@@ -1203,7 +1203,7 @@ namespace eval acs::test {
             set url [dict get $form @action]
         }
         if {$url eq ""} {
-            error "either form with action fields or url has to be provided"
+            error "either form with action fields or URL has to be provided"
         }
 
         if {$remove ne ""} {
@@ -1411,7 +1411,7 @@ namespace eval acs::test {
         }
         dict set d login $login
         dict set d session user_info $user_info
-        #aa_log "HTTP: url $url final session_info [ns_quotehtml <[dict get $d session]>]"
+        #aa_log "HTTP: URL $url final session_info [ns_quotehtml <[dict get $d session]>]"
 
         return $d
     }
@@ -1549,7 +1549,7 @@ namespace eval acs::test {
     ad_proc -public ::acs::test::get_url_from_location {
         dict
     } {
-        Determine the url based on the location field provided from
+        Determine the URL based on the location field provided from
         the result dict (as returned from acs::test::http).
 
         @param dict dict containing an ns_set called headers
@@ -1558,7 +1558,7 @@ namespace eval acs::test {
         set location [ns_set iget [dict get $dict headers] Location ""]
         if {$location ne ""} {
             set urlDict [ns_parseurl $location]
-            #aa_log "parse url '$location' => $urlDict"
+            #aa_log "parse URL '$location' => $urlDict"
             if {[dict get $urlDict tail] ne ""} {
                 set url [dict get $urlDict path]/[dict get $urlDict tail]
             } else {
@@ -2241,7 +2241,7 @@ ad_proc -public aa_test::parse_test_file {
 ad_proc -public aa_get_first_url {
     {-package_key:required}
 } {
-    Procedure for getting the url of a mounted package with the
+    Procedure for getting the URL of a mounted package with the
     package_key. It uses the first instance that it founds. This is
     useful for tclwebtest tests.
 } {
