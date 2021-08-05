@@ -415,46 +415,55 @@ ad_proc -public export_vars {
     {-override {}}
     {vars {}}
 } {
-    Exports variables either in URL or hidden form variable format. It should replace
-    <a
-    href="/api-doc/proc-view?proc=export_form_vars"><code>export_form_vars</code></a>,
-    <a
-    href="/api-doc/proc-view?proc=export_url_vars"><code>export_url_vars</code></a>
-    and all their friends.
+    
+    Exports variables either as a URL or in the form of hidden form
+    variables. The result is properly urlencoded, unless flags
+    prohibit this.    
 
     <p>
-
-    Example usage: <code>[export_vars -form { foo bar baz }]</code>
-
-    <p>
-
-    This will export the three variables <code>foo</code>, <code>bar</code> and <code>baz</code> as
-    hidden HTML form fields. It does exactly the same as <code>[export_vars -form {foo bar baz}]</code>.
+    Example usage: <code>set html [export_vars -form { foo bar baz }]</code><br>
+    <code>set url [export_vars { foo bar baz }]</code>
 
     <p>
+    This will export the three variables <code>foo</code>,
+    <code>bar</code> and <code>baz</code> as hidden HTML form
+    fields. It does exactly the same as <code>[export_vars -form {foo
+    bar baz}]</code>.
 
+    <p>
     Example usage: <code>[export_vars -sign -override {{foo "new value"}} -exclude { bar } { foo bar baz }]</code>
 
     <p>
 
-    This will export a variable named <code>foo</code> with the value "new value" and a variable named <code>baz</code>
-    with the value of <code>baz</code> in the caller's environment. Since we've specified that <code>bar</code> should be
-    excluded, <code>bar</code> won't get exported even though it's specified in the last argument. Additionally, even though
-    <code>foo</code> is specified also in the last argument, the value we use is the one given in the <code>override</code>
-    argument. Finally, both variables are signed, because we specified the <code>-sign</code> switch.
+    This will export a variable named <code>foo</code> with the value
+    "new value" and a variable named <code>baz</code> with the value
+    of <code>baz</code> in the caller's environment. Since we've
+    specified that <code>bar</code> should be excluded,
+    <code>bar</code> won't get exported even though it's specified in
+    the last argument. Additionally, even though <code>foo</code> is
+    specified also in the last argument, the value we use is the one
+    given in the <code>override</code> argument. Finally, both
+    variables are signed, because we specified the <code>-sign</code>
+    switch.
 
     <p>
 
-    You can specify variables with <b>three different precedences</b>, namely
-    <b><code>override</code>, <code>exclude</code> or <code>vars</code></b>. If a variable is present in <code>override</code>,
-    that's what'll get exported, no matter what. If a variable is in <code>exclude</code> and not in <code>override</code>,
-    then it will <em>not</em> get output. However, if it is in <code>vars</code> and <em>not</em> in either of
-    <code>override</code> or <code>exclude</code>, then it'll get output. In other words, we check <code>override</code>,
-    <code>exclude</code> and <code>vars</code> in that order of precedence.
+    You can specify variables with <b>three different precedences</b>,
+    namely <b><code>override</code>, <code>exclude</code> or
+    <code>vars</code></b>. If a variable is present in
+    <code>override</code>, that's what'll get exported, no matter
+    what. If a variable is in <code>exclude</code> and not in
+    <code>override</code>, then it will <em>not</em> get
+    output. However, if it is in <code>vars</code> and <em>not</em> in
+    either of <code>override</code> or <code>exclude</code>, then
+    it'll get output. In other words, we check <code>override</code>,
+    <code>exclude</code> and <code>vars</code> in that order of
+    precedence.
 
     <p>
 
-    The two variable specs, <b><code>vars</code> and <code>override</code></b> both look the same: They take a list of
+    The two variable specs, <b><code>vars</code> and
+    <code>override</code></b> both look the same: They take a list of
     variable specs. Examples of variable specs are:
 
     <ul>
@@ -465,16 +474,20 @@ ad_proc -public export_vars {
     <li>{foo:array,sign {[array get my_array]}}
     </ul>
 
-    In general, there's one or two elements. If there are two, the second element is the value we should use. If one,
-    we pull the value from the variable of the same name in the caller's environment. Note that when you specify the
-    value directly here, we call <a href="http://dev.scriptics.com/man/tcl8.3/TclCmd/subst.htm"><code>subst</code></a>
-    on it, so backslashes, square brackets and variables will get substituted correctly. Therefore, make sure you use
-    curly braces to surround this instead of the <code>[list]</code> command; otherwise the contents will get substituted
-    twice, and you'll be in trouble.
+    In general, there's one or two elements. If there are two, the
+    second element is the value we should use. If one, we pull the
+    value from the variable of the same name in the caller's
+    environment. Note that when you specify the value directly here,
+    we call the Tcl command subst on it, so backslashes, square
+    brackets and variables will get substituted correctly. Therefore,
+    make sure you use curly braces to surround this instead of the
+    <code>[list]</code> command; otherwise the contents will get
+    substituted twice, and you'll be in trouble.
 
     <p>
 
-    Right after the name, you may specify a colon and some flags, separated by commas. Valid flags are:
+    Right after the name, you may specify a colon and some flags,
+    separated by commas. Valid flags are:
 
     <dl>
 
@@ -485,79 +498,98 @@ ad_proc -public export_vars {
 
     <dt><b>array</b></dt>
     <dd>
-    The value is an array and should be exported in a way compliant with the <code>:array</code> flag of
-    <a href="/api-doc/proc-view?proc=ad_page_contract"><code>ad_page_contract</code></a>, which means
-    that each entry will get output as <code>name.key=value</code>.
-    <p>
-    If you don't specify a value directly, but want it pulled out of the Tcl environment, then you don't
-    need to specify <code>:array</code>. If you do, and the variable is in fact not an array, an error will
-    be thrown.
-    <p>
+    
+    The value is an array and should be exported in a way compliant
+    with the <code>:array</code> flag of <a
+    href="/api-doc/proc-view?proc=ad_page_contract"><code>ad_page_contract</code></a>,
+    which means that each entry will get output as
+    <code>name.key=value</code>.
+
+    <p> If you don't specify a value directly, but want it pulled out
+    of the Tcl environment, then you don't need to specify
+    <code>:array</code>. If you do, and the variable is in fact not an
+    array, an error will be thrown.  <p>
+
     </dd>
 
     <dt><b>sign</b></dt>
     <dd>
-    Sign this variable. This goes hand-in-hand with the <code>:verify</code> flag of
-    <a href="/api-doc/proc-view?proc=ad_page_contract"><code>ad_page_contract</code></a> and
-    makes sure that the value isn't tampered with on the client side. The <code>-sign</code>
-    switch to <code>export_vars</code>, is a short-hand for specifying the <code>:sign</code> switch
-    on every variable.
-    <p>
-    For example, one can use "user_id:sign(max_age=60)" in
-    export_vars to let the exported variable after 60 seconds.
-    Other potential arguments for sign are "user" or "csrf" to bind the signature to a user or
-    to the CSRF token.
+
+    Sign this variable. This goes hand-in-hand with the
+    <code>:verify</code> flag of <a
+    href="/api-doc/proc-view?proc=ad_page_contract"><code>ad_page_contract</code></a>
+    and makes sure that the value isn't tampered with on the client
+    side. The <code>-sign</code> switch to <code>export_vars</code>,
+    is a short-hand for specifying the <code>:sign</code> switch on
+    every variable.
+
+    <p> For example, one can use "user_id:sign(max_age=60)" in
+    export_vars to let the exported variable after 60 seconds.  Other
+    potential arguments for sign are "user" or "csrf" to bind the
+    signature to a user or to the CSRF token.
+    
     </dd>
 
     </dl>
 
-    The argument <b><code>exclude</code></b> simply takes a list of names of variables that you don't
-    want exported, even though they're specified in <code>vars</code>.
+    The argument <b><code>exclude</code></b> simply takes a list of
+    names of variables that you don't want exported, even though
+    they're specified in <code>vars</code>.
 
     <p>
 
-    <b>Intended use:</b> A page may have a set of variables that it cares about. You can store this in
-    a variable once and pass that to <code>export_vars</code> like this:
+    <b>Intended use:</b> A page may have a set of variables that it
+    cares about. You can store this in a variable once and pass that
+    to <code>export_vars</code> like this:
 
     <p><blockquote>
     <code>set my_vars { user_id sort_by filter_by  }<br>
     ... [export_vars $my_vars] ...</code>
     </blockquote><p>
 
-    Then, say one of them contains a column to filter on. When you want to clear that column, you can say
-    <code>[export_vars -exclude { filter_by } $my_vars]</code>.
+    Then, say one of them contains a column to filter on. When you
+    want to clear that column, you can say <code>[export_vars -exclude
+    { filter_by } $my_vars]</code>.
 
     <p>
 
     Similarly, if you want to change the sort order, you can say
-    <code>[export_vars -override { { sort_by $column } } $my_vars]</code>, and sorting will be done according to
-    the new value of <code>column</code>.
+    <code>[export_vars -override { { sort_by $column } }
+    $my_vars]</code>, and sorting will be done according to the new
+    value of <code>column</code>.
 
     <p>
 
-    If the variable name contains a colon (:), that colon must be escaped with a backslash,
-    so for example "form:id" becomes "form\:id". Sorry.
+    If the variable name contains a colon (:), that colon must be
+    escaped with a backslash, so for example "form:id" becomes
+    "form\:id". Sorry.
 
     @param sign Sign all variables.
 
     @param url Export in URL format. This is the default.
 
-    @param form Export in form format. You can't specify both URL and form format.
+    @param form Export in form format. You can't specify both URL and
+    form format.
 
-    @param quotehtml HTML quote the entire resulting string. This is an interim solution
-    while we're waiting for the templating system to do the quoting for us.
+    @param quotehtml HTML quote the entire resulting string. This is
+    an interim solution while we're waiting for the templating system
+    to do the quoting for us.
 
-    @param entire_form Export the entire form from the GET query string or the POST.
+    @param entire_form Export the entire form from the GET query
+    string or the POST.
 
-    @option no_empty If specified, variables with an empty string value will be suppressed from being exported.
-    This avoids cluttering up the URLs with lots of unnecessary variables.
+    @option no_empty If specified, variables with an empty string
+    value will be suppressed from being exported.  This avoids
+    cluttering up the URLs with lots of unnecessary variables.
 
-    @option base The base URL to make a link to. This will be prepended to the query string
-    along with a question mark (?), if the query is nonempty. So the returned
-    string can be used directly in a link. This is only relevant to URL export.
+    @option base The base URL to make a link to. This will be
+    prepended to the query string along with a question mark (?), if
+    the query is nonempty. So the returned string can be used directly
+    in a link. This is only relevant to URL export.
 
-    @option no_base_encode Decides whether argument passed as <code>base</code> option will be
-                           encoded by ad_urlencode_url proc
+    @option no_base_encode Decides whether argument passed as
+                           <code>base</code> option will be encoded by
+                           ad_urlencode_url proc
 
     @author Lars Pind (lars@pinds.com)
     @creation-date December 7, 2000
