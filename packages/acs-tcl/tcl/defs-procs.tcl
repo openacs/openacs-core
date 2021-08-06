@@ -532,20 +532,22 @@ ad_proc doc_return {args} {
 
 ad_proc -public ad_return_url {
     -urlencode:boolean
+    {-path_encode:boolean true}
     -qualified:boolean
     {-default_url .}
     {extra_args ""}
 } {
 
     Build a return url suitable for passing to a page you expect to return back
-    to the current page.
+    to the current page. Per default, the result is URL-encoded
+    (like the result of "export_vars" or ":pretty_link").
 
     <p>
 
     Example for direct inclusion in a link:
 
     <pre>
-    ad_returnredirect "foo?return_url=[ad_return_url -url_encode]"
+    ad_returnredirect "foo?return_url=[ad_return_url]"
     </pre>
 
     Example setting a variable to be used by export_vars:
@@ -563,12 +565,16 @@ ad_proc -public ad_return_url {
 
     @author Don Baccus (dhogaza@pacifier.com)
 
-    @param urlencode If true URL-encode the result
+    @param path_encode If false do no URL-encode the result
     @param default_url When there is no connection, fall back to this URL
     @param qualified If provided the return URL will be fully qualified including http or https.
     @param extra_args A list of {name value} lists to append to the query string
 
 } {
+
+    if { $urlencode_p } {
+        ns_log warning "deprecated flag -urlencode; result us encoded per default"
+    }
 
     if {[ns_conn isconnected]} {
         set query_list [export_entire_form_as_url_vars]
@@ -578,6 +584,10 @@ ad_proc -public ad_return_url {
         set base_url $default_url
     }
 
+    if { $path_encode_p } {
+        set base_url [ns_urlencode $base_url]
+    }
+
     if { [llength $query_list] == 0 } {
         set url $base_url
     } else {
@@ -585,7 +595,11 @@ ad_proc -public ad_return_url {
     }
 
     if {[llength $extra_args] > 0} {
-        set url [export_vars -base $url $extra_args]
+        #
+        # Deactivate base encode, since the input URL is already
+        # encoded as requested.
+        #
+        set url [export_vars -base $url -no_base_encode $extra_args]
     }
 
     if { $qualified_p } {
@@ -593,9 +607,6 @@ ad_proc -public ad_return_url {
         set url [security::get_qualified_url $url]
     }
 
-    if { $urlencode_p } {
-        set url [ns_urlencode $url]
-    }
     return $url
 }
 
