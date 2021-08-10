@@ -1169,13 +1169,14 @@ ad_proc -private rp_handler {} {
     }
 
     #
-    # Determine internal redirects by comparing URL suffix.  Don't use
-    # a match operation, since this might lead to surprising results,
+    # Determine internal redirects by comparing URL suffix. We check
+    # if the connection URL ends by the ad_conn extra_url. Don't use a
+    # match operation, since this might lead to surprising results,
     # when the URL contains match characters ('*' or '?', ...).
     #
     if {[info exists ::ad_conn(extra_url)]
         && $::ad_conn(extra_url) ne ""
-        && [string range $::ad_conn(extra_url) end-[string length $::ad_conn(extra_url)] end] ne [ns_conn url]
+        && [string range [ns_conn url] end-[expr {[string length $::ad_conn(extra_url)] - 1}] end] ne $::ad_conn(extra_url)
     } {
         #
         # On internal redirects, the current ::ad_conn(extra_url)
