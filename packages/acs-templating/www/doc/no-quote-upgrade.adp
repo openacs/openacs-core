@@ -35,7 +35,7 @@ effort that is required. Actually, the variables are subject to
 HTML-quoting and internationalization. The suffix
 <kbd>;noquote</kbd>
  means that the variable&#39;s content will be
-internationalized, but not HTML-quoted, while <kbd>;no18n</kbd>
+internationalized, but not HTML-quoted, while <kbd>;noi18n</kbd>
 
 means quote, but don&#39;t internationalize. Finally
 <kbd>;literal</kbd>
