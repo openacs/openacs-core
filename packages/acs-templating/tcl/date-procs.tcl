@@ -475,14 +475,20 @@ ad_proc -public template::util::date::set_property {
         return $date
     }
 
-    # Erase leading zeros from the value, but make sure that 00
-    # is not completely erased - but only for single-element properties
-
-    switch -- $value {
-        year - month - day - hour - minutes - seconds - short_year - short_hours - ampm {
-            set value [util::trim_leading_zeros $value]
-        }
-    }
+    # This trimming is actually more of a noop, as one should actually
+    # switch on the 'what' variable, expected to match one of the
+    # keys, while 'value' will just be a date. The probable typo is 18
+    # years old, so I am commenting out the code, rather than "fixing
+    # it", with possible unexpected consequences. Might go away for
+    # good at some point.
+    # # Erase leading zeros from the value, but make sure that 00
+    # # is not completely erased - but only for single-element properties
+    #
+    # switch -- $value {
+    #     year - month - day - hour - minutes - seconds - short_year - short_hours - ampm {
+    #         set value [util::trim_leading_zeros $value]
+    #     }
+    # }
 
     switch -- $what {
         year       { return [lreplace $date 0 0 $value] }
