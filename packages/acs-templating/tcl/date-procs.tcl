@@ -167,16 +167,15 @@ ad_proc -public template::util::date::acquire {
 ad_proc -public template::util::date::today {} {
     Create a new Date object for the current date.
 } {
+    set now [clock format [clock seconds] -format "%Y %m %d"]
+    set today [list]
 
-  set now [clock format [clock seconds] -format "%Y %m %d"]
-  set today [list]
+    foreach v $now {
+        # trim leading zeros to avoid octal problem
+        lappend today [util::trim_leading_zeros $v]
+    }
 
-  foreach v $now {
-    # trim leading zeros to avoid octal problem
-    lappend today [util::trim_leading_zeros $v]
-  }
-
-  return [create {*}$today]
+    return [create {*}$today]
 }
 
 ad_proc -public template::util::date::now {} {
