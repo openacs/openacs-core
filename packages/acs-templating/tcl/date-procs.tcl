@@ -146,9 +146,9 @@ ad_proc -public template::util::date::create {
     {seconds {}}
     {format "DD MONTH YYYY"}
 } {
-    Create a new Date object.
-    I chose to implement the date objects as lists instead of
-    arrays, because arrays are not first-class in Tcl
+    Create a new Date object. This is defined as a list of 7 elements,
+    respectively representing year, month, day, hours, minutes,
+    seconds and format.
 } {
     return [list $year $month $day $hours $minutes $seconds $format]
 }
