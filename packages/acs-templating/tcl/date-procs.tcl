@@ -107,9 +107,18 @@ ad_proc -public template::util::date::daysInMonth {
     month
     {year 0}
 } {
-    @return the number of days in a month, accounting for leap years
-    LOOKATME: IS THE LEAP YEAR CODE CORRECT ?
+    @param year an integer representing the number of the year in the
+                Gregorian calendar.
+
+    @return the number of days in a month, accounting for leap years.
+
+    @see https://en.wikipedia.org/wiki/Leap_year#Algorithm
 } {
+    # Something like this oneliner might work and delegate the leap
+    # year calculation to the clock command. However, it would be
+    # significantly slower...
+    # clock format [clock add [clock scan [format "%04d" $year]-[format "%02d" $month]-01 -format %Y-%m-%d] 1 month -1 day] -format %d
+
     set month [string trimleft $month 0]
     set year [string trimleft $year 0]
     if {$year eq ""} {set year 0}
