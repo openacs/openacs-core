@@ -1606,6 +1606,334 @@ ad_proc -public template::widget::time_of_day {
     return [template::widget::date element $tag_attributes]
 }
 
+#
+## HTML5 Date and time input widgets
+##
+## These widgets use native browser capabilities introduced by HTML5
+## to generate date and time widgets. When available, they also
+## provide some client-side normalization with respect to the
+## browser's locale and an overall better and more consistent user
+## experience across web platforms. They should in time become the
+## preferred alternative when implementing date and time fields in
+## template forms.
+#
+
+ad_proc -public template::widget::h5date {
+    element_reference
+    tag_attributes
+} {
+
+    Implements the HTML 5 input type "date".
+
+    Supported element parameters:
+
+    "-min" and "-max": for setting minimum and maximum dates that can
+                       be chosen by the user. If used, the condition
+                       min <= value <= max must be met. (Format =
+                       YYYY-MM-DD)
+
+    "-step": number of days jumped each time the date is
+             incremented. Value must be an integer
+
+    Parameters supplied this way will supersed same named parameters
+    supplied through the "-html" switch.
+
+    This widget also adds the attribute "pattern" as fallback for
+    browsers which do not support input type="date".
+
+} {
+    upvar $element_reference element
+
+    set attributes [dict create]
+
+    # attributes supplied via -html switch
+    if { [info exists element(html)] } {
+        dict set attributes {*}$element(html)
+    }
+
+    if {[llength $tag_attributes] > 0} {
+        dict set attributes {*}$tag_attributes
+    }
+
+    # Add fallback pattern attribute. Note that this pattern won't
+    # account for leap years or invalid days of the month. We leave
+    # this fine-graned validation to the server-side for now.
+    dict set attributes pattern {[0-9]+-(1[0-2]|0[0-9])-(3[0-1]|[0-2][0-9])}
+
+    # check min/max constraint
+    set last_date ""
+    foreach d {max value min} {
+
+        if {[info exists element($d)] && $element($d) ne ""} {
+            set attr_value $element($d)
+        } elseif {[dict exists attributes $d] && [dict get $attributes $d] ne ""} {
+            set attr_value [dict get $attributes $d]
+        } else {
+            continue
+        }
+
+        set invalid_date_p [catch {
+            set current_date [clock scan $attr_value -format "%Y-%m-%d"]
+        }]
+
+        if {!$invalid_date_p} {
+            if {$last_date ne "" &&
+                $current_date > $last_date} {
+                ns_log Warning "template::widget::h5date value of attribute \"$d\" $attr_value too big"
+            } else {
+                dict set attributes $d $attr_value
+            }
+
+            set last_date $current_date
+
+        } else {
+            ns_log Warning "template::widget::h5date value of attribute \"$d\" $attr_value is not a correct date"
+        }
+    }
+
+    if {[info exists element(step)]} {
+        if {[string is integer $element(step)]} {
+            dict set attributes step $element(step)
+        } else {
+            ns_log Warning {template::widget::h5date value of attribute "step" is not an integer!}
+        }
+    }
+
+    return [template::widget::input date element $attributes]
+}
+
+ad_proc -public template::data::validate::h5date {
+    value_ref
+    message_ref
+} {
+    Validate a date submitted via HTML 5 input type "date". The
+    submitted value is also checked against any "min" and "max"
+    constraint set on the input element itself.
+
+    @param value_ref Reference variable to the submitted value.
+    @param message_ref Reference variable for returning an error
+                       message.
+
+    @return True (1) if valid, false (0) if not.
+} {
+    upvar 2 $message_ref message $value_ref value
+
+    # get the elements definition
+    upvar 2 element element
+
+    if {$value ne ""} {
+        set invalid_date_p [catch {
+            set supplied_date [clock scan $value -format "%Y-%m-%d"]
+        }]
+
+        if {$invalid_date_p} {
+            lappend message [_ acs-templating.Invalid_date]
+            return 0
+        }
+
+        if {[info exists element(min)]} {
+            set invalid_date_p [catch {
+                set min [clock scan $element(min) -format "%Y-%m-%d"]
+            }]
+            if {$invalid_date_p || $min > $supplied_date} {
+                lappend message [_ acs-templating.Date_must_be_after_min_date \
+                                     [list min_date $element(min)]]
+                return 0
+            }
+        }
+
+        if {[info exists element(max)]} {
+            set invalid_date_p [catch {
+                set max [clock scan $element(max) -format "%Y-%m-%d"]
+            }]
+            if {$invalid_date_p || $max > $supplied_date} {
+                lappend message [_ acs-templating.Date_must_be_before_max_date \
+                                     [list max_date $element(max)]]
+                return 0
+            }
+        }
+    }
+
+    return 1
+}
+
+ad_proc -public template::widget::h5time {
+    element_reference
+    tag_attributes
+} {
+
+   Implements the HTML 5 input type "time".
+
+   Supported element parameters:
+
+   "-min" and "-max": for setting minimum and maximum times that can
+                      be chosen by the user. If used, the condition
+                      min <= value <= max must be met.  (Format =
+                      "hh:mm" or "hh:mm:ss" if parameter "-step" is
+                      present)
+
+   "-step": integer value that equates to the number of seconds you
+            want to increment by
+
+   Parameters supplied this way will supersed same named parameters
+   supplied through the "-html" switch.
+
+   This widget also adds the attribute "pattern" as fallback for
+   browsers which do not support input type="time".
+
+} {
+    upvar $element_reference element
+
+    set attributes [dict create]
+
+    # attributes supplied via -html switch
+    if { [info exists element(html)] } {
+        dict set attributes {*}$element(html)
+    }
+
+    if {[llength $tag_attributes] > 0} {
+        dict set attributes {*}$tag_attributes
+    }
+
+    # Add fallback pattern attribute (HH:MM:SS)
+    dict set attributes pattern {(2[0-4]|[0-1][0-9]):[0-5][0-9]:[0-5][0-9]}
+
+    # A HTML time field will always return a value in 24-hour format
+    # including leading zeros (hh:mm), regardless of the input
+    # format. If the step attribute is used time always includes
+    # seconds (hh:mm:ss). However, on the server side we must be able
+    # to accept and process both formats, so we must check for both.
+    set clock_formats {
+        "%H:%M"
+        "%H:%M:%S"
+    }
+
+    # check min/max constraint
+    set last_time ""
+    foreach d {max value min} {
+
+        if {[info exists element($d)] && $element($d) ne ""} {
+            set attr_value $element($d)
+        } elseif {[dict exists attributes $d] && [dict get $attributes $d] ne ""} {
+            set attr_value [dict get $attributes $d]
+        } else {
+            continue
+        }
+
+        foreach clock_format $clock_formats {
+            set invalid_time_p [catch {
+                set current_time [clock scan $attr_value -format $clock_format]
+            }]
+            if {!$invalid_time_p} {
+                break
+            }
+        }
+
+        if {!$invalid_time_p} {
+            if {$last_time ne "" &&
+                $current_time > $last_time} {
+                ns_log Warning "template::widget::h5time value of attribute \"$d\" $attr_value too big"
+            } else {
+                dict set attributes $d $attr_value
+            }
+
+            set last_time $current_time
+
+        } else {
+            ns_log Warning "template::widget::h5time value of attribute \"$d\" $attr_value is not a correct time"
+        }
+    }
+
+    if {[info exists element(step)]} {
+        if {[string is integer $element(step)]} {
+            dict set attributes step $element(step)
+        } else {
+            ns_log Warning {template::widget::h5time value of attribute "step" is not an integer!}
+        }
+    }
+
+    return [template::widget::input time element $attributes]
+}
+
+
+ad_proc -public template::data::validate::h5time {
+    value_ref
+    message_ref
+} {
+    Validate that a date submitted via HTML 5 input type "time". The
+    sbumitted value is also checked against any set "min" and "max"
+    constraint set on the input element itself.
+
+    @param value_ref Reference variable to the submitted value.
+    @param message_ref Reference variable for returning an error message.
+
+    @return True (1) if valid, false (0) if not.
+} {
+    upvar 2 $message_ref message $value_ref value
+
+    # get the elements definition
+    upvar 2 element element
+
+    # A HTML time field will always return a value in 24-hour format
+    # including leading zeros (hh:mm), regardless of the input
+    # format. If the step attribute is used time always includes
+    # seconds (hh:mm:ss). However, on the server side, we must be able
+    # to accept and process both formats, so we must check for both.
+    set clock_formats {
+        "%H:%M"
+        "%H:%M:%S"
+    }
+
+    if {$value ne ""} {
+        foreach clock_format $clock_formats {
+            set invalid_time_p [catch {
+                set supplied_time [clock scan $value -format $clock_format]
+            }]
+            if {!$invalid_time_p} {
+                break
+            }
+        }
+
+        if {$invalid_time_p} {
+            lappend message [_ acs-templating.Invalid_time]
+            return 0
+        }
+
+        if {[info exists element(min)]} {
+            foreach clock_format $clock_formats {
+                set invalid_time_p [catch {
+                    set min [clock scan $element(min) -format $clock_format]
+                }]
+                if {!$invalid_time_p} {
+                    break
+                }
+            }
+            if {$invalid_time_p || $min > $supplied_time} {
+                lappend message [_ acs-templating.Time_must_be_after_min_time \
+                                     [list min_time $element(min)]]
+                return 0
+            }
+        }
+
+        if {[info exists element(max)]} {
+            foreach clock_format $clock_formats {
+                set invalid_time_p [catch {
+                    set max [clock scan $element(max) -format $clock_format]
+                }]
+                if {!$invalid_time_p} {
+                    break
+                }
+            }
+            if {$invalid_time_p || $max > $supplied_time} {
+                lappend message [_ acs-templating.Time_must_be_before_max_time \
+                                     [list max_time $element(max)]]
+                return 0
+            }
+        }
+    }
+
+    return 1
+}
 
 # Local variables:
 #    mode: tcl
