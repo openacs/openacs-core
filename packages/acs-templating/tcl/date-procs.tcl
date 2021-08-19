@@ -814,6 +814,10 @@ ad_proc -public template::util::date::validate {
         minutes "MI"
         seconds "SS"
     } {
+        # Trim leading zeros to avoid numbers being interpreted as
+        # octals when comparing them.
+        set $field [util::trim_leading_zeros [set $field]]
+
         # If the field is required, but missing, report an error
         if {[set $field] eq ""} {
             if { [regexp $exp $format match] } {
@@ -830,41 +834,38 @@ ad_proc -public template::util::date::validate {
         }
     }
 
-    if { [template::util::negative $year] } {
+    if { $year ne {} && $year < 0 } {
         lappend error_msg [_ acs-templating.Year_must_be_positive]
     }
 
     if { $month ne {} } {
-        if { [string trimleft $month "0"] < 1 || [string trimleft $month "0"] > 12 } {
+        if { $month < 1 || $month > 12 } {
             lappend error_msg [_ acs-templating.Month_must_be_between_1_and_12]
-        } else {
-            if { $year > 0 } {
-                if { $day ne {} } {
-                    set maxdays [get_property days_in_month $date]
-                    if { [string trimleft $day "0"] < 1 || [string trimleft $day "0"] > $maxdays } {
-                        set month_pretty [template::util::date::get_property long_month_name $date]
-                        if { $month == 2 } {
-                            # February has a different number of days depending on the year
-                            append month_pretty " ${year}"
-                        }
-                        lappend error_msg [_ acs-templating.lt_day_between_for_month_pretty]
-                    }
+        } elseif { $year > 0 && $day ne {} } {
+            set maxdays [get_property days_in_month $date]
+            if { $day < 1 || $day > $maxdays } {
+                set month_pretty [template::util::date::get_property long_month_name $date]
+                if { $month == 2 } {
+                    # February has a different number of days depending on the year
+                    append month_pretty " ${year}"
                 }
+                lappend error_msg [_ acs-templating.lt_day_between_for_month_pretty]
             }
         }
     }
 
-    if { [template::util::negative $hours] || $hours > 23 } {
+    if { $hours ne {} && ($hours < 0 || $hours > 23) } {
         lappend error_msg [_ acs-templating.Hours_must_be_between_0_and_23]
     }
 
-    if { [template::util::negative $minutes] || $minutes > 59 } {
+    if { $minutes ne {} && ($minutes < 0 || $minutes > 59) } {
         lappend error_msg [_ acs-templating.Minutes_must_be_between_0_and_59]
     }
 
-    if { [template::util::negative $seconds] || $seconds > 59 } {
+    if { $seconds ne {} && ($seconds < 0 || $seconds > 59) } {
         lappend error_msg [_ acs-templating.Seconds_must_be_between_0_and_59]
     }
+
     if { [llength $error_msg] > 0 } {
         set error_msg "[join $error_msg {<br>}]"
         return 0
