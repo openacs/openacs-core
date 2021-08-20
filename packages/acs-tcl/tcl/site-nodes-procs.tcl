@@ -939,8 +939,28 @@ ad_proc -public site_node::closest_ancestor_package {
             set url [site_node::get_url -node_id $node_id]
         }
     }
+    #ns_log notice "closest_ancestor_package still [list -url $url urlv [ns_conn urlv]]"
 
-    # should we return the package at the passed-in node/url?
+    #
+    # GN: Make sure, the URL does not end with multiple slashes. The
+    # following regsub is from the standard's point of view not
+    # correct, since a URL path /%2f/ is syntactically permissible,
+    # but this is not supported in the current site-nodes code. It
+    # would be correct, to avoid the parsing of the slashes here and
+    # to process instead the result of [ns_conn urlv], which is
+    # already parsed (before the percent substitutions). This would
+    # probably require the request processor to perform some mangling
+    # of urlv in vhost cases to set a a proper [ad_conn urlv] ... and
+    # of course to pass the "urlv" instead of the "url" to the
+    # slash-parsing functions.
+    #
+    regsub {(/[/]*)/$} $url / url
+
+    #ns_log notice "closest_ancestor_package simplified [list -url $url]"
+
+    #
+    # Should we return the package at the passed-in node/url?
+    #
     if { $include_self_p && $package_key ne ""} {
         set node [site_node::get -url $url]
         #ns_log notice "=== [list site_node::get -url $url] => '$node'"
