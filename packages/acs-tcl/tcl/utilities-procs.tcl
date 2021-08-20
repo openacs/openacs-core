@@ -582,10 +582,12 @@ ad_proc -public export_vars {
     value will be suppressed from being exported.  This avoids
     cluttering up the URLs with lots of unnecessary variables.
 
-    @option base The base URL to make a link to. This will be
-    prepended to the query string along with a question mark (?), if
-    the query is nonempty. So the returned string can be used directly
-    in a link. This is only relevant to URL export.
+    @option base The base URL to make a link to. The provided value
+    should be a plain value (i.e. urldecoded). In case the provided
+    value is urlencoded, use the flag "-no_base_encode". The value of
+    this parameter will be prepended to the query string along with a
+    question mark (?), if the query is nonempty. The returned string
+    can be used directly in a link (when output is in URL format).
 
     @option no_base_encode Decides whether argument passed as
                            <code>base</code> option will be encoded by
