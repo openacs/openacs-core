@@ -41,9 +41,9 @@
   <msg key="lt_name_contains_invalid">%name% enthält ungültige Zeichen</msg>
   <msg key="lt_name_does_not_appear_">%name% scheint keine gültige e-Mail Adresse zu sein.</msg>
   <msg key="lt_name_does_not_appear__1">%name% scheint keine gültige US-Telefonnummer zu sein.</msg>
-  <msg key="lt_name_does_not_appear__2">%name% scheint kein Boolean Wert zu sein.</msg>
+  <msg key="lt_name_does_not_appear__2">%name% ist kein Bool&#39;scher Wert</msg>
   <msg key="lt_name_is_not_a_natural">%name% ist keine natürliche Zahl, die eine ganzzahlige Zahl größer oder gleich 0 ist.</msg>
-  <msg key="lt_name_is_not_a_valid_S">%name% ist kein gültiger  SQL Identifikator</msg>
+  <msg key="lt_name_is_not_a_valid_S">%name% ist kein gültiger SQL Identifikator</msg>
   <msg key="lt_name_is_not_a_word">%name% enthält nicht-alphabetische Zeichen</msg>
   <msg key="lt_name_is_not_an_intege">%name% ist keine ganze Zahl</msg>
   <msg key="lt_name_is_not_an_oid">%name% ist keine gültige Objekt-ID</msg>
@@ -56,7 +56,7 @@
   <msg key="lt_NB_This_error_was_sub">Der Fehler wurde übermittelt</msg>
   <msg key="lt_Please_back_up_using_">Bitte gehen Sie mit Ihrem Browser zurück und korrigieren den oben stehenden</msg>
   <msg key="lt_Problem_with_a_Page_o">Problem mit Ihrer Seite (oder vielleicht mit Ihrer Eingabe)</msg>
-  <msg key="lt_Problem_with_a_Templa">Problem mit einer Template Seite</msg>
+  <msg key="lt_Problem_with_a_Templa">Problem mit einer Template-Seite</msg>
   <msg key="lt_Problem_with_your_inp">Problem mit Ihrer Eingabe</msg>
   <msg key="lt_require_email_verific">E-Mail-Verifizierung anfordern</msg>
   <msg key="lt_The_-requires_element">Das -requires element \&#34;%element%\&#34; enthält ein Komma.</msg>
