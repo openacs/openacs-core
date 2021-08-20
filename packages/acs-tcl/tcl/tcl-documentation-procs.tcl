@@ -226,6 +226,7 @@ ad_proc -public ad_page_contract {
     {-form {}}
     {-level 1}
     {-context ""}
+    {-warn:boolean}    
     -properties
     docstring
     args
@@ -1200,12 +1201,18 @@ ad_proc -public ad_page_contract {
         #
         if {[incr ::__ad_complain_depth] < 10} {
 
+            set complaints [ad_complaints_get_list]
+            if {$warn_p} {
+                ad_log warning "contract in '$::ad_page_contract_context'"\
+                    "was violated:\n" [join $complaints "\n "]
+            }
+            
             if { [info exists return_errors] } {
                 upvar 1 $return_errors error_list
-                set error_list [ad_complaints_get_list]
+                set error_list $complaints
             } else {
                 template::multirow create complaints text
-                foreach elm [ad_complaints_get_list] {
+                foreach elm $complaints {
                     template::multirow append complaints $elm
                 }
                 ad_try {
@@ -1230,6 +1237,8 @@ ad_proc -public ad_page_contract {
                 ns_return 422 text/html $html
                 ad_script_abort
             }
+        } else {
+            ns_log Warning "ad_page_contract: depth of recursive complaints exceeded, complaint ignored"
         }
     }
 }
@@ -1302,7 +1311,7 @@ ad_proc ad_include_contract {docstring args} {
         set context ""
     }
 
-    ad_page_contract -level 2 -context $context -form [{*}$__cmd] $docstring {*}$args
+    ad_page_contract -warn -level 2 -context $context -form [{*}$__cmd] $docstring {*}$args
 }
 
 ####################
