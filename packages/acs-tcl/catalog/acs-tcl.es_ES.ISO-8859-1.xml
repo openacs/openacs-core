@@ -46,6 +46,7 @@
   <msg key="lt_name_is_not_a_valid_S">%name% no es un identificador SQL válido</msg>
   <msg key="lt_name_is_not_a_word">%name% contiene caracteres que no son de palabra</msg>
   <msg key="lt_name_is_not_an_intege">%name% no es un entero</msg>
+  <msg key="lt_name_is_not_an_oid">%name% no es un object_id</msg>
   <msg key="lt_name_is_not_in_the_ra">%name% no está en el rango \[%min%, %max%\]</msg>
   <msg key="lt_name_is_not_valid">%name% no válido</msg>
   <msg key="lt_name_is_too_long__Ple">%name% es demasiado largo. Por favor, introduzca un valor no superior a %max_length% caracteres. El valor introducido contiene %actual_length% caracteres.</msg>
