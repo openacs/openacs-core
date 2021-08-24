@@ -29,6 +29,8 @@
   <msg key="Format">Formato
 </msg>
   <msg key="Formats">Formatos</msg>
+  <msg key="Date_must_be_after_min_date">Fecha debe ser posterior a %min_date%</msg>
+  <msg key="Date_must_be_before_max_date">Fecha debe ser anterior a %max_date%</msg>
   <msg key="hours">horas</msg>
   <msg key="Hours_must_be_between_0_and_23">La hora debe estar comprendida entre 0 y 23</msg>
   <msg key="HTML">HTML
@@ -70,6 +72,7 @@
   <msg key="HTMLArea_SpecifyUploadFilename">Especifique un archivo a subir</msg>
   <msg key="Invalid_choice">Elección incorrecta</msg>
   <msg key="Invalid_currency">Moneda incorrecta</msg>
+  <msg key="Invalid_date">Fecha incorrecta</msg>
   <msg key="Invalid_decimal_number">Número decimal incorrecto</msg>
   <msg key="Invalid_email_format">Formato de correo incorrecto</msg>
   <msg key="Invalid_enumeration">Enumeración inválida</msg>
@@ -79,6 +82,7 @@
   <msg key="Invalid_keyword">Palabra clave incorrecta</msg>
   <msg key="Invalid_natural_number">Número natural incorrecto</msg>
   <msg key="Invalid_number">Número no válido</msg>
+  <msg key="Invalid_time">Tiempo incorrecto</msg>
   <msg key="Invalid_url">URL incorrecta</msg>
   <msg key="Invalid_url_element">URL incorrecta: &#34;%value%&#34;. Utilice solamente minúsculas, números o guiones. Por ejemplo: &#34;foo-bar&#34;.</msg>
   <msg key="Link_Title">Título del enlace</msg>
@@ -121,6 +125,8 @@
   <msg key="This_Group">Este grupo</msg>
   <msg key="This_image_can_be_reused_by">La imagen puede ser reutilizada por</msg>
   <msg key="This_image_can_be_reused_help">Esto permitirá que su imagen pueda ser utilizada en otros contextos</msg>
+  <msg key="Time_must_be_after_min_date">Tiempo debe ser posterior a %min_time%</msg>
+  <msg key="Time_must_be_before_max_date">Tiempo debe ser anterior a %max_time%</msg>
   <msg key="Upload_a_New_File">Subir un nuevo archivo</msg>
   <msg key="Upload_a_New_Image">Subir una nueva imagen</msg>
   <msg key="Year">Año</msg>
