@@ -3,8 +3,10 @@ ad_library {
 }
 
 aa_register_case \
-    -cats {smoke} \
-    acs_kernel__server_startup_ok {
+    -cats {
+        smoke
+        production_safe
+    } acs_kernel__server_startup_ok {
 
         Checks that the server has booted without errors.
 
