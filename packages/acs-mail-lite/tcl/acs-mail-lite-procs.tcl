@@ -784,6 +784,7 @@ namespace eval acs_mail_lite {
                     set send_mode ignore
                 } else {
                     set to_addr $redirect_to
+                    set to_addr_header $redirect_to
 
                     # Since we have to redirect to a list of addresses
                     # we need to remove the CC and BCC
