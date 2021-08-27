@@ -713,7 +713,7 @@ ad_proc -private rp_filter { why } {
     rp_debug -ns_log_level debug -debug t "rp_filter: setting up request: [ns_conn method] [ns_conn url] [ns_conn query]"
 
     ad_try {
-        array set node [site_node::get -url $ad_conn_url]
+        set node [site_node::get -url $ad_conn_url]
     } on error {errorMsg} {
         # log and do nothing
         ad_log error "rp_filter: site_node::get for url $ad_conn_url returns: $errorMsg"
@@ -724,27 +724,26 @@ ad_proc -private rp_filter { why } {
         # about non-instantiated nsvs when e.g. automated testing is
         # disabled.
         #
-        if {![apm_package_enabled_p $node(package_key)]} {
-            array set node [site_node::get -url /]
+        if {![apm_package_enabled_p [dict get $node package_key]]} {
+            set node [site_node::get -url /]
         }
 
-        if {$node(url) eq "$ad_conn_url/"} {
-            #ad_returnredirect $node(url)
+        if {[dict get $node url] eq "$ad_conn_url/"} {
             ad_returnredirect [ad_conn vhost_url]/
             rp_debug "rp_filter: returnredirect [ad_conn vhost_url]/"
             rp_debug "rp_filter: return filter_return"
             return filter_return
         }
-        ad_conn -set node_id $node(node_id)
-        ad_conn -set node_name $node(name)
-        ad_conn -set object_id $node(object_id)
-        ad_conn -set object_url $node(url)
-        ad_conn -set object_type $node(object_type)
-        ad_conn -set package_id $node(object_id)
-        ad_conn -set package_key $node(package_key)
-        ad_conn -set package_url $node(url)
-        ad_conn -set instance_name $node(instance_name)
-        ad_conn -set extra_url [string trimleft [string range $ad_conn_url [string length $node(url)] end] /]
+        ad_conn -set node_id [dict get $node node_id]
+        ad_conn -set node_name [dict get $node name]
+        ad_conn -set object_id [dict get $node object_id]
+        ad_conn -set object_url [dict get $node url]
+        ad_conn -set object_type [dict get $node object_type]
+        ad_conn -set package_id [dict get $node  object_id]
+        ad_conn -set package_key [dict get $node package_key]
+        ad_conn -set package_url [dict get $node url]
+        ad_conn -set instance_name [dict get $node instance_name]
+        ad_conn -set extra_url [string trimleft [string range $ad_conn_url [string length [dict get $node url]] end] /]
         rp_debug "rp_filter: sets extra_url '[ad_conn extra_url]'"
     }
 
@@ -1206,11 +1205,14 @@ ad_proc -private rp_handler {} {
             ad_conn -set package_key "acs-subsite"
             ad_conn -set package_url /
         } else {
-            array set node [site_node::get -url [ad_conn url]]
-            ad_conn -set extra_url [string range [ad_conn url] [string length $node(url)] end]
+            set node [site_node::get -url [ad_conn url]]
+            ad_conn -set extra_url [string range [ad_conn url] [string length [dict get $node url]] end]
             rp_debug "reset extra_url to '[ad_conn extra_url]'"
-            ad_conn -set package_key $node(package_key)
-            ad_conn -set package_url $node(url)
+            if {![apm_package_enabled_p [dict get $node package_key]]} {
+                set node [site_node::get -url /]
+            }
+            ad_conn -set package_key [dict get $node package_key]
+            ad_conn -set package_url [dict get $node url]
         }
     }
 
