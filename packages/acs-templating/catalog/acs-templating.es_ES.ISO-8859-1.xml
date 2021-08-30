@@ -126,7 +126,9 @@
   <msg key="This_image_can_be_reused_by">La imagen puede ser reutilizada por</msg>
   <msg key="This_image_can_be_reused_help">Esto permitirá que su imagen pueda ser utilizada en otros contextos</msg>
   <msg key="Time_must_be_after_min_date">Tiempo debe ser posterior a %min_time%</msg>
+  <msg key="Time_must_be_after_min_time">Tiempo debe ser posterior a %min_time%</msg>
   <msg key="Time_must_be_before_max_date">Tiempo debe ser anterior a %max_time%</msg>
+  <msg key="Time_must_be_before_max_time">Tiempo debe ser anterior a %max_time%</msg>
   <msg key="Upload_a_New_File">Subir un nuevo archivo</msg>
   <msg key="Upload_a_New_Image">Subir una nueva imagen</msg>
   <msg key="Year">Año</msg>
