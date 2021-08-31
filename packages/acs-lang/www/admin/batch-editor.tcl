@@ -153,6 +153,7 @@ db_foreach get_messages {} {
     ad_form -extend -name batch_editor -form \
         [list [list "message_key_pretty_$count:text(inform)" \
                    {label "Message Key"} \
+                   {noquote} \
                    {value "<a href=\"[ns_quotehtml $message_url]\">$package_key.$message_key</a>"}]]
 
     if { $description ne "" } {
@@ -169,7 +170,7 @@ db_foreach get_messages {} {
         ad_form -extend -name batch_editor -form \
             [list [list "default_locale_message_$count:text(inform),optional" \
                        {label $default_locale_label} \
-                       {value {[ns_quotehtml $default_message]}}]]
+                       {value $default_message}]]
     }
 
     if { [string length $translated_message] > 80 } {
