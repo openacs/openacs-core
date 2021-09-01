@@ -1,3 +1,4 @@
+https://openacs.org/acs-admin/send-email?subject=OK&email=neumann@wu.ac.at&message=ok+approved.&email_from=neumann@wu.ac.at&return_url=.
 ad_page_contract {
     email sending page
 
@@ -5,7 +6,7 @@ ad_page_contract {
     @creation-date 23 Aug 2000
     @cvs-id $Id$
 } {
-    email
+    email:email
     email_from
     subject
     message
