@@ -38,9 +38,31 @@ END OF TEMPLATE -->
       linkend="changelog-latest"></xref>) since the last release and in the
       entire &majorversion;.&minorversion; release sequence <xref linkend="changelog"></xref>.</para>
   -->
-
+      
+  <sect2 id="release-notes-5-10-0">
+    <title>Release 5.10.0</title>
+    <itemizedlist>
+      <listitem><para>
+        ... to be completed ....
+      </para></listitem>
+    </itemizedlist>
+  <para> Altogether, OpenACS 5.10.0 differs from OpenACS 5.9.1 by the
+    following statistics
+    <programlisting>
+      xxx files changed, xxx insertions(+), xxx deletions(-)
+    </programlisting>
+    contributed by xxxx committers (...) and xxxx patch/bugfix providers
+    (...). All packages of
+    the release were tested with PostgreSQL 10.* and Tcl 8.6.*.
+  </para>
+  <para>
+    For more details, consult the
+    <ulink href="http://openacs.org/changelogs/ChangeLog-5.10.0">raw ChangeLog</ulink>.
+  </para>  
+  </sect2>
+  
   <sect2 id="release-notes-5-9-1">
-    <title>Release 5.9.2</title>
+    <title>Release 5.9.1</title>
     <itemizedlist>
       <listitem><para>
 	The release of OpenACS 5.9.1 contains the 88 packages of the oacs-5-9
