@@ -588,7 +588,7 @@ aa_register_case -cats {
     /api-doc/
     /api-doc/proc-search
 } acs_api_browser_search {
-    Simple test to search for a proc in the api-browser
+    Simple test to search for a proc in the API-browser
 
     @author Héctor Romojaro <hector.romojaro@gmail.com>
     @creation-date 03 March 2021
@@ -601,7 +601,7 @@ aa_register_case -cats {
         set user_info [acs::test::user::create -user_id $user_id -admin]
         acs::test::confirm_email -user_id $user_id
         #
-        # Go to the api-doc and check status code
+        # Go to the API-doc and check status code
         #
         set d [acs::test::http -depth 3 -user_info $user_info /api-doc]
         acs::test::reply_has_status_code $d 200

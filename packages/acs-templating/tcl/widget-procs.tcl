@@ -1392,7 +1392,7 @@ ad_proc -public template::widget::url {
     element_reference
     tag_attributes
 } {
-    Render a url input widget.
+    Render a URL input widget.
 
     @param element_reference Reference variable to the form element
     @param tag_attributes HTML attributes to add to the tag

@@ -22,12 +22,12 @@ ad_proc -private ref_timezones::apm::after_upgrade {
             5.5.0d1 5.5.0d2 {
                 db_load_sql_data [acs_root_dir]/packages/ref-timezones/sql/[db_driverkey ""]/upgrade/upgrade-timezones.ctl
                 set entries [db_string _ "select count(*) from timezones"]
-                ns_log Notice "$entries time zones loaded"
+                ns_log Notice "$entries timezones loaded"
             }
             5.9.0b1 5.9.0b2 {
                 db_load_sql_data [acs_root_dir]/packages/ref-timezones/sql/[db_driverkey ""]/upgrade/upgrade-timezones.ctl
                 set entries [db_string _ "select count(*) from timezones"]
-                ns_log Notice "$entries time zones loaded"
+                ns_log Notice "$entries timezones loaded"
             }
         }
 }

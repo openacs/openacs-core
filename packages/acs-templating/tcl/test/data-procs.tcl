@@ -518,10 +518,10 @@ aa_register_case -cats {
     }
     set message ""
     foreach value $url_true {
-        aa_true "Is $value a url?" [template::data::validate url value message]
+        aa_true "Is $value a URL?" [template::data::validate url value message]
     }
     foreach value $url_false {
-        aa_false "Is $value a url?" [template::data::validate url value message]
+        aa_false "Is $value a URL?" [template::data::validate url value message]
     }
 }
 

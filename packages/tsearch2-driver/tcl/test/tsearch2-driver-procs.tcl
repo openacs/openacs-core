@@ -27,9 +27,9 @@ ad_proc -private tsearch2::indexed_keywords_p {
     if {[db_0or1row object_details {
             select fti from txt where object_id=:object_id
     }]} {
-        set splitted_fti [split $fti ']
+        set split_fti [split $fti ']
         foreach keyword $keywords {
-            if {$keyword ni $splitted_fti} {
+            if {$keyword ni $split_fti} {
                 aa_log "Keyword ($keyword) not found in fti: $fti"
                 return false
             } else {

@@ -2135,7 +2135,7 @@ ad_proc -private acs_mail_lite::inbound_email_context {
     #                        https://tools.ietf.org/html/rfc5598#section-3.4.1
     #
     # originator            A special case alternate to 'From' header.
-    #                       Usually defined by first SMTP MTA.
+    #                       Usually, defined by first SMTP MTA.
     #                       Notices may be sent to this address when
     #                       a bounce notice to the original email's 'From'
     #                       address bounces.

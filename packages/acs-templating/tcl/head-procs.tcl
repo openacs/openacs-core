@@ -1053,7 +1053,7 @@ ad_proc template::add_confirm_handler {
                     by this CSS selector. When a CSS selector contains
                     double and single quotes, we won't add any of
                     those around the selector automatically. Instead,
-                    the user must specify them explicity, for instance
+                    the user must specify them explicitly, for instance
                     like this: ... -selector {'[name="o\'hara"]'}. If
                     the selector does not contain any single or double
                     quotes, we can let the user omit them, as for the
@@ -1172,7 +1172,7 @@ ad_proc template::add_event_listener {
                     CSS selector. When a CSS selector contains double
                     and single quotes, we won't add any of those
                     around the selector automatically. Instead, the
-                    user must specify them explicity, for instance
+                    user must specify them explicitly, for instance
                     like this: ... -selector {'[name="o\'hara"]'}. If
                     the selector does not contain any single or double
                     quotes, we can let the user omit them, as for the

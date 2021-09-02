@@ -69,7 +69,7 @@ ad_proc -private ad_core_docs_html_redirector {args} {
     #
     # There is no [ad_conn file] processed yet. Therefore, we have to
     # compute the path (consider just the path after the package_url
-    # for file name construction).
+    # for filename construction).
     #
     set url [ad_conn url]
     #

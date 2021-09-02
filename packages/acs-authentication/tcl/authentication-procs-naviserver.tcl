@@ -83,7 +83,7 @@ ad_proc -private ::auth::login_attempts::all_entries {}  {
         }
 
         #
-        # In general we face here a race condition. The entry for the
+        # In general, we face here a race condition. The entry for the
         # keys might have timed out. So, the cache lookup might
         # fail. So, we provide a "value" with an empty string as
         # default.

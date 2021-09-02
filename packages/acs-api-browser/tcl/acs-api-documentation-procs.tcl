@@ -1440,7 +1440,7 @@ namespace eval ::apidoc {
     }
 
     ad_proc -private is_object {scope proc_name} {
-        Checks, whether the specified argument is an xotcl object.
+        Checks, whether the specified argument is an XOTcl object.
         Does not cause problems when xotcl is not loaded.
         @return boolean value
     } {
@@ -1813,7 +1813,7 @@ namespace eval ::apidoc {
                         }
                         #
                         # The last four words in the following clause
-                        # are deprecated procs which are unfortunatley
+                        # are deprecated procs which are unfortunately
                         # picked up as commands by
                         # apidoc::tclcode_to_html. Therefore, we
                         # ignore these explicitly.

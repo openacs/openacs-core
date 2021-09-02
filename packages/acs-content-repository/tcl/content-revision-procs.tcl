@@ -814,7 +814,7 @@ ad_proc ::content::revision::export_to_filesystem {
     -filename:required
 } {
     Export the content of the provided revision to the named file in
-    the file system.
+    the filesystem.
 } {
     ::content::revision::export_to_filesystem-$storage_type \
         -revision_id $revision_id \
@@ -826,7 +826,7 @@ ad_proc -private ::content::revision::export_to_filesystem-text {
     -filename:required
 } {
     Export the content of the provided revision to the named file in
-    the file system.
+    the filesystem.
 } {
     set content [db_string select_object_content {
         select content from cr_revisions where revision_id = :revision_id
@@ -841,7 +841,7 @@ ad_proc -private ::content::revision::export_to_filesystem-file {
     -filename:required
 } {
     Export the content of the provided revision to the named file in
-    the file system.
+    the filesystem.
 } {
     set cr_file_name [content::revision::get_cr_file_path -revision_id $revision_id]
 
@@ -874,7 +874,7 @@ ad_proc -private ::content::revision::export_to_filesystem-lob {
     -filename:required
 } {
     Export the content of the provided revision to the named file in
-    the file system.
+    the filesystem.
 } {
     db_blob_get_file select_object_content {} -file $filename
 }

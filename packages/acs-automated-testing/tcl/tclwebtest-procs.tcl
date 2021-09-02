@@ -91,7 +91,7 @@ ad_proc twt::server_url {} {
 
 #########################
 #
-# twt::user namespace
+# twt::usernamespace
 #
 #########################
 

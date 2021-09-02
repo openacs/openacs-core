@@ -308,7 +308,7 @@ ad_proc -private tsearch2::build_query_postgres { -query } {
         <li>"quoted text": text inside quote marks will be converted to terms
         separated by <-> operators, as if processed by phraseto_tsquery.</li>
         <li>OR: logical or will be converted to the | operator.</li>
-        <li>-: the logical not operator, converted to the the ! operator.</li>
+        <li>-: the logical not operator, converted to the ! operator.</li>
     </ul>
     For further documentation see also:
     https://www.postgresql.org/docs/11/textsearch-controls.html#TEXTSEARCH-PARSING-QUERIES
