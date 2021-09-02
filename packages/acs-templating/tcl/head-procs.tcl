@@ -1036,11 +1036,12 @@ ad_proc template::add_confirm_handler {
     {-message "#acs-templating.Are_you_sure#"}
     {-CSSclass "acs-confirm"}
     {-id}
+    {-selector}
     {-formfield}
 } {
     Register an event handler for confirmation dialogs for elements
-    either with a specified ID, CSS class, or for a formfield targeted
-    by form id and field name.
+    either with a specified ID, CSS class, a formfield targeted by
+    form id and field name or a CSS selector.
 
     @param event     register confirm handler for this type of event
     @param id        register confirm handler for this HTML ID
@@ -1048,6 +1049,19 @@ ad_proc template::add_confirm_handler {
     @param formfield register confirm handler for this formfield, specified
                      in a list of two elements in the form
                      <code>{ form_id field_name }</code>
+    @param selector register confirm handler for elements identified
+                    by this CSS selector. When a CSS selector contains
+                    double and single quotes, we won't add any of
+                    those around the selector automatically. Instead,
+                    the user must specify them explicity, for instance
+                    like this: ... -selector {'[name="o\'hara"]'}. If
+                    the selector does not contain any single or double
+                    quotes, we can let the user omit them, as for the
+                    case of a simple tag name selector: ... -selector
+                    "li". Quotes can also be omitted if the selector
+                    contains only one kind of them, like ... -selector
+                    {[data-property='value']} or ... -selector
+                    {[data-property="value"]}
     @param message  Message to be displayed in the confirmation dialog.
                     If the message looks like a message key
                     (starting and ending with a hash sign)
@@ -1070,6 +1084,8 @@ ad_proc template::add_confirm_handler {
         lappend cmd -id $id
     } elseif {[info exists formfield]} {
         lappend cmd -formfield $formfield
+    } elseif {[info exists selector]} {
+        lappend cmd -selector $selector
     } else {
         lappend cmd -CSSclass $CSSclass
     }
