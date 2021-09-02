@@ -57,7 +57,7 @@ apm-admin-procs.tcl</ulink> (Supports APM UI)</para></listitem>
 <title>Introduction</title>
 
 <para>
-In general terms, a <emphasis role="strong">package</emphasis> is a unit of software that
+In general, a <emphasis role="strong">package</emphasis> is a unit of software that
 serves a single well-defined purpose. That purpose may be to provide a
 service directly to one or more classes of end-user, (e.g., discussion forums
 and file storage for community members, user profiling tools for the site

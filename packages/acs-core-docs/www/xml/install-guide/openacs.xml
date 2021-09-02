@@ -414,7 +414,7 @@ CREATE DATABASE
 [$OPENACS_SERVICE_NAME etc]$ <userinput>emacs config.tcl</userinput>
 </screen>
             <para>
-	  You can continue without changing any values in the file.  However, if you don&#39;t change <computeroutput>address</computeroutput> to match the computer&#39;s ip address, you won&#39;t be able to browse to your server from other machines.
+	  You can continue without changing any values in the file.  However, if you don&#39;t change <computeroutput>address</computeroutput> to match the computer&#39;s IP address, you won&#39;t be able to browse to your server from other machines.
 	</para>
             
             <itemizedlist>

@@ -25,7 +25,7 @@ may not be as easy to use but is more secure.
 <para>
 
 If a user switches to HTTPS after logging into the system via HTTP, the user
-must obtain a secure token. To insure security, the <emphasis>only way</emphasis> to
+must obtain a secure token. To ensure security, the <emphasis>only way</emphasis> to
 obtain a secure token in the security system is to authenticate yourself via
 password over an HTTPS connection. Thus, users may need to log on again to a
 system when switching from HTTP to HTTPS. Note that logging on to a system

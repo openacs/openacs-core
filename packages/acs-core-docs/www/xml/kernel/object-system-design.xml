@@ -345,7 +345,7 @@ the data.</para></listitem>
 <para>Object subtypes provide a way to factor the data model while still keeping
 track of the fact that each member of a subtype (i.e. for each row in the
 subtype&#39;s table), is also a member of the parent type (i.e. there is a
-corresponding row in the parent type table). Therefore, applications an use
+corresponding row in the parent type table). Therefore, applications use
 this mechanism without worrying about this bookkeeping themselves, and we
 avoid having applications pollute the core data model with their specific
 information.</para>

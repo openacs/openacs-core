@@ -406,7 +406,7 @@ ROOT/
       administrator can create as many instances of the package as she
       likes, and map these instances to any URL in the site that she
       wants. If packages are analogous to executable programs in an
-      operating system, then package instances are analgous to multiple
+      operating system, then package instances are analogous to multiple
       running copies of a single program. Each instance can be independently
       administered and each instance maintains its own set of application
       parameters and options.

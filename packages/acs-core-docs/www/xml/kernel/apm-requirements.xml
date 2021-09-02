@@ -62,7 +62,7 @@ offer users new and improved services, and also allows programmers to quickly
 and easily distribute their OpenACS components in a standardized manner to other
 OpenACS sites.</para>
 
-<para>In general terms, a package is a unit of software that serves a single
+<para>In general, a package is a unit of software that serves a single
 well-defined purpose. The OpenACS Package Manager (APM) provides a mechanism for
 packaging, installing, and configuring OpenACS software in a consistent,
 user-friendly, and subsite-aware manner.</para>
