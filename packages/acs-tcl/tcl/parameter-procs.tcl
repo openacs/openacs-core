@@ -261,11 +261,7 @@ ad_proc -public parameter::get_from_package_key {
     #    packages.
     #
     if {$value eq ""} {
-        if {[db_string check_singleton {
-            select 1 from apm_package_types
-            where package_key = :package_key
-            and singleton_p = 't'
-        } -default 0]} {
+        if {[apm_package_singleton_p $package_key]} {
             set value [parameter::get \
                            -localize=$localize_p \
                            -boolean=$boolean_p \

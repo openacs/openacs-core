@@ -12,6 +12,18 @@ nsv_array set apm_reload_watch [list]
 nsv_array set apm_package_info [list]
 nsv_set apm_properties reload_level 0
 
+namespace eval apm {
+
+    # Cache the singleton_p property of all packages.
+    db_foreach get_singleton {
+        select package_key, singleton_p
+        from apm_package_types
+    } {
+        set ::apm::package_singleton_p($package_key) $singleton_p
+    }
+
+}
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
