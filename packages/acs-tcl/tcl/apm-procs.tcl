@@ -362,16 +362,12 @@ ad_proc -private apm_package_singleton_p {
 } {
     @return boolean telling whether a package is a singleton or not
 } {
-    if {[info exists ::apm::package_singleton_p($package_key)]} {
-        return $::apm::package_singleton_p($package_key)
-    } else {
-        # Fallback for code executed when the cache has not been
-        # populated, or for new packages before restart.
-        return [db_string check_singleton {
+    return [acs::per_thread_cache eval -key acs-tcl.apm-singleton-$package_key {
+        db_string check_singleton {
             select singleton_p from apm_package_types
             where package_key = :package_key
-        } -default f]
-    }
+        } -default f
+    }]
 }
 
 ad_proc -public apm_version_loaded_p { version_id } {
