@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-templating {ACS Templating}} {Commenting Tcl procedures for parsing}</property>
+<property name="context">{/doc/acs-templating/ {ACS Templating}} {Commenting Tcl procedures for parsing}</property>
 <property name="doc(title)">Commenting Tcl procedures for parsing</property>
 <master>
 <h2>Using comments to document Tcl procedures</h2>
@@ -134,8 +134,7 @@ In the above example <code>user_id</code> and
 <code>object_id</code> would be marked as required,
 <code>alert_admin_email</code> would show no default-value
 description, and <code>granter_id</code> and
-<code>privilege_id</code> would show the default info from
-above.
+<code>privilege_id</code> would show the default info from above.
 <p>On to <strong>\@see</strong> directive markers:</p><blockquote># \@see <em>&lt;type of reference&gt;</em><em>&lt;name
 of reference&gt;</em><em>&lt;url of
 reference&gt;</em>

@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-templating {ACS Templating}} {Templating System User Guide: Integrating Forms into a
+<property name="context">{/doc/acs-templating/ {ACS Templating}} {Templating System User Guide: Integrating Forms into a
 Wizard}</property>
 <property name="doc(title)">Templating System User Guide: Integrating Forms into a
 Wizard</property>
@@ -22,15 +22,13 @@ API</a> for optional parameters to this command.</p>
 <h3>Add steps</h3>
 <p>Once the wizard is created, use the <kbd>wizard create</kbd>
 command to add steps to it:</p>
-<pre>
-wizard add make_sandwich -label "Add the lettuce" -url "add-lettuce"</pre>
+<pre>wizard add make_sandwich -label "Add the lettuce" -url "add-lettuce"</pre>
 <p>In auto-generated wizards, the wizard steps appear in the order
 they were created. See the <a href="/api-doc/proc-view?proc=template%3a%3awizard%3a%3acreate">wizard
 API</a> for optional parameters to this command. Alternatively,
 wizard steps can be created in the <kbd>wizard create</kbd>
 statement with the <kbd>-steps</kbd> option:</p>
-<pre>
-wizard create make_sandwich -action "eat-sandwich.acs?sandwich_id=$sandwich_id" -params { 
+<pre>wizard create make_sandwich -action "eat-sandwich.acs?sandwich_id=$sandwich_id" -params { 
   sandwich_id 
 } -steps { 
   1 -label "Add Meat"    -url "add-meat" -repeat
@@ -44,8 +42,7 @@ using the <kbd>-params</kbd> option in the <kbd>wizard create</kbd>
 statement. At any point in the wizard process, a state
 variable&#39;s value can be updated using the <kbd>wizard
 set_param</kbd> command.</p>
-<pre>
-# check to see if a sandwich_id has been passed in by the wizard
+<pre># check to see if a sandwich_id has been passed in by the wizard
 request set_param sandwich_id -datatype integer -optional
 
 # if not, then set the sandwich_id

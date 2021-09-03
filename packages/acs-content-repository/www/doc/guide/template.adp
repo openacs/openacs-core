@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-content-repository {ACS Content Repository}} {Content Repository Developer Guide: Applying
+<property name="context">{/doc/acs-content-repository/ {ACS Content Repository}} {Content Repository Developer Guide: Applying
 Templates}</property>
 <property name="doc(title)">Content Repository Developer Guide: Applying
 Templates</property>
@@ -10,7 +10,8 @@ Templates</property>
 Guide</strong>
 <p>The content repository allows you to associate templates with
 both content types and individual content items. A template
-determines how a content item is rendered when exported to the filesystem or served directly to a client.</p>
+determines how a content item is rendered when exported to the
+filesystem or served directly to a client.</p>
 <p>The content repository does not make any assumptions about the
 type of templating system used by the application server with which
 it is being used. Templates are simply made available to the
@@ -125,5 +126,5 @@ content items is:</p>
 );</pre>
 <hr>
 <a href="mailto:karlg\@arsdigita.com">karlg\@arsdigita.com</a>
-<p>Last Modified: $&zwnj;Id: template.html,v 1.2 2017/08/07 23:47:47
+<p>Last Modified: $&zwnj;Id: template.html,v 1.2.2.1 2021/04/05 19:49:49
 gustafn Exp $</p>

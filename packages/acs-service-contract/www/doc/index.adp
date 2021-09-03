@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-service-contract {ACS Service Contracts}} {ACS Service Contract Documentation}</property>
+<property name="context">{/doc/acs-service-contract/ {ACS Service Contracts}} {ACS Service Contract Documentation}</property>
 <property name="doc(title)">ACS Service Contract Documentation</property>
 <master>
 <h1>ACS Service Contract Documentation</h1>
@@ -74,15 +74,13 @@ example <code>ObjectDisplay.Name.InputType</code> as name
 </li></ul>
 <h3>Creating Interfaces</h3>
 <ul><li>(sql):
-<pre>
-acs_sc_contract__new (contract_name, contract_desc):</pre>
+<pre>                 acs_sc_contract__new (contract_name, contract_desc):</pre>
 </li></ul>
 <p>creates a new contract to serve as a logical container for
 operations. contract_desc is a text description of the
 contract.</p>
 <ul><li>(sql):
-<pre>
-acs_sc_operation__new (contract_name, operation_name,
+<pre>                 acs_sc_operation__new (contract_name, operation_name,
                                        operation_desc, operation_iscachable_p,
                                        operation_inputtype, operation_outputtype
                                       ):</pre>

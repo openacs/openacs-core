@@ -6,7 +6,7 @@
 To ensure consistency (and its collateral benefit, maintainability),
 we define and adhere to standards in the following areas:
 </p><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="eng-standards-filenaming-nomenclature"></a>File Nomenclature</h3></div></div></div><p>
-Usually we organize our files so that they mainly serve one of the following three purposes:
+Usually, we organize our files so that they mainly serve one of the following three purposes:
 </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p> displaying objects and their properties</p></li><li class="listitem"><p> manipulating or acting on objects in some way (by creating, editing, linking, etc)</p></li><li class="listitem"><p> housing procedures, packages, data models and other prerequisite code
 Essentially, we want our files named in a fashion that reflects their purpose.</p></li></ul></div><p>
 
@@ -200,7 +200,7 @@ append page_content "&lt;/ul&gt;
 
 doc_return 200 text/html $page_content
 </pre><p>
-The old convention was to call <code class="computeroutput">ReturnHeaders</code> and
+The old convention was to call <code class="computeroutput">util_return_headers</code> and
 then <code class="computeroutput">ns_write</code> for each distinct chunk of the page. This
 approach has the disadvantage of tying up a scarce and valuable
 resource (namely, a database handle) for an unpredictable amount of

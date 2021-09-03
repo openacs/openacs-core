@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Object Model Requirements}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Object Model Requirements}</property>
 <property name="doc(title)">Object Model Requirements</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -138,9 +138,9 @@ modifiable data model, or how to store information that may change
 extensively between releases or in different client installations.
 Furthermore, we want to avoid changes to an application&#39;s
 database queries in the face of any custom extensions, since such
-changes are difficult or dangerous to make at runtime, and can make
-updating the system difficult. Some example applications in OpenACS
-3.x with modifiable data models include:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
+changes are difficult or dangerous to make at run time, and can
+make updating the system difficult. Some example applications in
+OpenACS 3.x with modifiable data models include:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>User/groups: developers and users can attach custom data to
 group types, groups, and members of groups.</p></li><li class="listitem"><p>In the Ecommerce data model, the <code class="computeroutput">ec_custom_product_fields</code> table defines
 attributes for catalog products, and the <code class="computeroutput">ec_custom_product_field_values</code> table stores

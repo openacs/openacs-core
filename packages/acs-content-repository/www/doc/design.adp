@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-content-repository {ACS Content Repository}} {Content Repository Design}</property>
+<property name="context">{/doc/acs-content-repository/ {ACS Content Repository}} {Content Repository Design}</property>
 <property name="doc(title)">Content Repository Design</property>
 <master>
 <h2>Content Repository Design</h2>
@@ -76,13 +76,13 @@ and allows the database server to scan and read it more
 efficiently.</p>
 <h3>VI. Further Reading</h3>
 <p>The <a href="object-model">Object Model</a> provides a
-graphic overview of how the content repository is designed.
-The model links to pages of the API Guide that describe individual
+graphic overview of how the content repository is designed. The
+model links to pages of the API Guide that describe individual
 objects. The Developer Guide describes how to address common
 development tasks using the content repository.</p>
 <hr>
 <a href="mailto:karlg\@arsdigita.com">karlg\@arsdigita.com</a>
 <br>
 
-Last Modified: $&zwnj;Id: design.html,v 1.2 2017/08/07 23:47:47 gustafn
+Last Modified: $&zwnj;Id: design.html,v 1.3 2018/07/03 18:19:14 hectorr
 Exp $

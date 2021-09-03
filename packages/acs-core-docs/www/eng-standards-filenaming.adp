@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {ACS File Naming and Formatting Standards}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {ACS File Naming and Formatting Standards}</property>
 <property name="doc(title)">ACS File Naming and Formatting Standards</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -18,7 +18,7 @@ maintainability), we define and adhere to standards in the
 following areas:</p><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="eng-standards-filenaming-nomenclature" id="eng-standards-filenaming-nomenclature"></a>File
-Nomenclature</h3></div></div></div><p>Usually we organize our files so that they mainly serve one of
+Nomenclature</h3></div></div></div><p>Usually, we organize our files so that they mainly serve one of
 the following three purposes:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>displaying objects and their properties</p></li><li class="listitem"><p>manipulating or acting on objects in some way (by creating,
 editing, linking, etc)</p></li><li class="listitem"><p>housing procedures, packages, data models and other prerequisite
@@ -216,8 +216,8 @@ used rarely, only when they are exceedingly useful.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="eng-standards-filenaming-tcllib" id="eng-standards-filenaming-tcllib"></a>Tcl Library Files</h3></div></div></div><p>Further standards for Tcl library files are under discussion; we
-plan to include naming conventions for procs.</p><div class="cvstag">($&zwnj;Id: filenaming.xml,v 1.8 2017/08/07 23:47:54
-gustafn Exp $)</div>
+plan to include naming conventions for procs.</p><div class="cvstag">($&zwnj;Id: filenaming.xml,v 1.8.2.2 2021/09/02
+16:56:02 gustafn Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

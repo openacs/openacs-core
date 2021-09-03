@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {How Internationalization/Localization works in
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {How Internationalization/Localization works in
 OpenACS}</property>
 <property name="doc(title)">How Internationalization/Localization works in
 OpenACS</property>
@@ -48,7 +48,7 @@ refers only to internationalizing the text in the package user
 interface.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="i18n-locale-templates" id="i18n-locale-templates"></a>Separate Templates for each Locale</h3></div></div></div><p>If the request processor finds a file named <code class="computeroutput">filename.locale.adp</code>, where locale matches
+<a name="i18n-locale-templates" id="i18n-locale-templates"></a>Separate Templates for each Locale</h3></div></div></div><p>If the request processor finds a filenamed <code class="computeroutput">filename.locale.adp</code>, where locale matches
 the user&#39;s locale, it will process that file instead of
 <code class="computeroutput">filename.adp</code>. For example, for
 a user with locale <code class="computeroutput">tl_PH</code>, the

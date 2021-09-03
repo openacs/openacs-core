@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-templating {ACS Templating}} {Templating System Tag Reference: Listtemplate}</property>
+<property name="context">{/doc/acs-templating/ {ACS Templating}} {Templating System Tag Reference: Listtemplate}</property>
 <property name="doc(title)">Templating System Tag Reference: Listtemplate</property>
 <master>
 <h2>Listtemplate</h2>

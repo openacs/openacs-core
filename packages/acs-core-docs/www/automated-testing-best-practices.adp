@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Automated Testing}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Automated Testing}</property>
 <property name="doc(title)">Automated Testing</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -41,15 +41,15 @@ For example, the subject of a forum post is used to construct a
 link and if it is " " it will have a link of <code class="computeroutput">&lt;a href="..."&gt; &lt;/a&gt;</code>
 which would not be clickable if whitespace was allowed as a valid
 input.</p></li><li class="listitem"><p>
-<strong>Doubleclick. </strong> Make sure that if you submit
-a form, use the back button, and submit again that the behavior is
-reasonable (correct behavior depends on what the form is for, but a
-server error is not reasonable).</p></li><li class="listitem"><p>
+<strong>Double-click. </strong> Make sure that if you
+submit a form, use the back button, and submit again that the
+behavior is reasonable (correct behavior depends on what the form
+is for, but a server error is not reasonable).</p></li><li class="listitem"><p>
 <strong>Duplicate names. </strong> Make sure that if a
 duplicate name is entered that there is a reasonable error rather
 than a server error. Check for insert, move, copy, and rename.</p></li>
-</ul></div><div class="cvstag">($&zwnj;Id: auto-testing.xml,v 1.4 2017/08/07
-23:47:54 gustafn Exp $)</div>
+</ul></div><div class="cvstag">($&zwnj;Id: auto-testing.xml,v 1.4.2.1 2019/08/09
+20:04:23 gustafn Exp $)</div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
 			leftLink="variables" leftLabel="Prev" leftTitle="Variables"

@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {External Authentication Requirements}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {External Authentication Requirements}</property>
 <property name="doc(title)">External Authentication Requirements</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -12,7 +12,7 @@ Documentation"
 <a name="ext-auth-requirements" id="ext-auth-requirements"></a>External
 Authentication Requirements</h2></div></div></div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140520367531464" id="idp140520367531464"></a>Vision</h3></div></div></div><p>People have plenty of usernames and passwords already, we
+<a name="idp140665976249600" id="idp140665976249600"></a>Vision</h3></div></div></div><p>People have plenty of usernames and passwords already, we
 don&#39;t want them to have yet another. We want people to be able
 to log in to OpenACS with the same password they use to log in to
 any other system.</p><p>Besides, administrators have better things to do than create
@@ -74,7 +74,7 @@ Pictures</h3></div></div></div><p>Authentication:</p><p><span class="inlinemedia
 <div class="titlepage"><div><div><h3 class="title">
 <a name="Requirements" id="Requirements"></a>Requirements</h3></div></div></div><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="idp140520348049544" id="idp140520348049544"></a>New API</h4></div></div></div><div class="segmentedlist"><table border="1" cellpadding="3" cellspacing="0" width="90%">
+<a name="idp140665823563712" id="idp140665823563712"></a>New API</h4></div></div></div><div class="segmentedlist"><table border="1" cellpadding="3" cellspacing="0" width="90%">
 <tr>
 <th width="15%">Feature</th><th width="8%">Status</th><th width="77%">Description</th>
 </tr><thead><tr><th>New API</th></tr></thead><tbody>
@@ -108,9 +108,9 @@ APIs</td>
 <td class="seg">EXT-AUTH-28</td><td class="seg">A</td><td class="seg">Username is email switch</td>
 </tr>
 </tbody>
-</table></div><p>Users will log in using a username, an authority, and a password.
-The authority is the source for user/password verification. OpenACS
-can be an authority itself.</p><p>Each user in OpenACS will belong to exactly one authority, which
+</table></div><p>Users will log in using a username, an authority, and a
+password. The authority is the source for user/password
+verification. OpenACS can be an authority itself.</p><p>Each user in OpenACS will belong to exactly one authority, which
 can either be the "local" OpenACS users table, in which
 case the password column is used, or it can be some external
 authority, which will be communicated with using some protocol, as
@@ -506,7 +506,7 @@ fail, signaling that the user&#39;s entry was not valid.</p></li><li class="list
 in the sort order.</p></li>
 </ul></div><p>The relevant code in user-login.tcl would look like this:</p><pre class="programlisting">
 if { ![auth::split_username -username_var username -authority_var authority] } {
-    # bounce back to the form with a message saying that the login wasn&#39;t valid.
+    # bounce back to the form with a message saying that the login was not valid. 
     ad_script_abort
 }
 

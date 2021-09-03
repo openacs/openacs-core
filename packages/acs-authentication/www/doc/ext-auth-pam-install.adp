@@ -85,13 +85,11 @@ file for each domain, all in <code class="computeroutput">/etc/pam.d</code>. Pre
 domain configuration lines into a single file, <code class="computeroutput">/etc/pam.conf</code>. On Red Hat, create the file
 <code class="computeroutput">/etc/pam.d/<span class="replaceable"><span class="replaceable">service0</span></span>
 </code> with these
-contents:</p><pre class="programlisting">
-auth       sufficient   /lib/security/pam_radius_auth.so
+contents:</p><pre class="programlisting">auth       sufficient   /lib/security/pam_radius_auth.so
 </pre>
 </li><li>
 <p>Modify the AOLserver configuration file to use this PAM domain.
-Edit the line</p><pre class="programlisting">
-ns_param   PamDomain             "<span class="replaceable"><span class="replaceable">service0</span></span>"</pre><p>So that the value of the parameter matches the name (just the
+Edit the line</p><pre class="programlisting">ns_param   PamDomain             "<span class="replaceable"><span class="replaceable">service0</span></span>"</pre><p>So that the value of the parameter matches the name (just the
 filename, not the fully pathed name) of the domain file in</p><pre class="programlisting">/etc/pam.d/</pre>
 </li>
 </ol></div>
@@ -102,8 +100,7 @@ filename, not the fully pathed name) of the domain file in</p><pre class="progra
 </li><li>
 <p><strong>Modify the AOLserver configuration file to support
 ns_pam. </strong></p><p>In <code class="computeroutput">/var/lib/aolserver/<span class="replaceable"><span class="replaceable">service0</span></span>/etc/config.tcl</code>, enable
-the nspam module by uncommenting this line:</p><pre class="programlisting">
-ns_param   nspam           ${bindir}/nspam.so</pre>
+the nspam module by uncommenting this line:</p><pre class="programlisting">ns_param   nspam           ${bindir}/nspam.so</pre>
 </li>
 </ol></div>
 </li><li><p>

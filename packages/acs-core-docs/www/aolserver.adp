@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Install AOLserver 3.3oacs1}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Install AOLserver 3.3oacs1}</property>
 <property name="doc(title)">Install AOLserver 3.3oacs1</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -153,13 +153,11 @@ Length: 826,613 [application/x-compressed]
 wget --passive http://www.tdom.org/tDOM-0.7.8.tar.gz
 tar xzf tDOM-0.7.8.tar.gz
 cd tDOM-0.7.8/unix</span></span>
-</pre><p>Edit the file CONFIG and change this section:</p><pre class="programlisting">
-# ----------------------------------------------------
+</pre><p>Edit the file CONFIG and change this section:</p><pre class="programlisting"># ----------------------------------------------------
 # aolsrc="/usr/src/aolserver-3.4"
 # ../configure --enable-threads --disable-tdomalloc \
 #   --with-aolserver=$aolsrc \
-#   --with-tcl=$aolsrc/tcl8.3.4/unix </pre><p>to</p><pre class="programlisting">
-# ----------------------------------------------------
+#   --with-tcl=$aolsrc/tcl8.3.4/unix </pre><p>to</p><pre class="programlisting"># ----------------------------------------------------
 aolsrc="/usr/local/src/aolserver/aolserver"
 ../configure --enable-threads --disable-tdomalloc \
   --with-aolserver=$aolsrc \

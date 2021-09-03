@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Scheduled Procedures}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Scheduled Procedures}</property>
 <property name="doc(title)">Scheduled Procedures</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -11,8 +11,7 @@ Topics"
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="tutorial-schedule-procs" id="tutorial-schedule-procs"></a>Scheduled Procedures</h2></div></div></div><p>Put this proc in a file <code class="computeroutput">/packages/<span class="replaceable"><span class="replaceable">myfirstpackage</span></span>/tcl/scheduled-init.tcl</code>.
 Files in /tcl with the -init.tcl ending are sourced on server
-startup. This one executes my_proc every 60 seconds:</p><pre class="programlisting">
-ad_schedule_proc 60 myfirstpackage::my_proc
+startup. This one executes my_proc every 60 seconds:</p><pre class="programlisting">ad_schedule_proc 60 myfirstpackage::my_proc
 </pre><p>This executes once a day, at midnight:</p><pre class="programlisting">ad_schedule_proc \
     -schedule_proc ns_schedule_daily \
     [list 0 0] \

@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-templating {ACS Templating}} {Templating System Tag Reference: Property}</property>
+<property name="context">{/doc/acs-templating/ {ACS Templating}} {Templating System Tag Reference: Property}</property>
 <property name="doc(title)">Templating System Tag Reference: Property</property>
 <master>
 <h2>Property</h2>
@@ -8,11 +8,11 @@
  : <a href="index">Tag Reference</a>
  : Property
 <h3>Summary</h3>
-<p>The <kbd>property</kbd> tag is used to set named attributes of the
-page.  The boolean attribute <kbd>adp</kbd> can be used to control, whether
-the content of the element should be processed by the ADP parser or
-not. Properties are most commonly used to pass information to a master
-template, such as a title or logo.</p>
+<p>The <kbd>property</kbd> tag is used to set named attributes of
+the page. The boolean attribute <kbd>adp</kbd> can be used to
+control, whether the content of the element should be processed by
+the ADP parser or not. Properties are most commonly used to pass
+information to a master template, such as a title or logo.</p>
 <h3>Usage</h3>
 <pre>&lt;master src="master"&gt;
 &lt;property name="title"&gt;My Home Page&lt;/property&gt;

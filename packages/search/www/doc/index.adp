@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/search {Search}} {Search}</property>
+<property name="context">{/doc/search/ {Search}} {Search}</property>
 <property name="doc(title)">Search</property>
 <master>
 <h1>Search</h1>

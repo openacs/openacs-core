@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Set up Log Analysis Reports}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Set up Log Analysis Reports}</property>
 <property name="doc(title)">Set up Log Analysis Reports</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -33,8 +33,7 @@ change <code class="computeroutput">OUTFILE
 to use a private directory. You&#39;ll also need to edit all
 instances of service0 to your $OPENACS_SERVICE_NAME.</p>
 </li><li class="listitem">
-<p>Run it.</p><pre class="screen">
-[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <strong class="userinput"><code>/usr/share/analog-5.32/analog -G -g/var/lib/aolserver/$OPENACS_SERVICE_NAME/etc/analog.cfg</code></strong>
+<p>Run it.</p><pre class="screen">[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <strong class="userinput"><code>/usr/share/analog-5.32/analog -G -g/var/lib/aolserver/$OPENACS_SERVICE_NAME/etc/analog.cfg</code></strong>
 /usr/share/analog-5.32/analog: analog version 5.32/Unix
 /usr/share/analog-5.32/analog: Warning F: Failed to open DNS input file
   /home/$OPENACS_SERVICE_NAME/dnscache: ignoring it
@@ -43,8 +42,7 @@ instances of service0 to your $OPENACS_SERVICE_NAME.</p>
 [$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$</pre><p>Verify that it works by browing to <code class="computeroutput">http://yourserver.test:8000/log/traffic.html</code>
 </p>
 </li><li class="listitem">
-<p>Automate this by creating a file in <code class="computeroutput">/etc/cron.daily</code>.</p><pre class="screen">
-[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <strong class="userinput"><code>exit</code></strong>
+<p>Automate this by creating a file in <code class="computeroutput">/etc/cron.daily</code>.</p><pre class="screen">[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <strong class="userinput"><code>exit</code></strong>
 logout
 
 [root root]# <strong class="userinput"><code>emacs /etc/cron.daily/analog</code></strong>

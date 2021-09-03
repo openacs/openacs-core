@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-templating {ACS Templating}} {Templating an Existing Tcl Page}</property>
+<property name="context">{/doc/acs-templating/ {ACS Templating}} {Templating an Existing Tcl Page}</property>
 <property name="doc(title)">Templating an Existing Tcl Page</property>
 <master>
 <h2>Templating an Existing Tcl Page</h2>
@@ -354,11 +354,11 @@ value.</p>
 <th><code>packages/acs-core-ui/www/pvt/alerts.tcl</code></th><th><code>packages/acs-core-ui/www/pvt/alerts.adp</code></th>
 </tr><tr>
 <td valign="top"><pre><font color="#999999">ad_page_contract {
-    \@cvs-id $&zwnj;Id: migration.html,v 1.4 2017/08/07 23:48:02 gustafn Exp $
+    \@cvs-id $&zwnj;Id: migration.html,v 1.4.2.1 2019/10/05 13:29:58 gustafn Exp $
 } {
 }</font></pre></td><td valign="top"><pre>
 <font color="#999999">ad_page_contract {
-    \@cvs-id $&zwnj;Id: migration.html,v 1.4 2017/08/07 23:48:02 gustafn Exp $
+    \@cvs-id $&zwnj;Id: migration.html,v 1.4.2.1 2019/10/05 13:29:58 gustafn Exp $
 } {
 } -properties {
     header:onevalue
@@ -560,5 +560,5 @@ Brechbühler</a>, <a href="mailto:iwashima\@mit.edu">Hiro
 Iwashima</a>
 </address>
 
-Last modified: $&zwnj;Id: migration.html,v 1.4 2017/08/07 23:48:02
+Last modified: $&zwnj;Id: migration.html,v 1.4.2.1 2019/10/05 13:29:58
 gustafn Exp $

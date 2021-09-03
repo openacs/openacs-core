@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-lang {ACS Localization}} {ACS 4 Globalization Requirements}</property>
+<property name="context">{/doc/acs-lang/ {ACS Localization}} {ACS 4 Globalization Requirements}</property>
 <property name="doc(title)">ACS 4 Globalization Requirements</property>
 <master>
 <h2>ACS 4 Globalization Requirements</h2>
@@ -378,7 +378,8 @@ preference should be stored.</p><p>
 preference should be attached via a session or else UTC should be
 used to display every date and time.</p><p>
 <strong>90.60</strong> The default if we can&#39;t determine a
-timezone is to display all dates and times in some universal timezone such as GMT.</p>
+timezone is to display all dates and times in some universal
+timezone such as GMT.</p>
 </blockquote>
 <h3>VI.H Database</h3>
 <blockquote><p>

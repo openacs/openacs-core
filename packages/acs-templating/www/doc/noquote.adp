@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-templating {ACS Templating}} {HTMLQuoting as Part of the Templating System -
+<property name="context">{/doc/acs-templating/ {ACS Templating}} {HTMLQuoting as Part of the Templating System -
 Requirements}</property>
 <property name="doc(title)">HTMLQuoting as Part of the Templating System -
 Requirements</property>

@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {OpenACS Internationalization Requirements}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {OpenACS Internationalization Requirements}</property>
 <property name="doc(title)">OpenACS Internationalization Requirements</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -416,8 +416,8 @@ non-registered user a timezone preference should be attached via a
 session or else UTC should be used to display every date and
 time.</p><p>
 <span class="emphasis"><em>90.60</em></span> The default if we
-can&#39;t determine a timezone is to display all dates and times
-in some universal timezone such as GMT.</p>
+can&#39;t determine a timezone is to display all dates and times in
+some universal timezone such as GMT.</p>
 </blockquote></div>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">

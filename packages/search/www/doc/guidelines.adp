@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/search {Search}} {How to make an object type searchable?}</property>
+<property name="context">{/doc/search/ {Search}} {How to make an object type searchable?}</property>
 <property name="doc(title)">How to make an object type searchable?</property>
 <master>
 <blockquote>

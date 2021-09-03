@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Installing OpenACS packages}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Installing OpenACS packages}</property>
 <property name="doc(title)">Installing OpenACS packages</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -15,8 +15,8 @@ new OpenACS Site"
 OpenACS docs are written by the named authors, and may be edited by
 OpenACS documentation staff.</div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140520359869048" id="idp140520359869048"></a>Installing OpenACS packages</h3></div></div></div><p>An OpenACS package extends your website and lets it do things it
-wasn&#39;t able to do before. You can have a weblog, a forums, a
+<a name="idp140665974379472" id="idp140665974379472"></a>Installing OpenACS packages</h3></div></div></div><p>An OpenACS package extends your website and lets it do things it
+was not able to do before. You can have a weblog, a forums, a
 calendar, or even do sophisticated project-management via your
 website.</p><p>After you&#39;ve installed OpenACS, you can congratulate
 yourself for a job well done. Then, you&#39;ll probably want to

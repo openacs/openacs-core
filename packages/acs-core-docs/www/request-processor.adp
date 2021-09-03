@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {The Request Processor}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {The Request Processor}</property>
 <property name="doc(title)">The Request Processor</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -106,8 +106,8 @@ package_key]</code></span></dt><dd><p>If the URL refers to a package instance, t
 name of the package.</p></dd><dt><span class="term"><code class="computeroutput">[ad_conn
 path_info]</code></span></dt><dd><p>In a .vuh file, path_info is the trailing part of the URL not
 matched by the .vuh file.</p></dd>
-</dl></div><div class="cvstag">($&zwnj;Id: rp.xml,v 1.13 2017/08/07 23:47:54 gustafn
-Exp $)</div>
+</dl></div><div class="cvstag">($&zwnj;Id: rp.xml,v 1.13.2.2 2019/08/09 20:04:23
+gustafn Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

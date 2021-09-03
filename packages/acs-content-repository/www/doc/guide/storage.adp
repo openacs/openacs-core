@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-content-repository {ACS Content Repository}} {}</property>
+<property name="context">{/doc/acs-content-repository/ {ACS Content Repository}} {}</property>
 <property name="doc(title)"></property>
 <master>
 <h2>Storing Data in the Content Repository</h2>
@@ -110,5 +110,5 @@ portrait upload form would look like this:</p>
 <pre>  ns_ora write_blob ...</pre>
 <hr>
 <a href="mailto:karlg\@arsdigita.com">karlg\@arsdigita.com</a>
-<p>Last Modified: $&zwnj;Id: storage.html,v 1.2 2017/08/07 23:47:47
+<p>Last Modified: $&zwnj;Id: storage.html,v 1.2.2.1 2021/04/05 19:49:49
 gustafn Exp $</p>

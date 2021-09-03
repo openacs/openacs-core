@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Basic Steps}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Basic Steps}</property>
 <property name="doc(title)">Basic Steps</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -93,15 +93,14 @@ variable $OPENACS_SERVICE_NAME. In order to set it globally so that
 it works for any new users or special service users you may create,
 edit the file <code class="computeroutput">/etc/profile</code> (
 <code class="computeroutput">/etc/share/skel/dot.profile</code> for
-FreeBSD) and add this line:</p><pre class="programlisting">
-export OPENACS_SERVICE_NAME=<span class="replaceable"><span class="replaceable">service0</span></span>
+FreeBSD) and add this line:</p><pre class="programlisting">export OPENACS_SERVICE_NAME=<span class="replaceable"><span class="replaceable">service0</span></span>
 </pre>
 </li>
 </ul></div>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140520358490104" id="idp140520358490104"></a>Paths and Users</h3></div></div></div><div class="table">
-<a name="idp140520358490744" id="idp140520358490744"></a><p class="title"><strong>Table 2.1. Default directories
+<a name="idp140665975271024" id="idp140665975271024"></a>Paths and Users</h3></div></div></div><div class="table">
+<a name="idp140665975271664" id="idp140665975271664"></a><p class="title"><strong>Table 2.1. Default directories
 for a standard install</strong></p><div class="table-contents"><table class="table" summary="Default directories for a standard install" cellspacing="0" width="100%" border="1">
 <colgroup>
 <col><col>
@@ -112,7 +111,7 @@ for a standard install</strong></p><div class="table-contents"><table class="tab
 <td>name of administrative access account</td><td>remadmin</td>
 </tr><tr>
 <td>OpenACS service</td><td>
-<a class="indexterm" name="idp140520358495352" id="idp140520358495352"></a><span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span> (set to service0
+<a class="indexterm" name="idp140665975292880" id="idp140665975292880"></a><span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span> (set to service0
 in default install)</td>
 </tr><tr>
 <td>OpenACS service account</td><td><span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span></td>

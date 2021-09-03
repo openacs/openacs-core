@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Upgrading Platform components}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Upgrading Platform components}</property>
 <property name="doc(title)">Upgrading Platform components</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -32,8 +32,7 @@ please exercise care.)</p><pre class="screen">cd /usr/local/src/
           cd aolserver/
           make
           </pre><p>Back up the old fts driver as a precaution and install the newly
-compiled one</p><pre class="screen">
-mv /usr/local/aolserver/bin/nsfts.so /usr/local/aolserver/bin/nsfts-0.2.so 
+compiled one</p><pre class="screen">mv /usr/local/aolserver/bin/nsfts.so /usr/local/aolserver/bin/nsfts-0.2.so 
           cp nsfts.so /usr/local/aolserver/bin
           </pre><p>Build and install the OpenFTS code for PostgreSQL</p><pre class="screen">cd /usr/local/src/Search-OpenFTS-tcl-0.3.2/
           cp -r pgsql_contrib_openfts /usr/local/src/postgresql-7.2.3/contrib /usr/local/src/postgresql-7.2.3/contrib/pgsql_contrib_openfts

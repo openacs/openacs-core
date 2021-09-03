@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {The OpenACS Database Access API}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {The OpenACS Database Access API}</property>
 <property name="doc(title)">The OpenACS Database Access API</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -98,12 +98,12 @@ string literals are no longer in the query, no extra quoting is
 required. Third, substitution of bind variables cannot change the
 actual text of the query, only the literal values in the
 placeholders. The database API makes bind variables easy to use by
-hooking them smoothly into the Tcl runtime so you simply provide
+hooking them smoothly into the Tcl run time so you simply provide
 :tclvar and the value of $tclvar is sent to the backend to actually
 execute the query.</p><p>The database API parses the query and pulls out all the bind
 variable specifications and replaces them with generic
 placeholders. It then automatically pulls the values of the named
-Tcl vars out of the runtime environment of the script, and passes
+Tcl vars out of the run time environment of the script, and passes
 them to the database.</p><p>Note that while this looks like a simple syntactic change, it
 really is very different from how interpolated text queries work.
 You use bind variables to replace what would otherwise be a literal
@@ -526,7 +526,7 @@ db_with_handle db {
 
           </pre>
 </dd>
-</dl></div><div class="cvstag">($&zwnj;Id: db-api.xml,v 1.17.2.1 2019/02/14 16:15:00
+</dl></div><div class="cvstag">($&zwnj;Id: db-api.xml,v 1.17.2.3 2020/07/02 08:39:25
 gustafn Exp $)</div>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">

@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-templating {ACS Templating}} {The ACS Templating System for Web Designers}</property>
+<property name="context">{/doc/acs-templating/ {ACS Templating}} {The ACS Templating System for Web Designers}</property>
 <property name="doc(title)">The ACS Templating System for Web Designers</property>
 <master>
 <h2>The ACS Templating System for Web Designers</h2>
@@ -123,17 +123,17 @@ presentation. The <a href="../tags/if">&lt;if&gt;</a> and
 &lt;else&gt; tags allow you to alter the format of your page to
 accommodate data changes. The function of &lt;if&gt; is
 straightforward enough: given a condition -- such as \@x\@ equals 5
--- all the text/html/dynamic data between the opening and
-closing &lt;if&gt; tags will be displayed if and only if \@x\@ does
-in fact equal 5. A complete listing of currently supported
-conditions and some brief explanatory notes can be found <a href="../tags/if">here</a>. Also, a few more things to keep in
+-- all the text/html/dynamic data between the opening and closing
+&lt;if&gt; tags will be displayed if and only if \@x\@ does in fact
+equal 5. A complete listing of currently supported conditions and
+some brief explanatory notes can be found <a href="../tags/if">here</a>. Also, a few more things to keep in
 mind:</p>
 <ul>
 <li>in Tcl all variables, even numbers, are stored as text strings
 with quantitative values, so conditions like less than, greater
 than, and (not) between can also be used with text to determine
 alphabetical order: <em>a</em> &lt; <em>b</em> &lt; ... &lt;
-<em>z</em>, lowercase letters are greater than uppercase, and
+<em>z</em>, lower-case letters are greater than upper-case, and
 numbers less than letters. Example: "you" are greater
 than "me", and "I" am less than
 "you"</li><li>the "between" conditions checks inclusively, so
@@ -176,11 +176,11 @@ add a few pointers:</p>
 <ul>
 <li>the &lt;slave&gt; tag indicates where on the master page the
 slave section is inserted</li><li>slave pages indicate the source of the master file with the
-&lt;master&gt; tag, referring by the filename only, and not
+&lt;master&gt; tag, referring by the file name only, and not
 including its ".adp" extension</li><li>as mentioned earlier, slave sections do not require
 &lt;html&gt;, &lt;head&gt;, and &lt;body&gt; tags when contained
 within a master tag already formatted for HTML</li><li>as the demonstration points out, pages are browsed at the .acs
-page sharing the same filename as the slave, not master</li><li>the master page can be viewed at its own .acs page, but shows
+page sharing the same file name as the slave, not master</li><li>the master page can be viewed at its own .acs page, but shows
 nothing in place of the &lt;slave&gt; tag</li><li>you can have nested slave sections, that is, a slave section
 within another slave</li><li>you <strong>cannot</strong> have two different slave sections
 within the same master (go ahead and try adding an extra
@@ -198,8 +198,9 @@ same name as a variable declared within the slave section&#39;s
 <p>Now that the secrets of &lt;master&gt; and &lt;slave&gt; have
 been revealed, it&#39;s time to put a little of your newfound
 knowledge to use. Open up <a href="form-sample.acs"><code>form-sample.adp</code></a>, a standalone,
-independently formatted html page, and enslave it to the mastery of your personal web page. It would also be nice if you were to
-label the newly inserted form with some slave-specific title.</p>
+independently formatted html page, and enslave it to the mastery of
+your personal web page. It would also be nice if you were to label
+the newly inserted form with some slave-specific title.</p>
 <p>
 <strong>Exercise Four: The functions of
 &lt;formtemplate&gt;</strong><br>

@@ -1,10 +1,11 @@
 
-<property name="context">{/doc/acs-content-repository {ACS Content Repository}} {ACS Content Repository Tutorial}</property>
+<property name="context">{/doc/acs-content-repository/ {ACS Content Repository}} {ACS Content Repository Tutorial}</property>
 <property name="doc(title)">ACS Content Repository Tutorial</property>
 <master>
 <h2>How to use the content repository</h2>
 
-by <a href="http://rubick.com">Jade Rubick</a>
+by <a href="http://web.archive.org/web/20180809082906/http://www.rubick.com/">Jade
+Rubick</a>
 <h3>Why use the content repository?</h3>
 <p>Let&#39;s say you&#39;re a developer making a package for
 OpenACS. You&#39;ve heard statements like, "every package
@@ -771,7 +772,8 @@ binary object associated with the item, as well as all
 attributes.</dd>
 </dl>
 <dl>
-<dt>Content Folder</dt><dd>A folder is analogous to a folder or directory in a filesystem. It represents a level in the content item hierarchy. In the
+<dt>Content Folder</dt><dd>A folder is analogous to a folder or directory in a filesystem.
+It represents a level in the content item hierarchy. In the
 previous example, press-releases is a folder under the repository
 root, and products is folder within that.</dd>
 </dl>

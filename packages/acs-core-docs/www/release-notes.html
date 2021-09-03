@@ -1,5 +1,18 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 'http://www.w3.org/TR/html4/loose.dtd"'>
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>OpenACS Release Notes</title><link rel="stylesheet" type="text/css" href="openacs.css"><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="general-documents.html" title="Chapter 1. High level information: What is OpenACS?"><link rel="previous" href="openacs-overview.html" title="Overview"><link rel="next" href="acs-admin.html" title="Part II. Administrator's Guide"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" style="border:0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="openacs-overview.html">Prev</a> </td><th width="60%" align="center">Chapter 1. High level information: What is OpenACS?</th><td width="20%" align="right"> <a accesskey="n" href="acs-admin.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="release-notes"></a>OpenACS Release Notes</h2></div></div></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="release-notes-5-9-1"></a>Release 5.9.2</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>OpenACS Release Notes</title><link rel="stylesheet" type="text/css" href="openacs.css"><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="general-documents.html" title="Chapter 1. High level information: What is OpenACS?"><link rel="previous" href="openacs-overview.html" title="Overview"><link rel="next" href="acs-admin.html" title="Part II. Administrator's Guide"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" style="border:0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="openacs-overview.html">Prev</a> </td><th width="60%" align="center">Chapter 1. High level information: What is OpenACS?</th><td width="20%" align="right"> <a accesskey="n" href="acs-admin.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="release-notes"></a>OpenACS Release Notes</h2></div></div></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="release-notes-5-10-0"></a>Release 5.10.0</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+        ... to be completed ....
+      </p></li></ul></div><p> Altogether, OpenACS 5.10.0 differs from OpenACS 5.9.1 by the
+    following statistics
+    </p><pre class="programlisting">
+      xxx files changed, xxx insertions(+), xxx deletions(-)
+    </pre><p>
+    contributed by xxxx committers (...) and xxxx patch/bugfix providers
+    (...). All packages of
+    the release were tested with PostgreSQL 10.* and Tcl 8.6.*.
+  </p><p>
+    For more details, consult the
+    <a class="ulink" href="" target="_top">raw ChangeLog</a>.
+  </p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="release-notes-5-9-1"></a>Release 5.9.1</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
 	The release of OpenACS 5.9.1 contains the 88 packages of the oacs-5-9
 	branch.  These packages include the OpenACS core packages, the major
 	application packages (e.g. most the ones used on OpenACS.org), and
@@ -88,7 +101,7 @@
 		  Stripped misleading SQL statements
 		</p></li></ul></div><p>
 	    </p></li><li class="listitem"><p>
-	      Marked redundant / uncalled sql functions as deprecated
+	      Marked redundant / uncalled SQL functions as deprecated
 	    </p></li><li class="listitem"><p>
 	      Replaced usages of obsolete view
 	      "all_object_party_privilege_map" by
@@ -104,7 +117,7 @@
 		  acs_object_types.object_type as foreign key
 		</p></li></ul></div><p>
 	    </p></li><li class="listitem"><p>
-	      Simplified core sql functions by using defaults:
+	      Simplified core SQL functions by using defaults:
 	      </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
 		  Number of functions reduced by a factor of 2 compared to OpenACS
 		  5.9.0 (while providing compatibility for clients using old
@@ -484,7 +497,7 @@
 		"ns/server/${server}/&gt;acs"
 		</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; "><li class="listitem"><p>
 		    NsShutdownWithNonZeroExitCode: tell NaviServer to return with a
-		    non-zero return code to cause restart (important under windows)
+		    nonzero return code to cause restart (important under windows)
 		  </p></li><li class="listitem"><p>
 		    LogIncludeUserId: include user_id in access log
 		  </p></li></ul></div><p>
@@ -740,7 +753,7 @@
 	      ignored due .xql files
 	      </p></li><li class="listitem"><p> Removed bug where same query-name was
 	      used in different branches of an if-statement for
-	      different sql statements, but the query-name lead to the
+	      different SQL statements, but the query-name lead to the
 	      wrong result.
 	      </p></li><li class="listitem"><p> Removed multiple entries of same query
 	      name from .xql files (e.g. the entry
@@ -788,8 +801,7 @@
 	      "ad_include_contract" (similar to ad_page_contract).
 	    </p></li><li class="listitem"><p>
 	      Improved them-ability for display_templates. One can now
-	      provide a display_template_name (similar to the sql
-	      statement name) to refer to display templates. This
+	      provide a display_template_name (similar to the SQL statement name) to refer to display templates. This
 	      enables reusability and is theme-able.
 	    </p></li><li class="listitem"><p> Dimensional slider reform (ad_dimensional):
  	    Removed hard-coded table layout from dimensional slider. Add
@@ -819,7 +831,7 @@
 	      in the acs-tcl package parameters)
 	    </p></li><li class="listitem"><p>
 	      Added ability to save data sent by
-	      ns_return in files on the file system. This can be used to
+	      ns_return in files on the filesystem. This can be used to
 	      validate HTML content also for password protected pages
 	      (controlled via package parameter "TclTraceSaveNsReturn" in
 	      the acs-tcl package parameters)
@@ -975,7 +987,7 @@
     committers.
     </p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="release-notes-5-7-0"></a>Release 5.7.0</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
           Made changes that extend acs-kernel's create_type and create_attribute procs,
-          so they're optionally able to create sql tables and columns.  Optional metadata
+          so they're optionally able to create SQL tables and columns.  Optional metadata
           params allow for the automatic generation of foreign key references, check
           exprs, etc.
         </p></li></ul></div></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="release-notes-5-6-0"></a>Release 5.6.0</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
@@ -1169,4 +1181,4 @@
         </p></li><li class="listitem"><p>
           Serving backup files and files from the CVS directories is turned off by default via the acs-kernel parameter
           ExcludedFiles in section request-processor (The variable provides a string match glob list of files and is defaulted to "*/CVS/* *~")
-        </p></li></ul></div><div class="cvstag">($Id$)</div></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="idp140520361422984"></a>Release 4.6.3</h3></div></div></div><p><a class="ulink" href="release-notes-4-6-3.html" target="_top">Release Notes for 4.6.3</a></p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="idp140520361424488"></a>Release 4.6.2</h3></div></div></div><p><a class="ulink" href="release-notes-4-6-2.html" target="_top">Release Notes for 4.6.2</a></p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="idp140520361425992"></a>Release 4.6</h3></div></div></div><p><a class="ulink" href="release-notes-4-6.html" target="_top">Release Notes for 4.6</a></p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="idp140520361427496"></a>Release 4.5</h3></div></div></div><p><a class="ulink" href="release-notes-4-5.html" target="_top">Release Notes for 4.5</a></p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="openacs-overview.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="acs-admin.html">Next</a></td></tr><tr><td width="40%" align="left">Overview </td><td width="20%" align="center"><a accesskey="u" href="general-documents.html">Up</a></td><td width="40%" align="right"> Part II. Administrator's Guide</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a></body></html>
+        </p></li></ul></div><div class="cvstag">($Id$)</div></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="idp140665973421504"></a>Release 4.6.3</h3></div></div></div><p><a class="ulink" href="release-notes-4-6-3.html" target="_top">Release Notes for 4.6.3</a></p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="idp140665973423008"></a>Release 4.6.2</h3></div></div></div><p><a class="ulink" href="release-notes-4-6-2.html" target="_top">Release Notes for 4.6.2</a></p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="idp140665973424512"></a>Release 4.6</h3></div></div></div><p><a class="ulink" href="release-notes-4-6.html" target="_top">Release Notes for 4.6</a></p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="idp140665973426016"></a>Release 4.5</h3></div></div></div><p><a class="ulink" href="release-notes-4-5.html" target="_top">Release Notes for 4.5</a></p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="openacs-overview.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="acs-admin.html">Next</a></td></tr><tr><td width="40%" align="left">Overview </td><td width="20%" align="center"><a accesskey="u" href="general-documents.html">Up</a></td><td width="40%" align="right"> Part II. Administrator's Guide</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a></body></html>

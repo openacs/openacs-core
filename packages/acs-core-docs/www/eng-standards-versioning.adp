@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Release Version Numbering}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Release Version Numbering}</property>
 <property name="doc(title)">Release Version Numbering</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -10,8 +10,8 @@ Standards"
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="eng-standards-versioning" id="eng-standards-versioning"></a>Release Version Numbering</h2></div></div></div><div class="authorblurb">
-<div class="cvstag">($&zwnj;Id: eng-standards-versioning.xml,v 1.11
-2017/08/07 23:47:54 gustafn Exp $)</div><p>By Ron Henderson, Revised by Joel Aufrecht</p>
+<div class="cvstag">($&zwnj;Id: eng-standards-versioning.xml,v 1.11.2.1
+2020/08/06 13:23:35 gustafn Exp $)</div><p>By Ron Henderson, Revised by Joel Aufrecht</p>
 OpenACS docs are written by the named authors, and may be edited by
 OpenACS documentation staff.</div><p>OpenACS version numbers help identify at a high-level what is in
 a particular release and what has changed since the last

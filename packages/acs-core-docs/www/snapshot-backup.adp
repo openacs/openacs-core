@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Manual backup and recovery}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Manual backup and recovery}</property>
 <property name="doc(title)">Manual backup and recovery</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -101,8 +101,8 @@ exit</span></span>
 </ul></div>
 </li><li class="listitem">
 <a name="backup-file-system" id="backup-file-system"></a><p>
-<strong>Back up the filesystem. </strong>Back up all of
-the files in the service, including the database backup file but
+<strong>Back up the filesystem. </strong>Back up all of the
+files in the service, including the database backup file but
 excluding the auto-generated <code class="filename">supervise</code> directory, which is unnecessary and has
 complicated permissions.</p><p>In the tar command,</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>
@@ -188,8 +188,8 @@ are not guaranteed to be created in the right order. In practice,
 running the OpenACS initialization script is always sufficient to
 create any out-of-order database objects. Next, restore the
 database from the dump file. The restoration will show some error
-messages at the beginning for objects that were precreated from
-the OpenACS initialization script, which can be ignored.</p><pre class="screen">[root root]# <strong class="userinput"><code>su - <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
+messages at the beginning for objects that were precreated from the
+OpenACS initialization script, which can be ignored.</p><pre class="screen">[root root]# <strong class="userinput"><code>su - <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
 </code></strong>
 [$OPENACS_SERVICE_NAME ~]$ <strong class="userinput"><code>createdb <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
 </code></strong>

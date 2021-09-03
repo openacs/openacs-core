@@ -6,7 +6,7 @@
     database to a file within the file tree.  Then, you back up the
     file tree.  All of the information needed to rebuild the site,
     including the AOLserver config files, is then in tree for regular
-    file system backup.</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p><b>Back up the database to a file. </b></p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><a name="oracle-snapshot-backup"></a><b>Oracle. </b></p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; "><li class="listitem"><p> 
+    filesystem backup.</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p><b>Back up the database to a file. </b></p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><a name="oracle-snapshot-backup"></a><b>Oracle. </b></p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; "><li class="listitem"><p> 
               Download the backup script. Save the file <a class="ulink" href="files/export-oracle.txt" target="_top">export-oracle.txt</a> as
               <code class="filename">/var/tmp/export-oracle.txt</code>
               </p></li><li class="listitem"><p>
@@ -73,7 +73,7 @@ Export terminated successfully without warnings.</pre></li></ul></div></li><li c
 <span class="action"><span class="action">su - $OPENACS_SERVICE_NAME
 pg_dump -f /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/database-backup/before_upgrade_to_4.6.dmp <span class="replaceable"><span class="replaceable">openacs-dev</span></span>
 ls -al /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/database-backup/before_upgrade_to_4.6.dmp
-exit</span></span></pre></li></ul></div></li><li class="listitem"><a name="backup-file-system"></a><p><b>Back up the file system. </b>Back up all of the files in the service, including the
+exit</span></span></pre></li></ul></div></li><li class="listitem"><a name="backup-file-system"></a><p><b>Back up the filesystem. </b>Back up all of the files in the service, including the
           database backup file but excluding the auto-generated
           <code class="filename">supervise</code> directory, which is
           unnecessary and has complicated permissions.  </p><p>In the tar command,</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><code class="computeroutput">c</code> create a
@@ -119,7 +119,7 @@ Shall the new user be allowed to create databases? (y/n) <strong class="userinpu
 Shall the new user be allowed to create more new users? (y/n) <strong class="userinput"><code>y</code></strong>
 CREATE USER
 [postgres ~]$ <strong class="userinput"><code>exit</code></strong>
-</pre><p>Because of a bug in Postgres backup-recovery, database objects are not guaranteed to be created in the right order.  In practice, running the OpenACS initialization script is always sufficient to create any out-of-order database objects.  Next, restore the database from the dump file.  The restoration will show some error messages at the beginning for objects that were pre-created from the OpenACS initialization script, which can be ignored.</p><pre class="screen">[root root]# <strong class="userinput"><code>su - <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span></code></strong>
+</pre><p>Because of a bug in Postgres backup-recovery, database objects are not guaranteed to be created in the right order.  In practice, running the OpenACS initialization script is always sufficient to create any out-of-order database objects.  Next, restore the database from the dump file.  The restoration will show some error messages at the beginning for objects that were precreated from the OpenACS initialization script, which can be ignored.</p><pre class="screen">[root root]# <strong class="userinput"><code>su - <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span></code></strong>
 [$OPENACS_SERVICE_NAME ~]$ <strong class="userinput"><code>createdb <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span></code></strong>
 CREATE DATABASE
 [$OPENACS_SERVICE_NAME ~]$<strong class="userinput"><code> psql -f /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/packages/acs-kernel/sql/postgresql/postgresql.sql <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span></code></strong>

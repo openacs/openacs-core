@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Chapter 1. High level information: What is
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Chapter 1. High level information: What is
 OpenACS?}</property>
 <property name="doc(title)">Chapter 1. High level information: What is
 OpenACS?</property>

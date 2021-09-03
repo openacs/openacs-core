@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-reference {ACS Reference Data}} {ACS Reference Requirements}</property>
+<property name="context">{/doc/acs-reference/ {ACS Reference Data}} {ACS Reference Requirements}</property>
 <property name="doc(title)">ACS Reference Requirements</property>
 <master>
 <h2>ACS Reference Requirements</h2>

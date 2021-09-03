@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Upgrading the OpenACS files}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Upgrading the OpenACS files}</property>
 <property name="doc(title)">Upgrading the OpenACS files</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -11,21 +11,21 @@
 <a name="upgrade-openacs-files" id="upgrade-openacs-files"></a>Upgrading
 the OpenACS files</h2></div></div></div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140520283780216" id="idp140520283780216"></a>Choosing a Method to Upgrade your
+<a name="idp140666101984976" id="idp140666101984976"></a>Choosing a Method to Upgrade your
 Files</h3></div></div></div><p>OpenACS is distributed in many different ways:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>as a collection of files</p></li><li class="listitem"><p>as one big tarball</p></li><li class="listitem"><p>via CVS</p></li><li class="listitem"><p>via automatic download from within the APM (package manager)</p></li>
 </ul></div><p>Upgrades work by first changing the filesystem (via any of the
 previous methods), and then using the APM to scan the filesystem,
 find upgrade scripts, and execute them. Starting with OpenACS 5.0,
-the last method was added, which automatically changes the filesystem for you. If you are using the last method, you can skip this
-page. This page describes whether or not you need to be upgrading
-using this page or not: <a class="xref" href="upgrade-5-0-dot" title="Upgrading an OpenACS 5.0.0 or greater installation">the
-section called “Upgrading an OpenACS 5.0.0 or greater
-installation”</a>
+the last method was added, which automatically changes the
+filesystem for you. If you are using the last method, you can skip
+this page. This page describes whether or not you need to be
+upgrading using this page or not: <a class="xref" href="upgrade-5-0-dot" title="Upgrading an OpenACS 5.0.0 or greater installation">the section
+called “Upgrading an OpenACS 5.0.0 or greater installation”</a>
 </p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140520283763176" id="idp140520283763176"></a>Methods of upgrading OpenACS files</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
+<a name="idp140666101990400" id="idp140666101990400"></a>Methods of upgrading OpenACS files</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem">
 <p>
 <strong>Upgrading files for a site which is not in a CVS
@@ -53,7 +53,7 @@ how to upgrade your local CVS repository with the latest OpenACS
 version, without overriding your own local customizations.</p><p>This diagram explains the basic idea. However, the labels are
 incorrect. Step 1(a) has been removed, and Step 1(b) should be
 labelled Step 1.</p><div class="figure">
-<a name="idp140520283786568" id="idp140520283786568"></a><p class="title"><strong>Figure 5.2. Upgrading a local
+<a name="idp140666102001360" id="idp140666102001360"></a><p class="title"><strong>Figure 5.2. Upgrading a local
 CVS repository</strong></p><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/upgrade-cvs.png" align="middle" alt="Upgrading a local CVS repository"></div></div>
 </div><br class="figure-break"><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle;">
 <li class="listitem">
@@ -123,8 +123,7 @@ package.</p>
 you have a local copy of the new OpenACS code, you need to import
 it into your local CVS repository and resolve any conflicts that
 occur.</p><p>Import the new files into your cvs repository; where they match
-existing files, they will become the new version of the file.</p><pre class="screen">
-[$OPENACS_SERVICE_NAME openacs-5-1]$ <strong class="userinput"><code> cd /var/lib/aolserver/<span class="replaceable"><span class="replaceable">openacs-5-1</span></span>
+existing files, they will become the new version of the file.</p><pre class="screen">[$OPENACS_SERVICE_NAME openacs-5-1]$ <strong class="userinput"><code> cd /var/lib/aolserver/<span class="replaceable"><span class="replaceable">openacs-5-1</span></span>
 </code></strong>
 [$OPENACS_SERVICE_NAME openacs-5-1]$ <strong class="userinput"><code> cvs -d /var/lib/cvs import -m "upgrade to OpenACS 5.1" <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span> OpenACS <span class="replaceable"><span class="replaceable">openacs-5-1</span></span>
 </code></strong>
@@ -143,8 +142,7 @@ conflicts between the new files and your current work. The example
 uses the cvs keyword yesterday, making the assumption that you
 haven&#39;t checked in new code to your local tree in the last day.
 This section should be improved to use tags instead of the keyword
-yesterday!</p><pre class="screen">
-[$OPENACS_SERVICE_NAME openacs-5.1]$ <strong class="userinput"><code> cd /var/lib/aolserver</code></strong>
+yesterday!</p><pre class="screen">[$OPENACS_SERVICE_NAME openacs-5.1]$ <strong class="userinput"><code> cd /var/lib/aolserver</code></strong>
 [$OPENACS_SERVICE_NAME tmp]$ <strong class="userinput"><code>rm -rf <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>-upgrade</code></strong>
 [$OPENACS_SERVICE_NAME tmp]$ <strong class="userinput"><code>mkdir <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>-upgrade</code></strong>
 [$OPENACS_SERVICE_NAME tmp]$ <strong class="userinput"><code>cvs checkout -d <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>-upgrade -jOpenACS:yesterday -jOpenACS -kk <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span> &gt; cvs.txt 2&gt;&amp;1</code></strong>
@@ -182,7 +180,7 @@ the OpenACS CVS repository (cvs.openacs.org)</strong></span></p><div class="orde
 [$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$</pre></li></ol></div>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140520366348776" id="idp140520366348776"></a>Upgrading a Production Site Safely</h3></div></div></div><p>If you are upgrading a production OpenACS site which is on a
+<a name="idp140666102063872" id="idp140666102063872"></a>Upgrading a Production Site Safely</h3></div></div></div><p>If you are upgrading a production OpenACS site which is on a
 private CVS tree, this process lets you do the upgrade without
 risking extended downtime or an unusable site:</p><div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem"><p>Declare a freeze on new cvs updates - ie, you cannot run cvs

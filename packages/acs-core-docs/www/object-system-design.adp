@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Object Model Design}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Object Model Design}</property>
 <property name="doc(title)">Object Model Design</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -229,10 +229,9 @@ constraints on the data.</p></li>
 still keeping track of the fact that each member of a subtype (i.e.
 for each row in the subtype&#39;s table), is also a member of the
 parent type (i.e. there is a corresponding row in the parent type
-table). Therefore, applications use this mechanism without
-worrying about this bookkeeping themselves, and we avoid having
-applications pollute the core data model with their specific
-information.</p>
+table). Therefore, applications use this mechanism without worrying
+about this bookkeeping themselves, and we avoid having applications
+pollute the core data model with their specific information.</p>
 </div><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
 <a name="objects-design-attributes" id="objects-design-attributes"></a>Object Attributes, Skinny
@@ -260,20 +259,21 @@ add to the list of user preferences is to add a column to the
 <code class="computeroutput">users_preferences</code> table
 (exactly the kind of data model change that has historically
 complicated the process of upgrading to a more recent OpenACS
-version).</p><p>The Object Model generalizes the scheme used in the old OpenACS
-3.x user/groups system. It defines a table called <code class="computeroutput">acs_attributes</code> that record what attributes
-belong to which object types, and how the attributes are stored. As
-before, attributes can either be stored in helper tables, or in a
-single central skinny table. The developer makes this choice on a
-case by case basis. For the most part, attribute data is stored in
-helper tables so that they can take full advantage of relational
-data modeling and because they will generally be more efficient.
-Occasionally, a data model will use skinny tables because doing so
-allows developers and users to dynamically update the set of
-attributes stored on an object without updating the data model at
-the code level. The bottom line: Helper tables are more functional
-and more efficient, skinny tables are more flexible but
-limited.</p>
+version).</p><p>The ACS Object Model generalizes the scheme used in the old
+OpenACS 3.x user/groups system. It defines a table called
+<code class="computeroutput">acs_attributes</code> that record what
+attributes belong to which object types, and how the attributes are
+stored. As before, attributes can either be stored in helper
+tables, or in a single central skinny table. The developer makes
+this choice on a case by case basis. For the most part, attribute
+data is stored in helper tables so that they can take full
+advantage of relational data modeling and because they will
+generally be more efficient. Occasionally, a data model will use
+skinny tables because doing so allows developers and users to
+dynamically update the set of attributes stored on an object
+without updating the data model at the code level. The bottom line:
+Helper tables are more functional and more efficient, skinny tables
+are more flexible but limited.</p>
 </div><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
 <a name="objects-design-relation-types" id="objects-design-relation-types"></a>Relation Types</h4></div></div></div><p>Many OpenACS 3.x modules use <span class="emphasis"><em>mapping
@@ -345,13 +345,13 @@ alternative. Here, some notion of subtyping is embedded into an
 existing SQL or SQL-like database engine. Examples of systems like
 this include the new Informix, PostgreSQL 7, and Oracle has
 something like this too. The main problem with these systems: each
-one implements their own nonportable extensions to SQL to
-implement subtyping. Thus, making OpenACS data models portable
-would become even more difficult. In addition, each of these object
-systems have strange limitations that make using inheritance
-difficult in practice. Finally, object databases are not as widely
-used as traditional relational systems. They have not been tested
-as extensively and their scalability to very large databases is not
+one implements their own nonportable extensions to SQL to implement
+subtyping. Thus, making OpenACS data models portable would become
+even more difficult. In addition, each of these object systems have
+strange limitations that make using inheritance difficult in
+practice. Finally, object databases are not as widely used as
+traditional relational systems. They have not been tested as
+extensively and their scalability to very large databases is not
 proven (though some will disagree with this statement).</p>
 </div><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
@@ -367,7 +367,7 @@ is not designed to scale too large type hierarchies. In the more
 limited domain of the metadata model, this is acceptable since the
 type hierarchy is fairly small. But the object system data model is
 not designed to support, for example, a huge type tree like the
-Java runtime libraries might define.</p><p>This last point cannot be over-stressed: <span class="strong"><strong>the object model is not meant to be used for large
+Java run time libraries might define.</p><p>This last point cannot be over-stressed: <span class="strong"><strong>the object model is not meant to be used for large
 scale application data storage</strong></span>. It is meant to
 represent and store metadata, not application data.</p>
 </div>

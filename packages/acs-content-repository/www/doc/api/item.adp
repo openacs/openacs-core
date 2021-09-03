@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-content-repository {ACS Content Repository}} {Package: content_item}</property>
+<property name="context">{/doc/acs-content-repository/ {ACS Content Repository}} {Package: content_item}</property>
 <property name="doc(title)">Package: content_item</property>
 <master>
 <h2>content_item</h2>
@@ -741,5 +741,5 @@ procedure write_to_file (
 </ul>
 <p> </p>
 
-Last Modified: $&zwnj;Id: item.html,v 1.6 2018/04/11 21:35:06 hectorr Exp
-$
+Last Modified: $&zwnj;Id: item.html,v 1.6.2.1 2019/08/10 18:09:52 gustafn
+Exp $

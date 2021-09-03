@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Categories}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Categories}</property>
 <property name="doc(title)">Categories</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -92,8 +92,7 @@ Template commands; here, we call them directly because we don&#39;t
 need the extra features of ad_form. The form calls itself, but with
 hidden variables carrying both <code class="computeroutput">note_id</code> and <code class="computeroutput">confirm_p</code>. If confirm_p is present, we
 delete the record, set redirection back to the index, and abort
-script execution.</p><p>The database commands:</p><pre class="screen">
-[$OPENACS_SERVICE_NAME\@yourserver www]$ <strong class="userinput"><code>emacs note-delete.xql</code></strong>
+script execution.</p><p>The database commands:</p><pre class="screen">[$OPENACS_SERVICE_NAME\@yourserver www]$ <strong class="userinput"><code>emacs note-delete.xql</code></strong>
 </pre><pre class="programlisting">&lt;?xml version="1.0"?&gt;
 &lt;queryset&gt;
   &lt;fullquery name="do_delete"&gt;
@@ -106,8 +105,7 @@ script execution.</p><p>The database commands:</p><pre class="screen">
       select samplenote__name(:note_id)
     &lt;/querytext&gt;
   &lt;/fullquery&gt;
-&lt;/queryset&gt;</pre><p>And the adp page:</p><pre class="screen">
-[$OPENACS_SERVICE_NAME\@yourserver www]$ <strong class="userinput"><code>emacs note-delete.adp</code></strong>
+&lt;/queryset&gt;</pre><p>And the adp page:</p><pre class="screen">[$OPENACS_SERVICE_NAME\@yourserver www]$ <strong class="userinput"><code>emacs note-delete.adp</code></strong>
 </pre><pre class="programlisting">
 &lt;master&gt;
 &lt;property name="title"&gt;\@title\@&lt;/property&gt;

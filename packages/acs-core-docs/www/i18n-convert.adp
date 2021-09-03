@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {How to Internationalize a Package}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {How to Internationalize a Package}</property>
 <property name="doc(title)">How to Internationalize a Package</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -94,9 +94,7 @@ grep -r "to_date.*H" *
 standard format, <code class="computeroutput">YYYY-MM-DD
 HH24:MI:SS</code> and change the field name to *_ansi so that it
 cannot be confused with previous, improperly formatting fields. For
-example,</p><pre class="programlisting">
-to_char(timestamp,'MM/DD/YYYY HH:MI:SS') as foo_date_pretty</pre><p>becomes</p><pre class="programlisting">
-to_char(timestamp,'YYYY-MM-DD HH24:MI:SS') as foo_date_ansi</pre>
+example,</p><pre class="programlisting">to_char(timestamp,'MM/DD/YYYY HH:MI:SS') as foo_date_pretty</pre><p>becomes</p><pre class="programlisting">to_char(timestamp,'YYYY-MM-DD HH24:MI:SS') as foo_date_ansi</pre>
 </li><li class="listitem">
 <p>In Tcl files where the date fields are used, convert the
 datetime from local server timezone, which is how it&#39;s stored
@@ -112,8 +110,7 @@ datetime and format code. Several format codes are usable for
 localization; they are placeholders that format dates with the
 appropriate codes for the user&#39;s locale. These codes are:
 <code class="computeroutput">%x, %X, %q, %Q, and %c.</code>
-</p><pre class="programlisting">
-set foo_date_pretty [lc_time_fmt $foo_date_ansi "%x %X"]</pre><p>Use the <code class="computeroutput">_pretty</code> version in
+</p><pre class="programlisting">set foo_date_pretty [lc_time_fmt $foo_date_ansi "%x %X"]</pre><p>Use the <code class="computeroutput">_pretty</code> version in
 your ADP page.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>%c: Long date and time (Mon November 18, 2002 12:00 AM)</p></li><li class="listitem"><p>%x: Short date (11/18/02)</p></li><li class="listitem"><p>%X: Time (12:00 AM)</p></li><li class="listitem"><p>%q: Long date without weekday (November 18, 2002)</p></li><li class="listitem"><p>%Q: Long date with weekday (Monday November 18, 2002)</p></li>
 </ul></div><p>The "q" format strings are OpenACS additions; the rest
@@ -147,7 +144,7 @@ its checks primarily on en_US XML catalog files.</p>
 </li>
 </ol></div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140520364283384" id="idp140520364283384"></a>Avoiding common i18n mistakes</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
+<a name="idp140664745045712" id="idp140664745045712"></a>Avoiding common i18n mistakes</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem">
 <p>
 <strong>Replace complicated keys with longer, simpler
@@ -164,24 +161,20 @@ refactor compound text as you encounter it.</p><p>The automated system can easil
 message texts, so that it tries to create two or three message keys
 for one long string with a tag in the middle. In these cases,
 uncheck those keys during the conversion and then edit the files
-directly. For example, this code:</p><pre class="programlisting">
-&lt;p class="form-help-text"&gt;&lt;b&gt;Invitations&lt;/b&gt; are sent,
+directly. For example, this code:</p><pre class="programlisting">  &lt;p class="form-help-text"&gt;&lt;b&gt;Invitations&lt;/b&gt; are sent,
           when this wizard is completed and casting begins.&lt;/p&gt;</pre><p>has a bold tag which confuses the converter into thinking there
 are two message keys for the text beginning "Invitations
 ..." where there should be one:</p><div class="mediaobject" align="center"><img src="images/i18n-3.png" align="middle"></div><p>Instead, we cancel those keys, edit the file manually, and put
-in a single temporary message tag:</p><pre class="programlisting">
-&lt;p class="form-help-text"&gt; &lt;#Invitations_are_sent &lt;b&gt;Invitations&lt;/b&gt; are sent, 
+in a single temporary message tag:</p><pre class="programlisting">  &lt;p class="form-help-text"&gt; &lt;#Invitations_are_sent &lt;b&gt;Invitations&lt;/b&gt; are sent, 
 when this wizard is completed and casting begins.#&gt;
   &lt;/p&gt;</pre><p>Complex if statements may produce convoluted message keys that
 are very hard to localize. Rewrite these if statements. For
-example:</p><pre class="programlisting">
-Select which case &lt;if \@simulation.casting_type\@ eq "open"&gt;and
+example:</p><pre class="programlisting">Select which case &lt;if \@simulation.casting_type\@ eq "open"&gt;and
 role&lt;/if&gt; to join, or create a new case for yourself.  If you do not
 select a case &lt;if \@simulation.casting_type\@ eq "open"&gt;and role&lt;/if&gt;
 to join, you will be automatically assigned to a case &lt;if
 \@simulation.casting_type\@ eq "open"&gt;and role&lt;/if&gt; when the
-simulation begins.</pre><p>... can be rewritten:</p><pre class="programlisting">
-&lt;if \@simulation.casting_type\@ eq "open"&gt;
+simulation begins.</pre><p>... can be rewritten:</p><pre class="programlisting">&lt;if \@simulation.casting_type\@ eq "open"&gt;
 
 Select which case and role to join, or create a new case for
 yourself.  If you do not select a case and role to join, you will
@@ -196,8 +189,7 @@ yourself.  If you do not select a case to join, you will
 be automatically assigned to a case when the simulation
 begins.
 
-&lt;/else&gt;</pre><p>Another example, where bugs are concatenated with a number:</p><pre class="programlisting">
-&lt;if \@components.view_bugs_url\@ not nil&gt;
+&lt;/else&gt;</pre><p>Another example, where bugs are concatenated with a number:</p><pre class="programlisting">&lt;if \@components.view_bugs_url\@ not nil&gt;
   &lt;a href="\@components.view_bugs_url\@" title="View the \@pretty_names.bugs\@ for this component"&gt;
   &lt;/if&gt;
   \@components.num_bugs\@ 
@@ -224,8 +216,7 @@ begins.
 &lt;if \@components.view_bugs_url\@ not nil&gt;
 &lt;/a&gt;
 &lt;/if&gt;
-</pre><p>It would probably be better to do this as something like:</p><pre class="programlisting">
-&lt;if \@components.view_bugs_url\@ not nil&gt;
+</pre><p>It would probably be better to do this as something like:</p><pre class="programlisting">&lt;if \@components.view_bugs_url\@ not nil&gt;
   &lt;if \@components.num_bugs\@ eq 1&gt;
     &lt;a href="\@components.view_bugs_url\@" title="#­bug-tracker.View_the_bug_fo_component#"&gt;#­bug-tracker.one_bug#&lt;/a&gt;
   &lt;/if&gt;&lt;else&gt;
@@ -241,14 +232,11 @@ with an equivalent. When several keys are concatenated, the
 resulting word order will not be correct for every language.
 Different languages may use expressions or idioms that don&#39;t
 match the phrase key-for-key. Create complete, distinct keys
-instead of building text from several keys. For example:</p><p>Original code:</p><pre class="programlisting">
-multirow append links "New [bug_tracker::conn Bug]" </pre><p>Problematic conversion:</p><pre class="programlisting">
-multirow append links "[_ bug-tracker.New] [bug_tracker::conn Bug]"</pre><p>Better conversion:</p><pre class="programlisting">set bug_label [bug_tracker::conn Bug]
+instead of building text from several keys. For example:</p><p>Original code:</p><pre class="programlisting">multirow append links "New [bug_tracker::conn Bug]" </pre><p>Problematic conversion:</p><pre class="programlisting">multirow append links "[_ bug-tracker.New] [bug_tracker::conn Bug]"</pre><p>Better conversion:</p><pre class="programlisting">set bug_label [bug_tracker::conn Bug]
 multirow append links "[_ bug-tracker.New_Bug]" "${url_prefix}bug-add"</pre><p>... and include the variable in the key: <code class="computeroutput">"New %bug_label%"</code>. This gives
 translators more control over the phrase.</p><p>In this example of bad i18n, full name is created by
 concatenating first and last name (admittedly this is pervasive in
-the toolkit):</p><pre class="programlisting">
-&lt;a href="\@past_version.maintainer_url\@" title="#­bug-tracker.Email# \@past_version.maintainer_email\@"&gt;
+the toolkit):</p><pre class="programlisting">&lt;a href="\@past_version.maintainer_url\@" title="#­bug-tracker.Email# \@past_version.maintainer_email\@"&gt;
 \@past_version.maintainer_first_names\@ \@past_version.maintainer_last_name\@&lt;/a&gt;</pre>
 </li><li class="listitem">
 <p>
@@ -269,8 +257,7 @@ may not be consistent across different locales.</p><p>Additional discussion: <a 
 words. </strong>Many packages use code words or key words,
 such as "open" and "closed", which will never
 be shown to the user. They may match key values in the database, or
-be used in a switch or if statement. Don&#39;t change these.</p><p>For example, the original code is</p><pre class="programlisting">
-workflow::case::add_log_data \           
+be used in a switch or if statement. Don&#39;t change these.</p><p>For example, the original code is</p><pre class="programlisting">workflow::case::add_log_data \           
        -entry_id $entry_id \        
        -key "resolution" \          
        -value [db_string select_resolution_code {}]</pre><p>This is incorrectly internationalized to</p><pre class="programlisting">  workflow::case::add_log_data \       
@@ -279,9 +266,7 @@ workflow::case::add_log_data \
        -value [db_string select_resolution_code {}]</pre><p>But <code class="computeroutput">resolution</code> is a keyword
 in a table and in the code, so this breaks the code. It should not
 have been internationalized at all. Here&#39;s another example of
-text that should not have been internationalized:</p><pre class="programlisting">
-{show_patch_status "open"}</pre><p>It is broken if changed to</p><pre class="programlisting">
-{show_patch_status "[_ bug-tracker.open]"}</pre>
+text that should not have been internationalized:</p><pre class="programlisting">{show_patch_status "open"}</pre><p>It is broken if changed to</p><pre class="programlisting">{show_patch_status "[_ bug-tracker.open]"}</pre>
 </li><li class="listitem">
 <p>
 <strong>Fix automatic truncated message keys. </strong>The
@@ -301,8 +286,7 @@ that might change; instead try to capture the meaning of the
 phrase. Ask yourself, if I was a translator and didn&#39;t know how
 this application worked, would this key and text make translation
 easy for me?</p><p>Sometimes the automatic converter creates keys that don&#39;t
-semantically match their text. Fix these:</p><pre class="programlisting">
-&lt;msg key="Fix"&gt;for version&lt;/msg&gt;
+semantically match their text. Fix these:</p><pre class="programlisting">&lt;msg key="Fix"&gt;for version&lt;/msg&gt;
 &lt;msg key="Fix_1"&gt;for&lt;/msg&gt;
 &lt;msg key="Fix_2"&gt;for Bugs&lt;/msg&gt;</pre><p>Another example: <code class="computeroutput">Bug-tracker
 component maintainer</code> was converted to <code class="computeroutput">[_ bug-tracker.Bug-tracker]</code>. Instead, it
@@ -321,11 +305,8 @@ two forms of plurals.</p></li><li class="listitem">
 <p>
 <strong>Quoting in the message catalog for
 tcl. </strong>Watch out for quoting and escaping when editing
-text that is also code. For example, the original string</p><pre class="programlisting">
-set title "Patch \"$patch_summary\" is nice."</pre><p>breaks if the message text retains all of the escaping that was
-in the Tcl command:</p><pre class="programlisting">
-&lt;msg&gt;Patch \"$patch_summary\" is nice.&lt;/msg&gt;</pre><p>When it becomes a key, it should be:</p><pre class="programlisting">
-&lt;msg&gt;Patch "$patch_summary" is nice.&lt;/msg&gt;</pre><p>Also, some keys had %var;noquote%, which is not needed since
+text that is also code. For example, the original string</p><pre class="programlisting">set title "Patch \"$patch_summary\" is nice."</pre><p>breaks if the message text retains all of the escaping that was
+in the Tcl command:</p><pre class="programlisting">&lt;msg&gt;Patch \"$patch_summary\" is nice.&lt;/msg&gt;</pre><p>When it becomes a key, it should be:</p><pre class="programlisting">&lt;msg&gt;Patch "$patch_summary" is nice.&lt;/msg&gt;</pre><p>Also, some keys had %var;noquote%, which is not needed since
 those variables are not quoted (and in fact the variable won&#39;t
 even be recognized so you get the literal %var;noquote% in the
 output).</p>
@@ -335,11 +316,8 @@ output).</p>
 within curly brackets isn&#39;t evaluated. Tcl uses curly brackets
 as an alternative way to build lists. But Tcl also uses curly
 brackets as an alternative to quotation marks for quoting text. So
-this original code</p><pre class="programlisting">
-array set names { key "Pretty" ...} </pre><p>... if converted to</p><pre class="programlisting">
-array set names { key "[_bug-tracker.Pretty]" ...} </pre><p>... won&#39;t work since the _ func will not be called. Instead,
-it should be</p><pre class="programlisting">
-array set names [list key [_bug-tracker.Pretty] ...]</pre>
+this original code</p><pre class="programlisting">array set names { key "Pretty" ...} </pre><p>... if converted to</p><pre class="programlisting">array set names { key "[_bug-tracker.Pretty]" ...} </pre><p>... won&#39;t work since the _ func will not be called. Instead,
+it should be</p><pre class="programlisting">array set names [list key [_bug-tracker.Pretty] ...]</pre>
 </li>
 </ul></div>
 </div>

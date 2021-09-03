@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {CVS Guidelines}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {CVS Guidelines}</property>
 <property name="doc(title)">CVS Guidelines</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -10,15 +10,15 @@ Standards"
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="cvs-guidelines" id="cvs-guidelines"></a> CVS Guidelines</h2></div></div></div><div class="authorblurb">
-<div class="cvstag">($&zwnj;Id: cvs.xml,v 1.9 2018/09/30 15:53:28 gustafn
-Exp $)</div><p>By Joel Aufrecht with input from Jeff Davis, Branimir Dolicki,
+<div class="cvstag">($&zwnj;Id: cvs.xml,v 1.9.2.1 2019/08/09 20:04:23
+gustafn Exp $)</div><p>By Joel Aufrecht with input from Jeff Davis, Branimir Dolicki,
 and Jade Rubick.</p>
 OpenACS docs are written by the named authors, and may be edited by
 OpenACS documentation staff.</div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="using-cvs-with-openacs" id="using-cvs-with-openacs"></a>Using CVS with OpenACS</h3></div></div></div><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="idp140520358843272" id="idp140520358843272"></a>Getting Started</h4></div></div></div><p>All OpenACS code is available anonymously. To get code
+<a name="idp140665975061728" id="idp140665975061728"></a>Getting Started</h4></div></div></div><p>All OpenACS code is available anonymously. To get code
 anonymously, use the parameter <code class="computeroutput">-d:pserver:anonymous\@cvs.openacs.org:/cvsroot</code>
 immediately after <code class="computeroutput">cvs</code> in a cvs
 command to check out or export code.</p><p>If you are an OpenACS developer, you should check out code so
@@ -77,7 +77,7 @@ editing hundreds of <code class="computeroutput">CVSROOT/Repository</code> files
 </div>
 </div><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="idp140520362675752" id="idp140520362675752"></a>Checkout for Package Development</h4></div></div></div><p>If you are actively developing a non-core package, you should
+<a name="idp140665013540656" id="idp140665013540656"></a>Checkout for Package Development</h4></div></div></div><p>If you are actively developing a non-core package, you should
 work from the latest core release branch. Currently this is
 oacs-5-9. This ensures that you are working on top of a stable
 OpenACS core, but still allows you to commit feature changes to
@@ -94,7 +94,7 @@ and <a class="ulink" href="http://openacs.org/projects/openacs/packages/" target
 packages and their current state.</p>
 </div><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="idp140520348647064" id="idp140520348647064"></a>Checkout for Core Development</h4></div></div></div><p>If you are actively developing packages in the OpenACS Core,
+<a name="idp140665013165472" id="idp140665013165472"></a>Checkout for Core Development</h4></div></div></div><p>If you are actively developing packages in the OpenACS Core,
 work from the HEAD branch. HEAD is used for active development of
 the next version of core OpenACS. It may be very buggy; it may not
 even install correctly. Do not use this branch for development of
@@ -103,7 +103,7 @@ work. To check out HEAD, omit the <code class="computeroutput">-r</code> tag.</p
 developer account:</p><pre class="screen"><span class="action"><span class="action">cvs -d:ext:cvs.openacs.org:/cvsroot checkout acs-core</span></span></pre><p>To check out HEAD anonymously:</p><pre class="screen"><span class="action"><span class="action">cvs -d:pserver:anonymous\@cvs.openacs.org:/cvsroot checkout acs-core</span></span></pre>
 </div><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="idp140520349129112" id="idp140520349129112"></a>Checkout .LRN</h4></div></div></div><p>.LRN consists of a given version OpenACS core, plus a set of
+<a name="idp140665013170144" id="idp140665013170144"></a>Checkout .LRN</h4></div></div></div><p>.LRN consists of a given version OpenACS core, plus a set of
 packages. These are collectively packages together to form a
 distribution of .LRN. F .LRN 2.0.0 sits on top of OpenACS 5.0.0.
 .LRN also uses an OpenACS install.xml file during installation;
@@ -128,7 +128,7 @@ repository.</p>
 <div class="titlepage"><div><div><h3 class="title">
 <a name="openacs-cvs-concepts" id="openacs-cvs-concepts"></a>OpenACS CVS Concepts</h3></div></div></div><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="idp140520348606440" id="idp140520348606440"></a>Modules</h4></div></div></div><p>All OpenACS code resides within a single CVS module,
+<a name="idp140665013424560" id="idp140665013424560"></a>Modules</h4></div></div></div><p>All OpenACS code resides within a single CVS module,
 <code class="computeroutput">openacs-4</code>. (The openacs-4
 directory contains code for all versions of OpenACS 4 and later,
 and .LRN 1 and later.) Checking out this module retrieves all
@@ -163,7 +163,7 @@ project-manager package.</p><p>Each OpenACS package (i.e., directory in <code cl
 module of the same name.</p>
 </div><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="idp140520367118264" id="idp140520367118264"></a> Tags and Branches</h4></div></div></div><p>Tags and Branches look similar in commands, but behave
+<a name="idp140665012962640" id="idp140665012962640"></a> Tags and Branches</h4></div></div></div><p>Tags and Branches look similar in commands, but behave
 differently. A tag is a fixed point on a branch. Check out a tag to
 get a specific version of OpenACS. Check out a branch to get the
 most current code for that major-minor version (e.g., 5.0.x or
@@ -286,8 +286,7 @@ the <code class="computeroutput">contrib</code> directory
 un-necessary. If you are working on a <code class="computeroutput">contrib</code> package, you should move it to
 <code class="computeroutput">/packages</code>. This must be done by
 an OpenACS administrator. On cvs.openacs.org:</p><div class="orderedlist"><ol class="orderedlist" type="a">
-<li class="listitem"><pre class="programlisting">
-cp -r /cvsroot/openacs-4/contrib/packages/<span class="replaceable"><span class="replaceable">package0</span></span> /cvsroot/openacs-4/packages</pre></li><li class="listitem"><p>Update the modules file as described above.</p></li><li class="listitem"><p>Remove the directory from cvs in the old location using
+<li class="listitem"><pre class="programlisting">cp -r /cvsroot/openacs-4/contrib/packages/<span class="replaceable"><span class="replaceable">package0</span></span> /cvsroot/openacs-4/packages</pre></li><li class="listitem"><p>Update the modules file as described above.</p></li><li class="listitem"><p>Remove the directory from cvs in the old location using
 <code class="computeroutput">cvs rm</code>. One approach
 <code class="computeroutput">for file in `find | grep -v CVS`; do
 rm $file; cvs remove $file; done</code>
@@ -404,7 +403,7 @@ TIP.</p>
 </ol></div>
 </div><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="idp140520367477704" id="idp140520367477704"></a> Informal Guidelines</h4></div></div></div><p>Informal guidelines which may be obsolete in places and should
+<a name="idp140665013117168" id="idp140665013117168"></a> Informal Guidelines</h4></div></div></div><p>Informal guidelines which may be obsolete in places and should
 be reviewed:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>Before committing to cvs you must submit a bug report and patch
 to the <a class="ulink" href="http://openacs.org/bugtracker/openacs" target="_top">OpenACS bug

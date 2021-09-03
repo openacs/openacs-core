@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-content-repository {ACS Content Repository}} {Content Repository: Testing Intermedia}</property>
+<property name="context">{/doc/acs-content-repository/ {ACS Content Repository}} {Content Repository: Testing Intermedia}</property>
 <property name="doc(title)">Content Repository: Testing Intermedia</property>
 <master>
 <h2>Testing Intermedia</h2>
@@ -28,8 +28,7 @@ that Intermedia is indeed functioning properly.</p>
 cause an error that you can ignore.</p>
 <p>Create an Intermedia index on the test table with INSO
 filtering:</p>
-<pre>
-create index cr_test_documents_idx on cr_test_documents ( doc )
+<pre>create index cr_test_documents_idx on cr_test_documents ( doc )
   indextype is ctxsys.context
   parameters ('FILTER content_filter_pref' );</pre>
 <h3>Load test documents</h3>
@@ -47,14 +46,13 @@ FIELDS TERMINATED BY ','
  ext_fname FILLER CHAR(80),
  doc LOBFILE(ext_fname) TERMINATED BY EOF)</pre>
 <p>Copy any number of documents (Microsoft Word, PDF, text, HTML,
-etc.) to the filesystem of your database server. Create a data
-file with an entry for each document you would like to load. This
-is simply a comma-separated text file:</p>
+etc.) to the filesystem of your database server. Create a data file
+with an entry for each document you would like to load. This is
+simply a comma-separated text file:</p>
 <pre>word, Simple Story,sample-docs/simple.doc,
 excel, Simple Spreadsheet,sample-docs/simple.xls</pre>
 <p>Load the documents from the command line:</p>
-<pre>
-$ sqlldr userid=cms/cms control=cr-test-docs.ctl log=cr-test-docs.log
+<pre>$ sqlldr userid=cms/cms control=cr-test-docs.ctl log=cr-test-docs.log
 
 SQL*Loader: Release 8.1.6.2.0 - Production on Thu Nov 9 13:36:56 2000
 
@@ -77,5 +75,5 @@ SQL&gt; select score(1), doc_id from cr_test_documents
 <a href="mailto:karlg\@arsdigita.com">karlg\@arsdigita.com</a>
 <br>
 
-Last revised: $&zwnj;Id: intermedia.html,v 1.2 2017/08/07 23:47:47
+Last revised: $&zwnj;Id: intermedia.html,v 1.2.2.1 2021/04/05 19:49:48
 gustafn Exp $

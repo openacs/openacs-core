@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {OpenACS Core Documentation}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {OpenACS Core Documentation}</property>
 <property name="doc(title)">OpenACS Core Documentation</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -9,7 +9,7 @@
 		    <div class="book">
 <div class="titlepage">
 <div><div><h1 class="title">
-<a name="idp140520283733688" id="idp140520283733688"></a>OpenACS Core Documentation</h1></div></div><hr>
+<a name="idp140665820845792" id="idp140665820845792"></a>OpenACS Core Documentation</h1></div></div><hr>
 </div><div class="toc">
 <p><strong>Table of Contents</strong></p><dl class="toc">
 <dt><span class="part"><a href="for-everyone">I. OpenACS For

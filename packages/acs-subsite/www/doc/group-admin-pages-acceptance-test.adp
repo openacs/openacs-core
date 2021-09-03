@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-subsite {ACS Subsite}} {Group Admin Pages - Acceptance test}</property>
+<property name="context">{/doc/acs-subsite/ {ACS Subsite}} {Group Admin Pages - Acceptance test}</property>
 <property name="doc(title)">Group Admin Pages - Acceptance test</property>
 <master>
 <h2><font><font>Group Admin Pages - Acceptance
@@ -229,6 +229,6 @@ drop package developer_defined_test_type;
 <address><font><a href="mailto:mbryzek\@arsdigita.com">Michael
 Bryzek</a></font></address>
 <font>
-<br><font size="-1">$&zwnj;Id: group-admin-pages-acceptance-test.html,v 1.4
-2017/08/07 23:47:59 gustafn Exp $</font>
+<br><font size="-1">$&zwnj;Id: group-admin-pages-acceptance-test.html,v
+1.4.2.1 2019/10/05 13:01:38 gustafn Exp $</font>
 </font>

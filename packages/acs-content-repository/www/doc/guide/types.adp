@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-content-repository {ACS Content Repository}} {Content Repository Developer Guide: Defining Content
+<property name="context">{/doc/acs-content-repository/ {ACS Content Repository}} {Content Repository Developer Guide: Defining Content
 Types}</property>
 <property name="doc(title)">Content Repository Developer Guide: Defining Content
 Types</property>
@@ -110,5 +110,5 @@ part of a content type definition. See <a href="object-relationships">Object Rel
 details.</p>
 <hr>
 <a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a>
-<p>Last Modified: $&zwnj;Id: types.html,v 1.2 2017/08/07 23:47:47 gustafn
-Exp $</p>
+<p>Last Modified: $&zwnj;Id: types.html,v 1.2.2.1 2019/08/10 18:09:52
+gustafn Exp $</p>

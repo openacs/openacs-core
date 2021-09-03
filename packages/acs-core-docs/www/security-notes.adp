@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Security Notes}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Security Notes}</property>
 <property name="doc(title)">Security Notes</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -68,8 +68,8 @@ ad_proc -private ad_login_page {} {
 </pre><p>The set of string match expressions in the procedure above
 should be extended appropriately for other registration pages. This
 procedure does not use <code class="computeroutput">ad_parameter</code> or regular expressions for
-performance reasons, as it is called by the request processor.</p><div class="cvstag">($&zwnj;Id: security-notes.xml,v 1.7 2014/10/27
-16:39:32 victorg Exp $)</div>
+performance reasons, as it is called by the request processor.</p><div class="cvstag">($&zwnj;Id: security-notes.xml,v 1.7.4.1 2021/09/02
+16:56:03 gustafn Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

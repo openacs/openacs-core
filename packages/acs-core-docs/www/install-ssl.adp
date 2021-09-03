@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Installing SSL Support for an OpenACS service}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Installing SSL Support for an OpenACS service}</property>
 <property name="doc(title)">Installing SSL Support for an OpenACS service</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -14,8 +14,7 @@ service</h2></div></div></div><p>Debian Users: <code class="computeroutput">apt-
 openssl</code> before proceeding.</p><div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem"><p>Make sure nsopenssl.so is <a class="link" href="install-nsopenssl" title="Install nsopenssl">installed</a>
 for AOLserver.</p></li><li class="listitem">
-<p>Uncomment this line from <code class="computeroutput">config.tcl</code>.</p><pre class="programlisting">
-#ns_param   nsopenssl       ${bindir}/nsopenssl.so
+<p>Uncomment this line from <code class="computeroutput">config.tcl</code>.</p><pre class="programlisting">#ns_param   nsopenssl       ${bindir}/nsopenssl.so
 </pre>
 </li><li class="listitem">
 <p>
@@ -41,8 +40,7 @@ section, we&#39;ll generate an unsigned certificate which will work
 in most browsers, albeit with pop-up messages.</p><p>Use an OpenSSL perl script to generate a certificate and
 key.</p><p>Debian users: use /usr/lib/ssl/misc/CA.pl instead of
 /usr/share/ssl/CA</p><p>macOS users: use perl /System/Library/OpenSSL/misc/CA.pl
--newcert instead of /usr/share/ssl/CA</p><pre class="screen">
-[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <strong class="userinput"><code>cd /var/lib/aolserver/$OPENACS_SERVICE_NAME/etc/certs</code></strong>
+-newcert instead of /usr/share/ssl/CA</p><pre class="screen">[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <strong class="userinput"><code>cd /var/lib/aolserver/$OPENACS_SERVICE_NAME/etc/certs</code></strong>
 [$OPENACS_SERVICE_NAME certs]$ <strong class="userinput"><code>perl /usr/share/ssl/misc/CA -newcert</code></strong>
 Using configuration from /usr/share/ssl/openssl.cnf
 Generating a 1024 bit RSA private key

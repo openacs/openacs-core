@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Upgrading OpenACS 4.6.3 to 5.0}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Upgrading OpenACS 4.6.3 to 5.0}</property>
 <property name="doc(title)">Upgrading OpenACS 4.6.3 to 5.0</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -19,7 +19,8 @@ or newer to upgrade OpenACS beyond 4.6.3. See <a class="link" href="upgrade-supp
 7.3</a>; <a class="xref" href="individual-programs" title="Table 2.2. Version Compatibility Matrix">Table 2.2,
 “Version Compatibility Matrix”</a>
 </p><div class="orderedlist"><ol class="orderedlist" type="1">
-<li class="listitem"><p><a class="link" href="snapshot-backup" title="Manual backup and recovery">Back up the database and filesystem.</a></p></li><li class="listitem"><p>
+<li class="listitem"><p><a class="link" href="snapshot-backup" title="Manual backup and recovery">Back up the database and
+filesystem.</a></p></li><li class="listitem"><p>
 <strong>Upgrade the filesystem for
 packages/acs-kernel. </strong><a class="xref" href="upgrade-openacs-files" title="Upgrading the OpenACS files">the section called “Upgrading the
 OpenACS files”</a>
@@ -36,8 +37,7 @@ from within psql or from the command line with commands such as
 -f upgrade-4.6.3-4.6.4.sql <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
 </code></strong></code>.
 Run the scripts in this order (order is tentative, not
-verified):</p><pre class="programlisting">
-psql -f upgrade-4.6.3-4.6.4.sql <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
+verified):</p><pre class="programlisting">psql -f upgrade-4.6.3-4.6.4.sql <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
 psql -f upgrade-4.6.4-4.6.5.sql <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
 psql -f upgrade-4.6.5-4.6.6.sql <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
 psql -f upgrade-4.7d-4.7.2d.sql <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
@@ -53,8 +53,7 @@ psql -f upgrade-5.0.0b2-5.0.0b3.sql <span class="replaceable"><span class="repla
 psql -f upgrade-5.0.0b3-5.0.0b4.sql <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
 </pre>
 </li><li class="listitem">
-<p>Upgrade ACS Service Contracts manually:</p><pre class="screen">
-[$OPENACS_SERVICE_NAME aolserver]$ <strong class="userinput"><code>cd /var/lib/aolserver/ <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/packages/acs-service-contracts/sql/postgresql/upgrade</code></strong>
+<p>Upgrade ACS Service Contracts manually:</p><pre class="screen">[$OPENACS_SERVICE_NAME aolserver]$ <strong class="userinput"><code>cd /var/lib/aolserver/ <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/packages/acs-service-contracts/sql/postgresql/upgrade</code></strong>
 psql -f upgrade-4.7d2-4.7d3.sql <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
 </pre>
 </li><li class="listitem">
@@ -68,8 +67,7 @@ psql -f upgrade-4.7d2-4.7d3.sql <span class="replaceable"><span class="replaceab
 it&#39;s harmless?) Create a file which will be executed on startup
 which takes care of a few issues with authentication and
 internationalization: create <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/tcl/zzz-postload.tcl
-containing:</p><pre class="programlisting">
-if {![apm_package_installed_p acs-lang]} {
+containing:</p><pre class="programlisting">if {![apm_package_installed_p acs-lang]} {
 apm_package_install -enable -mount_path acs-lang $::acs::rootdir/packages/acs-lang/acs-lang.info
 lang::catalog::import -locales [list "en_US"]
 }

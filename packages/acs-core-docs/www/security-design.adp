@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Security Design}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Security Design}</property>
 <property name="doc(title)">Security Design</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -251,7 +251,7 @@ procedures use <code class="computeroutput">ad_parameter</code> to
 obtain the constant value of a given parameter; these values are
 used to dynamically generate a procedure that returns a constant.
 This approach avoids (relatively) expensive calls to <code class="computeroutput">ad_parameter</code> in <code class="computeroutput">sec_handler</code>. The impact of this approach is
-that these parameters cannot be dynamically changed at runtime and
+that these parameters cannot be dynamically changed at run time and
 require a server restart.</p>
 </div><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
@@ -518,7 +518,7 @@ it into the database on every hit is too big a hammer.</p>
 </div><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
 <a name="cookieless-sessions" id="cookieless-sessions"></a>Cookieless Sessions</h4></div></div></div><p>Two trends drive the requirement for removing cookie dependence.
-WAP browsers that do not have cookies, and publc perceptions of
+WAP browsers that do not have cookies, and public perceptions of
 cookies as an invasion of privacy. The rely on the cookies
 mechanism in HTTP to distinguish one request from the next, and we
 trust it to force requests from the same client to carry the same

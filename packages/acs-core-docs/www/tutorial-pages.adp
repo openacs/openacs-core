@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Creating Web Pages}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Creating Web Pages}</property>
 <property name="doc(title)">Creating Web Pages</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -15,23 +15,23 @@ Tutorial"
 OpenACS docs are written by the named authors, and may be edited by
 OpenACS documentation staff.</div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140520362699816" id="idp140520362699816"></a>Install some API</h3></div></div></div><p>As a workaround for missing content-repository functionality,
+<a name="idp140666274138304" id="idp140666274138304"></a>Install some API</h3></div></div></div><p>As a workaround for missing content-repository functionality,
 copy a provided file into the directory for Tcl files:</p><pre class="screen"><span class="action"><span class="action">cp /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/packages/acs-core-docs/www/files/tutorial/note-procs.tcl /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/packages/myfirstpackage/tcl/</span></span></pre><p>To make this file take effect, go to the <a class="ulink" href="/acs-admin/apm" target="_top">APM</a> and choose "Reload
 changed" for "MyFirstPackage".</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140520348690632" id="idp140520348690632"></a>Page Map</h3></div></div></div><p>Our package will have two visible pages. The first shows a list
+<a name="idp140666274142960" id="idp140666274142960"></a>Page Map</h3></div></div></div><p>Our package will have two visible pages. The first shows a list
 of all objects; the second shows a single object in view or edit
 mode, and can also be used to add an object. The index page will
 display the list, but since we might reuse the list later,
 we&#39;ll put it in a separate file and include it on the index
 page.</p><div class="figure">
-<a name="idp140520348691992" id="idp140520348691992"></a><p class="title"><strong>Figure 9.5. Page
+<a name="idp140666274144384" id="idp140666274144384"></a><p class="title"><strong>Figure 9.5. Page
 Map</strong></p><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/tutorial-page-map.png" align="middle" alt="Page Map"></div></div>
 </div><br class="figure-break">
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140520349262264" id="idp140520349262264"></a>Build the "Index" page</h3></div></div></div><p>Each user-visible page in your package has, typically, three
+<a name="idp140666274147440" id="idp140666274147440"></a>Build the "Index" page</h3></div></div></div><p>Each user-visible page in your package has, typically, three
 parts. The <code class="computeroutput">tcl</code> file holds the
 procedural logic for the page, including Tcl and
 database-independent SQL code, and does things like check
@@ -40,8 +40,7 @@ the <code class="computeroutput">adp</code> page holds html. The
 <code class="computeroutput">-postgres.xql</code> and <code class="computeroutput">-oracle.xql</code> files contains
 database-specific SQL. The default page in any directory is
 <code class="computeroutput">index</code>, so we&#39;ll build that
-first, starting with the Tcl file:</p><pre class="screen">
-[$OPENACS_SERVICE_NAME postgresql]$<strong class="userinput"><code> cd /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/packages/myfirstpackages/www</code></strong>
+first, starting with the Tcl file:</p><pre class="screen">[$OPENACS_SERVICE_NAME postgresql]$<strong class="userinput"><code> cd /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/packages/myfirstpackages/www</code></strong>
 [$OPENACS_SERVICE_NAME www]$ <strong class="userinput"><code>emacs index.tcl</code></strong>
 </pre><p>Paste this into the file.</p><pre class="programlisting">ad_page_contract {
     This is the main page for the package.  It displays all of the Notes and provides links to edit them and to create new Notes.
@@ -109,8 +108,7 @@ db_multirow \
 #    indent-tabs-mode: nil
 # End:
 </pre><pre class="screen">[$OPENACS_SERVICE_NAME lib]$ <strong class="userinput"><code>emacs note-list.adp</code></strong>
-</pre><pre class="programlisting">
-&lt;listtemplate name="notes"&gt;&lt;/listtemplate&gt;</pre><p>You can test your work by viewing the page /myfirstpackage on
+</pre><pre class="programlisting">&lt;listtemplate name="notes"&gt;&lt;/listtemplate&gt;</pre><p>You can test your work by viewing the page /myfirstpackage on
 your installation.</p><p>Create the add/edit page. If note_id is passed in, it display
 that note, and can change to edit mode if appropriate. Otherwise,
 it presents a form for adding notes.</p><pre class="screen">[$OPENACS_SERVICE_NAME lib]$<strong class="userinput"><code> cd /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/packages/myfirstpackage/www</code></strong>

@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Package Manager Requirements}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Package Manager Requirements}</property>
 <property name="doc(title)">Package Manager Requirements</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -44,10 +44,10 @@ upgraded easily, with minimum disturbance to the rest of the
 system. This allows site owners to steadily offer users new and
 improved services, and also allows programmers to quickly and
 easily distribute their OpenACS components in a standardized manner
-to other OpenACS sites.</p><p>In general terms, a package is a unit of software that serves a
-single well-defined purpose. The OpenACS Package Manager (APM)
-provides a mechanism for packaging, installing, and configuring
-OpenACS software in a consistent, user-friendly, and subsite-aware
+to other OpenACS sites.</p><p>In general, a package is a unit of software that serves a single
+well-defined purpose. The OpenACS Package Manager (APM) provides a
+mechanism for packaging, installing, and configuring OpenACS
+software in a consistent, user-friendly, and subsite-aware
 manner.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
@@ -71,7 +71,8 @@ configuration file)</p></li><li class="listitem"><p>Upgrading packages, without 
 </ul></div>
 </li><li class="listitem"><p>
 <span class="strong"><strong>A registry of installed
-packages</strong></span>, database-backed and integrated with filesystem-based version control</p></li><li class="listitem">
+packages</strong></span>, database-backed and integrated with
+filesystem-based version control</p></li><li class="listitem">
 <p><span class="strong"><strong>Web-based tools for package
 development:</strong></span></p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle;">
 <li class="listitem"><p>Creating new packages locally</p></li><li class="listitem"><p>Releasing new versions of locally-created packages</p></li><li class="listitem"><p>Uploading packages to a global package repository on the web</p></li><li class="listitem"><p>Use of these tools should be safe, i.e. installing or removing a
@@ -309,7 +310,9 @@ created.</p>
 package</strong></span></p><p>
 <span class="strong"><strong>20.1</strong></span> The developer
 must be able to add files to the package. This is done by copying
-the files into the package directory in the host OS&#39;s filesystem. Files can be added at any point after package creation.</p><p>
+the files into the package directory in the host OS&#39;s
+filesystem. Files can be added at any point after package
+creation.</p><p>
 <span class="strong"><strong>20.3</strong></span> Once a package
 has been versioned and distributed, no new files should be added to
 the package without incrementing the version number.</p><p>
@@ -349,8 +352,8 @@ developer an option to confirm the file&#39;s deletion.</p>
 <span class="strong"><strong>40.0 Modify files in a
 package</strong></span>.</p><p>
 <span class="strong"><strong>40.1</strong></span> The developer
-should be able to modify files in the filesystem. The APM UI
-should not interfere with this.</p><p>
+should be able to modify files in the filesystem. The APM UI should
+not interfere with this.</p><p>
 <span class="strong"><strong>40.5</strong></span> However, if
 the developer modifies files containing procedural definitions, APM
 UI should allow a means to <span class="strong"><strong>watch</strong></span> those files and
@@ -588,8 +591,8 @@ throughout a site and should almost never be done.</p>
 <p><span class="strong"><strong>150.0 Scan for new or modified
 packages</strong></span></p><p>
 <span class="strong"><strong>150.1</strong></span> The
-administrator should be able to scan the filesystem for any
-changes made in any of the installed package files.</p><p>
+administrator should be able to scan the filesystem for any changes
+made in any of the installed package files.</p><p>
 <span class="strong"><strong>150.5</strong></span> The
 administrator should be able to scan the filesystem for any newly
 installed packages.</p>

@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Laying out a page with CSS instead of tables}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Laying out a page with CSS instead of tables}</property>
 <property name="doc(title)">Laying out a page with CSS instead of tables</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -12,9 +12,8 @@ Topics"
 <a name="tutorial-css-layout" id="tutorial-css-layout"></a>Laying out a page with CSS instead of
 tables</h2></div></div></div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140520348289912" id="idp140520348289912"></a>.LRN home page with table-based
-layout</h3></div></div></div><div class="mediaobject" align="center"><img src="images/dotlrn-style-1.png" align="middle"></div><p>A sample of the HTML code (<a class="ulink" href="files/dotlrn-style-1" target="_top">full source</a>)</p><pre class="programlisting">
-&lt;table border="0" width="100%"&gt;
+<a name="idp140665975834128" id="idp140665975834128"></a>.LRN home page with table-based
+layout</h3></div></div></div><div class="mediaobject" align="center"><img src="images/dotlrn-style-1.png" align="middle"></div><p>A sample of the HTML code (<a class="ulink" href="files/dotlrn-style-1" target="_top">full source</a>)</p><pre class="programlisting">&lt;table border="0" width="100%"&gt;
   &lt;tr&gt;
     &lt;td valign="top" width="50%"&gt;
       &lt;table class="element" border="0" cellpadding="0" cellspacing="0" width="100%"&gt;
@@ -39,7 +38,7 @@ layout</h3></div></div></div><div class="mediaobject" align="center"><img src="i
                         MBA 101</pre>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140520348223704" id="idp140520348223704"></a>.LRN Home with CSS-based layout</h3></div></div></div><div class="mediaobject" align="center"><img src="images/dotlrn-style-3.png" align="middle"></div><p>A sample of the HTML code (<a class="ulink" href="files/dotlrn-style-2" target="_top">full source</a>)</p><pre class="programlisting">&lt;div class="left"&gt;
+<a name="idp140665975839488" id="idp140665975839488"></a>.LRN Home with CSS-based layout</h3></div></div></div><div class="mediaobject" align="center"><img src="images/dotlrn-style-3.png" align="middle"></div><p>A sample of the HTML code (<a class="ulink" href="files/dotlrn-style-2" target="_top">full source</a>)</p><pre class="programlisting">&lt;div class="left"&gt;
   &lt;div class="portlet-wrap-shadow"&gt;
     &lt;div class="portlet-wrap-bl"&gt;
       &lt;div class="portlet-wrap-tr"&gt;

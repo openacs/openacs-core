@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-templating {ACS Templating}} {Templating System Tag Reference: Formgroup}</property>
+<property name="context">{/doc/acs-templating/ {ACS Templating}} {Templating System Tag Reference: Formgroup}</property>
 <property name="doc(title)">Templating System Tag Reference: Formgroup</property>
 <master>
 <h2>Formgroup</h2>
@@ -42,8 +42,7 @@ the <a href="grid"><kbd>grid</kbd></a> tag.</p></li><li>
 attributes in the <kbd>input</kbd> tags of each radio button or
 check box in the group. Although possible, newer browser security
 features such as CSP discourage the use of inline Javascript event
-handlers.</p><pre>
-&lt;formgroup id="services" style="background-color:white;"&gt;</pre>
+handlers.</p><pre>&lt;formgroup id="services" style="background-color:white;"&gt;</pre>
 </li><li><p>See the <a href="formtemplate"><kbd>formtemplate</kbd></a>
 and <a href="formwidget"><kbd>formwidget</kbd></a> tags for
 more information on writing the body of a dynamic form

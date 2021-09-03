@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Prerequisite Software}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Prerequisite Software}</property>
 <property name="doc(title)">Prerequisite Software</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -164,7 +164,7 @@ a tool for testing web interfaces via Tcl scripts.</p>
 </li><li class="listitem">
 <p>
 <strong>Web Server. </strong>The web server handles
-incoming HTTP requests, provides a runtime environment for
+incoming HTTP requests, provides a run time environment for
 OpenACS&#39;s Tcl code, connects to the database, sends out HTTP
 responses, and logs requests and errors. OpenACS uses AOLserver;
 <a class="ulink" href="http://openacs.org/forums/message-view?message_id=21461" target="_top">some people have had success running Apache with
@@ -308,8 +308,8 @@ versions of your files, do controlled deployment of code from
 development to production, or get or contribute development code
 from openacs.org.</p></li></ul></div>
 </li>
-</ul></div><div class="cvstag">($&zwnj;Id: software.xml,v 1.29 2018/07/04 10:20:42
-gustafn Exp $)</div>
+</ul></div><div class="cvstag">($&zwnj;Id: software.xml,v 1.29.2.1 2020/07/02
+08:39:25 gustafn Exp $)</div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
 			leftLink="install-steps" leftLabel="Prev" leftTitle="Basic Steps"

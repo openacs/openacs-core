@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Install Oracle 8.1.7}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Install Oracle 8.1.7}</property>
 <property name="doc(title)">Install Oracle 8.1.7</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -898,7 +898,7 @@ to do a <code class="computeroutput">connect internal</code> within
 access to the Oracle system.</td>
 </tr>
 </tbody>
-</table></div><div class="cvstag">($&zwnj;Id: oracle.xml,v 1.22 2017/08/07 23:47:55
+</table></div><div class="cvstag">($&zwnj;Id: oracle.xml,v 1.22.2.1 2020/07/02 08:39:25
 gustafn Exp $)</div>
 </div>
 </div>

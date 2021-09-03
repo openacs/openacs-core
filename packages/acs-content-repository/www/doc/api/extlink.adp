@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-content-repository {ACS Content Repository}} {Package: content_extlink}</property>
+<property name="context">{/doc/acs-content-repository/ {ACS Content Repository}} {Package: content_extlink}</property>
 <property name="doc(title)">Package: content_extlink</property>
 <master>
 <h2>content_extlink</h2>
@@ -114,5 +114,5 @@ procedure delete (
 </li>
 </ul>
 
-Last Modified: $&zwnj;Id: extlink.html,v 1.2 2017/08/07 23:47:47 gustafn
-Exp $
+Last Modified: $&zwnj;Id: extlink.html,v 1.2.2.1 2021/04/05 19:49:49
+gustafn Exp $

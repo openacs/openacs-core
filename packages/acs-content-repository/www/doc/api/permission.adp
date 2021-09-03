@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-content-repository {ACS Content Repository}} {Package: content_permission}</property>
+<property name="context">{/doc/acs-content-repository/ {ACS Content Repository}} {Package: content_permission}</property>
 <property name="doc(title)">Package: content_permission</property>
 <master>
 <h2>content_permission</h2>

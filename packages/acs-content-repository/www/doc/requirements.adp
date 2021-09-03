@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-content-repository {ACS Content Repository}} {Content Repository Requirements}</property>
+<property name="context">{/doc/acs-content-repository/ {ACS Content Repository}} {Content Repository Requirements}</property>
 <property name="doc(title)">Content Repository Requirements</property>
 <master>
 <h2>Content Repository Requirements</h2>
@@ -140,10 +140,10 @@ the URL <kbd>/press-releases/products/new-widget</kbd> is located
 at the third level down from the root of the hierarchy.</p><p>
 <a name="folder" id="folder"><strong>40.20.5 Content
 Folder</strong></a>.</p><p>A <em>folder</em> is analogous to a folder or directory in a
-filesystem. It represents a level in the content item hierarchy.
-In the previous example, <kbd>press-releases</kbd> is a folder
-under the repository root, and <kbd>products</kbd> is folder within
-that. The description of a folder may include the following
+filesystem. It represents a level in the content item hierarchy. In
+the previous example, <kbd>press-releases</kbd> is a folder under
+the repository root, and <kbd>products</kbd> is folder within that.
+The description of a folder may include the following
 information:</p><blockquote>
 <p>
 <strong>40.20.5.10</strong>. A URL-encoded name for building the
@@ -398,5 +398,5 @@ other objects.</td>
 <a href="mailto:karlg\@arsdigita.com">karlg\@arsdigita.com</a>
 <br>
 
-Last Modified: $&zwnj;Id: requirements.html,v 1.3 2017/08/07 23:47:47
+Last Modified: $&zwnj;Id: requirements.html,v 1.3.2.1 2021/04/05 19:49:48
 gustafn Exp $

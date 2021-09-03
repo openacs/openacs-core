@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-messaging {ACS Messaging}} {ACS Messaging Requirements}</property>
+<property name="context">{/doc/acs-messaging/ {ACS Messaging}} {ACS Messaging Requirements}</property>
 <property name="doc(title)">ACS Messaging Requirements</property>
 <master>
 <h1>ACS Messaging Requirements</h1>
@@ -59,7 +59,7 @@ implemented using this package:</p>
 <li>BBoard</li><li>Webmail</li><li>General Comments</li><li>Spam</li><li>Various parts of the ticket tracker.</li>
 </ul>
 <p>Each of these applications requires a message store and each
-defines its own high level organization for messages within that
+defines its own high-level organization for messages within that
 store.</p>
 <ul>
 <li>Bboard organizes messages into forums and categories and
@@ -156,5 +156,5 @@ bboard thread could be sent to a user as a digest.</p>
 <hr>
 <address><a href="mailto:kapoor\@maya.com"></a></address>
 
-Last modified: $&zwnj;Id: requirements.html,v 1.3 2018/04/11 21:35:07
-hectorr Exp $
+Last modified: $&zwnj;Id: requirements.html,v 1.3.2.1 2019/08/15 10:20:04
+gustafn Exp $

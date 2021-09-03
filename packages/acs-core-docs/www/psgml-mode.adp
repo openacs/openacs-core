@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Using PSGML mode in Emacs}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Using PSGML mode in Emacs}</property>
 <property name="doc(title)">Using PSGML mode in Emacs</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -99,7 +99,7 @@ lines into the <code class="computeroutput">.emacs</code> file:</p><pre class="p
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="psgml-mode-doctype" id="psgml-mode-doctype"></a>What is a <code class="computeroutput">DOCTYPE</code> ?</h3></div></div></div><p>All SGML and XML documents that should conform to a DTD have to
-declare a doctype. For the docbook XML, all your <code class="computeroutput">.xml</code> files whould start with the line</p><pre class="programlisting">
+declare a doctype. For the docbook XML, all your <code class="computeroutput">.xml</code> files would start with the line</p><pre class="programlisting">
       &lt;!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN" "docbookx.dtd"&gt;
    
 </pre><p>If your document is only part of a larger XML document, you can
@@ -144,8 +144,8 @@ parents, what its contents can be and lists its attributes.</td>
 <div class="titlepage"><div><div><h3 class="title">
 <a name="psgml-mode-reading" id="psgml-mode-reading"></a>Further reading</h3></div></div></div><p>Start with the <a class="xref" href="docbook-primer" title="OpenACS Documentation Guide">the section called “OpenACS
 Documentation Guide”</a>
-</p><div class="cvstag">($&zwnj;Id: psgml-mode.xml,v 1.9 2017/08/07 23:47:54
-gustafn Exp $)</div>
+</p><div class="cvstag">($&zwnj;Id: psgml-mode.xml,v 1.9.2.1 2021/09/02
+16:56:02 gustafn Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

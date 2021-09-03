@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Package Manager Design}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Package Manager Design}</property>
 <property name="doc(title)">Package Manager Design</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -32,7 +32,7 @@ startup)</p></li><li class="listitem"><p>
 </ul></div>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="apm-design-intro" id="apm-design-intro"></a>Introduction</h3></div></div></div><p>In general terms, a <span class="strong"><strong>package</strong></span> is a unit of software that
+<a name="apm-design-intro" id="apm-design-intro"></a>Introduction</h3></div></div></div><p>In general, a <span class="strong"><strong>package</strong></span> is a unit of software that
 serves a single well-defined purpose. That purpose may be to
 provide a service directly to one or more classes of end-user,
 (e.g., discussion forums and file storage for community members,

@@ -66,8 +66,7 @@ Execution Plan
    0	  SELECT STATEMENT Optimizer=CHOOSE
    1	0   NESTED LOOPS
    2	1     TABLE ACCESS (FULL) OF 'CONSTRAINT_NAMING_EXAMPLE'
-   3	1     INDEX (UNIQUE SCAN) OF 'EXAMPLE_TOPICS_TOPIC_ID_PK' (UNI
-	  QUE)
+   3	1     INDEX (UNIQUE SCAN) OF 'EXAMPLE_TOPICS_TOPIC_ID_PK' (UNIQUE)
 </pre><p>
 Isn't it nice to see "EXAMPLE_TOPICS_TOPIC_ID_PK" in the trace
 and know exactly which table oracle is using at each step?

@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Starting and Stopping an OpenACS instance.}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Starting and Stopping an OpenACS instance.}</property>
 <property name="doc(title)">Starting and Stopping an OpenACS instance.</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -105,7 +105,7 @@ in another window, so you can see what happens when you type these
 commands.</p><p>More information can be found on the <a class="ulink" href="http://panoptic.com/wiki/aolserver/How_to_start_stop_AOLserver_using_Daemontools" target="_top">AOLserver Daemontools</a> page.</p>
 </li>
 </ol></div><div class="table">
-<a name="idp140520359036168" id="idp140520359036168"></a><p class="title"><strong>Table 6.1. How it
+<a name="idp140665976307824" id="idp140665976307824"></a><p class="title"><strong>Table 6.1. How it
 Works</strong></p><div class="table-contents"><table class="table" summary="How it Works" cellspacing="0" border="1">
 <colgroup>
 <col><col><col><col><col><col>

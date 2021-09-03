@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Appendix D. Using CVS with an OpenACS Site}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Appendix D. Using CVS with an OpenACS Site}</property>
 <property name="doc(title)">Appendix D. Using CVS with an OpenACS Site</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -16,7 +16,7 @@ Site</h2></div></div></div><div class="authorblurb">
 OpenACS docs are written by the named authors, and may be edited by
 OpenACS documentation staff.</div><p>
 <a name="cvs-service-import" id="cvs-service-import"></a><strong>Add the Service to CVS -
-OPTIONAL. </strong><a class="indexterm" name="idp140520359767960" id="idp140520359767960"></a>These steps take
+OPTIONAL. </strong><a class="indexterm" name="idp140665822462816" id="idp140665822462816"></a>These steps take
 an existing OpenACS directory and add it to a <a class="link" href="install-cvs" title="Initialize CVS (OPTIONAL)">CVS
 repository</a>.</p><div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">
@@ -36,8 +36,7 @@ systems, you may get better results with .bash_profile instead of
 .bashrc.</p><pre class="screen">[root root]# <strong class="userinput"><code>su - <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
 </code></strong>
 [$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$<strong class="userinput"><code> emacs .bashrc</code></strong>
-</pre><p>Put this string into <code class="computeroutput">/home/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/.bashrc</code>:</p><pre class="programlisting">export CVSROOT=/cvsroot</pre><pre class="screen">
-[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <strong class="userinput"><code>exit</code></strong>
+</pre><p>Put this string into <code class="computeroutput">/home/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/.bashrc</code>:</p><pre class="programlisting">export CVSROOT=/cvsroot</pre><pre class="screen">[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <strong class="userinput"><code>exit</code></strong>
 logout
 
 [root root]#</pre>

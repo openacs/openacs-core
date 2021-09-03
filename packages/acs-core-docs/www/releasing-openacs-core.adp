@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {OpenACS Core and .LRN}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {OpenACS Core and .LRN}</property>
 <property name="doc(title)">OpenACS Core and .LRN</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -42,8 +42,7 @@ translations.</span></em></p><div class="orderedlist"><ol class="orderedlist" ty
 /var/lib/aolserver/$OPENACS_SERVICE_NAME/packages/acs-core-docs/www/xml/variables.ent
 with the new version number.</p></li><li class="listitem"><p>Add new section in
 /var/lib/aolserver/$OPENACS_SERVICE_NAME/packages/acs-core-docs/www/xml/for-everyone/release-notes.xml</p></li><li class="listitem">
-<p>Regenerate all HTML docs</p><pre class="screen">
-cd /var/lib/aolserver/$OPENACS_SERVICE_NAME/packages/acs-core-docs/www/xml
+<p>Regenerate all HTML docs</p><pre class="screen">cd /var/lib/aolserver/$OPENACS_SERVICE_NAME/packages/acs-core-docs/www/xml
 make</pre>
 </li><li class="listitem"><p>Update /var/lib/aolserver/$OPENACS_SERVICE_NAME/readme.txt with
 the new version number</p></li><li class="listitem">
@@ -51,8 +50,7 @@ the new version number</p></li><li class="listitem">
 packages. Use
 /var/lib/aolserver/$OPENACS_SERVICE_NAME/packages/acs-core-docs/www/files/update-info.sh
 with the new version number and the release date as arguments. Run
-it from /var/lib/aolserver/$OPENACS_SERVICE_NAME/packages:</p><pre class="screen">
-cd /var/lib/aolserver/$OPENACS_SERVICE_NAME/packages
+it from /var/lib/aolserver/$OPENACS_SERVICE_NAME/packages:</p><pre class="screen">cd /var/lib/aolserver/$OPENACS_SERVICE_NAME/packages
        ./acs-core-docs/www/files/update-info <span class="replaceable"><span class="replaceable">5.2.1</span></span><span class="replaceable"><span class="replaceable">2006-01-16</span></span>
 </pre>
 </li><li class="listitem"><p>Install a new site using the modified code and verify that the
@@ -184,7 +182,7 @@ detailed above until the process is stabilized).</p><pre class="programlisting">
 TAG=1
 
 # What release version are we building; version format should be
-# dashes rather than dots e.g. OACS_VERSION=5-0-0b4
+# dashes rather than dots eg. OACS_VERSION=5-0-0b4
 
 OACS_VERSION=5-0-0b4
 DOTLRN_VERSION=2-0-0b4
@@ -239,7 +237,7 @@ fi
 mkdir tarball
 cd tarball
 cvs -d $OACS_CVSROOT export -r openacs-$OACS_VERSION acs-core
-mv openacs-4 openacs-${OACS_VERSION//-/.}
+mv opeancs-4 openacs-${OACS_VERSION//-/.}
 tar -czf ../openacs-${OACS_VERSION//-/.}.tar.gz openacs-${OACS_VERSION//-/.}
 cd ..
 
@@ -259,8 +257,8 @@ tar -czf ../dotlrn-${DOTLRN_VERSION//-/.}.tar.gz dotlrn-${DOTLRN_VERSION//-/.}
 
 # Clean up after ourselves...
 cd $BASE &amp;&amp; rm -rf dotlrn-tarball tarball openacs-4 dotlrn-packages
-</pre><div class="cvstag">($&zwnj;Id: releasing-openacs.xml,v 1.24 2017/12/24
-13:15:07 gustafn Exp $)</div>
+</pre><div class="cvstag">($&zwnj;Id: releasing-openacs.xml,v 1.24.2.1
+2020/07/02 08:39:25 gustafn Exp $)</div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
 			leftLink="releasing-openacs" leftLabel="Prev" leftTitle="Chapter 16. Releasing

@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-templating {ACS Templating}} {Template System Guide}</property>
+<property name="context">{/doc/acs-templating/ {ACS Templating}} {Template System Guide}</property>
 <property name="doc(title)">Template System Guide</property>
 <master>
 <h2>Programmer / Developer Guide</h2>
@@ -15,7 +15,7 @@ of templating. The Tcl page should fill the data sources you
 promised in the contract, and not write to the connection. At the
 end of your Tcl page, call <code>ad_return_template</code>
 . The
-template system will look for an adp page with the filename stub
+template system will look for an adp page with the file name stub
 you indicate (defaulting to the same stub as the Tcl page), process
 that, and deliver it to the client. The adp page can use the
 datasources defined in the Tcl page.

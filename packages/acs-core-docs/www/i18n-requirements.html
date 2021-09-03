@@ -194,7 +194,7 @@ filesystem</p></li><li class="listitem"><p>Accepting form input data from users<
       filename.</p><p><span class="emphasis"><em>50.20</em></span> Tcl page script files can be
       authored in any character set. The system must have a way to
       determine the character set before loading the files, probably from
-      the filename.</p></blockquote></div></div><div class="sect3"><div class="titlepage"><div><div><h4 class="title"><a name="Submitted_Form_Data_Character_Set"></a>Submitted Form Data Character Set</h4></div></div></div><p><span class="emphasis"><em>50.30</em></span> Data which is submitted with a
+      the filename.</p></blockquote></div></div><div class="sect3"><div class="titlepage"><div><div><h4 class="title"><a name="Submitted_Form_Data_Character_Set"></a>Submitted Form Data Character Set</h4></div></div></div><p><span class="emphasis"><em>50.30</em></span> Data which is submitted with an
          HTTP request using a GET or POST method may be in any character
          set. The system must be able to determine the encoding of the form
          data and convert it to Unicode on demand.  </p><p><span class="emphasis"><em>50.35</em></span> The developer must be able to
@@ -251,17 +251,15 @@ function to return the correct incantation of NLS_SORT to use for a
 given locale with <code class="literal">ORDER BY</code> clauses in
 queries.</p><p><span class="emphasis"><em>80.40</em></span> The system must handle full-text
 search in any supported language.</p></blockquote></div></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="VI.G_Time_Zones"></a>Time Zones</h3></div></div></div><div class="blockquote"><blockquote class="blockquote"><p><span class="emphasis"><em>90.10</em></span> Provide API support for specifying
-a time zone</p><p><span class="emphasis"><em>90.20</em></span> Provide an API for computing time
+a timezone</p><p><span class="emphasis"><em>90.20</em></span> Provide an API for computing time
 and date operations which are aware of timezones. So for example a
 calendar module can properly synchronize items inserted into a
-calendar from users in different time zones using their own local
+calendar from users in different timezones using their own local
 times.</p><p><span class="emphasis"><em>90.30</em></span> Store all dates and times in
-universal time zone, UTC.</p><p><span class="emphasis"><em>90.40</em></span> For a registered users, a time
-zone preference should be stored.</p><p><span class="emphasis"><em>90.50</em></span> For a non-registered user a time
-zone preference should be attached via a session or else UTC should
+universal timezone, UTC.</p><p><span class="emphasis"><em>90.40</em></span> For a registered users, a timezone preference should be stored.</p><p><span class="emphasis"><em>90.50</em></span> For a non-registered user a timezone preference should be attached via a session or else UTC should
 be used to display every date and time.</p><p><span class="emphasis"><em>90.60</em></span> The default if we can't
-determine a time zone is to display all dates and times in some
-universal time zone such as GMT.</p></blockquote></div></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="VI.H_Database"></a>Database</h3></div></div></div><div class="blockquote"><blockquote class="blockquote"><p><span class="emphasis"><em>100.10</em></span> Since UTF8 strings can use up to
+determine a timezone is to display all dates and times in some
+universal timezone such as GMT.</p></blockquote></div></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="VI.H_Database"></a>Database</h3></div></div></div><div class="blockquote"><blockquote class="blockquote"><p><span class="emphasis"><em>100.10</em></span> Since UTF8 strings can use up to
 three (UCS2) or six (UCS4) bytes per character, make sure that
 column size declarations in the schema are large enough to
 accommodate required data (such as email addresses in

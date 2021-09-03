@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-content-repository {ACS Content Repository}} {Content Repository Developer Guide: Publishing
+<property name="context">{/doc/acs-content-repository/ {ACS Content Repository}} {Content Repository Developer Guide: Publishing
 Content}</property>
 <property name="doc(title)">Content Repository Developer Guide: Publishing
 Content</property>
@@ -122,5 +122,5 @@ the initial query for any needed attributes.</p>
 <a href="mailto:karlg\@arsdigita.com">karlg\@arsdigita.com</a>
 <br>
 
-Last Modified: $&zwnj;Id: publish.html,v 1.5 2017/08/07 23:47:47 gustafn
-Exp $
+Last Modified: $&zwnj;Id: publish.html,v 1.5.2.1 2021/04/05 19:49:49
+gustafn Exp $

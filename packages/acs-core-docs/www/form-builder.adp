@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Using Form Builder: building html forms dynamically}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Using Form Builder: building html forms dynamically}</property>
 <property name="doc(title)">Using Form Builder: building html forms dynamically</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -25,11 +25,10 @@ to this document, the ad_form <a class="ulink" href="http://openacs.org/api-doc/
 <a name="multi-part-elements" id="multi-part-elements"></a>Multi-part Elements</h3></div></div></div><p>Some elements have more than one choice, or can submit more than
 one value.</p><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="idp140520361036248" id="idp140520361036248"></a>SELECT elements</h4></div></div></div><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem">
+<a name="idp140665975380304" id="idp140665975380304"></a>SELECT elements</h4></div></div></div><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem">
 <p>
 <strong>Creating the form element. </strong>Populate a list
-of lists with values for the option list.</p><pre class="programlisting">
-set foo_options [db_list_of_lists foo_option_list "
+of lists with values for the option list.</p><pre class="programlisting">set foo_options [db_list_of_lists foo_option_list "
     select foo,
            foo_id
       from foos
@@ -54,8 +53,7 @@ elements"</a>.</p>
 refreshes to pull additional information from the database</h3></div></div></div><p>A situation you may run into often is where you want to pull in
 form items from a sub-category when the first category is selected.
 Ad_form makes this fairly easy to do. In the definition of your
-form element, include an HTML section</p><pre class="programlisting">
-{pm_task_id:integer(select),optional
+form element, include an HTML section</p><pre class="programlisting">    {pm_task_id:integer(select),optional
         {label "Subject"}
         {options {$task_options}}
         {html {onChange "document.form_name.__refreshing_p.value='1';submit()"}}
@@ -64,8 +62,7 @@ form element, include an HTML section</p><pre class="programlisting">
     </pre><p>What this will do is set the value for pm_task_id and all the
 other form elements, and resubmit the form. If you then include a
 block that extends the form, you&#39;ll have the opportunity to add
-in subcategories:</p><pre class="programlisting">
-if {[info exists pm_task_id] &amp;&amp; $pm_task_id ne ""} {
+in subcategories:</p><pre class="programlisting">    if {[info exists pm_task_id] &amp;&amp; $pm_task_id ne ""} {
     db_1row get_task_values { }
     ad_form -extend -name form_name -form { ... }
     </pre><p>Note that you will get strange results when you try to set the
@@ -99,7 +96,7 @@ widgets:</p><p><a class="ulink" href="http://openacs.org/forums/message-view?mes
 Errors</h3></div></div></div><p>Here are some common errors and what to do when you encounter
 them:</p><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="idp140520361005080" id="idp140520361005080"></a>Error when selecting values</h4></div></div></div><p>This generally happens when there is an error in your query.</p>
+<a name="idp140665025508960" id="idp140665025508960"></a>Error when selecting values</h4></div></div></div><p>This generally happens when there is an error in your query.</p>
 </div>
 </div>
 </div>

@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-templating {ACS Templating}} {Templating System User Guide: Composite Page}</property>
+<property name="context">{/doc/acs-templating/ {ACS Templating}} {Templating System User Guide: Composite Page}</property>
 <property name="doc(title)">Templating System User Guide: Composite Page</property>
 <master>
 <h2>Assembling a Page from Components</h2>
@@ -110,7 +110,7 @@ code/template pair. This is the standard situation, where the
 them. In some situations, the following facility can help to reduce
 duplication or to handle special situations more effectively.</p>
 <p>The "code" part can divert to another page by calling
-<code>template::set_file</code> to modify the filename stub of the
+<code>template::set_file</code> to modify the file name stub of the
 page being processed. For convenience,
 <code>ad_return_template</code> can be used with the same effect;
 it is a wrapper for <code>template::set_file</code>, and it

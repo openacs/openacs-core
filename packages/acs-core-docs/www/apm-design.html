@@ -7,7 +7,7 @@ apm-procs.tcl</a></p></li><li class="listitem"><p><a class="ulink" href="/api-do
 apm-install-procs.tcl</a> (Supports installation of packages)</p></li><li class="listitem"><p><a class="ulink" href="/api-doc/procs-file-view?path=packages%2facs%2dbootstrap%2dinstaller%2ftcl%2f30%2dapm%2dload%2dprocs%2etcl" target="_top">
 30-apm-load-procs.tcl</a> (Bootstraps APM for server startup)</p></li><li class="listitem"><p><a class="ulink" href="/api-doc/procs-file-view?path=packages%2facs%2dadmin%2ftcl%2fapm%2dadmin%2dprocs%2etcl" target="_top">
 apm-admin-procs.tcl</a> (Supports APM UI)</p></li></ul></div></li><li class="listitem"><p>PL/SQL file </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; "><li class="listitem"><p><a class="ulink" href="/doc/sql/display-sql?url=apm-create.sql&amp;package_key=acs-kernel" target="_top">apm-create.sql</a></p></li></ul></div></li></ul></div></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="apm-design-intro"></a>Introduction</h3></div></div></div><p>
-In general terms, a <span class="strong"><strong>package</strong></span> is a unit of software that
+In general, a <span class="strong"><strong>package</strong></span> is a unit of software that
 serves a single well-defined purpose. That purpose may be to provide a
 service directly to one or more classes of end-user, (e.g., discussion forums
 and file storage for community members, user profiling tools for the site
@@ -509,7 +509,7 @@ implementation puts all package specification information in a single file.
 This approach has certain advantages, such as centralization, but splitting
 this information into several files allows for flexible extensions to the APM
 architecture over time.</p><p>APM packages currently lack provisions to verify security information.
-There are plans to add MD5 time stamps and PGP signatures to packages to
+There are plans to add MD5 timestamps and PGP signatures to packages to
 enable secure authentication of packages. These steps are necessary for APM
 to be usable as a scalable method to distribute packages on multiple
 repositories worldwide.</p><p>Another anticipated change is to split the APM UI into separate systems

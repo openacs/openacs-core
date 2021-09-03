@@ -3,8 +3,7 @@
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
         </div><p>If your package changes its data model, you have to write an
-    upgrade script. This is very easy in OpenACS. </p><p>First, you want to make sure you change the original .sql
-    file so that new installation will have the new data model.</p><p>Next, check what version your package is currently at. For
+    upgrade script. This is very easy in OpenACS. </p><p>First, you want to make sure you change the original .sql file so that new installation will have the new data model.</p><p>Next, check what version your package is currently at. For
     example, it may be at version 1.0b1. Create a file in
     yourpackage/sql/postgres/upgrade called packagename-1.0b1-1.0b2.sql and put
     the SQL code that will update the data model. For example, if you

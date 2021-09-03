@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-templating {ACS Templating}} {}</property>
+<property name="context">{/doc/acs-templating/ {ACS Templating}} {}</property>
 <property name="doc(title)"></property>
 <master>
 <h2>Namespace publish</h2>
@@ -129,7 +129,7 @@ was written to the filesystem.</td>
 <td align="right">
 <code>url_ref</code><font color="red">*</font>
 </td><td align="left">The name of the variable in the calling frame that
-will receive the relative URL of the file in the filesystem which
+will receive the relative URL of the file in the file system which
 contains the content blob</td>
 </tr><tr>
 <td align="right">
@@ -427,11 +427,11 @@ stack</blockquote><dl>
 </table>
 <table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name="publish::handle_item" id="publish::handle_item"><font size="+1" weight="bold">publish::handle_item</font></a></td></tr><tr><td>
-<blockquote>Render an item either by looking it up in the
-temporary cache, or by using the appropriate mime handler. Once the
-item is rendered, it is stored in the temporary cache under a key
-which combines the item_id, any extra HTML parameters, and a flag
-which specifies whether the item was merged with its template.<br>
+<blockquote>Render an item either by looking it up in the temporary
+cache, or by using the appropriate mime handler. Once the item is
+rendered, it is stored in the temporary cache under a key which
+combines the item_id, any extra HTML parameters, and a flag which
+specifies whether the item was merged with its template.<br>
 This proc takes the same arguments as the individual mime
 handlers.</blockquote><dl>
 <dd>

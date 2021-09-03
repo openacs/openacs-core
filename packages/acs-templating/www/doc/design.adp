@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-templating {ACS Templating}} {Template System}</property>
+<property name="context">{/doc/acs-templating/ {ACS Templating}} {Template System}</property>
 <property name="doc(title)">Template System</property>
 <master>
 <h2>The Template System -- Design Document</h2>
@@ -325,5 +325,5 @@ Quinn</a>
 <address><a href="mailto:christian\@arsdigita.com">Christian
 Brechbuehler</a></address>
 <!-- Created: Mon Aug 14 11:53:07 EDT 2000 -->
-Last modified: $&zwnj;Id: design.html,v 1.9 2018/04/11 20:52:01 hectorr
-Exp $
+Last modified: $&zwnj;Id: design.html,v 1.10.2.2 2019/08/15 10:18:49
+gustafn Exp $

@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Write the Requirements and Design Specs}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Write the Requirements and Design Specs}</property>
 <property name="doc(title)">Write the Requirements and Design Specs</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -21,8 +21,7 @@ supporting files, like page maps or schema diagrams, in the
 <code class="computeroutput">www/doc/xml</code> directory, and
 store png or jpg versions of supporting files in the <code class="computeroutput">www/doc</code> directory.</p><p>For this tutorial, you should instead install the pre-written
 documentation files for the tutorial app. Log in as <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>, create the
-standard directories, and copy the prepared documentation:</p><pre class="screen">
-[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <strong class="userinput"><code>cd /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/packages/myfirstpackage/</code></strong>
+standard directories, and copy the prepared documentation:</p><pre class="screen">[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <strong class="userinput"><code>cd /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/packages/myfirstpackage/</code></strong>
 [$OPENACS_SERVICE_NAME myfirstpackage]$ <strong class="userinput"><code>mkdir -p www/doc/xml</code></strong>
 [$OPENACS_SERVICE_NAME myfirstpackage]$ <strong class="userinput"><code>cd www/doc/xml</code></strong>
 [$OPENACS_SERVICE_NAME xml]$ <strong class="userinput"><code>cp /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/packages/acs-core-docs/www/files/myfirstpackage/* .</code></strong>

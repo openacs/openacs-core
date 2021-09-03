@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Adding Comments}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Adding Comments}</property>
 <property name="doc(title)">Adding Comments</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -25,13 +25,11 @@ general_comments package registered, to get its url. You then embed
 in that url the id of the note and its title, and set the
 return_url to the current url so that the user can return after
 adding a comment.</p><p>We need to create html that shows any existing comments. We do
-this with another general_comments function:</p><pre class="programlisting">
-set comments_html [general_comments_get_comments
+this with another general_comments function:</p><pre class="programlisting">set comments_html [general_comments_get_comments
      -print_content_p 1 $note_id]</pre><p>First, we pass in an optional parameter that says to actually
 show the contents of the comments, instead of just the fact that
 there are comments. Then you pass the note id, which is also the
-acs_object id.</p><p>We put our two new variables in the note-edit.adp page.</p><pre class="programlisting">
-&lt;a href="\@comment_add_url\@"&gt;Add a comment&lt;/a&gt;
+acs_object id.</p><p>We put our two new variables in the note-edit.adp page.</p><pre class="programlisting">&lt;a href="\@comment_add_url\@"&gt;Add a comment&lt;/a&gt;
  \@comments_html\@</pre>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

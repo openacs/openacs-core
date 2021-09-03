@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-lang {ACS Localization}} {ACS 4 Globalization Detailed Design}</property>
+<property name="context">{/doc/acs-lang/ {ACS Localization}} {ACS 4 Globalization Detailed Design}</property>
 <property name="doc(title)">ACS 4 Globalization Detailed Design</property>
 <master>
 <h2>ACS 4 Globalization Detailed Design</h2>
@@ -432,8 +432,8 @@ _mr fr mail_notification "Le notification du email"
 </pre>
 
 In the example above, if the catalog file was loaded from the
-bboard package, all of the keys would be prefixed automatically with
-"<code>bboard.</code>
+bboard package, all of the keys would be prefixed automatically
+with "<code>bboard.</code>
 ".
 <h4>Loading A Message Catalog At Package Init Time</h4>
 

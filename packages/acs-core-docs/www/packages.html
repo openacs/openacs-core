@@ -7,13 +7,13 @@
       OpenACS. OpenACS packages are installed and maintained with the
       OpenACS Package Manager (APM) which is part of the acs-admin
       package.  This document presents reasons for packaging software,
-      conventions for the file system and naming that must be
+      conventions for the filesystem and naming that must be
       followed, and step by step instructions for creating a new
       package for the "Notes" example package.
     </p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="server-file-layout"></a>Server file layout</h3></div></div></div><p>
       Here is how an OpenACS 5 server is laid out
       starting from the Server root (ROOT):
-    </p><div class="figure"><a name="idp140520358730616"></a><p class="title"><b>Figure 11.1. Server file layout diagram</b></p><div class="figure-contents"><pre class="programlisting">
+    </p><div class="figure"><a name="idp140665974209600"></a><p class="title"><b>Figure 11.1. Server file layout diagram</b></p><div class="figure-contents"><pre class="programlisting">
 ROOT/
     bin/
         Various executables and scripts for server maintenance.
@@ -36,7 +36,7 @@ ROOT/
       logic, administration pages and user pages in a single part of
       the file tree.  This means developers can track down
       <span class="emphasis"><em>everything</em></span> that is related to a particular
-      package without hunting all over the file system.  Encapsulating
+      package without hunting all over the filesystem.  Encapsulating
       everything about a package in one place also makes it much
       easier to distribute packages independently from the OpenACS Core.
     </p><p>
@@ -51,7 +51,7 @@ ROOT/
       <a class="indexterm" name="baby"></a>
       To illustrate the general structure of a package, let's see what the
       package for the "notes" application should look like.
-    </p><div class="figure"><a name="idp140520363350392"></a><p class="title"><b>Figure 11.2. Package file layout diagram</b></p><div class="figure-contents"><pre class="programlisting">
+    </p><div class="figure"><a name="idp140665974168656"></a><p class="title"><b>Figure 11.2. Package file layout diagram</b></p><div class="figure-contents"><pre class="programlisting">
 ROOT/
   +-- packages/    APM Root
         |
@@ -124,7 +124,7 @@ ROOT/
       directories.  This makes it suitable for storing icons, css
       files, javascript, and other static content which can be treated
       this way.
-    </p><div class="table"><a name="idp140520349392328"></a><p class="title"><b>Table 11.1. Package files</b></p><div class="table-contents"><table class="table" summary="Package files" cellspacing="0" border="1"><colgroup><col><col><col></colgroup><thead><tr><th>File Type</th><th>Its Use</th><th>Naming Convention</th></tr></thead><tbody><tr><td>Package Specification File</td><td>The package specification file is an XML file generated and
+    </p><div class="table"><a name="idp140665973629920"></a><p class="title"><b>Table 11.1. Package files</b></p><div class="table-contents"><table class="table" summary="Package files" cellspacing="0" border="1"><colgroup><col><col><col></colgroup><thead><tr><th>File Type</th><th>Its Use</th><th>Naming Convention</th></tr></thead><tbody><tr><td>Package Specification File</td><td>The package specification file is an XML file generated and
           maintained by the OpenACS Package Manager (APM).  It specifies
           information about the package including its parameters and its
           files.</td><td><code class="computeroutput">notes.info</code></td></tr><tr><td>Data Model Creation Script</td><td>
@@ -239,7 +239,7 @@ ROOT/
       administrator can create as many instances of the package as she
       likes, and map these instances to any URL in the site that she
       wants. If packages are analogous to executable programs in an
-      operating system, then package instances are analgous to multiple
+      operating system, then package instances are analogous to multiple
       running copies of a single program. Each instance can be independently
       administered and each instance maintains its own set of application
       parameters and options.
@@ -266,8 +266,7 @@ ROOT/
           </span></dt><dd><p>
           This is a short text string that should uniquely name your package to
           distinguish it from all the others. It is used as a database key to
-          keep track of the package and as the name of the directory in the file
-          system where all the files related to your package will live. Example
+          keep track of the package and as the name of the directory in the filesystem where all the files related to your package will live. Example
           package keys in the current system include: <code class="computeroutput">forums</code>,
           <code class="computeroutput">acs-kernel</code> and so on. For the example application, we
           will use the package key <code class="computeroutput">notes</code>.
@@ -331,7 +330,7 @@ ROOT/
           file information", then the "Scan the
           <code class="computeroutput">packages/notes</code> directory for
           additional files in this package" link on that page to scan
-          the file system for new files.  This will bring you to a page
+          the filesystem for new files.  This will bring you to a page
           that lists all the files you just added and lets you add them to
           the <code class="computeroutput">notes</code> package.
         </p><p>
@@ -375,7 +374,7 @@ ROOT/
       will serve its pages.
     </p><p>
       In OpenACS 5, administrators can define an arbitrary mapping between the
-      URLs the user types and the actual file in the file system that is
+      URLs the user types and the actual file in the filesystem that is
       served. This mapping is called the <span class="emphasis"><em>site map</em></span> and entries in the
       site map are called <span class="emphasis"><em>site nodes</em></span>. Each site node maps a URL to an
       OpenACS object. Since package instances are objects, the site map allows

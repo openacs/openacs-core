@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Add PSGML commands to emacs init file (OPTIONAL)}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Add PSGML commands to emacs init file (OPTIONAL)}</property>
 <property name="doc(title)">Add PSGML commands to emacs init file (OPTIONAL)</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -11,7 +11,7 @@ additional supporting software"
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="psgml-for-emacs" id="psgml-for-emacs"></a>Add PSGML commands to emacs init file
 (OPTIONAL)</h2></div></div></div><p>
-<a class="indexterm" name="idp140520348237192" id="idp140520348237192"></a> If you plan to write or edit any
+<a class="indexterm" name="idp140665014864128" id="idp140665014864128"></a> If you plan to write or edit any
 documentation with emacs, install a customized emacs configuration
 file with DocBook commands in the skeleton directory, so it will be
 used for all new users. The file also fixes the backspace -&gt;

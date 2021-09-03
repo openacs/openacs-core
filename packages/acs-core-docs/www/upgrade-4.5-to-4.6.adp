@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Upgrading 4.5 or higher to 4.6.3}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Upgrading 4.5 or higher to 4.6.3}</property>
 <property name="doc(title)">Upgrading 4.5 or higher to 4.6.3</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -8,7 +8,7 @@
 			rightLink="upgrade-4.6.3-to-5" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="upgrade-4.5-to-4.6" id="upgrade-4.5-to-4.6"></a>Upgrading 4.5 or higher to 4.6.3</h2></div></div></div><a class="indexterm" name="idp140520348874264" id="idp140520348874264"></a><p>The required platform for OpenACS 4.6 is the same as 4.5, with
+<a name="upgrade-4.5-to-4.6" id="upgrade-4.5-to-4.6"></a>Upgrading 4.5 or higher to 4.6.3</h2></div></div></div><a class="indexterm" name="idp140666101895040" id="idp140666101895040"></a><p>The required platform for OpenACS 4.6 is the same as 4.5, with
 the exception of OpenFTS. OpenACS 4.6 and later require OpenFTS
 0.3.2 for full text search on PostGreSQL. If you have OpenFTS 0.2,
 you&#39;ll need to upgrade.</p><p>If upgrading from 4.4, you need to manually run

@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {OpenACS Release Notes}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {OpenACS Release Notes}</property>
 <property name="doc(title)">OpenACS Release Notes</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -11,7 +11,15 @@ information: What is OpenACS?"
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="release-notes" id="release-notes"></a>OpenACS Release Notes</h2></div></div></div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="release-notes-5-9-1" id="release-notes-5-9-1"></a>Release 5.9.2</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
+<a name="release-notes-5-10-0" id="release-notes-5-10-0"></a>Release 5.10.0</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;"><li class="listitem"><p>... to be completed ....</p></li></ul></div><p>Altogether, OpenACS 5.10.0 differs from OpenACS 5.9.1 by the
+following statistics</p><pre class="programlisting">
+      xxx files changed, xxx insertions(+), xxx deletions(-)
+    </pre><p>contributed by xxxx committers (...) and xxxx patch/bugfix
+providers (...). All packages of the release were tested with
+PostgreSQL 10.* and Tcl 8.6.*.</p><p>For more details, consult the <a class="ulink" href="" target="_top">raw ChangeLog</a>.</p>
+</div><div class="sect2">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="release-notes-5-9-1" id="release-notes-5-9-1"></a>Release 5.9.1</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>The release of OpenACS 5.9.1 contains the 88 packages of the
 oacs-5-9 branch. These packages include the OpenACS core packages,
 the major application packages (e.g. most the ones used on
@@ -391,7 +399,7 @@ workflow "allocate" actions</p></li><li class="listitem"><p>Internationalized mo
 </ul></div>
 </li><li class="listitem">
 <p>xotcl-request-monitor</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
-<li class="listitem"><p>Added class "BanUser" (use. e.g. IP address to
+<li class="listitem"><p>Added class "BanUser" (use. e.g. ip address to
 disallow requests from a user via request monitor)</p></li><li class="listitem"><p>Added support for optional user tracking in database</p></li><li class="listitem"><p>Added support for monitoring response-time for certain URLs via
 munin</p></li><li class="listitem"><p>Increased usage of XOTcl 2.0 variable resolver (potentially
 speed improvement 4x)</p></li><li class="listitem"><p>Performed some refactoring of response-time handling to allow
@@ -556,7 +564,7 @@ functions are marked as deprecated and will be moved into an
 "outdated" package in the 5.9 or 6.0 release)</p></li><li class="listitem"><p>General overhaul of package management</p></li><li class="listitem"><p>Install-from-local and install-from-repository can be used to
 install the provided packages based on a acs-core installation.
 This means that also DotLRN can be installed from repository or
-from local into an existing OpenACS instance.</p></li><li class="listitem"><p>Install-from-repository offers filtering functions, allows one to
+from local into an existing OpenACS instance.</p></li><li class="listitem"><p>Install-from-repository offers filtering functions, allows to
 install optionally from head-channel (for packages not in the base
 channel of the installed instance). Install-from-repository works
 more like an app-store, showing as well vendor information</p></li><li class="listitem"><p>Packages can be equipped with xml-based configuration files
@@ -815,20 +823,20 @@ styles still using these mechanisms will break.</p></li><li class="listitem"><p>
 turned off by default via the acs-kernel parameter ExcludedFiles in
 section request-processor (The variable provides a string match
 glob list of files and is defaulted to "*/CVS/* *~")</p></li>
-</ul></div><div class="cvstag">($&zwnj;Id: release-notes.xml,v 1.39.2.1 2019/03/10
-21:36:25 gustafn Exp $)</div>
+</ul></div><div class="cvstag">($&zwnj;Id: release-notes.xml,v 1.39.2.4 2021/09/02
+18:42:46 gustafn Exp $)</div>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140520361422984" id="idp140520361422984"></a>Release 4.6.3</h3></div></div></div><p><a class="ulink" href="release-notes-4-6-3" target="_top">Release Notes for 4.6.3</a></p>
+<a name="idp140665973421504" id="idp140665973421504"></a>Release 4.6.3</h3></div></div></div><p><a class="ulink" href="release-notes-4-6-3" target="_top">Release Notes for 4.6.3</a></p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140520361424488" id="idp140520361424488"></a>Release 4.6.2</h3></div></div></div><p><a class="ulink" href="release-notes-4-6-2" target="_top">Release Notes for 4.6.2</a></p>
+<a name="idp140665973423008" id="idp140665973423008"></a>Release 4.6.2</h3></div></div></div><p><a class="ulink" href="release-notes-4-6-2" target="_top">Release Notes for 4.6.2</a></p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140520361425992" id="idp140520361425992"></a>Release 4.6</h3></div></div></div><p><a class="ulink" href="release-notes-4-6" target="_top">Release Notes for 4.6</a></p>
+<a name="idp140665973424512" id="idp140665973424512"></a>Release 4.6</h3></div></div></div><p><a class="ulink" href="release-notes-4-6" target="_top">Release Notes for 4.6</a></p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140520361427496" id="idp140520361427496"></a>Release 4.5</h3></div></div></div><p><a class="ulink" href="release-notes-4-5" target="_top">Release Notes for 4.5</a></p>
+<a name="idp140665973426016" id="idp140665973426016"></a>Release 4.5</h3></div></div></div><p><a class="ulink" href="release-notes-4-5" target="_top">Release Notes for 4.5</a></p>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

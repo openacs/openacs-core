@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {System/Application Requirements Template}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {System/Application Requirements Template}</property>
 <property name="doc(title)">System/Application Requirements Template</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -106,9 +106,9 @@ requirements as well.</p></li>
 <a name="yourpackage-requirements-implementation" id="yourpackage-requirements-implementation"></a>Optional:
 Implementation Notes</h3></div></div></div><p><span class="emphasis"><em>Although in theory coding comes after
 design, which comes after requirements, we do not, and perhaps
-should not, always follow such a rigid process (aka the
-waterfall lifecycle). Often, there is a pre-existing system or
-prototype first, and thus you may want to write some thoughts on
+should not, always follow such a rigid process (aka the waterfall
+lifecycle). Often, there is a pre-existing system or prototype
+first, and thus you may want to write some thoughts on
 implementation, for aiding and guiding yourself or other
 programmers.</em></span></p>
 </div><div class="sect2">
@@ -127,8 +127,8 @@ programmers.</em></span></p>
 <td>0.1</td><td>Created</td><td>8/21/2000</td><td>Josh Finkler, Audrey McLoghlin</td>
 </tr>
 </tbody>
-</table></div><div class="cvstag">($&zwnj;Id: requirements-template.xml,v 1.7
-2017/08/07 23:47:54 gustafn Exp $)</div>
+</table></div><div class="cvstag">($&zwnj;Id: requirements-template.xml,v 1.7.2.2
+2020/07/02 08:39:25 gustafn Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

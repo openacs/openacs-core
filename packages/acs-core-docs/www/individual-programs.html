@@ -48,7 +48,7 @@
           queries in XML files, so we use an AOLserver module called
           tDOM to parse these files.  (This replaces libxml2, which
           was used prior to 4.6.4.)</p></li><li class="listitem"><a name="source-tclwebtest"></a><p><b><a class="ulink" href="http://sourceforge.net/project/showfiles.php?group_id=31075" target="_top">tclwebtest</a>, OPTIONAL. </b>tclwebtest is a tool for testing web interfaces via Tcl scripts.</p></li><li class="listitem"><p><b>Web Server. </b>The web server handles incoming HTTP requests, provides
-          a runtime environment for OpenACS's Tcl code, connects to the
+          a run time environment for OpenACS's Tcl code, connects to the
           database, sends out HTTP responses, and logs requests and
           errors.  OpenACS uses AOLserver;
           <a class="ulink" href="http://openacs.org/forums/message-view?message_id=21461" target="_top">some people have had success running Apache with mod_nsd</a>.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; "><li class="listitem"><a name="source-aolserver"></a><p><b><a class="ulink" href="http://aolserver.com/" target="_top">AOLserver</a> 4.x, REQUIRED. </b>Provides the base HTTP server</p></li></ul></div><p>
@@ -96,7 +96,7 @@
             higher, full text search is also available via tsearch2.
         </p></li><li class="listitem"><p><a name="analog-download"></a><b><a class="ulink" href="http://www.analog.cx/" target="_top">Analog</a> 5.32 or newer, OPTIONAL. </b>This program examines web server request logs, looks up
           DNS values, and produces a report.  You need this if you
-          want to see how much traffic your site is getting.</p></li><li class="listitem"><p><a name="balance-download"></a><b><a class="ulink" href="http://sourceforge.net/projects/balance/" target="_top">Balance</a> 3.11 or newer, OPTIONAL. </b>"Balance is a simple but powerful generic tcp proxy with round robin load balancing and failover mechanisms."  You need this or something equivalent if you are running a high-availability production site and do not have an external load balancing system.</p></li><li class="listitem"><p><b>Database. </b>The data on your site (for example, user names and passwords,
+          want to see how much traffic your site is getting.</p></li><li class="listitem"><p><a name="balance-download"></a><b><a class="ulink" href="http://sourceforge.net/projects/balance/" target="_top">Balance</a> 3.11 or newer, OPTIONAL. </b>"Balance is a simple but powerful generic tcp proxy with round robin load balancing and failover mechanisms."  You need this or something equivalent if you are running a high-availability production site and do not have an external load balancing system.</p></li><li class="listitem"><p><b>Database. </b>The data on your site (for example, usernames and passwords,
           calendar entries, and notes) is stored in the database.
           OpenACS separates the database with an abstraction layer,
           which means that several different databases all function

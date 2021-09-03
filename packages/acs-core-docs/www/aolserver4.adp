@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Install AOLserver 4}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Install AOLserver 4}</property>
 <property name="doc(title)">Install AOLserver 4</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -129,8 +129,7 @@ ora8.so</code></strong>) to fix it.</p>
 to use Postgres)</p><pre class="screen">[root nscache]# <strong class="userinput"><code>cd ../nspostgres</code></strong>
 [root nspostgres]# <strong class="userinput"><code>export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/pgsql/lib:/usr/local/aolserver/lib</code></strong>
 [root nspostgres]# <strong class="userinput"><code>make install POSTGRES=LSB ACS=1 INST=/usr/local/aolserver  AOLSERVER=/usr/local/aolserver</code></strong>
-</pre><p>If you get errors like:</p><pre class="programlisting">
-nspostgres.c: In function `Ns_PgTableList':
+</pre><p>If you get errors like:</p><pre class="programlisting">nspostgres.c: In function `Ns_PgTableList':
 nspostgres.c:679: warning: passing arg 3 of `Tcl_DStringAppend' as signed due to prototype</pre><p>then PostGreSQL is probably not in the standard location. The
 location of PostGreSQL is very dependent on which method was used
 to install it. To correct the problem, replace <code class="computeroutput">LSB</code> with the path to the path to your
@@ -155,8 +154,7 @@ the following 2 lines (lines 139-140):</p><pre class="programlisting">
 <a name="aolserver4-tdom-install" id="aolserver4-tdom-install"></a>Install tDOM</p><pre class="screen">[root nssha1]# <strong class="userinput"><code>cd ../tDOM-0.8.0/unix</code></strong>
 </pre><p>Edit the <code class="computeroutput">CONFIG</code> file.
 Uncomment the instructions meant for AOLserver 4, but edit it to
-look like this:</p><pre class="screen">
-../configure --enable-threads --disable-tdomalloc
+look like this:</p><pre class="screen">../configure --enable-threads --disable-tdomalloc
           --prefix=/usr/local/aolserver --with-tcl=/usr/local/lib</pre><p>Note that the location of the Tcl library may vary on different
 platforms (e.g. for Debian 3.0: --with-tcl=/usr/lib/tcl8.4)</p><p>Now you can compile and configure tDOM</p><pre class="screen">[root unix]# <strong class="userinput"><code>sh CONFIG</code></strong>
 [root unix]# <strong class="userinput"><code>make install</code></strong>

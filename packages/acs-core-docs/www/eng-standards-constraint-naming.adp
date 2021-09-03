@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Constraint naming standard}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Constraint naming standard}</property>
 <property name="doc(title)">Constraint naming standard</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -111,8 +111,7 @@ Execution Plan
    0      SELECT STATEMENT Optimizer=CHOOSE
    1    0   NESTED LOOPS
    2    1     TABLE ACCESS (FULL) OF 'CONSTRAINT_NAMING_EXAMPLE'
-   3    1     INDEX (UNIQUE SCAN) OF 'EXAMPLE_TOPICS_TOPIC_ID_PK' (UNI
-          QUE)
+   3    1     INDEX (UNIQUE SCAN) OF 'EXAMPLE_TOPICS_TOPIC_ID_PK' (UNIQUE)
 </pre><p>Isn&#39;t it nice to see "EXAMPLE_TOPICS_TOPIC_ID_PK"
 in the trace and know exactly which table oracle is using at each
 step?</p>
@@ -126,8 +125,8 @@ a requirement.</p><div>About Naming the not null constraints</div><p>Though nami
 immediately in error debugging (e.g. the error will say something
 like "Cannot insert null value into column"), we
 recommend naming not null constraints to be consistent in our
-naming of all constraints.</p><div class="cvstag">($&zwnj;Id: constraint-naming.xml,v 1.10 2018/03/24
-00:14:57 hectorr Exp $)</div>
+naming of all constraints.</p><div class="cvstag">($&zwnj;Id: constraint-naming.xml,v 1.10.2.1
+2019/08/09 20:04:23 gustafn Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

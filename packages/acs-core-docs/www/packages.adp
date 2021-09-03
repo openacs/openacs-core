@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {OpenACS Packages}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {OpenACS Packages}</property>
 <property name="doc(title)">OpenACS Packages</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -25,7 +25,7 @@ and step by step instructions for creating a new package for the
 <div class="titlepage"><div><div><h3 class="title">
 <a name="server-file-layout" id="server-file-layout"></a>Server file layout</h3></div></div></div><p>Here is how an OpenACS 5 server is laid out starting from the
 Server root (ROOT):</p><div class="figure">
-<a name="idp140520358730616" id="idp140520358730616"></a><p class="title"><strong>Figure 11.1. Server file layout
+<a name="idp140665974209600" id="idp140665974209600"></a><p class="title"><strong>Figure 11.1. Server file layout
 diagram</strong></p><div class="figure-contents"><pre class="programlisting">
 ROOT/
     bin/
@@ -64,7 +64,7 @@ removal. In OpenACS 5, this tool is called the <a class="link" href="packages" t
 <a class="indexterm" name="baby" id="baby"></a> To illustrate
 the general structure of a package, let&#39;s see what the package
 for the "notes" application should look like.</p><div class="figure">
-<a name="idp140520363350392" id="idp140520363350392"></a><p class="title"><strong>Figure 11.2. Package file layout
+<a name="idp140665974168656" id="idp140665974168656"></a><p class="title"><strong>Figure 11.2. Package file layout
 diagram</strong></p><div class="figure-contents"><pre class="programlisting">
 ROOT/
   +-- packages/    APM Root
@@ -134,7 +134,7 @@ installed or mounted. Files are returned directly, so .tcl or .adp
 files are not sourced in these directories. This makes it suitable
 for storing icons, css files, javascript, and other static content
 which can be treated this way.</p><div class="table">
-<a name="idp140520349392328" id="idp140520349392328"></a><p class="title"><strong>Table 11.1. Package
+<a name="idp140665973629920" id="idp140665973629920"></a><p class="title"><strong>Table 11.1. Package
 files</strong></p><div class="table-contents"><table class="table" summary="Package files" cellspacing="0" border="1">
 <colgroup>
 <col><col><col>
@@ -255,7 +255,7 @@ instances</em></span>. Once a package is loaded, the administrator
 can create as many instances of the package as she likes, and map
 these instances to any URL in the site that she wants. If packages
 are analogous to executable programs in an operating system, then
-package instances are analgous to multiple running copies of a
+package instances are analogous to multiple running copies of a
 single program. Each instance can be independently administered and
 each instance maintains its own set of application parameters and
 options.</p><p>The following sections will show you how to make a package for
@@ -309,8 +309,10 @@ and <code class="computeroutput">ROOT/packages/notes/sql/postgresql/notes-drop.s
 click the link called "notes" to go to the management
 page for the new package. Now click the link called "Manage
 file information", then the "Scan the <code class="computeroutput">packages/notes</code> directory for additional
-files in this package" link on that page to scan the filesystem for new files. This will bring you to a page that lists all
-the files you just added and lets you add them to the <code class="computeroutput">notes</code> package.</p><p>Note that while the <code class="computeroutput">.sql</code>
+files in this package" link on that page to scan the
+filesystem for new files. This will bring you to a page that lists
+all the files you just added and lets you add them to the
+<code class="computeroutput">notes</code> package.</p><p>Note that while the <code class="computeroutput">.sql</code>
 files have been added to the package, they <span class="emphasis"><em>have not</em></span> been loaded into the database.
 For the purposes of development, you have to load the data model by
 hand, because while OpenACS has automatic mechanisms for loading
@@ -349,7 +351,8 @@ didn&#39;t put the pages underneath <code class="computeroutput">ROOT/www</code>
 What we have to do is <span class="emphasis"><em>mount</em></span>
 the application into the site map. That is, we have to define the
 URL from which the application will serve its pages.</p><p>In OpenACS 5, administrators can define an arbitrary mapping
-between the URLs the user types and the actual file in the filesystem that is served. This mapping is called the <span class="emphasis"><em>site map</em></span> and entries in the site map are
+between the URLs the user types and the actual file in the
+filesystem that is served. This mapping is called the <span class="emphasis"><em>site map</em></span> and entries in the site map are
 called <span class="emphasis"><em>site nodes</em></span>. Each site
 node maps a URL to an OpenACS object. Since package instances are
 objects, the site map allows us to easily map package instances to
@@ -395,8 +398,8 @@ download and install. We&#39;ll cover this later.</p></li>
 <a name="packages-add-reading" id="packages-add-reading"></a>Additional Reading</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p><a class="xref" href="apm-design" title="Package Manager Design">Package Manager Design</a></p></li><li class="listitem"><p><a class="xref" href="apm-requirements" title="Package Manager Requirements">Package Manager Requirements</a></p></li><li class="listitem"><p><a class="link" href="tutorial-newpackage" title="Creating an Application Package">package development
 tutorial</a></p></li>
-</ul></div><div class="cvstag">($&zwnj;Id: packages.xml,v 1.13 2018/04/22 19:24:37
-gustafn Exp $)</div>
+</ul></div><div class="cvstag">($&zwnj;Id: packages.xml,v 1.13.2.3 2021/09/02
+16:56:01 gustafn Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

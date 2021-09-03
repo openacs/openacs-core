@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-templating {ACS Templating}} {Upgrading existing ADPs to noquote templating}</property>
+<property name="context">{/doc/acs-templating/ {ACS Templating}} {Upgrading existing ADPs to noquote templating}</property>
 <property name="doc(title)">Upgrading existing ADPs to noquote templating</property>
 <master>
 <h2>Upgrading existing ADPs to noquote templating</h2>
@@ -104,7 +104,7 @@ everything works as expected:
 &lt;/form&gt;
       </pre></blockquote>
 <p>
-<strong>Snippets of HTML produced by Tcl code, aka
+<strong>Snippets of HTML produced by Tcl code, a.k.a.
 <em>widgets</em>
 </strong>.<br>
 Normally we try to fit all HTML code into the ADP template and have
@@ -311,5 +311,5 @@ database or from the user.</p>
 <hr>
 <address><a href="mailto:hniksic\@xemacs.org">Hrvoje
 Niksic</a></address>
-<!-- Created: Mon Feb 26 12:12:00 CET 2001 --><!-- hhmts start -->Last modified: Thu Aug 20 18:38:05 CEST 2015 
+<!-- Created: Mon Feb 26 12:12:00 CET 2001 --><!-- hhmts start -->Last modified: Fri Nov 1 14:11:00 CET 2019 
 <!-- hhmts end -->

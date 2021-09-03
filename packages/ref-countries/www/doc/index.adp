@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/ref-countries {Reference Data - Country}} {Reference Country Documentation}</property>
+<property name="context">{/doc/ref-countries/ {Reference Data - Country}} {Reference Country Documentation}</property>
 <property name="doc(title)">Reference Country Documentation</property>
 <master>
 <h1>Reference Country Documentation</h1>

@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {OpenACS Permissions Tediously Explained}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {OpenACS Permissions Tediously Explained}</property>
 <property name="doc(title)">OpenACS Permissions Tediously Explained</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -127,7 +127,7 @@ are discussed in the following sections.</p>
 <a name="permissions-tedious-context-hierarchy" id="permissions-tedious-context-hierarchy"></a>Context
 Hierarchy</h3></div></div></div><p>Suppose objects <span class="emphasis"><em>A</em></span>,
 <span class="emphasis"><em>B</em></span>, ..., and <span class="emphasis"><em>F</em></span> form the following hierarchy.</p><div class="table">
-<a name="idp140520313098856" id="idp140520313098856"></a><p class="title"><strong>Table 11.2. Context Hierarchy
+<a name="idp140665015347792" id="idp140665015347792"></a><p class="title"><strong>Table 11.2. Context Hierarchy
 Example</strong></p><div class="table-contents"><table class="table" summary="Context Hierarchy Example" cellspacing="0" border="1">
 <colgroup>
 <col align="center" class="c1"><col align="center" class="c2"><col align="center" class="c3">
@@ -153,7 +153,7 @@ Example</strong></p><div class="table-contents"><table class="table" summary="Co
 </table></div>
 </div><br class="table-break"><p>This can be represented in the <a class="xref" href="permissions-tediously-explained">acs_objects</a>
 table by the following entries:</p><div class="table">
-<a name="idp140520363406856" id="idp140520363406856"></a><p class="title"><strong>Table 11.3. acs_objects example
+<a name="idp140665015364304" id="idp140665015364304"></a><p class="title"><strong>Table 11.3. acs_objects example
 data</strong></p><div class="table-contents"><table class="table" summary="acs_objects example data" cellspacing="0" border="1">
 <colgroup>
 <col align="center" class="c1"><col align="center" class="c2">
@@ -487,7 +487,7 @@ entries would look like so:</p><div class="informaltable"><table class="informal
 </tr>
 </tbody>
 </table></div><p>Read <code class="computeroutput">acs_rels</code>: right-side is
-a subset of left-side, ie <code class="computeroutput">object2</code> is a part of <code class="computeroutput">object1</code>.</p><p>Another way of building up groups is by adding subgroups.
+a subset of left-side, i.e. <code class="computeroutput">object2</code> is a part of <code class="computeroutput">object1</code>.</p><p>Another way of building up groups is by adding subgroups.
 Suppose we define <span class="emphasis"><em>Merry
 Pranksters</em></span> and <span class="emphasis"><em>Sad
 Pranksters</em></span> as subgroups of <span class="emphasis"><em>Pranksters</em></span>. We say that the <span class="emphasis"><em>Pranksters</em></span> group is <span class="strong"><strong>composed</strong></span> of groups <span class="emphasis"><em>Merry Pranksters</em></span> and <span class="emphasis"><em>Sad Pranksters</em></span>. This information is

@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/tsearch2-driver {Tsearch2 Driver}} {Tsearch2 Full-text Search Engine Driver for OpenACS
+<property name="context">{/doc/tsearch2-driver/ {Tsearch2 Driver}} {Tsearch2 Full-text Search Engine Driver for OpenACS
 5.x}</property>
 <property name="doc(title)">Tsearch2 Full-text Search Engine Driver for OpenACS
 5.x</property>

@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Where did this document come from?}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Where did this document come from?}</property>
 <property name="doc(title)">Where did this document come from?</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"

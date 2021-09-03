@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Writing OpenACS Application Pages}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Writing OpenACS Application Pages}</property>
 <property name="doc(title)">Writing OpenACS Application Pages</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -242,8 +242,8 @@ how it makes it possible to easily turn Notes into an application
 that appears to provide each user in a system with their own
 private notes database.</p><p>We also saw how to use the templating system&#39;s forms API in
 a simple way, to create forms based pages with minimal duplication
-of code.</p><div class="cvstag">($&zwnj;Id: subsites.xml,v 1.10.2.1 2019/06/27
-18:15:11 gustafn Exp $)</div>
+of code.</p><div class="cvstag">($&zwnj;Id: subsites.xml,v 1.10.2.2 2020/07/02
+08:39:25 gustafn Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

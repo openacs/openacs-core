@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-templating {ACS Templating}} {Templating System API: Multirow}</property>
+<property name="context">{/doc/acs-templating/ {ACS Templating}} {Templating System API: Multirow}</property>
 <property name="doc(title)">Templating System API: Multirow</property>
 <master>
 <h2>Multirow</h2>
@@ -20,20 +20,17 @@ row.</p><ul>
 for the row specified by <kbd>index</kbd>.</li>
 </ul>
 </blockquote>
-<pre>
-multirow <strong>set</strong><em> name index column value</em>
+<pre>multirow <strong>set</strong><em> name index column value</em>
 </pre>
 <blockquote><p>Set the value of a column in a specified row.</p></blockquote>
 <pre>multirow <strong>size</strong><em> name</em>
 </pre>
 <blockquote><p>Get the number of rows in the data source.</p></blockquote>
-<pre>
-multirow <strong>create</strong><em> name column [column ...]</em>
+<pre>multirow <strong>create</strong><em> name column [column ...]</em>
 </pre>
 <blockquote><p>Set up a new multirow data source. This is an alternative to
 having <a href="">db_multirow</a> create the data source.</p></blockquote>
-<pre>
-multirow <strong>append</strong><em> name value [value ...]</em>
+<pre>multirow <strong>append</strong><em> name value [value ...]</em>
 </pre>
 <blockquote><p>Add a row at the end of the data source. Extra values are
 dropped, missing values default to the empty string</p></blockquote>
