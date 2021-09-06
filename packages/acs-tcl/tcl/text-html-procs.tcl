@@ -1364,10 +1364,21 @@ ad_proc ad_parse_html_attributes_upvar {
                         if {$url eq ""} continue
 
                         set prot ""
-
-                        set parsed_url [ns_parseurl $url]
-                        # attribute is a URL including the protocol
-                        set proto [expr {[dict exists $parsed_url proto] ? [dict get $parsed_url proto] : ""}]
+                        try {
+                            set parsed_url [ns_parseurl $url]
+                            set proto [expr {[dict exists $parsed_url proto] ? [dict get $parsed_url proto] : ""}]
+                        } on error {errorMsg} {
+                            ns_log warning "ad_dom_sanitize_html cannot parse URL '$url': $errorMsg"
+                            #
+                            # The attribute is invalid. Report it or remove it.
+                            #
+                            if {$validate_p} {
+                                return 0
+                            } else {
+                                $node removeAttribute $att
+                            }
+                            continue
+                        }
                         if {$proto ne ""} {
                             if {$no_outer_urls_p} {
                                 # no external URLs allowed: we still
