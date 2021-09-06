@@ -1332,14 +1332,20 @@ ad_proc ad_parse_html_attributes_upvar {
             set queue [lrange $queue 1 end]
 
             # skip all non-element nodes
-            if {$node eq "" || [$node nodeType] ne "ELEMENT_NODE"} continue
+            if {$node eq "" || [$node nodeType] ne "ELEMENT_NODE"} {
+                continue
+            }
 
             # 1: check tag is allowed
             set node_name [string tolower [$node nodeName]]
             if {[info exists unallowed_tag($node_name)] ||
                 ($allowed_tags ne "*" && ![info exists allowed_tag($node_name)])} {
                 # invalid tag!
-                if {$validate_p} {return 0} else {$node delete}
+                if {$validate_p} {
+                    return 0
+                } else {
+                    $node delete
+                }
                 continue
             }
 
@@ -1352,7 +1358,11 @@ ad_proc ad_parse_html_attributes_upvar {
                 if {[info exists unallowed_attribute($att)] ||
                     ($allowed_attributes ne "*" && ![info exists allowed_attribute($att)])} {
                     # invalid attribute!
-                    if {$validate_p} {return 0} else {$node removeAttribute $att}
+                    if {$validate_p} {
+                        return 0
+                    } else {
+                        $node removeAttribute $att
+                    }
                     continue
                 }
 
@@ -1361,12 +1371,16 @@ ad_proc ad_parse_html_attributes_upvar {
                 switch -- $att {
                     "href" - "src" - "content" - "action" {
                         set url [string trim [$node getAttribute $att ""]]
-                        if {$url eq ""} continue
+                        if {$url eq ""} {
+                            continue
+                        }
 
                         set proto ""
                         try {
                             set parsed_url [ns_parseurl $url]
-                            set proto [expr {[dict exists $parsed_url proto] ? [dict get $parsed_url proto] : ""}]
+                            if {[dict exists $parsed_url proto]} {
+                                set proto [dict get $parsed_url proto]
+                            }
                         } on error {errorMsg} {
                             ns_log warning "ad_dom_sanitize_html cannot parse URL '$url': $errorMsg"
                             #
@@ -1394,7 +1408,11 @@ ad_proc ad_parse_html_attributes_upvar {
                                 # ...this is not, points elsewhere!
                                 } else {
                                     # invalid attribute!
-                                    if {$validate_p} {return 0} else {$node removeAttribute $att}
+                                    if {$validate_p} {
+                                        return 0
+                                    } else {
+                                        $node removeAttribute $att
+                                    }
                                     continue
                                 }
                             }
@@ -1412,7 +1430,11 @@ ad_proc ad_parse_html_attributes_upvar {
                         if {[info exists unallowed_protocol($proto)] ||
                             ($allowed_protocols ne "*" && ![info exists allowed_protocol($proto)])} {
                             # invalid attribute!
-                            if {$validate_p} {return 0} else {$node removeAttribute $att}
+                            if {$validate_p} {
+                                return 0
+                            } else {
+                                $node removeAttribute $att
+                            }
                             continue
                         }
                     }
