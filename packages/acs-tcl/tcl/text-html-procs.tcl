@@ -1363,7 +1363,7 @@ ad_proc ad_parse_html_attributes_upvar {
                         set url [string trim [$node getAttribute $att ""]]
                         if {$url eq ""} continue
 
-                        set prot ""
+                        set proto ""
                         try {
                             set parsed_url [ns_parseurl $url]
                             set proto [expr {[dict exists $parsed_url proto] ? [dict get $parsed_url proto] : ""}]
