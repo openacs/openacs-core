@@ -80,7 +80,7 @@ template.</p><pre class="screen">cp article-content.adp col2-content.adp
 </li><li class="listitem">
 <p>The template should provide us with the following ETP
 layout:</p><div class="table">
-<a name="idp140665975851424"></a><p class="title"><strong>Table 10.1. table showing ETP
+<a name="idp140697193965744"></a><p class="title"><strong>Table 10.1. table showing ETP
 layout</strong></p><div class="table-contents"><table class="table" summary="table showing ETP layout" cellspacing="0" border="1" width="250">
 <colgroup>
 <col align="left" class="c1"><col width="2" align="left" class="c2">

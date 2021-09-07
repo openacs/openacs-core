@@ -99,8 +99,8 @@ FreeBSD) and add this line:</p><pre class="programlisting">export OPENACS_SERVIC
 </ul></div>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140665975271024" id="idp140665975271024"></a>Paths and Users</h3></div></div></div><div class="table">
-<a name="idp140665975271664" id="idp140665975271664"></a><p class="title"><strong>Table 2.1. Default directories
+<a name="idp140698011826288" id="idp140698011826288"></a>Paths and Users</h3></div></div></div><div class="table">
+<a name="idp140698011826928" id="idp140698011826928"></a><p class="title"><strong>Table 2.1. Default directories
 for a standard install</strong></p><div class="table-contents"><table class="table" summary="Default directories for a standard install" cellspacing="0" width="100%" border="1">
 <colgroup>
 <col><col>
@@ -111,7 +111,7 @@ for a standard install</strong></p><div class="table-contents"><table class="tab
 <td>name of administrative access account</td><td>remadmin</td>
 </tr><tr>
 <td>OpenACS service</td><td>
-<a class="indexterm" name="idp140665975292880" id="idp140665975292880"></a><span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span> (set to service0
+<a class="indexterm" name="idp140698011831536" id="idp140698011831536"></a><span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span> (set to service0
 in default install)</td>
 </tr><tr>
 <td>OpenACS service account</td><td><span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span></td>

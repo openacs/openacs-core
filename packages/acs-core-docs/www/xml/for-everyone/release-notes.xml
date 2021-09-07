@@ -1366,7 +1366,7 @@ END OF TEMPLATE -->
     </programlisting>
     contributed by 4 committers (Michael Aram, Victor Guerra, Gustaf Neumann, Antonio Pisano) and
     patch/bugfix providers (Frank Bergmann, Andrew Helsley, Felix
-    Mödritscher, Marcos Moser, Franz Penz, Thomas Renner).
+    Mödritscher, Markus Moser, Franz Penz, Thomas Renner).
     These are significantly more  changes as the differences
     in the last releases. All packages of the release were tested with
     PostgreSQL 9.4.* and Tcl 8.5.*.

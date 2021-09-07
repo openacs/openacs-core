@@ -322,7 +322,7 @@
 <para> Altogether, OpenACS 5.10.0 differs from OpenACS 5.9.1 by the
 following statistics
 <programlisting>
-  xxx files changed, xxx insertions(+), xxx deletions(-)
+ 3442 files changed, 120847 insertions(+), 92002 deletions(-) 
 </programlisting>
 contributed by 7 committers (Antonio Pisano, Gustaf Neumann, Günter Ernst, Hector Romojaro, Michael Aram, Stefan Sobernig, Thomas Renner) and additional 13 patch/bugfix providers (Felix Mödritscher, Florian Mosböck, Frank Bergmann, Franz Penz, Hanifa Hasan, Keith Paskett, Markus Moser, Maurizio Martignano, Monika Andergassen, Nathan Coulter, Rainer Bachleitner, Stephan Adelsberger, Tony Kirkham).
 
