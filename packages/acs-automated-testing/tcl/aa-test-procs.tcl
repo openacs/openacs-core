@@ -1030,13 +1030,13 @@ ad_proc -public aa_run_with_teardown {
     }
 
     # Testing
-    set setup_error_p [catch {uplevel $test_code} setup_error]
+    set setup_error_p [catch {uplevel 1 $test_code} setup_error]
     set setup_error_stack $::errorInfo
 
     # Teardown
     set teardown_error_p 0
     if { $teardown_code ne "" } {
-        set teardown_error_p [catch {uplevel $teardown_code} teardown_error]
+        set teardown_error_p [catch {uplevel 1 $teardown_code} teardown_error]
         set teardown_error_stack $::errorInfo
     }
 
@@ -1604,7 +1604,7 @@ namespace eval acs::test {
         upvar $var root
         dom parse -html $html doc
         $doc documentElement root
-        uplevel $body
+        uplevel 1 $body
     }
 
     ad_proc -public get_form {body xpath} {
@@ -1838,7 +1838,7 @@ namespace eval ::acs::test::xpath {
         # environment
         #
         if {$node eq ""} {
-            set node [uplevel {set root}]
+            set node [uplevel 1 {set root}]
         }
         foreach q $selectors {
             try {
