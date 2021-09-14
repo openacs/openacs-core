@@ -882,7 +882,7 @@ ad_proc -public package_exec_plsql {
             # The parameter is not accepted as a parameter to the
             # pl/sql function. Ignore it.
             ns_log Warning "package_exec_plsql: skipping $__key not found in params for $__package_name $__object_name"
-            continue;
+            continue
         }
         lappend pieces [list $__key]
         set param_array([string toupper $__key]) 1
