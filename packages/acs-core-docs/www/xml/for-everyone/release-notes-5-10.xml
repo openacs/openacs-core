@@ -21,25 +21,8 @@
 	<itemizedlist>
 		<listitem><para>Features:
 		<itemizedlist>
-			<listitem><para>Added additional page_contract filter: oneof(red|green|blue)</para></listitem>
-			<listitem><para><computeroutput>template::add_event_listener</computeroutput> and <computeroutput>template::add_confirm_handler</computeroutput> now can target elements by CSS selector</para></listitem>
-			<listitem><para>Added text/markdown to the accepted text formats or rich-text widget</para></listitem>
 			<listitem><para>Support for range types in .xql files:
 			<para>PostgreSQL supports range types since 9.5. When using range types, square braces have to be used in SQL statements. Since OpenACS uses always Tcl substitution in .xql files, and OpenACS does NOT allow backslash substitution in these files, square brackets could not be escaped and therefore not be used in .xql files so far. This change allows now a developer to deactivate the substitution by passing e.g. <computeroutput>-subst none</computeroutput> to the db_* command using the .xql file. Valid values for <computeroutput>-subst</computeroutput> are <computeroutput>all</computeroutput>, <computeroutput>none</computeroutput>, <computeroutput>vars</computeroutput>, and <computeroutput>commands</computeroutput>, default is <computeroutput>all</computeroutput> which is exactly the behavior of previous releases. Therefore, this change is fully backward compatible.</para>
-			</para></listitem>
-			<listitem><para>Improved API browser: Visualization for code dependencies (which procs calls what, from where is a proc being called) and test-coverage</para></listitem>
-			<listitem><para>Warn site administrators about expiring certificates</para></listitem>
-			<listitem><para>Additional input types (and widgets) for <computeroutput>ad_form</computeroutput>:
-			<itemizedlist>
-				<listitem><para>checkbox_text</para></listitem>
-				<listitem><para>color</para></listitem>
-				<listitem><para>email</para></listitem>
-				<listitem><para>tel</para></listitem>
-				<listitem><para>url</para></listitem>
-				<listitem><para>number</para></listitem>
-				<listitem><para>file (multiple)</para></listitem>
-				<listitem><para>h5date and h5time: date and time fields using native HTML5 visualization and input normalization</para></listitem>
-			</itemizedlist>
 			</para></listitem>
 			<listitem><para>Registry for .js and .css libraries: allow besides classical URLs symbolic names for loading external resources (e.g. jquery), this makes it easier to upgrade libraries in multiple packages (without running into problems with duplicate versions) and supports switching between CDN and local pathsURN. The existing implementation is based on URNs and extends the existing template-head API to support registration for URNs. A URN provides an abstraction and a single place for e.g. updating references to external resources when switching between a CDN and a locally stored resource, or when a resource should be updated. Instead of adding e.g. a CDN URL via template::head::add_script, one can add an URN and control its content from a single place. Use common namespaces for OpenACS such as <computeroutput>urn:ad:css:* </computeroutput>and <computeroutput>urn:ad:js:*</computeroutput>.
 			<itemizedlist>
@@ -67,6 +50,23 @@
 				</para></listitem>
 			</itemizedlist>
 			</para></listitem>
+			<listitem><para>Improved API browser: Visualization for code dependencies (which procs calls what, from where is a proc being called) and test-coverage</para></listitem>
+			<listitem><para>Warn site administrators about expiring certificates</para></listitem>
+			<listitem><para>Added text/markdown to the accepted text formats or rich-text widget</para></listitem>
+			<listitem><para>Additional input types (and widgets) for <computeroutput>ad_form</computeroutput>:
+			<itemizedlist>
+				<listitem><para>checkbox_text</para></listitem>
+				<listitem><para>color</para></listitem>
+				<listitem><para>email</para></listitem>
+				<listitem><para>tel</para></listitem>
+				<listitem><para>url</para></listitem>
+				<listitem><para>number</para></listitem>
+				<listitem><para>file (multiple)</para></listitem>
+				<listitem><para>h5date and h5time: date and time fields using native HTML5 visualization and input normalization</para></listitem>
+			</itemizedlist>
+			</para></listitem>
+			<listitem><para>Added additional page_contract filter: oneof(red|green|blue)</para></listitem>
+			<listitem><para><computeroutput>template::add_event_listener</computeroutput> and <computeroutput>template::add_confirm_handler</computeroutput> now can target elements by CSS selector</para></listitem>
 			<listitem><para>
 			<para>Improved support for streaming HTML: The new API function <computeroutput>template::collect_body_scripts</computeroutput> can be used to get the content of template::script or CSP calls (<computeroutput>template::add_body_script</computeroutput>, <computeroutput>template::add_event_listener</computeroutput>, <computeroutput>template::add_body_handler</computeroutput>, <computeroutput>template::add_script</computeroutput>) when streaming HTML (incremental HTML) is used. Before, these call could bot be used for streaming HTML.</para>
 			</para></listitem>
@@ -74,13 +74,6 @@
 		</para></listitem>
 		<listitem><para>Reforms:
 		<itemizedlist>
-			<listitem><para>Dynamic blueprint reloading:
-			<itemizedlist>
-				<listitem><para>When reloading apm packages, watched files, etc. the NaviServer blueprint is now updated correctly. This solves the long-standing problem that changes for scheduled procedures required a restart of the server. Furthermore, the old-style reloading was based on a ever-growing list of reload operations each time a new reload was requested, causing slow-downs in long running server instances, especially, when new threads are started.</para></listitem>
-				<listitem><para>Now changes are applied to all NaviServer threads, including threads for schedules procedures, ns_jobs and the like. Note that the current job has to be finished before the changes can be applied.</para></listitem>
-				<listitem><para>For the transition, it is possible to switch between the classical reloading style and blueprint reloading by changing a variable in acs-tcl/tcl/apm-procs.tcl</para></listitem>
-			</itemizedlist>
-			</para></listitem>
 			<listitem><para>Login:
 			<itemizedlist>
 				<listitem><para>Get rid of bugging &quot;login page expired&quot; messages. The 17 years old construct was replaced by newer means to avoid caching of form values from the login form. Admins of existing sites should set the kernel parameter <computeroutput>LoginPageExpirationTime</computeroutput> to 0</para></listitem>
@@ -144,7 +137,7 @@
 			<listitem><para>Web testing was separated from non-maintained tcltest and was built on the standard OpenACS infrastructure</para></listitem>
 			<listitem><para>Include web testing per default in standard regression testing</para></listitem>
 			<listitem><para>Introduced new test authentication authority, allowing to run many user administration tests outside the context of a &quot;real authority&quot;: in cases where the real authority depends on external services to proof identity, (e.g. Kerberos), those tests would just fail.</para></listitem>
-			<listitem><para>Introduce the display of warnings in the UI</para></listitem>
+			<listitem><para>Introduce the display of warnings in the UI of automated testing</para></listitem>
 			<listitem><para>Added test coverage information in the automated testing pages, using the new proc-coverage API and providing test coverage information for packages and system wide.</para></listitem>
 			<listitem><para>Increased overall coverage of public API</para></listitem>
 			<listitem><para>New tests checking various data-model properties and smells
