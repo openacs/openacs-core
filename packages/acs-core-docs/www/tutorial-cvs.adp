@@ -69,7 +69,7 @@ initial revision: 1.1
 done
 <span class="emphasis"><em>(many lines omitted)</em></span>
 [$OPENACS_SERVICE_NAME myfirstpackage]$</pre><div class="figure">
-<a name="idp140697193935072" id="idp140697193935072"></a><p class="title"><strong>Figure 10.1. Upgrading a local
+<a name="idp140219190641392" id="idp140219190641392"></a><p class="title"><strong>Figure 10.1. Upgrading a local
 CVS repository</strong></p><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/development-with-cvs.png" align="middle" alt="Upgrading a local CVS repository"></div></div>
 </div><br class="figure-break">
 </div>

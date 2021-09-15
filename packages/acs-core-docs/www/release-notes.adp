@@ -19,11 +19,7 @@ OpenACS.org), and DotLRN 2.10.0.</p></li><li class="listitem">
 <p>Functional improvements</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle;">
 <li class="listitem">
 <p>Features:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: square;">
-<li class="listitem"><p>Added additional page_contract filter: oneof(red|green|blue)</p></li><li class="listitem"><p>
-<code class="computeroutput">template::add_event_listener</code>
-and <code class="computeroutput">template::add_confirm_handler</code> now can
-target elements by CSS selector</p></li><li class="listitem"><p>Added text/markdown to the accepted text formats or rich-text
-widget</p></li><li class="listitem">
+<li class="listitem">
 <p>Support for range types in .xql files:</p><p>PostgreSQL supports range types since 9.5. When using range
 types, square braces have to be used in SQL statements. Since
 OpenACS uses always Tcl substitution in .xql files, and OpenACS
@@ -35,13 +31,6 @@ none</code> to the db_* command using the .xql file. Valid values
 for <code class="computeroutput">-subst</code> are <code class="computeroutput">all</code>, <code class="computeroutput">none</code>, <code class="computeroutput">vars</code>, and <code class="computeroutput">commands</code>, default is <code class="computeroutput">all</code> which is exactly the behavior of
 previous releases. Therefore, this change is fully backward
 compatible.</p>
-</li><li class="listitem"><p>Improved API browser: Visualization for code dependencies (which
-procs calls what, from where is a proc being called) and
-test-coverage</p></li><li class="listitem"><p>Warn site administrators about expiring certificates</p></li><li class="listitem">
-<p>Additional input types (and widgets) for <code class="computeroutput">ad_form</code>:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
-<li class="listitem"><p>checkbox_text</p></li><li class="listitem"><p>color</p></li><li class="listitem"><p>email</p></li><li class="listitem"><p>tel</p></li><li class="listitem"><p>url</p></li><li class="listitem"><p>number</p></li><li class="listitem"><p>file (multiple)</p></li><li class="listitem"><p>h5date and h5time: date and time fields using native HTML5
-visualization and input normalization</p></li>
-</ul></div>
 </li><li class="listitem">
 <p>Registry for .js and .css libraries: allow besides classical
 URLs symbolic names for loading external resources (e.g. jquery),
@@ -73,7 +62,18 @@ order to reduce the number of requests.</p><pre class="programlisting">
    template::head::includes -container urn:js::style.js -parts {urn:ad:js:jquery ...}</pre>
 </li>
 </ul></div>
-</li><li class="listitem"><p>Improved support for streaming HTML: The new API function
+</li><li class="listitem"><p>Improved API browser: Visualization for code dependencies (which
+procs calls what, from where is a proc being called) and
+test-coverage</p></li><li class="listitem"><p>Warn site administrators about expiring certificates</p></li><li class="listitem"><p>Added text/markdown to the accepted text formats or rich-text
+widget</p></li><li class="listitem">
+<p>Additional input types (and widgets) for <code class="computeroutput">ad_form</code>:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
+<li class="listitem"><p>checkbox_text</p></li><li class="listitem"><p>color</p></li><li class="listitem"><p>email</p></li><li class="listitem"><p>tel</p></li><li class="listitem"><p>url</p></li><li class="listitem"><p>number</p></li><li class="listitem"><p>file (multiple)</p></li><li class="listitem"><p>h5date and h5time: date and time fields using native HTML5
+visualization and input normalization</p></li>
+</ul></div>
+</li><li class="listitem"><p>Added additional page_contract filter: oneof(red|green|blue)</p></li><li class="listitem"><p>
+<code class="computeroutput">template::add_event_listener</code>
+and <code class="computeroutput">template::add_confirm_handler</code> now can
+target elements by CSS selector</p></li><li class="listitem"><p>Improved support for streaming HTML: The new API function
 <code class="computeroutput">template::collect_body_scripts</code>
 can be used to get the content of template::script or CSP calls
 (<code class="computeroutput">template::add_body_script</code>,
@@ -86,21 +86,6 @@ bot be used for streaming HTML.</p></li>
 </li><li class="listitem">
 <p>Reforms:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: square;">
 <li class="listitem">
-<p>Dynamic blueprint reloading:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
-<li class="listitem"><p>When reloading apm packages, watched files, etc. the NaviServer
-blueprint is now updated correctly. This solves the long-standing
-problem that changes for scheduled procedures required a restart of
-the server. Furthermore, the old-style reloading was based on a
-ever-growing list of reload operations each time a new reload was
-requested, causing slow-downs in long running server instances,
-especially, when new threads are started.</p></li><li class="listitem"><p>Now changes are applied to all NaviServer threads, including
-threads for schedules procedures, ns_jobs and the like. Note that
-the current job has to be finished before the changes can be
-applied.</p></li><li class="listitem"><p>For the transition, it is possible to switch between the
-classical reloading style and blueprint reloading by changing a
-variable in acs-tcl/tcl/apm-procs.tcl</p></li>
-</ul></div>
-</li><li class="listitem">
 <p>Login:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;"><li class="listitem"><p>Get rid of bugging "login page expired" messages. The
 17 years old construct was replaced by newer means to avoid caching
 of form values from the login form. Admins of existing sites should
@@ -184,7 +169,8 @@ testing</p></li><li class="listitem"><p>Introduced new test authentication autho
 many user administration tests outside the context of a "real
 authority": in cases where the real authority depends on
 external services to proof identity, (e.g. Kerberos), those tests
-would just fail.</p></li><li class="listitem"><p>Introduce the display of warnings in the UI</p></li><li class="listitem"><p>Added test coverage information in the automated testing pages,
+would just fail.</p></li><li class="listitem"><p>Introduce the display of warnings in the UI of automated
+testing</p></li><li class="listitem"><p>Added test coverage information in the automated testing pages,
 using the new proc-coverage API and providing test coverage
 information for packages and system wide.</p></li><li class="listitem"><p>Increased overall coverage of public API</p></li><li class="listitem"><p>New tests checking various data-model properties and smells</p></li>
 </ul></div>
@@ -385,7 +371,7 @@ implementation for xowf</p></li>
 <a class="ulink" href="https://www.postgresql.org/support/versioning/" target="_top">February 2021</a>), tdom 0.9</p></li>
 </ul></div><p>Altogether, OpenACS 5.10.0 differs from OpenACS 5.9.1 by the
 following statistics</p><pre class="programlisting">
- 3442 files changed, 120847 insertions(+), 92002 deletions(-) 
+ 3445 files changed, 215464 insertions(+), 193642 deletions(-) 
 </pre><p>contributed by 7 committers (Antonio Pisano, Gustaf Neumann,
 Günter Ernst, Hector Romojaro, Michael Aram, Stefan Sobernig,
 Thomas Renner) and additional 13 patch/bugfix providers (Felix
@@ -1201,20 +1187,20 @@ styles still using these mechanisms will break.</p></li><li class="listitem"><p>
 turned off by default via the acs-kernel parameter ExcludedFiles in
 section request-processor (The variable provides a string match
 glob list of files and is defaulted to "*/CVS/* *~")</p></li>
-</ul></div><div class="cvstag">($&zwnj;Id: release-notes.xml,v 1.39.2.5 2021/09/06
-17:42:35 gustafn Exp $)</div>
+</ul></div><div class="cvstag">($&zwnj;Id: release-notes.xml,v 1.39.2.6 2021/09/07
+09:39:44 gustafn Exp $)</div>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140698012445936" id="idp140698012445936"></a>Release 4.6.3</h3></div></div></div><p><a class="ulink" href="release-notes-4-6-3" target="_top">Release Notes for 4.6.3</a></p>
+<a name="idp140219188852896" id="idp140219188852896"></a>Release 4.6.3</h3></div></div></div><p><a class="ulink" href="release-notes-4-6-3" target="_top">Release Notes for 4.6.3</a></p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140698012447440" id="idp140698012447440"></a>Release 4.6.2</h3></div></div></div><p><a class="ulink" href="release-notes-4-6-2" target="_top">Release Notes for 4.6.2</a></p>
+<a name="idp140219188854304" id="idp140219188854304"></a>Release 4.6.2</h3></div></div></div><p><a class="ulink" href="release-notes-4-6-2" target="_top">Release Notes for 4.6.2</a></p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140698012448944" id="idp140698012448944"></a>Release 4.6</h3></div></div></div><p><a class="ulink" href="release-notes-4-6" target="_top">Release Notes for 4.6</a></p>
+<a name="idp140219188855712" id="idp140219188855712"></a>Release 4.6</h3></div></div></div><p><a class="ulink" href="release-notes-4-6" target="_top">Release Notes for 4.6</a></p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140698012450448" id="idp140698012450448"></a>Release 4.5</h3></div></div></div><p><a class="ulink" href="release-notes-4-5" target="_top">Release Notes for 4.5</a></p>
+<a name="idp140219188857120" id="idp140219188857120"></a>Release 4.5</h3></div></div></div><p><a class="ulink" href="release-notes-4-5" target="_top">Release Notes for 4.5</a></p>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
