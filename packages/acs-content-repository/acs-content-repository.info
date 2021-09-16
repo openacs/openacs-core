@@ -12,7 +12,7 @@
     <inherit-templates-p>t</inherit-templates-p>
         <owner url="http://openacs.org">OpenACS</owner>
         <summary>The canonical repository for OpenACS content.</summary>
-        <release-date>2017-08-06</release-date>
+        <release-date>2021-09-15</release-date>
         <vendor url="http://openacs.org">OpenACS</vendor>
         <description format="text/html">
           Provides the API for creating and managing user generated
