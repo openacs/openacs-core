@@ -1956,7 +1956,7 @@ ad_proc -public util_current_location {} {
     # In case we have no connection return the location based on the
     # configured kernel parameters. This will be the same value for
     # all (maybe host-node mapped) subsites, so probably one should
-    # parametrize this function with a subsite value and compute the
+    # parameterize this function with a subsite value and compute the
     # result in the non-connected based on the subsite_id.
     #
     if {![ns_conn isconnected]} {

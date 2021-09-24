@@ -921,7 +921,7 @@ ad_proc -public ad_page_contract {
                  && $actual_value eq ""
              } {
                 # LARS:
-                # If you lappend an emptry_string, it'll actually add the empty string to the list as an element
+                # If you lappend an empty_string, it'll actually add the empty string to the list as an element
                 # which is not what we want
                 continue
             }
