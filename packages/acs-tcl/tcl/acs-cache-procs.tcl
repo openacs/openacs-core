@@ -373,7 +373,7 @@ namespace eval ::acs {
 namespace eval ::acs {
     ##########################################################################
     #
-    # acs::LockfreeCache: Per-thread and per-request Cache
+    # ::acs::LockfreeCache: Per-thread and per-request Cache
     #
     # Lockfree cache are provided either as per-thread caches or
     # per-request caches, sharing the property that accessing these
@@ -399,7 +399,7 @@ namespace eval ::acs {
     # the flush values in every thread.
     #
     ##########################################################################
-    nx::Class create acs::LockfreeCache {
+    nx::Class create ::acs::LockfreeCache {
         :property {prefix}
 
         :public method get {
@@ -477,18 +477,33 @@ namespace eval ::acs {
                 }
             }
         }
-        #
-        # The per-thread cache uses namespaced Tcl variables, identified
-        # by the prefix "::acs:cache::"
-        #
-        :create per_thread_cache -prefix ::acs::cache
-
+        
         #
         # The per-request cache uses Tcl variables in the global
         # namespace, such they are automatically reclaimed after the
-        # request. These use the prefix "::__acs_cache_"
+        # request. These use the prefix "::__acs_cache"
         #
         :create per_request_cache -prefix ::__acs_cache
+
+        #
+        # Define the "per_thread_cache"
+        #
+        if {[ns_config "ns/parameters" cachingmode singlenode] eq "none"} {
+            #
+            # If caching mode is "none", let the "per_thread_cache" behave
+            # like the "per_request_cache".
+            #
+            :create per_thread_cache -prefix ::__acs_cache
+            ns_log notice "cachingmode [ns_config "ns/parameters" cachingmode singlenode]" \
+                "-> per_thread_cache behaves like per-request_cache"
+
+        } else {
+            #
+            # The per-thread cache uses namespaced Tcl variables, identified
+            # by the prefix "::acs:cache"
+            #
+            :create per_thread_cache -prefix ::acs::cache
+        }
     }
     namespace eval ::acs::cache {}
 }
