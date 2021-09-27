@@ -278,8 +278,8 @@ ad_proc -private rp_invoke_proc { conn argv } {
 
     switch -- $arg_count {
         0 { set cmd $proc }
-        1 { set cmd [list $proc $arg] }
-        default { set cmd [list $proc $conn $arg] }
+        1 { set cmd [list $proc {*}$arg] }
+        default { set cmd [list $proc $conn {*}$arg] }
     }
 
     ad_try -auto_abort=false {
