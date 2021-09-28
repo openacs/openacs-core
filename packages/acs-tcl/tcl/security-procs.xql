@@ -24,13 +24,6 @@
 </fullquery>
 
 
-<fullquery name="ad_check_password.password_select">
-      <querytext>
-      select password, salt from users where user_id = :user_id
-      </querytext>
-</fullquery>
-
-
 <fullquery name="sec_lookup_property.property_lookup_sec">
       <querytext>
 
@@ -69,16 +62,6 @@
 	   set last_hit = :new_last_hit
 	 where session_id = :id and
                property_name = :name
-      </querytext>
-</fullquery>
-
-<fullquery name="ad_change_password.password_update">
-      <querytext>
-        update users
-        set    password = :new_password,
-               salt = :salt,
-               password_changed_date = current_timestamp
-        where  user_id = :user_id
       </querytext>
 </fullquery>
 

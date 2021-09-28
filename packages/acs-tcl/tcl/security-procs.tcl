@@ -573,7 +573,8 @@ ad_proc -public sec_get_user_auth_token {
 ad_proc -public sec_change_user_auth_token {
     user_id
 } {
-    Change the user's auth_token, which invalidates all existing login cookies, i.e. forces user logout at the server.
+    Change the user's auth_token, which invalidates all existing login cookies,
+    i.e. forces user logout at the server.
 } {
     set auth_token [ad_generate_random_string]
 
@@ -622,45 +623,133 @@ ad_proc -public ad_user_logout {
     ad_unset_cookie -domain $cookie_domain -secure t ad_user_login_secure
 }
 
+namespace eval ::security {
+    ad_proc -private preferred_password_hash_algorithm {} {
+
+        Check the list of preferred password hash algorithms and the
+        return the best which is available (or "salted-sha1" if
+        nothing applies).
+
+        @return password preferred hash algorithm
+    } {
+
+        set preferences [parameter::get \
+                             -parameter PasswordHashAlgorithm \
+                             -package_id $::acs::kernel_id \
+                             -default "salted-sha1"]
+        foreach algo $preferences {
+            if {[info commands ::security::hash::$algo] ne ""} {
+                #
+                # This preference is available.
+                #
+                return $algo
+            } else {
+                ns_log warning "PasswordHashAlgorithm '$algo' was specified," \
+                    "but is not available in your setup."
+            }
+        }
+        #
+        # General fallback (only necessary for invalid parameter settings)
+        #
+        ns_log warning "No valid PasswordHashAlgorithm was specified: '$preferences'." \
+            "Fall back to default."
+
+        return "salted-sha1"
+    }
+}
+
+namespace eval ::security::hash {
+    ad_proc -private salted-sha1 {password salt} {
+
+        Classical OpenACS password hash algorithm. This algorithm must
+        be always available and is independent of the
+        NaviServer/AOLserver version.
+
+        @return hex encoded password hash
+
+    } {
+        set salt [string trim $salt]
+        return [ns_sha1 ${password}${salt}]
+    }
+
+    if {[::acs::icanuse "ns_crypto::pbkdf2_hmac"]} {
+        ad_proc -private scram-sha-256 {password salt} {
+
+            SCRAM hash function using sha256 as digest function. The
+            SCRAM hash function is PBKDF2 [RFC2898] with HMAC as the
+            pseudo-random function and where the output key length ==
+            hash length.  We use 15K iterations for PBKDF2 as
+            recommended in RFC 7677.
+
+            @return hex encoded password hash
+        } {
+            return [::ns_crypto::pbkdf2_hmac \
+                        -digest sha256 \
+                        -iterations 15000 \
+                        -secret $password \
+                        -salt $salt]
+        }
+    }
+}
+
 ad_proc -public ad_check_password {
     user_id
     password_from_form
 } {
-    Returns 1 if the password is correct for the given user ID.
+
+    Check if the provided password is correct. OpenACS never stores
+    password, but uses salted hashes for identification. Different
+    algorithm can be used. When the stored hash is from an other hash
+    algorithm, which is preferred, this function updates the password
+    hash automatically, but only, when the password is correct.
+
+    @return Returns 1 if the password is correct for the given user ID.
 } {
 
-    set found_p [db_0or1row password_select {select password, salt from users where user_id = :user_id}]
-    db_release_unused_handles
+    set found_p [db_0or1row password_select {
+        select password, salt, password_hash_algorithm from users where user_id = :user_id
+    }]
     if { !$found_p } {
         return 0
     }
 
-    set salt [string trim $salt]
-
-    if {$password ne [ns_sha1 "$password_from_form$salt"]  } {
+    if {$password ne [::security::hash::$password_hash_algorithm $password_from_form $salt]  } {
         return 0
     }
 
+    set preferred_hash_algorithm [security::preferred_password_hash_algorithm]
+    if {$preferred_hash_algorithm ne $password_hash_algorithm} {
+        ns_log notice "upgrade password hash for user $user_id from" \
+            "$password_hash_algorithm to $preferred_hash_algorithm"
+        ad_change_password \
+            -password_hash_algorithm $preferred_hash_algorithm \
+            $user_id \
+            $password_from_form
+    }
     return 1
 }
 
 ad_proc -public ad_change_password {
+    {-password_hash_algorithm "salted-sha1"}
     user_id
     new_password
 } {
     Change the user's password
 } {
-    # In case someone wants to change the salt from now on, you can do
-    # this and still support old users by changing the salt below.
-
     if { $user_id eq "" } {
         error "No user_id supplied"
     }
 
     set salt [sec_random_token]
-    set new_password [ns_sha1 "$new_password$salt"]
-    db_dml password_update {}
-    db_release_unused_handles
+    set new_password [::security::hash::$password_hash_algorithm $new_password $salt]
+    db_dml password_update {
+        update users
+        set    password = :new_password,
+               salt = :salt,
+               password_hash_algorithm = :password_hash_algorithm,
+               password_changed_date = current_timestamp
+        where  user_id = :user_id
+    }
 }
 
 ad_proc -private sec_setup_session {

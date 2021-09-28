@@ -99,6 +99,7 @@ namespace eval ::acs {
 ::acs::register_icanuse "ns_conn contentsentlength" [acs::cmd_has_subcommand ns_conn contentsentlength]
 ::acs::register_icanuse "ns_conn partialtimes"      [acs::cmd_has_subcommand ns_conn partialtimes]
 ::acs::register_icanuse "ns_conn pool"              [acs::cmd_has_subcommand ns_conn pool]
+::acs::register_icanuse "ns_crypto::pbkdf2_hmac"    {[info commands ::ns_crypto::pbkdf2_hmac] ne ""}
 ::acs::register_icanuse "ns_crypto::randombytes"    {[info commands ::ns_crypto::randombytes] ne ""}
 ::acs::register_icanuse "ns_db currenthandles"      [acs::cmd_has_subcommand ns_db currenthandles]
 ::acs::register_icanuse "ns_hash"                   {[info commands ::ns_hash] ne ""}
