@@ -577,7 +577,9 @@ create table users (
 	second_to_last_visit	date,
 	n_sessions		integer default 1 not null,
         -- local authentication information
-	password		char(40),
+	password		varchar2(128),
+        password_hash_algorithm varchar2(100)
+                                DEFAULT 'salted_sha1' NOT NULL,
 	salt			char(40),
 	password_question	varchar2(1000),
 	password_answer		varchar2(1000),
