@@ -1305,13 +1305,13 @@ ad_proc ad_include_contract {docstring args} {
     #ns_log notice "final command: $__cmd"
 
     if {[uplevel {info exists __adp_remember_stub}]} {
-        set path [string range [uplevel {set __adp_remember_stub}] [string length $::acs::rootdir]+1 end]
-        set context "include $path"
+        set __path [string range [uplevel {set __adp_remember_stub}] [string length $::acs::rootdir]+1 end]
+        set __context "include $__path"
     } else {
-        set context ""
+        set __context ""
     }
 
-    ad_page_contract -warn -level 2 -context $context -form [{*}$__cmd] $docstring {*}$args
+    ad_page_contract -warn -level 2 -context $__context -form [{*}$__cmd] $docstring {*}$args
 }
 
 ####################
