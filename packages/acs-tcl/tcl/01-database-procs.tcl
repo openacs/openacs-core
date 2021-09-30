@@ -176,6 +176,14 @@ ad_proc -private db_state_array_name_is {
 #     }
 # }
 
+#
+# Make sure, we have an nsv_array "db_driverkey", otherwise "nsv_get
+# db_driverkey ..." will cause an exception.
+#
+if {![nsv_array exists db_driverkey]} {
+    nsv_set db_driverkey . .
+}
+
 ad_proc -public db_driverkey {
     {-handle_p 0}
     dbn
@@ -193,45 +201,46 @@ ad_proc -public db_driverkey {
     @author Andrew Piskorski (atp@piskorski.com)
     @creation-date 2003/04/08
 } {
-    return [acs::per_thread_cache eval -key acs-tcl.db_driverkey_${handle_p}_$dbn {
+    if { $handle_p } {
+        #
+        # Input is a handle, not a database name. Determine from the
+        # handle the db-name (via the pool information)
+        #
+        set handle $dbn
+        set pool [ns_db poolname $handle]
+        set dbn $::acs::db_pool_to_dbn($pool)
+    }
 
+    if { ![nsv_get db_driverkey $dbn driverkey] } {
+        #
+        # This ASSUMES that any overriding of this default value via
+        # "ns_param driverkey_dbn" has already been done:
+        #
         if { $handle_p } {
-            set handle $dbn
-            set pool [ns_db poolname $handle]
-            set dbn $::acs::db_pool_to_dbn($pool)
-        }
-
-        if { ![nsv_exists db_driverkey $dbn] } {
-            #
-            # This ASSUMES that any overriding of this default value via
-            # "ns_param driverkey_dbn" has already been done:
-            #
-            if { $handle_p } {
+            set driver [ns_db driver $handle]
+        } else {
+            db_with_handle -dbn $dbn handle {
                 set driver [ns_db driver $handle]
-            } else {
-                db_with_handle -dbn $dbn handle {
-                    set driver [ns_db driver $handle]
-                }
             }
-
-            # These are the default driverkey values, if they are not set
-            # in the config file:
-
-            if { [string match "Oracle*" $driver] } {
-                set driverkey {oracle}
-            } elseif { $driver eq "PostgreSQL" } {
-                set driverkey "postgresql"
-            } elseif { $driver eq "ODBC" } {
-                set driverkey "nsodbc"
-            } else {
-                set driverkey {}
-                ns_log Error "db_driverkey: Unknown driver '$driver'."
-            }
-
-            nsv_set db_driverkey $dbn $driverkey
         }
-        nsv_get db_driverkey $dbn
-    }]
+
+        # These are the default driverkey values, if they are not set
+        # in the config file:
+
+        if { [string match "Oracle*" $driver] } {
+            set driverkey {oracle}
+        } elseif { $driver eq "PostgreSQL" } {
+            set driverkey "postgresql"
+        } elseif { $driver eq "ODBC" } {
+            set driverkey "nsodbc"
+        } else {
+            set driverkey {}
+            ns_log Error "db_driverkey: Unknown driver '$driver'."
+        }
+
+        nsv_set db_driverkey $dbn $driverkey
+    }
+    return $driverkey
 }
 
 
