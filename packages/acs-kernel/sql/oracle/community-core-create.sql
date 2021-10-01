@@ -579,7 +579,7 @@ create table users (
         -- local authentication information
 	password		varchar2(128),
         password_hash_algorithm varchar2(100)
-                                DEFAULT 'salted_sha1' NOT NULL,
+                                DEFAULT 'salted-sha1' NOT NULL,
 	salt			char(40),
 	password_question	varchar2(1000),
 	password_answer		varchar2(1000),

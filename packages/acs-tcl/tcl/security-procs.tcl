@@ -627,7 +627,7 @@ namespace eval ::security {
     ad_proc -private preferred_password_hash_algorithm {} {
 
         Check the list of preferred password hash algorithms and the
-        return the best which is available (or "salted_sha1" if
+        return the best which is available (or "salted-sha1" if
         nothing applies).
 
         @return password preferred hash algorithm
@@ -636,7 +636,7 @@ namespace eval ::security {
         set preferences [parameter::get \
                              -parameter PasswordHashAlgorithm \
                              -package_id $::acs::kernel_id \
-                             -default "salted_sha1"]
+                             -default "salted-sha1"]
         foreach algo $preferences {
             if {[info commands ::security::hash::$algo] ne ""} {
                 #
@@ -654,12 +654,12 @@ namespace eval ::security {
         ns_log warning "No valid PasswordHashAlgorithm was specified: '$preferences'." \
             "Fall back to default."
 
-        return "salted_sha1"
+        return "salted-sha1"
     }
 }
 
 namespace eval ::security::hash {
-    ad_proc -private salted_sha1 {password salt} {
+    ad_proc -private salted-sha1 {password salt} {
 
         Classical OpenACS password hash algorithm. This algorithm must
         be always available and is independent of the
@@ -673,7 +673,7 @@ namespace eval ::security::hash {
     }
 
     if {[::acs::icanuse "ns_crypto::pbkdf2_hmac"]} {
-        ad_proc -private scram_sha_256 {password salt} {
+        ad_proc -private scram-sha-256 {password salt} {
 
             SCRAM hash function using sha256 as digest function. The
             SCRAM hash function is PBKDF2 [RFC2898] with HMAC as the
@@ -730,7 +730,7 @@ ad_proc -public ad_check_password {
 }
 
 ad_proc -public ad_change_password {
-    {-password_hash_algorithm "salted_sha1"}
+    {-password_hash_algorithm "salted-sha1"}
     user_id
     new_password
 } {

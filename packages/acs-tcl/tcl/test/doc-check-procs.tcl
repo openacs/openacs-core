@@ -65,6 +65,7 @@ aa_register_case -cats {smoke production_safe} -procs {
     set functionalOps {^f::(-|/)$}
     set internalUse {^(_.+|AcsSc[.].+|callback::.+|install::.+|.*[-](lob|text|gridfs|file))$}
     set prescribed {^((after|before|notifications)-([a-zA-Z0-9_]+))$}
+    set nameWarning {public error private warning}
 
     foreach p [lsort -dictionary [nsv_array names api_proc_doc]] {
         if {[string match "* *" $p]} continue
@@ -99,7 +100,8 @@ aa_register_case -cats {smoke production_safe} -procs {
                     )
                    && ![regexp $prescribed $tail]
                } {
-            aa_log_result fail "proc '$p' ($protection): name/namespace contains invalid characters"
+            aa_log_result [dict get $nameWarning $protection] \
+                "proc '$p' ($protection): name/namespace contains invalid characters"
         } else {
             incr good
         }
