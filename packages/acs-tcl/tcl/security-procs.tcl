@@ -681,7 +681,7 @@ namespace eval ::security::hash {
             hash length.  We use 15K iterations for PBKDF2 as
             recommended in RFC 7677.
 
-            @return hex encoded password hash
+            @return hex encoded password hash (64 bytes)
         } {
             return [::ns_crypto::pbkdf2_hmac \
                         -digest sha256 \
@@ -690,6 +690,19 @@ namespace eval ::security::hash {
                         -salt $salt]
         }
     }
+
+    if {[::acs::icanuse "ns_crypto::scrypt"]} {
+        ad_proc -private scrypt-16384-8-1 {password salt} {
+
+            Compute a "password hash" using the scrypt password based
+            key derivation function (RFC 7914)
+
+            @return hex encoded password hash (128 bytes)
+        } {
+            return [::ns_crypto::scrypt -secret $password -salt $salt -n 16384 -r 8 -p 1]
+        }
+    }
+
 }
 
 ad_proc -public ad_check_password {
