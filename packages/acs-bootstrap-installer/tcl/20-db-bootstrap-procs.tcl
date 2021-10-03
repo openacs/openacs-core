@@ -194,7 +194,7 @@ ad_proc -private db_bootstrap_set_db_type { errors } {
         set database_problem "OpenACS requires three database pools in order to run correctly."
     }
 
-    # We're done with the mult-db dbn stuff, from now on we deal only
+    # We're done with the multi-db dbn stuff, from now on we deal only
     # with the OpenACS default database pools:
     #
     # TODO: For now the below pool-checking code runs ONLY for the
@@ -238,6 +238,7 @@ ad_proc -private db_bootstrap_set_db_type { errors } {
                     }
                 }
             }
+            #ns_log notice "pool $pool: got handle $db suffix $this_suffix"
 
             ns_db releasehandle $db
             if { $this_suffix eq "" } {
