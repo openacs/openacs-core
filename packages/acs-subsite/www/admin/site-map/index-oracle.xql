@@ -3,21 +3,6 @@
 <queryset>
     <rdbms><type>oracle</type><version>8.1.6</version></rdbms>
 
-    <fullquery name="path_select">
-        <querytext>
-            select node_id,
-                   name,
-                   directory_p,
-                   level,
-                   acs_object.name(object_id) as obj_name,
-                   acs_permission.permission_p(object_id, :user_id, 'admin') as admin_p
-            from site_nodes
-            start with node_id = :root_id
-            connect by node_id = prior parent_id
-            order by level desc
-        </querytext>
-    </fullquery>
-
     <fullquery name="nodes_select">
         <querytext>
             select package_id,
