@@ -33,7 +33,16 @@ ad_proc -private auth::test::get_password_vars {
 } {
     upvar $array_name test_vars
 
-    db_1row select_vars {} -column_array test_vars
+    db_1row select_vars {
+        select u.user_id,
+               aa.authority_id,
+               u.username
+        from users u,
+                   auth_authorities aa
+        where u.authority_id = aa.authority_id
+        and aa.short_name = 'local'
+        fetch first 1 rows only
+    } -column_array test_vars
 }
 
 ####

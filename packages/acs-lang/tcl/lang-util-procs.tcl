@@ -426,7 +426,13 @@ ad_proc -public lang::util::nls_language_from_language {
     @param language  Name of a country, using ISO-3166 two letter code
     @return          The nls_language name of the language.
 } {
-    return [db_string nls_language_from_language {}]
+    return [db_string nls_language_from_language {
+        select nls_language
+        from   ad_locales
+        where  lower(trim(language)) = lower(:language)
+          and  enabled_p = 't'
+        fetch first 1 rows only
+    }]
 }
 
 
