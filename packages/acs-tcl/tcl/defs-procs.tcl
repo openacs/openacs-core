@@ -437,56 +437,174 @@ ad_proc -public ad_parameter_from_file {
     return [ns_config "ns/server/[ns_info server]/acs/$package_key" $name]
 }
 
+#
+# Implementation of ad_parameter_cache
+# 1) for cachingmode none
+# 2) via "nsv_dict" (cluster aware)
+# 3) via "nsv" (not cluster aware)
 
-ad_proc -public ad_parameter_cache {
-    -set
-    -delete:boolean
-    -global:boolean
-    key
-    parameter_name
-} {
+if {[ns_config "ns/parameters" cachingmode "per-node"] eq "none"} {
+    #
+    # If caching mode is "none", the "ad_parameter_cache" is
+    # essentially a no-op stub, but it is used for interface
+    # compatibility.
+    #
+    # TODO: One should essentially define more more cachetype for
+    # nsv_caching in acs-cache-procs to reduce redundancy and for
+    # providing higher orthogonality.
+    #
+    ad_proc -public ad_parameter_cache {
+        -set
+        -delete:boolean
+        -global:boolean
+        key
+        parameter_name
+    } {
 
-    Manages the cache for ad_parameter.
-    @param set Use this flag to indicate a value to set in the cache.
-    @param delete Delete the value from the cache
-    @param global If true, global param, false, instance param
-    @param key Specifies the key for the cache'd parameter, either the package instance
-     id (instance parameter) or package key (global parameter).
-    @param parameter_name Specifies the parameter name that is being cached.
-    @return The cached value.
+        Stub for a parameter cache, since "cachingmode" is "none".
 
-} {
-    if {$delete_p} {
-        if {[nsv_exists ad_param_$key $parameter_name]} {
-            nsv_unset ad_param_$key $parameter_name
+        @param set Use this flag to indicate a value to set in the cache.
+        @param delete Delete the value from the cache
+        @param global If true, global param, false, instance param
+        @param key Specifies the key for the cache'd parameter, either the package instance
+        id (instance parameter) or package key (global parameter).
+        @param parameter_name Specifies the parameter name that is being cached.
+        @return The cached value.
+
+    } {
+        if {$delete_p} {
+            return
         }
-        return
+        if {[info exists set]} {
+            return $set
+        } elseif { $global_p } {
+            set value [db_string select_global_parameter_value {
+                select apm_parameter_values.attr_value
+                from   apm_parameters, apm_parameter_values
+                where  apm_parameter_values.package_id is null
+                and    apm_parameter_values.parameter_id = apm_parameters.parameter_id
+                and    apm_parameters.parameter_name = :parameter_name
+                and    apm_parameters.package_key = :key
+            } -default ""]
+        } else {
+            set value [db_string select_instance_parameter_value {
+                select apm_parameter_values.attr_value
+                from   apm_parameters, apm_parameter_values
+                where  apm_parameter_values.package_id = :key
+                and    apm_parameter_values.parameter_id = apm_parameters.parameter_id
+                and    apm_parameters.parameter_name = :parameter_name
+            } -default ""]
+        }
+        return $value
     }
-    if {[info exists set]} {
-        nsv_set "ad_param_${key}" $parameter_name $set
-        return $set
-    } elseif { [nsv_exists ad_param_$key $parameter_name] } {
-        return [nsv_get ad_param_$key $parameter_name]
-    } elseif { $global_p } {
-        set value [db_string select_global_parameter_value {
-            select apm_parameter_values.attr_value
-            from   apm_parameters, apm_parameter_values
-            where  apm_parameter_values.package_id is null
-            and    apm_parameter_values.parameter_id = apm_parameters.parameter_id
-            and    apm_parameters.parameter_name = :parameter_name
-            and    apm_parameters.package_key = :key
-        } -default ""]
-    } else {
-        set value [db_string select_instance_parameter_value {
-            select apm_parameter_values.attr_value
-            from   apm_parameters, apm_parameter_values
-            where  apm_parameter_values.package_id = :key
-            and    apm_parameter_values.parameter_id = apm_parameters.parameter_id
-            and    apm_parameters.parameter_name = :parameter_name
-        } -default ""]
+
+} elseif {[::acs::icanuse "nsv_dict"]} {
+
+    if {![nsv_array exists ad_param]} {
+        nsv_set ad_param . .
     }
-    nsv_set "ad_param_${key}" $parameter_name $value
-    return $value
+
+    ad_proc -public ad_parameter_cache {
+        -set
+        -delete:boolean
+        -global:boolean
+        key
+        parameter_name
+    } {
+
+        Manages the cache for ad_parameter.
+        @param set Use this flag to indicate a value to set in the cache.
+        @param delete Delete the value from the cache
+        @param global If true, global param, false, instance param
+        @param key Specifies the key for the cache'd parameter, either the package instance
+        id (instance parameter) or package key (global parameter).
+        @param parameter_name Specifies the parameter name that is being cached.
+        @return The cached value.
+
+    } {
+        if {$delete_p} {
+            if {[nsv_dict exists ad_param $key $parameter_name]} {
+                ::acs::clusterwide nsv_dict unset ad_param $key $parameter_name
+            }
+            return
+        }
+        if {[info exists set]} {
+            nsv_dict set ad_param $key $parameter_name $set
+            return $set
+        } elseif { [nsv_dict get -varname value ad_param $key $parameter_name] } {
+            return $value
+        } elseif { $global_p } {
+            set value [db_string select_global_parameter_value {
+                select apm_parameter_values.attr_value
+                from   apm_parameters, apm_parameter_values
+                where  apm_parameter_values.package_id is null
+                and    apm_parameter_values.parameter_id = apm_parameters.parameter_id
+                and    apm_parameters.parameter_name = :parameter_name
+                and    apm_parameters.package_key = :key
+            } -default ""]
+        } else {
+            set value [db_string select_instance_parameter_value {
+                select apm_parameter_values.attr_value
+                from   apm_parameters, apm_parameter_values
+                where  apm_parameter_values.package_id = :key
+                and    apm_parameter_values.parameter_id = apm_parameters.parameter_id
+                and    apm_parameters.parameter_name = :parameter_name
+            } -default ""]
+        }
+        nsv_dict set ad_param $key $parameter_name $value
+        return $value
+    }
+} else {
+    ad_proc -public ad_parameter_cache {
+        -set
+        -delete:boolean
+        -global:boolean
+        key
+        parameter_name
+    } {
+
+        Manages the cache for ad_parameter.
+        @param set Use this flag to indicate a value to set in the cache.
+        @param delete Delete the value from the cache
+        @param global If true, global param, false, instance param
+        @param key Specifies the key for the cache'd parameter, either the package instance
+        id (instance parameter) or package key (global parameter).
+        @param parameter_name Specifies the parameter name that is being cached.
+        @return The cached value.
+
+    } {
+        if {$delete_p} {
+            if {[nsv_exists ad_param_$key $parameter_name]} {
+                nsv_unset ad_param_$key $parameter_name
+            }
+            return
+        }
+        if {[info exists set]} {
+            nsv_set "ad_param_${key}" $parameter_name $set
+            return $set
+        } elseif { [nsv_exists ad_param_$key $parameter_name] } {
+            return [nsv_get ad_param_$key $parameter_name]
+        } elseif { $global_p } {
+            set value [db_string select_global_parameter_value {
+                select apm_parameter_values.attr_value
+                from   apm_parameters, apm_parameter_values
+                where  apm_parameter_values.package_id is null
+                and    apm_parameter_values.parameter_id = apm_parameters.parameter_id
+                and    apm_parameters.parameter_name = :parameter_name
+                and    apm_parameters.package_key = :key
+            } -default ""]
+        } else {
+            set value [db_string select_instance_parameter_value {
+                select apm_parameter_values.attr_value
+                from   apm_parameters, apm_parameter_values
+                where  apm_parameter_values.package_id = :key
+                and    apm_parameter_values.parameter_id = apm_parameters.parameter_id
+                and    apm_parameters.parameter_name = :parameter_name
+            } -default ""]
+        }
+        nsv_set "ad_param_${key}" $parameter_name $value
+        return $value
+    }
 }
 
 ad_proc -private ad_parameter_cache_all {} {

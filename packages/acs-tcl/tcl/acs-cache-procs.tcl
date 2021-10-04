@@ -444,7 +444,7 @@ namespace eval ::acs {
                 #ns_log notice "### cmd returns <$value> no_empty $no_empty "
                 if {$no_empty && $value eq ""} {
                     return ""
-                }                
+                }
                 dict set ${:prefix} $key $value
                 #ns_log notice "### [list  dict set ${:prefix} $key $value]"
             }
@@ -459,16 +459,16 @@ namespace eval ::acs {
             # Flush a cache entry based on the pattern (which might be
             # wild-card-free).
             #
-            if {[info exists ${:prefix}]} {            
+            if {[info exists ${:prefix}]} {
                 if {$pattern eq "*"} {
-                    ns_log notice "### dict flush ${:prefix} <$pattern>" 
+                    ns_log notice "### dict flush ${:prefix} <$pattern>"
                     unset ${:prefix}
                 } elseif {[string first "*" $pattern] != -1} {
                     #
                     # A real pattern with wild-card was provided.
-                    #                    
+                    #
                     set keys [dict keys [set ${:prefix}] $pattern]
-                    ns_log notice "### dict flush ${:prefix} <$pattern> -> [llength $keys]]" 
+                    ns_log notice "### dict flush ${:prefix} <$pattern> -> [llength $keys]]"
                     foreach key $keys {
                         dict unset ${:prefix} $key
                     }
@@ -477,7 +477,7 @@ namespace eval ::acs {
                 }
             }
         }
-        
+
         #
         # The per-request cache uses Tcl variables in the global
         # namespace, such they are automatically reclaimed after the
@@ -488,7 +488,7 @@ namespace eval ::acs {
         #
         # Define the "per_thread_cache"
         #
-        if {[ns_config "ns/parameters" cachingmode singlenode] eq "none"} {
+        if {[ns_config "ns/parameters" cachingmode "per-node"] eq "none"} {
             #
             # If caching mode is "none", let the "per_thread_cache" behave
             # like the "per_request_cache".
@@ -559,7 +559,9 @@ namespace eval ::acs {
             nsv_set ""
             nsv_unset ""
             nsv_incr ""
+            nsv_dict ""
             bgdelivery ""
+            callback ""
             ns_cache "^ns_cache\s+eval"
             ns_cache_flush ""
             acs::cache_flush_all ""

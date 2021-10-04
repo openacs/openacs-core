@@ -43,7 +43,7 @@ ad_proc -public parameter::set_global_value {
 
     db_exec_plsql set_parameter_value {}
 
-    callback subsite::global_parameter_changed \
+    acs::clusterwide callback subsite::global_parameter_changed \
         -package_key $package_key \
         -parameter $parameter \
         -value $value
@@ -121,7 +121,7 @@ ad_proc -public parameter::set_value {
 
     db_exec_plsql set_parameter_value {}
 
-    callback subsite::parameter_changed \
+    acs::clusterwide callback subsite::parameter_changed \
         -package_id $package_id \
         -parameter $parameter \
         -value $value
