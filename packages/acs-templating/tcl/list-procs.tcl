@@ -591,7 +591,10 @@ ad_proc -public template::list::prepare {
         set list_properties(page_query_original) $list_properties(page_query_substed)
 
         # Now wrap the provided query with the limit information
-        set list_properties(page_query_substed) [db_map pagination_query]
+        set list_properties(page_query_substed) [subst {
+            $list_properties(page_query_substed) offset [expr {$first_row - 1}]
+            fetch first [expr {$last_row - $first_row + 1}] rows only
+        }]
 
         # Generate a paginator name which includes the page group we're in
         # and all the filter values, so the paginator cahing works properly
