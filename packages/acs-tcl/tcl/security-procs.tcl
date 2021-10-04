@@ -712,7 +712,7 @@ ad_proc -public ad_check_password {
 
     Check if the provided password is correct. OpenACS never stores
     password, but uses salted hashes for identification. Different
-    algorithm can be used. When the stored hash is from an other hash
+    algorithm can be used. When the stored hash is from another hash
     algorithm, which is preferred, this function updates the password
     hash automatically, but only, when the password is correct.
 
