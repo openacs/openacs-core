@@ -143,6 +143,27 @@ aa_register_case \
             }
     }
 
+aa_register_case \
+    -cats {api} \
+    -procs {
+        auth::get_all_registration_elements
+    } \
+    authority__get_sc_impl_columns {
+        Test auth::get_all_registration_elements
+    } {
+        aa_equals "Proc returns the expected result with flag 'include_password_confirm' set" \
+            [lsort [auth::get_all_registration_elements -include_password_confirm]] [lsort {
+                email username first_names last_name password
+                password_confirm screen_name url
+                secret_question secret_answer
+            }]
+        aa_equals "Proc returns the expected result with flag 'include_password_confirm' NOT set" \
+            [lsort [auth::get_all_registration_elements]] [lsort {
+                email username first_names last_name password
+                screen_name url secret_question secret_answer
+            }]
+    }
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
