@@ -15,7 +15,14 @@ ad_page_contract {
 permission::require_permission -object_id $object_id -privilege "admin"
 
 # first we verify that this object receives notifications
-if { ![db_0or1row select_name {}] } {
+if { ![db_0or1row select_name {
+    select acs_object.name(object_id) as name, type_id
+    from notification_requests
+    where dynamic_p = 'f'
+      and object_id = :object_id
+    order by type_id
+    fetch first 1 rows only
+}] } {
     # there are no notifications for this object
     ad_return_error "[_ notifications.No_Notifications]" "[_ notifications.No_Notifications_text]"
     ad_script_abort
