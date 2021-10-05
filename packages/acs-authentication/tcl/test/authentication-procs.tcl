@@ -164,6 +164,55 @@ aa_register_case \
             }]
     }
 
+aa_register_case \
+    -cats {api} \
+    -procs {
+        auth::get_register_authority
+    } \
+    auth__get_register_authority {
+        Test auth::get_register_authority
+    } {
+        aa_run_with_teardown \
+            -rollback \
+            -test_code {
+                # Set all authorities as the register authority one by
+                # one and see that the proc returns the expected
+                # value.
+                db_foreach get_authorities {
+                    select authority_id,
+                           short_name,
+                           register_impl_id
+                    from auth_authorities
+                } {
+                    aa_log "Setting '$short_name' as the registration authority"
+                    parameter::set_from_package_key \
+                        -parameter RegisterAuthority \
+                        -package_key "acs-authentication" \
+                        -value $short_name
+                    if { $register_impl_id eq "" } {
+                        aa_log "Authority '$short_name' does not have a register implementation, fallback to local authority"
+                        set reg_authority_id [auth::authority::local]
+                    } else {
+                        aa_log "Authority '$short_name' has a register implementation"
+                        set reg_authority_id $authority_id
+                    }
+                    aa_equals "Register authority '$short_name' should be picked correctly" \
+                        $reg_authority_id [auth::get_register_authority]
+                }
+
+                # Finally, try a bogus one.
+                set not_exists [db_string get_bogus_auhtority {
+                    select '0' || min(short_name) from auth_authorities
+                }]
+                parameter::set_from_package_key \
+                    -parameter RegisterAuthority \
+                    -package_key "acs-authentication" \
+                    -value $not_exists
+                aa_equals "Non existent register authority '$not_exists' falls back to the local authority" \
+                    [auth::authority::local] [auth::get_register_authority]
+            }
+    }
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
