@@ -266,6 +266,173 @@ aa_register_case \
             }
     }
 
+aa_register_case \
+    -cats {api} \
+    -procs {
+        auth::get_user_id
+    } \
+    auth__get_user_id {
+        Test auth::get_user_id
+    } {
+        # We will just mess about with the ad_conn variables used
+        # inside the proc to simulate a few possible situations.
+        set prev_untrusted_user_id [ad_conn untrusted_user_id]
+        set prev_account_status [ad_conn account_status]
+        set prev_auth_level [ad_conn auth_level]
+
+        set user_id [ad_conn user_id]
+
+        set bogus_user [db_string get_bogus_user {
+            select max(user_id) + 1 from users
+        }]
+
+        aa_run_with_teardown \
+            -rollback \
+            -test_code {
+                foreach {
+                    untrusted_user_id account_status auth_level
+                    wanted_level wanted_account_status
+                    expected_result
+                } [list \
+                       0           whatever none   1234 whatever 0 \
+                       $user_id    ok       ok     ok     ok       $user_id \
+                       $user_id    ok       ok     secure ok       [expr {[security::https_available_p] ? 0 : $user_id}] \
+                       $user_id    ok       secure secure ok       $user_id \
+                       $user_id    ok       secure secure whatever $user_id \
+                       $bogus_user ok       secure secure ok       $bogus_user \
+                       $bogus_user ko       secure secure ok       0 \
+                      ] {
+                    ad_conn -set untrusted_user_id $untrusted_user_id
+                    ad_conn -set account_status $account_status
+                    ad_conn -set auth_level $auth_level
+
+                    set v [auth::get_user_id \
+                               -level $wanted_level \
+                               -account_status $wanted_account_status]
+                    aa_equals "For user '$untrusted_user_id', level '$wanted_level', account_status '$wanted_account_status' the result should be '$expected_result'" \
+                        $v $expected_result
+                }
+            } -teardown_code {
+                ad_conn -set untrusted_user_id $prev_untrusted_user_id
+                ad_conn -set account_status $prev_account_status
+                ad_conn -set auth_level $prev_auth_level
+            }
+    }
+
+aa_register_case \
+    -cats {api} \
+    -procs {
+        auth::login_attempts::get_all
+        auth::login_attempts::reset
+        auth::login_attempts::reset_all
+        auth::login_attempts::record
+        auth::login_attempts::threshold_reached_p
+        auth::login_attempts::get
+    } \
+    auth__login_attempts {
+        Test login attempts API
+    } {
+        set orig_max_failed_login_attempts [parameter::get_from_package_key \
+                                                -parameter "MaxConsecutiveFailedLoginAttempts" \
+                                                -package_key "acs-authentication" \
+                                                -default 0]
+        try {
+            # We set this value forcefully or chances are that
+            # some system will never test this API
+            set max_failed_login_attempts 10
+            parameter::set_from_package_key \
+                -parameter "MaxConsecutiveFailedLoginAttempts" \
+                -package_key "acs-authentication" \
+                -value $max_failed_login_attempts
+
+            set login_attempt_key acs-test-login-key
+            set another_login_attempt_key acs-test-login-another-key
+
+            for {set i 1} {$i <= $max_failed_login_attempts} {incr i} {
+                ::auth::login_attempts::record \
+                    -login_attempt_key $login_attempt_key
+                aa_equals "Login attempts for key '$login_attempt_key' should now be '$i'" \
+                    $i [::auth::login_attempts::get -key $login_attempt_key]
+                aa_false "Threshold for key '$login_attempt_key' should not have been reached" \
+                    [::auth::login_attempts::threshold_reached_p \
+                         -login_attempt_key $login_attempt_key]
+            }
+
+            ::auth::login_attempts::record \
+                -login_attempt_key $login_attempt_key
+            aa_true "Threshold for key '$login_attempt_key' should now have been reached" \
+                [::auth::login_attempts::threshold_reached_p \
+                     -login_attempt_key $login_attempt_key]
+
+            aa_log "Forgetting of login attempts for '$another_login_attempt_key'"
+            auth::login_attempts::reset \
+                -login_attempt_key $another_login_attempt_key
+
+            aa_true "Threshold for key '$login_attempt_key' should still have been reached" \
+                [::auth::login_attempts::threshold_reached_p \
+                     -login_attempt_key $login_attempt_key]
+
+            aa_log "Forgetting of login attempts for '$login_attempt_key'"
+            auth::login_attempts::reset \
+                -login_attempt_key $login_attempt_key
+
+            aa_false "Threshold for key '$login_attempt_key' should now be fine" \
+                [::auth::login_attempts::threshold_reached_p \
+                     -login_attempt_key $login_attempt_key]
+            aa_equals "Number of attempts for key '$login_attempt_key' should now be 0" \
+                0 [::auth::login_attempts::get \
+                       -key $login_attempt_key]
+
+            aa_log "Resetting all attempts"
+            auth::login_attempts::reset_all
+            aa_true "No attempts anymore..." \
+                {[llength [auth::login_attempts::get_all]] == 0}
+
+            aa_log "Record two attemps on different keys"
+
+            ::auth::login_attempts::record \
+                -login_attempt_key $login_attempt_key
+            aa_equals "Number of attempts for key '$login_attempt_key' should now be 1" \
+                1 [::auth::login_attempts::get \
+                       -key $login_attempt_key]
+
+            ::auth::login_attempts::record \
+                -login_attempt_key $another_login_attempt_key
+            aa_equals "Number of attempts for key '$another_login_attempt_key' should now be 1" \
+                1 [::auth::login_attempts::get \
+                       -key $another_login_attempt_key]
+
+            set all_attempts [auth::login_attempts::get_all]
+
+            set keys_to_expect [list \
+                                    $login_attempt_key \
+                                    $another_login_attempt_key]
+            aa_equals "auth::login_attempts::get_all returns the expected number of entries" \
+                [llength $all_attempts] [expr {3 * 2}]
+            foreach {key timeout number_of_attempts} $all_attempts {
+                aa_true "auth::login_attempts::get_all returns an integer for timeout" \
+                    [string is integer -strict $timeout]
+                aa_equals "auth::login_attempts::get_all returns the correct number of attempts" \
+                    1 $number_of_attempts
+                set i [lsearch -exact $keys_to_expect $key]
+                aa_true "auth::login_attempts::get_all the correct keys" \
+                    {$i >= 0}
+                set keys_to_expect [lreplace $keys_to_expect $i $i]
+            }
+
+            aa_log "Resetting all attempts"
+            auth::login_attempts::reset_all
+
+            aa_true "No attempts anymore..." \
+                {[llength [auth::login_attempts::get_all]] == 0}
+        } finally {
+            parameter::set_from_package_key \
+                -parameter "MaxConsecutiveFailedLoginAttempts" \
+                -package_key "acs-authentication" \
+                -value $orig_max_failed_login_attempts
+        }
+    }
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
