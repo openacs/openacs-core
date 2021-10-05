@@ -96,6 +96,53 @@ aa_register_case \
             }
     }
 
+aa_register_case \
+    -cats {api} \
+    -procs {
+        auth::delete_local_account
+        acs_user::registered_user_p
+        auth::get_local_account_status
+    } \
+    auth__delete_local_account  {
+        Test mainly auth::delete_local_account and
+        auth::get_local_account_status
+    } {
+        aa_run_with_teardown \
+            -rollback \
+            -test_code {
+                set authority_id [auth::authority::get_id -short_name "acs_testing"]
+                set result [acs::test::user::create]
+                set user_id [dict get $result user_id]
+                set username [dict get $result username]
+
+                set account_status [auth::get_local_account_status -user_id $user_id]
+                aa_equals "User '$username' should have local status 'ok'" ok $account_status
+
+                set registered_p [acs_user::registered_user_p -user_id $user_id]
+                aa_true "User '$username' is currently approved" $registered_p
+
+                aa_log "Calling auth::delete_local_account on the user"
+                set r [auth::delete_local_account \
+                           -authority_id $authority_id \
+                           -username $username]
+
+                set registered_p [acs_user::registered_user_p -user_id $user_id]
+                aa_false "User '$username' is not approved anymore" $registered_p
+                aa_true "User '$username' still exists" [db_0or1row get_user {
+                    select 1 from users where user_id = :user_id
+                }]
+                set account_status [auth::get_local_account_status -user_id $user_id]
+                aa_equals "User '$username' should have local status 'closed'" closed $account_status
+
+                set not_a_user [acs_magic_object security_context_root]
+                set account_status [auth::get_local_account_status -user_id $not_a_user]
+                aa_equals "Object '$not_a_user' is not an account" no_account $account_status
+
+                aa_true "Proc returns 'delete_status'" [dict exists $r delete_status]
+                aa_true "Proc returns 'delete_message'" [dict exists $r delete_status]
+            }
+    }
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
