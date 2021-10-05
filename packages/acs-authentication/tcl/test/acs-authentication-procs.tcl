@@ -447,14 +447,23 @@ aa_register_case  \
     -procs {
         auth::password::can_change_p
         auth::test::get_password_vars
+        auth::password::can_reset_p
+        auth::password::can_retrieve_p
     } \
-    auth_password_can_change_p {
-    Test the auth::password::can_change_p proc.
+    auth_password_can_change_reset_retrieve_p {
+        Test auth::password::can_change_p, auth::password::can_reset_p
+        and auth::password::can_retrieve_p.
 } {
     auth::test::get_password_vars -array_name test_vars
 
-    aa_equals "Should return 1 when CanChangePassword is true for the local driver " \
+    aa_equals "auth::password::can_change_p should return 1 when CanChangePassword is true for the local driver " \
         [auth::password::can_change_p -user_id $test_vars(user_id)] \
+        "1"
+    aa_equals "auth::password::can_reset_p should return 1 for the local driver " \
+        [auth::password::can_reset_p -authority_id $test_vars(authority_id)] \
+        "1"
+    aa_equals "auth::password::can_retrieve_p return 1 for the local driver " \
+        [auth::password::can_retrieve_p -authority_id $test_vars(authority_id)] \
         "1"
 }
 
