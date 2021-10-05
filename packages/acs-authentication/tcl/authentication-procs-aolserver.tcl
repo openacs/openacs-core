@@ -97,7 +97,8 @@ ad_proc -private ::auth::login_attempts::get {
 ad_proc -private ::auth::login_attempts::all_entries {}  {
     Get all login attempts
 
-    @return list {key number_of_attempts timeout}
+    @return list of triples in the form {key1 timeout1
+            number_of_attempts1 key2 ...}
 } {
 
     set result [list]
