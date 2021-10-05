@@ -148,7 +148,7 @@ aa_register_case \
     -procs {
         auth::get_all_registration_elements
     } \
-    authority__get_sc_impl_columns {
+    auth__get_all_registration_elements {
         Test auth::get_all_registration_elements
     } {
         aa_equals "Proc returns the expected result with flag 'include_password_confirm' set" \
