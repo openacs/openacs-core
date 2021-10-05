@@ -1747,7 +1747,7 @@ ad_proc -public template::data::validate::h5date {
             set invalid_date_p [catch {
                 set max [clock scan $element(max) -format "%Y-%m-%d"]
             }]
-            if {$invalid_date_p || $max > $supplied_date} {
+            if {$invalid_date_p || $supplied_date > $max} {
                 lappend message [_ acs-templating.Date_must_be_before_max_date \
                                      [list max_date $element(max)]]
                 return 0
@@ -1925,7 +1925,7 @@ ad_proc -public template::data::validate::h5time {
                     break
                 }
             }
-            if {$invalid_time_p || $max > $supplied_time} {
+            if {$invalid_time_p || $supplied_time > $max} {
                 lappend message [_ acs-templating.Time_must_be_before_max_time \
                                      [list max_time $element(max)]]
                 return 0
