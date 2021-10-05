@@ -367,7 +367,7 @@ CREATE DATABASE
                   <secondary>Vacuuming</secondary>
                 </indexterm>
                 <screen>[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <userinput>export EDITOR=emacs;crontab -e</userinput></screen>
-                <para>Add these lines to the file.  The vacuum command cleans up temporary structures within a PostGreSQL database, and can improve performance.  We vacuum gently every hour and completely every day.  The numbers and stars at the beginning are cron columns that specify when the program should be run - in this case, whenever the minute is 0 and the hour is 1, i.e., 1:00 am every day, and every (*) day of month, month, and day of week.  Type <computeroutput>man 5 crontab</computeroutput> for more information.</para>
+                <para>Add these lines to the file.  The vacuum command cleans up temporary structures within a PostgreSQL database, and can improve performance.  We vacuum gently every hour and completely every day.  The numbers and stars at the beginning are cron columns that specify when the program should be run - in this case, whenever the minute is 0 and the hour is 1, i.e., 1:00 am every day, and every (*) day of month, month, and day of week.  Type <computeroutput>man 5 crontab</computeroutput> for more information.</para>
                 <programlisting>0 1-23 * * * /usr/local/pgsql/bin/vacuumdb --analyze <replaceable>$OPENACS_SERVICE_NAME</replaceable>
 0 0 * * * /usr/local/pgsql/bin/vacuumdb --full --analyze <replaceable>$OPENACS_SERVICE_NAME</replaceable></programlisting>
 
@@ -669,7 +669,7 @@ Loading package .info files ... this will take a few minutes</programlisting>
       </listitem>
       <listitem>
         <para>Set up database environment variables for the site
-	user.  Depending on how you installed Oracle or PostGreSQL, these settings may be necessary for working with the
+	user.  Depending on how you installed Oracle or PostgreSQL, these settings may be necessary for working with the
 	database while logged in as the service user.  They do not
 	directly affect the service&#39;s run-time connection with the
 	database, because those environmental variables are set by the

@@ -864,7 +864,7 @@ cvs tag -F openacs-5-1-compat
     package with your package.</para>
    
     <para>First step is to create the notification types. To do this a script similar 
-    to the one below needs to be loaded into Postgresql. I create this script in a 
+    to the one below needs to be loaded into PostgreSQL. I create this script in a 
     package-name/sql/postgresql/package-name-notifications-init.sql file. I then load 
     this file from my create SQL file. The following code snippet is taken from 
     Weblogger. It creates a lars_blogger_notif notification type (which was created 
@@ -1189,7 +1189,7 @@ drop function inline_0();
     url="http://openacs.org/forums/message-view?message_id=112943">OpenACS
     implementation has a few differences in the
     implementation</ulink>, to make it work for many languages and the
-    LIKE construct in Postgres.
+    LIKE construct in PostgreSQL.
     </para>
 
   </sect1>
@@ -1579,7 +1579,7 @@ ad_page_contract {
     <title>Connect to a second database</title>
     <para>It is possible to use the OpenACS Tcl database API with
     other databases.  In this example, the OpenACS site uses a
-    PostGre database, and accesses another PostGre database called
+    PostgreSQL database, and accesses another PostgreSQL database called
     legacy.</para>
     <orderedlist>
       <listitem>
