@@ -413,6 +413,75 @@ aa_register_case \
 
         } finally {
             ns_unregister_op GET $endpoint_name
+            acs_user::delete -user_id $user_id -permanent
+        }
+    }
+
+aa_register_case \
+    -cats {api} \
+    -procs {
+        auth::self_registration
+    } \
+    auth__self_registration {
+        Test auth::self_registration
+    } {
+        set old_allow_self_register_p [parameter::get_from_package_key \
+                                           -package_key acs-authentication \
+                                           -parameter AllowSelfRegister]
+        try {
+            set endpoint_name test__auth__self_registration
+            ns_register_proc GET $endpoint_name {
+                ns_return 200 text/plain [auth::self_registration]
+            }
+
+            set result [acs::test::user::create]
+            set user_id [dict get $result user_id]
+
+            aa_section "Set AllowSelfRegister to false"
+            parameter::set_from_package_key \
+                -package_key acs-authentication \
+                -parameter AllowSelfRegister \
+                -value false
+
+            aa_log "Unauthenticated request"
+            set d [acs::test::http \
+                       -method GET /$endpoint_name]
+            acs::test::reply_has_status_code $d 302
+
+            aa_log "Authenticated request"
+            set d [acs::test::http -user_id $user_id \
+                       -method GET /$endpoint_name]
+            acs::test::reply_has_status_code $d 200
+            aa_equals "Response must be the supplied user_id '$user_id'" \
+                [dict get $d body] $user_id
+
+            aa_section "Set AllowSelfRegister to true"
+            parameter::set_from_package_key \
+                -package_key acs-authentication \
+                -parameter AllowSelfRegister \
+                -value true
+
+            aa_log "Unauthenticated request"
+            set d [acs::test::http \
+                       -method GET /$endpoint_name]
+            acs::test::reply_has_status_code $d 200
+            aa_equals "Response must be empty" \
+                [dict get $d body] ""
+
+            aa_log "Authenticated request"
+            set d [acs::test::http -user_id $user_id \
+                       -method GET /$endpoint_name]
+            acs::test::reply_has_status_code $d 200
+            aa_equals "Response must be empty" \
+                [dict get $d body] ""
+
+        } finally {
+            parameter::set_from_package_key \
+                -package_key acs-authentication \
+                -parameter AllowSelfRegister \
+                -value $old_allow_self_register_p
+            ns_unregister_op GET $endpoint_name
+            acs_user::delete -user_id $user_id -permanent
         }
     }
 
