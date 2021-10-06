@@ -380,6 +380,42 @@ aa_register_case \
         }
     }
 
+aa_register_case \
+    -cats {api} \
+    -procs {
+        auth::refresh_login
+    } \
+    auth__refresh_login {
+        Test auth::refresh_login
+    } {
+        try {
+            set endpoint_name test__auth__refresh_login
+            ns_register_proc GET $endpoint_name {
+                set auth_level [ns_queryget auth_level]
+                if {$auth_level ne ""} {
+                    ad_conn -set auth_level $auth_level
+                }
+                ns_return 200 text/plain [auth::refresh_login]
+            }
+
+            set result [acs::test::user::create]
+            set user_id [dict get $result user_id]
+
+            set d [acs::test::http -user_id $user_id \
+                       -method GET /$endpoint_name]
+            acs::test::reply_has_status_code $d 200
+            aa_equals "Response must be the supplied user_id '$user_id'" \
+                [dict get $d body] $user_id
+
+            set d [acs::test::http -user_id $user_id \
+                       -method GET /$endpoint_name?auth_level=expired]
+            acs::test::reply_has_status_code $d 302
+
+        } finally {
+            ns_unregister_op GET $endpoint_name
+        }
+    }
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
