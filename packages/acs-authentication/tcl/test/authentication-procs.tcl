@@ -485,6 +485,104 @@ aa_register_case \
         }
     }
 
+aa_register_case \
+    -cats {api} \
+    -procs {
+        auth::update_local_account
+    } \
+    auth__update_local_account {
+        Test auth::update_local_account
+    } {
+        aa_run_with_teardown \
+            -rollback \
+            -test_code {
+                set result [acs::test::user::create]
+                set user_id [dict get $result user_id]
+
+                set u [acs_user::get -user_id $user_id]
+                set authority_id [dict get $u authority_id]
+                set test_authority_id $authority_id
+                set username [dict get $u username]
+
+                set other_authority_id [db_string get_authority {
+                    select min(authority_id) from auth_authorities
+                    where authority_id <> :test_authority_id
+                }]
+
+                foreach update_infos [list \
+                                          [list [list \
+                                                     email_verified_p f \
+                                                     screen_name abcd \
+                                                     authority_id $other_authority_id \
+                                                     bio "a bio" \
+                                                     first_names Jonh \
+                                                     last_name Doe \
+                                                     username anotheruser \
+                                                     email valid@email.com \
+                                                     url http://avalidurl.com \
+                                                     whatever blabla] true]\
+                                          [list [list \
+                                                     email_verified_p t \
+                                                     screen_name abcde \
+                                                     authority_id $test_authority_id \
+                                                     bio "another bio" \
+                                                     first_names Jonh2 \
+                                                     last_name Doe2 \
+                                                     username anotheruser2 \
+                                                     email invalidemail.com \
+                                                     url http://avalidurl.com \
+                                                     whatever blabla] false] \
+                                          [list [list \
+                                                     first_names Jonh3 \
+                                                     last_name Doe3] true]] {
+                    lassign $update_infos data correct_p
+
+                    set not [expr {$correct_p ? "" : "not "}]
+                    aa_section "Updating user '$user_id' with $data, supposed to be ${not}correct"
+
+                    unset -nocomplain update_data
+                    array set update_data $data
+
+                    set result [auth::update_local_account \
+                                    -authority_id $authority_id \
+                                    -username $username \
+                                    -array update_data]
+
+                    # Update the info we supply to the proc when the
+                    # update should succeed.
+                    if {$correct_p} {
+                        if {[dict exists $data authority_id]} {
+                            set authority_id [dict get $data authority_id]
+                        }
+                        if {[dict exists $data username]} {
+                            set username [dict get $data username]
+                        }
+                    }
+
+                    set expected_keys [lsort -unique \
+                                           [list {*}[dict keys $result] \
+                                                update_status update_message element_messages]]
+                    aa_equals "Proc returns the expected entries" \
+                        [lsort [dict keys $result]] \
+                        $expected_keys
+
+                    set expected_status [expr {$correct_p ? "ok" : "data_error"}]
+                    aa_equals "Update status is '$expected_status' -> $result" \
+                        [dict get $result update_status] \
+                        $expected_status
+
+                    if {$correct_p} {
+                        set updated_user [acs_user::get -user_id $user_id]
+                        foreach {key expected_value} $data {
+                            if {[dict exists $updated_user $key]} {
+                                aa_equals "Attribute '$key' was updated to '$expected_value'" \
+                                    [dict get $updated_user $key] $expected_value
+                            }
+                        }
+                    }
+                }
+            }
+    }
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
