@@ -350,6 +350,7 @@ aa_register_case \
     -cats { api smoke production_safe } \
     -procs {
         apidoc::tclcode_to_html
+        apidoc::tcl_to_html
         ad_looks_like_html_p
         ad_urldecode_query
     } \
@@ -390,6 +391,18 @@ aa_register_case \
                 {[string first $script $output] > -1}
             aa_true "Valid input '$script' contains some sort of URL of itself" \
                 {[string first [ns_quotehtml [ad_urldecode_query $script]] $output] > -1}
+        }
+
+        foreach script $commands {
+            set output [apidoc::tcl_to_html $script]
+            aa_true "Proc '$script' returns some HTML" \
+                [ad_looks_like_html_p $output]
+            aa_true "Proc '$script' contains links to commands documentation" \
+                {
+                    [string first /api-doc/proc-view $output] > -1 ||
+                    [string first /api-doc/tcl-proc $output] > -1 ||
+                    [string first /xotcl/show-object $output] > -1
+                }
         }
 
         aa_true "Specifying OO flags on non-OO commands is not harmful" \
