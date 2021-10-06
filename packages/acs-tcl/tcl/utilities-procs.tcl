@@ -4025,11 +4025,12 @@ namespace eval util {
             if {![ad_file exists $stem.svg]} {
                 ns_log notice "inline_svg_from_dot: generate $stem.svg"
 
-                set f [open $stem.dot w]; puts $f $dot_code; close $f
+                set dotfile $stem.dot
+                set svgfile $stem.svg
+                set f [open $dotfile w]; puts $f $dot_code; close $f
 
-                set f [open "|$dot -Tsvg -o $stem.svg" w]; puts $f $dot_code
                 try {
-                    close $f
+                    exec $dot -Tsvg -o $svgfile $dotfile
                 } on error {errorMsg} {
                     ns_log warning "inline_svg_from_dot: dot returned $errorMsg"
                 } on ok {result} {
