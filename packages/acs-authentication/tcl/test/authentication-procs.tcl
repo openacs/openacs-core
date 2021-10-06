@@ -583,6 +583,63 @@ aa_register_case \
                 }
             }
     }
+
+aa_register_case \
+    -cats {api} \
+    -procs {
+        auth::verify_account_status
+    } \
+    auth__verify_account_status {
+        Test auth::verify_account_status
+    } {
+        try {
+            set endpoint_name test__auth__verify_account_status
+            ns_register_proc GET $endpoint_name {
+                ad_conn -set auth_level somenonsense
+                auth::verify_account_status
+                ns_return 200 text/plain [ad_conn auth_level]
+            }
+
+            set login_list [sec_login_read_cookie]
+            set login_info [list \
+                                user_id    [lindex $login_list 0] \
+                                issue_time [lindex $login_list 1] \
+                                auth_token [lindex $login_list 2] \
+                                forever    [lindex $login_list end]]
+            set sec_login_timeout [sec_login_timeout]
+            set ok_p [expr { $sec_login_timeout == 0
+                             || [ns_time] - [dict get $login_info issue_time] < $sec_login_timeout
+                         }]
+            if {!$ok_p} {
+                set extected_statuses expired
+            } else {
+                set extected_statuses {ok secure}
+            }
+
+            set user_id [ad_conn user_id]
+            aa_section "Accessing the test endpoint as user '$user_id'"
+            set d [acs::test::http \
+                       -user_id $user_id \
+                       -headers [ns_set array [ad_conn headers]] \
+                       -method GET /$endpoint_name]
+            acs::test::reply_has_status_code $d 200
+
+            set auth_level [dict get $d body]
+            aa_true "Returned '$auth_level' is among the expected ones '$extected_statuses'" \
+                {$auth_level in $extected_statuses}
+
+            aa_section "Accessing the test endpoint as nobody"
+            set d [acs::test::http \
+                       -method GET /$endpoint_name]
+            acs::test::reply_has_status_code $d 200
+            aa_equals "Returned auth_level is 'none'" \
+                [dict get $d body] "none"
+
+        } finally {
+            ns_unregister_op GET $endpoint_name
+        }
+    }
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
