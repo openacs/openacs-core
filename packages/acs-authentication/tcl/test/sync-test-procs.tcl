@@ -16,6 +16,7 @@ aa_register_case \
         auth::sync::job::start
         auth::sync::job::start_get_document
         auth::sync::purge_jobs
+        auth::sync::job::get_authority_id
     } \
     sync_start_end {
     Test batch job basics: Starting, getting document, adding entries, ending.
@@ -26,8 +27,21 @@ aa_register_case \
 
             # Start noninteractive job
 
+            set local_authority_id [auth::authority::local]
+
             set job_id [auth::sync::job::start \
-                            -authority_id [auth::authority::local]]
+                            -authority_id $local_authority_id]
+
+            aa_equals "Authority has been stored correctly" \
+                [auth::sync::job::get_authority_id -job_id $job_id] \
+                $local_authority_id
+
+            set broken_job_id [db_string get_broken_job {
+                select max(job_id) + 1 from auth_batch_jobs
+            }]
+            aa_true "Querying the authority on an invalid job id fails" [catch {
+                auth::sync::job::get_authority_id -job_id $broken_job_id
+            }]
 
             aa_true "Returns a job_id" {$job_id ne ""}
 
