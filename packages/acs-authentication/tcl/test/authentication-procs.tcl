@@ -600,7 +600,16 @@ aa_register_case \
                 ns_return 200 text/plain [ad_conn auth_level]
             }
 
-            set login_list [sec_login_read_cookie]
+            #
+            # If over HTTPS, we look for the *_secure cookie
+            #
+            if { [security::secure_conn_p] || [ad_conn behind_secure_proxy_p]} {
+                set cookie_name "ad_user_login_secure"
+            } else {
+                set cookie_name "ad_user_login"
+            }
+            set login_list [split [ad_get_signed_cookie $cookie_name] ","]
+
             set login_info [list \
                                 user_id    [lindex $login_list 0] \
                                 issue_time [lindex $login_list 1] \
