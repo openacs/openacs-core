@@ -35,6 +35,7 @@ namespace eval ::acs {
         :property parameter:required
         :property package_key:required
         :property maxentry:integer
+        :property {timeout 5m}
         :property {default_size:integer 10000}
 
         :method cache_name {key} {
@@ -126,6 +127,7 @@ namespace eval ::acs {
                 # Create a cache.
                 #
                 ns_cache_create \
+                    -timeout ${:timeout} \
                     {*}[expr {[info exists :maxentry] ? "-maxentry ${:maxentry}" : ""}] \
                     $name $size
             }
