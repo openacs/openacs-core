@@ -600,42 +600,22 @@ aa_register_case \
                 ns_return 200 text/plain [ad_conn auth_level]
             }
 
-            #
-            # If over HTTPS, we look for the *_secure cookie
-            #
-            if { [security::secure_conn_p] || [ad_conn behind_secure_proxy_p]} {
-                set cookie_name "ad_user_login_secure"
-            } else {
-                set cookie_name "ad_user_login"
-            }
-            set login_list [split [ad_get_signed_cookie $cookie_name] ","]
+            set user_info [acs::test::user::create -admin]
+            set user_id [dict get $user_info user_id]
+            acs::test::confirm_email -user_id $user_id
+            set d [::acs::test::login $user_info]
 
-            set login_info [list \
-                                user_id    [lindex $login_list 0] \
-                                issue_time [lindex $login_list 1] \
-                                auth_token [lindex $login_list 2] \
-                                forever    [lindex $login_list end]]
-            set sec_login_timeout [sec_login_timeout]
-            set ok_p [expr { $sec_login_timeout == 0
-                             || [ns_time] - [dict get $login_info issue_time] < $sec_login_timeout
-                         }]
-            if {!$ok_p} {
-                set extected_statuses expired
-            } else {
-                set extected_statuses {ok secure}
-            }
+            set expected_statuses {ok secure}
 
-            set user_id [ad_conn user_id]
             aa_section "Accessing the test endpoint as user '$user_id'"
             set d [acs::test::http \
-                       -user_id $user_id \
-                       -headers [ns_set array [ad_conn headers]] \
+                       -last_request $d \
                        -method GET /$endpoint_name]
             acs::test::reply_has_status_code $d 200
 
             set auth_level [dict get $d body]
-            aa_true "Returned '$auth_level' is among the expected ones '$extected_statuses'" \
-                {$auth_level in $extected_statuses}
+            aa_true "Returned '$auth_level' is among the expected ones '$expected_statuses'" \
+                {$auth_level in $expected_statuses}
 
             aa_section "Accessing the test endpoint as nobody"
             set d [acs::test::http \
@@ -646,6 +626,7 @@ aa_register_case \
 
         } finally {
             ns_unregister_op GET $endpoint_name
+            acs_user::delete -user_id $user_id -permanent
         }
     }
 
