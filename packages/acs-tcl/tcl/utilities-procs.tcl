@@ -415,10 +415,10 @@ ad_proc -public export_vars {
     {-override {}}
     {vars {}}
 } {
-    
+
     Exports variables either as a URL or in the form of hidden form
     variables. The result is properly urlencoded, unless flags
-    prohibit this.    
+    prohibit this.
 
     <p>
     Example usage: <code>set html [export_vars -form { foo bar baz }]</code><br>
@@ -498,7 +498,7 @@ ad_proc -public export_vars {
 
     <dt><b>array</b></dt>
     <dd>
-    
+
     The value is an array and should be exported in a way compliant
     with the <code>:array</code> flag of <a
     href="/api-doc/proc-view?proc=ad_page_contract"><code>ad_page_contract</code></a>,
@@ -527,7 +527,7 @@ ad_proc -public export_vars {
     export_vars to let the exported variable after 60 seconds.  Other
     potential arguments for sign are "user" or "csrf" to bind the
     signature to a user or to the CSRF token.
-    
+
     </dd>
 
     </dl>
@@ -4012,13 +4012,13 @@ namespace eval util {
             }
             #
             # Cache file in the filesystem based on an MD5 checksum
-            # derived from the dot source-cide, the format and the
+            # derived from the dot source-code, the format and the
             # styling.
             #
             # TODO: one should provide a more general - usable for
             # many applications - file cache with a cleanup of stale
-            # entries (maybe based on last access time, when the prile
-            # system provides it).
+            # entries (maybe based on last access time, when the
+            # filesystem provides it).
             #
             set dot_signature [ns_md5 $dot_code-svg-$css]
             set stem $dir/$dot_signature
