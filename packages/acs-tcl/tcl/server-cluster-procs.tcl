@@ -7,7 +7,7 @@ ad_library {
 }
 
 ad_proc server_cluster_enabled_p {} { Returns true if clustering is enabled. } {
-    return [parameter::get -package_id [ad_acs_kernel_id] -parameter ClusterEnabledP -default 0]
+    return [parameter::get -package_id $::acs::kernel_id -parameter ClusterEnabledP -default 0]
 }
 
 ad_proc server_cluster_all_hosts {} {
@@ -16,31 +16,21 @@ ad_proc server_cluster_all_hosts {} {
 
 } {
     if { ![server_cluster_enabled_p] } {
-        return [list]
+        return {}
     }
-    return [parameter::get -package_id [ad_acs_kernel_id] -parameter ClusterPeerIP]
+    return [parameter::get -package_id $::acs::kernel_id -parameter ClusterPeerIP]
 }
 
 ad_proc server_cluster_peer_hosts {} {
 
     Returns a list of all hosts, excluding this host, in the server cluster.
 
-} {
-    set peer_hosts [list]
-    set my_ip [ns_config ns/server/[ns_info server]/module/nssock Address]
-
-    foreach host [server_cluster_all_hosts] {
-       #AGUSTIN
-       if { ![regexp {(.*):(.*)} $host match myhost myport] } {
-            set myport 80
-            set myhost $host
-       }
-       if { $myhost ne $my_ip } {
-            lappend peer_hosts $host
-        }
-    }
-
-    return $peer_hosts
+} { 
+    return [lmap cluster_server [::acs::Cluster info instances] {
+        util::join_location \
+            -hostname [$cluster_server cget -host] \
+            -port [$cluster_server cget -port]
+    }]
 }
 
 ad_proc server_cluster_authorized_p { ip } {
@@ -57,7 +47,7 @@ ad_proc server_cluster_authorized_p { ip } {
         return 1
     }
 
-    foreach glob [parameter::get -package_id [ad_acs_kernel_id] -parameter ClusterAuthorizedIP] {
+    foreach glob [parameter::get -package_id $::acs::kernel_id -parameter ClusterAuthorizedIP] {
         if { [string match $glob $ip] } {
             return 1
         }
@@ -80,7 +70,7 @@ proc server_cluster_do_httpget { url timeout } {
 ad_proc -private server_cluster_logging_p {} {
     Returns true if we're logging cluster requests.
 } {
-    return [parameter::get -package_id [ad_acs_kernel_id] -parameter EnableLoggingP -default 0]
+    return [parameter::get -package_id $::acs::kernel_id -parameter EnableLoggingP -default 0]
 }
 
 ad_proc -private server_cluster_httpget_from_peers {
@@ -109,7 +99,7 @@ ad_proc -private ad_canonical_server_p {} {
     AOLserver (for instance, if we have the aolservers sitting behind a
     load balancer).
 } {
-    set canonical_server [parameter::get -package_id [ad_acs_kernel_id] -parameter CanonicalServer]
+    set canonical_server [parameter::get -package_id $::acs::kernel_id -parameter CanonicalServer]
     if { $canonical_server eq "" } {
         ns_log Error "Your configuration is not correct for server clustering. Please ensure that you have the CanonicalServer parameter set correctly."
         return 1

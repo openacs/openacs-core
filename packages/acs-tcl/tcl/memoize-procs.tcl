@@ -61,6 +61,15 @@ ad_proc -private util_memoize_flush_local {script} {
     ns_cache flush util_memoize $script
 }
 
+ad_proc -public util_memoize_flush {script} {
+    Forget any cached value for <i>script</i>.  If clustering is
+    enabled, flush the caches on all servers in the cluster.
+
+    @param script The Tcl script whose cached value should be flushed.
+} {
+    ::acs::clusterwide ns_cache flush util_memoize $script
+}
+
 ad_proc -public util_memoize_flush_regexp {
     -log:boolean
     expr

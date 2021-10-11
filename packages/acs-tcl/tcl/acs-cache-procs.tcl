@@ -537,14 +537,19 @@ namespace eval ::acs {
     }
 
     proc cache_flush_all {cache pattern} {
+        #
         # Provide means to perform a wildcard-based cache flushing on
         # (cluster) machines.
-        foreach n [ns_cache names $cache $pattern] {ns_cache flush $cache $n}
+        #
+        foreach n [ns_cache names $cache $pattern] {
+            ns_cache flush $cache $n
+        }
     }
 
     nx::Class create Cluster {
         :property host
         :property {port 80}
+        :property {url /acs-cluster-do}
 
         set :allowed_host_patterns [list]
         set :url /acs-cluster-do
@@ -569,29 +574,55 @@ namespace eval ::acs {
             acs::cache_flush_all ""
         }
 
+        :object method log {args} {
+            ns_log notice "cluster: [join $args { }]"
+        }
+        :method log {args} {
+            ns_log notice "cluster host ${:host} ${:port}: [join $args { }]"
+        }
+
         #
-        # handling the ns_filter methods
+        # Handling the ns_filter methods
         #
         :public object method trace args {
-            :log ""
+            #:log "trace"
             return filter_return
         }
 
         :public object method preauth args {
-            :log ""
+            #:log "preauth"
             :incoming_request
             return filter_return
         }
 
         :public object method postauth args {
-            :log ""
+            #:log "postauth"
             return filter_return
+        }
+
+        :public object method allowed_command {cmd} {
+            #
+            # Check, which command are allowed to be executed in the
+            # cluster.
+            #
+
+            #ns_log notice "--cluster allowed [dict keys ${:allowed_command}]?"
+            set cmd_name [lindex $cmd 0]
+            #ns_log notice "--cluster can i execute $cmd_name? [dict exists ${:allowed_command} $cmd_name]"
+            if {[dict exists ${:allowed_command} $cmd_name]} {
+                set except_RE [dict get ${:allowed_command} $cmd_name]
+                #ns_log notice "--cluster [list regexp $except_RE $cmd] -> [regexp $except_RE $cmd]"
+                set allowed [expr {$except_RE eq "" || ![regexp $except_RE $cmd]}]
+            } else {
+                set allowed 0
+            }
+            return $allowed
         }
 
         #
         # handle incoming request issues
         #
-        :public object method  incoming_request {} {
+        :public object method incoming_request {} {
             set cmd [ns_queryget cmd]
             set addr [lindex [ns_set iget [ns_conn headers] x-forwarded-for] end]
             if {$addr eq ""} {set addr [ns_conn peeraddr]}
@@ -623,16 +654,9 @@ namespace eval ::acs {
                     error "refuse to execute commands from $host (command: '$cmd')"
                 }
             }
-            set cmd_name [lindex $cmd 0]
-            set key allowed_command($cmd_name)
-            #ns_log notice "--cluster $key exists ? [info exists :$key]"
-            if {[info exists :$key]} {
-                set except_RE [set :$key]
-                #ns_log notice "--cluster [list regexp $except_RE $cmd] -> [regexp $except_RE $cmd]"
-                if {$except_RE eq "" || ![regexp $except_RE $cmd]} {
-                    ns_log notice "--cluster executes command '$cmd' from host $host"
-                    return [eval $cmd]
-                }
+            if {[::acs::Cluster allowed_command $cmd]} {
+                ns_log notice "--cluster executes command '$cmd' from host $host"
+                return [eval $cmd]
             }
             error "command '$cmd' from host $host not allowed"
         }
@@ -646,10 +670,17 @@ namespace eval ::acs {
             }
         }
 
-        :public object method message args {
-            :log "--cluster outgoing request to [:host]:[:port] // $args"
+        :public method message args {
+            :log "--cluster outgoing request to ${:host}:${:port} // $args"
 
-            utl::http::get -url http://[:host]:[:port]/[:url]?cmd=[ns_urlencode $args]
+            try {
+                ns_http run http://${:host}:${:port}/${:url}?cmd=[ns_urlencode $args]
+            } on error {errorMsg} {
+                ns_log warning "-cluster: send message to http://${:host}:${:port}/${:url}?cmd=[ns_urlencode $args] failed: $errorMsg"
+            } on ok {result} {
+                ns_log notice "-cluster: response $result"
+            }
+            #util::http::get -url
         }
     }
 }

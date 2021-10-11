@@ -2,20 +2,32 @@
 # Check if cluster is enabled, and if, set up the custer objects
 #
 if {[server_cluster_enabled_p]} {
-    set my_ip   [ns_config ns/server/[ns_info server]/module/nssock Address]
-    set my_port [ns_config ns/server/[ns_info server]/module/nssock port]
+    set driver_section [ns_driversection -driver nssock]
+    set my_ips   [ns_config $driver_section address]
+    set my_ports [ns_config -int $driver_section port]
 
-    foreach host [server_cluster_all_hosts] {
-        set port 80
-        regexp {^(.*):(.*)} $host _ host port
-        if {"$host-$port" eq "$my_ip-$my_port"}  continue
-        ::acs::Cluster create CS_${host}_$port -host $host -port $port
+    set cluster_do_url [::acs::Cluster eval {set :url}]
+
+    foreach hostport [server_cluster_all_hosts] {
+        set d {port 80}
+        set d [dict merge $d [ns_parsehostport $hostport]]
+        dict with d {
+            if {$host in $my_ips && $port in $my_ports} {
+                ns_log notice "Cluster: server $host $port is no cluster peer"
+                continue
+            }
+            ns_log notice "Cluster: server $host $port is a cluster peer"
+            ::acs::Cluster create CS_${host}_${port} \
+                -host $host \
+                -port $port \
+                -url $cluster_do_url
+        }
     }
 
     foreach ip [parameter::get -package_id [ad_acs_kernel_id] -parameter ClusterAuthorizedIP] {
         if {[string first * $ip] > -1} {
             ::acs::Cluster eval [subst {
-                :lappend allowed_host_patterns $ip
+                lappend allowed_host_patterns $ip
             }]
         } else {
             ::acs::Cluster eval [subst {
@@ -26,16 +38,23 @@ if {[server_cluster_enabled_p]} {
 
     set url [::acs::Cluster eval {set :url}]
 
-    # Check, if the filter url mirrors a site node. If so,
-    # the cluster mechanism will not work, if the site node
-    # requires a login. Clustering will only work if the
-    # root node is freely accessible.
+    #
+    # TODO: The following test does not work yet, since
+    # "::xo::db::sql::site_node" is not yet defined. This requires
+    # more refactoring from xo* to the main infrastructure.
+    #
+    if {0} {
+        # Check, if the filter url mirrors a site node. If so,
+        # the cluster mechanism will not work, if the site node
+        # requires a login. Clustering will only work if the
+        # root node is freely accessible.
 
-    array set node [site_node::get -url $url]
-    if {$node(url) ne "/"} {
-        ns_log notice "***\n*** WARNING: there appears a package mounted on\
-       $url\n***Cluster configuration will not work\
-       since there is a conflict with the AOLserver filter with the same name!\n"
+        array set node [site_node::get -url $url]
+        if {$node(url) ne "/"} {
+            ns_log notice "***\n*** WARNING: there appears a package mounted on" \
+                "$url\n***Cluster configuration will not work" \
+                "since there is a conflict with the filter with the same name! (n)"
+        }
     }
 
     #ns_register_filter trace GET $url ::acs::Cluster
