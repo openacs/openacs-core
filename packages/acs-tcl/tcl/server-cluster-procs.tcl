@@ -7,12 +7,16 @@ ad_library {
 }
 
 ad_proc server_cluster_enabled_p {} { Returns true if clustering is enabled. } {
-    return [parameter::get -package_id $::acs::kernel_id -parameter ClusterEnabledP -default 0]
+    return [parameter::get \
+                -package_id $::acs::kernel_id \
+                -parameter ClusterEnabledP \
+                -default 0]
 }
 
 ad_proc server_cluster_all_hosts {} {
 
-    Returns a list of all hosts, possibly including this host, in the server cluster.
+    Returns a list of all hosts, possibly including this host, in the
+    server cluster.
 
 } {
     if { ![server_cluster_enabled_p] } {
@@ -25,7 +29,7 @@ ad_proc server_cluster_peer_hosts {} {
 
     Returns a list of all hosts, excluding this host, in the server cluster.
 
-} { 
+} {
     return [lmap cluster_server [::acs::Cluster info instances] {
         util::join_location \
             -hostname [$cluster_server cget -host] \
@@ -55,68 +59,56 @@ ad_proc server_cluster_authorized_p { ip } {
     return 0
 }
 
-proc server_cluster_do_httpget { url timeout } {
-    if { [catch {
-        set result [util::http::get -url $url -timeout $timeout -max_depth 0]
-        set page [dict get $result page]
-        if { ![regexp -nocase successful $page] } {
-            ns_log "Error" "Clustering: util::http::get $url returned unexpected value. Is /SYSTEM/flush-memoized-statement.tcl set up on this host?"
-        }
-    } error] } {
-        ns_log "Error" "Clustering: Unable to get $url (with timeout $timeout): $error"
-    }
+ad_proc -private server_cluster_my_config {} {
+} {
+    set driver_section [ns_driversection -driver nssock]
+    set my_ips   [ns_config $driver_section address]
+    set my_ports [ns_config -int $driver_section port]
+    return [list host $my_ips port $my_ports]
 }
 
-ad_proc -private server_cluster_logging_p {} {
-    Returns true if we're logging cluster requests.
+ad_proc -private server_cluster_get_config {hostport} {
+    Return a dict parsed from the host and port spec.
+    If no port is specified, it defaults to 80
+
+    @param hostport IP address with optional port
+    @return dict containing host and port
 } {
-    return [parameter::get -package_id $::acs::kernel_id -parameter EnableLoggingP -default 0]
+    set d {port 80}
+    return [dict merge $d [ns_parsehostport $hostport]]
 }
 
-ad_proc -private server_cluster_httpget_from_peers {
-    { -timeout 5 }
-    url
-} {
-    Schedules an HTTP GET request to be issued immediately to all peer
-    hosts (using ad_schedule_proc -once t -thread f -debug t 0).
-} {
-    if { ![string match "/*" $url] } {
-        set url "/$url"
-    }
-    foreach host [server_cluster_peer_hosts] {
-        # Schedule the request. Don't actually issue the request in this thread, since
-        # (a) we want to parallelize the requests, and (b) we want this procedure to
-        # return immediately.
-        ad_schedule_proc -once t -thread f -debug t -all_servers t 0 server_cluster_do_httpget "http://$host$url" $timeout
-    }
-}
 
 ad_proc -private ad_canonical_server_p {} {
-    Returns true if this is the primary server, false otherwise.
 
-    we're using IP:port to uniquely identify the canonical server, since
-    hostname or IP does not always uniquely identify an instance of
-    AOLserver (for instance, if we have the aolservers sitting behind a
-    load balancer).
+    Returns true if this is the primary (called historically
+    "canonical") server, false otherwise.
+
+    Since the server can listen to multiple IP addresses and on
+    multiple ports, all of these have to be checked.
 } {
     set canonical_server [parameter::get -package_id $::acs::kernel_id -parameter CanonicalServer]
     if { $canonical_server eq "" } {
-        ns_log Error "Your configuration is not correct for server clustering. Please ensure that you have the CanonicalServer parameter set correctly."
+        ns_log Error "Your configuration is not correct for server clustering." \
+            "Please ensure that you have the CanonicalServer parameter set correctly."
         return 1
     }
 
-    if { ![regexp {(.*):(.*)} $canonical_server match canonical_ip canonical_port] } {
-        set canonical_port 80
-        set canonical_ip $canonical_server
+    set myConfig [server_cluster_my_config]
+    set canonicalConfig [server_cluster_get_config $canonical_server]
+    #
+    # Both, myConfig and canonicalConfig can contain multiple IP
+    # addressen and ports.
+    #
+    foreach my_ip [dict get $myConfig host] {
+        foreach my_port [dict get $myConfig port] {
+            dict with canonicalConfig {
+                if {$my_ip in $host && $my_port in $port} {
+                    return 1
+                }
+            }
+        }
     }
-
-    set driver_section [ns_driversection -driver nssock]
-    if { [ns_config $driver_section Address] == $canonical_ip
-         && [ns_config $driver_section Port 80] == $canonical_port
-     } {
-        return 1
-    }
-
     return 0
 }
 

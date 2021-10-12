@@ -2,17 +2,20 @@
 # Check if cluster is enabled, and if, set up the custer objects
 #
 if {[server_cluster_enabled_p]} {
-    set driver_section [ns_driversection -driver nssock]
-    set my_ips   [ns_config $driver_section address]
-    set my_ports [ns_config -int $driver_section port]
-
+    set myConfig [server_cluster_my_config]
     set cluster_do_url [::acs::Cluster eval {set :url}]
 
+    #
+    # Iterate over all servers in the cluster and add Cluster objects
+    # for the ones, which are different from the current host (the
+    # peer hosts).
+    #
     foreach hostport [server_cluster_all_hosts] {
-        set d {port 80}
-        set d [dict merge $d [ns_parsehostport $hostport]]
-        dict with d {
-            if {$host in $my_ips && $port in $my_ports} {
+        set config [server_cluster_get_config $hostport]
+        dict with config {
+            if {$host in [dict get $myConfig host]
+                && $port in [dict get $myConfig port]
+            } {
                 ns_log notice "Cluster: server $host $port is no cluster peer"
                 continue
             }
@@ -24,7 +27,7 @@ if {[server_cluster_enabled_p]} {
         }
     }
 
-    foreach ip [parameter::get -package_id [ad_acs_kernel_id] -parameter ClusterAuthorizedIP] {
+    foreach ip [parameter::get -package_id $::acs::kernel_id -parameter ClusterAuthorizedIP] {
         if {[string first * $ip] > -1} {
             ::acs::Cluster eval [subst {
                 lappend allowed_host_patterns $ip
