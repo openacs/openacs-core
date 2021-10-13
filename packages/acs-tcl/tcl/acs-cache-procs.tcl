@@ -571,6 +571,7 @@ namespace eval ::acs {
             callback ""
             ns_cache "^ns_cache\s+eval"
             ns_cache_flush ""
+            ns_urlspace ""
             acs::cache_flush_all ""
         }
 
