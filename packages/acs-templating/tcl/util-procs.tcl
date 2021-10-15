@@ -629,6 +629,7 @@ ad_proc -public template::util::tcl_to_sql_list { lst } {
 }
 
 ad_proc -public template::themed_template {
+    {-verbose:boolean false}
     path
 } {
 
@@ -638,6 +639,7 @@ ad_proc -public template::themed_template {
     themed template is returned, otherwise the passed template path.
 
     @param path absolute path within the open acs tree (without extension)
+    @verbose boolean flag; report tried path in the system log
     @return path to themed template or input value (without extension)
 
 } {
@@ -646,9 +648,18 @@ ad_proc -public template::themed_template {
     } else {
         set style $path
     }
-    set stub [template::resource_path -type templates -style $style -relative]
+    set stub [template::resource_path \
+                  {*}[expr {$verbose_p ? "-verbose" : ""}] \
+                  -type templates -style $style -relative]
     if {[file readable $::acs::rootdir/$stub.adp]} {
+        if {$verbose_p} {
+            ns_log notice "themed_template: found template in $stub"
+        }
         return $stub
+    } else {
+        if {$verbose_p} {
+            ns_log notice "themed_template: no themed template found for '$path'"
+        }
     }
     return $path
 }
@@ -670,6 +681,7 @@ ad_proc -public template::streaming_template {
 }
 
 ad_proc -public template::resource_path {
+    {-verbose:boolean false}
     -type:required
     -style:required
     -relative:boolean
@@ -687,6 +699,7 @@ ad_proc -public template::resource_path {
     @param relative return optionally the path relative to the OpenACS root directory
     @param theme_dir theming directory (alternative to determination via subsite), higher priority
     @param subsite_id subsite_id to determine theming information
+    @verbose boolean flag; report tried path in the system log
 
     @return path of the resource (without extension)
     @author Gustaf Neumann
@@ -712,6 +725,9 @@ ad_proc -public template::resource_path {
         if {$theme_dir ne ""} {
             set path $theme_dir/$type/$style
             set lookup_path [expr {[file extension $path] eq "" ? "${path}.adp" : $path}]
+            if {$verbose_p} {
+                ns_log notice "themed_template: try themed template '$lookup_path'"
+            }
             if {![file exists $::acs::rootdir/$lookup_path]} {
                 unset path
             }
