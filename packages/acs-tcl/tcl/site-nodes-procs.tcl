@@ -1686,7 +1686,7 @@ if {$UseXotclSiteNodes} {
                 # necessary).
                 #
 
-                ::acs::sitewide ns_urlspace unset -id $::acs::siteNodesID -recurse -key sitenode $url
+                ::acs::clusterwide ns_urlspace unset -id $::acs::siteNodesID -recurse -key sitenode $url
                 next
             }
 
