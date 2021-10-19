@@ -743,18 +743,12 @@ ad_proc -public template::paginator::get_data { statement_name name datasource q
         set query [uplevel 2 "db_map ${statement_name}_partial"]
     }
 
-    # DEDS: quote the ids so that we are not
-    #       necessarily limited to integer keys
-    set quoted_ids [list]
-    foreach one_id $ids {
-        lappend quoted_ids [::ns_dbquotevalue $one_id]
-    }
-    set in_list [join $quoted_ids ","]
+    set in_list [::ns_dbquotelist $ids]
     if { ! [regsub CURRENT_PAGE_SET $query $in_list query] } {
         error "Token CURRENT_PAGE_SET not found in page data query  ${statement_name}_partial: $query"
     }
 
-    if { [llength $in_list] == 0 } {
+    if {$in_list eq ""} {
         uplevel 2 "set $datasource:rowcount 0"
         return
     }
@@ -814,18 +808,12 @@ ad_proc -public template::paginator::get_query { name id_column page } {
 
         set query "CURRENT_PAGE_SET"
 
-        # DEDS: quote the ids so that we are not
-        #       necessarily limited to integer keys
-        set quoted_ids [list]
-        foreach one_id $ids {
-            lappend quoted_ids [::ns_dbquotevalue $one_id]
-        }
-        set in_list [join $quoted_ids ","]
+        set in_list [::ns_dbquotelist $ids]
         if { ! [regsub CURRENT_PAGE_SET $query $in_list query] } {
             error "Token CURRENT_PAGE_SET not found."
         }
 
-        if { [llength $in_list] == 0 } {
+        if {$in_list eq ""} {
             uplevel 2 "set $datasource:rowcount 0"
             return
         }
