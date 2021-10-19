@@ -479,7 +479,7 @@ aa_register_case \
         Test ad_page_contract_filters
     } {
         dict set cases integer { "1" 1 "a" 0 "1.2" 0 "'" 0 }
-        dict set cases naturalnum { "1" 1 "-1" 0 "a" 0 "1.2" 0 "'" 0 }
+        dict set cases naturalnum { "1" 1 0 1 "-1" 0 "a" 0 "1.2" 0 "'" 0 }
         dict set cases float { "1" 1 "1.0" 1 "a" 0 "-1.0" 1 "1,0" 0 }
         dict set cases negative_float { "1" 1 "-1.0" 1 "-a" 0 "-1,0" 0 }
         dict set cases object_id {
