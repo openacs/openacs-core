@@ -418,11 +418,10 @@ namespace eval attribute {
         upvar $enum_array_name enum_values
         set attr_list [list]
 
-        set storage_clause ""
-
         if {$include_storage_types ne ""} {
-            set storage_clause "
-              and a.storage in ('[join $include_storage_types "', '"]')"
+            set storage_clause "and a.storage in ([ns_dbquotelist $include_storage_types])"
+        } else {
+            set storage_clause ""
         }
 
         db_foreach select_attributes [subst -nocommands {

@@ -813,7 +813,7 @@ ad_proc -public subsite::get_theme_subsites {
     set subsites [db_list get_theme_subsites [subst {
         select package_id from apm_parameter_values
         where parameter_id = (select parameter_id from apm_parameters
-                              where package_key in ('[join [subsite::package_keys] ',']')
+                              where package_key in ([ns_dbquotelist [subsite::package_keys]])
                               and parameter_name = 'ThemeKey')
         and attr_value = :theme
         and (:subsite_id is null or package_id = :subsite_id)

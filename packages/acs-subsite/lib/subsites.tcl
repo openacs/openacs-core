@@ -79,7 +79,7 @@ db_multirow -extend { url join_url request_url } subsites select_subsites [subst
            groups g
     where  n.parent_id = :subsite_node_id
       and    p.package_id = n.object_id
-      and    p.package_key  in ('[join [subsite::package_keys] {','}]')
+      and    p.package_key in ([ns_dbquotelist [subsite::package_keys]])
       and    ag.package_id = p.package_id
       and    g.group_id = ag.group_id
       and    (acs_permission.permission_p(p.package_id, :untrusted_user_id, 'read')

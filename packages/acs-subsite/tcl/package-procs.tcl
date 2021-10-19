@@ -555,7 +555,7 @@ ad_proc package_object_attribute_list {
 
     if {$include_storage_types ne ""} {
         set storage_clause "
-          and a.storage in ('[join $include_storage_types "', '"]')"
+          and a.storage in ([ns_dbquotelist $include_storage_types])"
     }
 
     return [db_list_of_lists attributes_select {}]
