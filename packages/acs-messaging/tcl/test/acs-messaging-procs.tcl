@@ -10,7 +10,7 @@ aa_register_case \
     -procs {acs_messaging_format_as_html} \
     acs_messaging_format_as_html {
     Test acs_messaging_format_as_html proc.
-} {    
+} {
 
     aa_run_with_teardown \
         -rollback \
@@ -27,7 +27,7 @@ aa_register_case \
     -procs {acs_message_p} \
     acs_messaging_message_p {
     Test message_p proc.
-} {    
+} {
 
     aa_run_with_teardown \
         -rollback \
