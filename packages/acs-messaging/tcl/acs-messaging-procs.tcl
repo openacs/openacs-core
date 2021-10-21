@@ -67,25 +67,28 @@ ad_proc -public acs_messaging_first_ancestor {
     return $ancestor_id
 }
 
-ad_proc -public acs_messaging_send {
-    {-message_id:required}
-    {-recipient_id:required}
-    {-grouping_id ""}
-    {-wait_until ""}
-} {
-    Schedule one message to be sent to one party.
-} {
-    db_dml {
-        begin
-            acs_message.send (
-                message_id => :message_id,
-                recipient_id => :recipient_id,
-                grouping_id => :grouping_id,
-                wait_until => :wait_until
-            );
-        end;
-    }
-}
+# apisano 2021-10-21: since its introduction 21 years ago, this proc
+# has been broken. In fact, db_dml needs at least a query name to work
+# properly. Furthermore, no query for Postgres is available.
+# ad_proc -public acs_messaging_send {
+#     {-message_id:required}
+#     {-recipient_id:required}
+#     {-grouping_id ""}
+#     {-wait_until ""}
+# } {
+#     Schedule one message to be sent to one party.
+# } {
+#     db_dml {
+#         begin
+#             acs_message.send (
+#                 message_id => :message_id,
+#                 recipient_id => :recipient_id,
+#                 grouping_id => :grouping_id,
+#                 wait_until => :wait_until
+#             );
+#         end;
+#     }
+# }
 
 ad_proc -public acs_messaging_send_query {
     {-message_id:required}
