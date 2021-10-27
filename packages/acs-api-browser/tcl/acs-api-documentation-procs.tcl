@@ -425,7 +425,7 @@ ad_proc -public api_proc_documentation {
         flags ""
         default_values ""
         switches0 ""
-        switches1 ""        
+        switches1 ""
         positionals ""
         varargs_p 0
         script ""
@@ -1161,13 +1161,14 @@ ad_proc -public api_get_body {proc_name} {
 
     if {[namespace which ::xo::api] ne ""
         && [regexp {^(.*) (inst)?proc (.*)$} $proc_name match obj prefix method]} {
+        set method [lindex $proc_name end]
         if {[regexp {^(.*) (.*)$} $obj match scope obj]} {
             if {[::xo::api scope_eval $scope ::nsf::is object $obj]} {
-                return [::xo::api get_method_source $scope $obj $prefix $method]
+                return [::xo::api get_method_source $scope ::$obj $prefix $method]
             }
         } else {
             if {[::nsf::is object $obj]} {
-                return [::xo::api get_method_source "" $obj $prefix $method]
+                return [::xo::api get_method_source "" ::$obj $prefix $method]
             }
         }
         return ""
