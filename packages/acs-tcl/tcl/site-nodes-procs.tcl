@@ -1341,8 +1341,8 @@ if {$UseXotclSiteNodes} {
                 #
             }
 
-            # Create an object "site_node" to provide a user-interface close
-            # to the classical one.
+            # Create an object "xo::site_node" to provide a
+            # user-interface close to the classical one.
             :create site_node
         }
 
