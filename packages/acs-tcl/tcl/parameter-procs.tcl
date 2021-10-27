@@ -160,17 +160,8 @@ ad_proc -public parameter::get {
     # ns_config values
     #
     if {$package_id ne ""} {
-        set package_key ""
-        # This can fail at server startup--OpenACS calls parameter::get to
-        # get the size of the util_memoize cache so it can setup the cache.
-        # apm_package_key_from_id needs that cache, but on server start
-        # when the toolkit tries to get the parameter for the cache size
-        # the cache doesn't exist yet, so apm_package_key_from_id fails
-        if {![catch {
-            set package_key [apm_package_key_from_id $package_id]
-        }]} {
-            set value [ad_parameter_from_file $parameter $package_key]
-        }
+        set package_key [apm_package_key_from_id $package_id]
+        set value [ad_parameter_from_file $parameter $package_key]
     }
 
     # 2. check the parameter cache
@@ -187,9 +178,10 @@ ad_proc -public parameter::get {
         # Replace message keys in hash marks with localized texts
         set value [lang::util::localize $value]
     }
-
-    # Special parsing for boolean parameters, true and false can be written
-    # in many different ways
+    #
+    # Normalize boolean results if required, since "true" and "false"
+    # can be written in many different ways.
+    #
     if { $boolean_p } {
         set value [template::util::is_true $value]
     }
