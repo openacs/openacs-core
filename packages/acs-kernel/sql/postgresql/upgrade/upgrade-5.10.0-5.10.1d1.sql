@@ -11,6 +11,7 @@ ALTER TABLE users ADD COLUMN IF NOT EXISTS password_hash_algorithm
 
 DROP VIEW acs_users_all;
 DROP VIEW cc_users;
+DROP VIEW registered_users_of_package_id;
 DROP VIEW registered_users;
 
 ALTER TABLE users ALTER COLUMN password TYPE character varying(128);
@@ -45,3 +46,12 @@ CREATE VIEW registered_users AS
   and m.rel_type = 'membership_rel'
   and mr.member_state = 'approved'
   and u.email_verified_p = 't';
+
+--
+-- actually from acs-subsite (which is mandatory in acs-core)
+--
+CREATE VIEW registered_users_of_package_id AS
+  select u.*, au.package_id
+  from application_users au,
+       registered_users u
+  where au.user_id = u.user_id;
