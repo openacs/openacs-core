@@ -8,7 +8,7 @@ ad_library {
 
 ad_proc server_cluster_enabled_p {} { Returns true if clustering is enabled. } {
     return [parameter::get \
-                -package_id [ad_acs_kernel_id] \
+                -package_id $::acs::kernel_id \
                 -parameter ClusterEnabledP \
                 -default 0]
 }
@@ -22,7 +22,7 @@ ad_proc server_cluster_all_hosts {} {
     if { ![server_cluster_enabled_p] } {
         return {}
     }
-    return [parameter::get -package_id [ad_acs_kernel_id] -parameter ClusterPeerIP]
+    return [parameter::get -package_id $::acs::kernel_id -parameter ClusterPeerIP]
 }
 
 ad_proc server_cluster_peer_hosts {} {
@@ -51,7 +51,7 @@ ad_proc server_cluster_authorized_p { ip } {
         return 1
     }
 
-    foreach glob [parameter::get -package_id [ad_acs_kernel_id] -parameter ClusterAuthorizedIP] {
+    foreach glob [parameter::get -package_id $::acs::kernel_id -parameter ClusterAuthorizedIP] {
         if { [string match $glob $ip] } {
             return 1
         }
@@ -87,7 +87,7 @@ ad_proc -private ad_canonical_server_p {} {
     Since the server can listen to multiple IP addresses and on
     multiple ports, all of these have to be checked.
 } {
-    set canonical_server [parameter::get -package_id [ad_acs_kernel_id] -parameter CanonicalServer]
+    set canonical_server [parameter::get -package_id $::acs::kernel_id -parameter CanonicalServer]
     if { $canonical_server eq "" } {
         ns_log Error "Your configuration is not correct for server clustering." \
             "Please ensure that you have the CanonicalServer parameter set correctly."

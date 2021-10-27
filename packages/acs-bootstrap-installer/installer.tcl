@@ -394,6 +394,14 @@ ad_proc -private install_do_data_model_install {} {
     "
     ns_write "\n<script>window.scrollTo(0,document.body.scrollHeight);</script>\n"
 
+    #
+    # At this time, the basic data model and the proc
+    # "ad_acs_kernel_id" are defined, such we can also define the
+    # global variable for bootstrap, which is already needed for the
+    # out-of-band sourcing of 20-memoize-init.tcl below.
+    #
+    set ::acs::kernel_id [ad_acs_kernel_id]
+    
     # Some APM procedures use util_memoize, so initialize the cache
     # before starting APM install
     array set errors {}
