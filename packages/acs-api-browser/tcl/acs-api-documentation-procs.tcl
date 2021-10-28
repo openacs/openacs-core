@@ -1167,16 +1167,48 @@ ad_proc -public api_get_body {proc_name} {
     if {[namespace which ::xo::api] ne ""
         && [regexp {^(.*) (inst)?proc (.*)$} $proc_name match obj prefix method]} {
         set method [lindex $proc_name end]
+
         if {[regexp {^(.*) (.*)$} $obj match scope obj]} {
             if {[::xo::api scope_eval $scope ::nsf::is object $obj]} {
-                return [::xo::api get_method_source $scope ::$obj $prefix $method]
+                set body [::xo::api get_method_body $scope ::$obj $prefix $method]
+                set isNx [::xo::api scope_eval $scope \
+                              ::nsf::directdispatch ::$obj \
+                              ::nsf::methods::object::info::hastype ::nx::Class]
             }
         } else {
             if {[::nsf::is object $obj]} {
-                return [::xo::api get_method_source "" ::$obj $prefix $method]
+                set body [::xo::api get_method_body "" ::$obj $prefix $method]
+                set isNx [::nsf::directdispatch ::$obj \
+                              ::nsf::methods::object::info::hastype ::nx::Class]
             }
         }
-        return ""
+        if {[info exists body]} {
+            if {$isNx} {
+                #
+                # Beautify source code: delete the leading indent.
+                # First check, if we have an non-empty indent...
+                #
+                set lines [split $body \n]
+                set firstNonEmptyLine ""
+                foreach line $lines {
+                    if {[regexp {^(\s+)\S} $line . indent]} {
+                        break
+                    }
+                }
+                #
+                # if we have some indent, remove it from the lines.
+                #
+                if {[info exists indent]} {
+                    set lines [lmap line $lines {
+                        set x [regexp "^${indent}(.*)$" $line . line]
+                        set line
+                    }]
+                    set body [join $lines \n]
+                }
+                set doc [::xo::api get_doc_block $body body]
+            }
+            return $body
+        }
     } elseif {[namespace which ::xo::api] ne ""
               && [regexp {^([^ ]+) (Class|Object) (.*)$} $proc_name . thread kind obj]} {
         return [::xo::api get_object_source $thread $obj]
@@ -1484,7 +1516,6 @@ namespace eval ::apidoc {
 
         set proc_namespace ""
         regexp {^(::)?(.*)::[^:]+$} $proc_name match colons proc_namespace
-
         return [tclcode_to_html -scope $scope -proc_namespace $proc_namespace [api_get_body $proc_name]]
     }
 
