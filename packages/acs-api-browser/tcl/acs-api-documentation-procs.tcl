@@ -470,6 +470,11 @@ ad_proc -public api_proc_documentation {
     } {
         set xotclArgs 1
         set scope ""
+        #
+        # Since we get "method" via regexp, we have to remove the
+        # curly brackets for ensemble methods
+        #
+        set method [lindex $method 0]
         regexp {^(.+) (.+)$} $cl match scope cl
         if {$prefix eq ""} {
             set pretty_proc_name "[::xo::api object_link $scope $cl] $method"
