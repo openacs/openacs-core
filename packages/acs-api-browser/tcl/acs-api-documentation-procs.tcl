@@ -1199,11 +1199,7 @@ ad_proc -public api_get_body {proc_name} {
                 # if we have some indent, remove it from the lines.
                 #
                 if {[info exists indent]} {
-                    set lines [lmap line $lines {
-                        set x [regexp "^${indent}(.*)$" $line . line]
-                        set line
-                    }]
-                    set body [join $lines \n]
+                    set body [ns_trim -prefix $indent $body]
                 }
                 set doc [::xo::api get_doc_block $body body]
             }

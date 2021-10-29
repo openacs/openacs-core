@@ -110,7 +110,13 @@ namespace eval ::acs {
 ::acs::register_icanuse "ns_setcookie -samesite"    [acs::cmd_error_contains ns_setcookie -samesite]
 ::acs::register_icanuse "ns_urlencode -part oauth1" [acs::cmd_error_contains {ns_urlencode -part xxx} oauth1]
 ::acs::register_icanuse "ns_writer"                 {[info commands ::ns_writer] ne ""}
-::acs::register_icanuse "nsv_dict"                  [acs::cmd_error_contains {nsv_dict get ""} -varname]
+
+#
+# At the time "ns_trim -prefix was introduced, a memory leak in
+# nsv_dict was removed that could lead to a growing size of NaviServer
+# on busy sites.
+#
+::acs::register_icanuse "nsv_dict"                  [acs::cmd_error_contains {ns_trim} -prefix]
 
 #
 # The following commands check indirectly the availability, since the
@@ -129,6 +135,8 @@ namespace eval ::acs {
 # emulated.
 #
 if {[namespace which ns_base64urlencode] eq ""} {
+    ns_log notice "... define compatibility version for ns_base64urlencode"
+
     #
     # Compatibility for AOLserver or NaviServer before 4.99.17
     #
@@ -141,6 +149,8 @@ if {[namespace which ns_base64urlencode] eq ""} {
 }
 
 if {[namespace which ::ns_dbquotelist] eq ""} {
+    ns_log notice "... define compatibility version for ns_dbquotelist"
+
     ad_proc -public ns_dbquotelist {
         list
         {type text}
@@ -164,14 +174,15 @@ if {[namespace which ::ns_dbquotelist] eq ""} {
         return $sql
     }
 }
-
-if {[namespace which ::ns_trim] eq ""} {
+if {![acs::cmd_error_contains {ns_trim} -prefix]} {
+    ns_log notice "... define compatibility version for ns_trim"
 
     ad_proc ns_trim {
         {-delimiter ""}
+        {-prefix ""}
         text
     } {
-        Delimiter line trim command
+        Delimiter line trim command.
 
         Strip from the begin of every line characters whitespace followed
         by the specified delimiter character. Example:
@@ -181,21 +192,35 @@ if {[namespace which ::ns_trim] eq ""} {
             | World!
         }]
 
-        This function could/should be coded in C for speed.
+        This function is part of NaviServer, the Tcl version is just a
+        fallback, when older versions of NaviServer are used.
     } {
-        if {$delimiter ne ""} {
-            set re "^\\s*\[$delimiter\](.*)$"
+        if {$prefix ne ""} {
+            set len [string length $prefix]
+            set lines [lmap line [split $text \n] {
+                if {[string range $line 0 $len-1] eq $prefix} {
+                    set line [string range $line $len end]
+                }
+                set line
+            }]
+            set text [join $lines \n]
         } else {
-            set re "^\\s*(\S*.*)$"
+            if {$delimiter ne ""} {
+                set re "^\\s*\[$delimiter\](.*)$"
+            } else {
+                set re "^\\s*(\S*.*)$"
+            }
+            set text [join [lmap line [split $text \n] {
+                regexp $re $line . line
+                set line
+            }] \n]
         }
-        join [lmap line [split $text \n] {
-            regexp $re $line . line
-            set line
-        }] \n
+        return $text
     }
 }
 
 if {[namespace which ::ns_uuid] eq ""} {
+    ns_log notice "... define compatibility version for ns_uuid"
 
     ad_proc ns_uuid {} {
 
@@ -214,6 +239,8 @@ if {[namespace which ::ns_uuid] eq ""} {
 }
 
 if {[namespace which ::ns_parsehostport] eq ""} {
+    ns_log notice "... define compatibility version for ns_parsehostport"
+
     ad_proc ns_parsehostport {hostport} {
 
         Backward compatibility function for parsing host and port.
