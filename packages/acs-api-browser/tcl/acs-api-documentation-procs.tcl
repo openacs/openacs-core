@@ -1183,24 +1183,24 @@ ad_proc -public api_get_body {proc_name} {
             }
         }
         if {[info exists body]} {
+            #
+            # Beautify source code: delete the leading indent.
+            # First check, if we have a nonempty indent...
+            #
+            set lines [split $body \n]
+            set firstNonEmptyLine ""
+            foreach line $lines {
+                if {[regexp {^(\s+)\S} $line . indent]} {
+                    break
+                }
+            }
+            #
+            # if we have some indent, remove it from the lines.
+            #
+            if {[info exists indent]} {
+                set body [ns_trim -prefix $indent $body]
+            }
             if {$isNx} {
-                #
-                # Beautify source code: delete the leading indent.
-                # First check, if we have an non-empty indent...
-                #
-                set lines [split $body \n]
-                set firstNonEmptyLine ""
-                foreach line $lines {
-                    if {[regexp {^(\s+)\S} $line . indent]} {
-                        break
-                    }
-                }
-                #
-                # if we have some indent, remove it from the lines.
-                #
-                if {[info exists indent]} {
-                    set body [ns_trim -prefix $indent $body]
-                }
                 set doc [::xo::api get_doc_block $body body]
             }
             return $body
