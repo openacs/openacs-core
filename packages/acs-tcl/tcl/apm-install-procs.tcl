@@ -1856,35 +1856,33 @@ ad_proc -public apm_version_names_compare {
     Example:
 
     <ul>
-
     <li>apm_version_names_compare "1.2d3" "3.5b" => -1
-
     <li> apm_version_names_compare "3.5b" "3.5b" => 0
-
     <li> apm_version_names_compare "3.5b" "1.2d3" => 1
-
     </ul>
 
     @param version_name_1 the first version name
-
     @param version_name_2 the second version name
-
     @return
 
     <ul>
-
     <li> -1: the first version is smallest
-
     <li> 0: they're identical
-
     <li> 1: the second version is smallest
-
     </ul>
 
     @author Lars Pind
 } {
-    db_1row select_sortable_versions {}
-    return [string compare $sortable_version_1 $sortable_version_2]
+    #
+    # This function is stable (returns always the same results for the
+    # same input) and called with only a few different input
+    # values. By using acs::per_thread_cache the performance improves
+    # from 265 microseconds to 2 microseconds;
+    #
+    return [acs::per_thread_cache eval -key acs-tcl.apm_version_names_compare($version_name_1,$version_name_2) {
+        db_1row select_sortable_versions {}
+        string compare $sortable_version_1 $sortable_version_2
+    }]
 }
 
 ad_proc -private apm_upgrade_logic_compare {
