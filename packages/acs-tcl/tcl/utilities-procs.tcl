@@ -235,11 +235,20 @@ ad_proc util_report_library_entry {
 
 ad_proc -public util::get_referrer {
     -relative:boolean
+    -trusted:boolean
 } {
     @return referrer from the request headers.
     @param relative return the refer without protocol and host
 } {
     set url [ns_set iget [ns_conn headers] Referer]
+    #
+    # Don't return untrusted header field when -trusted was
+    # specified. An attacker might to sneak in e.g. a JavaScript URL.
+    #
+    if { $trusted_p && [util::external_url_p $url]} {
+        ns_log warning "someone tried to sneak in an untrusted referrer '$url'"
+        set url ""
+    }
     if {$relative_p} {
         # In case the referrer URL has a protocol and host remove it
         regexp {^[a-z]+://[^/]+(/.*)$} $url . url

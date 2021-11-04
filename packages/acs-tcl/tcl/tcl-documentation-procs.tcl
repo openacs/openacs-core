@@ -226,7 +226,7 @@ ad_proc -public ad_page_contract {
     {-form {}}
     {-level 1}
     {-context ""}
-    {-warn:boolean}    
+    {-warn:boolean}
     -properties
     docstring
     args
@@ -1206,7 +1206,7 @@ ad_proc -public ad_page_contract {
                 ad_log warning "contract in '$::ad_page_contract_context'"\
                     "was violated:\n" [join $complaints "\n "]
             }
-            
+
             if { [info exists return_errors] } {
                 upvar 1 $return_errors error_list
                 set error_list $complaints
@@ -1218,7 +1218,7 @@ ad_proc -public ad_page_contract {
                 ad_try {
                     set html [ad_parse_template \
                                   -params [list complaints [list context $::ad_page_contract_context] \
-                                               [list prev_url [util::get_referrer]] \
+                                               [list prev_url [util::get_referrer -trusted]] \
                                               ] [template::themed_template "/packages/acs-tcl/lib/complain"]]
                 } on error {errorMsg} {
                     set errorCode $::errorCode
@@ -2343,7 +2343,7 @@ ad_proc ad_page_contract_handle_datasource_error {error} {
     ns_return 422 text/html [ad_parse_template \
                                  -params [list [list exception_count $exception_count] \
                                               [list exception_text $exception_text] \
-                                              [list prev_url  [util::get_referrer]] \
+                                              [list prev_url [util::get_referrer -trusted]] \
                                              ]  $complaint_template]
 }
 
