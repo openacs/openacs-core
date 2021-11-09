@@ -526,14 +526,34 @@ if {[ns_config "ns/parameters" cachingmode "per-node"] eq "none"} {
             if {[nsv_dict exists ad_param $key $parameter_name]} {
                 ::acs::clusterwide nsv_dict unset ad_param $key $parameter_name
             }
+            acs::per_request_cache flush -pattern acs-tcl.ad_param-$key
             return
         }
         if {[info exists set]} {
             nsv_dict set ad_param $key $parameter_name $set
+            acs::per_request_cache flush -pattern acs-tcl.ad_param-$key
             return $set
-        } elseif { [nsv_dict get -varname value ad_param $key $parameter_name] } {
-            return $value
-        } elseif { $global_p } {
+        }
+        #
+        # Keep the parameter dict in a per-request cache to reduce
+        # potentially high number of nsv locks, when parameters of a
+        # package are queried a high number of times per request
+        # (without this we see on some sites > 100 locks on this nsv
+        # per request).
+        #
+        set dict [acs::per_request_cache eval -no_empty -key acs-tcl.ad_param-$key {
+            if {[nsv_get ad_param $key result]} {
+                #ns_log notice "ad_parameter_cache $key $parameter_name not cached"
+                set result
+            } else {
+                set result ""
+            }
+        }]
+        if {[dict exists $dict $parameter_name]} {
+            #ns_log notice "ad_parameter_cache $key $parameter_name get from dict"
+            return [dict get $dict $parameter_name]
+        }
+        if { $global_p } {
             set value [db_string select_global_parameter_value {
                 select apm_parameter_values.attr_value
                 from   apm_parameters, apm_parameter_values
