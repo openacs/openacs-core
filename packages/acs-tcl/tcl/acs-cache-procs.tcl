@@ -464,7 +464,7 @@ namespace eval ::acs {
             if {[info exists ${:prefix}]} {
                 if {$pattern eq "*"} {
                     ns_log notice "### dict flush ${:prefix} <$pattern>"
-                    unset ${:prefix}
+                    unset -nocomplain ${:prefix}
                 } elseif {[string first "*" $pattern] != -1} {
                     #
                     # A real pattern with wild-card was provided.
