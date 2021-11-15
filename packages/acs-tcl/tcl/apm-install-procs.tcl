@@ -1144,6 +1144,7 @@ ad_proc -public apm_package_delete {
     {-sql_drop_scripts ""}
     {-callback apm_dummy_callback}
     {-remove_files:boolean}
+    {-delete_site_nodes:boolean}
     package_key
 } {
 
@@ -1159,6 +1160,7 @@ ad_proc -public apm_package_delete {
     # Unmount all instances of this package with the Tcl API that
     # invokes before-unmount callbacks
     db_transaction {
+        set site_nodes [list]
         db_foreach all_package_instances {
             select site_nodes.node_id
             from apm_packages, site_nodes
@@ -1168,6 +1170,7 @@ ad_proc -public apm_package_delete {
             set url [site_node::get_url -node_id $node_id]
             apm_callback_and_log $callback "Unmounting package instance at url $url <br>"
             site_node::unmount -node_id $node_id
+            lappend site_nodes $node_id
         }
 
         # Delete the package instances with Tcl API that invokes
@@ -1211,6 +1214,24 @@ ad_proc -public apm_package_delete {
             file delete -force -- [acs_package_root_dir $package_key]
         } error] } {
             apm_callback_and_log $callback "<li>Unable to delete [acs_package_root_dir $package_key]:<font color=red>$error</font>"
+        }
+    }
+
+    if {$delete_site_nodes_p} {
+        # We also cleanup the leftover site nodes. We must check that
+        # the nodes still exist because the uninstall callbacks might
+        # have taken care of them already. We also need to make sure
+        # that the nodes do not have subnodes, as the deletion would
+        # fail otherwise.
+        foreach node_id $site_nodes {
+            if {[db_0or1row still_exists_and_is_leaf {
+                select 1 from site_nodes n
+                where node_id = :node_id
+                  and not exists (select 1 from site_nodes
+                                   where parent_id = n.node_id)
+            }]} {
+                site_node::delete -node_id $node_id
+            }
         }
     }
 
