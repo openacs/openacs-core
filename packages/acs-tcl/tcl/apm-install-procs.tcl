@@ -1015,7 +1015,9 @@ ad_proc -public apm_package_install {
             # Run install.xml only for new installs
             #
             ns_log notice "===== RUN /packages/$package_key/install.xml"
-            apm::process_install_xml -install_from_repository=$install_from_repository_p /packages/$package_key/install.xml ""
+            apm::process_install_xml \
+                -install_from_repository=$install_from_repository_p \
+                /packages/$package_key/install.xml ""
         }
 
     } else {
@@ -1025,7 +1027,7 @@ ad_proc -public apm_package_install {
     }
 
     # Flush the installed_p cache
-    util_memoize_flush [list apm_package_installed_p_not_cached $package_key]
+    acs::misc_cache flush apm_package_installed-$package_key
 
     return $version_id
 }
@@ -1033,7 +1035,7 @@ ad_proc -public apm_package_install {
 ad_proc apm_unregister_disinherited_params { package_key dependency_id } {
 
     Remove parameters for package_key that have been disinherited (i.e., the
-                                                                   dependency that caused them to be inherited have been removed).  Called only
+    dependency that caused them to be inherited have been removed).  Called only
     by the APM and keep it that way, please.
 
 } {
@@ -1076,7 +1078,9 @@ ad_proc -public apm_package_install_version {
     {-callback apm_dummy_callback}
     {-array:required}
     {-version_id ""}
-    package_key version_name version_uri summary description description_format vendor vendor_uri auto_mount {release_date ""}
+    package_key version_name version_uri summary description
+    description_format vendor vendor_uri auto_mount
+    {release_date ""}
 } {
     Installs a version of a package.
 
@@ -1236,8 +1240,7 @@ ad_proc -public apm_package_delete {
     }
 
     # Flush the installed_p cache
-    util_memoize_flush [list apm_package_installed_p_not_cached $package_key]
-
+    acs::misc_cache flush apm_package_installed-$package_key
     apm_callback_and_log $callback "<p>Done."
 }
 
@@ -1538,6 +1541,7 @@ ad_proc -public apm_version_enable { {-callback apm_dummy_callback} version_id }
     @param version_id The id of the version to be enabled.
 } {
     db_exec_plsql apm_package_version_enable {}
+    acs::misc_cache flush apm_package_enabled-[apm_package_key_from_version_id $version_id]
     apm_callback_and_log $callback  "<p>Package enabled."
 }
 
@@ -1548,6 +1552,7 @@ ad_proc -public apm_version_disable { {-callback apm_dummy_callback} version_id 
     @param version_id The id of the version to be disabled.
 } {
     db_exec_plsql apm_package_version_disable {}
+    acs::misc_cache flush apm_package_enabled-[apm_package_key_from_version_id $version_id]
     apm_callback_and_log $callback  "<p>Package disabled."
 }
 

@@ -825,7 +825,7 @@ ad_proc -public apm_load_any_changed_libraries {
             #
             set before [list epoch [ns_ictl epoch] size [string length [ns_ictl get]]]
             ns_log notice "### blueprint_reloading: before $before cmds:\n[join $cmds \;\n]"
-            
+
             ns_eval [join $cmds \;]
             #
             # The current thread has still the old blueprint. If we
@@ -1022,31 +1022,40 @@ ad_proc -public apm_package_installed_p {
     Returns 1 if there is an installed package version corresponding to the package_key,
     0 otherwise. Uses a cached value for performance.
 } {
-    if { [util_memoize_initialized_p] } {
-        return [util_memoize [list apm_package_installed_p_not_cached $package_key]]
+    set sql {
+        select 1 from apm_package_versions
+        where package_key = :package_key
+        and installed_p = 't'
+    }
+    if {[info commands ::acs::misc_cache] ne ""} {
+        return [acs::misc_cache eval apm_package_installed-$package_key {
+            db_0or1row apm_package_installed_p $sql
+        }]
     } else {
-        return [apm_package_installed_p_not_cached $package_key]
+        ns_log warning "apm_package_installed_p $package_key needs direct query"
+        return [db_0or1row apm_package_installed_p $sql]
     }
 }
 
-ad_proc -private apm_package_installed_p_not_cached {
-    package_key
-} {
-    return [db_0or1row apm_package_installed_p {
-        select 1 from dual where exists
-        (select 1 from apm_package_versions
-         where package_key = :package_key
-         and installed_p)
-    }]
-}
-
-ad_proc -public apm_package_enabled_p {
+ad_proc -public -debug apm_package_enabled_p {
     package_key
 } {
     Returns 1 if there is an enabled package version corresponding to the package_key
     and 0 otherwise.
 } {
-    return [db_string apm_package_enabled_p {} -default 0]
+    set sql {
+        select 1 from apm_package_versions
+        where package_key = :package_key
+        and enabled_p = 't'
+    }
+    if {[info commands ::acs::misc_cache] ne ""} {
+        return [acs::misc_cache eval apm_package_enabled-$package_key {
+            db_0or1row apm_package_enabled_p $sql
+        }]
+    } else {
+        ns_log warning "apm_package_enabled_p $package_key needs direct query"
+        return [db_0or1row apm_package_enabled_p $sql]
+    }
 }
 
 ad_proc -public apm_enabled_packages {} {
@@ -1332,7 +1341,7 @@ ad_proc -public apm_package_id_from_key {package_key} {
     return $result
 }
 
-ad_proc -public apm_flush_package_id_cache {package_key} {    
+ad_proc -public apm_flush_package_id_cache {package_key} {
     Flush the package id cache for this package at least in the
     current thread.  TODO: should be refactored together with the
     2level cache (per thread and util_memoize).

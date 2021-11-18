@@ -96,14 +96,6 @@
     </querytext>
   </fullquery>
 
-  <fullquery name="apm_package_enabled_p.apm_package_enabled_p">
-    <querytext>
-      select 1 from apm_package_versions
-      where package_key = :package_key
-      and enabled_p = 't'
-    </querytext>
-  </fullquery>
-
   <fullquery name="apm_version_installed_p.apm_version_installed_p">
     <querytext>
       select 1 from apm_package_versions
