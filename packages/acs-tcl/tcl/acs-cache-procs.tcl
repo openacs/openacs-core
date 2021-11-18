@@ -686,6 +686,25 @@ namespace eval ::acs {
     }
 }
 
+namespace eval ::acs {
+    ad_proc -private try_cache {cache key cmd} {
+
+        Function to support caching during bootstrap.  When the
+        provided cache exists, then use it for caching, otherwise
+        perform uncalled call. This function is made intentionally
+        private, since this should only be required during
+        bootstraping. It does not make sense to wrap arbitrary caching
+        calls with this function.
+
+    } {
+        if {[info commands $cache] ne ""} {
+            return [uplevel [list $cache eval $key $cmd]]
+        } else {
+            ns_log warning "no cache $cache: need direct call $key $cmd"
+            return [uplevel $cmd]
+        }
+    }
+}
 
 
 # Local variables:

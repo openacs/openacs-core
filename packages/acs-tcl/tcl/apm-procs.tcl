@@ -1022,18 +1022,12 @@ ad_proc -public apm_package_installed_p {
     Returns 1 if there is an installed package version corresponding to the package_key,
     0 otherwise. Uses a cached value for performance.
 } {
-    set sql {
-        select 1 from apm_package_versions
-        where package_key = :package_key
-        and installed_p = 't'
-    }
-    if {[info commands ::acs::misc_cache] ne ""} {
-        return [acs::misc_cache eval apm_package_installed-$package_key {
-            db_0or1row apm_package_installed_p $sql
-        }]
-    } else {
-        ns_log warning "apm_package_installed_p $package_key needs direct query"
-        return [db_0or1row apm_package_installed_p $sql]
+    acs::try_cache ::acs::misc_cache apm_package_installed-$package_key {
+        db_0or1row apm_package_installed_p {
+            select 1 from apm_package_versions
+            where package_key = :package_key
+            and installed_p = 't'
+        }
     }
 }
 
@@ -1043,18 +1037,12 @@ ad_proc -public -debug apm_package_enabled_p {
     Returns 1 if there is an enabled package version corresponding to the package_key
     and 0 otherwise.
 } {
-    set sql {
-        select 1 from apm_package_versions
-        where package_key = :package_key
-        and enabled_p = 't'
-    }
-    if {[info commands ::acs::misc_cache] ne ""} {
-        return [acs::misc_cache eval apm_package_enabled-$package_key {
-            db_0or1row apm_package_enabled_p $sql
-        }]
-    } else {
-        ns_log warning "apm_package_enabled_p $package_key needs direct query"
-        return [db_0or1row apm_package_enabled_p $sql]
+    acs::try_cache ::acs::misc_cache apm_package_enabled-$package_key {
+        db_0or1row apm_package_enabled_p {
+            select 1 from apm_package_versions
+            where package_key = :package_key
+            and enabled_p = 't'
+        }
     }
 }
 
