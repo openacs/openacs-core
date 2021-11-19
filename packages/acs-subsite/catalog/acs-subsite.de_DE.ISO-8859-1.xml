@@ -76,7 +76,7 @@
   <msg key="change_password_email_body_0">Sie haben (oder jemand der vorgibt, Sie zu sein, hat) eine Änderung Ihres Passwortes angefragt. Um diese Änderung durchzuführen, besuchen Sie den folgenden Link:</msg>
   <msg key="change_password_email_body_1">Wenn Sie nicht der Urheber dieser Anfrage sind, ist es nicht nötig darauf zu reagieren.</msg>
   <msg key="change_password_email_subject">Anfrage auf Änderung des Passworts für</msg>
-  <msg key="Check_Your_Inbox">Überpüfen Sie Ihr Postfach</msg>
+  <msg key="Check_Your_Inbox">Überprüfen Sie Ihr Postfach</msg>
   <msg key="Children">Untergeordnete Objekte</msg>
   <msg key="choose_assessment">Wählen Sie einen der Registrationsfragebögen:</msg>
   <msg key="choose_assessment_help">Wählen sie die Umfrage aus, welche neuen Benutzern angezeigt wird.&lt;br&gt; Dies kann verwendet werden um automatisierte Aktionen (wie zb. Benutzer in bestimmte Gruppen hinzu zu fügen, bestimmte Personen über neue Anmeldungen zu informieren) auszuführen</msg>
@@ -295,7 +295,7 @@ Bitte ändern Sie Ihr Passwort unter folgendem Link:
   <msg key="lt_Our_server_can_tell_y">Bestimmte Daten wie Benutzeridentifikation oder Passwort können vom Browser gespeichert werden. Dadurch brauchen diese Daten bei Computern, die von nur einer Person genutzt werden, nicht bei jeder Sitzung neu eingegeben zu werden.</msg>
   <msg key="lt_Password_Confirmation">Passwort bestätigen</msg>
   <msg key="lt_Personal_Home_Page_UR">URL der persönlichen Homepage:</msg>
-  <msg key="lt_Please_locate_your_co">Bitte wählen Sie aus der folgenden Liste Ihren Ländercode aus. Gehen Sie dann mit Hilfe Ihres Browsers zum  Formular zurück.</msg>
+  <msg key="lt_Please_locate_your_co">Bitte wählen Sie aus der folgenden Liste Ihren Ländercode aus. Gehen Sie dann mit Hilfe Ihres Browsers zum Formular zurück.</msg>
   <msg key="lt_Please_read_and_follo">Bitte führen Sie die in der E-Mail genannten Schritte aus.</msg>
   <msg key="lt_Please_try_to_a_hrefi">Bitte versuchen Sie noch einmal, sich &lt;a href=&#34;index&#34;&gt;anzumelden&lt;/a&gt;.</msg>
   <msg key="lt_Portrait_of_first_last">Profilbild von %first_names% %last_name%</msg>
@@ -345,7 +345,7 @@ Bitte ändern Sie Ihr Passwort unter folgendem Link:
   <msg key="Male">Männlich</msg>
   <msg key="Manage_Portrait">Profilbild verwalten</msg>
   <msg key="Manage_unmounted_applications">Abgehängte Anwendungen verwalten</msg>
-  <msg key="manage_users_email">Verwalten des E-Mail Datenschutzes des Benutzers</msg>
+  <msg key="manage_users_email">Verwalten des E-Mail-Datenschutzes des Benutzers</msg>
   <msg key="Manage_your_notifications">Benachrichtigungsoptionen verwalten</msg>
   <msg key="Mem_list_not_allowed">Sie sind nicht berechtigt, die Liste aller Mitglieder zu sehen.</msg>
   <msg key="Member">Mitglieder</msg>
@@ -378,7 +378,7 @@ Bitte ändern Sie Ihr Passwort unter folgendem Link:
   <msg key="Notes">Hinweise:</msg>
   <msg key="Notice">Hinweis:</msg>
   <msg key="number_of_groups_defined">Anzahl der definierten Gruppen</msg>
-  <msg key="number_of_relationships_defined">number of relationships defined</msg>
+  <msg key="number_of_relationships_defined">Anzahl der definierten Beziehungen</msg>
   <msg key="Object_Types">Objekt-Typen</msg>
   <msg key="on_name_to">für %name% an:</msg>
   <msg key="Online">Online</msg>
@@ -390,11 +390,11 @@ Bitte ändern Sie Ihr Passwort unter folgendem Link:
   <msg key="Or_add_a_new_user">oder einen neuen Benutzer hinzufügen</msg>
   <msg key="or_the">oder das</msg>
   <msg key="Parameters">Parameter</msg>
-  <msg key="parameters">parameter</msg>
+  <msg key="parameters">Parameter</msg>
   <msg key="Password">Passwort</msg>
   <msg key="Password_changed_body">Das Passwort Ihres Benutzerkontos (%account_id_label%: %account_id%) bei %system_name% wurde kürzlich geändert. Es sind keine weiteren Schritte nötig, diese Mitteilung dient lediglich Ihrer Sicherheit. --------------- Sie können Ihr Passwort jederzeit mit folgenden Schritten ändern: 1. Melden Sie sich bei %system_name% an. 2. Klicken Sie auf den Link &#39;%pvt_home_name%&#39;. 3. Wählen Sie die Option &#39;%password_update_link_text%&#39;.</msg>
   <msg key="Password_changed_subject">Passwort geändert</msg>
-  <msg key="Password_regular_change_now">Ihr Passwort muss rgelmässig geändert werden.  Bitte Ändern Sie jetzt ihr Passwort.</msg>
+  <msg key="Password_regular_change_now">Ihr Passwort muss regelmässig geändert werden.  Bitte Ändern Sie jetzt ihr Passwort.</msg>
   <msg key="Passwords_dont_match">Passwörter stimmen nicht Überein</msg>
   <msg key="perm_cannot_be_removed">Die Erlaubnis kann nicht wieder zurückgenommen werden.</msg>
   <msg key="Permissions">Berechtigungen</msg>
@@ -422,15 +422,15 @@ Bitte ändern Sie Ihr Passwort unter folgendem Link:
   <msg key="Registration">%system_name% Registrierung</msg>
   <msg key="Registration_Approval_Notice">&lt;p&gt;Vielen Dank für Ihre Registrierung bei %system_name%. Der Antrag wurde an einen Administrator übermittelt.&lt;/p&gt; &lt;p&gt;Sobald Sie freigeschaltet sind, erhalten Sie eine E-Mail mit den erforderlichen Anmeldedaten und können %system_name% nutzen.&lt;/p&gt; </msg>
   <msg key="Reject">Ablehnen</msg>
-  <msg key="Relational_Segment_administration">Relational Segment administration</msg>
+  <msg key="Relational_Segment_administration">Verwaltung der Relational Segments</msg>
   <msg key="Relational_Segments">Relational Segments</msg>
   <msg key="relationship_to_site">Beziehung zur Seite</msg>
-  <msg key="Relationship_Types">Relationship Types</msg>
-  <msg key="Relationship_types_administration">Relationship types administration</msg>
+  <msg key="Relationship_Types">Beuiehungstypen</msg>
+  <msg key="Relationship_types_administration">Verwaltung der Beziehungstypen</msg>
   <msg key="Remember_my_login">Anmeldedaten auf diesem Computer speichern</msg>
   <msg key="Remove">Entfernen</msg>
   <msg key="remove">entfernen</msg>
-  <msg key="Remove_All">Alle Entfernen</msg>
+  <msg key="Remove_All">Alle entfernen</msg>
   <msg key="rename">Umbenennen</msg>
   <msg key="Req_membership_comm">Zugang zu dieser Gruppe beantragen</msg>
   <msg key="Req_membership_subs">Mitgliedschaft für diese Subsite beantragen</msg>
@@ -529,7 +529,7 @@ copy it as above to the new location, then select &lt;em&gt;unmount&lt;/em&gt; a
   <msg key="Vacation_information_updated">Die Informationen zu Ihrer Abwesenheit unter %site_link% wurden aktualisiert.</msg>
   <msg key="view_all_online_members">View all online members.</msg>
   <msg key="View_all_roles">Alle Rollen anzeigen</msg>
-  <msg key="View_Alphabetical_Index">View Alphabetical Index</msg>
+  <msg key="View_Alphabetical_Index">Zeige alphabetischen Index</msg>
   <msg key="Visible_to">Sichtbar für</msg>
   <msg key="Welcome_user">Willkommen, %user_name%!</msg>
   <msg key="When_leaving_checkbox_empty">Bereits erteilte Berechtigungen, die Sie hier nicht auswählen, werden aufgehoben.</msg>
