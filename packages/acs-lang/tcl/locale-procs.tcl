@@ -514,14 +514,14 @@ ad_proc -public lang::user::set_timezone {
 #
 #####
 
-ad_proc -public lang::conn::locale {
+ad_proc -private lang::conn::locale_not_cached {
     {-package_id ""}
     {-site_wide:boolean}
     {-user_id ""}
 } {
     Get the locale for this request, perhaps for a given package instance.
-    This procedure will never return an error. Everything that could fail is
-    wrapped in a catch.
+
+    This is the not-cached version.
 
     @param package_id The package for which you want to get the locale.
     @param site_wide Set this if you want to get the site-wide locale.
@@ -576,6 +576,28 @@ ad_proc -public lang::conn::locale {
     }
 
     return $locale
+}
+
+ad_proc -public lang::conn::locale {
+    {-package_id ""}
+    {-site_wide:boolean}
+    {-user_id ""}
+} {
+    Get the locale for this request, perhaps for a given package instance.
+
+    @param package_id The package for which you want to get the locale.
+    @param site_wide Set this if you want to get the site-wide locale.
+} {
+    # Notice that caching for longer than the single request would be
+    # more complex, e.g. defaults coming from ad_conn in the various
+    # procs and flushing.
+    return [acs::per_request_cache eval \
+                -key acs-lang.lang.conn.locale($package_id,$site_wide_p,$user_id) {
+                    lang::conn::locale_not_cached \
+                        -package_id $package_id \
+                        -site_wide=$site_wide_p \
+                        -user_id $user_id
+                }]
 }
 
 ad_proc -private lang::conn::browser_locale {} {
