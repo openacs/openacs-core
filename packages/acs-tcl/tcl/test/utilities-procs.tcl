@@ -241,6 +241,54 @@ aa_register_case -cats {
     }
 }
 
+aa_register_case -cats {
+    api
+    smoke
+    production_safe
+} -procs {
+    util::word_diff
+} word_diff {
+    Test the util::word_diff proc.
+} {
+    #
+    # Equal length
+    #
+    set cases {
+        {
+            -name "add"
+            -old "hello world"
+            -new "hello2 world"
+            -result {hello<u><b><font color="red">2</font></b></u> world}
+        }
+
+        {
+            -name "delete"
+            -old "hello2 world"
+            -new "hello world"
+            -result {hello<strike><i><font color="blue">2</font></i></strike> world}
+        }
+
+        {
+            -name "add begin end"
+            -old "ello"
+            -new "hello2"
+            -result {<u><b><font color="red">h</font></b></u>ello<u><b><font color="red">2</font></b></u>}
+        }
+
+        {
+            -name "delete begin end"
+            -old "hello2"
+            -new "ello"
+            -result {<strike><i><font color="blue">h</font></i></strike>ello<strike><i><font color="blue">2</font></i></strike>}
+        }
+    }
+    foreach case $cases {
+        aa_equals "diff [dict get $case -name]" \
+            [util::word_diff -old [dict get $case -old] -new [dict get $case -new]] \
+            [dict get $case -result]
+    }
+}
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4

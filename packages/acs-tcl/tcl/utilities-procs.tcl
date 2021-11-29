@@ -3453,7 +3453,7 @@ ad_proc -public util::word_diff {
             set sv [expr {$d_end + 1}]
         } elseif {[regexp {^a(\d+)$} $diff full m1]} {
             set d_end $m1
-            for {set i $sv} {$i < $m1} {incr i} {
+            for {set i $sv} {$i <= $m1} {incr i} {
                 append res "${split_by}[lindex $old_w $i]"
             }
             while {1} {
