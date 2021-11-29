@@ -3402,20 +3402,26 @@ ad_proc -public util::word_diff {
     close $old_fd
     close $new_fd
 
+    #
     # Diff output is 1 based, our lists are 0 based, so insert a dummy
     # element to start the list with.
+    #
     set old_w [linsert [split $old $split_by] 0 {}]
     set sv 1
 
-    #    For debugging purposes:
-    #    set diff_pipe [open "| diff -f $old_f $new_f" "r"]
-    #    while {![eof $diff_pipe]} {
-    #        append res "[gets $diff_pipe]<br>"
-    #    }
-
-    set diff_pipe [open "| diff -f $old_f $new_f" "r"]
-    while {![eof $diff_pipe]} {
-        gets $diff_pipe diff
+    try {
+        exec -ignorestderr diff -f $old_f $new_f
+    } on error {output} {
+    } on ok {output} {
+    }
+    set lines [split $output \n]
+    set pos -1
+    set nrLines [llength $lines]
+    while {1} {
+        if {$nrLines < $pos} {
+            break
+        }
+        set diff [lindex $lines [incr pos]]
         if {[regexp {^d(\d+)(\s+(\d+))?$} $diff full m1 m2]} {
             if {$m2 ne ""} {set d_end $m2} else {set d_end $m1}
             for {set i $sv} {$i < $m1} {incr i} {
@@ -3433,8 +3439,11 @@ ad_proc -public util::word_diff {
             for {set i $m1} {$i <= $d_end} {incr i} {
                 append res "${split_by}${start_old}[lindex $old_w $i]${end_old}"
             }
-            while {![eof $diff_pipe]} {
-                gets $diff_pipe diff
+            while {1} {
+                if {$nrLines < $pos} {
+                    break
+                }
+                set diff [lindex $lines [incr pos]]
                 if {$diff eq "."} {
                     break
                 } else {
@@ -3447,8 +3456,11 @@ ad_proc -public util::word_diff {
             for {set i $sv} {$i < $m1} {incr i} {
                 append res "${split_by}[lindex $old_w $i]"
             }
-            while {![eof $diff_pipe]} {
-                gets $diff_pipe diff
+            while {1} {
+                if {$nrLines < $pos} {
+                    break
+                }
+                set diff [lindex $lines [incr pos]]
                 if {$diff eq "."} {
                     break
                 } else {

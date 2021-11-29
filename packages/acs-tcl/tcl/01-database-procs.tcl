@@ -2836,13 +2836,9 @@ ad_proc -public db_source_sql_file {
                 set pgpass "<<$pgpass"
             }
 
-            # DRB: Submitted patch was in error - the driver opens a -h hostname connection
-            # unless the hostname is localhost.   We need to do the same here.  The submitted
-            # patch checked for a blank hostname, which fails in the driver.  Arguably the
-            # driver's wrong but a lot of non-OpenACS folks use it, and even though I'm the
-            # maintainer we shouldn't break existing code over such trivialities...
+            #
             # GN: windows requires $pghost "-h ..."
-
+            #
             if { ([db_get_dbhost] eq "localhost" || [db_get_dbhost] eq "")
                  && $::tcl_platform(platform) ne "windows"
              } {
@@ -2851,39 +2847,40 @@ ad_proc -public db_source_sql_file {
                 set pghost "-h [db_get_dbhost]"
             }
 
-            set errno [catch {
-                cd [ad_file dirname $file]
-                set fp [open "|[file join [db_get_pgbin] psql] $pghost $pgport $pguser -f $file [db_get_database] $pgpass" "r"]
-            } errorMsg]
+            set dir [ad_file dirname $file]
+            set cmd "[file join [db_get_pgbin] psql] \
+                         $pghost $pgport $pguser \
+                         -f $file \
+                         [db_get_database] $pgpass"
 
-            if {$errno > 0} {
+            try {
+                if {[info commands proxy::exec] ne ""} {
+                    ns_log notice [list ::proxy::exec -call $cmd -cd $dir]
+                    ::proxy::exec -call $cmd -cd $dir
+                } {
+                    set fp [open "|$cmd" r]
+                    catch {set result [read $fp]}
+                    close $fp
+                }
+            } on error {errorMsg} {
                 set error_found 1
                 set error_lines $errorMsg
-            } else {
-                while { [gets $fp line] >= 0 } {
-                    # Don't bother writing out lines which are purely whitespace.
+            } on ok {result} {
+                set error_found 0
+                foreach line [split $result \n] {
+                    #
+                    # Don't bother writing out lines which are purely
+                    # whitespace.
+                    #
                     if { ![string is space $line] } {
                         apm_callback_and_log $callback "[ns_quotehtml $line]\n"
                     }
-                }
-
-                # PSQL dumps errors and notice information on stderr, and has no option to turn
-                # this off.  So we have to chug through the "error" lines looking for those that
-                # really signal an error.
-
-                set errno [ catch {
-                    close $fp
-                } error]
-
-                if { $errno == 2 } {
-                    return $error
-                }
-
-                # Just filter out the "NOTICE" lines, so we get the stack dump along with real
-                # ERRORs.  This could be done with a couple of opaque-looking regexps...
-
-                set error_found 0
-                foreach line [split $error "\n"] {
+                    #
+                    # PSQL dumps errors and notice information on
+                    # stderr, and has no option to turn this off.  So
+                    # we have to chug through the "error" lines
+                    # looking for those that really signal an error.
+                    #
                     if { [string first NOTICE $line] == -1 } {
                         append error_lines "$line\n"
                         set error_found [expr { $error_found
@@ -2892,7 +2889,7 @@ ad_proc -public db_source_sql_file {
                     }
                 }
             }
-
+            ns_log notice "ERROR_FOUND=$error_found"
             if { $error_found } {
                 return -code error -errorinfo $error_lines -errorcode $::errorCode $error_lines
             }
