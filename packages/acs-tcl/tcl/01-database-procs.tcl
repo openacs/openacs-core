@@ -2858,6 +2858,7 @@ ad_proc -public db_source_sql_file {
                     ns_log notice [list ::proxy::exec -call $cmd -cd $dir]
                     ::proxy::exec -call $cmd -cd $dir
                 } {
+                    cd $dir
                     set fp [open "|$cmd" r]
                     catch {set result [read $fp]}
                     close $fp
