@@ -149,7 +149,7 @@ if {[info commands ns_valid_utf8] ne ""} {
         Check, if the provided zip file contains only filenames with
         valid UTF-8 characters. Unfortunately, handling different
         character sets differs between variants of unzip (also between
-        unzip between the redhat and debian families. For details
+        unzip between the redhat and debian families). For details
         about file structure of zip files, consult e.g.
         https://en.wikipedia.org/wiki/ZIP_(file_format)
 
