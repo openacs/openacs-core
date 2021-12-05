@@ -110,6 +110,7 @@ namespace eval ::acs {
 ::acs::register_icanuse "ns_setcookie -samesite"    [acs::cmd_error_contains ns_setcookie -samesite]
 ::acs::register_icanuse "ns_urlencode -part oauth1" [acs::cmd_error_contains {ns_urlencode -part xxx} oauth1]
 ::acs::register_icanuse "ns_writer"                 {[info commands ::ns_writer] ne ""}
+::acs::register_icanuse "ns_baseunit"               {[info commands ::ns_baseunit] ne ""}
 
 #
 # At the time "ns_trim -prefix was introduced, a memory leak in

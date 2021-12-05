@@ -51,10 +51,28 @@ namespace eval ::acs {
             # Determine the cache size depending on configuration
             # variables.
             #
-            return [::parameter::get_from_package_key \
-                        -package_key ${:package_key} \
-                        -parameter "${:parameter}Size" \
-                        -default ${:default_size}]
+            set specifiedSize [::parameter::get_from_package_key \
+                                   -package_key ${:package_key} \
+                                   -parameter "${:parameter}Size" \
+                                   -default ${:default_size}]
+            if {[::nsf::is integer $specifiedSize]} {
+                set size $specifiedSize
+            } else {
+                if {[acs::icanuse ns_baseunit]} {
+                    set size [ns_baseunit -size $specifiedSize]
+                } else {
+                    #
+                    # Rough approximation for older versions of NaviServer.
+                    #
+                    if {[regexp {^(\d+)([mk])b} [string tolower $specifiedSize] . amount unit]} {
+                        set multipliers {k 1024 m 1048576}
+                        set size [expr {[dict get $multipliers $unit] * $amount}]
+                    } else {
+                        error "invalid size specification '$specifiedSize'"
+                    }
+                }
+            }
+            return $size
         }
 
         :public method flush {{-partition_key} key} {
@@ -687,7 +705,7 @@ namespace eval ::acs {
 }
 
 namespace eval ::acs {
-    ad_proc -private try_cache {cache key cmd} {
+    ad_proc -private try_cache {cache operation key args} {
 
         Function to support caching during bootstrap.  When the
         provided cache exists, then use it for caching, otherwise
@@ -698,10 +716,13 @@ namespace eval ::acs {
 
     } {
         if {[info commands $cache] ne ""} {
-            return [uplevel [list $cache eval $key $cmd]]
+            return [uplevel [list $cache $operation $key {*}$args]]
         } else {
-            ns_log warning "no cache $cache: need direct call $key $cmd"
-            return [uplevel $cmd]
+            if {$operation eq "eval"} {
+                ns_log warning "no cache $cache: need direct call $key $args"
+                return [uplevel {*}$args]
+            }
+            ns_log warning "no cache $cache: call ignored"
         }
     }
 }
