@@ -2860,43 +2860,42 @@ ad_proc -public db_source_sql_file {
                 } {
                     cd $dir
                     set fp [open "|$cmd" r]
+                    set result ""
                     catch {set result [read $fp]}
                     close $fp
+                    set result
                 }
-            } on error {errorMsg} {
-                set error_found 1
-                set error_lines $errorMsg
+            } on error {result} {
             } on ok {result} {
-                set error_found 0
-                foreach line [split $result \n] {
-                    #
-                    # Don't bother writing out lines which are purely
-                    # whitespace.
-                    #
-                    if { ![string is space $line] } {
-                        apm_callback_and_log $callback "[ns_quotehtml $line]\n"
-                    }
-                    #
-                    # PSQL dumps errors and notice information on
-                    # stderr, and has no option to turn this off.  So
-                    # we have to chug through the "error" lines
-                    # looking for those that really signal an error.
-                    #
-                    if { [string first NOTICE $line] == -1 } {
-                        append error_lines "$line\n"
-                        set error_found [expr { $error_found
-                                                || [string first ERROR $line] != -1
-                                                || [string first FATAL $line] != -1 } ]
-                    }
+            }
+            set error_found 0
+            foreach line [split $result \n] {
+                #
+                # Don't bother writing out lines which are purely
+                # whitespace.
+                #
+                if { ![string is space $line] } {
+                    apm_callback_and_log $callback "[ns_quotehtml $line]\n"
+                }
+                #
+                # PSQL dumps errors and notice information on
+                # stderr, and has no option to turn this off.  So
+                # we have to chug through the "error" lines
+                # looking for those that really signal an error.
+                #
+                if { [string first NOTICE $line] == -1 } {
+                    append error_lines "$line\n"
+                    set error_found [expr { $error_found
+                                            || [string first ERROR $line] != -1
+                                            || [string first FATAL $line] != -1 } ]
                 }
             }
             ns_log notice "ERROR_FOUND=$error_found"
             if { $error_found } {
                 return -code error -errorinfo $error_lines -errorcode $::errorCode $error_lines
             }
-
         }
-
+        
         nsodbc {
             error "$proc_name is not supported for this database."
         }
