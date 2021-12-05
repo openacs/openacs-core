@@ -36,20 +36,20 @@ ad_proc -public ad_host_administrator {} {
 
     @return The e-mail address of a technical person who can fix problems
 } {
-    return [parameter::get -package_id [ad_acs_kernel_id] -parameter HostAdministrator]
+    return [parameter::get -package_id $::acs::kernel_id -parameter HostAdministrator]
 }
 
 ad_proc -public ad_outgoing_sender {} {
     @return The email address that will sign outgoing alerts
 } {
-    return [parameter::get -package_id [ad_acs_kernel_id] -parameter OutgoingSender]
+    return [parameter::get -package_id $::acs::kernel_id -parameter OutgoingSender]
 }
 
 ad_proc -public ad_system_name {} {
     This is the main name of the Web service that you're offering
     on top of the OpenACS Web Publishing System.
 } {
-    return [parameter::get -package_id [ad_acs_kernel_id] -parameter SystemName]
+    return [parameter::get -package_id $::acs::kernel_id -parameter SystemName]
 }
 
 
@@ -57,7 +57,7 @@ ad_proc -public ad_pvt_home {} {
     This is the URL of a user's private workspace on the system, usually
     [subsite]/pvt/home.tcl
 } {
-    return "[subsite::get_element -element url -notrailing][parameter::get -package_id [ad_acs_kernel_id] -parameter HomeURL]"
+    return "[subsite::get_element -element url -notrailing][parameter::get -package_id $::acs::kernel_id -parameter HomeURL]"
 }
 
 ad_proc -public ad_admin_home {} {
@@ -78,23 +78,23 @@ ad_proc -public ad_pvt_home_name {} {
     This is the name that will be used for the user's workspace (usually "Your Workspace").
     @return the name especified for the user's workspace in the HomeName kernel parameter.
 } {
-    return [lang::util::localize [parameter::get -package_id [ad_acs_kernel_id] -parameter HomeName]]
+    return [lang::util::localize [parameter::get -package_id $::acs::kernel_id -parameter HomeName]]
 }
 
 ad_proc -public ad_pvt_home_link {} {
     @return the HTML fragment for the /pvt link
 } {
-    return "<a href=\"[ad_pvt_home]\">[ad_pvt_home_name]</a>"
+    return "<a href='[ad_pvt_home]'>[ad_pvt_home_name]</a>"
 }
 
 ad_proc -public ad_site_home_link {} {
     @return a link to the user's workspace if the user is logged in. Otherwise, a link to the page root.
 } {
     if { [ad_conn user_id] != 0 } {
-        return "<a href=\"[ad_pvt_home]\">[subsite::get_element -element name]</a>"
+        return "<a href='[ad_pvt_home]'>[subsite::get_element -element name]</a>"
     } else {
         # we don't know who this person is
-        return "<a href=\"[subsite::get_element -element url]\">[subsite::get_element -element name]</a>"
+        return "<a href='[subsite::get_element -element url]'>[subsite::get_element -element name]</a>"
     }
 }
 
@@ -102,7 +102,7 @@ ad_proc -public ad_system_owner {} {
     Person who owns the service
     this person would be interested in user feedback, etc.
 } {
-    return [parameter::get -package_id [ad_acs_kernel_id] -parameter SystemOwner]
+    return [parameter::get -package_id $::acs::kernel_id -parameter SystemOwner]
 }
 
 
@@ -110,7 +110,7 @@ ad_proc -public ad_publisher_name {} {
     A human-readable name of the publisher, suitable for
     legal blather.
 } {
-    return [parameter::get -package_id [ad_acs_kernel_id] -parameter PublisherName]
+    return [parameter::get -package_id $::acs::kernel_id -parameter PublisherName]
 }
 
 ad_proc -public ad_url {} {
@@ -119,20 +119,22 @@ ad_proc -public ad_url {} {
     @see util::configured_location
     @see util_current_location
 } {
-    return [parameter::get -package_id [ad_acs_kernel_id] -parameter SystemURL]
+    return [parameter::get -package_id $::acs::kernel_id -parameter SystemURL]
 }
 
 ad_proc -public acs_community_member_page {} {
-    @return the url for the community member page
+    @return the URL for the community member page
 } {
-    return "[subsite::get_element -element url -notrailing][parameter::get \
-                -package_id [ad_acs_kernel_id] -parameter CommunityMemberURL]"
+    set url [parameter::get \
+                 -package_id $::acs::kernel_id \
+                 -parameter CommunityMemberURL]
+    return "[subsite::get_element -element url -notrailing]$url"
 }
 
 ad_proc -public acs_community_member_url {
     {-user_id:required}
 } {
-    @return the url for the community member page of a particular user
+    @return the URL for the community member page of a particular user
 } {
     return [export_vars -base [acs_community_member_page] user_id]
 }
@@ -145,8 +147,8 @@ ad_proc -public acs_community_member_link {
     @see acs_community_member_url
 } {
     if {$label eq ""} {
-        acs_user::get -user_id $user_id -array user
-        set label "$user(first_names) $user(last_name)"
+        set user [acs_user::get -user_id $user_id]
+        set label "[dict get $user first_names] [dict get $user last_name]"
     }
     set href [acs_community_member_url -user_id $user_id]
     return [subst {<a href="[ns_quotehtml $href]">$label</a>}]
@@ -155,9 +157,12 @@ ad_proc -public acs_community_member_link {
 ad_proc -public acs_community_member_admin_url {
     {-user_id:required}
 } {
-    @return the url for the community member admin page of a particular user
+    @return the URL for the community member admin page of a particular user
 } {
-    return [export_vars -base [parameter::get -package_id [ad_acs_kernel_id] -parameter CommunityMemberAdminURL] { user_id }]
+    set url [parameter::get \
+                 -package_id $::acs::kernel_id \
+                 -parameter CommunityMemberAdminURL]
+    return [export_vars -base $url { user_id }]
 }
 
 ad_proc -public acs_community_member_admin_link {
@@ -240,8 +245,10 @@ ad_proc ad_return_exception_page {
                             -package_key "acs-tcl" \
                             -parameter "ReturnError" \
                             -default "/packages/acs-tcl/lib/ad-return-error"]
-    set page [ad_parse_template -params [list [list title $title] [list explanation $explanation]] $error_template]
-    if {$status > 399
+    set page [ad_parse_template \
+                  -params [list [list title $title] [list explanation $explanation]] \
+                  $error_template]
+    if {$status >= 400
         && [string match {*; MSIE *} [ns_set iget [ad_conn headers] User-Agent]]
         && [string length $page] < 512 } {
         append page [string repeat " " [expr {513 - [string length $page]}]]
@@ -330,7 +337,8 @@ ad_proc ad_return_if_another_copy_is_running {
         }
     }
     if { $n_matches > $max_simultaneous_copies } {
-        ad_return_warning "Too many copies" "This is an expensive page for our server, which is already running the same program on behalf of some other users.  Please try again at a less busy hour."
+        ad_return_warning "Too many copies" \
+            "This is an expensive page for our server, which is already running the same program on behalf of some other users.  Please try again at a less busy hour."
         # blow out of the caller as well
         if {$call_adp_break_p} {
             # we were called from an ADP page; we have to abort processing
@@ -403,11 +411,7 @@ ad_proc -private ad_requested_object_id {} {
     }
 
     if { $package_id eq "" } {
-        if { [catch {
-            set package_id [ad_acs_kernel_id]
-        }] } {
-            set package_id 0
-        }
+        set package_id $::acs::kernel_id
     }
     return $package_id
 }
@@ -419,9 +423,10 @@ ad_proc -public ad_parameter_from_file {
     This proc returns the value of a parameter that has been set in the
     parameters/ad.ini file.
 
-    Note: <strong>The use of the parameters/ad.ini file is discouraged.</strong>  Some sites
-    need it to provide instance-specific parameter values that are independent of the contents of the
-    apm_parameter tables.
+    Note: <strong>The use of the parameters/ad.ini file is
+    discouraged.</strong> Some sites need it to provide
+    instance-specific parameter values that are independent of the
+    contents of the apm_parameter tables.
 
     @param name The name of the parameter.
     @return The parameter of the object or if it doesn't exist, the default.
