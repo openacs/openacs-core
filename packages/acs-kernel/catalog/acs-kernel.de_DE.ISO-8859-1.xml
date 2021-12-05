@@ -114,7 +114,7 @@
   <msg key="Member_role_pretty_plural">Teilnehmer/-innen</msg>
   <msg key="member_role_pretty_plural">Teilnehmer</msg>
   <msg key="member_state_account_mail_approved">Ihre Kennung auf %site_name% wurde genehmigt. Besuchen Sie %url%</msg>
-  <msg key="member_state_account_mail_banned">Ihre Kennung auf %site_name% wurde dekativiert.</msg>
+  <msg key="member_state_account_mail_banned">Ihre Kennung auf %site_name% wurde deaktiviert.</msg>
   <msg key="member_state_account_mail_deleted">Ihre Kennung auf %site_name% wurde gelöscht.</msg>
   <msg key="member_state_account_mail_merged">Ihre Kennung auf %site_name% wurde zusammengelegt.</msg>
   <msg key="member_state_account_mail_needs_approval">Ihre Kennung auf %site_name% wurde beantragt.</msg>
