@@ -524,7 +524,7 @@ ad_proc -private auth::authority::get_not_cached {
 } {
     set columns [get_columns]
 
-        lappend columns \
+    lappend columns \
         "(select impl_pretty_name from acs_sc_impls where impl_id = auth_impl_id) as auth_impl_name" \
         "(select impl_pretty_name from acs_sc_impls where impl_id = pwd_impl_id) as pwd_impl_name" \
         "(select impl_pretty_name from acs_sc_impls where impl_id = register_impl_id) as register_impl_name" \
