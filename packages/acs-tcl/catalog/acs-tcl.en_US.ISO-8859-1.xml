@@ -8,7 +8,7 @@
   <msg key="ban">ban</msg>
   <msg key="Browser_of_the_user">User's Browser:</msg>
   <msg key="Comments">&lt;b&gt; Comments: &lt;/b&gt;&lt;br&gt; 
-    &lt;span style=&quot;color:red;&quot;&gt; (Please explain what you where trying to do) &lt;/span&gt;</msg>
+    &lt;span style=&quot;color:red;&quot;&gt; (Please explain what you were trying to do) &lt;/span&gt;</msg>
   <msg key="delete">delete</msg>
   <msg key="Detais">Details:</msg>
   <msg key="Email">Email:</msg>
@@ -41,7 +41,7 @@
   <msg key="lt_Multiple_definitions_">Multiple definitions of ad_page_contract filter \&quot;%name%\&quot; in %script% and %prior_script%</msg>
   <msg key="lt_name_does_not_appear_">%name% does not appear to be a valid email address.</msg>
   <msg key="lt_name_does_not_appear__1">%name% does not appear to be a valid US phone number.</msg>
-  <msg key="lt_name_does_not_appear__2">%name% does not appear to be a boolean value.</msg>
+  <msg key="lt_name_does_not_appear__2">%name% does not appear to be a Boolean value.</msg>
   <msg key="lt_name_is_not_a_natural">%name% is not a natural number, that is an integer greater than or equal to 0.</msg>
   <msg key="lt_name_is_not_valid">%name% is not valid</msg>
   <msg key="lt_name_is_not_a_valid_S">%name% is not a valid SQL identifier</msg>
@@ -78,7 +78,7 @@
   <msg key="lt_value_does_not_appear">%value% does not appear to be a valid U.S. phone
 	    number.</msg>
   <msg key="lt_Value_for_name_contai">Value for %name% contains HTML tags</msg>
-  <msg key="lt_Value_is_not_an_decim">Value is not an decimal number.</msg>
+  <msg key="lt_Value_is_not_an_decim">Value is not a decimal number.</msg>
   <msg key="lt_Value_is_not_an_integ">Value is not an integer</msg>
   <msg key="lt_We_had_a_problem_proc">We had a problem processing your request:</msg>
   <msg key="lt_You_cant_have_two_val">You can't have two validation blocks named '%name%'</msg>
@@ -105,7 +105,7 @@ http://openacs.org/forums/message-view?message%5fid=161393</description>
 
 Level 4: Deprecated
 The package was in some earlier version
-is use, but was probably replaced by a another package. The
+is use, but was probably replaced by another package. The
 package description should point to a preferred version. 
 </description>
 
@@ -113,7 +113,7 @@ package description should point to a preferred version.
   <description key="maturity_mature">Maturity level is visible in the Installer and when browsing the repository. 
 
 Level 2: Mature. 
-Meets all Level 1 criteia 
+Meets all Level 1 criteria 
 Has installation guide and user documentation 
 OCT member verifies no serious deviations from general coding practices 
 Has no namespace conflicts with existing level 2 packages. 
@@ -151,7 +151,7 @@ http://openacs.org/forums/message-view?message%5fid=161393 </description>
   <msg key="Sorry">Sorry.</msg>
   <msg key="Success_error_submitted">The Error has been reported to the developers</msg>
   <msg key="Thank_you">Thank you.</msg>
-  <msg key="The">The error whas the following:</msg>
+  <msg key="The">The error was the following:</msg>
   <msg key="There">There was a server error processing your request. We apologize.</msg>
   <msg key="There_1">There was a server error</msg>
   <msg key="This">This file has generated an error.</msg>
