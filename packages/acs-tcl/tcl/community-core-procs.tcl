@@ -387,7 +387,7 @@ ad_proc -public acs_user::get_by_username {
         set user_id [ns_cache eval user_info_cache $key {
             set user_id [acs_user::get_by_username_not_cached \
                              -authority_id $authority_id \
-                             -username     $username]
+                             -username $username]
             #
             # Don't cache results from invalid usernames.
             #
@@ -469,7 +469,7 @@ ad_proc -public acs_user::get {
         set user_id [expr {$username ne "" ?
                            [acs_user::get_by_username \
                                 -authority_id $authority_id \
-                                -username     $username] :
+                                -username $username] :
                            [ad_conn user_id]}]
     }
 
@@ -738,12 +738,17 @@ ad_proc -public acs_user::registered_user_p {
 }
 
 
-ad_proc -public acs_user::ScreenName {} {
-    Get the value of the ScreenName parameter. Checked to ensure that it only returns none, solicit, or require.
+ad_proc -public acs_user::ScreenName {} {    
+    Get the value of the ScreenName parameter. Checked to ensure that
+    it only returns none, solicit, or require.    
 } {
-    set value [parameter::get -parameter ScreenName -package_id [ad_acs_kernel_id] -default "solicit"]
+    set value [parameter::get \
+                   -parameter ScreenName \
+                   -package_id $::acs::kernel_id \
+                   -default "solicit"]
     if { $value ni {"none" "solicit" "require"} } {
-        ns_log Error "acs-kernel.ScreenName parameter invalid. Set to '$value', should be one of none, solicit, or require."
+        ns_log error "acs-kernel.ScreenName parameter invalid." \
+            "Set to '$value', should be one of none, solicit, or require."
         return "solicit"
     } else {
         return $value
