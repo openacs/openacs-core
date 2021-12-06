@@ -11,8 +11,20 @@ ALTER TABLE users ADD COLUMN IF NOT EXISTS password_hash_algorithm
 
 DROP VIEW acs_users_all;
 DROP VIEW cc_users;
-DROP VIEW registered_users_of_package_id;
 DROP VIEW registered_users;
+
+--
+-- Some legacy applications might contain still the VIEW
+-- "registered_users_of_package_id", which is defined in
+--
+--     acs-subsite/sql/postgresql/user-profiles-create.sql
+--
+-- This file is NOT included in new installations since over 20 years,
+-- so it is not maintained and treated as a leftover from ancient
+-- times.  Therefore, the view registered_users_of_package_id is not
+-- recreated by this update script.
+--
+DROP VIEW IF EXISTS registered_users_of_package_id;
 
 ALTER TABLE users ALTER COLUMN password TYPE character varying(128);
 
@@ -48,10 +60,11 @@ CREATE VIEW registered_users AS
   and u.email_verified_p = 't';
 
 --
--- actually from acs-subsite (which is mandatory in acs-core)
+-- Actually from acs-subsite (which is mandatory in acs-core), but
+-- obsolete (see above).
 --
-CREATE VIEW registered_users_of_package_id AS
-  select u.*, au.package_id
-  from application_users au,
-       registered_users u
-  where au.user_id = u.user_id;
+-- CREATE VIEW registered_users_of_package_id AS
+--  select u.*, au.package_id
+--  from application_users au,
+--       registered_users u
+--  where au.user_id = u.user_id;
