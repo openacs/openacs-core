@@ -60,7 +60,7 @@ BEGIN
     -- Delete from the table.
 
     -- DRB: I removed the quote_ident calls that DanW originally included
-    -- because the table names appear to be stored in upper case.  Quoting
+    -- because the table names appear to be stored in uppercase.  Quoting
     -- causes them to not match the actual lower or potentially mixed-case
     -- table names.  We will just forbid squirrely names that include quotes.
     
