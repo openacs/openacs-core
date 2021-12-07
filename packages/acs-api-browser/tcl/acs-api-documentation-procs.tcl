@@ -844,8 +844,13 @@ ad_proc -private api_called_proc_names {
 } {
 
     Return list of procs called by the specified procname handle.
+    Note that this function is based on "::apidoc::tcl_to_html",
+    which is based on some heuristics and is not guaranteed to
+    return always the correct results (it might contain false positives).
+    Use this private function only, when heuristics are fine.
 
     @author Gustaf Neumann
+
     @param proc_name name is fully qualified name without leading colons proc procs,
     XOTcl methods are a triple with the fully qualified class name,
     then proc|instproc and then the method name.
@@ -870,7 +875,8 @@ ad_proc -private api_called_proc_names {
             #ns_log notice "api_called_proc_names <$proc_name> got body <$body>"
 
         } on error {errorMsg} {
-            ns_log warning "api_called_proc_names: cannot obtain body of '$proc_name' via ::apidoc::tcl_to_html: $errorMsg"
+            ns_log warning "api_called_proc_names: cannot obtain body of '$proc_name'" \
+                "via ::apidoc::tcl_to_html: $errorMsg"
             return ""
         }
     }
@@ -1755,10 +1761,31 @@ namespace eval ::apidoc {
                     set in_comment 0
                 }
 
-                "\{" -
                 ";" {
                     if {!$in_quotes && !$in_comment} {
                         set proc_ok 1
+                    }
+                    append html $char
+                }
+
+                "\{" {
+                    if {!$in_quotes && !$in_comment} {
+                        set proc_ok 1
+                        set linestart [string last "\n" $data $i]
+                        if {$linestart != -1} {
+                            set segment [string range $data $linestart+1 $i]
+                            #ns_log notice "SEGMENT <$segment>"
+                            #
+                            # When the line looks like from a
+                            # definition of a proc/instproc/method,
+                            # don't expect that the next word is a
+                            # potential command, since this is rather
+                            # an argument.
+                            #
+                            if {[regexp {(proc|method) } $segment]} {
+                                set proc_ok 0
+                            }
+                        }
                     }
                     append html $char
                 }
@@ -1790,7 +1817,6 @@ namespace eval ::apidoc {
                         set proc_ok 0
                         set procl [length_proc [string range $data $i end]]
                         set proc_name [string range $data $i $i+$procl]
-
                         if {$proc_name eq "ad_proc"} {
                             #
                             # Pretty print comment after ad_proc rather than trying to index keywords
