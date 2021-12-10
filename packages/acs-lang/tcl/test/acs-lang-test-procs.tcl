@@ -1236,6 +1236,90 @@ aa_register_case \
         }
     }
 
+ad_proc -private lang::test::get_all_package_files {} {
+    Get all files on the system where some message key is expected.
+} {
+    set files [list]
+    set directories [list $::acs::rootdir/packages/]
+    while {[llength $directories] > 0} {
+        set d [lindex $directories 0]
+        set directories [lrange $directories 1 end]
+        lappend directories {*}[glob -directory $d -nocomplain -types d *]
+        lappend files {*}[glob -directory $d -nocomplain -types {f r} *.{info,adp,sql,tcl}]
+    }
+    return $files
+}
+
+aa_register_case \
+    -error_level warning \
+    lang_message_dependencies_are_fine {
+        Makes sure that message key usages are consistent with the
+        package dependencies.
+    } {
+        # Retrieve dependencies for every package known to the system
+        foreach package_key [db_list get_packages {
+            select package_key from apm_packages
+        }] {
+            lappend dependencies($package_key) \
+                $package_key \
+                {*}[apm_one_package_load_libraries_dependencies $package_key]
+        }
+
+        # Create a lookup array for every message key on the system to
+        # tell a real message key from rubbish
+        db_foreach get_messages {
+            select package_key, message_key
+            from lang_messages
+        } {
+            set message_keys(${package_key}.${message_key}) 1
+        }
+
+        set theme_folders [db_list get_theme_folders {
+            select resource_dir from subsite_themes
+            where resource_dir is not null
+        }]
+
+        # Get "all files" on the system...
+        set root_prefix [string length $::acs::rootdir/packages/]
+        set theme_regexp ^([join $theme_folders |]).*$
+        foreach f [lang::test::get_all_package_files] {
+            set package_key [lindex [file split [string range $f $root_prefix end]] 0]
+
+            if {![info exists dependencies($package_key)]} {
+                aa_log "'$f' does not belong to a package installed on the system."
+                continue
+            }
+            if {[regexp $theme_regexp [string range $f [string length $::acs::rootdir] end]]} {
+                aa_log "'$f' is a theme file and can refer to any message key."
+                continue
+            }
+
+            set rfd [open $f r]
+            set content [read $rfd]
+            close $rfd
+
+            # ...parse every possible message key occurrence...
+            foreach occurrence [regexp -all -inline -- {[\w.,: -]+\.[\w.,: -]+} $content] {
+                lassign [split [string trim $occurrence] .] message_package_key message_key
+                # ...make sure it is a real message key...
+                if {![info exists message_keys(${message_package_key}.${message_key})]} {
+                    ns_log warning "$f: '${message_package_key}.${message_key}' is not a message key."
+                    continue
+                }
+                # ..leave the core out of this: its message keys can alway be used...
+                if {[string match acs-* $message_package_key]} {
+                    aa_log "'${message_package_key}.${message_key}' belongs to the core and can alway be used."
+                    continue
+                }
+                # ...and check that the package it belongs to is one
+                # of our dependencies.
+                aa_true \
+                    "'$f': message key #${message_package_key}.${message_key}# belongs to dependencies of '$package_key'." \
+                    {$message_package_key in $dependencies($package_key)}
+            }
+        }
+    }
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
