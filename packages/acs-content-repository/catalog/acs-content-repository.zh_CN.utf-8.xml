@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<message_catalog package_key="acs-content-repository" locale="zh_CN" charset="utf-8">
+
+  <msg key="Last_Modified">最新修改</msg>
+  <msg key="Name">名称</msg>
+  <msg key="Size">大小</msg>
+  <msg key="Type">类型</msg>
+  
+</message_catalog>
