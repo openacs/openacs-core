@@ -1262,7 +1262,7 @@ aa_register_case \
         }] {
             lappend dependencies($package_key) \
                 $package_key \
-                {*}[apm_one_package_load_libraries_dependencies $package_key]
+                {*}[apm_package_load_libraries_order $package_key]
         }
 
         # Create a lookup array for every message key on the system to

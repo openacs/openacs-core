@@ -349,7 +349,7 @@ ad_proc apm_package_url_resolution {
     return [nsv_get apm_package_url_resolution $package_key]
 }
 
-ad_proc -private apm_package_load_libraries_order {
+ad_proc apm_package_load_libraries_order {
     package_key
 } {
     Wrapper that returns the cached package library load order list.
