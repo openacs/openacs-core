@@ -1274,6 +1274,9 @@ aa_register_case \
             set message_keys(${package_key}.${message_key}) 1
         }
 
+        # A theme package might override message keys from various
+        # packages, while not depending on any of them, we do not
+        # check for those occurrences.
         set theme_folders [db_list get_theme_folders {
             select resource_dir from subsite_themes
             where resource_dir is not null
