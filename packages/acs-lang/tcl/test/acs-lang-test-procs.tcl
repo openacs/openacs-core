@@ -1258,7 +1258,7 @@ aa_register_case \
     } {
         # Retrieve dependencies for every package known to the system
         foreach package_key [db_list get_packages {
-            select package_key from apm_packages
+            select package_key from apm_package_types
         }] {
             lappend dependencies($package_key) \
                 $package_key \

@@ -14,7 +14,7 @@ aa_register_case \
         expected result from the data model.
     } {
         foreach package_key [db_list get_packages {
-            select package_key from apm_packages
+            select package_key from apm_package_types
         }] {
             set db_dependencies [db_list get_dependencies {
                 with recursive dependencies as
