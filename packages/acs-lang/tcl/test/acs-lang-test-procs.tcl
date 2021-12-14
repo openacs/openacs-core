@@ -1258,11 +1258,13 @@ aa_register_case \
     } {
         # Retrieve dependencies for every package known to the system
         foreach package_key [db_list get_packages {
-            select package_key from apm_package_types
+            select package_key from apm_package_types p
+            where exists (select 1 from apm_package_version_info
+                           where package_key = p.package_key
+                             and enabled_p)
         }] {
-            lappend dependencies($package_key) \
-                $package_key \
-                {*}[apm_package_load_libraries_order $package_key]
+            set dependencies($package_key) \
+                [apm_package_load_libraries_order $package_key]
         }
 
         # Create a lookup array for every message key on the system to
