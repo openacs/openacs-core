@@ -902,7 +902,7 @@ ad_proc template::head::prepare_multirows {} {
         template::multirow sort headscript order
         array unset scripts
     }
-    template:::prepare_body_script_multirow
+    template::prepare_body_script_multirow
 }
 
 ad_proc -private template::prepare_body_script_multirow {} {
