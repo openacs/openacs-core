@@ -1072,7 +1072,7 @@ ad_proc template::add_confirm_handler {
         set message [_ $key]
     }
     set script [subst {
-        if (!confirm('$message')) {
+        if (!confirm(`$message`)) {
             event.preventDefault();
         }
     }]
