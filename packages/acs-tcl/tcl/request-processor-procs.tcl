@@ -1871,20 +1871,13 @@ ad_proc -private ad_http_cache_control { } {
 
     # Check if any relevant header is already present - in this case
     # don't touch anything.
-    set modify_p 1
-
-    if { [ns_set ifind $headers "cache-control"] > -1
-         || [ns_set ifind $headers "expires"] > -1 } {
+    if {
+        [ns_set ifind $headers "cache-control"] > -1
+        || [ns_set ifind $headers "expires"] > -1
+        || [string tolower [ns_set iget $headers "pragma"]] eq "no-cache"
         set modify_p 0
     } else {
-        for { set i 0 } { $i < [ns_set size $headers] } { incr i } {
-            if { [string tolower [ns_set key $headers $i]] eq "pragma"
-                 && [string tolower [ns_set value $headers $i]] eq "no-cache"
-             } {
-                set modify_p 0
-                break
-            }
-        }
+        set modify_p 1
     }
 
     # Set three headers, to be sure it won't get cached. If you are in
