@@ -457,11 +457,8 @@ ad_proc -private ds_trace_filter { conn args why } {
     if { [ds_enabled_p] && [ds_collection_enabled_p] } {
         ds_add conn end [ns_time] endclicks [clock clicks -microseconds]
 
-        for { set i 0 } { $i < [ns_set size [ad_conn outputheaders]] } { incr i } {
-            ds_add oheaders \
-                [ns_set key [ad_conn outputheaders] $i] \
-                [ns_set value [ad_conn outputheaders] $i]
-        }
+        ds_add oheaders \
+            {*}[ns_set array [ad_conn outputheaders]]
 
         foreach param { browser_id validated session_id user_id } {
             global ad_sec_$param
