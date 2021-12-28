@@ -22,11 +22,12 @@ if {[catch { ns_dbformvalue [ns_getform] on_vacation_until date on_vacation_unti
 
 set user_id [ad_conn user_id]
 
-db_transaction {
-    # We update the users table to maintain compatibility with acs installations prior to user_vacations
-    set bind_vars [ad_tcl_vars_to_ns_set user_id on_vacation_until]
-    db_dml pvt_set_vacation_update "update users set no_alerts_until = :on_vacation_until where user_id = :user_id" -bind $bind_vars
-
+# We update the users table to maintain compatibility with acs
+# installations prior to user_vacations
+db_dml pvt_set_vacation_update {
+    update users set
+      no_alerts_until = :on_vacation_until
+    where user_id = :user_id
 }
 
 set home_link [ad_pvt_home_link]
