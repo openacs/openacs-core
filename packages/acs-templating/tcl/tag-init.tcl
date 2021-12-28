@@ -510,7 +510,8 @@ template::tag formwidget { params } {
     set id [template::get_attribute formwidget $params id]
 
     # get any additional HTML attributes specified by the designer
-    set tag_attributes [template::util::set_to_list $params id]
+    set tag_attributes [ns_set array $params]
+    dict unset tag_attributes id
 
     template::adp_append_string \
         "\[template::element render \${form:id} [list $id] { $tag_attributes } \]"
@@ -524,7 +525,8 @@ template::tag formhelp { params } {
     set id [template::get_attribute formhelp $params id]
 
     # get any additional HTML attributes specified by the designer
-    set tag_attributes [template::util::set_to_list $params id]
+    set tag_attributes [ns_set array $params]
+    dict unset tag_attributes id
 
     template::adp_append_string \
         "\[template::element render_help \${form:id} [list $id] { $tag_attributes } \]"
@@ -569,7 +571,8 @@ template::tag formgroup { chunk params } {
     set id [template::get_attribute formgroup $params id]
 
     # get any additional HTML attributes specified by the designer
-    set tag_attributes [template::util::set_to_list $params id]
+    set tag_attributes [ns_set array $params]
+    dict unset tag_attributes id
 
     # generate a list of options and option labels as a data source
 
@@ -599,7 +602,9 @@ template::tag formgroup-widget { chunk params } {
 
     set row [template::get_attribute formgroup-widget $params row]
     # get any additional HTML attributes specified by the designer
-    set tag_attributes [template::util::set_to_list $params id row]
+    set tag_attributes [ns_set array $params]
+    dict unset tag_attributes id
+    dict unset tag_attributes row
 
     # generate a list of options and option labels as a data source
 
@@ -639,8 +644,10 @@ template::tag formtemplate { chunk params } {
     }
 
     # get any additional HTML attributes specified by the designer
-    set tag_attributes [template::util::set_to_list $params \
-                            id style method title cols headers]
+    set tag_attributes [ns_set array $params]
+    foreach key {id style method title cols headers} {
+        dict unset tag_attributes $key
+    }
 
     template::adp_append_string \
         [subst -nocommands {[template::form render $id { $tag_attributes } ]}]

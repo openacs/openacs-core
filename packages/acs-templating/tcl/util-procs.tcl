@@ -217,30 +217,6 @@ ad_proc -public template::util::lnest { listref value next args } {
     set inlist [array get values]
 }
 
-ad_proc -public template::util::set_to_list { set args } {
-    Turns an ns_set into a key-value list, excluding any number of
-    specified keys.  Useful for turning the contents on an ns_set into
-    a form that may be cached or manipulated as a native Tcl data structure.
-
-    @param set  A reference to an ns_set.
-    @param args Any number of key names to exclude from the list.
-
-    @return A list in the form { key value key value key value ... }
-} {
-
-    set result [list]
-
-    for { set i 0 } { $i < [ns_set size $set] } { incr i } {
-
-        set key [ns_set key $set $i]
-        if { $key in $args } { continue }
-
-        lappend result $key [ns_set value $set $i]
-    }
-
-    return $result
-}
-
 ad_proc -public template::util::set_to_vars { set args } {
     Declare local variables for set values
 

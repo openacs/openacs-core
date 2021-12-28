@@ -442,7 +442,34 @@ ad_proc -private -deprecated template::get_enclosing_tag { tag } {
     return $name
 }
 
+ad_proc -deprecated template::util::set_to_list { set args } {
+    Turns an ns_set into a key-value list, excluding any number of
+    specified keys.  Useful for turning the contents on an ns_set into
+    a form that may be cached or manipulated as a native Tcl data structure.
 
+    DEPRECATED: this proc can be replaced with trivial ns_set and
+                plain tcl idioms
+
+    @see ns_set
+
+    @param set  A reference to an ns_set.
+    @param args Any number of key names to exclude from the list.
+
+    @return A list in the form { key value key value key value ... }
+} {
+
+    set result [list]
+
+    for { set i 0 } { $i < [ns_set size $set] } { incr i } {
+
+        set key [ns_set key $set $i]
+        if { $key in $args } { continue }
+
+        lappend result $key [ns_set value $set $i]
+    }
+
+    return $result
+}
 
 # Local variables:
 #    mode: tcl
