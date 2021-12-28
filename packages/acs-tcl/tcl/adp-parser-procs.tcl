@@ -377,8 +377,8 @@ ad_proc -public doc_adp_compile { adp } {
 		doc_adp_append_code "\}"
 	    } else {
 		doc_adp_append_code "set __doc_attributes \[ns_set create\]"
-		for { set i 0 } { $i < [ns_set size $attributes] } { incr i } {
-		    doc_adp_append_code "ns_set put \$__doc_attributes [doc_adp_quote_tcl_string [ns_set key $attributes $i]] [doc_adp_quote_tcl_string [ns_set value $attributes $i]]"
+                foreach {key value} [ns_set array $attributes] {
+		    doc_adp_append_code "ns_set put \$__doc_attributes [doc_adp_quote_tcl_string $key] [doc_adp_quote_tcl_string $value]"
 		}
 
 		if { $tag_info(balanced_p) } {

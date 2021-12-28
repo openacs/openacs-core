@@ -18,10 +18,7 @@ if {[ns_info version] eq "4.5"} {
 
     if {"$poolSet" ne ""} {
 
-        set poolSize [ns_set size $poolSet]
-        for {set i 0} {$i < $poolSize} {incr i} {
-            set poolName [ns_set key $poolSet $i]
-            set poolDescription [ns_set value $poolSet $i]
+        foreach {poolName poolDescription} [ns_set array $poolSet] {
             set poolConfigSection "ns/server/[ns_info server]/pool/$poolName"
             set poolConfigSet [ns_configsection $poolConfigSection]
             if {"$poolConfigSet" eq ""} {

@@ -770,10 +770,7 @@ ad_proc -public package_instantiate_object {
 
     # Go through the extra_vars (ben - OpenACS)
     if {$extra_vars ne "" } {
-        for {set i 0} {$i < [ns_set size $extra_vars]} {incr i} {
-            set __key [ns_set key $extra_vars $i]
-            set __value [ns_set value $extra_vars $i]
-
+        foreach {__key __value} [ns_set array $extra_vars] {
             if { ![info exists real_params([string toupper $__key])] } {
                 # The parameter is not accepted as a parameter to the
                 # pl/sql function. Ignore it.
