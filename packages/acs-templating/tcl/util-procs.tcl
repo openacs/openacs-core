@@ -217,30 +217,6 @@ ad_proc -public template::util::lnest { listref value next args } {
     set inlist [array get values]
 }
 
-ad_proc -public template::util::set_to_vars { set args } {
-    Declare local variables for set values
-
-    @param set  A reference to an ns_set.
-    @param args Any number of keys to declare as local variables.
-} {
-
-    if { [llength $args] == 0 } {
-
-        for { set i 0 } { $i < [ns_set size $set] } { incr i } {
-            set key [ns_set key $set $i]
-            upvar $key value
-            set value [ns_set get $set $key]
-        }
-
-    } else {
-
-        foreach key $args {
-            upvar $key value
-            set value [ns_set get $set $key]
-        }
-    }
-}
-
 ad_proc -public template::util::array_to_vars { arrayname } {
     Declare local variables for every key in an array.
 

@@ -471,6 +471,35 @@ ad_proc -deprecated template::util::set_to_list { set args } {
     return $result
 }
 
+ad_proc -deprecated template::util::set_to_vars { set args } {
+    Declare local variables for set values
+
+    DEPRECATED: this proc can be replaced with trivial ns_set and
+                plain tcl idioms
+
+    @see ns_set
+
+    @param set  A reference to an ns_set.
+    @param args Any number of keys to declare as local variables.
+} {
+
+    if { [llength $args] == 0 } {
+
+        for { set i 0 } { $i < [ns_set size $set] } { incr i } {
+            set key [ns_set key $set $i]
+            upvar $key value
+            set value [ns_set get $set $key]
+        }
+
+    } else {
+
+        foreach key $args {
+            upvar $key value
+            set value [ns_set get $set $key]
+        }
+    }
+}
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
