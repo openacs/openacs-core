@@ -845,9 +845,7 @@ ad_proc -private publish::set_to_pairs { params {exclusion_list ""} } {
 } {
 
   set extra_args [list]
-  for { set i 0 } { $i < [ns_set size $params] } { incr i } {
-    set key   [ns_set key $params $i]
-    set value [ns_set value $params $i]
+  foreach {key value} [ns_set array $params] {
     if { $key ni $exclusion_list } {
       lappend extra_args $key $value
     }
