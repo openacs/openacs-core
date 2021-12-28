@@ -66,14 +66,9 @@ ad_proc -private cr_scan_mime_types {} {
     # Get the config file ns_set
     set mime_types [ns_configsection "ns/mimetypes"]
     if {$mime_types ne ""} {
-        set n_mime_types [ns_set size $mime_types]
-
-        for {set i 0} {$i < $n_mime_types} {incr i} {
-            set extension [ns_set key $mime_types $i]
-            set mime_type [ns_set value $mime_types $i]
-
+        foreach {extension mime_type} [ns_set array $mime_types] {
             # special case
-            if {$extension eq "NoExtension" || $extension eq "Default"} {
+            if {$extension in {"NoExtension" "Default"}} {
                 continue
             }
 
