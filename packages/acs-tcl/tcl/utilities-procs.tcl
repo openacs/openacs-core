@@ -1222,21 +1222,6 @@ ad_proc -public oacs_util::csv_foreach {
     }
 }
 
-ad_proc -public oacs_util::vars_to_ns_set {
-    {-ns_set:required}
-    {-var_list:required}
-} {
-    Does an ns_set put on each variable named in var_list
-
-    @param var_list list of variable names in the calling scope
-    @param ns_set an ns_set id that already exists.
-} {
-    foreach var $var_list {
-        upvar $var one_var
-        ns_set put $ns_set $var $one_var
-    }
-}
-
 ad_proc -private util_WriteWithExtraOutputHeaders {
     headers_so_far
     {first_part_of_page ""}

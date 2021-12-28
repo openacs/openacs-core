@@ -85,12 +85,13 @@ ad_proc -public notification::delivery::new {
 } {
     Register a new delivery method with the notification service.
 } {
-    set extra_vars [ns_set create]
+    set extra_vars [ns_set create s \
+                        delivery_method_id $delivery_method_id \
+                        sc_impl_id $sc_impl_id \
+                        short_name $short_name \
+                        pretty_name $pretty_name \
+                       ]
 
-    oacs_util::vars_to_ns_set \
-        -ns_set $extra_vars \
-        -var_list {delivery_method_id sc_impl_id short_name pretty_name}
-    
     return [package_instantiate_object \
                 -extra_vars $extra_vars \
                 "notification_delivery_method"]

@@ -33,8 +33,13 @@ namespace eval notification::type {
     } {
         create a new notification type. Must provide a service contract implementation ID.
     } {
-        set extra_vars [ns_set create]
-        oacs_util::vars_to_ns_set -ns_set $extra_vars -var_list {type_id sc_impl_id short_name pretty_name description}
+        set extra_vars [ns_set create s \
+                            type_id $type_id \
+                            sc_impl_id $sc_impl_id \
+                            short_name $short_name \
+                            pretty_name $pretty_name \
+                            description $description \
+                           ]
 
         set type_id [package_instantiate_object -extra_vars $extra_vars notification_type]
 

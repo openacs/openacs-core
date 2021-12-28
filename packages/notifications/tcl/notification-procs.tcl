@@ -313,15 +313,20 @@ namespace eval notification {
                 set notif_subject [ad_string_truncate -len 100 -- $notif_subject]
 
                 # Set up the vars
-                set extra_vars [ns_set create]
-                oacs_util::vars_to_ns_set \
-                    -ns_set $extra_vars \
-                    -var_list {notification_id type_id object_id response_id notif_subject notif_text notif_html notif_user file_ids}
+                set extra_vars [ns_set create s \
+                                    notification_id $notification_id \
+                                    type_id $type_id \
+                                    object_id $object_id \
+                                    response_id $response_id \
+                                    notif_subject $notif_subject \
+                                    notif_text $notif_text \
+                                    notif_html $notif_html \
+                                    notif_user $notif_user\
+                                    file_ids $file_ids \
+                                   ]
 
                 if { $notif_date ne "" } {
-                    oacs_util::vars_to_ns_set \
-                        -ns_set $extra_vars \
-                        -var_list {notif_date}
+                    ns_set put $extra_vars notif_date $notif_date
                 }
 
                 # Create the notification

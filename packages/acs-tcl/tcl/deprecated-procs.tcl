@@ -4009,6 +4009,25 @@ ad_proc -deprecated ad_tcl_vars_list_to_ns_set {
     return $set_id
 }
 
+ad_proc -deprecated oacs_util::vars_to_ns_set {
+    {-ns_set:required}
+    {-var_list:required}
+} {
+    Does an ns_set put on each variable named in var_list
+
+    DEPRECATED: modern ns_set idioms make this proc obsolete
+
+    @see ns_set
+
+    @param var_list list of variable names in the calling scope
+    @param ns_set an ns_set id that already exists.
+} {
+    foreach var $var_list {
+        upvar $var one_var
+        ns_set put $ns_set $var $one_var
+    }
+}
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
