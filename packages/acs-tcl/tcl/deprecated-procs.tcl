@@ -3882,6 +3882,26 @@ ad_proc -public -deprecated util_search_list_of_lists {list_of_lists query_strin
     return [lsearch -index $sublist_element_pos $list_of_lists $query_string]
 }
 
+ad_proc -deprecated util_list_to_ns_set { aList } {
+    Convert a list in the form "key value key value ..." into an ns_set.
+
+    DEPRECATED: this proc can be replaced with a oneliner using list expansion.
+
+    @see ns_set create ?name? ?key? ?value? ...
+
+    @param aList The list to convert
+
+    @return The id of a (non-persistent) ns_set
+} {
+    # set setid [ns_set create]
+    # foreach {k v} $aList {
+    #     ns_set put $setid $k $v
+    # }
+
+    # return $setid
+    return [ns_set create s {*}$aList]
+}
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4

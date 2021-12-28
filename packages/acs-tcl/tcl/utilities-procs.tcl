@@ -2860,22 +2860,6 @@ ad_proc -public util_ns_set_to_list {
     return $result
 }
 
-
-ad_proc -public util_list_to_ns_set { aList } {
-    Convert a list in the form "key value key value ..." into an ns_set.
-
-    @param aList The list to convert
-
-    @return The id of a (non-persistent) ns_set
-} {
-    set setid [ns_set create]
-    foreach {k v} $aList {
-        ns_set put $setid $k $v
-    }
-
-    return $setid
-}
-
 ad_proc -public util_sets_equal_p { list1 list2 } {
     Tests whether each unique string in list1 occurs as many
     times in list1 as in list2 and vice versa (regardless of order).
