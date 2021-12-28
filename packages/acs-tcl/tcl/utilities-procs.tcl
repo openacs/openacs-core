@@ -811,20 +811,18 @@ ad_proc -public export_vars {
     #
     #####
 
-    set export_size [ns_set size $export_set]
     set export_string {}
 
     if { $url_p } {
-        set export_list [list]
-        for { set i 0 } { $i < $export_size } { incr i } {
-            lappend export_list [ad_urlencode_query [ns_set key $export_set $i]]=[ad_urlencode_query [ns_set value $export_set $i]]
+        foreach {key value} [ns_set array $export_set] {
+            lappend export_string [ad_urlencode_query $key]=[ad_urlencode_query $value]
         }
-        set export_string [join $export_list "&"]
+        set export_string [join $export_string "&"]
     } else {
-        for { set i 0 } { $i < $export_size } { incr i } {
+        foreach {key value} [ns_set array $export_set] {
             append export_string [subst {<div><input type="hidden"
-                name="[ns_quotehtml [ns_set key $export_set $i]]"
-                value="[ns_quotehtml [ns_set value $export_set $i]]"></div>
+                name="[ns_quotehtml $key]"
+                value="[ns_quotehtml $value]"></div>
             }]
         }
     }
