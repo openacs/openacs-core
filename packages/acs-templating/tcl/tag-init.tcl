@@ -1,23 +1,26 @@
-# Tag Handlers for the ArsDigita Templating System
+ad_library {
+    Tag Handlers for the ArsDigita Templating System
 
-# Copyright (C) 1999-2000 ArsDigita Corporation
-# Authors: Karl Goldstein         (karlg@arsdigita.com)
-#          Stanislav Freidin      (sfreidin@arsdigita.com)
-#          Christian Brechbuehler (chrisitan@arsdigita.com)
+    Copyright (C) 1999-2000 ArsDigita Corporation
+    Authors: Karl Goldstein         (karlg@arsdigita.com)
+             Stanislav Freidin      (sfreidin@arsdigita.com)
+             Christian Brechbuehler (chrisitan@arsdigita.com)
 
-# $Id$
+    $Id$
 
-# This is free software distributed under the terms of the GNU Public
-# License.  Full text of the license is available from the GNU Project:
-# http://www.fsf.org/copyleft/gpl.html
+    This is free software distributed under the terms of the GNU Public
+    License.  Full text of the license is available from the GNU Project:
+    http://www.fsf.org/copyleft/gpl.html
+}
 
 #-----------------------------------------------------------
 # Putting tag handlers in namespaces does not seem to work!
 #-----------------------------------------------------------
 
-# Add some escaped Tcl
-
 template::tag tcl { chunk params } {
+    #
+    # Add some escaped Tcl
+    #
 
     # if the chunk begins with = then add our own append
     if { [string index $chunk 0] eq "=" } {
@@ -27,11 +30,12 @@ template::tag tcl { chunk params } {
     }
 }
 
-# Set a property for the template.  Properties are primarily for the
-# benefit of the master template to display appropriate context,
-# such as the title, navigation links, etc.
-
 template::tag property { chunk params } {
+    #
+    # Set a property for the template.  Properties are primarily for
+    # the benefit of the master template to display appropriate
+    # context, such as the title, navigation links, etc.
+    #
 
     set name [ns_set iget $params name]
     set adp  [ns_set iget $params adp]
@@ -49,9 +53,10 @@ template::tag property { chunk params } {
     }
 }
 
-# Set the master template.
-
 template::tag master { params } {
+    #
+    # Set the master template.
+    #
 
     set src [ns_set iget $params src]
     set slave_properties_p [template::get_attribute master $params slave-properties-p 0]
@@ -76,9 +81,10 @@ template::tag master { params } {
     }]
 }
 
-# Insert the slave template
-
 template::tag slave { params } {
+    #
+    # Insert the slave template
+    #
 
     #Start developer support frame around subordinate template.
     if { [namespace which ::ds_enabled_p] ne ""
@@ -176,7 +182,6 @@ ad_proc -private template::template_tag_include_helper_code {
 }
 
 ad_proc -private template::template_tag_include_command {src params} {
-} {
     # pass additional arguments as key-value pairs
 
     set command "template::adp_parse"
@@ -191,10 +196,8 @@ ad_proc -private template::template_tag_include_command {src params} {
     return $command
 }
 
-#
-# Include another template in the current template
-#
 ad_proc -private template::template_tag_include_helper {params} {
+    Include another template in the current template
 } {
     set src [ns_set iget $params src]
     set ds [ns_set iget $params ds]
@@ -226,14 +229,14 @@ template::tag include { params } {
     template::template_tag_include_helper $params
 }
 
-#
-# <widget> is very similar to <include>, but uses widget specific name
-# resolution based on themes.  If the theme package contains
-# resources/widgets/$specifiedName it is used from there. Otherwise it
-# behaves exactly like <include> (without the resources/templates/
-# theming)
-#
 template::tag widget { params } {
+    #
+    # <widget> is very similar to <include>, but uses widget specific
+    # name resolution based on themes.  If the theme package contains
+    # resources/widgets/$specifiedName it is used from
+    # there. Otherwise it behaves exactly like <include> (without the
+    # resources/templates/ theming)
+    #
     set src [ns_set iget $params src]
     set adp_stub [template::resource_path -type widgets -style $src -relative]
     if {[file exists $::acs::rootdir/$adp_stub.adp]} {
@@ -242,10 +245,10 @@ template::tag widget { params } {
     template::template_tag_include_helper $params
 }
 
-
-# Repeat a template chunk for each row of a multirow data source
-
 template::tag multiple { chunk params } {
+    #
+    # Repeat a template chunk for each row of a multirow data source
+    #
 
     set name      [template::get_attribute multiple $params name       ]
     set startrow  [template::get_attribute multiple $params startrow  0]
@@ -294,9 +297,10 @@ template::tag multiple { chunk params } {
   }"
 }
 
-# Repeat a template chunk for each item in a list
-
 template::tag list { chunk params } {
+    #
+    # Repeat a template chunk for each item in a list
+    #
 
     # the list tag accepts a value so that it may be used without a data
     # source in the Tcl script
@@ -333,10 +337,11 @@ template::tag list { chunk params } {
     template::adp_append_code "}"
 }
 
-# Create a recursed group, generating a recursive multirow block until the
-# column name stays the same
-
 template::tag group { chunk params } {
+    #
+    # Create a recursed group, generating a recursive multirow block
+    # until the column name stays the same
+    #
 
     set column [template::get_attribute group $params column]
     set delimiter [template::get_attribute group $params delimiter ""]
@@ -422,10 +427,11 @@ template::tag group { chunk params } {
     }
 }
 
-# Repeat a template chunk consisting of a grid cell for each row of a
-# multirow data source
-
 template::tag grid { chunk params } {
+    #
+    # Repeat a template chunk consisting of a grid cell for each row
+    # of a multirow data source
+    #
 
     set name [template::get_attribute grid $params name]
     # cols must be a float for ceil to work
@@ -464,19 +470,17 @@ template::tag grid { chunk params } {
 }
 
 template::tag if { chunk params } {
-
     template::template_tag_if_condition $chunk $params if
 }
 
 template::tag elseif { chunk params } {
-
     template::template_tag_if_condition $chunk $params elseif
 }
 
-
-# Append an "else" clause to the if expression
-
 template::tag else { chunk params } {
+    #
+    # Append an "else" clause to the if expression
+    #
 
     template::adp_append_code "else {" -nobreak
 
@@ -485,9 +489,11 @@ template::tag else { chunk params } {
     template::adp_append_code "}"
 }
 
-# Output a template chunk without parsing, for preprocessed templates
-
 template::tag noparse { chunk params } {
+    #
+    # Output a template chunk without parsing, for preprocessed
+    # templates
+    #
 
     # escape quotes
     regsub -all -- {[\]\[""\\$]} $chunk {\\&} quoted
@@ -495,10 +501,11 @@ template::tag noparse { chunk params } {
     template::adp_append_string $quoted
 }
 
-# Render the HTML for the form widget, incorporating any additional
-# markup attributes specified in the template.
-
 template::tag formwidget { params } {
+    #
+    # Render the HTML for the form widget, incorporating any
+    # additional markup attributes specified in the template.
+    #
 
     set id [template::get_attribute formwidget $params id]
 
@@ -509,9 +516,10 @@ template::tag formwidget { params } {
         "\[template::element render \${form:id} [list $id] { $tag_attributes } \]"
 }
 
-# Display the help information for an element
-
 template::tag formhelp { params } {
+    #
+    # Display the help information for an element
+    #
 
     set id [template::get_attribute formhelp $params id]
 
@@ -522,9 +530,10 @@ template::tag formhelp { params } {
         "\[template::element render_help \${form:id} [list $id] { $tag_attributes } \]"
 }
 
-# Report a form error if one is specified.
-
 template::tag formerror { chunk params } {
+    #
+    # Report a form error if one is specified.
+    #
 
     set id [template::get_attribute formerror $params id]
     set type [ns_set get $params type]
@@ -552,9 +561,10 @@ template::tag formerror { chunk params } {
     template::adp_append_code "\}"
 }
 
-# Render a group of form widgets
-
 template::tag formgroup { chunk params } {
+    #
+    # Render a group of form widgets
+    #
 
     set id [template::get_attribute formgroup $params id]
 
@@ -580,8 +590,11 @@ template::tag formgroup { chunk params } {
     }
 }
 
-# render one element from a formgroup
 template::tag formgroup-widget { chunk params } {
+    #
+    # Render one element from a formgroup
+    #
+
     set id [template::get_attribute formgroup-widget $params id]
 
     set row [template::get_attribute formgroup-widget $params row]
@@ -600,11 +613,12 @@ template::tag formgroup-widget { chunk params } {
 
 }
 
-# Render a form, incorporating any additional markup attributes
-# specified in the template.  Set the magic variable "form:id"
-# for elements to reference
-
 template::tag formtemplate { chunk params } {
+    #
+    # Render a form, incorporating any additional markup attributes
+    # specified in the template.  Set the magic variable "form:id" for
+    # elements to reference
+    #
 
     set level [template::adp_level]
     set id [template::get_attribute formtemplate $params id]
@@ -653,50 +667,48 @@ template::tag formtemplate { chunk params } {
     template::adp_append_string "</form>"
 }
 
-
-# @private tag_child
-#
-# Implements the <tt>child</tt> tag which renders a child item.
-# See the Developer Guide for more information. <br>
-# The child tag format is
-# <blockquote><tt>
-# &lt;child tag=<i>tag</i> index=<i>n embed args</i>&gt;
-# </blockquote>
-#
-# @param params  The ns_set id for extra HTML parameters
-
 template::tag child { params } {
+    #
+    # @private tag_child
+    #
+    # Implements the <tt>child</tt> tag which renders a child item.
+    # See the Developer Guide for more information. <br> The child tag
+    # format is <blockquote><tt> &lt;child tag=<i>tag</i> index=<i>n
+    # embed args</i>&gt; </blockquote>
+    #
+    # @param params  The ns_set id for extra HTML parameters
+    #
+
     publish::process_tag child $params
 }
 
-# @private tag_relation
-#
-# Implements the <tt>relation</tt> tag which renders a related item.
-# See the Developer Guide for more information. <br>
-# The relation tag format is
-# <blockquote><tt>
-# &lt;relation tag=<i>tag</i> index=<i>n embed args</i>&gt;
-# </tt></blockquote>
-#
-# @param params  The ns_set id for extra HTML parameters
-
 template::tag relation { params } {
+    #
+    # @private tag_relation
+    #
+    # Implements the <tt>relation</tt> tag which renders a related
+    # item.  See the Developer Guide for more information. <br> The
+    # relation tag format is <blockquote><tt> &lt;relation
+    # tag=<i>tag</i> index=<i>n embed args</i>&gt; </tt></blockquote>
+    #
+    # @param params  The ns_set id for extra HTML parameters
+    #
+
     publish::process_tag relation $params
 }
 
-
-# @private tag_content
-#
-# Implements the <tt>content</tt> tag which renders the content
-# of the current item.
-# See the Developer Guide for more information. <br>
-# The content tag format is simply <tt>&lt;content&gt;</tt>. The
-# <tt>embed</tt> and <tt>no_merge</tt> parameters are implicit to
-# the tag.
-#
-# @param params  The ns_set id for extra HTML parameters
-
 template::tag content { params } {
+    #
+    # @private tag_content
+    #
+    # Implements the <tt>content</tt> tag which renders the content of
+    # the current item.  See the Developer Guide for more
+    # information. <br> The content tag format is simply
+    # <tt>&lt;content&gt;</tt>. The <tt>embed</tt> and
+    # <tt>no_merge</tt> parameters are implicit to the tag.
+    #
+    # @param params  The ns_set id for extra HTML parameters
+    #
 
     # Get item id/revision_id
     set item_id [publish::get_main_item_id]
@@ -716,17 +728,18 @@ template::tag content { params } {
     template::adp_append_code "append __adp_output \[$command\]"
 }
 
-# Include another template in the current template, but make
-# some other chunk dependent on whether or not the included
-# template returned something.
-#
-# This is useful if, say, you want to wrap the template with some HTML,
-# for example, a frame in a portal, but if there's nothing to show,
-# you don't want to show the frame either.
-#
-# @author Lars Pind (lars@collaboraid.net)
-
 template::tag include-optional { chunk params } {
+    #
+    # Include another template in the current template, but make some
+    # other chunk dependent on whether or not the included template
+    # returned something.
+    #
+    # This is useful if, say, you want to wrap the template with some
+    # HTML, for example, a frame in a portal, but if there's nothing
+    # to show, you don't want to show the frame either.
+    #
+    # @author Lars Pind (lars@collaboraid.net)
+    #
 
     #
     # Check, if the src can be resolved against resources/templates in
@@ -745,11 +758,12 @@ template::tag include-optional { chunk params } {
 
     set command [template::template_tag_include_command $src $params]
 
-    # __adp_include_optional_output is a list that operates like a stack
-    # So first we execute the include template, and push the result onto this stack
-    # Then, if the output contained anything but whitespace, we also output the
-    # chunk inside the include-optional tag.
-    # Finally, we pop the output off of the __adp_include_optional_output stack.
+    # __adp_include_optional_output is a list that operates like a
+    # stack, so first we execute the include template, and push the
+    # result onto this stack, then, if the output contained anything
+    # but whitespace, we also output the chunk inside the
+    # include-optional tag.  Finally, we pop the output off of the
+    # __adp_include_optional_output stack.
 
     template::adp_append_code "ad_try { lappend __adp_include_optional_output \[$command\] } on error {errmsg} {"
     template::adp_append_code "    append __adp_output \"Error in include template \\\"\[template::util::url_to_file \"$src\" \"\$__adp_stub\"\]\\\": \[ns_quotehtml \$errmsg\]\""
@@ -773,11 +787,13 @@ template::tag include-optional { chunk params } {
 
 }
 
-# Insert the output from the include-optional tag
-#
-# @author Lars Pind (lars@collaboraid.net)
-
 template::tag include-output { params } {
+    #
+    # Insert the output from the include-optional tag
+    #
+    # @author Lars Pind (lars@collaboraid.net)
+    #
+
     template::adp_append_code {
         if { [info exists __adp_include_optional_output] } {
             append __adp_output [lindex $__adp_include_optional_output end]
@@ -786,14 +802,14 @@ template::tag include-output { params } {
 }
 
 template::tag trn { chunk params } {
-    # DRB: we have to do our own variable substitution as the template framework doesn't handle
-    # it for us ... being able to use page variables here is consistent with the rest
-    # of the templating engine.
-
-    # LARS: Note that this version of the <TRN> tag requires a body, like this:
-    # <trn key="...">default</trn>.
-    # This is the way to give a default value, and is okay, because we now have the #...#
-    # notation for when there's no default value.
+    # DRB: we have to do our own variable substitution as the template
+    # framework doesn't handle it for us ... being able to use page
+    # variables here is consistent with the rest of the templating
+    # engine.
+    # LARS: Note that this version of the <TRN> tag requires a body,
+    # like this: <trn key="...">default</trn>.
+    # This is the way to give a default value, and is okay, because we
+    # now have the #...# notation for when there's no default value.
     # Will register the key in the message catalog if it doesn't exist.
 
     set size [ns_set size $params]
@@ -805,16 +821,19 @@ template::tag trn { chunk params } {
         regsub {@([a-zA-Z0-9_:]+)@} [set [ns_set key $params $i]] {${\1}} [ns_set key $params $i]
     }
 
-    # And this needs to be executed at page execution time due to interactions with the
-    # preferences changing code.  This is consistent with what the way #notation# is handled
-    # (the ad_conn call is dumped into the code, not executed on the spot)
+    # And this needs to be executed at page execution time due to
+    # interactions with the preferences changing code.  This is
+    # consistent with what the way #notation# is handled (the ad_conn
+    # call is dumped into the code, not executed on the spot)
 
     if { ![info exists locale] } {
-        # We need this to be executed at template execution time, because the template's
-        # compiled code will be cached and reused for many requests.
+        # We need this to be executed at template execution time,
+        # because the template's compiled code will be cached and
+        # reused for many requests.
         set locale "\[ad_conn locale\]"
     } else {
-        # Check to see if we should register this into the message catalog
+        # Check to see if we should register this into the message
+        # catalog
         if { [string length $locale] == 2 } {
             set locale [lang::util::default_locale_from_lang $locale]
         }
@@ -832,32 +851,32 @@ template::tag trn { chunk params } {
         [subst -nocommands {append __adp_output [_ $locale $key $quoted_chunk]}]
 }
 
-
-# DanW: implements a switch statement just like in Tcl
-# use as follows:
-#
-# <switch flag=regexp @some_var@>
-#     <case in "foo" "bar" "baz">
-#         Foo, Bar or Baz was selected
-#     </case>
-#     <case value="a.+">
-#         A was selected
-#     </case>
-#     <case value="b.+">
-#         B was selected
-#     </case>
-#     <case value="c.+">
-#         C was selected
-#     </case>
-#     <default>
-#         Not a valid selection
-#     </default>
-# </switch>
-#
-# The flag switch is optional and it defaults to exact if not specified.
-# Valid values are exact, regexp, and glob
-
 template::tag switch { chunk params } {
+    #
+    # DanW: implements a switch statement just like in Tcl
+    # use as follows:
+    #
+    # <switch flag=regexp @some_var@>
+    #     <case in "foo" "bar" "baz">
+    #         Foo, Bar or Baz was selected
+    #     </case>
+    #     <case value="a.+">
+    #         A was selected
+    #     </case>
+    #     <case value="b.+">
+    #         B was selected
+    #     </case>
+    #     <case value="c.+">
+    #         C was selected
+    #     </case>
+    #     <default>
+    #         Not a valid selection
+    #     </default>
+    # </switch>
+    #
+    # The flag switch is optional and it defaults to exact if not specified.
+    # Valid values are exact, regexp, and glob
+    #
 
     set sw ""
     set arg ""
@@ -883,11 +902,10 @@ template::tag switch { chunk params } {
     template::adp_append_code "}"
 }
 
-
-# case statements as part of switch statement as shown above
-#
-
 template::tag case { chunk params } {
+    #
+    # case tag, to be used inside of the switch tag
+    #
 
     # Scan the parameter stack backward, looking for the tag name
 
@@ -959,9 +977,11 @@ template::tag case { chunk params } {
     }
 }
 
-# default value for case statement which is a sub-tag in switch tag
-
 template::tag default { chunk params } {
+    #
+    # default value for case statement which is a sub-tag in switch
+    # tag
+    #
 
     # Scan the parameter stack backward, looking for the tag name
 
@@ -977,14 +997,23 @@ template::tag default { chunk params } {
     template::adp_append_code "}"
 }
 
-# contract and comment tags for adding inline
-# documentation to adp files.
-#
-# @author Ben Bytheway (ben@vrusp.com)
+template::tag contract { chunk params } {
+    #
+    # contract tag for adding inline
+    # documentation to adp files.
+    #
+    # @author Ben Bytheway (ben@vrusp.com)
+    #
+}
 
-template::tag contract { chunk params } {}
-
-template::tag comment { chunk params } {}
+template::tag comment { chunk params } {
+    #
+    # comment tag for adding inline
+    # documentation to adp files.
+    #
+    # @author Ben Bytheway (ben@vrusp.com)
+    #
+}
 
 
 
