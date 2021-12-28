@@ -291,11 +291,9 @@ ad_proc -public util_remove_nulls_from_ns_set {
 } {
     set new_set_id [ns_set new "no_nulls$old_set_id"]
 
-    for {set i 0} {$i < [ns_set size $old_set_id]} {incr i} {
-        if { [ns_set value $old_set_id $i] ne "" } {
-
-            ns_set put $new_set_id [ns_set key $old_set_id $i] [ns_set value $old_set_id $i]
-
+    foreach {key value} [ns_set array $old_set_id] {
+        if { $value ne "" } {
+            ns_set put $new_set_id $key $value
         }
     }
 
