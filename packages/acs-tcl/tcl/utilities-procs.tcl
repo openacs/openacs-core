@@ -916,9 +916,7 @@ ad_proc -public export_entire_form {} {
     set hidden ""
     set the_form [ns_getform]
     if { $the_form ne "" } {
-        for {set i 0} {$i<[ns_set size $the_form]} {incr i} {
-            set varname [ns_set key $the_form $i]
-            set varvalue [ns_set value $the_form $i]
+        foreach {varname varvalue} [ns_set array $the_form] {
             append hidden "<input type=\"hidden\" name=\"[ns_quotehtml $varname]\" value=\"[ns_quotehtml $varvalue]\" >\n"
         }
     }
@@ -950,11 +948,7 @@ ad_proc export_ns_set_vars {
 
     set return_list [list]
     if { $setid ne "" } {
-        set set_size [ns_set size $setid]
-        set set_counter_i 0
-        while { $set_counter_i < $set_size } {
-            set name [ns_set key $setid $set_counter_i]
-            set value [ns_set value $setid $set_counter_i]
+        foreach {name value} [ns_set array $setid] {
             if {$name ni $exclusion_list && $name ne ""} {
                 if {$format eq "url"} {
                     lappend return_list "[ad_urlencode_query $name]=[ad_urlencode_query $value]"
@@ -962,7 +956,6 @@ ad_proc export_ns_set_vars {
                     lappend return_list " name=\"[ns_quotehtml $name]\" value=\"[ns_quotehtml $value]\""
                 }
             }
-            incr set_counter_i
         }
     }
     if {$format eq "url"} {
@@ -988,9 +981,7 @@ ad_proc -public export_entire_form_as_url_vars {
     set params [list]
     set the_form [ns_getform]
     if { $the_form ne "" } {
-        for {set i 0} {$i<[ns_set size $the_form]} {incr i} {
-            set varname [ns_set key $the_form $i]
-            set varvalue [ns_set value $the_form $i]
+        foreach {varname varvalue} [ns_set array $the_form] {
             if {
                 $vars_to_passthrough eq ""
                 || ($varname in $vars_to_passthrough)
@@ -1230,11 +1221,8 @@ ad_proc -private util_WriteWithExtraOutputHeaders {
 } {
     set headers [ad_conn outputheaders]
     ns_set put $headers Server "[ns_info name]/[ns_info version]"
-    set set_headers_i 0
-    set set_headers_limit [ns_set size $headers]
-    while {$set_headers_i < $set_headers_limit} {
-        append headers_so_far "[ns_set key $headers $set_headers_i]: [ns_set value $headers $set_headers_i]\r\n"
-        incr set_headers_i
+    foreach {key value} [ns_set array $headers] {
+        append headers_so_far "$key: $value\r\n"
     }
     append entire_string_to_write $headers_so_far "\r\n" $first_part_of_page
     ns_write $entire_string_to_write
@@ -3883,8 +3871,8 @@ namespace eval util {
         returns a plain text version of the passed ns_set id
     } {
         set result ""
-        for {set i 0} {$i<[ns_set size $set_id]} {incr i} {
-            append result "[ns_set key $set_id $i] : [ns_set value $set_id $i]\n"
+        foreach {key value} [ns_set array $set_id] {
+            append result "$key : $value\n"
         }
         return $result
     }
