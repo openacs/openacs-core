@@ -340,8 +340,8 @@ ad_proc -private ds_collect_connection_info {} {
         ds_add start [ns_time]
         ds_add conn startclicks [ad_conn start_clicks]
 
-        for { set i 0 } { $i < [ns_set size [ad_conn headers]] } { incr i } {
-            ds_add headers [ns_set key [ad_conn headers] $i] [ns_set value [ad_conn headers] $i]
+        foreach {key value} [ns_set array [ad_conn headers]] {
+            ds_add headers $key $value
         }
         foreach param { method url query request peeraddr } {
             ds_add conn $param [ad_conn $param]
@@ -374,13 +374,7 @@ ad_proc -public ds_collect_db_call {
             set _errno [catch {
                 if { [info exists bind] && [llength $bind] != 0 } {
                     if { [llength $bind] == 1 } {
-                        set bind_vars [list]
-                        set len [ns_set size $bind]
-                        for {set i 0} {$i < $len} {incr i} {
-                            lappend bind_vars [ns_set key $bind $i] \
-                                [ns_set value $bind $i]
-                        }
-                        set bound_sql [db_bind_var_substitution $sql $bind_vars]
+                        set bound_sql [db_bind_var_substitution $sql [ns_set array $bind]]
                     } else {
                         set bound_sql [db_bind_var_substitution $sql $bind]
                     }
