@@ -68,7 +68,7 @@ ad_proc -private db_bootstrap_set_db_type { errors } {
     #
     # There are some problems with this approach:
     #
-    # 1. The "AvailablePool" parameter specifies the pools to be used by the ACS. 
+    # 1. The "AvailablePool" parameter specifies the pools to be used by the ACS.
     #    The default pool needn't be listed as an available pool, therefore, in a
     #    mixed db environment the check strategy described above might not actually
     #    be checking any pool designated for ACS use.
@@ -147,7 +147,7 @@ ad_proc -private db_bootstrap_set_db_type { errors } {
             }
 
             if { [db_available_pools $default_dbn] eq "" } {
-                ns_log Error "$proc_name: No pools specified for database '$default_dbn'." 
+                ns_log Error "$proc_name: No pools specified for database '$default_dbn'."
                 set old_availablepool_p 1
             }
         }
@@ -174,11 +174,11 @@ ad_proc -private db_bootstrap_set_db_type { errors } {
         set ::acs::db_pools($default_dbn) $dbn_pools
     }
     set ::acs::db_pools("") $::acs::db_pools($::acs::default_database)
-    
+
     set pools [db_available_pools {}]
     if { [llength $pools] <= 0 } {
         set ::acs::db_pools($default_dbn) $all_pools
-        set ::acs::db_pools("") $all_pools        
+        set ::acs::db_pools("") $all_pools
         set pools $all_pools
         ns_log Notice "$proc_name: Using ALL database pools for OpenACS."
     }
