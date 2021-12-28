@@ -230,10 +230,7 @@ ad_proc -private template::paginator::init { statement_name name query {print_p 
             set total_so_far 1
 
             while { \[db_getrow \$db \$selection\] } {
-                set this_result \[list\]
-                for { set i 0 } { \$i < \[ns_set size \$selection\] } { incr i } {
-                    lappend this_result \[ns_set value \$selection \$i\]
-                }
+                set this_result \[ns_set values \$selection\]
                 if { $print_p } {
                     if { \$total_so_far % 250 == 0 } {
                         ns_write \"&#133;\$total_so_far \"
@@ -286,10 +283,7 @@ ad_proc -private template::paginator::init { statement_name name query {print_p 
             set total_so_far 1
 
             while { \[db_getrow \$db \$selection\] } {
-                set this_result \[list\]
-                for { set i 0 } { \$i < \[ns_set size \$selection\] } { incr i } {
-                    lappend this_result \[ns_set value \$selection \$i\]
-                }
+                set this_result \[ns_set values \$selection \]
                 if { $print_p } {
                     if { \$total_so_far % 250 == 0 } {
                         ns_write \"...\$total_so_far \"

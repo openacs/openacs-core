@@ -162,13 +162,7 @@ ad_proc -private template::query::onerow { statement_name db result_name sql } {
         # Set the results in the calling frame.
         upvar $opts(uplevel) $result_name result
 
-        set size [ns_set size $row]
-
-        for { set i 0 } { $i < $size } { incr i } {
-
-            set column [ns_set key $row $i]
-            set result($column) [ns_set value $row $i]
-        }
+        array set result [ns_set array $row]
 
         if { [info exists opts(cache)] } {
             set opts(result) [array get result]
@@ -236,16 +230,9 @@ ad_proc -private template::query::multirow { statement_name db result_name sql }
 
         set result(rownum) $rowcount
 
-        set size [ns_set size $row]
-
-        for { set i 0 } { $i < $size } { incr i } {
-
-            set column [ns_set key $row $i]
-            set result($column) [ns_set value $row $i]
-
-            if {$rowcount == 1 } {
-                lappend column_list $column
-            }
+        array set result [ns_set array $row]
+        if { $rowcount == 1 } {
+            lappend column_list {*}[ns_set keys $row]
         }
 
         # Execute custom code for each row
@@ -287,14 +274,7 @@ ad_proc -private template::query::multilist { statement_name db result_name sql 
     set rows {}
 
     while { [ns_db getrow $db $row] } {
-
-        set values {}
-        set size [ns_set size $row]
-
-        for { set i 0 } { $i < $size } { incr i } {
-            lappend values [ns_set value $row $i]
-        }
-        lappend rows $values
+        lappend rows [ns_set values $row]
     }
 
     if { [info exists opts(cache)] } {
@@ -333,12 +313,7 @@ ad_proc -private template::query::nestedlist { statement_name db result_name sql
 
     while { [ns_db getrow $db $row] } {
 
-        set values {}
-        set size [ns_set size $row]
-
-        for { set i 0 } { $i < $size } { incr i } {
-            lappend values [ns_set value $row $i]
-        }
+        set values [ns_set values $row]
 
         # build the values on which to group
         set group_values [list]
@@ -1006,9 +981,7 @@ ad_proc -public template::url { command args } {
 
         get_query {
             set keyvalues [list]
-            for { set i 0 } { $i < [ns_set size $params] } { incr i } {
-                set key [ns_set key $params $i]
-                set value [ns_set value $params $i]
+            foreach {key value} [ns_set array $params] {
                 lappend keyvalues [ns_urlencode $key]=[ns_urlencode $value]
             }
             set result [join $keyvalues &]
