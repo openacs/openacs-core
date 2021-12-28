@@ -3508,7 +3508,7 @@ ad_proc -private db_exec_lob_oracle {
             if {$content_index == -1} {
                 set content_index 0
             }
-            set content [ns_set value $selection $i]
+            set content [ns_set value $selection $content_index]
 
             switch -- $original_type {
 
