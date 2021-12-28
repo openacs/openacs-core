@@ -1080,13 +1080,7 @@ ad_proc -private db_exec_plpgsql { db statement_name pre_sql fname } {
         upvar bind bind
         if { [info exists bind] && [llength $bind] != 0 } {
             if { [llength $bind] == 1 } {
-                set bind_vars [list]
-                set len [ns_set size $bind]
-                for {set i 0} {$i < $len} {incr i} {
-                    lappend bind_vars [ns_set key $bind $i] \
-                        [ns_set value $bind $i]
-                }
-                set proc_sql [db_bind_var_substitution $sql $bind_vars]
+                set proc_sql [db_bind_var_substitution $sql [ns_set array $bind]]
             } else {
                 set proc_sql [db_bind_var_substitution $sql $bind]
             }
@@ -1747,10 +1741,7 @@ ad_proc -private db_multirow_helper {} {
                 incr counter
                 upvar $level_up "$var_name:$counter" array_val
                 set array_val(rownum) $counter
-                for { set i 0 } { $i < [ns_set size $selection] } { incr i } {
-                    set array_val([ns_set key $selection $i]) \
-                        [ns_set value $selection $i]
-                }
+                array set array_val [ns_set array $selection]
             } else {
                 #
                 # There is a code block to execute.
@@ -2288,9 +2279,7 @@ ad_proc -public db_0or1row {
             set values [list]
 
             if { $selection ne "" } {
-                for {set i 0} { $i < [ns_set size $selection] } {incr i} {
-                    lappend values [list [ns_set key $selection $i] [ns_set value $selection $i]]
-                }
+                set values [ns_set array $selection]
             }
 
             set values
@@ -2299,11 +2288,7 @@ ad_proc -public db_0or1row {
         if { $values eq "" } {
             set selection ""
         } else {
-            set selection [ns_set create]
-
-            foreach value $values {
-                ns_set put $selection [lindex $value 0] [lindex $value 1]
-            }
+            set selection [ns_set create s {*}$values]
         }
     } else {
         db_with_handle -dbn $dbn db {
@@ -2318,8 +2303,8 @@ ad_proc -public db_0or1row {
     if { [info exists column_array] } {
         array set array_val [ns_set array $selection]
     } elseif { ![info exists column_set] } {
-        for { set i 0 } { $i < [ns_set size $selection] } { incr i } {
-            uplevel 1 [list set [ns_set key $selection $i] [ns_set value $selection $i]]
+        foreach {key value} [ns_set array $selection] {
+            uplevel 1 [list set $key $value]
         }
     }
 
@@ -3519,13 +3504,11 @@ ad_proc -private db_exec_lob_oracle {
         }
 
         if {$file_storage_p} {
-            set content [ns_set value $selection 0]
-            for {set i 0} {$i < [ns_set size $selection]} {incr i} {
-                set name [ns_set key $selection $i]
-                if {$name eq "content"} {
-                    set content [ns_set value $selection $i]
-                }
+            set content_index [ns_set find $selection "content"]
+            if {$content_index == -1} {
+                set content_index 0
             }
+            set content [ns_set value $selection $i]
 
             switch -- $original_type {
 
@@ -3598,13 +3581,7 @@ ad_proc -private db_exec_lob_postgresql {
         upvar bind bind
         if { [info exists bind] && [llength $bind] != 0 } {
             if { [llength $bind] == 1 } {
-                set bind_vars [list]
-                set len [ns_set size $bind]
-                for {set i 0} {$i < $len} {incr i} {
-                    lappend bind_vars [ns_set key $bind $i] \
-                        [ns_set value $bind $i]
-                }
-                set lob_sql [db_bind_var_substitution $sql $bind_vars]
+                set lob_sql [db_bind_var_substitution $sql [ns_set array $bind]]
             } else {
                 set lob_sql [db_bind_var_substitution $sql $bind]
             }
@@ -3618,12 +3595,11 @@ ad_proc -private db_exec_lob_postgresql {
 
         set selection [ns_db 1row $db $lob_sql]
         set content [ns_set value $selection 0]
-        for {set i 0} {$i < [ns_set size $selection]} {incr i} {
-            set name [ns_set key $selection $i]
-            if {$name eq "storage_type"} {
-                set storage_type [ns_set value $selection $i]
-            } elseif {$name eq "content"} {
-                set content [ns_set value $selection $i]
+
+        foreach var {storage_type content} {
+            set i [ns_set find $selection $var]
+            if {$i != -1} {
+                set $var [ns_set value $selection $i]
             }
         }
 
