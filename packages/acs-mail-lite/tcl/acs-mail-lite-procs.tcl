@@ -955,7 +955,7 @@ namespace eval acs_mail_lite {
         set extraheaders_list [list]
 
         if { $extraheaders ne "" } {
-            foreach {key value} [util_ns_set_to_list -set $extraheaders] {
+            foreach {key value} [ns_set array $extraheaders] {
                 lappend extraheaders_list [list $key $value]
             }
         }

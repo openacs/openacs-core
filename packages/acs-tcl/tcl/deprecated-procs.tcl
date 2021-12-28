@@ -3902,6 +3902,31 @@ ad_proc -deprecated util_list_to_ns_set { aList } {
     return [ns_set create s {*}$aList]
 }
 
+ad_proc -deprecated util_ns_set_to_list {
+    {-set:required}
+} {
+    Convert an ns_set into a list suitable for passing in to the
+    "array set" command (key value key value ...).
+
+    DEPRECATED: ns_set array is an equivalent oneliner
+
+    @see ns_set array
+    @param set The ns_set to convert
+
+    @return An array of equivalent keys and values as the ns_set specified.
+} {
+    # set result [list]
+
+    # for {set i 0} {$i < [ns_set size $set]} {incr i} {
+    #     lappend result [ns_set key $set $i]
+    #     lappend result [ns_set value $set $i]
+    # }
+
+    # return $result
+
+    return [ns_set array $set]
+}
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4

@@ -421,7 +421,7 @@ ad_proc -public template::util::list_of_ns_sets_to_multirow {
         ns_set put $row_set rownum $i
 
         upvar $level $var_name:$i row
-        array set row [util_ns_set_to_list -set $row_set]
+        array set row [ns_set array $row_set]
         if {$i == 1} {
             set columns [array names row]
         }

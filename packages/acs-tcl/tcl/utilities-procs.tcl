@@ -2839,25 +2839,6 @@ ad_proc -public util::max { args } {
     return $max
 }
 
-ad_proc -public util_ns_set_to_list {
-    {-set:required}
-} {
-    Convert an ns_set into a list suitable for passing in to the "array set" command (key value key value ...).
-
-    @param set The ns_set to convert
-
-    @return An array of equivalent keys and values as the ns_set specified.
-} {
-    set result [list]
-
-    for {set i 0} {$i < [ns_set size $set]} {incr i} {
-        lappend result [ns_set key $set $i]
-        lappend result [ns_set value $set $i]
-    }
-
-    return $result
-}
-
 ad_proc -public util_sets_equal_p { list1 list2 } {
     Tests whether each unique string in list1 occurs as many
     times in list1 as in list2 and vice versa (regardless of order).
@@ -2897,7 +2878,7 @@ ad_proc -public util_list_of_ns_sets_to_list_of_lists {
     set result [list]
 
     foreach ns_set $list_of_ns_sets {
-        lappend result [util_ns_set_to_list -set $ns_set]
+        lappend result [ns_set array $ns_set]
     }
 
     return $result

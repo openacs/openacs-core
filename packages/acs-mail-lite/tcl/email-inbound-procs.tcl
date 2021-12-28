@@ -2512,7 +2512,7 @@ ad_proc -private acs_mail_lite::check_bounces {} {
 
     # send notification to users with disabled email
     foreach notification $notifications {
-        set notification_list [util_ns_set_to_list -set $notification]
+        set notification_list [ns_set array $notification]
         array set user $notification_list
         set user_id $user(user_id)
         set href [export_vars -base [ad_url]/register/restore-bounce {user_id}]
