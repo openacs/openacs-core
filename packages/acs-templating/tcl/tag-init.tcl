@@ -812,13 +812,11 @@ template::tag trn { chunk params } {
     # now have the #...# notation for when there's no default value.
     # Will register the key in the message catalog if it doesn't exist.
 
-    set size [ns_set size $params]
-    for { set i 0 } { $i < $size } { incr i } {
-        set [ns_set key $params $i] [ns_set value $params $i]
+    foreach {key value} [ns_set array $params] {
         # substitute array variables
-        regsub {@([a-zA-Z0-9_]+)\.([a-zA-Z0-9_.]+)@} [set [ns_set key $params $i]] {${\1(\2)}} [ns_set key $params $i]
+        regsub {@([a-zA-Z0-9_]+)\.([a-zA-Z0-9_.]+)@} $value {${\1(\2)}} $key
         # substitute regular variables
-        regsub {@([a-zA-Z0-9_:]+)@} [set [ns_set key $params $i]] {${\1}} [ns_set key $params $i]
+        regsub {@([a-zA-Z0-9_:]+)@} $value {${\1}} $key
     }
 
     # And this needs to be executed at page execution time due to
@@ -880,14 +878,9 @@ template::tag switch { chunk params } {
 
     set sw ""
     set arg ""
-    set size [ns_set size $params]
 
     # get the switch flags and the switch var
-
-    for { set i 0 } { $i < $size } { incr i } {
-        set key [ns_set key $params $i]
-        set value [ns_set value $params $i]
-
+    foreach {key value} [ns_set array $params] {
         if {$key eq $value} {
             set arg $key
         } elseif {$key eq "flag"} {

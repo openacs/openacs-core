@@ -165,9 +165,9 @@ ad_proc -private db_bootstrap_set_db_type { errors } {
         set dbn_pools [list]
         set the_set [ns_configsection $config_path]
         if { $the_set ne "" } {
-            for {set i 0} {$i < [ns_set size $the_set]} {incr i} {
-                if { [string tolower [ns_set key $the_set $i]] ==  "availablepool" } {
-                    lappend dbn_pools [ns_set value $the_set $i]
+            foreach {key value} [ns_set array $the_set] {
+                if { [string tolower $key] == "availablepool" } {
+                    lappend dbn_pools $value
                 }
             }
         }
