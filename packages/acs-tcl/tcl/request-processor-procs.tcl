@@ -1875,6 +1875,7 @@ ad_proc -private ad_http_cache_control { } {
         [ns_set ifind $headers "cache-control"] > -1
         || [ns_set ifind $headers "expires"] > -1
         || [string tolower [ns_set iget $headers "pragma"]] eq "no-cache"
+    } {
         set modify_p 0
     } else {
         set modify_p 1
