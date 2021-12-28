@@ -1,17 +1,18 @@
-# tcl/acs-content-repository-procs.tcl patch
-#
-# a patch to the cr for handling the deleting revision's files
-# when the revision has been deleted from the database
-#
-# Walter McGinnis (wtem@olywa.net), 2001-09-23
-# based on original photo-album package code by Tom Baginski
-#
-# JCD 2002-12-96 This should be fixed since on oracle anyway, being in a
-# transaction does not mean that you get read level consistency across
-# queries.  End result is that someone can do an insert into the
-# delete list and the delete_files query will whack it and the file
-# will then never be deleted.  Oops.
+ad_library {
+    tcl/acs-content-repository-procs.tcl patch
 
+    a patch to the cr for handling the deleting revision's files
+    when the revision has been deleted from the database
+
+    Walter McGinnis (wtem@olywa.net), 2001-09-23
+    based on original photo-album package code by Tom Baginski
+
+    JCD 2002-12-96 This should be fixed since on oracle anyway, being in a
+    transaction does not mean that you get read level consistency across
+    queries.  End result is that someone can do an insert into the
+    delete list and the delete_files query will whack it and the file
+    will then never be deleted.  Oops.
+}
 
 ad_proc -private cr_delete_scheduled_files {} {
     Tries to delete all the files in cr_files_to_delete.  Makes sure
@@ -57,14 +58,11 @@ ad_proc -private cr_cleanup_orphaned_files {} {
     cr_delete_orphans [cr_get_file_creation_log]
 }
 
-
-##
-## Scan AOLserver mime types and insert them into cr_mime_types
-##
-## ben@openforce
-##
-
 ad_proc -private cr_scan_mime_types {} {
+    Scan AOLserver mime types and insert them into cr_mime_types
+
+    @author ben@openforce
+} {
     # Get the config file ns_set
     set mime_types [ns_configsection "ns/mimetypes"]
     if {$mime_types ne ""} {
@@ -86,16 +84,10 @@ ad_proc -private cr_scan_mime_types {} {
     }
 }
 
-##
-## Check for orphans in the content repository directory, and delete
-## such files if required.
-##
-## gustaf.neumann@wu-wien.ac.at
-##
-
-
-ad_proc -private cr_check_orphaned_files {-delete:boolean {-mtime ""}} {
-
+ad_proc -private cr_check_orphaned_files {
+    -delete:boolean
+    {-mtime ""}
+} {
     Check for orphaned files in the content repository directory, and
     delete such files if required.  Orphaned files might be created,
     when files are added to the content repository, but the transaction
@@ -108,6 +100,7 @@ ad_proc -private cr_check_orphaned_files {-delete:boolean {-mtime ""}} {
     @param delete delete the orphaned files
     @param mtime same semantics as mtime in the file command
 
+    @author gustaf.neumann@wu-wien.ac.at
 } {
     set cr_root [nsv_get CR_LOCATIONS CR_FILES]
     set root_length [string length $cr_root]
@@ -135,15 +128,13 @@ ad_proc -private cr_check_orphaned_files {-delete:boolean {-mtime ""}} {
 }
 
 ad_proc -private acs_cr_scheduled_release_exec {} {
-
-    This was handled by oracle, but since other dbs, such as PostgreSQL don't 
-    support job submission, the job scheduling has been moved to aolserver.
-    (OpenACS - DanW)
-
+    This was handled by oracle, but since other dbs, such as
+    PostgreSQL don't support job submission, the job scheduling has
+    been moved to aolserver.  (OpenACS - DanW)
 } {
-
     db_exec_plsql schedule_releases {}
 }
+
 #
 # Local variables:
 #    mode: tcl
