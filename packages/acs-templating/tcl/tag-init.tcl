@@ -715,7 +715,7 @@ template::tag content { params } {
     set revision_id [publish::get_main_revision_id]
 
     # Concatenate all other keys into the extra arguments list
-    set extra_args [publish::set_to_pairs $params]
+    set extra_args [ns_set array $params]
 
     # Add code to flush the cache
 
