@@ -183,11 +183,8 @@ ad_proc -private template::template_tag_include_command {src params} {
     append command " \[template::util::url_to_file \"$src\" \"\$__adp_stub\"\]"
     append command " \[list"
 
-    for { set i 0 } { $i < [ns_set size $params] } { incr i } {
-
-        set key [ns_set key $params $i]
+    foreach {key value} [ns_set array $params] {
         if {$key in {src ds}} { continue }
-        set value [ns_set value $params $i]
         append command [subst { $key "$value"}]
     }
     append command "\]"
