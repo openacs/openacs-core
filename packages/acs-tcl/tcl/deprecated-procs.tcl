@@ -3936,8 +3936,7 @@ ad_proc -deprecated ad_tcl_vars_to_ns_set {
     correspondingly: key is the name of the var, value is the value of
     the var. The caller is (obviously) responsible for freeing the set if need be.
 
-    DEPRECATED: modern ns_set idioms allow to replace this proc with a
-    better oneliner in every case.
+    DEPRECATED: modern ns_set idioms make this proc obsolete
 
     @see ns_set
 
@@ -3963,6 +3962,47 @@ ad_proc -deprecated ad_tcl_vars_to_ns_set {
     }
 
     foreach varname $args {
+        upvar $varname var
+        ns_set $command $set_id $varname $var
+    }
+    return $set_id
+}
+
+ad_proc -deprecated ad_tcl_vars_list_to_ns_set {
+    -set_id
+    -put:boolean
+    vars_list
+} {
+    Takes a Tcl list of variable names and <code>ns_set update</code>s values in an ns_set
+    correspondingly: key is the name of the var, value is the value of
+    the var. The caller is (obviously) responsible for freeing the set if need be.
+
+    DEPRECATED: modern ns_set idioms make this proc obsolete
+
+    @see ns_set
+
+    @param set_id If this switch is specified, it'll use this set instead of
+    creating a new one.
+
+    @param put If this boolean switch is specified, it'll use <code>ns_set put</code> instead
+    of <code>ns_set update</code> (update is default)
+
+    @param vars_list A Tcl list of variable names that will be transported into the ns_set.
+
+    @author Lars Pind (lars@pinds.com)
+
+} {
+    if { ![info exists set_id] } {
+        set set_id [ns_set create]
+    }
+
+    if { $put_p } {
+        set command put
+    } else {
+        set command update
+    }
+
+    foreach varname $vars_list {
         upvar $varname var
         ns_set $command $set_id $varname $var
     }
