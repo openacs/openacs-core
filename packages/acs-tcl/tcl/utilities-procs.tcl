@@ -199,23 +199,6 @@ ad_proc util::unzip {
     exec $unzipCmd {*}$extra_options [expr {$overwrite_p ? "-o" : "-n"}] $source -d $destination
 }
 
-ad_proc -private -deprecated proc_source_file_full_path {proc_name} {
-
-    This is a used function solely kept here for (unclear) backward
-    compatibility in acs-bootstrap-installer/tcl/00-proc-procs.tcl.
-    AFIKT, there is no need for this function in OpenACS, it should be
-    removed after the release of OpenACS 5.10.
-
-} {
-    if { ![nsv_exists proc_source_file $proc_name] } {
-        return ""
-    } else {
-        set tentative_path [nsv_get proc_source_file $proc_name]
-        regsub -all -- {/\./} $tentative_path {/} result
-        return $result
-    }
-}
-
 ad_proc util_report_library_entry {
     {extra_message ""}
 } {
@@ -2332,38 +2315,6 @@ ad_proc -public ad_tcl_list_list_to_ns_set {
     }
 
     return $set_id
-}
-
-ad_proc -public -deprecated ad_ns_set_keys {
-    -colon:boolean
-    {-exclude ""}
-    set_id
-} {
-    Returns the keys of an ns_set as a Tcl list, like <code>array names</code>.
-
-    This proc can be easily replaced by a Tcl dict
-    operation. Furthermore, newer versions of NaviServer have "ns_set
-    keys" and "ns_set values" operations.
-
-    @param colon If set, will prepend all the keys with a colon; useful for bind variables
-    @param exclude Optional Tcl list of key names to exclude
-
-    @author Lars Pind (lars@pinds.com)
-
-} {
-    set keys [list]
-    set size [ns_set size $set_id]
-    for { set i 0 } { $i < $size } { incr i } {
-        set key [ns_set key $set_id $i]
-        if {$key ni $exclude} {
-            if { $colon_p } {
-                lappend keys ":$key"
-            } else {
-                lappend keys $key
-            }
-        }
-    }
-    return $keys
 }
 
 ad_proc -public util_wrap_list {
