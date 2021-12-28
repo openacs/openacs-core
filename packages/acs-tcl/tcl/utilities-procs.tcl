@@ -2168,9 +2168,7 @@ ad_proc -public ad_ns_set_to_tcl_vars {
         return -code error "The optional switch duplicates must be either overwrite, ignore or fail"
     }
 
-    set size [ns_set size $set_id]
-    for { set i 0 } { $i < $size } { incr i } {
-        set varname [ns_set key $set_id $i]
+    foreach {varname value} [ns_set array $set_id] {
         upvar $level $varname var
         if { [info exists var] } {
             switch -- $duplicates {
@@ -2183,7 +2181,7 @@ ad_proc -public ad_ns_set_to_tcl_vars {
                 }
             }
         }
-        set var [ns_set value $set_id $i]
+        set var $value
     }
 }
 
