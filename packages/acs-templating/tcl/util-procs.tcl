@@ -62,25 +62,6 @@ ad_proc -public template::util::get_opts { argv } {
 # * Utility procedures for manipulating lists, arrays and ns_sets *
 # * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-ad_proc -public template::util::list_opts { {array_ref opts} } {
-    Converts an array to an option list
-
-    @param  array_ref  The name of the array in the calling frame containing
-    option-value pairs.  Defaults to "opts".
-
-    @return A list of option-value pairs suitable for appending to a command.
-} {
-
-    upvar $array_ref arr
-
-    set ret [list]
-    foreach {key value} [array get arr] {
-        lappend ret "-$key" $value
-    }
-
-    return $ret
-}
-
 ad_proc -public template::util::is_nil { ref } {
     Determines whether a variable both exists and is not an empty string.
 

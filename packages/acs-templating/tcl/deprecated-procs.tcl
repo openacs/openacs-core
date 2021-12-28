@@ -500,6 +500,29 @@ ad_proc -deprecated template::util::set_to_vars { set args } {
     }
 }
 
+ad_proc -deprecated template::util::list_opts { {array_ref opts} } {
+    Converts an array to an option list
+
+    DEPRECATED: this proc can be replaced by simple tcl idioms
+
+    @see plain tcl
+
+    @param  array_ref  The name of the array in the calling frame containing
+    option-value pairs.  Defaults to "opts".
+
+    @return A list of option-value pairs suitable for appending to a command.
+} {
+
+    upvar $array_ref arr
+
+    set ret [list]
+    foreach {key value} [array get arr] {
+        lappend ret "-$key" $value
+    }
+
+    return $ret
+}
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
