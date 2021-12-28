@@ -633,9 +633,7 @@ ad_proc -public export_vars {
         set the_form [ns_getform]
         # ns_getform will return the empty string outside a connection
         if { $the_form ne "" } {
-            for { set i 0 } { $i < [ns_set size $the_form] } { incr i } {
-                set varname [ns_set key $the_form $i]
-                set varvalue [ns_set value $the_form $i]
+            foreach {varname varvalue} [ns_set array $the_form] {
                 lappend noprocessing_vars [list $varname $varvalue]
             }
         }
