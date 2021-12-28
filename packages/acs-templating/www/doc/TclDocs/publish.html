@@ -874,7 +874,7 @@ Render an item either by looking it up in the temporary cache, or by using the a
 </tr>
 <tr><td>
 <blockquote>
-Concatenate a list of name-value pairs as returned by <kbd>set_to_pairs</kbd> into a list of { name=value} pairs
+Concatenate a list of name-value pairs as a list of { name=value} pairs
 </blockquote>
 <dl>
 
@@ -893,10 +893,6 @@ Concatenate a list of name-value pairs as returned by <kbd>set_to_pairs</kbd> in
   <dt><strong>Returns:</strong>
   <dd>
   An HTML string in format " name=value name=value ..."  
-
-  <dt><strong>See Also:</strong>
-  
-    <dd>proc - <a href="publish.html#publish::set_to_pairs">publish::set_to_pairs</a></br>
 </dl>
 </td>
 </tr>
@@ -1137,46 +1133,6 @@ Render a child/related item and return the resulting HTML, stripping off the hea
   <dt><strong>See Also:</strong>
   
     <dd>proc - <a href="publish.html#publish::handle_item">publish::handle_item</a></br><a href="publish.html#publish::merge_with_template">publish::merge_with_template</a></br>
-</dl>
-</td>
-</tr>
-</table>
-
-<p>
-<table width="100%"><tr><td width="100%" bgcolor="#CCCCFF">
-  <a name="publish::set_to_pairs"><font size="+1" weight=bold>publish::set_to_pairs</font></a>
-  
-</td>
-</tr>
-<tr><td>
-<blockquote>
-Convert an ns_set into a list of name-value pairs, in form {name value name value ...}
-</blockquote>
-<dl>
-
-  <strong>Parameters:</strong>
-  <table>
-  
-  <tr>
-  <td align="right"><code>params</code>
-  <font color=red>*</font></td>
-       <td align="left">
-    
-  The ns_set id</td></tr>
-  
-  <tr>
-  <td align="right"><code>exclusion_list</code>
-  <font color=red>*</font></td>
-       <td align="left">
-    
-  {} A list of keys to be ignored</td></tr>
-  
-   </table>
-
-  <dt><strong>Returns:</strong>
-  <dd>
-  A list of name-value pairs representing the data in the ns_set
-
 </dl>
 </td>
 </tr>

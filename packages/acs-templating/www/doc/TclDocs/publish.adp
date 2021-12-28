@@ -475,8 +475,7 @@ handler, in format {name value name value ...}</td>
 </table>
 <table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name="publish::html_args" id="publish::html_args"><font size="+1" weight="bold">publish::html_args</font></a></td></tr><tr><td>
-<blockquote>Concatenate a list of name-value pairs as returned by
-<kbd>set_to_pairs</kbd> into a list of { name=value}
+<blockquote>Concatenate a list of name-value pairs as a list of { name=value}
 pairs</blockquote><dl>
 <dd>
 <strong>Parameters:</strong><table><tr>
@@ -485,8 +484,7 @@ pairs</blockquote><dl>
 </td><td align="left">The list of name-value pairs</td>
 </tr></table>
 </dd><dt><strong>Returns:</strong></dt><dd>An HTML string in format " name=value name=value
-..."</dd><dt><strong>See Also:</strong></dt><dd>proc - <a href="publish">publish::set_to_pairs</a><br>
-</dd>
+..."</dd>
 </dl>
 </td></tr>
 </table>
@@ -624,27 +622,6 @@ order to prevent infinite recursion.</td>
 </table>
 </dd><dt><strong>Returns:</strong></dt><dd>The rendered HTML for the child item</dd><dt><strong>See Also:</strong></dt><dd>proc - <a href="publish">publish::handle_item</a><br><a href="publish">publish::merge_with_template</a><br>
 </dd>
-</dl>
-</td></tr>
-</table>
-<table width="100%">
-<tr><td width="100%" bgcolor="#CCCCFF"><a name="publish::set_to_pairs" id="publish::set_to_pairs"><font size="+1" weight="bold">publish::set_to_pairs</font></a></td></tr><tr><td>
-<blockquote>Convert an ns_set into a list of name-value pairs, in
-form {name value name value ...}</blockquote><dl>
-<dd>
-<strong>Parameters:</strong><table>
-<tr>
-<td align="right">
-<code>params</code><font color="red">*</font>
-</td><td align="left">The ns_set id</td>
-</tr><tr>
-<td align="right">
-<code>exclusion_list</code><font color="red">*</font>
-</td><td align="left">{} A list of keys to be ignored</td>
-</tr>
-</table>
-</dd><dt><strong>Returns:</strong></dt><dd>A list of name-value pairs representing the data in the
-ns_set</dd>
 </dl>
 </td></tr>
 </table>

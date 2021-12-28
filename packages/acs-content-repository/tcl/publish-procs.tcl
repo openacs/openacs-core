@@ -305,15 +305,12 @@ ad_proc -private publish::html_args { argv } {
 
   @private html_args
 
-  Concatenate a list of name-value pairs as returned by
-  <tt>set_to_pairs</tt> into a list of "name=value" pairs
+  Concatenate a list of name-value pairs as a list of "name=value"
+  pairs.
 
   @param argv   The list of name-value pairs
 
   @return An HTML string in format "name=value name=value ..."
-
-  @see publish::set_to_pairs
-
 } {
   set extra_html ""
   if { ![template::util::is_nil argv] } {
@@ -829,32 +826,6 @@ ad_proc -public publish::render_subitem {
 # The content tags
 
 
-ad_proc -private publish::set_to_pairs { params {exclusion_list ""} } {
-
-  @private set_to_pairs
-
-  Convert an ns_set into a list of name-value pairs, in form
-  {name value name value ...}
-
-  @param params   The ns_set id
-  @param exclusion_list {}
-     A list of keys to be ignored
-
-  @return A list of name-value pairs representing the data in the ns_set
-
-} {
-
-  set extra_args [list]
-  foreach {key value} [ns_set array $params] {
-    if { $key ni $exclusion_list } {
-      lappend extra_args $key $value
-    }
-  }
-
-  return $extra_args
-}
-
-
 ad_proc -private publish::process_tag { relation_type params } {
 
   @private process_tag
@@ -877,8 +848,12 @@ ad_proc -private publish::process_tag { relation_type params } {
   set parent_item_id [ns_set iget $params parent_item_id]
 
   # Concatenate all other keys into the extra arguments list
-  set extra_args [publish::set_to_pairs $params \
-    {tag index embed parent_item_id}]
+  set extra_args [list]
+  foreach {key value} [ns_set array $params] {
+      if {$key ni {tag index embed parent_item_id}} {
+          lappend extra_args $key $value
+      }
+  }
 
   # Render the item, append it to the page
   # set item_id [publish::get_main_item_id]
