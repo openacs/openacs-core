@@ -1857,8 +1857,9 @@ ad_proc util::split_host {hostspec hostnameVar portVar} {
 }
 
 ad_proc util::split_location {location protoVar hostnameVar portVar} {
-    Split the provided location into "proto", "hostname" and
-    "port".  The results are returned to the provided output
+
+    Split the provided location into "proto", "hostname" and "port".
+    The results are returned on success to the provided output
     variables.  The function supports IP-literal notation according to
     RFC 3986 section 3.2.2.
 
@@ -1868,18 +1869,24 @@ ad_proc util::split_location {location protoVar hostnameVar portVar} {
 } {
     upvar $protoVar proto $hostnameVar hostname $portVar port
 
-    set urlInfo [ns_parseurl $location]
-    if {[dict exists $urlInfo proto] && [dict exists $urlInfo host]} {
-        set proto [dict get $urlInfo proto]
-        set hostname [dict get $urlInfo host]
-        if {[dict exists $urlInfo port]} {
-            set port [dict get $urlInfo port]
-        } else {
-            set port [dict get {http 80 https 443} $proto]
-        }
-        set success 1
-    } else {
+    try {
+        set urlInfo [ns_parseurl $location]
+    } on error {errorMsg} {
+        ns_log warning "cannot parse URL '$location': $errorMsg"
         set success 0
+    } on ok {result} {
+        if {[dict exists $urlInfo proto] && [dict exists $urlInfo host]} {
+            set proto [dict get $urlInfo proto]
+            set hostname [dict get $urlInfo host]
+            if {[dict exists $urlInfo port]} {
+                set port [dict get $urlInfo port]
+            } else {
+                set port [dict get {http 80 https 443} $proto]
+            }
+            set success 1
+        } else {
+            set success 0
+        }
     }
     return $success
 }
