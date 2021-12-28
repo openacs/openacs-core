@@ -289,6 +289,43 @@ aa_register_case -cats {
     }
 }
 
+aa_register_case -cats {
+    api
+    production_safe
+} -procs {
+    util::split_location
+    util::join_location
+} util__split_and_join_location {
+    Test util::split_location and util::join_location.
+} {
+    foreach {location expected_proto expected_hostname expected_port expected_success} {
+        aaa "" "" "" 0
+        http://miao.bau.com http miao.bau.com 80 1
+        aaa.bbb.ccc "" "" "" 0
+        https://website.at.domain https website.at.domain 443 1
+        http://another.website.com:666 http another.website.com 666 1
+        ftp:/ciao.broken.it "" "" "" 0
+        aaa.bbb.ccc/path "" "" "" 0
+        https://website.at.domain/afile https website.at.domain 443 1
+        http://another.website.com:666/andsomecontent http another.website.com 666 1
+    } {
+        set success [util::split_location $location proto hostname port]
+        set expected_success_pretty [expr {$expected_success ? "succeeds" : "fails"}]
+        aa_equals "Parsing '$location' $expected_success_pretty" $expected_success $success
+
+        if {$expected_success} {
+            aa_equals "Protocol for '$location' is '$expected_proto'" $expected_proto $proto
+            aa_equals "Hostname for '$location' is '$expected_hostname'" $expected_hostname $hostname
+            aa_equals "Port for '$location' is '$expected_port'" $expected_port $port
+
+            aa_true "Joining back the parsing of '$location' returns the URL itself" \
+                [regexp \
+                     {^[util::join_location -proto $proto -hostname $hostname -port $port].*$} \
+                     $location]
+        }
+    }
+}
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
