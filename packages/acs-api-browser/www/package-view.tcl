@@ -61,7 +61,11 @@ set dimensional_list {
 set title "$pretty_name $version_name"
 set context [list $title]
 set dimensional_slider [ad_dimensional $dimensional_list "" \
-                            [ad_tcl_vars_to_ns_set version_id kind public_p about_package_key]]
+                            [ns_set create s \
+                                 version_id $version_id \
+                                 kind $kind \
+                                 public_p $public_p \
+                                 about_package_key $about_package_key]]
 
 set doc_pages [lindex [glob -nocomplain "[acs_package_root_dir $package_key]/www/doc/index.*"] 0]
 
