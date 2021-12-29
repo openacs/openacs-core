@@ -603,8 +603,7 @@ template::tag formgroup-widget { chunk params } {
     set row [template::get_attribute formgroup-widget $params row]
     # get any additional HTML attributes specified by the designer
     set tag_attributes [ns_set array $params]
-    dict unset tag_attributes id
-    dict unset tag_attributes row
+    dict unset tag_attributes id row
 
     # generate a list of options and option labels as a data source
 
@@ -645,9 +644,7 @@ template::tag formtemplate { chunk params } {
 
     # get any additional HTML attributes specified by the designer
     set tag_attributes [ns_set array $params]
-    foreach key {id style method title cols headers} {
-        dict unset tag_attributes $key
-    }
+    dict unset tag_attributes id style method title cols headers
 
     template::adp_append_string \
         [subst -nocommands {[template::form render $id { $tag_attributes } ]}]
