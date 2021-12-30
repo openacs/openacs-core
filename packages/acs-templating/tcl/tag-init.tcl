@@ -510,8 +510,9 @@ template::tag formwidget { params } {
     set id [template::get_attribute formwidget $params id]
 
     # get any additional HTML attributes specified by the designer
-    set tag_attributes [ns_set array $params]
-    dict unset tag_attributes id
+    set tag_attributes [dict remove \
+                            [ns_set array $params] \
+                            id]
 
     template::adp_append_string \
         "\[template::element render \${form:id} [list $id] { $tag_attributes } \]"
@@ -525,8 +526,9 @@ template::tag formhelp { params } {
     set id [template::get_attribute formhelp $params id]
 
     # get any additional HTML attributes specified by the designer
-    set tag_attributes [ns_set array $params]
-    dict unset tag_attributes id
+    set tag_attributes [dict remove \
+                            [ns_set array $params] \
+                            id]
 
     template::adp_append_string \
         "\[template::element render_help \${form:id} [list $id] { $tag_attributes } \]"
@@ -571,8 +573,9 @@ template::tag formgroup { chunk params } {
     set id [template::get_attribute formgroup $params id]
 
     # get any additional HTML attributes specified by the designer
-    set tag_attributes [ns_set array $params]
-    dict unset tag_attributes id
+    set tag_attributes [dict remove \
+                            [ns_set array $params] \
+                            id]
 
     # generate a list of options and option labels as a data source
 
@@ -602,10 +605,9 @@ template::tag formgroup-widget { chunk params } {
 
     set row [template::get_attribute formgroup-widget $params row]
     # get any additional HTML attributes specified by the designer
-    set tag_attributes [ns_set array $params]
-    foreach a {id row} {
-        dict unset tag_attributes $a
-    }
+    set tag_attributes [dict remove \
+                            [ns_set array $params] \
+                            id row]
 
     # generate a list of options and option labels as a data source
 
@@ -645,10 +647,9 @@ template::tag formtemplate { chunk params } {
     }
 
     # get any additional HTML attributes specified by the designer
-    set tag_attributes [ns_set array $params]
-    foreach a {id style method title cols headers} {
-        dict unset tag_attributes $a
-    }
+    set tag_attributes [dict remove \
+                            [ns_set array $params] \
+                            id style method title cols headers]
 
     template::adp_append_string \
         [subst -nocommands {[template::form render $id { $tag_attributes } ]}]
