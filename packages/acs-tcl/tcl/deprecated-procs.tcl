@@ -4077,6 +4077,54 @@ ad_proc -public -deprecated ad_ns_set_keys {
     return $keys
 }
 
+
+#
+# The following proc is based on undefined function 
+#
+#
+# -------------------------------------------------------
+# missing function "ad_serve_html_page"
+#ad_proc -private rp_handle_html_request {} {
+#
+#    Handles a request for an HTML file.
+#
+#} {
+#    ad_serve_html_page [ad_conn file]
+#}
+
+# -------------------------------------------------------
+# missing function "ad_country_name_from_country_code"
+#
+# ad_proc ad_pretty_mailing_address_from_args {
+#     line1
+#     line2
+#     city
+#     state
+#     postal_code
+#     country_code
+# } {
+#     Returns a prettily formatted address with country name, given
+#     an address.
+#
+#     @author Unknown
+#     @author Roberto Mello
+# } {
+#     set lines [list]
+#     if { $line2 eq "" } {
+#         lappend lines $line1
+#     } elseif { $line1 eq "" } {
+#         lappend lines $line2
+#     } else {
+#         lappend lines $line1
+#         lappend lines $line2
+#     }
+#     lappend lines "$city, $state $postal_code"
+#     if { $country_code ne "" && $country_code ne "us" } {
+#         lappend lines [ad_country_name_from_country_code $country_code]
+#     }
+#     return [join $lines "\n"]
+# }
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4

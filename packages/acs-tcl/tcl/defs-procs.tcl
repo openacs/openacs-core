@@ -350,37 +350,6 @@ ad_proc ad_return_if_another_copy_is_running {
     return 1
 }
 
-ad_proc ad_pretty_mailing_address_from_args {
-    line1
-    line2
-    city
-    state
-    postal_code
-    country_code
-} {
-    Returns a prettily formatted address with country name, given
-    an address.
-
-    @author Unknown
-    @author Roberto Mello
-} {
-    set lines [list]
-    if { $line2 eq "" } {
-        lappend lines $line1
-    } elseif { $line1 eq "" } {
-        lappend lines $line2
-    } else {
-        lappend lines $line1
-        lappend lines $line2
-    }
-    lappend lines "$city, $state $postal_code"
-    if { $country_code ne "" && $country_code ne "us" } {
-        lappend lines [ad_country_name_from_country_code $country_code]
-    }
-    return [join $lines "\n"]
-}
-
-
 # for pages that have optional decoration
 
 ad_proc ad_decorate_top {

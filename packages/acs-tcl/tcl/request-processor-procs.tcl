@@ -1804,14 +1804,6 @@ ad_proc -public rp_handle_tcl_request {} {
     source [ad_conn file]
 }
 
-ad_proc -private rp_handle_html_request {} {
-
-    Handles a request for an HTML file.
-
-} {
-    ad_serve_html_page [ad_conn file]
-}
-
 if { [apm_first_time_loading_p] } {
     # Initialize nsv_sets
 
