@@ -374,7 +374,7 @@ namespace eval ::acs {
 
         :public method flush_pattern {{-partition_key:required} pattern} {
             #
-            # flush just in the determined partition
+            # flush just in all partitions
             #
             :flush_pattern_in_all_partitions $pattern
         }
@@ -466,9 +466,9 @@ namespace eval ::acs {
                     return ""
                 }
                 dict set ${:prefix} $key $value
-                #ns_log notice "### [list  dict set ${:prefix} $key $value]"
+                #ns_log notice "### [list dict set ${:prefix} $key $value]"
             }
-            #ns_log notice "### will return [list  dict get ${:prefix} $key]"
+            #ns_log notice "### will return [list dict get ${:prefix} $key]"
             return [dict get [set ${:prefix}] $key]
         }
 
