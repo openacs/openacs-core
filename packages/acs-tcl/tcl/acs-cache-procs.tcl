@@ -58,19 +58,7 @@ namespace eval ::acs {
             if {[::nsf::is integer $specifiedSize]} {
                 set size $specifiedSize
             } else {
-                if {[acs::icanuse ns_baseunit]} {
-                    set size [ns_baseunit -size $specifiedSize]
-                } else {
-                    #
-                    # Rough approximation for older versions of NaviServer.
-                    #
-                    if {[regexp {^(\d+)([mk])b} [string tolower $specifiedSize] . amount unit]} {
-                        set multipliers {k 1024 m 1048576}
-                        set size [expr {[dict get $multipliers $unit] * $amount}]
-                    } else {
-                        error "invalid size specification '$specifiedSize'"
-                    }
-                }
+                set size [ns_baseunit -size $specifiedSize]
             }
             return $size
         }

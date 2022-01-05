@@ -263,11 +263,23 @@ if {[info commands ::ns_baseunit] eq ""} {
         Partial backward compatibility function of
            "ns_baseunit ?-size size? ?-time time?"
         Only the time unit part is partially implemented,
-        therefore, icanuse is not set for that feature.
+        therefore, icanuse is not set for that feature,
+        since one should be able to trust blindly on this.
 
     } {
         if {[info exists size]} {
-            error "partial implementation of ns_baseunit does not support -size option"
+            #
+            # Rough approximation for AOLserver and older versions of NaviServer.
+            #
+            if {![string is integer -strict $size]} {
+                if {[regexp {^(\d+)([mk])b} [string tolower $specifiedSize] . amount unit]} {
+                    set multipliers {k 1024 m 1048576}
+                    set size [expr {[dict get $multipliers $unit] * $amount}]
+                } else {
+                    error "invalid size specification '$size'"
+                }
+            }
+            return $size
         }
         if {![string is integer -strict $time]} {
             if {[regexp {^(\d+)d$} $time _ t]} {
