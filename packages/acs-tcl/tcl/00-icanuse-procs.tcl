@@ -256,6 +256,34 @@ if {[namespace which ::ns_parsehostport] eq ""} {
     }
 }
 
+if {[info commands ::ns_baseunit] eq ""} {
+
+    ad_proc ns_baseunit {-size -time} {
+
+        Partial backward compatibility function of
+           "ns_baseunit ?-size size? ?-time time?"
+        Only the time unit part is partially implemented,
+        therefore, icanuse is not set for that feature.
+
+    } {
+        if {[info exists size]} {
+            error "partial implementation of ns_baseunit does not support -size option"
+        }
+        if {![string is integer -strict $time]} {
+            if {[regexp {^(\d+)d$} $time _ t]} {
+                set time [expr {60*60*24*$t}]
+            } elseif {[regexp {^(\d+)h$} $time _ t]} {
+                set time [expr {60*60*$t}]
+            } elseif {[regexp {^(\d+)m$} $time _ t]} {
+                set time [expr {60*$t}]
+            } else {
+                error "rp_serve_resource_file: invalid time '$time' specified"
+            }
+        }
+        return $time
+    }
+}
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
