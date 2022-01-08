@@ -431,7 +431,8 @@ namespace eval ::acs {
 
         :public method eval {
             {-key:required}
-            {-no_empty:switch false}
+            {-no_cache}
+            {-from_cache_indicator}
             cmd
         } {
             #
@@ -441,23 +442,37 @@ namespace eval ::acs {
             # @param key key for caching, should start with package-key
             #            and a dot to avoid name clashes
             # @param cmd command to be executed.
-            # @return    return the last value set (don't use "return").
+            # @param no_cache list of returned values that should not be cached
+            # @param from_cache_indicator variable name to indicate whether
+            #        the returned value was from cache or not
+            #
+            # @return return the last value set (don't use "return").
             #
             #set cache_key ${:prefix}$key
             #ns_log notice "### exists $cache_key => [dict exists ${:prefix} $key]"
+            if {[info exists from_cache_indicator]} {
+                :upvar $from_cache_indicator from_cache
+            }
 
             if {![info exists ${:prefix}] || ![dict exists [set ${:prefix}] $key]} {
                 #ns_log notice "### call cmd <$cmd>"
+                set from_cache 0
                 set value [:uplevel $cmd]
-                #ns_log notice "### cmd returns <$value> no_empty $no_empty "
-                if {$no_empty && $value eq ""} {
-                    return ""
+                if {[info exists no_cache] && $value in $no_cache} {
+                    #ns_log notice "### cache eval $key returns <$value> without caching"
+                    return $value
                 }
+                #if {$value eq "0"} {
+                #    ns_log notice "### cache eval $key returns <$value> with caching"
+                #}
                 dict set ${:prefix} $key $value
                 #ns_log notice "### [list dict set ${:prefix} $key $value]"
+            } else {
+                set from_cache 1
+                set value [dict get [set ${:prefix}] $key]
             }
             #ns_log notice "### will return [list dict get ${:prefix} $key]"
-            return [dict get [set ${:prefix}] $key]
+            return $value
         }
 
         :public method flush {

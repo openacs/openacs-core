@@ -515,7 +515,7 @@ if {[ns_config "ns/parameters" cachingmode "per-node"] eq "none"} {
         # (without this we see on some sites > 100 locks on this nsv
         # per request).
         #
-        set dict [acs::per_request_cache eval -no_empty -key acs-tcl.ad_param-$key {
+        set dict [acs::per_request_cache eval -no_cache "" -key acs-tcl.ad_param-$key {
             if {[nsv_get ad_param $key result]} {
                 #ns_log notice "ad_parameter_cache $key $parameter_name not cached"
                 set result
