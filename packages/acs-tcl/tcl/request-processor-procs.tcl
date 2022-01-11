@@ -629,10 +629,14 @@ ad_proc -private rp_filter { why } {
     #
     # Check, if we are supposed to upgrade insecure requests. This
     # should be after the canonical check to avoid multiple redirects.
+    # The W3C spec (https://www.w3.org/TR/upgrade-insecure-requests/)
+    # requires explicitly the value of "1". By testing this, we
+    # mitigate atttacks against this header field without losing
+    # performance.
     #
     set upgrade_insecure_requests_p [ns_set iget [ns_conn headers] Upgrade-Insecure-Requests]
     if {$upgrade_insecure_requests_p ne ""
-        && $upgrade_insecure_requests_p
+        && $upgrade_insecure_requests_p eq "1"
         && [security::https_available_p]
         && ![security::secure_conn_p]
     } {
