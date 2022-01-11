@@ -432,6 +432,7 @@ namespace eval ::acs {
         :public method eval {
             {-key:required}
             {-no_cache}
+            {-no_empty:switch false}
             {-from_cache_indicator}
             cmd
         } {
@@ -442,6 +443,9 @@ namespace eval ::acs {
             # @param key key for caching, should start with package-key
             #            and a dot to avoid name clashes
             # @param cmd command to be executed.
+            # @param no_empty don't cache empty values. This flag is
+            #        deprecated, one should use the no_cache flag
+            #        instead.
             # @param no_cache list of returned values that should not be cached
             # @param from_cache_indicator variable name to indicate whether
             #        the returned value was from cache or not
@@ -458,6 +462,10 @@ namespace eval ::acs {
                 #ns_log notice "### call cmd <$cmd>"
                 set from_cache 0
                 set value [:uplevel $cmd]
+                if {$no_empty} {
+                    ad_log warning "no_empty flag is deprecated and will be dropped in the future."
+                    lappend no_cache ""
+                }
                 if {[info exists no_cache] && $value in $no_cache} {
                     #ns_log notice "### cache eval $key returns <$value> without caching"
                     return $value
