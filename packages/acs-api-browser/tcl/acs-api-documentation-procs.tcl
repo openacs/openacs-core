@@ -1519,6 +1519,11 @@ namespace eval ::apidoc {
         set proc_namespace ""
         regexp {^(::)?(.*)::[^:]+$} $proc_name match colons proc_namespace
         return [tclcode_to_html -scope $scope -proc_namespace $proc_namespace [api_get_body $proc_name]]
+        #package req nx::pp
+        #append result \
+        #    [tclcode_to_html -scope $scope -proc_namespace $proc_namespace [api_get_body $proc_name]] \
+        #    <br> \
+        #    [nx::pp render [api_get_body $proc_name]]
     }
 
     ad_proc -private length_var {data} {
@@ -1812,6 +1817,10 @@ namespace eval ::apidoc {
                     append html "&nbsp;"
                 }
 
+                "\t" {
+                    append html "&nbsp;&nbsp;&nbsp;&nbsp;"
+                }
+
                 default {
                     if {$proc_ok} {
                         set proc_ok 0
@@ -1932,8 +1941,11 @@ namespace eval ::apidoc {
                                     [pretty_token proc $proc_name] </a>
                             }
                         } else {
+                            #if {$procl > 2 && [string match ad_* $proc_name]} {
+                            #    ns_log notice "TCLCODE: giving up on '$proc_name' ($procl) [string range $data $i $i+20]"
+                            #}
                             append html $proc_name
-                            set proc_ok 1
+                            #set proc_ok 1
                         }
                         incr i $procl
 
@@ -2054,13 +2066,13 @@ namespace eval ::apidoc {
 # procs for linking to libraries, pages, etc, should go here too.
 #
 
-ad_proc api_proc_url { proc } {
+ad_proc api_proc_url { {-source:boolean 1} proc } {
     @return the URL of the page that documents the given proc.
 
     @author Lars Pind (lars@pinds.com)
     @creation-date 14 July 2000
 } {
-    return "/api-doc/proc-view?proc=[ns_urlencode $proc]&source_p=1"
+    return "/api-doc/proc-view?proc=[ns_urlencode $proc]&source_p=$source_p"
 }
 
 ad_proc -private api_proc_doc_url {-proc_name -source_p -version_id} {
@@ -2079,18 +2091,15 @@ ad_proc -private api_proc_doc_url {-proc_name -source_p -version_id} {
     return $url
 }
 
-ad_proc -deprecated api_proc_link { proc } {
+ad_proc api_proc_link { {-source:boolean 1} proc } {
     @return full HTML link to the documentation for the proc.
-
-    Deprecated as it is broken because api_proc_url accepts (now?)
-    different arguments
 
     @see api_proc_url
 
     @author Lars Pind (lars@pinds.com)
     @creation-date 14 July 2000
 } {
-    return "<a href=\"[ns_quotehtml [api_proc_url -proc_name $proc -source_p 1]]\">$proc</a>"
+    return "<a href=\"[ns_quotehtml [api_proc_url -source=$source_p $proc]]\">$proc</a>"
 }
 
 ad_proc -private api_test_case_url {testcase_pair} {
