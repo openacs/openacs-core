@@ -164,7 +164,9 @@ aa_register_case -cats {smoke production_safe} -error_level warning -procs {
     # Create the typo dictionary with values from the common typos file
     set f [open $typo_list "r"]
     while {[gets $f line] >= 0} {
-        dict append typos {*}[string tolower $line]
+        if {[regexp {^(.*)[\|][\|](.*)$} [string tolower $line] . word replacement]} {
+            dict set typos $word $replacement
+        }
     }
     close $f
     aa_log "Created typo dictionary using data from $typo_list ([dict size $typos] typos loaded)"
