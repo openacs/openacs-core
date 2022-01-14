@@ -28,6 +28,7 @@ aa_register_case \
         content::item::new
         content::item::rename
         content::item::update
+        content::item::content_is_null
         content::revision::is_latest
         content::revision::is_live
         content::type::attribute::new
