@@ -979,7 +979,7 @@ ad_proc -public ::content::item::content_is_null { revision_id } {
   @return 1 if the content is null, 0 otherwise
 
 } {
-    set content_test [db_string cin_get_content ""]
+    set content_test [db_string cin_get_content {} -default ""]
 
     return [expr {$content_test eq ""}]
 }

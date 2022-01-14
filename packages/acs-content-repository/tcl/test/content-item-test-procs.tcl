@@ -159,6 +159,51 @@ aa_register_case \
             aa_equals "Items $index_item_id is index in a folder $first_folder_id" \
                 $index_item_id [content::folder::get_index_page -folder_id $first_folder_id]
 
+            aa_false "Item $index_item_id is not null" \
+                [content::item::content_is_null [db_string rev {
+                    select live_revision from cr_items
+                    where item_id = :index_item_id
+                }]]
+
+            #########################################################
+            # create an empty cr_item
+            #########################################################
+
+            set empty_item_id [content::item::new \
+                                   -name emptyboi \
+                                   -parent_id $first_folder_id \
+                                   -is_live "t"]
+
+            aa_false "Empty item $empty_item_id has no revision" \
+                [db_0or1row rev {
+                    select revision_id from cr_revisions
+                    where item_id = :empty_item_id
+                }]
+
+            set empty_item_id [content::item::new \
+                                   -name emptyboi2 \
+                                   -parent_id $first_folder_id \
+                                   -is_live "t" \
+                                   -text "I will be empty"]
+
+            aa_false "Empty item $empty_item_id is not null before emptying" \
+                [content::item::content_is_null [db_string rev {
+                    select live_revision from cr_items
+                    where item_id = :empty_item_id
+                }]]
+
+            db_dml empty_the_boi {
+                update cr_revisions set
+                content = null
+                where item_id = :empty_item_id
+            }
+
+            aa_true "Empty item $empty_item_id is now null" \
+                [content::item::content_is_null [db_string rev {
+                    select live_revision from cr_items
+                    where item_id = :empty_item_id
+                }]]
+
             #########################################################
             # create a cr_item with evil string
             #########################################################
@@ -329,6 +374,12 @@ aa_register_case \
                                  -title $tmp_item_name \
                                  -parent_id $first_folder_id \
                                  -tmp_filename $::acs::rootdir/packages/acs-content-repository/tcl/test/test.html]
+
+            aa_true "Item $tmp_item_id counts as null" \
+                [content::item::content_is_null [db_string rev {
+                    select live_revision from cr_items
+                    where item_id = :tmp_item_id
+                }]]
 
             aa_true "Tmp_filename added cr_item exists" \
                 {[content::item::get_id \
