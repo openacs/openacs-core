@@ -1,7 +1,7 @@
 ad_page_contract {
     Let's the user change his/her password.  Asks
     for old password, new password, and confirmation.
-    
+
     @cvs-id $Id$
 } {
     {user_id:naturalnum,notnull {[ad_conn untrusted_user_id]}}
@@ -84,23 +84,23 @@ ad_form -extend -name update -form {
         {html {size 20}}
     }
 } -on_request {
-    
+
 } -validate {
     {password_1
         { [string equal $password_1 $password_2] }
         { Passwords don't match }
     }
 } -on_submit {
-    
+
     if { $old_password ne "" } {
         set password_old $old_password
     }
-    
+
     array set result [auth::password::change \
                           -user_id $user_id \
                           -old_password $password_old \
                           -new_password $password_1]
-    
+
     switch -- $result(password_status) {
         ok {
             # Continue
@@ -123,10 +123,10 @@ ad_form -extend -name update -form {
             break
         }
     }
-    
+
     # If old_password was supplied, handle authentication and log the user in
     if { $old_password ne "" } {
-        
+
         # We use full-scale auth::authenticate here, in order to be sure we also get account-status checked
         # Hm. What if there's a problem with timing, so the password update doesn't take effect immediately?
         array set auth_info [auth::authenticate \
@@ -134,7 +134,7 @@ ad_form -extend -name update -form {
                 -authority_id $user(authority_id) \
                 -username $user(username) \
                 -password $password_1]
-        
+
         # Handle authentication problems
         switch -- $auth_info(auth_status) {
             ok {
@@ -146,7 +146,7 @@ ad_form -extend -name update -form {
                 break
             }
         }
-        
+
         if { [info exists auth_info(account_url)] && $auth_info(account_url) ne "" } {
             ad_returnredirect $auth_info(account_url)
             ad_script_abort
@@ -169,7 +169,7 @@ ad_form -extend -name update -form {
     if {[ad_conn account_status] eq "closed"} {
         auth::verify_account_status
     }
-    
+
 } -after_submit {
     if { $return_url eq "" } {
         set return_url [ad_pvt_home]
