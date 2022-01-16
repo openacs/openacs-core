@@ -597,7 +597,7 @@ ad_proc -public template::list::prepare {
         }]
 
         # Generate a paginator name which includes the page group we're in
-        # and all the filter values, so the paginator cahing works properly
+        # and all the filter values, so the paginator caching works properly
         # Antonio Pisano 2015-11-17: it is important that the paginator_name starts with the list's
         # name, because we count on this in template::paginator::create to retrieve the count_query
         set paginator_name $list_properties(name)

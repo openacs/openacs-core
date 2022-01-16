@@ -978,7 +978,7 @@ ad_proc template::get_body_event_handlers {
 } {
 
     Get body event handlers specified with template::add_body_handler.
-    The proc clears the golbal variable ::template::body_handlers
+    The proc clears the global variable ::template::body_handlers
     after having processed its content.
 
 } {
