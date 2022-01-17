@@ -2504,8 +2504,14 @@ ad_proc -private security::configured_locations {
         # but not for receiving.
         #
         if {[dict get $d port] != 0} {
+            #
+            # Add configured locations (deprecated, since this
+            # conflicts with the concept of virutal servers).
+            #
             set location [dict get $d location]
-            if {$location ni $locations} {lappend locations $location}
+            if {$location ne "" && $location ni $locations} {
+                lappend locations $location
+            }
 
             set hosts [dict get $d host]
             if {[acs::icanuse "ns_set values"]} {
@@ -2516,13 +2522,33 @@ ad_proc -private security::configured_locations {
                 }
             }
             foreach host $hosts {
-                set location [dict get $d proto]://$host
+                set proto [dict get $d proto]
+                set port [dict get $d port]
+                #
+                # Add always a variant with the omitted default port.
+                #
+                if {($proto eq "https" && $port eq "443")
+                    || ($proto eq "http" && $port eq "80")
+                } {
+                    set location ${proto}://$host
+                    if {$location ni $locations} {
+                        lappend locations $location
+                    }
+                }
+                #
+                # Add a variant with the omitted port to
+                # portless_locations.
+                #
+                set location ${proto}://$host
                 if {$location ni $portless_locations
                     && $location ni $locations
                 } {
                     lappend portless_locations $location
                 }
-                append location :[dict get $d port]
+                #
+                # Add always a variant with the port to locations.
+                #
+                append location :$port
                 if {$location ni $locations} {
                     lappend locations $location
                 }
