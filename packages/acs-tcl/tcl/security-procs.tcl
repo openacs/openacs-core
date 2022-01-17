@@ -2475,96 +2475,69 @@ if {[namespace which ns_driver] ne ""} {
     }
 }
 
-ad_proc -public security::locations {} {
+ad_proc -private security::configured_locations {
+    {-suppress_http_port:boolean false}
+    {-secure_conn:boolean false}
+} {
 
-    This function returns the configured locations and the current
-    location and the vhost locations, potentially in HTTP or in HTTPs
-    variants.
+    This function returns the configured locations.
 
     When the package parameter "SuppressHttpPort" of acs-tcl parameter
     is true, then an alternate location without a port is included.
     This proc also assumes hostnames from host_node_map table are
     accurate and legit.
 
-    The term location refers to protocol://domain:port for
-    website.
+    The term location refers to "protocol://domain:port" for website.
 
-    @return insecure location and secure location followed possibly by alternate location(s) as a list.
+    @return list of locations
 
 } {
     set locations [list]
     set portless_locations {}
     #
-    # Get Information from configured servers
+    # Get configuration information from the configured servers.
     #
     set driver_info [security::configured_driver_info]
     foreach d $driver_info {
         #
-        # port == 0 means that the driver is just used for sending, but not for receiving
+        # port == 0 means that the driver is just used for sending,
+        # but not for receiving.
         #
         if {[dict get $d port] != 0} {
             set location [dict get $d location]
             if {$location ni $locations} {lappend locations $location}
 
-            set location [dict get $d proto]://[dict get $d host]
-            if {$location ni $portless_locations &&
-                $location ni $locations} {
-                lappend portless_locations $location
+            set hosts [dict get $d host]
+            if {[acs::icanuse "ns_set values"]} {
+                set virtualservers \
+                    [ns_configsection ns/module/[dict get $d driver]/servers]
+                if {$virtualservers ne ""} {
+                    lappend hosts {*}[ns_set values $virtualservers]
+                }
             }
-            append location :[dict get $d port]
-            if {$location ni $locations} {lappend locations $location}
-        }
-    }
-
-    if {[ns_conn isconnected]} {
-        #
-        # Is the current connection secure?
-        #
-        set secure_conn_p [expr {[security::secure_conn_p] || [ad_conn behind_secure_proxy_p]}]
-
-        set current_location [util_current_location]
-        if {$current_location ni $locations} {
-            lappend locations $current_location
-        }
-
-        #
-        # When we are on a secure connection, the command above added
-        # already a secure connection. When we are on a nonsecure
-        # connection, but HTTPS is available, allow as well the
-        # current host via the secure connection.
-        #
-        if {!$secure_conn_p && [https_available_p]} {
-            set secure_current_location [security::get_secure_location]
-            #ns_log notice "ADD secure_current_location: <$secure_current_location>"
-            if {$secure_current_location ni $locations} {
-                lappend locations $secure_current_location
+            foreach host $hosts {
+                set location [dict get $d proto]://$host
+                if {$location ni $portless_locations
+                    && $location ni $locations
+                } {
+                    lappend portless_locations $location
+                }
+                append location :[dict get $d port]
+                if {$location ni $locations} {
+                    lappend locations $location
+                }
             }
         }
-    } else {
-        set secure_conn_p 0
     }
-
-    #
-    # Consider if we are behind a proxy and don't want to publish the
-    # proxy's backend port. In this cases, SuppressHttpPort can be used
-    #
-    set suppress_http_port [parameter::get -parameter SuppressHttpPort \
-                                -boolean \
-                                -package_id [apm_package_id_from_key acs-tcl] \
-                                -default 0]
-    if {$suppress_http_port} {
-        lappend locations {*}$portless_locations
-    }
-
 
     #
     # Add locations from host_node_map
     #
-    set host_node_map_hosts_list [acs::misc_cache eval security-locations-host-names {
-        db_list get_node_host_names {select host from host_node_map}
-    }]
+    set host_node_map_hosts_list \
+        [db_list get_node_host_names {select host from host_node_map}]
+
     if { [llength $host_node_map_hosts_list] > 0 } {
-        if { $suppress_http_port } {
+        if { $suppress_http_port_p } {
             foreach hostname $host_node_map_hosts_list {
                 lappend locations "http://${hostname}"
                 if {$secure_conn_p} {
@@ -2588,6 +2561,83 @@ ad_proc -public security::locations {} {
             }
         }
     }
+
+    if {$suppress_http_port_p} {
+        lappend locations {*}$portless_locations
+    }
+
+    return $locations
+}
+
+ad_proc -public security::locations {} {
+
+    This function returns the configured locations and the current
+    location and the vhost locations, potentially in HTTP or in HTTPs
+    variants.
+
+    When the package parameter "SuppressHttpPort" of acs-tcl parameter
+    is true, then an alternate location without a port is included.
+    This proc also assumes hostnames from host_node_map table are
+    accurate and legit.
+
+    The term location refers to protocol://domain:port for
+    website.
+
+    @return insecure location and secure location followed possibly by alternate location(s) as a list.
+
+} {
+    #
+    # Is the current connection secure?
+    #
+    set secure_conn_p [expr {[ns_conn isconnected]
+                             ? ([security::secure_conn_p] || [ad_conn behind_secure_proxy_p])
+                             : 0}]
+    #
+    # Consider if we are behind a proxy and don't want to publish the
+    # proxy's backend port. In this cases, SuppressHttpPort can be used
+    #
+    set suppress_http_port_p [parameter::get -parameter SuppressHttpPort \
+                                -boolean \
+                                -package_id [apm_package_id_from_key acs-tcl] \
+                                -default 0]
+    #
+    # Get Information from configured servers
+    #
+    set locations [acs::misc_cache eval security-configure-locations-$suppress_http_port_p-$secure_conn_p {
+        security::configured_locations -suppress_http_port=$suppress_http_port_p -secure_conn=$secure_conn_p
+    }]
+
+    #
+    # When we are connected, add the current location if is not there
+    # already, also potentially in a secure fashion.
+    #
+    # This is probably not needed, but is kept here for backwards
+    # compatibility. For the time being, add log statements when this
+    # happens.
+    #
+    if {[ns_conn isconnected]} {
+
+        set current_location [util_current_location]
+        if {$current_location ni $locations} {
+            ns_log notice "security::locations add connected location <$current_location>"
+            lappend locations $current_location
+        }
+
+        #
+        # When we are on a secure connection, the command above added
+        # already a secure connection. When we are on a nonsecure
+        # connection, but HTTPS is available, allow as well the
+        # current host via the secure connection.
+        #
+        if {!$secure_conn_p && [https_available_p]} {
+            set secure_current_location [security::get_secure_location]
+            if {$secure_current_location ni $locations} {
+                ns_log notice "security::locations add connected secure location <$secure_current_location>"
+                lappend locations $secure_current_location
+            }
+        }
+    }
+
     #ns_log notice "security::locations <$locations>"
     return $locations
 }
