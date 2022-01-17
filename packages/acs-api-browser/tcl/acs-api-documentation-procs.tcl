@@ -1945,7 +1945,7 @@ namespace eval ::apidoc {
                             #    ns_log notice "TCLCODE: giving up on '$proc_name' ($procl) [string range $data $i $i+20]"
                             #}
                             append html $proc_name
-                            #set proc_ok 1
+                            set proc_ok 1
                         }
                         incr i $procl
 
