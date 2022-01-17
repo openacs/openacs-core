@@ -1222,7 +1222,7 @@ ad_proc -public api_get_body {proc_name} {
     } elseif {[info procs ::nsf::procs::$proc_name_pattern] ne ""} {
         return [::nx::Object info method body ::nsf::procs::$proc_name]
     } else {
-        return "No such Tcl-proc '$proc_name'"
+        return $proc_name
     }
 }
 
@@ -1703,11 +1703,11 @@ namespace eval ::apidoc {
         }
 
         set data [string map [list & "&amp;" < "&lt;" > "&gt;"] \n$script]
-
         set in_comment 0
         set in_quotes 0
         set proc_ok 1
         set l [string length $data]
+
         for {set i 0} {$i < $l} {incr i} {
             set char [string index $data $i]
             switch -- $char {
@@ -1826,6 +1826,7 @@ namespace eval ::apidoc {
                         set proc_ok 0
                         set procl [length_proc [string range $data $i end]]
                         set proc_name [string range $data $i $i+$procl]
+
                         if {$proc_name eq "ad_proc"} {
                             #
                             # Pretty print comment after ad_proc rather than trying to index keywords
@@ -1878,7 +1879,9 @@ namespace eval ::apidoc {
                                     }
                                 }
                             }
+                            continue
                         }
+
                         #
                         # The last four words in the following clause
                         # are deprecated procs which are unfortunately
@@ -1945,7 +1948,7 @@ namespace eval ::apidoc {
                             #    ns_log notice "TCLCODE: giving up on '$proc_name' ($procl) [string range $data $i $i+20]"
                             #}
                             append html $proc_name
-                            set proc_ok 1
+                            #set proc_ok 1
                         }
                         incr i $procl
 
