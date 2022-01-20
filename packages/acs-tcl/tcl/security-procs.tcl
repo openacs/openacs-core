@@ -1857,7 +1857,7 @@ ad_proc -public ad_get_client_property {
     cached value if available. If -cache_only is true, will never
     incur a database hit (i.e., will only return a value if
     cached). If the property is secure, we must be on a validated session
-    over HTTPS.
+    over HTTPS or the default is returned.
 
     @param session_id controls which session is used
     @param module typically the name of the package to which the property
