@@ -12,7 +12,7 @@ ad_library {
 }
 
 
-ad_proc -public util_memoize_initialized_p {} {
+ad_proc -deprecated util_memoize_initialized_p {} {
     Return 1 if the util_memoize cache has been initialized
     and is ready to be used and 0 otherwise.
 
