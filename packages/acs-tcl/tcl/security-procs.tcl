@@ -1809,14 +1809,14 @@ ad_proc -private sec_populate_secret_tokens_db {} {
 #
 #####
 
-ad_proc -private sec_lookup_property {
+ad_proc -private sec_lookup_property_not_cached {
     id
     module
     name
 } {
 
-    Used as a helper procedure for util_memoize to look up a
-    particular property from the database.
+    Look up a particular session property from the database and record
+    the last hit when found.
 
     @return empty, when no property is recorded or a list containing property_value and secure_p
 
@@ -1880,7 +1880,7 @@ ad_proc -public ad_get_client_property {
         set id $session_id
     }
 
-    set cmd [list sec_lookup_property $id $module $name]
+    set cmd [list sec_lookup_property_not_cached $id $module $name]
 
     if { $cache_only == "t" && ![util_memoize_cached_p $cmd] } {
         return $default
@@ -1983,7 +1983,9 @@ ad_proc -public ad_set_client_property {
     }
 
     # Remember the new value, seeding the memoize cache with the proper value.
-    util_memoize_seed [list sec_lookup_property $session_id $module $name] [list $value $secure]
+    util_memoize_seed \
+        [list sec_lookup_property_not_cached $session_id $module $name] \
+        [list $value $secure]
 }
 
 
