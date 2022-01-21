@@ -652,6 +652,44 @@ aa_register_case -cats {
     }
 }
 
+aa_register_case \
+    -error_level warning \
+    -cats {smoke production_safe} \
+    api__smells_of_hacking {
+        Searches for "smells of hacking" inside every proc's doc and
+        body.
+    } {
+        set smells {
+            hack
+            hotfix
+            todo
+            ugly
+            fixme
+            quickfix
+        }
+        set rx ^.*([join $smells |]).*$
+        foreach proc_name [nsv_array names api_proc_doc] {
+            set doc_elements [nsv_get api_proc_doc $proc_name]
+            if {[dict exists $doc_elements deprecated_p]} {
+                set deprecated_p [dict get $doc_elements deprecated_p]
+            } else {
+                set deprecated_p false
+            }
+            if {!$deprecated_p} {
+                if {[dict exists $doc_elements main]} {
+                    set documentation [dict get $doc_elements main]
+                } else {
+                    set documentation ""
+                }
+                set code [api_get_body $proc_name]
+                aa_false "'$proc_name' body smells" \
+                    [regexp -nocase -- $rx $code]
+                aa_false "'$proc_name' doc smells" \
+                    [regexp -nocase -- $rx $documentation]
+            }
+        }
+    }
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
