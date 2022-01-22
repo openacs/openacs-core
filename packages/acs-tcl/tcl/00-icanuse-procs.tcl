@@ -113,7 +113,8 @@ namespace eval ::acs {
 ::acs::register_icanuse "ns_writer"                 {[info commands ::ns_writer] ne ""}
 ::acs::register_icanuse "ns_baseunit"               {[info commands ::ns_baseunit] ne ""}
 ::acs::register_icanuse "ns_pg pid"                 [acs::cmd_has_subcommand ns_pg pid]
-
+::acs::register_icanuse "nsf::parseargs -asdict"    [acs::cmd_error_contains {nsf::parseargs} -asdict]
+::acs::register_icanuse "ns_parsequery -charset"    [acs::cmd_error_contains {ns_parsequery} -charset]
 #
 # At the time "ns_trim -prefix was introduced, a memory leak in
 # nsv_dict was removed that could lead to a growing size of NaviServer
