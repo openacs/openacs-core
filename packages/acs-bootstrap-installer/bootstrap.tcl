@@ -63,7 +63,7 @@ proc acs_bootstrap_fatal_error { message { throw_error_p 1 } } {
 
 set errno [catch {
     # Used for ns_logs:
-    set proc_name {Bootstrap}
+    set proc_name Bootstrap
 
     # Load the special bootstrap Tcl library.
 
