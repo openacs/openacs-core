@@ -110,7 +110,8 @@ aa_register_case -cats {smoke production_safe} -procs {
 }
 
 aa_register_case -cats {smoke production_safe} -error_level warning -procs {
-    aa_log_result    
+    aa_log_result
+    api_proc_link
 } documentation__check_deprecated_see {
     checks if deprecated procs have an @see clause
 
@@ -223,7 +224,7 @@ aa_register_case -cats {smoke production_safe} -error_level warning -procs {
 }
 
 aa_register_case -cats {smoke production_safe} -error_level warning -procs {
-    aa_log_result    
+    aa_log_result
 } documentation__check_parameters {
 
     Check if the parameters defined in the proc doc as '@param' are actual
@@ -270,7 +271,7 @@ aa_register_case -cats {smoke production_safe} -error_level warning -procs {
             set real_params [list \
                                  {*}[dict get $proc_doc switches0] \
                                  {*}[dict get $proc_doc positionals] \
-                                 {*}[dict get $proc_doc switches1] \                                 
+                                 {*}[dict get $proc_doc switches1] \
                                 ]
             #
             # Check if the last parameter is 'args', as it is not included into

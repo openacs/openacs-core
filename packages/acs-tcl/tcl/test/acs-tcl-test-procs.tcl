@@ -1290,6 +1290,40 @@ aa_register_case \
     aa_equals "No arguments" [util::interval_pretty] ""
 }
 
+aa_register_case \
+    -cats {api smoke production_safe} \
+    -procs {
+        ::acs::icanuse
+        ::acs::register_icanuse
+    } acs_icanuse {
+        Test the acs::icanuse interface
+
+        @author Gustaf Neumann
+    } {
+        aa_run_with_teardown \
+            -test_code {
+                set label [ad_generate_random_string]
+                #
+                # The random label should not exist
+                #
+                aa_true "can i use a random string?" {[acs::icanuse $label] == 0}
+                #
+                # Register the label
+                #
+                ::acs::register_icanuse $label 1
+                #
+                # Now we should be able to use it.
+                #
+                aa_true "can i use a random string?" [acs::icanuse $label]
+
+
+            } \
+            -teardown_code {
+                unset ::acs::caniuse($label)
+            }
+    }
+
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
