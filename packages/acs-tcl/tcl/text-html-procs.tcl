@@ -1817,7 +1817,9 @@ ad_proc ad_parse_html_attributes_upvar {
         # Expand entities before outputting
         set text [util_expand_entities $text]
 
-        # If we're not in a PRE
+        #
+        # If we're not inside an HTML "<PRE>" element.
+        #
         if { $output(pre) <= 0 } {
             # collapse all whitespace
             regsub -all -- {\s+} $text { } text
@@ -1839,7 +1841,10 @@ ad_proc ad_parse_html_attributes_upvar {
                 set text [string trimleft $text]
             }
         } else {
-            # we're in a PRE: clean line breaks and tabs
+            #
+            # We're inside an HTML <PRE> element: clean line breaks
+            # and tabs.
+            #
             regsub -all -- {\r\n} $text "\n" text
             regsub -all -- {\r} $text "\n" text
             # tabs become four spaces
@@ -1875,8 +1880,32 @@ ad_proc ad_parse_html_attributes_upvar {
         }
 
 
-        if {1} {
-            # If there's a blockquote in the beginning of the text, we wouldn't have caught it before
+        if {[::acs::icanuse "ns_reflow_text -offset"]} {
+            #
+            # Reflow based on "ns_reflow_text -offset". This is
+            # substantially faster, especially on longer text strings.
+            #
+            set plain [ns_reflow_text \
+                           -offset $output(linelen) \
+                           -width $output(maxlen) \
+                           -- $text]
+            #ns_log notice "XXXX -> <$plain>"
+            set lastNewLine [string last \n $plain]
+            if {$lastNewLine == -1} {
+                incr output(linelen) [string length $plain]
+            } else {
+                set output(linelen) [expr {[string length $plain] - $lastNewLine}]
+            }
+            set plain [join [split $plain \n] \n[string repeat {    } $output(blockquote)]]
+            #ns_log notice "plain\n$plain"
+            #ns_log notice "blockquote $output(blockquote) linelen $output(linelen) maxlen $output(maxlen)"
+            append output(text) $plain
+
+        } else {
+            #
+            # If there's a blockquote in the beginning of the text, we
+            # wouldn't have caught it before.
+            #
             if { $output(text) eq "" } {
                 append output(text) [string repeat {    } $output(blockquote)]
             }
@@ -1908,27 +1937,6 @@ ad_proc ad_parse_html_attributes_upvar {
                     }
                 }
             }
-        } else {
-            #
-            # This is an experimental version that requires a version
-            # of NaviServer supporting the "-offset" argument. So it
-            # is deactivated for the time being for public use.
-            #
-            set plain [ns_reflow_text \
-                           -offset $output(linelen) \
-                           -width $output(maxlen) \
-                           $text]
-            set lastNewLine [string last \n $plain]
-            #ns_log notice "ns_reflow_text -width $output(maxlen) <$text>\ntext: $text\nplain $plain"
-            if {$lastNewLine == -1} {
-                incr output(linelen) [string length $plain]
-            } else {
-                set output(linelen) [expr {[string length $plain] - $lastNewLine}]
-            }
-            set plain [join [split $plain \n] \n[string repeat {    } $output(blockquote)]]
-            #ns_log notice "plain\n$plain"
-            #ns_log notice "blockquote $output(blockquote) linelen $output(linelen) maxlen $output(maxlen)"
-            append output(text) $plain
         }
     }
 
