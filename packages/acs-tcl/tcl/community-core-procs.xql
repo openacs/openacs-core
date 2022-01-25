@@ -1,37 +1,37 @@
 <?xml version="1.0"?>
 <queryset>
 
-<fullquery name="person::update.update_person">      
+<fullquery name="person::update.update_person">
       <querytext>
-      
+
 	update persons
          set    [join $cols ", "]
          where person_id = :person_id
-    
+
       </querytext>
 </fullquery>
 
-<fullquery name="person::update.update_object_title">      
+<fullquery name="person::update.update_object_title">
       <querytext>
-      
+
 	update acs_objects
 	set title = :first_names || ' ' || :last_name
 	where object_id = :person_id
-    
+
       </querytext>
 </fullquery>
 
-<fullquery name="acs_user::update.user_update">      
+<fullquery name="acs_user::update.user_update">
       <querytext>
-      
+
 	update users
         set    [join $cols ", "]
         where  user_id = :user_id
-    
+
       </querytext>
 </fullquery>
 
-<fullquery name="acs_user::get_by_username_not_cached.user_id_from_username">      
+<fullquery name="acs_user::get_by_username_not_cached.user_id_from_username">
       <querytext>
 
             select user_id
@@ -42,9 +42,9 @@
       </querytext>
 </fullquery>
 
-<fullquery name="party::update.party_update">      
+<fullquery name="party::update.party_update">
       <querytext>
-      
+
 	update parties
         set    [join $cols ", "]
         where  party_id = :party_id
@@ -52,9 +52,9 @@
       </querytext>
 </fullquery>
 
-<fullquery name="party::update.object_title_update">      
+<fullquery name="party::update.object_title_update">
       <querytext>
-      
+
 	    update acs_objects
 	    set title = :email
 	    where object_id = :party_id
@@ -65,9 +65,9 @@
 
 <fullquery name="party::get_by_email_not_cached.select_party_id">
       <querytext>
-      
-        select party_id 
-        from   parties 
+
+        select party_id
+        from   parties
         where  lower(email) = lower(:email)
 
       </querytext>
@@ -77,7 +77,7 @@
     <querytext>
 	select
 		name
-	from 
+	from
 		organizations
 	where
 		organization_id = :party_id
@@ -88,7 +88,7 @@
     <querytext>
 	select
 		group_name
-	from 
+	from
 		groups
 	where
 		group_id = :party_id
@@ -99,7 +99,7 @@
     <querytext>
 	select
 		party_name
-	from 
+	from
 		party_names
 	where
 		party_id = :party_id
