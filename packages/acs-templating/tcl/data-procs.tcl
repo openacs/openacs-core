@@ -61,7 +61,8 @@ ad_proc -private template::data::validate::widget { value_ref message_ref } {
         $value_ref value \
         element element
 
-    if {[info exists element(options)]} {
+    if {$element(widget) in {radio select} &&
+        [info exists element(options)]} {
         # Make sure widgets that are meant to pick an option from a
         # restricted list of values, actually allow only those values.
         set valid_p false
