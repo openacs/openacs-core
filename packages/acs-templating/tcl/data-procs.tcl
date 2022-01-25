@@ -40,8 +40,44 @@ ad_proc -public template::data::validate { type value_ref message_ref } {
     @see template::data::validate::url
     @see template::data::validate::oneof
 } {
+    if {![validate::widget $value_ref $message_ref]} {
+        return 0
+    } else {
+        return [validate::$type $value_ref $message_ref]
+    }
+}
 
-    return [validate::$type $value_ref $message_ref]
+ad_proc -private template::data::validate::widget { value_ref message_ref } {
+    Here we perform the widget-specific validation, which does not
+    depend on the datatype itself, but rather on the widget logics.
+
+    @param value_ref Reference variable to the submitted value
+    @param message_ref Reference variable for returning an error message
+
+    @return True (1) if valid, false (0) if not
+} {
+    upvar 2 \
+        $message_ref message \
+        $value_ref value \
+        element element
+
+    if {[info exists element(options)]} {
+        # Make sure widgets that are meant to pick an option from a
+        # restricted list of values, actually allow only those values.
+        set valid_p false
+        foreach o $element(options) {
+            lassign $o option_label option_value
+            if {$value eq $option_value} {
+                set valid_p true
+            }
+        }
+        if {!$valid_p} {
+            set message [_ acs-templating.Invalid_choice]
+            return 0
+        }
+    }
+
+    return 1
 }
 
 ad_proc -public template::data::validate::integer {
