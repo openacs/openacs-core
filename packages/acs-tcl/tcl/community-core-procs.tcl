@@ -128,7 +128,7 @@ ad_proc -public person::get_person_info_not_cached {
 
     @see person::get
 } {
-    set person_p [db_0or1row get_person_info {
+    db_0or1row get_person_info {
         select person_id,
                first_names,
                last_name,
@@ -136,13 +136,9 @@ ad_proc -public person::get_person_info_not_cached {
                bio
           from persons
          where person_id = :person_id
-    } -column_array person]
+    } -column_array person
 
-    if {$person_p} {
-        return [array get person]
-    } else {
-        return [list]
-    }
+    return [array get person]
 }
 
 ad_proc -public person::flush_person_info {
