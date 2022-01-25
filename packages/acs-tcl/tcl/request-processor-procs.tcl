@@ -1674,9 +1674,12 @@ ad_proc -public ad_conn {args} {
                                 && [ns_config "ns/parameters" ReverseProxyMode false]
                             } {
                                 #
-                                # Try to get the address provided by a
-                                # reverse proxy such as NGINX via
-                                # X-Forwarded-For, if available.
+                                # In case, we have an older
+                                # NaviServer, try to get the address
+                                # provided by a reverse proxy such as
+                                # NGINX via X-Forwarded-For, if
+                                # available. Note that in this case
+                                # there is no validation happending.
                                 #
                                 set headers [ns_conn headers]
                                 set i [ns_set ifind $headers "X-Forwarded-For"]
