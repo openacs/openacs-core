@@ -129,4 +129,5 @@
   <msg key="Year">Year</msg>
   <msg key="year">year</msg>
   <msg key="Year_must_be_positive">Year must be positive</msg>
+  <msg key="Your_captcha_is_invalid">Your captcha is invalid</msg>
 </message_catalog>
