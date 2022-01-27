@@ -64,12 +64,24 @@ aa_register_case -cats {
             [db_string count {select count(*) from template_widget_captchas}]
 
         template::widget::captcha element {}
+        db_dml store_expired_captcha {
+            insert into template_widget_captchas
+            (image_checksum, text, expiration)
+             values
+            ('test',
+             'test',
+             current_timestamp - cast('1 seconds' as interval)
+            )
+         }
+
         set query $captcha_checksum_id=nonsense
         set d [acs::test::http $endpoint_name?$query]
         acs::test::reply_has_status_code $d 500
 
-        aa_true "Checksums were not cleared (checksum cannot be found)" \
-            [db_string count {select count(*) from template_widget_captchas}]
+        aa_equals "Checksums were not cleared (checksum cannot be found), but expired captchas were cleaned up" \
+            [db_string count {select count(*) from template_widget_captchas}] \
+            1
+
         db_dml clear_checksums {
             delete from template_widget_captchas
         }
@@ -82,11 +94,8 @@ aa_register_case -cats {
         set d [acs::test::http $endpoint_name?$query]
         acs::test::reply_has_status_code $d 500
 
-        aa_true "Checksums were not cleared (text does not match the checksum)" \
+        aa_false "Checksums were cleared even when the text does not match" \
             [db_string count {select count(*) from template_widget_captchas}]
-        db_dml clear_checksums {
-            delete from template_widget_captchas
-        }
 
     } finally {
         ns_unregister_op GET $endpoint_name
