@@ -130,7 +130,7 @@ aa_register_case -cats {
                          -text $text]
         set ocr ""
         try {
-            set ocr [exec $tesseract [dict get $captcha path] - 2> /dev/null]
+            set ocr [exec -ignorestderr -- $tesseract [dict get $captcha path] -]
         } on error {errmsg} {
             aa_log "Tesseract failed on '[dict get $captcha path]'"
         }
