@@ -127,14 +127,21 @@ ad_proc -public template::widget::captcha {
     ::file delete -- $captcha_path
     close $rfd
 
-    # Store the checksum in the database together with the text we
-    # expect.
     if {[info exists element(expire)]} {
         set expiration $element(expire)
     } else {
         set expiration 3600
     }
+    # Store the checksum in the database together with the text we
+    # expect. While we do this, we also take care of cleaning up
+    # expired captchas.
     db_dml store_captcha {
+        with
+        cleanup as (
+            delete from template_widget_captchas
+            where image_checksum = :checksum
+               or expiration < current_timestamp
+        )
         insert into template_widget_captchas
         (image_checksum, text, expiration)
         values
@@ -184,16 +191,21 @@ ad_proc -public template::data::validate::captcha {
     if {$checksum ne ""} {
         # While we check for this particular captcha, we also sloppily
         # cleanup the ones that have already expired.
-        db_dml check_captcha {
-            with cleanup_expired as (
+        set text [db_string check_captcha {
+            with
+            lookup as (
+               select text, image_checksum
+                 from template_widget_captchas
+                where image_checksum = :checksum
+            ),
+            cleanup as (
                 delete from template_widget_captchas
-                where expiration < current_timestamp
+                where image_checksum = (select image_checksum from lookup)
+                   or expiration < current_timestamp
             )
-            delete from template_widget_captchas
-            where image_checksum = :checksum
-              and text = :value
-        }
-        set valid_p [db_resultrows]
+            select text from lookup
+        } -default ""]
+        set valid_p [expr {$text eq $value}]
     } else {
         set valid_p 0
     }
