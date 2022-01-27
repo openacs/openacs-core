@@ -191,7 +191,7 @@ ad_proc -public template::data::validate::captcha {
     if {$checksum ne ""} {
         # While we check for this particular captcha, we also sloppily
         # cleanup the ones that have already expired.
-        set text [db_string check_captcha {
+        set valid_p [db_0or1row check_captcha {
             with
             lookup as (
                select text, image_checksum
@@ -203,9 +203,8 @@ ad_proc -public template::data::validate::captcha {
                 where image_checksum = (select image_checksum from lookup)
                    or expiration < current_timestamp
             )
-            select text from lookup
-        } -default ""]
-        set valid_p [expr {$text eq $value}]
+            select 1 from lookup where text = :value
+        }]
     } else {
         set valid_p 0
     }
