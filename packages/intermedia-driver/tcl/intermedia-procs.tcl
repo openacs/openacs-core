@@ -94,7 +94,7 @@ ad_proc -public -callback search::search -impl intermedia-driver {} {
     @param object_type
 } {
     if {[info exists package_ids] && [llength $package_ids]} {
-        set package_ids_clause " and swi.package_id in ([template::util::tcl_to_sql_list $package_ids]) "
+        set package_ids_clause " and swi.package_id in ([ns_dbquotelist $package_ids]) "
     } else {
         set package_ids_clause ""
     }

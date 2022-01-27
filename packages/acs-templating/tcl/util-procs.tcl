@@ -538,29 +538,6 @@ ad_proc -public template::util::number_list { last_number {start_at 0} } {
     return $ret
 }
 
-ad_proc -public template::util::tcl_to_sql_list { lst } {
-    Convert a Tcl list to a SQL list, for use with the "in" statement.
-    Uses double single quotes (similar to ns_dbquotevalue) to escape single quotes
-
-    Note: this proc could be deprecated in the not so far future, as
-    Naviserver now provides a native api for this and a
-    tcl-implemented fallback exists in current OpenACS code.
-
-    @see ns_dbquotelist
-} {
-
-    if { [llength $lst] > 0 } {
-        # replace single quotes by two single quotes
-        regsub -all -- ' "$lst" '' lst2
-        set sql "'"
-        append sql [join $lst2 "', '"]
-        append sql "'"
-        return $sql
-    } else {
-        return ""
-    }
-}
-
 ad_proc -public template::themed_template {
     {-verbose:boolean false}
     path

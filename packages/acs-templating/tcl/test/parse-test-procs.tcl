@@ -55,22 +55,6 @@ aa_register_case \
         }
 }
 
-aa_register_case -cats {
-    api
-    smoke
-    production_safe
-} tcl_to_sql_list {
-    Tests the tcl_to_sql_list proc.
-
-    @author Torben Brosten
-} {
-    aa_equals "parses list of 0 items" [template::util::tcl_to_sql_list [list]] ""
-    aa_equals "parses list of 2 or more" \
-        [template::util::tcl_to_sql_list [list isn't hess' 'bit 'trippy']] \
-        "'isn''t', 'hess''', '''bit', '''trippy'''"
-
-}
-
 aa_register_case \
     -cats {api smoke production_safe} \
     -procs {
@@ -102,21 +86,6 @@ aa_register_case \
     aa_equals "square brackets in array key safe" $expanded_message "Test message \$two(\$three(\[__does_not_exist\]))"
 
 }
-
-aa_register_case \
-    -cats {api smoke production_safe} \
-    -procs {
-        template::util::tcl_to_sql_list
-    } \
-    tcl_to_sql_list {
-    Tests the tcl_to_sql_list proc.
-
-    @author Torben Brosten
-} {
-    aa_equals "parses list of 0 items" [template::util::tcl_to_sql_list [list]] ""
-    aa_equals "parses list of 2 or more" [template::util::tcl_to_sql_list [list isn't hess' 'bit 'trippy']] "'isn''t', 'hess''', '''bit', '''trippy'''"
-}
-
 
 # Local variables:
 #    mode: tcl

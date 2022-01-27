@@ -523,6 +523,28 @@ ad_proc -deprecated template::util::list_opts { {array_ref opts} } {
     return $ret
 }
 
+ad_proc -deprecated template::util::tcl_to_sql_list { lst } {
+    Convert a Tcl list to a SQL list, for use with the "in" statement.
+    Uses double single quotes (similar to ns_dbquotevalue) to escape single quotes
+
+    DEPRECATED: NaviServer now provides a native api for this and a
+    tcl-implemented fallback exists in current OpenACS code.
+
+    @see ns_dbquotelist
+} {
+
+    if { [llength $lst] > 0 } {
+        # replace single quotes by two single quotes
+        regsub -all -- ' "$lst" '' lst2
+        set sql "'"
+        append sql [join $lst2 "', '"]
+        append sql "'"
+        return $sql
+    } else {
+        return ""
+    }
+}
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4

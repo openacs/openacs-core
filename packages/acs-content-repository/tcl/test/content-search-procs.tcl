@@ -16,7 +16,7 @@ ad_proc -private cr_item_search::assert_not_in_queue {
             select count(*) from search_observer_queue
             where object_id = :revision_id
             and event in
-            ([template::util::tcl_to_sql_list $events])
+            ([ns_dbquotelist $events])
         }] -default 0]
 }
 
@@ -34,7 +34,7 @@ ad_proc -private cr_item_search::assert_in_queue {
             select count(*) from search_observer_queue
             where object_id = :revision_id
             and event in
-            ([template::util::tcl_to_sql_list $events])
+            ([ns_dbquotelist $events])
         }] -default 0]
 }
 

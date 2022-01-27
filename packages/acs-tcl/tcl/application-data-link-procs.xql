@@ -134,7 +134,7 @@
     <querytext>
   	delete from acs_data_links where object_id_one=:object_id
         and object_id_two in 
-          ([template::util::tcl_to_sql_list $link_object_id_list])
+          ([ns_dbquotelist $link_object_id_list])
         [application_data_link::relation_tag_where_clause -relation_tag $relation_tag]
     </querytext>
 </fullquery>
@@ -150,7 +150,7 @@
 
 <fullquery name="application_data_link::scan_for_links.confirm_object_ids">
     <querytext>
-	select object_id from acs_objects where object_id in ([template::util::tcl_to_sql_list $refs])
+	select object_id from acs_objects where object_id in ([ns_dbquotelist $refs])
     </querytext>
 </fullquery>	
 
