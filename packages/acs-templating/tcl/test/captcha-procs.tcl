@@ -101,3 +101,51 @@ aa_register_case -cats {
         ns_unregister_op GET $endpoint_name
     }
 }
+
+aa_register_case -cats {
+    api
+    smoke
+    production_safe
+} -procs {
+    captcha::image::generate
+} tesseract_cannot_crack_catpcha {
+
+    Provide a baseline check for robustness by making sure a free tool
+    such as Tesseract cannot crack the captcha.
+
+    @see https://github.com/tesseract-ocr/tessdoc
+
+} {
+    set tesseract [::util::which tesseract]
+    if {$tesseract eq ""} {
+        aa_log "Tesseract command not available. We cannot perform this check."
+        return
+    }
+
+    for {set i 0} {$i < 10} {incr i} {
+        set text [ad_generate_random_string 5]
+        set pointsize [expr {round((rand()*80))+20}]
+        set captcha [captcha::image::generate \
+                         -pointsize $pointsize \
+                         -text $text]
+        set ocr ""
+        try {
+            set ocr [exec $tesseract [dict get $captcha path] - 2> /dev/null]
+        } on error {errmsg} {
+            aa_log "Tesseract failed on '[dict get $captcha path]'"
+        }
+
+        aa_false "Tesseract guessed '$ocr' in '[dict get $captcha path]', the real text was '$text'" [expr {$text eq $ocr}]
+
+        # Make tesseract a favor and clean up non-alphanum chars
+        regsub -all -- {([^\w]|\s)} $ocr {} ocr_clean
+        aa_false "One can get to '$ocr_clean' in '[dict get $captcha path]' by cleaning non-alphanumerics, the real text was '$text'" \
+             [expr {$text eq $ocr_clean}]
+
+        # Make yet another favor and convert to uppercase
+        set ocr_clean_uppercase [string toupper $ocr_clean]
+        aa_false "One can get to '$ocr_clean_uppercase' in '[dict get $captcha path]' by converting to uppercase, the real text was '$text'" \
+             [expr {$text eq $ocr_clean_uppercase}]
+
+    }
+}
