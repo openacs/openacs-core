@@ -9,14 +9,14 @@ namespace eval captcha {}
 namespace eval captcha::image {}
 
 ad_proc -private captcha::image::generate {
-    {-pointsize 40}
+    {-size 150x50}
     -text
     {-background "#ffffff"}
     {-fill "#000000"}
 } {
     Creates a distorted capcha image from a text.
 
-    @param pointsize the font size as supported by convert
+    @param size the size expressed as \{width\}x\{height\} in pixel
     @param text the text to use for the captcha. When unspecified, a
                 random text will be used. The text can only contain
                 alphanumeric characters and spaces.
@@ -35,8 +35,8 @@ ad_proc -private captcha::image::generate {
         error {'convert' command not available.}
     }
 
-    if {![string is integer -strict $pointsize]} {
-        error {Invalid pointsize}
+    if {![regexp -nocase {^\d+x\d+$} $size]} {
+        error {Invalid size}
     }
     if {![regexp -nocase {^(\#([0-9]|[a-f]){6}){2}$} ${background}${fill}]} {
         error {Invalid color}
@@ -51,12 +51,14 @@ ad_proc -private captcha::image::generate {
 
     set path [ad_tmpnam].png
 
+    set wavelength [expr {round(rand() * 100) + 100}]
+
     exec $convert \
-        -pointsize $pointsize \
+        -size $size \
         -background $background \
         -fill $fill \
         label:$text \
-        -wave 25%x150% \
+        -wave 25%x$wavelength% \
         $path
 
     if {![file exists $path]} {
@@ -103,16 +105,16 @@ ad_proc -public template::widget::captcha {
     } else {
         set fill #000000
     }
-    if {[info exists element(pointsize)]} {
-        set pointsize $element(pointsize)
+    if {[info exists element(size)]} {
+        set size $element(size)
     } else {
-        set pointsize 40
+        set size 150x50
     }
 
     set captcha [captcha::image::generate \
                      -background $background \
                      -fill $fill \
-                     -pointsize $pointsize]
+                     -size $size]
 
     set checksum [dict get $captcha checksum]
     set text [dict get $captcha text]

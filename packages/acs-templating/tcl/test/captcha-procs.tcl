@@ -122,11 +122,21 @@ aa_register_case -cats {
         return
     }
 
-    for {set i 0} {$i < 10} {incr i} {
+    foreach size {
+        50x150
+        100x300
+        200x600
+        400x1200
+        800x2400
+        160x120
+        320x240
+        640x480
+        1024x768
+        1280x960
+    } {
         set text [ad_generate_random_string 5]
-        set pointsize [expr {round((rand()*80))+20}]
         set captcha [captcha::image::generate \
-                         -pointsize $pointsize \
+                         -size $size \
                          -text $text]
         set ocr ""
         try {
