@@ -1917,6 +1917,13 @@ namespace eval ::acs::test::xpath {
         foreach n [$node selectNodes $xpath//input] {
             set name [get_name_attribute $n $xpath//input]
             if {$name eq ""} continue
+
+            # Do not consider unchecked radio buttons as values
+            if {[$n getAttribute type ""] eq "radio" &&
+                ![$n hasAttribute checked]} {
+                continue
+            }
+
             #ns_log notice "aa_xpath::get_form_values from $className input node $n name $name:"
             if {[$n hasAttribute value]} {
                 set value [$n getAttribute value]
