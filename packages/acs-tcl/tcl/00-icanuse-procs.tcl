@@ -117,6 +117,7 @@ namespace eval ::acs {
 ::acs::register_icanuse "ns_parsequery -charset"    [acs::cmd_error_contains {ns_parsequery} -charset]
 ::acs::register_icanuse "ns_reflow_text -offset"    [acs::cmd_error_contains {ns_reflow_text} -offset]
 ::acs::register_icanuse "nsf::config profile"       [expr {[info exists ::nsf::config(profile)] ? $::nsf::config(profile) : 0}]
+::acs::register_icanuse "ns_strcoll"                {[info commands ::ns_strcoll] ne ""}
 
 #
 # At the time "ns_trim -prefix was introduced, a memory leak in
@@ -124,6 +125,13 @@ namespace eval ::acs {
 # on busy sites.
 #
 ::acs::register_icanuse "nsv_dict"                  [acs::cmd_error_contains {ns_trim} -prefix]
+
+#
+# When "nsf::parseargs -asdict" was introduced, the object aliasing
+# was also introduced in nsf. .... But this feature is not ready yet.
+#
+#::acs::register_icanuse "nx::alias object"          [acs::cmd_error_contains {nsf::parseargs} -asdict]
+
 
 #
 # The following commands check indirectly the availability, since the
