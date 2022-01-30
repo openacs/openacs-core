@@ -23,7 +23,7 @@ aa_register_case -cats {
             }
             set message ""
             set value [ns_queryget value]
-            # Simulate a 2 level depth for the api
+            # Simulate a 2-level depth for the API
             proc test args {
                 return [template::data::validate::captcha value message]
             }

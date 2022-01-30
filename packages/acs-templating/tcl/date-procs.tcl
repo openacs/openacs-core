@@ -1636,7 +1636,7 @@ ad_proc -public template::widget::h5date {
     "-step": number of days jumped each time the date is
              incremented. Value must be an integer
 
-    Parameters supplied this way will superseded same named parameters
+    Parameters supplied this way will supersede same-named parameters
     supplied through the "-html" switch.
 
     This widget also adds the attribute "pattern" as fallback for
@@ -1776,7 +1776,7 @@ ad_proc -public template::widget::h5time {
    "-step": integer value that equates to the number of seconds you
             want to increment by
 
-   Parameters supplied this way will superseded same named parameters
+   Parameters supplied this way will supersede same-named parameters
    supplied through the "-html" switch.
 
    This widget also adds the attribute "pattern" as fallback for

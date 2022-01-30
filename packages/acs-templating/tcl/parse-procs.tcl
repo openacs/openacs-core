@@ -34,8 +34,8 @@ ad_proc -public template::adp_include {
               [list &book "bookdata" base $base style feed]]
     </pre>
 
-    The [list &book "bookdata" ...] tells adp_include to pass the book array by reference to the adp include, where it is
-    referred to via @book.field@.
+    The [list &book "bookdata" ...] tells adp_include to pass the book array
+    by reference to the adp include, where it is referred to via @book.field@.
 
     @param uplevel how far up the stack should the adp_level be set to
     (default is the calling procedures level)
@@ -70,17 +70,20 @@ ad_proc -public template::adp_parse { __adp_stub __args } {
     strings from adp files.
 
     @param __adp_stub   The root (without the file extension) of the
-    absolute path to the template and associated code.
+                        absolute path to the template and associated code.
     @param __args       One list containing any number of key-value pairs
-    passed to an included template from its container.
-    All data sources may be passed by reference.
+                        passed to an included template from its container.
+                        All data sources may be passed by reference.
     @see template::adp_include
 } {
     # declare any variables passed in to an include or master
     # TODO: call adp_set_vars instead.
 
     foreach {__key __value} $__args {
-        if {[string match "&*" $__key]} {    # "&" triggers call by reference
+        #
+        # Keys starting with "&" trigger call by reference.
+        #
+        if {[string range $__key 0 0] eq "&"} {
             if {"&" ne $__key } {
                 set __name [string range $__key 1 end]
             } else {
@@ -95,13 +98,18 @@ ad_proc -public template::adp_parse { __adp_stub __args } {
                     upvar \#[adp_level] $__value:$__i $__name:$__i
                 }
             }
-        } else {                # not "&" => normal arg (no reference)
+        } else {
+            #
+            # Key does not start with "&" => normal arg (no reference).
+            #
             set $__key $__value
         }
     }
 
-    # set the stack frame at which the template is being parsed so that
-    # other procedures can reference variables cleanly
+    #
+    # Set the stack frame at which the template is being parsed so
+    # that other procedures can reference variables cleanly.
+    #
     lappend ::template::parse_level [info level]
 
     # execute the code to prepare the data sources for a template
@@ -116,8 +124,10 @@ ad_proc -public template::adp_parse { __adp_stub __args } {
         set mime_type [get_mime_type]
         set template_extension [get_mime_template_extension $mime_type]
 
-        # generate ADP output if a template exists (otherwise assume plain Tcl page)
-
+        #
+        # Generate ADP output if a template exists (otherwise assume
+        # plain Tcl page)
+        #
         set templated_p 0
         if { [ad_conn locale] ne ""
              && [file exists "$__adp_stub.[ad_conn locale].$template_extension"]} {
@@ -133,17 +143,20 @@ ad_proc -public template::adp_parse { __adp_stub __args } {
              && [::ds_enabled_p]
              && [::ds_page_fragment_cache_enabled_p]
              && [::ds_collection_enabled_p] } {
-            ns_cache get ds_page_bits [ad_conn request] template_list
-            lappend template_list $__adp_stub.$template_extension
-            ns_cache set ds_page_bits [ad_conn request] $template_list
+            ns_cache lappend ds_page_bits [ad_conn request] \
+                $__adp_stub.$template_extension
         }
 
         if { $templated_p } {
-
-            # ensure that template output procedure exists and is up-to-date
+            #
+            # Ensure that template output procedure exists and is
+            # up-to-date.
+            #
             template::adp_init $template_extension $__adp_stub
-
-            # get result of template output procedure into __adp_output, and properties into __adp_properties
+            #
+            # Get result of template output procedure into __adp_output,
+            # and properties into __adp_properties
+            #
             template::code::${template_extension}::$__adp_stub
 
             # JCD: Lets keep a copy of all the page fragments!  WooHoo.
@@ -151,17 +164,23 @@ ad_proc -public template::adp_parse { __adp_stub __args } {
                  && [::ds_enabled_p]
                  && [::ds_page_fragment_cache_enabled_p]
                  && [::ds_collection_enabled_p] } {
-                ns_cache set ds_page_bits "[ad_conn request]:$__adp_stub.$template_extension" $__adp_output
+                ns_cache set ds_page_bits \
+                    "[ad_conn request]:$__adp_stub.$template_extension" $__adp_output
             }
 
             # call the master template if one has been defined
             if { [info exists __adp_master] } {
                 # pass properties on to master template
                 set __adp_output [template::adp_parse $__adp_master \
-                                      [concat [list __adp_slave $__adp_output] [array get __adp_properties]]]
+                                      [concat \
+                                           [list __adp_slave $__adp_output] \
+                                           [array get __adp_properties]]]
             }
         } else {
-            # no template;  found_script_p tells us if adp_prepare at least found a script.
+            #
+            # No template; found_script_p tells us if adp_prepare at
+            # least found a script.
+            #
             if { !$found_script_p } {
                 # No template. Perhaps there is an HTML file.
                 if { [file exists $__adp_stub.html] } {
@@ -325,8 +344,9 @@ ad_proc -private template::adp_prepare {} {
 
             # propagate aborting
             if {[info exists ::request_aborted]} {
-                ns_log warning "propagating abortion from $__adp_remember_stub.tcl\
-          (status [lindex $::request_aborted 0]): '[lindex $::request_aborted 1]')"
+                ns_log warning "propagating abortion from $__adp_remember_stub.tcl" \
+                    "(status [lindex $::request_aborted 0]:"\
+                    "'[lindex $::request_aborted 1]'"
                 unset ::request_aborted
                 ad_script_abort
                 #adp_abort
@@ -511,9 +531,10 @@ ad_proc -public template::adp_compile { {-file ""} {-string ""} } {
     regsub -all -- {([^0-9])%>} $chunk {\1</tcl>} chunk
     # warn about the first ambiguity in the source
     if {[regexp {[0-9]+%>} $chunk match]} {
-        ns_log warning "ambiguous '$match'; write Tcl escapes with a space like\
-      <% set x 50 %> and HTML tags with proper quoting, like <hr width=\"50%\">\
-      when compiling ADP source: [list template::adp_compile -file $file -string $string]"
+        ns_log warning "ambiguous '$match'; write Tcl escapes with a space like" \
+            {<% set x 50 %> and HTML tags with proper quoting, like <hr width="50%">} \
+            "when compiling ADP source: " \
+            [list template::adp_compile -file $file -string $string]
     }
 
     # recursively parse the template
@@ -537,11 +558,17 @@ ad_proc -public template::adp_compile { {-file ""} {-string ""} } {
                 {\1[template::expand_percentage_signs [lang::message::lookup $__ad_conn_locale {\2} {TRANSLATION MISSING} {} -1]]} \
                 code]} {}
 
-    # We do each substitution set in two pieces, separately for normal
-    # variables and for variables with ";noquote" attached to them.
-    # Specifically, @x@ gets translated to [ns_quotehtml ${x}], whereas
-    # @x;noquote@ gets translated to ${x}.  The same goes for array
-    # variable references.
+    #
+    # We do each substitution set in several pieces, separately for
+    # normal variables and for variables having ";noquote", ";no18n",
+    # and ";literal" attached to them.  Specifically, @x@ gets
+    # translated to [ns_quotehtml ${x}], whereas @x;noquote@ gets
+    # translated to ${x}.  The same goes for array variable
+    # references.
+    #
+    # The approach with several regexp operations can be optimized,
+    # but since this is happening only at ADP compile time, this does
+    # not seem critical.
 
     # substitute array variable references
     while {[regsub -all -- [template::adp_array_variable_regexp_noquote] $code {\1[lang::util::localize $\2(\3)]} code]} {}
@@ -549,7 +576,7 @@ ad_proc -public template::adp_compile { {-file ""} {-string ""} } {
     while {[regsub -all -- [template::adp_array_variable_regexp_literal] $code {\1$\2(\3)} code]} {}
     #
     # Some aolservers have broken implementations of ns_quotehtml
-    # (returning for the empty string input a one byte output). 
+    # (returning for the empty string input a one byte output).
     #
     while {[regsub -all -- [template::adp_array_variable_regexp] $code {\1[ns_quotehtml [lang::util::localize $\2(\3)]]} code]} {}
 
@@ -563,8 +590,7 @@ ad_proc -public template::adp_compile { {-file ""} {-string ""} } {
         while {[regsub -all -- [template::adp_variable_regexp] $code {\1[ns_quotehtml [lang::util::localize ${\2}]]} code]} {}
     }
 
-    # unescape protected # references
-    # unescape protected @ references
+    # unescape protected "#" and "@" references
     set code [string map { \\@ @ \\# #} $code]
 
     return $code
@@ -861,4 +887,3 @@ ad_proc -public template::get_attribute { tag params name { default "ERROR" } } 
 #    tcl-indent-level: 4
 #    indent-tabs-mode: nil
 # End:
-
