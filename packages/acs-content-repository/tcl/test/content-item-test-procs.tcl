@@ -27,6 +27,7 @@ aa_register_case \
         content::item::get_latest_revision
         content::item::new
         content::item::rename
+        content::item::copy
         content::item::update
         content::item::content_is_null
         content::revision::is_latest
@@ -328,7 +329,55 @@ aa_register_case \
             #########################################################
             # copy it
             #########################################################
-            #TODO
+            aa_equals "Item cannot be copied in the same folder using the same name" \
+                [content::item::copy \
+                     -item_id $new_type_item_id \
+                     -target_folder_id $first_folder_id] ""
+
+            aa_equals "Item cannot be copied in another folder without registering its content type first" \
+                [content::item::copy \
+                     -item_id $new_type_item_id \
+                     -target_folder_id $second_folder_id] ""
+
+            aa_log "Registering content type '$content_type' for '$second_folder_id'"
+            content::folder::register_content_type \
+                -folder_id $second_folder_id \
+                -content_type $content_type
+
+            set copied_no_sibling_item_id [content::item::copy \
+                                                -item_id $new_type_item_id \
+                                                -target_folder_id $second_folder_id]
+            aa_true "Item can be copied in another folder using the same name after content type registration" \
+                [string is integer -strict $copied_no_sibling_item_id]
+
+            content::item::get \
+                -item_id $copied_no_sibling_item_id \
+                -array_name copied_no_sibling_item
+            foreach att {name attribute_name} value {new_name attribute_value} {
+                aa_equals "Copied item '$copied_no_sibling_item_id' has the right $att" \
+                    $copied_no_sibling_item($att) $value
+            }
+            aa_equals "Copied item '$copied_no_sibling_item_id' has an empty title. This is expected" \
+                $copied_no_sibling_item(title) ""
+
+
+            aa_log "Cleanup the copy so we can test the no cascade cleanup later"
+            content::item::delete -item_id $copied_no_sibling_item_id
+
+            set copied_sibling_item_id [content::item::copy \
+                                            -item_id $new_type_item_id \
+                                            -target_folder_id $first_folder_id \
+                                            -name copied_name]
+
+            content::item::get \
+                -item_id $copied_sibling_item_id \
+                -array_name copied_sibling_item
+            foreach att {name attribute_name} value {copied_name attribute_value} {
+                aa_equals "Sibling copied item '$copied_sibling_item_id' has the right $att" \
+                    $copied_sibling_item($att) $value
+            }
+            aa_equals "Sibling copied item '$copied_sibling_item_id' has an empty title. This is expected" \
+                $copied_sibling_item(title) ""
 
             #########################################################
             # move the copy
@@ -391,6 +440,10 @@ aa_register_case \
             aa_true "Tmp_filename added cr_revision exists" \
                 {[content::item::get_latest_revision \
                             -item_id $tmp_item_id] ne ""}
+
+            
+            
+
             #########################################################
             # delete first folder and everything in it to clean up
             #########################################################
