@@ -212,11 +212,17 @@ ad_proc -public lang::message::register {
     set cols(conflict_p) :conflict_db_p
 
     # Different logic for update and insert
-    if { [nsv_exists lang_message_$locale $key] } {
+    if { [db_0or1row message_exists {
+        select
+               -- For use in audit log call
+               message as old_message
+          from lang_messages
+        where locale = :locale
+          and package_key = :package_key
+          and message_key = :message_key
+    }] } {
         # Update existing message if the message has changed
 
-        # For use in audit log call
-        set old_message [nsv_get lang_message_$locale $key]
         # Peter TODO: should these attributes be cached?
         lang::message::get \
             -package_key $package_key \
@@ -306,6 +312,10 @@ ad_proc -public lang::message::delete {
               conflict_p f \
               sync_time "" \
         ]
+
+    # Cleanup the nsv caching the message
+    set key "${package_key}.${message_key}"
+    nsv_unset -nocomplain -- lang_message_$locale $key
 }
 
 ad_proc -private lang::message::undelete {
