@@ -35,7 +35,7 @@ ad_proc -private captcha::image::generate {
         error {'convert' command not available.}
     }
 
-    if {![regexp -nocase {^\d+x\d+$} $size]} {
+    if {![regexp -nocase {^(\d+)x(\d+)$} $size m width height]} {
         error {Invalid size}
     }
     if {![regexp -nocase {^(\#([0-9]|[a-f]){6}){2}$} ${background}${fill}]} {
@@ -51,15 +51,20 @@ ad_proc -private captcha::image::generate {
 
     set path [ad_tmpnam].png
 
-    set wavelength [expr {round(rand() * 100) + 100}]
+    set amplitude [expr {round($height * 0.25)}]
+    set wavelength [expr {round($width * 0.75)}]
+    set offset [expr {round($width * rand())}]
 
     exec $convert \
         -size $size \
         -background $background \
         -fill $fill \
         label:$text \
-        -wave 25%x$wavelength% \
+        -splice ${offset}x0+0+0 \
+        -wave ${amplitude}x${wavelength} \
+        -chop   ${offset}x0+0+0 \
         $path
+
 
     if {![file exists $path]} {
         error "File '$destination' was not generated"
