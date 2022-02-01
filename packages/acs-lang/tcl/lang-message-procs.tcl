@@ -254,13 +254,8 @@ ad_proc -public lang::message::register {
                 $old_message_array(conflict_p) \
                 $old_message_array(upgrade_status)
 
-            # Trying to avoid hitting Oracle bug#2011927
-            if { [string trim $message] eq "" } {
-                db_dml lang_message_update {}
-            } else {
-                set cols(message) [db_map message]
-                db_dml lang_message_update {} -clobs [list $message]
-            }
+            set cols(message) [db_map message]
+            db_dml lang_message_update {} -clobs [list $message]
         }
     } else {
         # Insert new message
@@ -282,12 +277,7 @@ ad_proc -public lang::message::register {
             lappend val_clauses $cols($col)
         }
 
-        # avoiding bug#2011927 from Oracle.
-        if { [string trim $message] eq "" } {
-            db_dml lang_message_insert_null_msg {}
-        } else {
-            db_dml lang_message_insert {} -clobs [list $message]
-        }
+        db_dml lang_message_insert {} -clobs [list $message]
     }
 
     # Update the message catalog cache
@@ -1096,11 +1086,7 @@ ad_proc -public lang::message::update_description {
     @author Simon Carstensen
     @creation-date 2003-08-12
 } {
-    if { [string trim $description] eq "" } {
-        db_dml update_description_insert_null {}
-    } else {
-        db_dml update_description {} -clobs [list $description]
-    }
+    db_dml update_description {} -clobs [list $description]
 }
 
 # Local variables:
