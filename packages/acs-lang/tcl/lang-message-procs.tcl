@@ -197,7 +197,7 @@ ad_proc -public lang::message::register {
     # Build up an array of columns to set
     array set cols [list]
     if { $update_sync_p } {
-        set cols(sync_time) [db_map sync_time]
+        set cols(sync_time) current_timestamp
     } else {
         set cols(sync_time) "null"
     }
@@ -554,10 +554,8 @@ ad_proc -private lang::message::edit {
         lappend set_clauses "$name = :$name"
         set $name $edit_array($name)
     }
-    if { $update_sync_p } {
-        if { ![info exists edit_array(sync_time)] } {
-            lappend set_clauses [db_map set_sync_time_now]
-        }
+    if { $update_sync_p && ![info exists edit_array(sync_time)] } {
+        lappend set_clauses {sync_time = current_timestamp}
     }
 
     if { [llength $set_clauses] > 0 } {

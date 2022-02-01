@@ -27,16 +27,4 @@
     </querytext>
   </fullquery>
 
-  <partialquery name="lang::message::register.sync_time">
-    <querytext>
-        current_timestamp
-    </querytext>
-  </partialquery>
-
-  <partialquery name="lang::message::edit.set_sync_time_now">
-      <querytext>
-        sync_time = current_timestamp
-      </querytext>
-  </partialquery>
-
 </queryset>
