@@ -682,10 +682,12 @@ aa_register_case \
                     set documentation ""
                 }
                 set code [api_get_body $proc_name]
-                aa_false "'$proc_name' body smells" \
-                    [regexp -nocase -- $rx $code]
-                aa_false "'$proc_name' doc smells" \
-                    [regexp -nocase -- $rx $documentation]
+                set smells_p [regexp -nocase -- $rx $code m smell]
+                set smell [expr {$smells_p ? "of '$smell'" : ""}]
+                aa_false "'$proc_name' body smells $smell" $smells_p
+                set smells_p [regexp -nocase -- $rx $documentation m smell]
+                set smell [expr {$smells_p ? "of '$smell'" : ""}]
+                aa_false "'$proc_name' doc smells $smell" $smells_p
             }
         }
     }
