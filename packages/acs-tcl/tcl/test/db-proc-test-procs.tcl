@@ -26,6 +26,24 @@ aa_register_case \
 }
 
 aa_register_case \
+    -cats {smoke} \
+    db_quoting {
+        Try to break the db quoting by feeding weird stuff to it.
+    } {
+        set data_path [acs_root_dir]/packages/acs-tcl/tcl/test/data/db-quoting-test.txt
+        set rfd [open $data_path r]
+        set data [read $rfd]
+        close $rfd
+
+        set db_data ""
+        aa_false "Quoting the test data won't fail" [catch {
+            set db_data [db_string q {select :data from dual}]
+        }]
+
+        aa_true "Data passing through the database did not change" {$db_data eq $data}
+    }
+
+aa_register_case \
     -cats {db smoke production_safe} \
     -procs {
         db_foreach
