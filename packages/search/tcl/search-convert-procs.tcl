@@ -59,22 +59,44 @@ ad_proc -public search::convert::binary_to_text {
             set convert_command {unzip -p $filename content.xml >$tmp_filename}
         }
         text/html {
-	    file delete -- $tmp_filename
-	    #
-	    # Reading the whole content into memory is not necessarily
-	    # the best when dealing with huge files. However, for
-	    # html-files this is probably ok.
-	    #
+            file delete -- $tmp_filename
+            #
+            # Reading the whole content into memory is not necessarily
+            # the best when dealing with huge files. However, for
+            # html-files this is probably ok.
+            #
             return [ns_striphtml [template::util::read_file $filename]]
         }
         text/plain {
-	    file delete -- $tmp_filename
-	    #
-	    # Reading the whole content into memory is not necessarily
-	    # the best when dealing with huge files. However, for
-	    # txt-files this is probably ok.
-	    #
-	    return [template::util::read_file $filename]
+            file delete -- $tmp_filename
+            #
+            # Don't trust blindly the extension and try to use the
+            # unix "file" command to get more info.
+            #
+            set file_command [::util::which file]
+            if {$file_command ne ""} {
+                set result [exec -ignorestderr $file_command --mime-type $filename]
+                set mime_type [lindex $result 1]
+                #
+                # Maybe, we are too restrictve by the following test,
+                # but let us be conservative first.
+                #
+                if {$mime_type ne "text/plain"} {
+                    #
+                    # The available file is not what it preteneds to
+                    # be. We could try further to extract content, but
+                    # we give simply up here.
+                    #
+                    ns_log notice "search-convert: not a plain text file $result"
+                    return ""
+                }
+            }
+            #
+            # Reading the whole content into memory is not necessarily
+            # the best when dealing with huge files. However, for
+            # txt-files this is probably ok.
+            #
+            return [template::util::read_file $filename]
         }
 
         default {
