@@ -10,7 +10,9 @@ namespace eval acs_admin {
 
     ad_proc -private ::acs_admin::check_expired_certificates {
         {-api production}
+        {-key_type ecdsa}
     } {
+
         Check expire-dates of certificates and send warning emails to
         the admin. In case HTTPS is not configured via the "nsssl"
         driver, or the command line tool "openssl" is not installed,
@@ -18,7 +20,9 @@ namespace eval acs_admin {
 
         @param api possible values: "production" or "staging".
             In case the certificate is expired, use this type of
-            letsencrypt environment to obtain a fresh certificate
+            letsencrypt environment to obtain a fresh certificate.
+
+        @param key_type possible values: "rsa" or "ecdsa".
 
         @return boolean telling whether expired certificates existed
         (true) or not (false)
@@ -111,8 +115,15 @@ namespace eval acs_admin {
                             # configuration file from section:
                             # (ns_section ns/server/${server}/module/letsencrypt)
                             #
+                            if {[::letsencrypt::Client info lookup parameters \
+                                     create key_type] ne ""} {
+                                set key_type_parameter "-key_type $key_type"
+                            } else {
+                                set key_type_parameter ""
+                            }
                             set c [::letsencrypt::Client new \
                                        -API $api \
+                                       {*}$key_type_parameter \
                                        -background \
                                        -domains {} \
                                       ]
