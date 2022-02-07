@@ -295,7 +295,7 @@ ad_proc -public util::random_init {seed} {
 ad_proc -public util::random {} {
     Return a pseudo-random number between 0 and 1. The reason to have
     this proc is that seeding can be controlled by the user and the
-    generation is independent from tcl.
+    generation is independent of Tcl.
 
     @see util::random_init
 } {
@@ -1290,7 +1290,7 @@ ad_proc -public ad_decode { args } {
     be returned in the case convert from values matches the given value to
     be decoded.<br>
     <br>
-    Note that in most cases native tcl idioms such as expr or switch
+    Note that in most cases native Tcl idioms such as expr or switch
     will do the trick. This proc CAN make sense when one has many
     alternatives to decode, as in such cases a switch statement would
     not be as compact.<br>

@@ -2508,7 +2508,7 @@ ad_proc -private security::configured_locations {
         if {[dict get $d port] != 0} {
             #
             # Add configured locations (deprecated, since this
-            # conflicts with the concept of virutal servers).
+            # conflicts with the concept of virtual servers).
             #
             set location [dict get $d location]
             if {$location ne "" && $location ni $locations} {

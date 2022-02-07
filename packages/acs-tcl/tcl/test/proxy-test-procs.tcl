@@ -23,7 +23,7 @@ ad_library {
 #     intention is not clear to me. If there is the goal to change the
 #     encoding for a single file, why not change it for this file?
 #
-#  c) The use case for the test is unclear. if a program requries in a
+#  c) The use case for the test is unclear. If a program requires in a
 #     single run different system encodings, it does something
 #     probably wrong.
 #
