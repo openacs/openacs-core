@@ -30,17 +30,21 @@ aa_register_case \
     db_quoting {
         Try to break the db quoting by feeding weird stuff to it.
     } {
-        set data_path [acs_root_dir]/packages/acs-tcl/tcl/test/data/db-quoting-test.txt
-        set rfd [open $data_path r]
-        set data [read $rfd]
-        close $rfd
+        set strings {
+            "I contain the null \u0000character"
+            "\u0000"
+            "\u0000',(select 1 from dual)"
+            "\u0000'',(select 1 from dual)"
+            "\u0000''',(select 1 from dual)"
+            "\u0000''',(select 1 from dual)'"
+        }
 
-        set db_data ""
-        aa_false "Quoting the test data won't fail" [catch {
-            set db_data [db_string q {select :data from dual}]
-        }]
-
-        aa_true "Data passing through the database did not change" {$db_data eq $data}
+        foreach data $strings {
+            set error_p [catch {
+                db_string q {select :data from dual}
+            } errmsg]
+            aa_true "Quoting the test data should fail: $errmsg" $error_p
+        }
     }
 
 aa_register_case \
