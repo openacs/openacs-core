@@ -61,13 +61,19 @@ ad_proc -private template::data::validate::widget { value_ref message_ref } {
         $value_ref value \
         element element
 
-    if {[info exists element(widget)] &&
-        $element(widget) in {radio select multiselect} &&
-        [info exists element(options)]} {
+    if {
+        [info exists element(widget)] &&
+        $element(widget) in {radio select multiselect}
+    } {
         # Make sure widgets that are meant to pick an option from a
         # restricted list of values, actually allow only those values.
+
+        # These widgets MUST specify a list of options. When none is
+        # specified, validation will fail.
+        set options [expr {[info exists element(options)] ? $element(options) : ""}]
+
         set valid_p false
-        foreach o $element(options) {
+        foreach o $options {
             lassign $o option_label option_value
             if {$value eq $option_value} {
                 set valid_p true
