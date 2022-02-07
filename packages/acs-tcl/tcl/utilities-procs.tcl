@@ -1135,7 +1135,6 @@ ad_proc -public oacs_util::csv_foreach {
     @param override_headers the list of variables in the CSV
     @param array_name the name of the array to set with the values from the CSV as each line is read.
 } {
-    # FIXME: We should catch the error here
     set csv_stream [open $file r]
 
     # Check if there are headers
