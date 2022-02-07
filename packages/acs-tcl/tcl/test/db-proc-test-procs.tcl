@@ -30,6 +30,26 @@ aa_register_case \
     db_quoting {
         Try to break the db quoting by feeding weird stuff to it.
     } {
+
+        #
+        # Checking base essentials: PostgreSQL does not allow embedded
+        # NUL character.
+        #
+        set data "a\x00b"
+        aa_true "Attempting to sneak-in invalid data via bind values [ns_urlencode $data]" [catch {
+            db_string via_bindvar {select :data from dual}
+        }]
+
+        aa_true "Attempting to sneak-in invalid data via quoted value data [ns_urlencode $data]" [catch {
+            db_string via_dbquote [subst {select [ns_dbquotevalue $data] from dual}]
+        }]
+
+        #
+        # The following checks do not introduce anything new, but come
+        # from real-world intrusion detection ... although the tests
+        # look silly to me, since PostgreSQL ignores eveything after
+        # the NUL character.
+        #
         set strings {
             "I contain the null \u0000character"
             "\u0000"
