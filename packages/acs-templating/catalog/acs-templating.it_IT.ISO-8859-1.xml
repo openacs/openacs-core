@@ -76,6 +76,7 @@
   <msg key="Invalid_enumeration_duplicate_elements">Enumerazione non valida. &#34;%value%&#34; non contiene valori unici.</msg>
   <msg key="Invalid_filename">Nome del file non valido</msg>
   <msg key="Invalid_integer">Intero non valido</msg>
+  <msg key="Invalid_item">Oggetto non valido</msg>
   <msg key="Invalid_keyword">Parola chiave non valida</msg>
   <msg key="Invalid_natural_number">Numero naturale non valido</msg>
   <msg key="Invalid_number">Numero non valido</msg>
@@ -105,6 +106,7 @@
   <msg key="Page">Pagina</msg>
   <msg key="Page_Size">Dimensione Pagina</msg>
   <msg key="Plain_Text">Testo Semplice</msg>
+  <msg key="Please_enter_the_captcha">Inserisci le lettere visualizzate nel captcha</msg>
   <msg key="Previous_with_arrow">&lt;&lt; Precedente</msg>
   <msg key="required">obbligatorio</msg>
   <msg key="reverse_sort_order_of_label">Inverti la direzione dell&#39;ordinamento di %label%</msg>
@@ -129,4 +131,5 @@
   <msg key="Year">Anno</msg>
   <msg key="year">anno</msg>
   <msg key="Year_must_be_positive">L&#39;anno deve essere positivo</msg>
+  <msg key="Your_captcha_is_invalid">Il captcha inserito non è corretto</msg>
 </message_catalog>
