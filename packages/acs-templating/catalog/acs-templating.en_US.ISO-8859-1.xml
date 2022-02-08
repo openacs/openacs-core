@@ -76,6 +76,7 @@
   <msg key="Invalid_enumeration_duplicate_elements">Invalid enumeration. &#34;%value%&#34; does not contain unique values.</msg>
   <msg key="Invalid_filename">Invalid filename</msg>
   <msg key="Invalid_integer">Invalid integer</msg>
+  <msg key="Invalid_item">Invalid item</msg>
   <msg key="Invalid_keyword">Invalid keyword</msg>
   <msg key="Invalid_natural_number">Invalid natural number</msg>
   <msg key="Invalid_number">Invalid number</msg>
