@@ -48,9 +48,26 @@ if { $show_p } {
 
     template::add_body_script -script {
         document.getElementById('ACS_DS_ADP').addEventListener('click', function (event) {
-            var el=document.getElementsByTagName('span');
             event.preventDefault();
-            for(i=0;i<el.length;i++){if(el[i].className=='developer-support-adp-file-on'){void(el[i].className='developer-support-adp-file-off')}else{if(el[i].className=='developer-support-adp-file-off'){void(el[i].className='developer-support-adp-file-on')}}};void(el=document.getElementsByTagName('div'));for(i=0;i<el.length;i++){if(el[i].className=='developer-support-adp-box-on'){void(el[i].className='developer-support-adp-box-off')}else{if(el[i].className=='developer-support-adp-box-off'){void(el[i].className='developer-support-adp-box-on')}};if(el[i].className=='developer-support-adp-output-on'){void(el[i].className='developer-support-adp-output-off')}else{if(el[i].className=='developer-support-adp-output-off'){void(el[i].className='developer-support-adp-output-on')}};}
+            for (e of document.getElementsByTagName('span')) {
+                if (e.className === 'developer-support-adp-file-on') {
+                    e.className = 'developer-support-adp-file-off';
+                } else if (e.className === 'developer-support-adp-file-off') {
+                    e.className = 'developer-support-adp-file-on';
+                }
+            }
+            for (e of document.getElementsByTagName('div')) {
+                if (e.className === 'developer-support-adp-box-on') {
+                    e.className = 'developer-support-adp-box-off';
+                } else if(e.className === 'developer-support-adp-box-off'){
+                    e.className = 'developer-support-adp-box-on';
+                }
+                if (e.className === 'developer-support-adp-output-on') {
+                    e.className = 'developer-support-adp-output-off';
+                } else if(e.className === 'developer-support-adp-output-off') {
+                    e.className = 'developer-support-adp-output-on';
+                }
+            }
         });
     }
 
@@ -61,9 +78,14 @@ if { $show_p } {
 
     template::add_body_script -script {
         document.getElementById('ACS_DS_FOT').addEventListener('click', function (event) {
-            var el=document.getElementsByTagName('div');
             event.preventDefault();
-            for(i=0;i<el.length;i++){if(el[i].className=='developer-support-footer'){void(el[i].className='developer-support-footer-off')}else{if(el[i].className=='developer-support-footer-off'){void(el[i].className='developer-support-footer')}}};
+            for (e of document.getElementsByTagName('div')) {
+                if(e.className === 'developer-support-footer') {
+                    e.className = 'developer-support-footer-off';
+                } else if(e.className === 'developer-support-footer-off') {
+                    e.className = 'developer-support-footer';
+                }
+            }
         });
     }
 
