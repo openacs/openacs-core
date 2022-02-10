@@ -1887,7 +1887,7 @@ ad_proc -public apm_package_instance_new {
         select package_id
           from apm_package_types t,
                apm_packages p
-         where t.singleton_p
+         where t.singleton_p = 't'
            and t.package_key = p.package_key
            and t.package_key = :package_key}]
     } {
@@ -2028,8 +2028,9 @@ ad_proc -public apm_application_new_checkbox {} {
     db_foreach package_types {
          select package_key, pretty_name
          from apm_package_types t
-         where not (singleton_p and exists (select 1 from apm_packages
-                                             where package_key = t.package_key))
+         where not (singleton_p = 't'
+                    and exists (select 1 from apm_packages
+                                where package_key = t.package_key))
          order by pretty_name
     } {
         lappend options [subst {<option value="$package_key">$pretty_name</option>}]

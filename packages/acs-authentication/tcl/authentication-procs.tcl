@@ -1797,7 +1797,7 @@ ad_proc -public auth::can_admin_system_without_authority_p {
           and u.user_id = m.member_id
           and u.member_state = 'approved'
           and u.authority_id <> :authority_id
-          and acs_permission.permission_p(amo.object_id, u.user_id, 'admin')
+          and acs_permission.permission_p(amo.object_id, u.user_id, 'admin') = 't'
         )
     }]
 }

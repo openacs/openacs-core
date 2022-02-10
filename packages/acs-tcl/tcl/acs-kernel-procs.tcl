@@ -25,7 +25,7 @@ ad_proc -private ad_acs_administrator_exists_p {} {
              and p.object_id = amo.object_id
              and p.grantee_id = m.party_id
              and u.user_id = m.member_id
-             and acs_permission.permission_p(amo.object_id, u.user_id, 'admin')
+             and acs_permission.permission_p(amo.object_id, u.user_id, 'admin') = 't'
          )
     } -default 0]
 }

@@ -37,7 +37,7 @@ aa_register_case \
                           and u.user_id = m.member_id
                           and u.member_state = 'approved'
                           and u.authority_id <> :authority_id
-                          and acs_permission.permission_p(amo.object_id, u.user_id, 'admin')
+                          and acs_permission.permission_p(amo.object_id, u.user_id, 'admin') = 't'
                         )
                     }]
                     aa_equals "Proc should return $expected for authority $authority_id" \
@@ -62,7 +62,7 @@ aa_register_case \
                     and p.grantee_id = m.party_id
                     and u.user_id = m.member_id
                     and u.member_state = 'approved'
-                    and acs_permission.permission_p(amo.object_id, u.user_id, 'admin')
+                    and acs_permission.permission_p(amo.object_id, u.user_id, 'admin') = 't'
                 }] {
                     permission::revoke \
                         -party_id $user_id \

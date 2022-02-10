@@ -16,6 +16,11 @@ create table lang_user_timezone (
     timezone           varchar2(100)
 );
 
+
+-- The column object_id allows to bind the message key to the
+-- lifetime of an acs_object: upon object's deletion, the message
+-- key will be automatically deleted from the system.
+
 create table lang_message_keys ( 
     message_key        varchar2(200)
                        constraint lang_message_keys_m_key_nn
@@ -26,14 +31,10 @@ create table lang_message_keys (
                        on delete cascade
                        constraint lang_message_keys_p_key_nn
                        not null,
-
-    -- This optional column allows to bind the message key to the
-    -- lifetime of an acs_object: upon object's deletion, the message
-    -- key will be automatically deleted from the system.
-    object_id          integer constraint lang_message_keys_object_id_fk
+    object_id          integer
+                       constraint lang_message_keys_object_id_fk
                        references acs_objects(object_id)
                        on delete cascade,
-
     description        clob,
     constraint lang_message_keys_pk
     primary key (message_key, package_key)
