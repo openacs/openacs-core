@@ -14,17 +14,6 @@
 </style>
 </multiple>
 
-<comment>
-   These two variables have to be set before the XinhaCore.js is loaded. To 
-   enforce the order, it is put here.
-</comment>
-<if @::acs_blank_master__htmlareas@ defined and @::xinha_dir@ defined and @::xinha_lang@ defined>
-<script type="text/javascript"<if @::__csp_nonce@ not nil> nonce="@::__csp_nonce;literal@"</if>>
-_editor_url = "@::xinha_dir;literal@"; 
-_editor_lang = "@::xinha_lang;literal@";
-</script>
-</if>
-
 <multiple name="headscript">   <script type="@headscript.type;literal@"<if @headscript.src@ not nil> src="@headscript.src;literal@"</if><if @headscript.charset@ not nil> charset="@headscript.charset;literal@"</if><if @headscript.defer@ not nil> defer="@headscript.defer;literal@"</if><if @headscript.async@ not nil> async="@headscript.async;literal@"</if><if @headscript.integrity@ not nil> integrity="@headscript.integrity;literal@"</if><if @headscript.crossorigin@ not nil> crossorigin="@headscript.crossorigin;literal@"</if><if @::__csp_nonce@ not nil> nonce="@::__csp_nonce;literal@"</if>><if @headscript.content@ not nil>@headscript.content;noquote@</if></script>
 </multiple>
 
