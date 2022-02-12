@@ -1,5 +1,5 @@
 -- add extended attribute to rel types
-alter table acs_rel_types add column composable_p boolean default 't' not null;
+alter table acs_rel_types add composable_p char(1) default 't' not null;
 update acs_rel_types set composable_p = 'f' where rel_type = 'admin_rel';
 
 create or replace trigger membership_rels_in_tr
