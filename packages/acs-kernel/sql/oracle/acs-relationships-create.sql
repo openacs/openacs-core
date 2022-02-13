@@ -131,7 +131,8 @@ as
     object_type_two	in acs_rel_types.object_type_two%TYPE,
     role_two		in acs_rel_types.role_two%TYPE default null,
     min_n_rels_two	in acs_rel_types.min_n_rels_two%TYPE,
-    max_n_rels_two	in acs_rel_types.max_n_rels_two%TYPE
+    max_n_rels_two	in acs_rel_types.max_n_rels_two%TYPE,
+    composable_p        in char default 't'
   );
 
   procedure drop_type (
@@ -215,7 +216,8 @@ as
     object_type_two	in acs_rel_types.object_type_two%TYPE,
     role_two		in acs_rel_types.role_two%TYPE default null,
     min_n_rels_two	in acs_rel_types.min_n_rels_two%TYPE,
-    max_n_rels_two	in acs_rel_types.max_n_rels_two%TYPE
+    max_n_rels_two	in acs_rel_types.max_n_rels_two%TYPE,
+    composable_p        in char default 't'
   )
   is
   begin
@@ -237,13 +239,15 @@ as
       object_type_one, role_one,
       min_n_rels_one, max_n_rels_one,
       object_type_two, role_two,
-      min_n_rels_two, max_n_rels_two)
+      min_n_rels_two, max_n_rels_two,
+      composable_p)
     values
      (create_type.rel_type,
       create_type.object_type_one, create_type.role_one,
       create_type.min_n_rels_one, create_type.max_n_rels_one,
       create_type.object_type_two, create_type.role_two,
-      create_type.min_n_rels_two, create_type.max_n_rels_two);
+      create_type.min_n_rels_two, create_type.max_n_rels_two,
+      create_type.composable_p);
   end;
 
   procedure drop_type (
