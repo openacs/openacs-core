@@ -63,26 +63,7 @@ ad_proc -public subsite::callback {
     # a list as each callback may itself require a database
     # handle. Note that we need the distinct in case two callbacks are
     # registered for an object and its parent object type.
-    db_foreach get_callbacks {
-        with recursive object_hierarchy as (
-            select object_type, supertype
-              from acs_object_types
-             where object_type = coalesce(:object_type, (select object_type
-                                                         from acs_objects
-                                                         where object_id = :object_id))
-
-            union all
-
-            select t.object_type, t.supertype
-            from acs_object_types t,
-                 object_hierarchy s
-            where t.object_type = s.supertype
-        )
-        select distinct callback, callback_type as type
-          from subsite_callbacks
-        where event_type = :event_type
-          and object_type in (select object_type from object_hierarchy)
-    } {
+    db_foreach get_callbacks {} {
         switch -- $type {
             tcl {
                 # Execute the Tcl procedure
