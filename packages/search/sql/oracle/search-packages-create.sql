@@ -55,9 +55,10 @@ begin
     -- race condition.
     --
 
-    if p_event = 'DELETE' then
-      select count(*) from acs_objects into l_count
-      where object_id = p_object_id;
+    if enqueue.event = 'DELETE' then
+      select count(*) into l_count
+      from acs_objects
+      where object_id = enqueue.object_id;
       if l_count = 0 then
          return;
       end if;
