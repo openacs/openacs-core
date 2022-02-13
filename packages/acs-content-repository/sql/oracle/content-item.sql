@@ -81,7 +81,7 @@ function new (
   storage_type  in cr_items.storage_type%TYPE default 'lob',
   security_inherit_p in acs_objects.security_inherit_p%TYPE default 't',
   package_id    in acs_objects.package_id%TYPE default null,
-  with_child_rels in boolean default 't'
+  with_child_rels in char default 't'
 ) return cr_items.item_id%TYPE
 is
   v_parent_id      cr_items.parent_id%TYPE;
