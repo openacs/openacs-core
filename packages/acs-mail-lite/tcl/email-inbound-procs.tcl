@@ -1256,7 +1256,7 @@ ad_proc -private acs_mail_lite::inbound_queue_pull {
             where processed_p <>'1'
             and release_p <>'1'
             order by priority
-            limit :email_max_ct } ]
+            fetch next :email_max_ct rows only}]
 
         set chunk_len [llength $chunk_ols]
         if { $chunk_len < 1} {
