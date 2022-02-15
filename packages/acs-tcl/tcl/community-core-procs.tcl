@@ -573,7 +573,6 @@ ad_proc -private acs_user::get_user_info_not_cached {
                u.auth_token,
                mm.rel_id,
                case when (mr.member_state = 'approved') then 't' else 'f' end  as registered_user_p,
-               mr.member_state = 'approved' as registered_user_p,
                mr.member_state
         from users u
              left join group_member_map mm on mm.member_id = u.user_id
