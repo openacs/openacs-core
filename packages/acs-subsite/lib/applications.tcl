@@ -28,6 +28,8 @@ list::create \
 set subsite_node_id [subsite::get_element -element node_id]
 
 set user_id [ad_conn user_id]
+ns_log notice "APPS: subsite_node_id $subsite_node_id, user_id $user_id // [array get ::ad_conn]"
+
 
 db_multirow applications select_applications {
     select p.package_id,
@@ -41,7 +43,7 @@ db_multirow applications select_applications {
     and    p.package_id = n.object_id
     and    t.package_key = p.package_key
     and    t.package_type = 'apm_application'
-    and    acs_permission.permission_p(p.package_id, :user_id, 'read')
+    and    acs_permission.permission_p(p.package_id, :user_id, 'read') = 't'
     order  by upper(instance_name)
 }
 
