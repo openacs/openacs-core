@@ -572,6 +572,7 @@ ad_proc -private acs_user::get_user_info_not_cached {
                extract(day from current_timestamp - password_changed_date) as password_age_days,
                u.auth_token,
                mm.rel_id,
+               case when (mr.member_state = 'approved') then 't' else 'f' end  as registered_user_p,
                mr.member_state = 'approved' as registered_user_p,
                mr.member_state
         from users u
