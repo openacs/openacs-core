@@ -30,7 +30,8 @@
       and    p.package_key  in ('[join [subsite::package_keys] {','}]')
       and    ag.package_id = p.package_id
       and    g.group_id = ag.group_id
-      and    (g.join_policy != 'closed' or acs_permission.permission_p(p.package_id, :untrusted_user_id, 'read'))
+      and    (g.join_policy != 'closed' or
+              acs_permission.permission_p(p.package_id, :untrusted_user_id, 'read') = 't')
     order  by lower(instance_name)
 
       </querytext>
