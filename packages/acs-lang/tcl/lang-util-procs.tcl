@@ -388,10 +388,11 @@ ad_proc -private lang::util::default_locale_from_lang_not_cached {
         select locale
         from ad_locales l
         where language = :language
-          and enabled_p
-          and (default_p or not exists (select 1 from ad_locales
-                                         where language = :language
-                                           and locale <> l.locale))
+          and enabled_p = 't'
+          and (default_p = 't' or not exists
+             (select 1 from ad_locales
+              where language = :language
+              and locale <> l.locale))
     }]
     if {[llength $locales] > 1} {
         ad_log error "multiple locales '$locales' defined for language '$language'. Define default locale longuage in /acs-lang/admin"
