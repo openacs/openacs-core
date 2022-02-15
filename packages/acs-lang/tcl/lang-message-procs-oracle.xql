@@ -4,7 +4,7 @@
 
   <partialquery name="lang::message::register.message">
     <querytext>
-        empty_clob()
+        :message
     </querytext>
   </partialquery>
 
