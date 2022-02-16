@@ -57,27 +57,30 @@ namespace eval notification::sweep {
         # outer join on the mapping table and a null check.
         #
         set notifications [db_list_of_ns_sets select_notifications {
-            select notification_id,
+           select notifications.notification_id,
                    notif_subject,
                    notif_text,
                    notif_html,
                    file_ids,
-                   user_id,
+                   notification_requests.user_id,
                    request_id,
-                   type_id,
+                   notifications.type_id,
                    delivery_method_id,
                    response_id,
                    notif_date,
                    notif_user,
                    acs_permission.permission_p(notification_requests.object_id, notification_requests.user_id, 'read') as still_valid_p
-            from notifications inner join notification_requests using (type_id, object_id)
+            from notifications
+            inner join notification_requests on (notifications.type_id = notification_requests.type_id
+                                                and notifications.object_id = notification_requests.object_id)
               inner join acs_objects on (notification_requests.request_id = acs_objects.object_id)
-              left outer join notification_user_map using (notification_id, user_id)
+              left outer join notification_user_map on (notification_user_map.notification_id = notifications.notification_id
+                                                       and notification_user_map.user_id = notification_requests.user_id)
             where sent_date is null
               and creation_date <= notif_date
               and (notif_date is null or notif_date < current_timestamp)
               and interval_id = :interval_id
-            order by user_id, type_id, notif_date
+            order by notification_requests.user_id, notifications.type_id, notif_date
         }]
 
         foreach notif $notifications {
