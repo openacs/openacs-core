@@ -10,6 +10,9 @@ PROMPT starting utilities-create.sql....
 --
 
 create or replace TYPE t_util_primary_keys IS TABLE OF varchar2(100);
+/
+show errors
+
 
 create or replace package util
 as
