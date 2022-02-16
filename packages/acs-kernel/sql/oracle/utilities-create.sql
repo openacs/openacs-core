@@ -9,6 +9,8 @@ PROMPT starting utilities-create.sql....
 -- @cvs-id $Id$
 --
 
+create or replace TYPE t_util_primary_keys IS TABLE OF varchar2(100);
+
 create or replace package util
 as
     function multiple_nextval(
@@ -22,12 +24,12 @@ as
     
     function table_exists (
 	name in varchar2)
-	return boolean;
+	return char;
 	
     function table_column_exists (
 	t_name  in varchar2,
 	c_name in varchar2)
-	return boolean;
+	return char;
     
     function view_exists (
 	name in varchar2)
@@ -66,11 +68,9 @@ as
 	column    IN varchar2)
     return LONG;
 
-    TYPE primary_keys IS TABLE OF varchar2(100);
-
     function get_primary_keys (
         table_name IN varchar2)
-       return primary_keys;
+       return t_util_primary_keys;
 
 end util;
 /
@@ -117,11 +117,11 @@ as
     
     function table_exists (
         name IN varchar2)
-    return boolean
+    return char
     as
 
       v_count integer;
-      v_exists boolean;
+      v_exists char;
 
     begin
 
@@ -129,9 +129,9 @@ as
       from user_tables where table_name = upper(table_exists.name);
 
       if v_count = 1 then
-        v_exists := true;
+        v_exists := 't';
       else
-        v_exists := false;
+        v_exists := 'f';
       end if;
 
       return v_exists;
@@ -141,10 +141,10 @@ as
     function table_column_exists (
         t_name  IN varchar2,
         c_name IN varchar2)
-    return boolean
+    return char
     as
       v_count integer;
-      v_exists boolean;
+      v_exists char;
 
     begin
 
@@ -153,9 +153,9 @@ as
       and column_name = upper(table_column_exists.c_name);
 
       if v_count = 1 then
-        v_exists := true;
+        v_exists := 't';
       else
-        v_exists := false;
+        v_exists := 'f';
       end if;
 
       return v_exists;
@@ -340,17 +340,20 @@ as
 	   and column_name = get_default.column;
 
       return v_value;
+      
+      exception when no_data_found then 
+         return null;
     end get_default;
 
     function get_primary_keys(
         table_name in varchar2)
-    return primary_keys
+    return t_util_primary_keys
     as
-       v_rec primary_keys;
+       v_ret t_util_primary_keys;
 
     begin
           select cols.column_name
-	    bulk collect into v_rec
+          bulk collect into v_ret
 	  from all_constraints cons, all_cons_columns cols
 	  where cols.table_name = get_primary_keys.table_name
 	  and cons.constraint_type = 'P'
@@ -358,7 +361,7 @@ as
 	  and cons.owner = cols.owner
 	  order by cols.table_name, cols.position;
 
-        return v_rec;
+        return v_ret;
     end get_primary_keys;
 
 end util;
