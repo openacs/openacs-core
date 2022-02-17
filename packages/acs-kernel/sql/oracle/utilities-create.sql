@@ -216,8 +216,8 @@ as
        join all_cons_columns cc on (c.owner = cc.owner
                                          and c.constraint_name = cc.constraint_name)
        where c.constraint_type = 'U'
-         and c.table_name = unique_exists.table_name
-         and cc.column_name = unique_exists.column
+         and c.table_name = upper(unique_exists.table_name)
+         and cc.column_name = upper(unique_exists.column)
          and ((v_single = 0) or (
             select count(*) from all_cons_columns
              where constraint_name = c.constraint_name) = 1);
@@ -242,8 +242,8 @@ as
        join all_cons_columns cc on (c.owner = cc.owner
                                     and c.constraint_name = cc.constraint_name)
        where c.constraint_type = 'P'
-         and c.table_name = primary_key_exists.table_name
-         and cc.column_name = primary_key_exists.column
+         and c.table_name = upper(primary_key_exists.table_name)
+         and cc.column_name = upper(primary_key_exists.column)
          and ((v_single = 0) or (
             select count(*) from all_cons_columns
              where constraint_name = c.constraint_name
@@ -262,8 +262,8 @@ as
     begin
       select decode(count(*),0,'f','t') into v_exists
         from all_tab_columns
-         where table_name = not_null_exists.table_name
-           and column_name = not_null_exists.column
+         where table_name = upper(not_null_exists.table_name)
+           and column_name = upper(not_null_exists.column)
            and nullable = 'N';
 
       return v_exists;
@@ -279,8 +279,8 @@ as
     begin
       select data_default into v_value
         from all_tab_columns
-         where table_name = get_default.table_name
-           and column_name = get_default.column;
+         where table_name = upper(get_default.table_name)
+           and column_name = upper(get_default.column);
 
       return v_value;
 
