@@ -10,6 +10,8 @@ ad_page_contract {
     object_id:naturalnum,notnull
     {pretty_name:allhtml ""}
     return_url:localurl
+    interval_id:integer,optional
+    delivery_method_id:integer,optional
 }
 
 set user_id [auth::require_login]
