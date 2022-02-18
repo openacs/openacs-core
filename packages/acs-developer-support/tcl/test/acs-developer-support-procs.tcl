@@ -110,8 +110,9 @@ aa_register_case \
             nsv_set ds_properties enabled_p $enabled_p
             set ::ds_enabled_p $enabled_p
             aa_equals "enabled value is ON" 1 [ds_enabled_p]
-            aa_equals "show value is the permission enabled value" [ds_permission_p] [ds_show_p]
-
+            aa_equals "show value is the permission enabled value" \
+                [string is true -strict [ds_permission_p]] \
+                [string is true -strict [ds_show_p]]
         } finally {
             ds_set_database_enabled $old_db_state
             ds_set_profiling_enabled $old_pr_state
