@@ -42,52 +42,52 @@ aa_register_case \
         permission::grant -party_id $user_id -object_id $new_package_id -privilege "admin"
         # Verifying the admin privilege on the user
         aa_true "testing admin privilege" \
-            {[permission::permission_p -party_id $user_id -object_id $new_package_id -privilege "admin"] == 1}
+            [permission::permission_p -party_id $user_id -object_id $new_package_id -privilege "admin"]
         # Revoking admin privilege
         permission::revoke -party_id $user_id -object_id $new_package_id -privilege "admin"
-        aa_true "testing if admin privilege was revoked" \
-            {[permission::permission_p -party_id $user_id -object_id $new_package_id -privilege "admin"] == 0}
+        aa_false "testing if admin privilege was revoked" \
+            [permission::permission_p -party_id $user_id -object_id $new_package_id -privilege "admin"]
 
         # Grant read privilege
         permission::grant -party_id $user_id -object_id $new_package_id -privilege "read"
         # Verifying  the read privilege on the user
         aa_true "testing read permissions" \
-            {[permission::permission_p -party_id $user_id -object_id $new_package_id -privilege "read" ] == 1}
+            [permission::permission_p -party_id $user_id -object_id $new_package_id -privilege "read"]
         # Revoking read privilege
         permission::revoke -party_id $user_id -object_id $new_package_id -privilege "read"
         # We tested with a query because we have problems with inherit
         aa_true "testing if read privilege was revoked" \
-            {[db_string test_read "select 1 from acs_permissions where object_id = :new_package_id and grantee_id = :user_id" -default 0] ==  0}
+            {![db_string test_read "select 1 from acs_permissions where object_id = :new_package_id and grantee_id = :user_id" -default 0]}
 
         # Grant write privilege
         permission::grant -party_id $user_id -object_id $new_package_id -privilege "write"
         # Verifying the write privilege  on the user
         aa_true "testing write permissions" \
-              {[permission::permission_p -party_id $user_id -object_id  $new_package_id -privilege "write" ] == 1}
+            [permission::permission_p -party_id $user_id -object_id  $new_package_id -privilege "write"]
         # Revoking write privilege
         permission::revoke -party_id $user_id -object_id $new_package_id -privilege "write"
         aa_true "testing if write permissions was revoked" \
-            {[permission::permission_p -party_id $user_id -object_id  $new_package_id -privilege "write" ] == 0}
+            {![permission::permission_p -party_id $user_id -object_id  $new_package_id -privilege "write" ]}
 
         # Grant create privilege
         permission::grant -party_id $user_id -object_id $new_package_id -privilege "create"
         # Verifying the create privilege  on the user
         aa_true "testing create permissions" \
-            {[permission::permission_p -party_id $user_id -object_id  $new_package_id -privilege "create" ] == 1}
+            [permission::permission_p -party_id $user_id -object_id  $new_package_id -privilege "create"]
         # Revoking create privilege
         permission::revoke -party_id $user_id -object_id $new_package_id -privilege "create"
-        aa_true "testing if create privileges was revoked" \
-            {[permission::permission_p -party_id $user_id -object_id  $new_package_id -privilege "create" ] == 0}
+        aa_false "testing if create privileges was revoked" \
+            [permission::permission_p -party_id $user_id -object_id  $new_package_id -privilege "create"]
 
         # Grant delete privilege
         permission::grant -party_id $user_id -object_id $new_package_id -privilege "delete"
         # Verifying the delete privilege on the user
         aa_true "testing delete permissions" \
-             {[permission::permission_p -party_id $user_id -object_id  $new_package_id -privilege "delete" ] == 1}
+            [permission::permission_p -party_id $user_id -object_id  $new_package_id -privilege "delete"]
         # Revoking delete privilege
         permission::revoke -party_id $user_id -object_id $new_package_id -privilege "delete"
-         aa_true "testing if delete permissions was revoked" \
-             {[permission::permission_p -party_id $user_id  -object_id  $new_package_id -privilege "delete" ]  == 0}
+        aa_false "testing if delete permissions was revoked" \
+            [permission::permission_p -party_id $user_id  -object_id  $new_package_id -privilege "delete"]
     }
 }
 
