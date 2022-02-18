@@ -79,40 +79,45 @@ aa_register_case \
                     break
                 }
             }
-            aa_equals "collection enabled value is correct" \
-                $collection_enabled_p [ds_collection_enabled_p]
+            aa_true "collection enabled value is correct" {
+                ($collection_enabled_p && [ds_collection_enabled_p]) ||
+                (!$collection_enabled_p && ![ds_collection_enabled_p])
+            }
 
             ds_set_database_enabled 0
-            aa_equals "database enabled is OFF" \
-                0 [ds_database_enabled_p]
+            aa_false "database enabled is OFF" \
+                [ds_database_enabled_p]
             ds_set_database_enabled 1
-            aa_equals "database enabled is ON" \
-                1 [ds_database_enabled_p]
+            aa_true "database enabled is ON" \
+                [ds_database_enabled_p]
 
-            aa_equals "page fragment cache enabled value is correct" \
-                [nsv_get ds_properties page_fragment_cache_p] \
-                [ds_page_fragment_cache_enabled_p]
+            aa_true "page fragment cache enabled value is correct" {
+                ([nsv_get ds_properties page_fragment_cache_p] && [ds_page_fragment_cache_enabled_p]) ||
+                (![nsv_get ds_properties page_fragment_cache_p] && ![ds_page_fragment_cache_enabled_p])
+            }
 
             ds_set_profiling_enabled 0
-            aa_equals "profiling enabled is OFF" \
-                0 [ds_profiling_enabled_p]
+            aa_false "profiling enabled is OFF" \
+                [ds_profiling_enabled_p]
             ds_set_profiling_enabled 1
-            aa_equals "profiling enabled is ON" \
-                1 [ds_profiling_enabled_p]
+            aa_true "profiling enabled is ON" \
+                [ds_profiling_enabled_p]
 
             set enabled_p 0
             nsv_set ds_properties enabled_p $enabled_p
             set ::ds_enabled_p $enabled_p
-            aa_equals "enabled value is OFF" 0 [ds_enabled_p]
-            aa_equals "show value is OFF" 0 [ds_show_p]
+            aa_false "enabled value is OFF" [ds_enabled_p]
+            aa_false "show value is OFF" [ds_show_p]
 
             set enabled_p 1
             nsv_set ds_properties enabled_p $enabled_p
             set ::ds_enabled_p $enabled_p
-            aa_equals "enabled value is ON" 1 [ds_enabled_p]
-            aa_equals "show value is the permission enabled value" \
-                [string is true -strict [ds_permission_p]] \
-                [string is true -strict [ds_show_p]]
+            aa_true "enabled value is ON" [ds_enabled_p]
+            aa_true "show value is the permission enabled value" {
+                ([ds_permission_p] && [ds_show_p]) ||
+                (![ds_permission_p] && ![ds_show_p])
+            }
+
         } finally {
             ds_set_database_enabled $old_db_state
             ds_set_profiling_enabled $old_pr_state
