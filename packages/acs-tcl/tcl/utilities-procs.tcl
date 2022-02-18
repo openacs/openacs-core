@@ -3817,8 +3817,46 @@ ad_proc -public util::var_subst_quotehtml {
 
 namespace eval util {
 
+    ad_proc -public ::util::file_content_check {
+        -type:required
+        -filename:required
+    } {
+
+        Check whether the provided file is of the requested type.
+        This function is more robust and protable than relying on
+        external programs and their output, but it does not work on
+        all possible file types. It checks a few common cases that
+        could lead to problems otherwise, like when uploading archives.
+
+        @return Boolean value (0 or 1)
+
+    } {
+        set known_signatures {
+            zip    504b0304
+            gzip   1f8b
+            pdf    255044462d
+            xz     fd377a585a00
+            bz2    425A68
+            export 23206578706f7274696e6720
+        }
+        if {[dict exists $known_signatures $type]} {
+            set hex_signature [dict get $known_signatures $type]
+            set len [expr {[string length $hex_signature] / 2}]
+            set F [open $filename rb]
+            set signature [read $F $len]
+            close $F
+            return [expr {[binary encode hex $signature] eq $hex_signature}]
+        } else {
+            error "util::file_content_check called with unsupported file type '$type'"
+        }
+    }
+
     ad_proc -public ::util::ns_set_to_tcl_string {set_id} {
-        returns a plain text version of the passed ns_set id
+        
+        Return a plain text version of the passed-in ns_set, useful
+        for debugging and introspection.
+        
+        @return text string conisting of multiple lines of the form "key: value"
     } {
         set result ""
         foreach {key value} [ns_set array $set_id] {

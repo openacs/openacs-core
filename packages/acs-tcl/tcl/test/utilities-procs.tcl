@@ -326,6 +326,30 @@ aa_register_case -cats {
     }
 }
 
+aa_register_case -cats {
+    api
+    production_safe
+} -procs {
+    util::file_content_check
+} util__file_content_check {
+    Test util::file_content_check.
+} {
+    set sourcefile $::acs::rootdir/packages/acs-tcl/tcl/test/utilities-procs.tcl
+    set file [ad_tmpnam]
+
+    set gzip [::util::which gzip]
+    if {$gzip ne ""} {
+        set file [ad_tmpnam]
+        ad_file copy $sourcefile $file
+        if {[ad_file exists $file.gz]} {
+            ad_file delete $file.gz
+        }
+        exec $gzip < $file > $file.gz
+        aa_true "check detection of gzip file" [util::file_content_check -type gzip -file $file.gz]
+        ad_file delete $file.gz
+    }
+}
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
