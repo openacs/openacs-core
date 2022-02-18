@@ -56,8 +56,11 @@ aa_register_case \
         # Revoking read privilege
         permission::revoke -party_id $user_id -object_id $new_package_id -privilege "read"
         # We tested with a query because we have problems with inherit
-        aa_true "testing if read privilege was revoked" \
-            {![db_string test_read "select 1 from acs_permissions where object_id = :new_package_id and grantee_id = :user_id" -default 0]}
+        aa_false "testing if read privilege was revoked" \
+            [db_string test_read {
+                select 1 from acs_permissions
+                where object_id = :new_package_id and grantee_id = :user_id
+            } -default 0]
 
         # Grant write privilege
         permission::grant -party_id $user_id -object_id $new_package_id -privilege "write"
@@ -66,8 +69,8 @@ aa_register_case \
             [permission::permission_p -party_id $user_id -object_id  $new_package_id -privilege "write"]
         # Revoking write privilege
         permission::revoke -party_id $user_id -object_id $new_package_id -privilege "write"
-        aa_true "testing if write permissions was revoked" \
-            {![permission::permission_p -party_id $user_id -object_id  $new_package_id -privilege "write" ]}
+        aa_false "testing if write permissions was revoked" \
+            [permission::permission_p -party_id $user_id -object_id  $new_package_id -privilege "write"]
 
         # Grant create privilege
         permission::grant -party_id $user_id -object_id $new_package_id -privilege "create"
@@ -124,27 +127,30 @@ aa_register_case \
         #Grant permissions for this user in this object
         permission::grant -party_id $user_id -object_id $new_package_id -privilege "delete"
         aa_true "testing admin permissions" \
-            {[permission::permission_p -party_id $user_id -object_id  $new_package_id -privilege "delete" ] == 1}
+            [permission::permission_p -party_id $user_id -object_id  $new_package_id -privilege "delete"]
         permission::revoke -party_id $user_id -object_id $new_package_id -privilege "delete"
 
         permission::grant -party_id $user_id -object_id $new_package_id -privilege "create"
         aa_true "testing create permissions" \
-            {[permission::permission_p -party_id $user_id -object_id  $new_package_id -privilege "create" ] == 1}
+            [permission::permission_p -party_id $user_id -object_id  $new_package_id -privilege "create"]
         permission::revoke -party_id $user_id -object_id $new_package_id -privilege "create"
 
         permission::grant -party_id $user_id -object_id $new_package_id -privilege "write"
         aa_true "testing write permissions" \
-            {[permission::permission_p -party_id $user_id -object_id  $new_package_id -privilege "write" ] == 1}
+            [permission::permission_p -party_id $user_id -object_id  $new_package_id -privilege "write"]
         permission::revoke -party_id $user_id -object_id $new_package_id -privilege "write"
 
         permission::grant -party_id $user_id -object_id $new_package_id -privilege "read"
         aa_true "testing read permissions" \
-            {[db_string test_read "select 1 from acs_permissions where object_id = :new_package_id and grantee_id = :user_id" -default 0] == 1}
+            [db_string test_read {
+                select 1 from acs_permissions
+                where object_id = :new_package_id and grantee_id = :user_id
+            } -default 0]
         permission::revoke -party_id $user_id -object_id $new_package_id -privilege "read"
 
         permission::grant -party_id $user_id -object_id $new_package_id -privilege "admin"
         aa_true "testing delete permissions" \
-            {[permission::permission_p -party_id $user_id -object_id  $new_package_id -privilege "admin" ] == 1}
+            [permission::permission_p -party_id $user_id -object_id  $new_package_id -privilege "admin"]
         permission::revoke -party_id $user_id -object_id $new_package_id -privilege "admin"
 
     }
