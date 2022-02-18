@@ -16,11 +16,10 @@ ad_proc -private tsearch2::trunc_to_max {txt} {
 
     https://www.postgresql.org/docs/current/static/textsearch-limitations.html
 } {
-    set max_size_to_index [db_string get_max_size_to_index {
-        select min(default_value) from apm_parameters
-        where package_key = 'tsearch2-driver' and
-        parameter_name = 'max_size_to_index'
-    } -default "1048575"]
+    set max_size_to_index [parameter::get \
+                               -package_id [apm_package_id_from_key tsearch2-driver] \
+                               -parameter max_size_to_index \
+                               -default 1048575]
     if {$max_size_to_index == 0} {
         set max_size_to_index 1048575
     }
