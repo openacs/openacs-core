@@ -56,8 +56,8 @@ aa_register_case \
                 acc.*, ac.search_condition,
                   decode(ac.constraint_type,'C','CK','R','FK','P','PK','U','UN','') as constraint_type
             from
-                  (select count(column_name) as columns, table_name, constraint_name from user_cons_columns group by table_name, constraint_name) acc,
-                  user_constraints ac
+                (select count(column_name) as columns, table_name, constraint_name
+                  from user_cons_columns group by table_name, constraint_name) acc, user_constraints ac
             where ac.constraint_name = acc.constraint_name
             order by acc.table_name, acc.constraint_name
         }
@@ -68,6 +68,14 @@ aa_register_case \
 
     db_foreach check_constraints $get_constraints {
         if { $db_is_pg_p || [string last "$" $table_name] eq -1 } {
+
+            if {[string range $constraint_name 0 2] eq "pg_"} {
+                #
+                # Don't complain about PostgreSQL not naming its
+                # constraints according to the OpenACS rules.
+                #
+                continue
+            }
 
             regsub {_[[:alpha:]]+$} $constraint_name "" name_without_type
             set standard_name "${name_without_type}_${constraint_type}"
@@ -87,24 +95,38 @@ aa_register_case \
                     set constraint_type "NN"
                 }
 
-                set standard_name ${table_name}_${column_name}_${constraint_type}
+                set full_name ${table_name}_${column_name}_${constraint_type}
 
-                if { [string length $standard_name] > 30 } {
+                if { [string length $full_name] < 30 } {
                     # Only check the abbreviation
-                    set standard_name "${name_without_type}_${constraint_type}"
+                    set checked_name $full_name
+                } else {
+                    set checked_name $standard_name
                 }
+            } else {
+                set checked_name $standard_name
             }
 
             # Giving a hint for constraint naming
-            if {[string range $standard_name 0 2] eq "SYS"} {
+            if {[string range $checked_name 0 2] eq "SYS"} {
                 set hint "unnamed"
             } else {
-                set hint "hint: $standard_name"
+                set hint "hint: $checked_name"
             }
 
-            if { $standard_name ne $constraint_name
-                 && $standard_name_alt ne $constraint_name } {
-                aa_log_result fail "Table $table_name constraint $constraint_name ($constraint_type) violates naming standard ($hint)"
+            if { $checked_name ne $constraint_name } {
+                set oversized [expr {[string length $constraint_name] >= 30}]
+                set oversized_checked [expr {[string length $checked_name] >= 30}]
+                if {!$oversized && $oversized_checked} {
+                    #
+                    # Don't complain, if the standard name is
+                    # oversized, but the chosen variant is not.
+                    #
+                } else {
+                    aa_log_result fail "Constraint '$constraint_name' ($constraint_type)" \
+                        " violates naming standard ($hint)" \
+                        " oversized $oversized oversized by standard naming $oversized_checked"
+                }
             }
         }
     }
