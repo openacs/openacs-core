@@ -12,8 +12,12 @@
           @bug_blurb;noquote@</dd>
       </if>
       <if @proc_blurb@ not nil>
-        <dt class="description-list">Procs:</dt><dd>This test case covers OpenACS proc(s):
-          @proc_blurb;noquote@</dd>
+        <dt class="description-list">Procs:</dt>
+            <dd>This test case covers directly the following OpenACS proc(s):<br>
+             @proc_blurb;noquote@</dd>
+             <if @nr_indirect_test_procs@ gt 0>
+            <dd>This test case covers indirectly further @nr_indirect_test_procs@ OpenACS procs.
+             </if>
       </if>
       <if @url_blurb@ not nil>
         <dt class="description-list">URLs:</dt><dd>This test case covers the following URLs:

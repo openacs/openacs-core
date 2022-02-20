@@ -87,12 +87,29 @@ foreach bug $testcase_bugs {
 }
 set bug_blurb [join $bug_list ", "]
 
+#
+# Split procs into direct and indirectly covered procs. These are
+# separated by an empty line. if there is no empty line, then we
+# assume all procs are directly tested.
+#
+set direct_testcase_procs ""
+set indirect_testcase_procs ""
+set var direct_testcase_procs
+foreach line [split [string trim $testcase_procs] \n] {
+    if {[string trim $line] eq ""} {
+        set var indirect_testcase_procs 
+    } else {
+        append $var $line " "
+    }
+}
+
 set proc_list [list]
-foreach p $testcase_procs {
+foreach p $direct_testcase_procs {
     set href [export_vars -base "/api-doc/proc-view" { {proc $p} }]
     lappend proc_list [subst {<a href="[ns_quotehtml $href]">$p</a>}]
 }
 set proc_blurb [join $proc_list ", "]
+set nr_indirect_test_procs [llength $indirect_testcase_procs]
 
 set url_list [list]
 foreach url $testcase_urls {

@@ -689,7 +689,7 @@ ad_proc -private aa_indent {} {
     try to make it easier to read nested test cases.
 } {
     if {[info exists ::__aa_test_indent]} {
-        return "<tt>[string repeat {<div class='vl'></div>} [expr {[info level] - $::__aa_test_indent -2}]]</tt>"
+        return "<tt>[string repeat {<span class='vl'></span>} [expr {[info level] - $::__aa_test_indent -2}]]</tt>"
     }
 }
 
@@ -1195,6 +1195,7 @@ namespace eval acs::test {
     } {
         if {$form_content eq ""} {
             set form_content [form_get_fields $form]
+            aa_log "FORM-CONTENT from FORM '$form_content'"
         }
         if {$form_content eq ""} {
             error "either nonempty form or form_content has to be provided"

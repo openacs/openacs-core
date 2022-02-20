@@ -140,7 +140,7 @@ td pre {
     padding: 2px;
     background-color: inherit;
 }
-div.vl {
+div.vl, span.vl {
     border-left: 1px solid #aaa;
     padding:4px;
     height:3ex;
