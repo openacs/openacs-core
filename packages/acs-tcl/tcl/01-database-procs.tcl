@@ -3213,24 +3213,14 @@ ad_proc -public db_column_type {{-dbn ""} {-complain:boolean} table_name column_
 
     @author Yon Feldman (yon@arsdigita.com)
 
-    @change-log 10 July, 2000: changed to return error
-    if column name doesn't exist
-    (mdettinger@arsdigita.com)
-
-    @change-log 11 July, 2000: changed to return lowercase data types
-    (yon@arsdigita.com)
-
-    @change-log 11 July, 2000: changed to return error using the db_string default clause
-    (yon@arsdigita.com)
-
 } {
     # Works for both Oracle and PostgreSQL:
-    set datatype [db_string -dbn $dbn column_type_select "
-    select data_type as data_type
-      from user_tab_columns
-     where upper(table_name) = upper(:table_name)
-       and upper(column_name) = upper(:column_name)
-    " -default "-1"]
+    set datatype [db_string -dbn $dbn column_type_select {
+        select data_type as data_type
+        from user_tab_columns
+        where upper(table_name) = upper(:table_name)
+        and upper(column_name) = upper(:column_name)
+    } -default -1]
     if {$complain_p && $datatype == -1} {
         error "Datatype for $table_name.$column_name not found."
     } else {
