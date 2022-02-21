@@ -51,7 +51,7 @@ create view sec_id_seq as
 select nextval('t_sec_id_seq') as nextval;
 
 
-select define_function_args('sec_session_property__upsert','session_id,module,name,secure_p,last_hit');
+select define_function_args('sec_session_property__upsert','session_id,module,name,value,secure_p,last_hit');
 
 CREATE OR REPLACE FUNCTION sec_session_property__upsert(
        p_session_id bigint,
