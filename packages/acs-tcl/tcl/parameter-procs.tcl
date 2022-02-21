@@ -208,68 +208,84 @@ ad_proc -public parameter::set_from_package_key {
         -value $value
 }
 
-ad_proc -public parameter::get_from_package_key {
-    -localize:boolean
-    -boolean:boolean
-    {-package_key:required}
-    {-parameter:required}
-    {-default ""}
-} {
-    Gets an instance parameter for the package corresponding to package_key.
+if {![db_table_exists apm_parameters]} {
 
-    Note that this makes the assumption that the package is a singleton.
-
-    New packages should use global parameters instead.
-
-    @param package_key what package to get the parameter from. We will try
-           to get the package_id from the package_key. This
-           may cause an error if there are more than one
-           instance of this package
-    @param parameter which parameter's value to get
-    @param default what to return if we don't find a value
-} {
-    #
-    # 1. Check to see if this parameter is being set in the server's
-    #    configuration file; this value has highest precedence.
-    #
-    set value [ad_parameter_from_file $parameter $package_key]
-
-    #
-    # 2. Try to get the value from a global package parameter.
-    #
-    if {$value eq ""} {
-        set value [parameter::get_global_value \
-                       -localize=$localize_p \
-                       -boolean=$boolean_p \
-                       -package_key $package_key \
-                       -parameter $parameter \
-                       -default ""]
+    ad_proc -public parameter::get_from_package_key {
+        -localize:boolean
+        -boolean:boolean
+        {-package_key:required}
+        {-parameter:required}
+        {-default ""}
+    } {
+        ns_log notice "parameter::get_from_package_key: called during initialization:" \
+            "$package_key.$parameter -> '$default' (default)" 
+        return $default
     }
 
-    #
-    # 3. Try to get the value from the package_id of this package_key
-    #    and use the standard parameter::get function to get the
-    #    value. Note that this lookup only makes sense for singleton
-    #    packages.
-    #
-    if {$value eq ""} {
-        if {[apm_package_singleton_p $package_key]} {
-            set value [parameter::get \
+} else {
+
+    ad_proc -public parameter::get_from_package_key {
+        -localize:boolean
+        -boolean:boolean
+        {-package_key:required}
+        {-parameter:required}
+        {-default ""}
+    } {
+        Gets an instance parameter for the package corresponding to package_key.
+
+        Note that this makes the assumption that the package is a singleton.
+
+        New packages should use global parameters instead.
+
+        @param package_key what package to get the parameter from. We will try
+        to get the package_id from the package_key. This
+        may cause an error if there are more than one
+        instance of this package
+        @param parameter which parameter's value to get
+        @param default what to return if we don't find a value
+    } {
+        #
+        # 1. Check to see if this parameter is being set in the server's
+        #    configuration file; this value has highest precedence.
+        #
+        set value [ad_parameter_from_file $parameter $package_key]
+
+        #
+        # 2. Try to get the value from a global package parameter.
+        #
+        if {$value eq ""} {
+            set value [parameter::get_global_value \
                            -localize=$localize_p \
                            -boolean=$boolean_p \
-                           -package_id [apm_package_id_from_key $package_key] \
+                           -package_key $package_key \
                            -parameter $parameter \
-                           -default $default \
-                          ]
-        } else {
-            ns_log notice "tried to lookup parameter $parameter from non-singleton package $package_key"
-            set value $default
+                           -default ""]
         }
+
+        #
+        # 3. Try to get the value from the package_id of this package_key
+        #    and use the standard parameter::get function to get the
+        #    value. Note that this lookup only makes sense for singleton
+        #    packages.
+        #
+        if {$value eq ""} {
+            if {[apm_package_singleton_p $package_key]} {
+                set value [parameter::get \
+                               -localize=$localize_p \
+                               -boolean=$boolean_p \
+                               -package_id [apm_package_id_from_key $package_key] \
+                               -parameter $parameter \
+                               -default $default \
+                              ]
+            } else {
+                ns_log notice "tried to lookup parameter $parameter from non-singleton package $package_key"
+                set value $default
+            }
+        }
+
+        return $value
     }
-
-    return $value
 }
-
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
