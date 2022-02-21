@@ -831,7 +831,7 @@ $extra_stuff_for_document_head
         }]
     }
     foreach attr [array names attrs] {
-	lappend attr_list "$attr=\"$attrs($attr)\""
+        lappend attr_list "$attr=\"$attrs($attr)\""
     }
     append html "<body [join $attr_list]>\n"
 
@@ -852,24 +852,24 @@ ad_proc -deprecated ad_footer {
 } {
     global sidegraphic_displayed_p
     if { $signatory eq "" } {
-	set signatory [ad_system_owner]
+        set signatory [ad_system_owner]
     }
     if { [info exists sidegraphic_displayed_p] && $sidegraphic_displayed_p } {
-	# we put in a BR CLEAR=RIGHT so that the signature will clear any side graphic
-	# from the ad-sidegraphic.tcl package
-	set extra_br "<br clear=right>"
+        # we put in a BR CLEAR=RIGHT so that the signature will clear any side graphic
+        # from the ad-sidegraphic.tcl package
+        set extra_br "<br clear=right>"
     } else {
-	set extra_br ""
+        set extra_br ""
     }
     if { [parameter::get -package_id [ad_acs_kernel_id] -parameter EnabledP -default 0] && [parameter::get -package_id [ad_acs_kernel_id] -parameter StickInFooterP -default 0] && !$suppress_curriculum_bar_p} {
-	set curriculum_bar "<center>[curriculum_bar]</center>"
+        set curriculum_bar "<center>[curriculum_bar]</center>"
     } else {
-	set curriculum_bar ""
+        set curriculum_bar ""
     }
     if { [namespace which ds_link] ne "" } {
-	set ds_link [ds_link]
+        set ds_link [ds_link]
     } else {
-	set ds_link ""
+        set ds_link ""
     }
     return "
 $extra_br
@@ -914,9 +914,9 @@ ad_proc -deprecated ad_admin_footer {} {
     @see  Documentation on the site master template for the proper way to standardize page footers
 } {
     if { [namespace which ds_link] ne "" } {
-	set ds_link [ds_link]
+        set ds_link [ds_link]
     } else {
-	set ds_link ""
+        set ds_link ""
     }
     return "<hr>
 $ds_link
@@ -935,18 +935,18 @@ ad_proc -deprecated ad_get_user_info {} {
     @see acs_user::get
 } {
     uplevel {
-	set user_id [ad_conn user_id]
-	if { [catch {
-	    db_1row user_name_select {
-		select first_names, last_name, email
-		from persons, parties
-		where person_id = :user_id
-		and person_id = party_id
-	    }
-	} errmsg] } {
-	    ad_return_error "Couldn't find user info" "Couldn't find user info."
-	    return
-	}
+        set user_id [ad_conn user_id]
+        if { [catch {
+            db_1row user_name_select {
+                select first_names, last_name, email
+                from persons, parties
+                where person_id = :user_id
+                and person_id = party_id
+            }
+        } errmsg] } {
+            ad_return_error "Couldn't find user info" "Couldn't find user info."
+            return
+        }
     }
 }
 
@@ -979,7 +979,7 @@ ad_proc -deprecated ad_parameter {
     @return The parameter of the object or if it doesn't exist, the default.
 } {
     if {[info exists set]} {
-	set ns_param [parameter::set_value -package_id $package_id -parameter $name -value $set]
+        set ns_param [parameter::set_value -package_id $package_id -parameter $name -value $set]
     } else {
         set ns_param [parameter::get -localize=$localize_p -package_id $package_id -parameter $name -default $default]
     }
@@ -991,53 +991,53 @@ ad_proc -deprecated ad_parameter {
 ad_proc -deprecated doc_serve_template { __template_path } { Serves the document in the environment using a particular template. } {
     upvar #0 doc_properties __doc_properties
     foreach __name [array names __doc_properties] {
-	set $__name $__doc_properties($__name)
+        set $__name $__doc_properties($__name)
     }
 
     set adp [ns_adp_parse -file $__template_path]
     set content_type [ns_set iget [ad_conn outputheaders] "content-type"]
     if { $content_type eq "" } {
-	set content_type "text/html"
+        set content_type "text/html"
     }
     doc_return 200 $content_type $adp
 }
 
 ad_proc -deprecated doc_serve_document {} { Serves the document currently in the environment. } {
     if { ![doc_exists_p] } {
-	error "No document has been built."
+        error "No document has been built."
     }
 
     set mime_type [doc_get_property mime_type]
     if { $mime_type eq "" } {
-	if { [doc_property_exists_p title] } {
-	    set mime_type "text/html;content-pane"
-	} else {
-	    set mime_type "text/html"
-	}
+        if { [doc_property_exists_p title] } {
+            set mime_type "text/html;content-pane"
+        } else {
+            set mime_type "text/html"
+        }
     }
 
     switch -- $mime_type {
-	text/html;content-pane - text/x-html-content-pane {
-	    # It's a content pane. Find the appropriate template.
-	    set template_path [doc_find_template [ad_conn file]]
-	    if { $template_path eq "" } {
-		ns_returnerror 500 "Unable to find master template"
-	        ns_log error \
-		    "Unable to find master template for file '[ad_conn file]'"
-	    } else {
-	        doc_serve_template $template_path
-	    }
-	}
-	default {
-	    # Return a complete document.
-	    ns_return 200 $mime_type [doc_get_property body]
-	}
+        text/html;content-pane - text/x-html-content-pane {
+            # It's a content pane. Find the appropriate template.
+            set template_path [doc_find_template [ad_conn file]]
+            if { $template_path eq "" } {
+                ns_returnerror 500 "Unable to find master template"
+                ns_log error \
+                    "Unable to find master template for file '[ad_conn file]'"
+            } else {
+                doc_serve_template $template_path
+            }
+        }
+        default {
+            # Return a complete document.
+            ns_return 200 $mime_type [doc_get_property body]
+        }
     }
 }
 
 ad_proc -deprecated doc_tag_ad_document { contents params } {} {
     for { set i 0 } { $i < [ns_set size $params] } { incr i } {
-	doc_set_property [ns_set key $params $i] [ns_set value $params $i]
+        doc_set_property [ns_set key $params $i] [ns_set value $params $i]
     }
     doc_set_property _adp 1
     return [template::adp_parse_string $contents]
@@ -1046,7 +1046,7 @@ ad_proc -deprecated doc_tag_ad_document { contents params } {} {
 ad_proc -deprecated doc_tag_ad_property { contents params } {} {
     set name [ns_set iget $params name]
     if { $name eq "" } {
-	return "<em>No <tt>name</tt> property in <tt>AD-PROPERTY</tt> tag</em>"
+        return "<em>No <tt>name</tt> property in <tt>AD-PROPERTY</tt> tag</em>"
     }
     doc_set_property $name $contents
 }
@@ -1056,7 +1056,7 @@ ad_proc -deprecated doc_tag_ad_property { contents params } {} {
 ad_proc -deprecated doc_init {} { Initializes the global environment for document handling. } {
     global doc_properties
     if { [info exists doc_properties] } {
-	unset doc_properties
+        unset doc_properties
     }
     array set doc_properties {}
 }
@@ -1074,7 +1074,7 @@ ad_proc -deprecated doc_property_exists_p { name } { Return 1 if a property exis
 ad_proc -deprecated doc_get_property { name } { Returns a property (or an empty string if no such property exists). } {
     global doc_properties
     if { [info exists doc_properties($name)] } {
-	return $doc_properties($name)
+        return $doc_properties($name)
     }
     return ""
 }
@@ -1091,7 +1091,7 @@ ad_proc -deprecated doc_set_mime_type { mime_type } { Sets the mime-type propert
 ad_proc -deprecated doc_exists_p {} { Returns 1 if there is a document in the global environment. } {
     global doc_properties
     if { [array size doc_properties] > 0 } {
-	return 1
+        return 1
     }
     return 0
 }
@@ -1107,15 +1107,15 @@ ad_proc -deprecated doc_find_template { filename } { Finds a master.adp file whi
 
     set dir [ad_file dirname $filename]
     while { [string length $dir] > 1 && [string first $path_root $dir] == 0 } {
-	# Only look in directories under the path root.
-	if { [file isfile "$dir/master.adp"] } {
-	    return "$dir/master.adp"
-	}
-	set dir [ad_file dirname $dir]
+        # Only look in directories under the path root.
+        if { [file isfile "$dir/master.adp"] } {
+            return "$dir/master.adp"
+        }
+        set dir [ad_file dirname $dir]
     }
 
     if { [file exists "$path_root/templates/master.adp"] } {
-	return "$path_root/templates/master.adp"
+        return "$path_root/templates/master.adp"
     }
 
     # Uhoh. Nada!
@@ -1304,9 +1304,9 @@ ad_proc -deprecated ad_table {
          would do the right thing.
          <p>
          the value "no_sort" should be used for columns which should not allow sorting.
-	 <p>
-	 the value "sort_by_pos" should be used if the columns passed in
-	 are column positions rather than column names.
+         <p>
+         the value "sort_by_pos" should be used if the columns passed in
+         are column positions rather than column names.
 
     <li> display_info.  If this is a null string you just default to generating
          &lt;td&gt;column_id&lt;/td&gt;.  If it is a string in the lookup list
@@ -1342,159 +1342,159 @@ ad_proc -deprecated ad_table {
 
     # This procedure needs a full rewrite!
     db_with_handle -dbn $dbn Tdb {
-	# Execute the query
+        # Execute the query
         set selection [db_exec select $Tdb $full_statement_name $sql_qry]
-	set Tcount 0
-	set Tband_count 0
-	set Tpage_count 0
-	set Tband_color 0
-	set Tband_class 0
-	set Tn_bands [llength $Tband_colors]
-	set Tn_band_classes [llength $Tband_classes]
-	set Tform [ad_conn form]
+        set Tcount 0
+        set Tband_count 0
+        set Tpage_count 0
+        set Tband_color 0
+        set Tband_class 0
+        set Tn_bands [llength $Tband_colors]
+        set Tn_band_classes [llength $Tband_classes]
+        set Tform [ad_conn form]
 
-	# export variables from calling environment
-	if {$Textra_vars ne ""} {
-	    foreach Tvar $Textra_vars {
-		upvar $Tvar $Tvar
-	    }
-	}
+        # export variables from calling environment
+        if {$Textra_vars ne ""} {
+            foreach Tvar $Textra_vars {
+                upvar $Tvar $Tvar
+            }
+        }
 
-	# get the current ordering information
-	set Torderbykey {::not_sorted::}
-	set Treverse {}
-	regexp {^([^*,]+)([*])?} $Torderby match Torderbykey Treverse
-	if {$Treverse eq "*"} {
-	    set Torder desc
-	} else {
-	    set Torder asc
-	}
+        # get the current ordering information
+        set Torderbykey {::not_sorted::}
+        set Treverse {}
+        regexp {^([^*,]+)([*])?} $Torderby match Torderbykey Treverse
+        if {$Treverse eq "*"} {
+            set Torder desc
+        } else {
+            set Torder asc
+        }
 
-	# set up the target url for new sorts
-	if {$Torder_target_url eq ""} {
-	    set Torder_target_url [ad_conn url]
-	}
-	set Texport "[uplevel [list export_ns_set_vars url [list orderby$Tsuffix]]]&"
-	if {$Texport == "&"} {
-	    set Texport {}
-	}
-	set Tsort_url "$Torder_target_url?${Texport}orderby$Tsuffix="
+        # set up the target url for new sorts
+        if {$Torder_target_url eq ""} {
+            set Torder_target_url [ad_conn url]
+        }
+        set Texport "[uplevel [list export_ns_set_vars url [list orderby$Tsuffix]]]&"
+        if {$Texport == "&"} {
+            set Texport {}
+        }
+        set Tsort_url "$Torder_target_url?${Texport}orderby$Tsuffix="
 
-	set Thtml {}
-	set Theader {}
+        set Thtml {}
+        set Theader {}
 
-	# build the list of columns to display...
-	set Tcolumn_list [ad_table_column_list $Tdatadef $Tcolumns]
+        # build the list of columns to display...
+        set Tcolumn_list [ad_table_column_list $Tdatadef $Tcolumns]
 
-	# generate the header code
-	#
-	append Theader "<table $Ttable_extra_html>\n"
-	if {$Theader_row_extra eq ""} {
-	    append Theader "<tr>\n"
-	} else {
-	    append Theader "<tr $Theader_row_extra>\n"
-	}
-	foreach Ti $Tcolumn_list {
-	    set Tcol [lindex $Tdatadef $Ti]
-	    if { ( [ns_set find $selection [lindex $Tcol 0]] < 0
-		   && ([lindex $Tcol 2] eq "" || [lindex $Tcol 2] ne "sort_by_pos")
-		   )
-		 || [lindex $Tcol 2] eq "no_sort"
-	     } {
+        # generate the header code
+        #
+        append Theader "<table $Ttable_extra_html>\n"
+        if {$Theader_row_extra eq ""} {
+            append Theader "<tr>\n"
+        } else {
+            append Theader "<tr $Theader_row_extra>\n"
+        }
+        foreach Ti $Tcolumn_list {
+            set Tcol [lindex $Tdatadef $Ti]
+            if { ( [ns_set find $selection [lindex $Tcol 0]] < 0
+                   && ([lindex $Tcol 2] eq "" || [lindex $Tcol 2] ne "sort_by_pos")
+                   )
+                 || [lindex $Tcol 2] eq "no_sort"
+             } {
 
-		# not either a column in the select or has sort code
-		# then just a plain text header so do not do sorty things
-		append Theader " <th>[lindex $Tcol 1]</th>\n"
-	    } else {
-		if {[lindex $Tcol 0] eq $Torderbykey } {
-		    if {$Torder eq "desc"} {
-			set Tasord $Tasc_order_img
-		    } else {
-			set Tasord $Tdesc_order_img
-		    }
-		} else {
-		    set Tasord {}
-		}
-		set href $Tsort_url[ns_urlencode [ad_new_sort_by [lindex $Tcol 0] $Torderby]]
-		append Theader \
-		    [subst { <th><a href="[ns_urlencode $href]">}] \
-		    "\n[lindex $Tcol 1]</a>&nbsp;$Tasord</th>\n"
-	    }
-	}
-	append Theader "</tr>\n"
+                # not either a column in the select or has sort code
+                # then just a plain text header so do not do sorty things
+                append Theader " <th>[lindex $Tcol 1]</th>\n"
+            } else {
+                if {[lindex $Tcol 0] eq $Torderbykey } {
+                    if {$Torder eq "desc"} {
+                        set Tasord $Tasc_order_img
+                    } else {
+                        set Tasord $Tdesc_order_img
+                    }
+                } else {
+                    set Tasord {}
+                }
+                set href $Tsort_url[ns_urlencode [ad_new_sort_by [lindex $Tcol 0] $Torderby]]
+                append Theader \
+                    [subst { <th><a href="[ns_urlencode $href]">}] \
+                    "\n[lindex $Tcol 1]</a>&nbsp;$Tasord</th>\n"
+            }
+        }
+        append Theader "</tr>\n"
 
-	#
-	# This has gotten kind of ugly.  Here we are looping over the
-	# rows returned and then potentially a list of ns_sets which can
-	# be passed in (grrr.  Richard Li needs for general protections stuff
-	# for "fake" public record which does not exist in DB).
-	#
+        #
+        # This has gotten kind of ugly.  Here we are looping over the
+        # rows returned and then potentially a list of ns_sets which can
+        # be passed in (grrr.  Richard Li needs for general protections stuff
+        # for "fake" public record which does not exist in DB).
+        #
 
-	set Tpost_data 0
+        set Tpost_data 0
 
-	while { 1 } {
-	    if {!$Tpost_data && [ns_db getrow $Tdb $selection]} {
-		# in all its evil majesty
-		set_variables_after_query
-	    } else {
-		# move on to fake rows...
-		incr Tpost_data
-	    }
+        while { 1 } {
+            if {!$Tpost_data && [ns_db getrow $Tdb $selection]} {
+                # in all its evil majesty
+                set_variables_after_query
+            } else {
+                # move on to fake rows...
+                incr Tpost_data
+            }
 
-	    if { $Tpost_data && $Tpost_data <= [llength $Tpost_data_ns_sets] } {
-		# bind the Tpost_data_ns_sets row of the passed in data
-		set_variables_after_query_not_selection [lindex $Tpost_data_ns_sets $Tpost_data-1]
-	    } elseif { $Tpost_data } {
-		# past the end of the fake data drop out.
-		break
-	    }
+            if { $Tpost_data && $Tpost_data <= [llength $Tpost_data_ns_sets] } {
+                # bind the Tpost_data_ns_sets row of the passed in data
+                set_variables_after_query_not_selection [lindex $Tpost_data_ns_sets $Tpost_data-1]
+            } elseif { $Tpost_data } {
+                # past the end of the fake data drop out.
+                break
+            }
 
-	    if { $Tmax_rows && $Tcount >= $Tmax_rows } {
-		if { ! $Tpost_data } {
-		    # we hit max count and had rows left to read...
-		    ns_db flush $Tdb
-		}
-		break
-	    }
+            if { $Tmax_rows && $Tcount >= $Tmax_rows } {
+                if { ! $Tpost_data } {
+                    # we hit max count and had rows left to read...
+                    ns_db flush $Tdb
+                }
+                break
+            }
 
-	    # deal with putting in the header if need
-	    if { $Tcount == 0 } {
-		append Thtml "$Theader"
-	    } elseif { $Tpage_count == 0 }  {
-		append Thtml "</table>\n$Ttable_break_html\n$Theader"
-	    }
+            # deal with putting in the header if need
+            if { $Tcount == 0 } {
+                append Thtml "$Theader"
+            } elseif { $Tpage_count == 0 }  {
+                append Thtml "</table>\n$Ttable_break_html\n$Theader"
+            }
 
-	    # first check if we are in audit mode and if the audit columns have changed
-	    set Tdisplay_changes_only 0
-	    if {$Taudit ne "" && $Tcount > 0} {
-		# check if the audit key columns changed
-		foreach Taudit_key $Taudit {
-		    if {[set $Taudit_key] eq [set P$Taudit_key] } {
-			set Tdisplay_changes_only 1
-		    }
-		}
-	    }
+            # first check if we are in audit mode and if the audit columns have changed
+            set Tdisplay_changes_only 0
+            if {$Taudit ne "" && $Tcount > 0} {
+                # check if the audit key columns changed
+                foreach Taudit_key $Taudit {
+                    if {[set $Taudit_key] eq [set P$Taudit_key] } {
+                        set Tdisplay_changes_only 1
+                    }
+                }
+            }
 
-	    # this is for breaking on sorted field etc.
-	    append Thtml [subst $Tpre_row_code]
+            # this is for breaking on sorted field etc.
+            append Thtml [subst $Tpre_row_code]
 
-	    if { ! $Tdisplay_changes_only } {
-		# in audit mode a record spans multiple rows.
-		incr Tcount
-		incr Tband_count
-	    }
-	    incr Tpage_count
+            if { ! $Tdisplay_changes_only } {
+                # in audit mode a record spans multiple rows.
+                incr Tcount
+                incr Tband_count
+            }
+            incr Tpage_count
 
-	    if { $Trows_per_page && $Tpage_count >= $Trows_per_page } {
-		set Tband_color 0
-		set Tband_class 0
-		set Tband_count 0
-		set Tpage_count 0
+            if { $Trows_per_page && $Tpage_count >= $Trows_per_page } {
+                set Tband_color 0
+                set Tband_class 0
+                set Tband_count 0
+                set Tpage_count 0
 
-	    }
+            }
 
             set Trow_default {}
-	    # generate the row band color
+            # generate the row band color
             if { $Tband_count >= $Trows_per_band } {
                 set Tband_count 0
                 set Tband_color [expr {($Tband_color + 1) % $Tn_bands} ]
@@ -1512,52 +1512,52 @@ ad_proc -deprecated ad_table {
 
             set Trow_default "<tr$Trow_default>"
 
-	    append Thtml [subst $Trow_code]
+            append Thtml [subst $Trow_code]
 
-	    foreach Ti $Tcolumn_list {
-		set Tcol [lindex $Tdatadef $Ti]
-		# If we got some special formatting code we handle it
-		# single characters r l c are special for alignment
-		set Tformat [lindex $Tcol 3]
-		set Tcolumn [lindex $Tcol 0]
-		switch -- $Tformat {
-		    "" {set Tdisplay_field " <td>[set $Tcolumn]</td>\n"}
-		    r {set Tdisplay_field " <td align=\"right\">[set $Tcolumn]</td>\n"}
-		    l {set Tdisplay_field " <td align=\"left\">[set $Tcolumn]</td>\n"}
-		    c {set Tdisplay_field " <td align=\"center\">[set $Tcolumn]</td>\n"}
-		    tf {set Tdisplay_field " <td align=\"center\">[util_PrettyBoolean [set $Tcolumn]]</td>\n"}
-		    01 {set Tdisplay_field " <td align=\"center\">[util_PrettyTclBoolean [set $Tcolumn]]</td>\n"}
-		    bz {set Tdisplay_field " <td align=\"right\">&nbsp;[blank_zero [set $Tcolumn]]</td>\n"}
-		    default {set Tdisplay_field " [subst $Tformat]\n"}
-		}
+            foreach Ti $Tcolumn_list {
+                set Tcol [lindex $Tdatadef $Ti]
+                # If we got some special formatting code we handle it
+                # single characters r l c are special for alignment
+                set Tformat [lindex $Tcol 3]
+                set Tcolumn [lindex $Tcol 0]
+                switch -- $Tformat {
+                    "" {set Tdisplay_field " <td>[set $Tcolumn]</td>\n"}
+                    r {set Tdisplay_field " <td align=\"right\">[set $Tcolumn]</td>\n"}
+                    l {set Tdisplay_field " <td align=\"left\">[set $Tcolumn]</td>\n"}
+                    c {set Tdisplay_field " <td align=\"center\">[set $Tcolumn]</td>\n"}
+                    tf {set Tdisplay_field " <td align=\"center\">[util_PrettyBoolean [set $Tcolumn]]</td>\n"}
+                    01 {set Tdisplay_field " <td align=\"center\">[util_PrettyTclBoolean [set $Tcolumn]]</td>\n"}
+                    bz {set Tdisplay_field " <td align=\"right\">&nbsp;[blank_zero [set $Tcolumn]]</td>\n"}
+                    default {set Tdisplay_field " [subst $Tformat]\n"}
+                }
 
-		if { $Tdisplay_changes_only
-		     && $Tdisplay_field eq $Tlast_display($Ti) } {
-		    set Tdisplay_field {<td>&nbsp;</td>}
-		} else {
-		    set Tlast_display($Ti) $Tdisplay_field
-		}
-		append Thtml $Tdisplay_field
-	    }
+                if { $Tdisplay_changes_only
+                     && $Tdisplay_field eq $Tlast_display($Ti) } {
+                    set Tdisplay_field {<td>&nbsp;</td>}
+                } else {
+                    set Tlast_display($Ti) $Tdisplay_field
+                }
+                append Thtml $Tdisplay_field
+            }
 
-	    append Thtml "</tr>\n"
+            append Thtml "</tr>\n"
 
-	    # keep the last row around so we can do fancy things.
-	    # so on next row we can say things like if $Pvar != $var not blank
-	    if { $Tpost_data && $Tpost_data <= [llength $Tpost_data_ns_sets] } {
-		# bind the Tpost_data_ns_sets row of the passed in data
-		set_variables_after_query_not_selection [lindex $Tpost_data_ns_sets $Tpost_data-1] P
-	    } else {
-		set_variables_after_query_not_selection $selection P
-	    }
-	}
+            # keep the last row around so we can do fancy things.
+            # so on next row we can say things like if $Pvar != $var not blank
+            if { $Tpost_data && $Tpost_data <= [llength $Tpost_data_ns_sets] } {
+                # bind the Tpost_data_ns_sets row of the passed in data
+                set_variables_after_query_not_selection [lindex $Tpost_data_ns_sets $Tpost_data-1] P
+            } else {
+                set_variables_after_query_not_selection $selection P
+            }
+        }
 
-	if { $Tcount > 0} {
-	    append Thtml "$Textra_rows
+        if { $Tcount > 0} {
+            append Thtml "$Textra_rows
 </table>\n"
-	} else {
-	    append Thtml $Tmissing_text
-	}
+        } else {
+            append Thtml $Tmissing_text
+        }
     }
     return $Thtml
 }
@@ -1964,16 +1964,16 @@ ad_proc -deprecated ad_custom_load {user_id item_group item item_type} {
 } {
 
     if {
-	![db_0or1row load_user_customization {
-	    select value_type, value
-	    from user_custom
-	    where user_id = :user_id
-	    and item_type = :item_type
-	    and item_group = :item_group
-	    and  item = :item
-	}]
+        ![db_0or1row load_user_customization {
+            select value_type, value
+            from user_custom
+            where user_id = :user_id
+            and item_type = :item_type
+            and item_group = :item_group
+            and  item = :item
+        }]
     } {
-	set value {}
+        set value {}
     }
     return $value
 }
@@ -1984,10 +1984,10 @@ ad_proc -deprecated ad_custom_list {user_id item_group item_set item_type target
 } {
 
     set items [db_list custom_list {
-	select item from user_custom
-	where user_id = :user_id
-	and item_type = :item_type
-	and item_group = :item_group
+        select item from user_custom
+        where user_id = :user_id
+        and item_type = :item_type
+        and item_group = :item_group
     }]
 
     set break {}
@@ -2071,8 +2071,8 @@ ad_proc -deprecated ad_dimensional_settings {define current} {
             && [ns_set find $current [lindex $opt 0]] > -1} {
             set picked [ns_set get $current [lindex $opt 0]]
         } else {
-	    set picked [lindex $opt 2]
-	}
+            set picked [lindex $opt 2]
+        }
         foreach val [lindex $opt 3] {
             if {$picked eq [lindex $val 0] } {
                 append html "<option selected=\"selected\" value=\"[ns_quotehtml [lindex $val 0]]\">[lindex $val 1]</option>\n"
@@ -2111,9 +2111,9 @@ ad_proc -deprecated set_member? { s v } {
     <p>Tests whether or not $v is a member of set $s.</p>
 } {
     if {$v ni $s} {
-	return 0
+        return 0
     } else {
-	return 1
+        return 1
     }
 }
 
@@ -2126,7 +2126,7 @@ ad_proc -deprecated set_append! { s-name v } {
     upvar $s-name s
 
     if { ![set_member? $s $v] } {
-	lappend s $v
+        lappend s $v
     }
 }
 
@@ -2138,9 +2138,9 @@ ad_proc -deprecated set_union { u v } {
     set result $u
 
     foreach ve $v {
-	if { ![set_member? $result $ve] } {
-	    lappend result $ve
-	}
+        if { ![set_member? $result $ve] } {
+            lappend result $ve
+        }
     }
 
   return $result
@@ -2155,9 +2155,9 @@ ad_proc -deprecated set_union! { u-name v } {
     upvar $u-name u
 
     foreach ve $v {
-	if { ![set_member? $u $ve] } {
-	    lappend u $ve
-	}
+        if { ![set_member? $u $ve] } {
+            lappend u $ve
+        }
     }
 
     return $u
@@ -2172,9 +2172,9 @@ ad_proc -deprecated set_intersection { u v } {
     set result [list]
 
     foreach ue $u {
-	if { [set_member? $v $ue] } {
-	    lappend result $ue
-	}
+        if { [set_member? $v $ue] } {
+            lappend result $ue
+        }
     }
 
     return $result
@@ -2190,9 +2190,9 @@ ad_proc -deprecated set_intersection! { u-name v } {
     set result [list]
 
     foreach ue $u {
-	if { [set_member? $v $ue] } {
-	    lappend result $ue
-	}
+        if { [set_member? $v $ue] } {
+            lappend result $ue
+        }
     }
 
     set u $result
@@ -2206,9 +2206,9 @@ ad_proc -deprecated set_difference { u v } {
     set result [list]
 
     foreach ue $u {
-	if { ![set_member? $v $ue] } {
-	    lappend result $ue
-	}
+        if { ![set_member? $v $ue] } {
+            lappend result $ue
+        }
     }
 
     return $result
@@ -2224,9 +2224,9 @@ ad_proc -deprecated set_difference! { u-name v } {
     set result [list]
 
     foreach ue $u {
-	if { ![set_member? $v $ue] } {
-	    lappend result $ue
-	}
+        if { ![set_member? $v $ue] } {
+            lappend result $ue
+        }
     }
 
     set u $result
@@ -2871,19 +2871,19 @@ ad_proc -deprecated ad_user_new {
     @see auth::create_local_account
 } {
     return [auth::create_local_account_helper \
-		$email \
-		$first_names \
-		$last_name \
-		$password \
-		$password_question \
-		$password_answer \
-		$url \
-		$email_verified_p \
-		$member_state \
-		$user_id \
-		$username \
-		$authority_id \
-		$screen_name]
+                $email \
+                $first_names \
+                $last_name \
+                $password \
+                $password_question \
+                $password_answer \
+                $url \
+                $email_verified_p \
+                $member_state \
+                $user_id \
+                $username \
+                $authority_id \
+                $screen_name]
 }
 
 #
@@ -2899,7 +2899,7 @@ namespace eval oacs::user {
         {-array:required}
     } {
         Load up user information
-	@see acs_user::get
+        @see acs_user::get
     } {
         # Upvar the Tcl Array
         upvar $array row
@@ -3006,12 +3006,12 @@ ad_proc -deprecated -warn set_variables_after_query {} {
     @see packages/acs-tcl/tcl/00-database-procs.tcl
 } {
     uplevel {
-	    set set_variables_after_query_i 0
-	    set set_variables_after_query_limit [ns_set size $selection]
-	    while {$set_variables_after_query_i<$set_variables_after_query_limit} {
-		set [ns_set key $selection $set_variables_after_query_i] [ns_set value $selection $set_variables_after_query_i]
-		incr set_variables_after_query_i
-	    }
+            set set_variables_after_query_i 0
+            set set_variables_after_query_limit [ns_set size $selection]
+            while {$set_variables_after_query_i<$set_variables_after_query_limit} {
+                set [ns_set key $selection $set_variables_after_query_i] [ns_set value $selection $set_variables_after_query_i]
+                incr set_variables_after_query_i
+            }
     }
 }
 
@@ -3024,12 +3024,12 @@ ad_proc -deprecated -warn set_variables_after_subquery {} {
     @see packages/acs-tcl/tcl/00-database-procs.tcl
 } {
     uplevel {
-	    set set_variables_after_query_i 0
-	    set set_variables_after_query_limit [ns_set size $sub_selection]
-	    while {$set_variables_after_query_i<$set_variables_after_query_limit} {
-		set [ns_set key $sub_selection $set_variables_after_query_i] [ns_set value $sub_selection $set_variables_after_query_i]
-		incr set_variables_after_query_i
-	    }
+            set set_variables_after_query_i 0
+            set set_variables_after_query_limit [ns_set size $sub_selection]
+            while {$set_variables_after_query_i<$set_variables_after_query_limit} {
+                set [ns_set key $sub_selection $set_variables_after_query_i] [ns_set value $sub_selection $set_variables_after_query_i]
+                incr set_variables_after_query_i
+            }
     }
 }
 
@@ -3047,10 +3047,10 @@ ad_proc -deprecated -warn set_variables_after_query_not_selection {selection_var
     set set_variables_after_query_limit [ns_set size $selection_variable]
     while {$set_variables_after_query_i<$set_variables_after_query_limit} {
         # NB backslash squarebracket needed since mismatched {} would otherwise mess up value stmt.
-	uplevel "
-	set ${name_prefix}[ns_set key $selection_variable $set_variables_after_query_i] \[ns_set value $selection_variable $set_variables_after_query_i]
-	"
-	incr set_variables_after_query_i
+        uplevel "
+        set ${name_prefix}[ns_set key $selection_variable $set_variables_after_query_i] \[ns_set value $selection_variable $set_variables_after_query_i]
+        "
+        incr set_variables_after_query_i
     }
 }
 
@@ -3098,11 +3098,11 @@ ad_proc -public -deprecated ad_privacy_threshold {} {
 } {
     set session_user_id [ad_conn user_id]
     if {$session_user_id == 0} {
-	# viewer of this page isn't logged in, only show stuff
-	# that is extremely unprivate
-	set privacy_threshold 0
+        # viewer of this page isn't logged in, only show stuff
+        # that is extremely unprivate
+        set privacy_threshold 0
     } else {
-	set privacy_threshold 5
+        set privacy_threshold 5
     }
     return $privacy_threshold
 }
@@ -4077,9 +4077,181 @@ ad_proc -public -deprecated ad_ns_set_keys {
     return $keys
 }
 
+########################################################################
+# deprecated site-nodes-procs.tcl
+########################################################################
+namespace eval ::site_node {}
 
+ad_proc -deprecated site_node_delete_package_instance {
+    {-node_id:required}
+} {
+    Wrapper for apm_package_instance_delete
+
+    @author Arjun Sanyal (arjun@openforc.net)
+    @creation-date 2002-05-02
+    @see site_node::delete
+} {
+    db_transaction {
+        set package_id [site_node::get_object_id -node_id $node_id]
+        site_node::unmount -node_id $node_id
+        apm_package_instance_delete $package_id
+    } on_error {
+        site_node::update_cache -node_id $node_id
+    }
+}
+
+ad_proc -deprecated site_map_unmount_application {
+    { -sync_p "t" }
+    { -delete_p "f" }
+    node_id
+} {
+    Unmounts the specified node.
+
+    @author Michael Bryzek (mbryzek@arsdigita.com)
+    @creation-date 2001-02-07
+
+    @param sync_p If "t", we flush the in-memory site map
+    @param delete_p If "t", we attempt to delete the site node. This
+    will fail if you have not cleaned up child nodes
+    @param node_id The node_id to unmount
+    @see site_node::unmount
+
+} {
+    db_transaction {
+        site_node::unmount -node_id $node_id
+
+        if {$delete_p == "t"} {
+            site_node::delete -node_id $node_id
+        }
+    }
+}
+
+ad_proc -deprecated site_node_id {url} {
+    Returns the node_id of a site node. Throws an error if there is no
+    matching node.
+    @see site_node::get_node_id
+} {
+    return [site_node::get_node_id -url $url]
+}
+
+ad_proc -deprecated site_nodes_sync {args} {
+    Brings the in-memory copy of the url hierarchy in sync with the
+    database version.
+
+    @see site_node::init_cache
+} {
+    site_node::init_cache
+}
+
+ad_proc -deprecated -warn site_node_closest_ancestor_package {
+    { -default "" }
+    { -url "" }
+    package_keys
+} {
+    <p>
+    Use site_node::closest_ancestor_package. Note that
+    site_node_closest_ancestor_package will include the passed-in node in the
+    search, whereas the new proc doesn't by default. If you want to include
+    the passed-in node, call site_node::closest_ancestor_package with the
+    -include_self flag
+    </p>
+
+    <p>
+    Finds the package id of a package of specified type that is
+    closest to the node id represented by url (or by ad_conn url).Note
+    that closest means the nearest ancestor node of the specified
+    type, or the current node if it is of the correct type.
+
+    <p>
+
+    Usage:
+
+    <pre>
+    # Pull out the package_id of the subsite closest to our current node
+    set pkg_id [site_node::closest_ancestor_package -include_self -package_key "acs-subsite"]
+    </pre>
+
+    @param default The value to return if no package can be found
+    @param url The url of the node from which to start the search
+    @param package_keys The type(s) of the package(s) for which we are looking
+
+    @return <code>package_id</code> of the nearest package of the
+    specified type (<code>package_key</code>). Returns $default if no
+    such package can be found.
+
+    @see site_node::closest_ancestor_package
+} {
+
+    if {$url eq ""} {
+        set url [ad_conn url]
+    }
+
+    set result [site_node::closest_ancestor_package \
+                    -package_key $package_keys \
+                    -url $url \
+                    -include_self]
+    if {$result eq ""} {
+        set result $default
+    }
+    return $result
+}
+
+ad_proc -deprecated site_node_closest_ancestor_package_url {
+    { -default "" }
+    { -package_key {} }
+} {
+    Returns the url stub of the nearest application of the specified
+    type.
+
+    @author Michael Bryzek (mbryzek@arsdigita.com)
+    @creation-date 2001-02-05
+
+    @param package_key The types of packages for which we're looking (defaults to subsite packages)
+    @param default The default value to return if no package of the
+    specified type was found
+
+    @see site::node::closest_ancestor_package
+} {
+    if {$package_key eq ""} {
+        set package_key [subsite::package_keys]
+    }
+
+    set subsite_pkg_id [site_node::closest_ancestor_package \
+                            -include_self \
+                            -package_key $package_key \
+                            -url [ad_conn url] ]
+
+    if {$subsite_pkg_id eq ""} {
+        # No package was found... return the default
+        return $default
+    }
+
+    return [lindex [site_node::get_url_from_object_id -object_id $subsite_pkg_id] 0]
+}
+
+ad_proc -deprecated site_node::conn_url {
+} {
+    Use this in place of ns_conn url when referencing host_nodes.
+    This proc returns the appropriate ns_conn url value, depending on
+    if host_node_map is used for current connection, or hostname's
+    domain.
+    @see ad_conn
+} {
+    set ns_conn_url [ns_conn url]
+    set subsite_get_url [subsite::get_url]
+    set joined_url [ad_file join $subsite_get_url $ns_conn_url]
+    # join drops ending slash for some cases. Add back if appropriate.
+    if { [string index $ns_conn_url end] eq "/" && [string index $joined_url end] ne "/" } {
+        append joined_url "/"
+    }
+    return $joined_url
+}
+
+########################################################################
+# Functions based on undefined code
+########################################################################
 #
-# The following proc is based on undefined function 
+# The following proc is based on undefined function
 #
 #
 # -------------------------------------------------------

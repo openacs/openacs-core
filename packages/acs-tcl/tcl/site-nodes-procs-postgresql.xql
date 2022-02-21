@@ -3,12 +3,6 @@
 <queryset>
     <rdbms><type>postgresql</type><version>7.1</version></rdbms>
 
-    <fullquery name="site_node::delete.delete_site_node">
-        <querytext>
-            select site_node__delete(:node_id);
-        </querytext>
-    </fullquery>
-
     <fullquery name="site_node::update_cache.select_child_site_nodes">
       <querytext>
         with recursive site_node_tree as (
