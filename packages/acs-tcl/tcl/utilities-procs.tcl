@@ -3823,7 +3823,7 @@ namespace eval util {
     } {
 
         Check whether the provided file is of the requested type.
-        This function is more robust and protable than relying on
+        This function is more robust and portable than relying on
         external programs and their output, but it does not work on
         all possible file types. It checks a few common cases that
         could lead to problems otherwise, like when uploading archives.

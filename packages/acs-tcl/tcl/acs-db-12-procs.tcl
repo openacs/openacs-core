@@ -150,12 +150,12 @@ namespace eval ::acs::db {
         #
         if {[string tolower $default] eq "null"} {
             set default_value ""
-            set allowedEmtpyOpt "-allow_empty"
+            set allowedEmptyOpt "-allow_empty"
         } else {
             set default_value $default
-            set allowedEmtpyOpt ""
+            set allowedEmptyOpt ""
         }
-        return [list [:dbproc_arg -name $name -type $type {*}$allowedEmtpyOpt] $default_value]
+        return [list [:dbproc_arg -name $name -type $type {*}$allowedEmptyOpt] $default_value]
     }
 
     ::acs::db::SQL method build_function_argument_list {dict} {
@@ -283,10 +283,11 @@ namespace eval ::acs::db {
         #
         #    sqlpackage object {argument_names ... types ... defaulted ... result_type ....}
         #
-        # Note, that we assume, that the "owner" of this functions is
-        # the user "OPENACS".  This way we cover only these functions
-        # defined by openacs (this has a similar functionality like
-        # the "function_args" in PostgreSQL.
+        # Note that the method processes only the functions and
+        # procedures created by the current USER, which is in the
+        # default configuration the user "OPENACS".  This way, we cover
+        # only these functions defined by OpenACS. This has a similar
+        # functionality like the "function_args" in PostgreSQL.
         #
         set last_func ""
         set result {}
@@ -295,7 +296,7 @@ namespace eval ::acs::db {
             select package_name, object_name, position, argument_name, data_type, defaulted
             from all_arguments
             where package_name is not null
-            and owner = 'OPENACS'
+            and owner = USER
             order by package_name, object_name, position
         }] {
             lassign $tuple package_name object_name position argument_name data_type defaulted
@@ -471,7 +472,7 @@ namespace eval ::acs::db {
 
         } else {
             #
-            # Call an SQL function returing a scalar.
+            # Call an SQL function returning a scalar.
             #
             set sql [subst {BEGIN :1 := $sql; END;}]
             set sql_cmd [subst {ns_ora exec_plsql_bind \$__DB \[subst {$sql}\] 1 {}}]

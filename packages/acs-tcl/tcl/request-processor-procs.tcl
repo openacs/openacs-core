@@ -1684,7 +1684,7 @@ ad_proc -public ad_conn {args} {
                                 # provided by a reverse proxy such as
                                 # NGINX via X-Forwarded-For, if
                                 # available. Note that in this case
-                                # there is no validation happending.
+                                # there is no validation happening.
                                 #
                                 set headers [ns_conn headers]
                                 set i [ns_set ifind $headers "X-Forwarded-For"]
