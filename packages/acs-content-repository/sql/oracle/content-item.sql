@@ -1079,22 +1079,32 @@ end get_live_revision;
 procedure set_live_revision (
   revision_id    in cr_revisions.revision_id%TYPE,
   publish_status in cr_items.publish_status%TYPE default 'ready',
-  publish_date   in cr_revisions.publish_date%TYPE default sysdate
+  publish_date   in cr_revisions.publish_date%TYPE default sysdate,
+  is_latest      in char default 'f'
 ) is
 begin
 
-  update
-    cr_items
-  set
-    live_revision = set_live_revision.revision_id,
-    publish_status = set_live_revision.publish_status
-  where
-    item_id = (select
-                 item_id
-               from
-                 cr_revisions
-               where
-                 revision_id = set_live_revision.revision_id);
+  if set_live_revision.is_latest = 't' then
+    update cr_items
+      set
+            live_revision = set_live_revision.revision_id,
+            publish_status = set_live_revision.publish_status,
+            latest_revision = set_live_revision.revision_id
+      where
+            item_id = (select item_id
+               from   cr_revisions
+               where  revision_id = set_live_revision.revision_id);
+  else
+    update cr_items
+      set
+            live_revision = set_live_revision.revision_id,
+            publish_status = set_live_revision.publish_status
+      where
+            item_id = (select item_id
+               from   cr_revisions
+               where  revision_id = set_live_revision.revision_id);
+  end if;
+
 
   update
     cr_revisions

@@ -578,9 +578,10 @@ procedure set_live_revision (
   --                       for its corresponding item
   --    @see {content_item.get_live_revision}
   --*/
-  revision_id   in cr_revisions.revision_id%TYPE,
+  revision_id    in cr_revisions.revision_id%TYPE,
   publish_status in cr_items.publish_status%TYPE default 'ready',
-  publish_date   in cr_revisions.publish_date%TYPE default sysdate    
+  publish_date   in cr_revisions.publish_date%TYPE default sysdate,
+  is_latest      in char default 'f'
 );
 
 
