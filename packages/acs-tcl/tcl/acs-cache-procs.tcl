@@ -36,7 +36,7 @@ namespace eval ::acs {
         :property package_key:required
         :property maxentry:integer
         :property {timeout 5m}
-        :property {default_size:integer 10000}
+        :property {default_size 100KB}
 
         :method cache_name {key} {
             #
