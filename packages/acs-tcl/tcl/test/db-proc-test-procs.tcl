@@ -637,23 +637,17 @@ aa_register_case -error_level warning -cats {
 } {
     set val1 \x00
     set queries {
-       variable {
-           select :val1;
-       }
+        variable {sql {select :val1} status 1}
     }
     switch [db_type] {
        postgresql {
-           lappend queries literal {
-               select '\x00'::bytea;
-           }
+           lappend queries literal {sql {select '\x00'::bytea} status 0}
        }
     }
     foreach {type query} $queries {
-        set status [catch {
-            db_string noxql $query
-        } value copts]
-        aa_equals [list $type {SQL executed successfully?}] $status 0
-        aa_true [list $type {Value is the null character?}] {$value eq "\x00"}
+        set status [catch { db_string noxql [dict get $query sql]} value copts]
+        aa_equals [list $type {SQL executed successfully?}] $status [dict get $query status]
+        aa_true [list $type {Value is the null character?} $value] {$value eq {\x00}}
     }
 }
 
