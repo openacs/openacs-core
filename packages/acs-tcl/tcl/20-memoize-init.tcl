@@ -4,7 +4,6 @@
 #
 # Create the cache used by util_memoize.
 #
-set ::acs::kernel_id [ad_acs_kernel_id]
 ns_cache create util_memoize -size \
     [parameter::get -package_id $::acs::kernel_id -parameter MaxSize -default 200000]
 

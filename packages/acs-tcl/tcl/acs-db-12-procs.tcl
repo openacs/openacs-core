@@ -44,19 +44,33 @@ namespace eval ::acs::db {
         return {CHAR NUMBER VARCHAR2 DATE TABLE}
     }
 
-
     #
     # Mapping of SQL "package" name and "object" name to the names as
     # stored in the database.
     #
-    ::acs::db::oracle method sql_function_name {package_name object_name} {
+    ::acs::db::postgresql method sql_function_name {package_name object_name} {
         return ${package_name}__${object_name}
     }
     ::acs::db::oracle method sql_function_name {package_name object_name} {
         return ${package_name}.${object_name}
     }
 
-
+    #
+    # Helper for replacing different SQL notations for calling
+    # database functions.
+    #
+    ::acs::db::postgresql public method map_function_name {sql} {
+        # Replace calls to function names in provided SQL
+        # (dummy function for PostgreSQL)
+        return $sql
+    }
+    
+    ::acs::db::oracle public method map_function_name {sql} {
+        # Replace calls to function names in provided SQL
+        # (replace "package__object" by  "package.object").
+        return [string map [list "__" .] $sql]
+    }
+    
     #
     # Generator function
     #
@@ -77,19 +91,44 @@ namespace eval ::acs::db {
         #
         #   ::acs::dc call /package_name/ /object_name/ ?/args/?
         #
+
+        ns_log notice "Creating DB function interface" \
+            "(driver '[::acs::dc cget -driver]', backend '[::acs::dc cget -backend]')"
+        
         set db_definitions ""
         foreach item [:get_all_package_functions -dbn $dbn] {
             lassign $item package_name object_name sql_info
+            
             if {[string match "*TRG" [string toupper $object_name]]} {
                 # no need to provide interface to trigger functions
                 continue
             }
+           
             set package_name [string tolower $package_name]
             set object_name [string tolower $object_name]
-            set key ${package_name}.${object_name}
+            set key ${package_name}.${object_name}            
             if {$match ne "*" && ![string match $match $key]} {
                 continue
             }
+
+            set nr_args [llength [dict get $sql_info argument_names]]
+            if {
+                [llength [dict get $sql_info types]] != $nr_args
+                || [llength [dict get $sql_info defaulted]] != $nr_args
+                || [llength [dict get $sql_info defaults]] != $nr_args
+            } {
+                ns_log warning "Inconsistent definition skipped: $key" \
+                    "argument_names $nr_args" \
+                    "types [llength [dict get $sql_info types]]" \
+                    "defaulted [llength [dict get $sql_info defaulted]]" \
+                    "defaults [llength [dict get $sql_info defaults]]\n" \
+                    "names     [dict get $sql_info argument_names]\n" \
+                    "types     [dict get $sql_info types]\n" \
+                    "defaulted [dict get $sql_info defaulted]\n" \
+                    "defaults  [dict get $sql_info defaults]"
+                continue
+            }
+            
             ns_log notice "generate stub for '$key'"
             if {![dict exists $db_definitions $key]} {
                 dict set db_definitions $key package_name $package_name
@@ -202,7 +241,11 @@ namespace eval ::acs::db {
         #
         # Currently, "defaults" are only available for PostgreSQL
         #
-
+        if {![db_table_exists acs_function_args]} {
+            ns_log notice "acs_function_args is not (yet) defined, don't create stub functions now"
+            return {}
+        }
+        
         set definitions [::acs::dc list_of_lists -dbn $dbn get_all_package_functions {
             select function, arg_name, arg_default
             from   acs_function_args
@@ -232,7 +275,7 @@ namespace eval ::acs::db {
         # argument types, return type) from PostgreSQL system
         # catalogs.
         #
-        set pg_data [::xo::dc list_of_lists -dbn $dbn [current method] {
+        set pg_data [::acs::dc list_of_lists -dbn $dbn [current method] {
             select distinct
             af.function,
             substring(af.function from 0 for position('__' in af.function)) as package_name,
@@ -552,7 +595,7 @@ namespace eval ::acs::db {
 
 }
 
-::acs::dc create_db_function_interface ;# -verbose ;# -match test.*
+#::acs::dc create_db_function_interface  -verbose ;# -match test.*
 
 # Local variables:
 #    mode: tcl

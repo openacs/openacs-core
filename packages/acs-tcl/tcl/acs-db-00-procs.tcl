@@ -42,6 +42,7 @@ namespace eval ::acs::db {
 
     ::nx::Class create ::acs::db::Driver {
         :property backend
+        :property driver
         #
         # Define the "abstract" API (here via protected methods)
         #
@@ -87,8 +88,9 @@ namespace eval ::acs::db {
 
     ::nx::Class create ::acs::db::nsdbi            -superclasses ::acs::db::Driver
     ::nx::Class create ::acs::db::nsdbi-postgresql -superclasses {::acs::db::nsdbi ::acs::db::postgresql}
-
-
+    #
+    # Preliminary list of functions (to be extened/refined)
+    #
     ::acs::db::nsdb public method list_of_lists {{-dbn ""} {-bind ""} -prepare qn sql} {
         set bindOpt [expr {$bind ne "" ? [list -bind $bind] : ""}]
         if {$sql eq ""} {
@@ -97,6 +99,14 @@ namespace eval ::acs::db {
         return [:uplevel [list ::db_list_of_lists -dbn $dbn $qn $sql {*}$bindOpt]]
     }
 
+    ::acs::db::nsdb public method list {{-dbn ""} {-bind ""} -prepare qn sql} {
+        set bindOpt [expr {$bind ne "" ? [list -bind $bind] : ""}]
+        if {$sql eq ""} {
+            set qn [uplevel [list [self] qn $qn]]
+        }
+        uplevel [list ::db_list -dbn $dbn $qn $sql {*}$bindOpt]
+    }
+    
     ::acs::db::nsdbi public method list_of_lists {{-dbn ""} {-bind ""} -prepare qn sql} {
         if {$sql eq ""} {
             set sql [:get_sql $qn]
@@ -107,6 +117,19 @@ namespace eval ::acs::db {
                               -result lists -max 1000000 -- $sql]]
     }
 
+    ::acs::db::nsdbi public method list {{-dbn ""} {-bind ""} -prepare qn sql} {
+        if {$sql eq ""} {
+            set sql [:get_sql $qn]
+        }
+        set flat [:uplevel [list ::dbi_rows -columns __columns \
+                                {*}[expr {$dbn ne "" ? [list -db $dbn] : ""}] \
+                                {*}[expr {$bind ne "" ? [list -bind $bind] : ""}] \
+                                -- $sql]]
+        if {[:uplevel {llength $__columns}] > 1} {
+            error "query is returning more than one column"
+        }
+        return $flat
+    }
 
     ##########################################################################
     #
@@ -147,7 +170,10 @@ namespace eval ::acs::db {
                 set driver nsdbi
             }
         }
-        return [::acs::db::$driver-$backend create $name -backend $backend]
+        
+        return [::acs::db::$driver-$backend create $name \
+                    -backend $backend \
+                    -driver $driver]
     }
 
     #
