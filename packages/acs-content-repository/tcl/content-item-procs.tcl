@@ -1096,7 +1096,7 @@ ad_proc -public content::item::get_revision_content {
     -item_id
 } {
 
-  Create a onerow datasource called content in the calling frame
+  Create a one-row datasource called content in the calling frame
   which contains all attributes for the revision (including inherited
   ones).
 
