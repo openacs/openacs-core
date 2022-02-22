@@ -64,13 +64,13 @@ namespace eval ::acs::db {
         # (dummy function for PostgreSQL)
         return $sql
     }
-    
+
     ::acs::db::oracle public method map_function_name {sql} {
         # Replace calls to function names in provided SQL
         # (replace "package__object" by  "package.object").
         return [string map [list "__" .] $sql]
     }
-    
+
     #
     # Generator function
     #
@@ -94,19 +94,19 @@ namespace eval ::acs::db {
 
         ns_log notice "Creating DB function interface" \
             "(driver '[::acs::dc cget -driver]', backend '[::acs::dc cget -backend]')"
-        
+
         set db_definitions ""
         foreach item [:get_all_package_functions -dbn $dbn] {
             lassign $item package_name object_name sql_info
-            
+
             if {[string match "*TRG" [string toupper $object_name]]} {
                 # no need to provide interface to trigger functions
                 continue
             }
-           
+
             set package_name [string tolower $package_name]
             set object_name [string tolower $object_name]
-            set key ${package_name}.${object_name}            
+            set key ${package_name}.${object_name}
             if {$match ne "*" && ![string match $match $key]} {
                 continue
             }
@@ -128,7 +128,7 @@ namespace eval ::acs::db {
                     "defaults  [dict get $sql_info defaults]"
                 continue
             }
-            
+
             ns_log notice "generate stub for '$key'"
             if {![dict exists $db_definitions $key]} {
                 dict set db_definitions $key package_name $package_name
@@ -245,7 +245,7 @@ namespace eval ::acs::db {
             ns_log notice "acs_function_args is not (yet) defined, don't create stub functions now"
             return {}
         }
-        
+
         set definitions [::acs::dc list_of_lists -dbn $dbn get_all_package_functions {
             select function, arg_name, arg_default
             from   acs_function_args
@@ -405,7 +405,7 @@ namespace eval ::acs::db {
         # driver as well.
         #
         set body_prefix "\n # Automatically generated method\n\n"
-        set cmd [list ::acs::db::${:backend} public method \
+        set cmd [list ::acs::db::${:driver}-${:backend} public method \
                      "call ${package_name} $object_name" \
                      $nonposarg_list \
                      "$body_prefix$body" \
@@ -595,7 +595,38 @@ namespace eval ::acs::db {
 
 }
 
-#::acs::dc create_db_function_interface  -verbose ;# -match test.*
+#
+# Check, whether we have to regenerate the database function interface.
+#
+# - During initial setup, there are no db-functions, so nothing has to
+#   be done.
+#
+# - During regular startup of the server, the generation of the stub
+#   interface happens in the *init procs (hopefully this is always
+#   sufficient, but seems so)
+#
+# - During reloads of acs-db-*-procs, the base classes are interface
+#   objects are recreated and cleaned up from all prior definitions,
+#   which means that in this situations, we have to regeneate the
+#   interface.
+#
+# - One might call manually the regeneration, when database functions
+#   have been altered and no restart is desired.
+#
+ns_log notice "DB function interface: epoch [ns_ictl epoch]"
+if { [ns_ictl epoch] > 0} {
+    set interfaceObjs [::acs::db::Driver info instances -closure]
+    ns_log notice "DB function interface: existing interface objs $interfaceObjs"
+    foreach interfaceObj $interfaceObjs {
+        set hasCallMethod [llength [$interfaceObj info lookup method call]]
+        ns_log notice "DB function interface: $interfaceObj has CALL method: $hasCallMethod"
+        if {!$hasCallMethod} {
+            ns_log notice "DB function interface: ..... will create interface for $interfaceObj"
+            $interfaceObj create_db_function_interface  ;# -verbose ;# -match test.*
+        }
+    }
+}
+
 
 # Local variables:
 #    mode: tcl
