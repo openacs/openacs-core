@@ -1159,7 +1159,7 @@ namespace eval ::acs {
 }
 
 #
-# Plain Tcl API using the definitons from above
+# Plain Tcl API using the definitions from above
 #
 ad_proc -public site_node::new {
     {-name:required}

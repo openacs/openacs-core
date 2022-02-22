@@ -89,7 +89,7 @@ namespace eval ::acs::db {
     ::nx::Class create ::acs::db::nsdbi            -superclasses ::acs::db::Driver
     ::nx::Class create ::acs::db::nsdbi-postgresql -superclasses {::acs::db::nsdbi ::acs::db::postgresql}
     #
-    # Preliminary list of functions (to be extened/refined)
+    # Preliminary list of functions (to be extended/refined)
     #
     ::acs::db::nsdb public method list_of_lists {{-dbn ""} {-bind ""} -prepare qn sql} {
         set bindOpt [expr {$bind ne "" ? [list -bind $bind] : ""}]
