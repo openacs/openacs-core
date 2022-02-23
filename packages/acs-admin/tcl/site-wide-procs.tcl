@@ -70,11 +70,12 @@ namespace eval ::acs_admin {
         set path [dict get $node_info url]$node_name
         #
         # Flush site node cache to avoid potential bootstrap
-        # problems.
+        # problems. We call the flush operation via the internal
+        # acs::site_node object, since the this known the proper cache
+        # to flush. Maybe, we can develop a more general API in the
+        # future.
         #
-        if {[namespace which ::xo::site_node] ne ""} {
-            xo::site_node flush_pattern id-$path*
-        }
+        acs::site_node flush_pattern id-$path*
 
         if {[site_node::exists_p -url $path]} {
             #
