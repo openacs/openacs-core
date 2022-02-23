@@ -26,7 +26,7 @@ as
         return char;
 
     function table_column_exists (
-        table_name  in varchar2,
+        table_name in varchar2,
         column in varchar2)
         return char;
 
