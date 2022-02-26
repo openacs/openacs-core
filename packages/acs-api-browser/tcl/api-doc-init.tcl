@@ -1,4 +1,3 @@
-
 # Decide, whether we want to include calling-info based on static
 # analysis in the procdoc structure (what function calls what other
 # functions). This calling-info is just relevant for developer
@@ -20,6 +19,8 @@ if {[parameter::get \
         -default false]} {
     ad_schedule_proc -thread t -once t 1 ::api_add_calling_info_to_procdoc
 }
+
+::xo::api update_object_doc "" ::acs::db::[::acs::dc cget -driver]-[::acs::dc cget -backend] ""
 
 # Local variables:
 #    mode: tcl
