@@ -568,10 +568,10 @@ ad_proc -private lang::conn::locale_not_cached {
         set locale [lang::system::site_wide_locale]
     }
 
-    # if that does not exist then we are back to just another language
-    # let's pick uhmm... en_US
+    # if that does not exist, or is not supported, then we are back to
+    # just another language let's pick uhmm... en_US
 
-    if { $locale eq "" } {
+    if { $locale eq "" || $locale ni [lang::system::get_locales]} {
         set locale en_US
     }
 
