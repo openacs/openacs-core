@@ -9,7 +9,7 @@ ad_page_contract {
     {num:range(0|200) 0}
     {dfs:word,trim,notnull ""}
     {dts:word,trim,notnull ""}
-    {search_package_id:naturalnum ""}
+    {search_package_id:naturalnum,object_id ""}
     {scope ""}
     {object_type:token ""}
 } -validate {
@@ -54,7 +54,7 @@ set user_id [ad_conn user_id]
 set driver [parameter::get -package_id $package_id -parameter FtsEngineDriver]
 if {[callback::impl_exists -impl $driver -callback search::driver_info]} {
     array set info [lindex [callback -impl $driver search::driver_info] 0]
-#    array set info [list package_key intermedia-driver version 1 automatic_and_queries_p 1  stopwords_p 1]
+    # array set info [list package_key intermedia-driver version 1 automatic_and_queries_p 1  stopwords_p 1]
 } else {
     array set info [acs_sc::invoke -contract FtsEngineDriver -operation info -call_args [list] -impl $driver]
 }
