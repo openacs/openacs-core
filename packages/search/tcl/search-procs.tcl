@@ -69,7 +69,7 @@ ad_proc -public -deprecated search::is_guest_p {
 
     Deprecated: returning 0 since more than 10 years...
 
-    @see :xo::db::sql::dotlrn_privacy proc guest_p
+    @see :acs::dc proc "call dotlrn_privacy guest_p"
 } {
     # set user_id [ad_conn user_id]
     # return [db_string get_is_guest_p {select dotlrn_privacy.guest_p(:user_id) from dual}]

@@ -46,6 +46,11 @@ ad_proc -public search::convert::binary_to_text {
             set convert_command {catppt $filename >$tmp_filename}
         }
         application/pdf {
+            if {![util::file_content_check -type pdf -file $filename]} {
+                ns_log warning "search: $filename ($mime_type) is not a pdf file; skip indexing"
+                file delete -- $tmp_filename                
+                return ""
+            }
             set convert_command {pdftotext $filename $tmp_filename}
         }
         application/vnd.oasis.opendocument.text -
@@ -56,6 +61,11 @@ ad_proc -public search::convert::binary_to_text {
         application/vnd.oasis.opendocument.presentation-template -
         application/vnd.oasis.opendocument.spreadsheet -
         application/vnd.oasis.opendocument.spreadsheet-template {
+            if {![util::file_content_check -type zip -file $filename]} {
+                ns_log warning "search: $filename ($mime_type) is not a zip file; skip indexing"
+                file delete -- $tmp_filename                
+                return ""
+            }
             set convert_command {unzip -p $filename content.xml >$tmp_filename}
         }
         text/html {
