@@ -115,11 +115,11 @@ aa_register_case \
         ad_parse_html_attributes_upvar
     } \
     ad_html_security_check_href_allowed {
-    tests is href attribute is allowed of A tags
+        Tests is href attribute is allowed
 } {
-    set html "<a href=\"http://www.example/com\">An Link</a>"
+    set html "<a href='http://www.example/com'>An Link</a>"
     aa_equals "href with http:// is allowed for 'a' tags" [ad_html_security_check $html] ""
-    set html "<a href=\"https://www.example/com\">An Link</a>"
+    set html "<a href='https://www.example/com'>An Link</a>"
     aa_equals "href with https:// is allowed for 'a' tags" [ad_html_security_check $html] ""
 }
 
@@ -132,17 +132,36 @@ aa_register_case \
         ad_parse_html_attributes_upvar
     } \
     ad_html_security_check_forbidden_protolcols {
-    tests is href attribute is forbidden for certain tags
+        Tests is href contains allowed protocols
 } {
-    set html "<a href=\"foo://www.example/com\">An Link</a>"
+    set html "<a href='foo://www.example/com'>An Link</a>"
     aa_true "protocol 'foo' is not allowed" {[ad_html_security_check $html] ne ""}
-    set html "<a href=\"javascript:alert('hi')\">An Link</a>"
+    set html "<a href='javascript:alert('hi')'>An Link</a>"
     aa_true "protocol 'javascript' is not allowed" {[ad_html_security_check $html] ne ""}
-    set html "<a href=\"data:alert('hi')\">An Link</a>"
+    set html "<a href='data:alert('hi')'>An Link</a>"
     aa_true "protocol 'data' is not allowed" {[ad_html_security_check $html] ne ""}
-    set html "<a href=\"blob:https://example.com/')\">An Link</a>"
+    set html "<a href='blob:https://example.com/')'>An Link</a>"
     aa_true "protocol 'blob' is not allowed" {[ad_html_security_check $html] ne ""}
 }
+
+aa_register_case \
+    -cats {api smoke} \
+    -procs {
+        ad_html_security_check
+    } \
+    ad_html_security_check_forbidden_tags {
+        tests is text contains allowed tags
+} {
+    set html "hello <a href='/foo'>An Link</a> world."
+    aa_true "Tag a is not allowed - empty tag list" {[ad_html_security_check -allowed_tags "" $html] ne {}}
+
+    set html "hello <a href='/foo'>An Link</a> world."
+    aa_true "Tag a is not allowed - non-empty tag list" {[ad_html_security_check -allowed_tags "b h1" $html] ne {}}
+
+    set html "hello <a href='/foo'>An Link</a> world."
+    aa_equals "Tag 'a' is allowed" [ad_html_security_check -allowed_tags "a b h1" $html] ""
+}
+
 
 aa_register_case \
     -cats {api smoke} \
@@ -291,27 +310,27 @@ aa_register_case \
 } {
     #Convert leading and trailing spaces or tabs
     set html "\tinter spaces  "
-    aa_log "html= \"$html\" - Contains tabs and spaces"
+    aa_log "html= '$html' - Contains tabs and spaces"
     set result [util_convert_line_breaks_to_html $html]
-    aa_false "Now html=\"$result\"" [regexp {\sinter spaces\s} $result]
+    aa_false "Now html='$result'" [regexp {\sinter spaces\s} $result]
 
     #convert single break
     set html "\r\n inter\r\nbreaks \r\n"
-    aa_log "html= \"$html\" - Contains a single break"
+    aa_log "html= '$html' - Contains a single break"
     set result [util_convert_line_breaks_to_html $html]
-    aa_false "Now html=\"$result\"" [regexp {inter<b />\nspaces} $result]
+    aa_false "Now html='$result'" [regexp {inter<b />\nspaces} $result]
 
     #convert paragraph break
     set html "\r\n inter\r\n\r\nbreaks \r\n"
-    aa_log "html= \"$html\" - Contains a double break"
+    aa_log "html= '$html' - Contains a double break"
     set result [util_convert_line_breaks_to_html $html]
-    aa_false "Now html=\"$result\"" [regexp {inter</p><p style="margin-bottom: 0px;">spaces} $result]
+    aa_false "Now html='$result'" [regexp {inter</p><p style="margin-bottom: 0px;">spaces} $result]
 
     #convert more than 2 breaks
     set html "\r\n inter\r\n\r\n\r\nbreaks \r\n"
-    aa_log "html= \"$html\" - Contains more than 2 breaks"
+    aa_log "html= '$html' - Contains more than 2 breaks"
     set result [util_convert_line_breaks_to_html $html]
-    aa_false "Now html=\"$result\"" [regexp {inter<b />\n<b />\n<b />\nspaces} $result]
+    aa_false "Now html='$result'" [regexp {inter<b />\n<b />\n<b />\nspaces} $result]
 }
 
 
@@ -331,7 +350,7 @@ aa_register_case \
     set html $result
     aa_log "Quote html=$html"
     set result [ad_unquotehtml $html]
-    aa_equals "Unquote html=$result" "\"<&text>\"" $result
+    aa_equals "Unquote html=$result" "'<&text>'" $result
 }
 
 aa_register_case \
@@ -359,10 +378,10 @@ aa_register_case \
     util_remove_html_tags {
     Test if it remove all between tags
 } {
-    set html "<p><b>some</b> text <i>to</i> probe if it <table><tr>remove all between \"<\" and \">\"<tr><table><tags>"
+    set html "<p><b>some</b> text <i>to</i> probe if it <table><tr>remove all between '<' and '>'<tr><table><tags>"
     set result [util_remove_html_tags $html]
-    aa_equals "Without all between \"<\" and \">\" html=\"$result\""\
-        "some text to probe if it remove all between \"\"" $result
+    aa_equals "Without all between '<' and '>' html='$result'"\
+        "some text to probe if it remove all between ''" $result
 }
 
 aa_register_case \

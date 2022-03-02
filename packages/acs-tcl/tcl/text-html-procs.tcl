@@ -856,14 +856,29 @@ ad_proc ad_parse_html_attributes_upvar {
 
 
 
-    ad_proc ad_html_security_check { html } {
+    ad_proc ad_html_security_check {
+        -allowed_tags
+        -allowed_attributes
+        -allowed_protocols
+        html
+    } {
 
         Returns a human-readable explanation if the user has used any
-        HTML tag other than the ones marked allowed in antispam
-        section of the kernel parameters.  Otherwise returns an empty
-        string.
+        HTML tag other than the allowed ones.
 
-        @return a human-readable, plaintext explanation of what's wrong with the user's input.
+        It uses for checking the provided values. If these values are
+        not provided the function takes the union of the per-package
+        instance value and the values from the "antispam" section of
+        the kernel parameters.
+
+        @param allowed_tags
+        @param allowed_attributes
+        @param allowed_protocols
+        @param html The HTML text being validated.
+
+        @return a human-readable, plaintext explanation of what's
+               wrong with the user's input.  If everthing is ok,
+               return an empty string.
 
         @author Lars Pind (lars@pinds.com)
         @creation-date 20 July 2000
@@ -880,32 +895,36 @@ ad_proc ad_parse_html_attributes_upvar {
             return "For security reasons, you're not allowed to have the less-than-percent combination in your input."
         }
 
-        array set allowed_attribute [list]
-        array set allowed_tag [list]
-        array set allowed_protocol [list]
-
-        # Use the antispam tags for this package instance and whatever is on the kernel.
-        set allowed_tags_list [concat \
-                                   $extra_tags \
-                                   [ad_parameter_all_values_as_list -package_id $::acs::kernel_id AllowedTag antispam] \
-                                   [ad_parameter_all_values_as_list AllowedTag antispam]]
-
-        set allowed_attributes_list [concat \
-                                         [ad_parameter_all_values_as_list -package_id $::acs::kernel_id AllowedAttribute antispam] \
-                                         [ad_parameter_all_values_as_list AllowedAttribute antispam]]
-
-        set allowed_protocols_list [concat \
-                                        [ad_parameter_all_values_as_list -package_id $::acs::kernel_id AllowedProtocol antispam] \
-                                        [ad_parameter_all_values_as_list AllowedProtocol antispam]]
-
-        foreach attribute $allowed_attributes_list {
-            set allowed_attribute([string tolower $attribute]) 1
+        if {[info exists allowed_tags]} {
+            lappend allowed_tags {*}$extra_tags
+        } else {
+            set allowed_tags [concat \
+                                  $extra_tags \
+                                  [ad_parameter_all_values_as_list \
+                                       -package_id $::acs::kernel_id \
+                                       AllowedTag antispam] \
+                                  [ad_parameter_all_values_as_list AllowedTag antispam]]
         }
-        foreach tagname $allowed_tags_list {
-            set allowed_tag([string tolower $tagname]) 1
+
+        if {![info exists allowed_attributes]} {
+            set allowed_attributes [concat \
+                                        [ad_parameter_all_values_as_list \
+                                             -package_id $::acs::kernel_id \
+                                             AllowedAttribute antispam] \
+                                        [ad_parameter_all_values_as_list AllowedAttribute antispam]]
         }
-        foreach protocol $allowed_protocols_list {
-            set allowed_protocol([string tolower $protocol]) 1
+
+        if {![info exists allowed_protocols]} {
+            set allowed_protocols [concat \
+                                       [ad_parameter_all_values_as_list \
+                                            -package_id $::acs::kernel_id \
+                                            AllowedProtocol antispam] \
+                                       [ad_parameter_all_values_as_list AllowedProtocol antispam]]
+        }
+
+        foreach var {attributes tags protocols} {
+            set allowed_$var [string tolower [set allowed_$var]]
+            set allow_all_$var [expr {"*" in [set allowed_$var]}]
         }
 
         # loop over all tags
@@ -918,37 +937,49 @@ ad_proc ad_parse_html_attributes_upvar {
                 # Not considered a tag. Shouldn't do any harm in browsers.
                 # (Tested with digits, with &#65; syntax, with whitespace)
             } else {
-                # The tag was valid ... now let's see if it's on the allowed list.
+                #
+                # The tag is potentially ok ... now let's see if it's
+                # on the allowed list.
+                #
                 set tagname [string tolower [string range $html [lindex $name_idx 0] [lindex $name_idx 1]]]
 
-                if { ![info exists allowed_tag($tagname)] && ![info exists allowed_tag(*)] } {
-                    # Nope, this was a naughty tag.
-                    return "For security reasons we only accept the submission of HTML
-        containing the following tags: [join $allowed_tags_list " "].
-        You have a [string toupper $tagname] tag in there."
+                if { !$allow_all_tags && $tagname ni $allowed_tags } {
+                    #
+                    # This tag is not allowed.
+                    #
+                    return [subst {For security reasons we only accept the submission of HTML
+                        containing the following tags: [join $allowed_tags " "].
+                        You have a '[string toupper $tagname]' tag in there.
+                    }]
                 } else {
-                    # Legal tag.
-
-                    # Make i point to the first character inside the tag, after the tag name and any whitespace
+                    #
+                    # Valid and allowed tag. Make i point to the first
+                    # character inside the tag, after the tag name and
+                    # any whitespace.
+                    #
                     set i [expr { [lindex $match 1] + 1}]
 
                     set attr_list [ad_parse_html_attributes_upvar html i]
 
                     foreach attribute $attr_list {
+                        #
+                        # All attribute names in $attr_list are
+                        # already lower case.
+                        #
                         lassign $attribute attr_name attr_value
 
-                        if { ![info exists allowed_attribute($attr_name)]
-                             && ![info exists allowed_attribute(*)] } {
+                        if { !$allow_all_attributes
+                             && $attr_name ni $allowed_attributes} {
                             return "The attribute '$attr_name' is not allowed for $tagname tags"
                         }
 
-                        if { [string tolower $attr_name] ne "style" } {
+                        if { !$allow_all_protocols && $attr_name ne "style" } {
                             if { [regexp {^\s*(([^\s:]+):\/\/|(data|javascript|blob):)} $attr_value match . p1 p2] } {
-                                set protocol [expr {$p1 ne "" ? $p1 : $p2}]
-                                if { ![info exists allowed_protocol([string tolower $protocol])]
-                                     && ![info exists allowed_protocol(*)] } {
-                                    return "Your URLs can only use these protocols: [join $allowed_protocols_list ", "].
-                You have a '$protocol' protocol in there."
+                                set protocol [string tolower [expr {$p1 ne "" ? $p1 : $p2}]]
+                                if { $protocol ni $allowed_protocols } {
+                                    return [subst {The allowed URLs can only use these protocols:
+                                        [join $allowed_protocols ", "].
+                                        You have a '$protocol' protocol in there.}]
                                 }
                             }
                         }
@@ -956,7 +987,7 @@ ad_proc ad_parse_html_attributes_upvar {
                 }
             }
         }
-        return {}
+        return ""
     }
 
     # This was created in order to pre-process some content to be fed
