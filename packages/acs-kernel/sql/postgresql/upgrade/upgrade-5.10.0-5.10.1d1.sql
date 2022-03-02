@@ -11,7 +11,6 @@ ALTER TABLE users ADD COLUMN IF NOT EXISTS password_hash_algorithm
 
 DROP VIEW acs_users_all;
 DROP VIEW cc_users;
-DROP VIEW registered_users;
 
 --
 -- Some legacy applications might contain still the VIEW
@@ -25,6 +24,13 @@ DROP VIEW registered_users;
 -- recreated by this update script.
 --
 DROP VIEW IF EXISTS registered_users_of_package_id;
+
+--
+-- In case, the legacy view registered_users_of_package_id was in
+-- place, it has to be dropped before registered_users.
+--
+DROP VIEW registered_users;
+
 
 ALTER TABLE users ALTER COLUMN password TYPE character varying(128);
 
