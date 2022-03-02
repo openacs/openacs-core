@@ -1919,6 +1919,12 @@ namespace eval ::acs::test::xpath {
             set name [get_name_attribute $n $xpath//input]
             if {$name eq ""} continue
 
+            # Disabled attributes are not sent together with the form
+            # on submit, so we do not fetch them.
+            if {[$n hasAttribute disabled]} {
+                continue
+            }
+
             # Do not consider unchecked radio buttons as values
             if {[$n getAttribute type ""] eq "radio" &&
                 ![$n hasAttribute checked]} {
@@ -1936,6 +1942,13 @@ namespace eval ::acs::test::xpath {
         foreach n [$node selectNodes $xpath//textarea] {
             set name [get_name_attribute $n $xpath//textarea]
             if {$name eq ""} continue
+
+            # Disabled attributes are not sent together with the form
+            # on submit, so we do not fetch them.
+            if {[$n hasAttribute disabled]} {
+                continue
+            }
+
             #ns_log notice "aa_xpath::get_form_values from $className textarea node $n name $name:"
             set value [$n text]
             lappend values $name $value
@@ -1943,6 +1956,13 @@ namespace eval ::acs::test::xpath {
         foreach n [$node selectNodes $xpath//select/option\[@selected='selected'\]] {
             set name [get_name_attribute [$n parentNode] $xpath//option/..]
             if {$name eq ""} continue
+
+            # Disabled attributes are not sent together with the form
+            # on submit, so we do not fetch them.
+            if {[$n hasAttribute disabled]} {
+                continue
+            }
+
             set value [$n getAttribute value]
             lappend values $name $value
         }
