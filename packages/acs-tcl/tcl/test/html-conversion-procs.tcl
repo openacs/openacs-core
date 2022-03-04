@@ -350,7 +350,7 @@ aa_register_case \
     set html $result
     aa_log "Quote html=$html"
     set result [ad_unquotehtml $html]
-    aa_equals "Unquote html=$result" "'<&text>'" $result
+    aa_equals "Unquote html=$result" "\"<&text>\"" $result
 }
 
 aa_register_case \
