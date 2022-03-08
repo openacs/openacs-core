@@ -172,7 +172,7 @@ ad_proc -public site_node::instantiate_and_mount {
 
         if { ![exists_p -url $url] } {
             set node_id [site_node::new -name $node_name -parent_id $parent_node_id]
-            ns_log notice "site_node::instantiate_and_mount NEW sitenode '$node_id'"
+            #ns_log notice "site_node::instantiate_and_mount NEW sitenode '$node_id'"
         } else {
             # Check that there isn't already a package mounted at the node
             set node [get -url $url]
@@ -189,7 +189,7 @@ ad_proc -public site_node::instantiate_and_mount {
     if { $context_id eq "" } {
         set context_id [site_node::closest_ancestor_package -node_id $node_id]
     }
-    ns_log notice "site_node::instantiate_and_mount -node_id '$node_id' context_id '$context_id'"
+    #ns_log notice "site_node::instantiate_and_mount -node_id '$node_id' context_id '$context_id'"
 
     # Instantiate the package
     set package_id [apm_package_instance_new \
@@ -197,7 +197,7 @@ ad_proc -public site_node::instantiate_and_mount {
                         -package_key $package_key \
                         -instance_name $package_name \
                         -context_id $context_id]
-    ns_log notice "site_node::instantiate_and_mount -node_id '$node_id' context_id '$context_id' package_id '$package_id'"
+    #ns_log notice "site_node::instantiate_and_mount -node_id '$node_id' context_id '$context_id' package_id '$package_id'"
 
     # Mount the package
     site_node::mount -node_id $node_id -object_id $package_id
@@ -636,7 +636,7 @@ namespace eval ::acs {
                     from $from
                     where parent_id = :node_id $package_key_clause
                 }]
-                set child_urls [::acs::dc list [current method] $sql]
+                set child_urls [::acs::dc list dbqd..[current method] $sql]
             }
 
             if { $package_type ne "" } {
@@ -692,7 +692,7 @@ namespace eval ::acs {
             #
             # ns_log notice "non-cached version of has_children called with $node_id"
 
-            set children [::acs::dc list -prepare integer has_children {
+            set children [::acs::dc list -prepare integer dbqd..has_children {
                 select 1 from site_nodes where parent_id = :node_id
                 FETCH NEXT 1 ROWS ONLY
             }]
@@ -713,7 +713,7 @@ namespace eval ::acs {
         :public method get_urls_from_object_id {
             -object_id:required
         } {
-            set child_urls [::acs::dc list -prepare integer [current method]-all [subst {
+            set child_urls [::acs::dc list -prepare integer dbqd..[current method]-all [subst {
                 select [acs::dc map_function_name site_node__url(node_id)] as url
                 from site_nodes
                 where object_id = :object_id
@@ -729,7 +729,7 @@ namespace eval ::acs {
             #
             # @param package_key
             #
-            return [::acs::dc list -prepare varchar [current method]-urls-from-package-key [subst {
+            return [::acs::dc list -prepare varchar dbqd..[current method]-urls-from-package-key [subst {
                 select [acs::dc map_function_name site_node__url(node_id)]
                 from site_nodes n, apm_packages p
                 where p.package_key = :package_key
@@ -1014,7 +1014,7 @@ namespace eval ::acs {
                     set sql [string map [list "WITH RECURSIVE" "WITH"] $sql]
                 }
 
-                set tree [::acs::dc list_of_lists -prepare {integer boolean} get_subtree $sql]
+                set tree [::acs::dc list_of_lists -prepare {integer boolean} dbqd..get_subtree $sql]
 
                 foreach entry $tree {
                     lassign $entry url node_id object_id
@@ -1145,10 +1145,9 @@ namespace eval ::acs {
             ::acs::clusterwide ns_urlspace unset -id $::acs::siteNodesID -recurse -key sitenode $url
             next
         }
-
-
     }
     site_node object mixins add SiteNodesCache
+
     if {[namespace which ns_urlspace] ne ""} {
         set ::acs::siteNodesID [ns_urlspace new]
         ns_log notice \
