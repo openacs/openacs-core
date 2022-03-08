@@ -401,7 +401,7 @@ ad_proc -private install_do_data_model_install {} {
     # out-of-band sourcing of 20-memoize-init.tcl below.
     #
     set ::acs::kernel_id [ad_acs_kernel_id]
-    
+
     # Some APM procedures use util_memoize, so initialize the cache
     # before starting APM install
     array set errors {}
@@ -500,6 +500,17 @@ ad_proc -private install_do_packages_install {} {
     if { ![ad_acs_admin_node] } {
         ns_write "  <p><li> Completing Install sequence by mounting the main site and other core packages.<p>
         <blockquote><pre>"
+
+        if {[info commands ::acs::dc] ne ""} {
+            #
+            # Initialize DB function interface, to make functions
+            # e.g. avilable for apm_mount_core_packages.
+            #
+            ns_log notice "Installer initializing db_function_interface"
+            ::acs::dc create_db_function_interface ;# -verbose ;# -match test.*
+        } else {
+            ns_log notice "Installer initializing db_function_interface"
+        }
 
         # Mount the main site
         cd [file join $::acs::rootdir packages acs-kernel sql [db_type]]
