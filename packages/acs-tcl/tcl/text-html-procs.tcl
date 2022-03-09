@@ -885,11 +885,16 @@ ad_proc ad_parse_html_attributes_upvar {
 
     } {
         #
-        # Allow in testing mode always a "form" tag, independent of
-        # the parameter settings.  There should be a nicer way of
-        # doing this...
+        # Allow in certain situations additional attributes (e.g. for
+        # the "form" in an xowiki::Form" the <form> tag).  There
+        # should be better ways developed to handle such cases...
         #
-        set extra_tags [expr {[info exists ::__aa_testing_mode] ? "form" : ""}]
+        if {[info exists ::__extra_allowed_tags]} {
+            set extra_tags $::__extra_allowed_tags
+        } else {
+            set extra_tags ""
+        }
+        #ns_log notice "extra_tags <$extra_tags>"
 
         if { [string first <% $html] > -1 } {
             return "For security reasons, you're not allowed to have the less-than-percent combination in your input."
