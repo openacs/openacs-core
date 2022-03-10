@@ -14,7 +14,7 @@ site_node::init_cache
 # In case, we have a recent version of NaviServer, we can use
 # ns_urlspace for mapping tree data.
 #
-if {[namespace which ns_urlspace] ne ""} {
+if {[namespace which ns_urlspace] ne "" && [::acs::dc info lookup method call] ne ""} {
     #
     # Prefetch paths, which should not be mapped to the base node "/",
     # since these have to go through the classical mapping, where we
