@@ -288,11 +288,9 @@ namespace eval acs_mail_lite {
         {-object_id ""}
     } {
 
-        Prepare an email to be sent, with the option to pass in a list
-        of file_ids as well as specify an html_body and a
-        mime_type. It also supports multiple "TO" recipients as well
-        as CC and BCC recipients. Runs entirely off MIME and SMTP to
-        achieve this.
+        Prepare an email to be sent. Various email attributes can be
+        specified, such as subject, body, senders, recipients,
+        attachments and so on. The proc relies on MIME and SMTP.
 
         @param send_immediately The email is send immediately and not
                stored in the acs_mail_lite_queue
@@ -455,11 +453,10 @@ namespace eval acs_mail_lite {
         {-force_delivery_mode ""}
     } {
 
-        Prepare an email to be sent immediately, with the option to
-        pass in a list of file_ids as well as specify an html_body and
-        a mime_type. It also supports multiple "TO" recipients as well
-        as CC and BCC recipients. Runs entirely off MIME and SMTP to
-        achieve this.
+        Prepare an email to be sent immediately. Various email
+        attributes can be specified, such as subject, body, senders,
+        recipients, attachments and so on. The proc relies on MIME and
+        SMTP.
 
         @param to_addr List of e-mail addresses to send this mail to.
 
