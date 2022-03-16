@@ -389,12 +389,12 @@ namespace eval acs_mail_lite {
 
         ad_try {
             db_foreach get_queued_messages {} {
-                # check if record is already there and free to use
-                set return_id [db_string get_queued_message {} -default -1]
-                if {$return_id == $id} {
-                    # lock this record for exclusive use
-                    set locking_server [ad_url]
-                    db_dml lock_queued_message {}
+                # Lock the message and also make sure that it was not
+                # locked or deleted by somebody else in the meantime.
+                set locking_server [ad_url]
+                db_dml lock_queued_message {}
+
+                if {[db_resultrows] == 1} {
                     # send the mail
                     ad_try {
                         acs_mail_lite::send_immediately \
@@ -415,10 +415,15 @@ namespace eval acs_mail_lite {
                             -extraheaders $extraheaders \
                             -use_sender_p $use_sender_p
                     } on error {errorMsg} {
-                        ad_log Error "Could not send queued mail (message $return_id): $errorMsg"
-                        # release the lock (MS not now)
-                        # set locking_server ""
-                        # db_dml lock_queued_message {}
+                        ad_log Error "Could not send queued mail (message $id): $errorMsg"
+                        # Uncommenting the following two lines would
+                        # cause failed emails to be retried at the
+                        # next sweep. This could make sense only for
+                        # certain kinds of errors, so it is best left
+                        # commented and delegated to e.g. downstream
+                        # callbacks.
+                        ## set locking_server ""
+                        ## db_dml lock_queued_message {}
                     } on ok {r} {
                         # mail was sent, delete the queue entry
                         db_dml delete_queue_entry {}

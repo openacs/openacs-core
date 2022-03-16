@@ -1,19 +1,12 @@
 <?xml version="1.0"?>
 <queryset>
 
-    <fullquery name="acs_mail_lite::sweeper.get_queued_message">
-        <querytext>
-            select message_id as id
-            from acs_mail_lite_queue
-            where message_id=:id and (locking_server = '' or locking_server is NULL)
-        </querytext>
-    </fullquery>
-
     <fullquery name="acs_mail_lite::sweeper.lock_queued_message">
         <querytext>
             update acs_mail_lite_queue
                set locking_server = :locking_server
-            where message_id=:id
+             where message_id = :id
+               and locking_server is NULL
         </querytext>
     </fullquery> 
 
