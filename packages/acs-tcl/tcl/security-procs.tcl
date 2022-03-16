@@ -1371,6 +1371,10 @@ ad_proc -public ad_verify_signature {
     @param secret specifies an external secret to use instead of the
     one provided by the ACS signature mechanism.
 } {
+    if {![string is list $signature]} {
+        ns_log warning "signature is not a list '$signature'"
+        return 0
+    }
     lassign $signature token_id expire_time hash
     return [__ad_verify_signature $value $token_id $secret $expire_time $hash]
 }
@@ -1386,6 +1390,10 @@ ad_proc -public ad_verify_signature_with_expr {
     @param secret specifies an external secret to use instead of the
     one provided by the ACS signature mechanism.
 } {
+    if {![string is list $signature]} {
+        ns_log warning "signature is not a list '$signature'"
+        return 0
+    }
     lassign $signature token_id expire_time hash
     if { [__ad_verify_signature $value $token_id $secret $expire_time $hash] } {
         return $expire_time
