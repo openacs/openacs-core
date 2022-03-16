@@ -383,8 +383,7 @@ namespace eval acs_mail_lite {
         Send messages in the acs_mail_lite_queue table.
     } {
         # Make sure that only one thread is processing the queue at a time.
-        if {[nsv_incr acs_mail_lite send_mails_p] > 1} {
-            nsv_incr acs_mail_lite send_mails_p -1
+        if {[nsv_incr acs_mail_lite send_mails_p] != 1} {
             return
         }
 
@@ -427,7 +426,7 @@ namespace eval acs_mail_lite {
                 }
             }
         } finally {
-            nsv_incr acs_mail_lite send_mails_p -1
+            nsv_unset acs_mail_lite send_mails_p
         }
     }
 
