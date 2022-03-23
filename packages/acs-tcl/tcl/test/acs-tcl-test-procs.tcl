@@ -1271,6 +1271,10 @@ aa_register_case \
         aa_equals "ad_decode $case $cases_complete return $result" "$result" [ad_decode $case {*}$cases_complete]
     }
     aa_equals "ad_decode gibberish $cases_complete return Unknown" "Unknown" [ad_decode gibberish {*}$cases_complete]
+    
+    aa_equals "ad_decode no default, found"     [ad_decode b a 1 b 2] 2
+    aa_equals "ad_decode no default, not found" [ad_decode x a 1 b 2] ""
+    aa_equals "ad_decode no default, no alternatives" [ad_decode x] ""
 }
 
 aa_register_case \

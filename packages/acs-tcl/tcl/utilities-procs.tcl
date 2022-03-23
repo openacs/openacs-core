@@ -1282,51 +1282,42 @@ ad_proc -public ad_safe_eval args {
     return [ad_apply uplevel $args]
 }
 
-ad_proc -public ad_decode { args } {
+ad_proc -public ad_decode { value args } {
+
     This procedure is analogus to sql decode procedure. The first parameter is
     the value we want to decode. This parameter is followed by a list of
     pairs where first element in the pair is convert from value and second
     element is convert to value. The last value is default value, which will
     be returned in the case convert from values matches the given value to
-    be decoded.<br>
-    <br>
+    be decoded.
+
     Note that in most cases native Tcl idioms such as expr or switch
     will do the trick. This proc CAN make sense when one has many
     alternatives to decode, as in such cases a switch statement would
-    not be as compact.<br>
-    <br>
-    Good usage:<br>
+    not be as compact.
+
+    <p>Good usage:<br>
     <code>ad_decode $value f Foo b Bar d Dan s Stan l Lemon m Melon
-    Unknown</code> ---> a oneliner as opposed to a long switch
-    statement<br>
-    <br>
-    Bad usage:<br>
-    <code>ad_decode $boolean_p t 0 1</code> ---> just use <code>expr {!$boolean_p}</code>
+    Unknown</code><br> ---> a oneliner as opposed to a long switch statement<br>
+
+    <p>Bad usage:<br>
+    <code>ad_decode $boolean_p t 0 1</code><br>---> just use <code>expr {!$boolean_p}</code>
+
+    @param value input value
+    @return matched value or default
 } {
     set num_args [llength $args]
-    set input_value [lindex $args 0]
-
-    set counter 1
-
-    while { $counter < $num_args - 2 } {
-        lappend from_list [lindex $args $counter]
-        incr counter
-        lappend to_list [lindex $args $counter]
-        incr counter
-    }
-
-    set default_value [lindex $args $counter]
-
-    if { $counter < 2 } {
-        return $default_value
-    }
-
-    set index [lsearch -exact $from_list $input_value]
-
-    if { $index < 0 } {
-        return $default_value
+    if {$num_args % 2 == 1} {
+        set default [lindex $args end]
+        set map [lrange $args 0 end-1]
     } else {
-        return [lindex $to_list $index]
+        set default ""
+        set map $args
+    }
+    if {[dict exists $map $value]} {
+        return [dict get $map $value]
+    } else {
+        return $default
     }
 }
 
@@ -3852,10 +3843,10 @@ namespace eval util {
     }
 
     ad_proc -public ::util::ns_set_to_tcl_string {set_id} {
-        
+
         Return a plain text version of the passed-in ns_set, useful
         for debugging and introspection.
-        
+
         @return text string conisting of multiple lines of the form "key: value"
     } {
         set result ""
