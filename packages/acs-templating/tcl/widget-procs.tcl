@@ -677,7 +677,9 @@ ad_proc -public template::widget::menu {
     upvar $attribute_reference attributes
 
     # Create an array for easier testing of selected values
-    template::util::list_to_lookup $values_list values
+    if {[string is list $values_list]} {
+        template::util::list_to_lookup $values_list values
+    }
 
     set output {}
     if { $mode ne "edit" } {
