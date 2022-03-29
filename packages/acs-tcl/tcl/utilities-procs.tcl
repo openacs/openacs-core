@@ -1812,7 +1812,22 @@ ad_proc util::split_location {location protoVar hostnameVar portVar} {
     try {
         set urlInfo [ns_parseurl $location]
     } on error {errorMsg} {
-        ns_log warning "cannot parse URL '$location': $errorMsg"
+        #
+        # Here we cannot use "ad_log warning", since it calls
+        # "split_location" leading potentially in some error cases to
+        # a recursive loop (call path "ad_log warning",
+        # "util::request_info -with_headers...",
+        # "util_current_location", "security::validated_host_header"
+        # "util::split_location"). Therefore, we are using here the a
+        # simplified version just printing the header fields.
+        #
+        set msg "cannot parse URL '$location': $errorMsg"
+        if {[ns_conn isconnected]} {
+            append msg \
+                \n [ns_conn request] \
+                \n [util::ns_set_pretty_print [ns_conn headers]]
+        }
+        ns_log warning $msg
         set success 0
     } on ok {result} {
         if {[dict exists $urlInfo proto] && [dict exists $urlInfo host]} {
@@ -3675,6 +3690,29 @@ ad_proc -public util::disk_cache_eval {
     return $result
 }
 
+ad_proc -private util::ns_set_pretty_print {
+    {-title {}}
+    {-prefix " "}
+    set
+} {
+    Return pretty printed version of an ns_set, in the style of HTTP
+    request header fields.
+    
+    @param title title info for the full set
+    @param prefix prefix string for every line (used e.g. for indenting)
+    @return multi-line string
+} {
+    set lines {}
+    if {$title ne ""} {
+        lappend lines $title
+    }
+    lappend lines {*}[lmap {k v} [ns_set array $set] {
+        string cat $prefix $k ": " $v
+    }]
+    return [join $lines \n]
+}
+
+
 ad_proc -public util::request_info {
     {-with_headers:boolean false}
 } {
@@ -3723,10 +3761,7 @@ ad_proc -public util::request_info {
         # Optional header info
         #
         if {$with_headers_p} {
-            append info \n
-            foreach {k v} [ns_set array [ns_conn headers]] {
-                append info "\n $k: $v"
-            }
+            append info \n [util::ns_set_pretty_print [ns_conn headers]]
         }
     }
     return $info
