@@ -41,23 +41,16 @@ if {[server_cluster_enabled_p]} {
 
     set url [::acs::Cluster eval {set :url}]
 
-    #
-    # TODO: The following test does not work yet, since
-    # "::xo::db::sql::site_node" is not yet defined. This requires
-    # more refactoring from xo* to the main infrastructure.
-    #
-    if {0} {
-        # Check, if the filter url mirrors a site node. If so,
-        # the cluster mechanism will not work, if the site node
-        # requires a login. Clustering will only work if the
-        # root node is freely accessible.
+    # Check, if the filter URL mirrors a site node. If so,
+    # the cluster mechanism will not work, if the site node
+    # requires a login. Clustering will only work if the
+    # root node is freely accessible.
 
-        array set node [site_node::get -url $url]
-        if {$node(url) ne "/"} {
-            ns_log notice "***\n*** WARNING: there appears a package mounted on" \
-                "$url\n***Cluster configuration will not work" \
-                "since there is a conflict with the filter with the same name! (n)"
-        }
+    set node_info [site_node::get -url $url]
+    if {[dict get $node_info url] ne "/"} {
+        ns_log notice "***\n*** WARNING: there appears a package mounted on" \
+            "$url\n***Cluster configuration will not work" \
+            "since there is a conflict with the filter with the same name! (n)"
     }
 
     #ns_register_filter trace GET $url ::acs::Cluster
