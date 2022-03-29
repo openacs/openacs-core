@@ -112,15 +112,15 @@ ad_proc -private sec_handler {} {
     ns_log debug "OACS= sec_handler: enter"
 
     if {[info exists ::security::log(login_cookie)]} {
-        foreach c [list ad_session_id ad_secure_token ad_user_login ad_user_login_secure] {
-            lappend msg "$c '[ad_get_cookie $c]'"
+        foreach c [list session_id secure_token user_login user_login_secure] {
+            lappend msg "$c '[ad_get_cookie [security::cookie_name $c]]'"
         }
         ns_log notice "OACS [ns_conn url] cookies: $msg"
     }
 
     try {
 
-        ad_get_signed_cookie "ad_session_id"
+        ad_get_signed_cookie [security::cookie_name session_id]
 
     } trap {AD_EXCEPTION NO_COOKIE} {errorMsg} {
         #
@@ -312,7 +312,7 @@ ad_proc -private sec_handler {} {
              && ([security::secure_conn_p] || [ad_conn behind_secure_proxy_p])
          } {
             catch {
-                set sec_token [split [ad_get_signed_cookie "ad_secure_token"] {,}]
+                set sec_token [split [ad_get_signed_cookie [security::cookie_name secure_token]] {,}]
                 if {[lindex $sec_token 0] eq $session_id
                     && [lindex $sec_token 2] eq [ad_conn peeraddr]
                 } {
@@ -375,20 +375,20 @@ if {[ns_info name] eq "NaviServer"} {
 
 ad_proc -private sec_login_read_cookie {} {
 
-    Fetches values either from ad_user_login_secure or ad_user_login,
-    depending whether we are in a secured connection or not.
+    Fetches values either from "user_login_secure" or "user_login"
+    cookies, depending whether we are in a secured connection or not.
 
     @author Victor Guerra
 
-    @return List of values read from cookie ad_user_login_secure or ad_user_login
+    @return List of values read from cookie "user_login_secure" or "user_login"
 } {
     #
     # If over HTTPS, we look for the *_secure cookie
     #
     if { [security::secure_conn_p] || [ad_conn behind_secure_proxy_p]} {
-        set cookie_name "ad_user_login_secure"
+        set cookie_name [security::cookie_name user_login_secure]
     } else {
-        set cookie_name "ad_user_login"
+        set cookie_name [security::cookie_name user_login]
     }
     return [split [ad_get_signed_cookie $cookie_name] ","]
 }
@@ -505,11 +505,14 @@ ad_proc -public ad_user_login {
 } {
     set prev_user_id [ad_conn user_id]
 
-    # deal with the permanent login cookies (ad_user_login and ad_user_login_secure)
+    #
+    # Deal with the permanent login cookies (user_login and
+    # user_login_secure).
+    #
     if { $forever_p } {
         set max_age inf
     } else {
-        # ad_user_login cookie will live for as long as the maximum login time
+        # user_login cookie will live for as long as the maximum login time
         set max_age [sec_login_timeout]
     }
 
@@ -525,7 +528,7 @@ ad_proc -public ad_user_login {
             -max_age $max_age \
             -secure t \
             -domain $cookie_domain \
-            ad_user_login_secure \
+            [security::cookie_name user_login_secure] \
             "$user_id,[ns_time],[sec_get_user_auth_token $user_id],[ns_time],$forever_p"
 
         # We're secure
@@ -533,20 +536,20 @@ ad_proc -public ad_user_login {
     } elseif { $prev_user_id != $user_id } {
         # Hose the secure login token if this user is different
         # from the previous one.
-        ad_unset_cookie -secure t ad_user_login_secure
+        ad_unset_cookie -secure t [security::cookie_name user_login_secure]
     }
 
     #
-    # Set "ad_user_login" Cookie always with secure=f for mixed
+    # Set "user_login" Cookie always with secure=f for mixed
     # content.
     #
-    ns_log Debug "ad_user_login: Setting new ad_user_login cookie with max_age $max_age"
+    ns_log Debug "ad_user_login: Setting new user_login cookie with max_age $max_age"
     ad_set_signed_cookie \
         -expire [expr {$forever_p ? false : true}] \
         -max_age $max_age \
         -domain $cookie_domain \
         -secure f \
-        ad_user_login \
+        [security::cookie_name user_login] \
         "$user_id,[ns_time],[sec_get_user_auth_token $user_id],$forever_p"
 
     # deal with the current session
@@ -617,10 +620,10 @@ ad_proc -public ad_user_logout {
                             -parameter SecureSessionCookie \
                             -package_id $::acs::kernel_id \
                             -default 0] ? "t" : "f"}] \
-        ad_session_id
-    ad_unset_cookie -domain $cookie_domain -secure f ad_user_login
-    ad_unset_cookie -domain $cookie_domain -secure t ad_secure_token
-    ad_unset_cookie -domain $cookie_domain -secure t ad_user_login_secure
+        [security::cookie_name session_id]
+    ad_unset_cookie -domain $cookie_domain -secure f [security::cookie_name user_login]
+    ad_unset_cookie -domain $cookie_domain -secure t [security::cookie_name secure_token]
+    ad_unset_cookie -domain $cookie_domain -secure t [security::cookie_name user_login_secure]
 }
 
 namespace eval ::security {
@@ -875,10 +878,19 @@ ad_proc -private sec_update_user_session_info {
     db_release_unused_handles
 }
 
+ad_proc -private security::cookie_name {plain_name} {
+    
+} {
+    #
+    # Setting a cookie always requires a connection.
+    #
+    return [ns_config "ns/server/[ns_info server]/acs" CookieNamespace "ad_"]$plain_name
+}
+
 ad_proc -private sec_generate_session_id_cookie {
     {-cookie_domain ""}
 } {
-    Sets the ad_session_id cookie based on global variables.
+    Sets the "session_id" cookie based on global variables.
 } {
     set user_id [ad_conn untrusted_user_id]
     #
@@ -897,7 +909,8 @@ ad_proc -private sec_generate_session_id_cookie {
         }
     }
 
-    ns_log Debug "Security: [ns_time] sec_generate_session_id_cookie setting session_id=$session_id, user_id=$user_id, login_level=$login_level"
+    ns_log Debug "Security: [ns_time] sec_generate_session_id_cookie setting" \
+        "session_id=$session_id, user_id=$user_id, login_level=$login_level"
 
     if {$cookie_domain eq ""} {
         set cookie_domain [parameter::get \
@@ -905,8 +918,8 @@ ad_proc -private sec_generate_session_id_cookie {
                                -package_id $::acs::kernel_id]
     }
 
-    # Fetch the last value element of ad_user_login cookie (or
-    # ad_user_login_secure) that indicates if user wanted to be
+    # Fetch the last value element of "user_login" or
+    # "user_login_secure" cookie that indicates if user wanted to be
     # remembered when logging in.
 
     set discard t
@@ -928,13 +941,17 @@ ad_proc -private sec_generate_session_id_cookie {
         -replace t \
         -max_age $max_age \
         -domain $cookie_domain \
-        ad_session_id "$session_id,$user_id,$login_level,[ns_time]"
+        [security::cookie_name session_id] \
+        "$session_id,$user_id,$login_level,[ns_time]"
 }
 
 ad_proc -private sec_generate_secure_token_cookie { } {
-    Sets the ad_secure_token cookie.
+    Sets the "secure_token" cookie.
 } {
-    ad_set_signed_cookie -secure t "ad_secure_token" "[ad_conn session_id],[ns_time],[ad_conn peeraddr]"
+    ad_set_signed_cookie \
+        -secure t \
+        [security::cookie_name secure_token] \
+        "[ad_conn session_id],[ns_time],[ad_conn peeraddr]"
 }
 
 ad_proc -private sec_allocate_session {} {
@@ -1985,7 +2002,13 @@ ad_proc -public ad_set_client_property {
                 #
                 # Perform an upsert operation via stored procedure
                 #
-                db_exec_plsql prop_upsert {}
+                acs::dc call sec_session_property upsert \
+                    -session_id $session_id \
+                    -module $module \
+                    -name $name \
+                    -value $value \
+                    -secure $secure \
+                    -last_hit $last_hit
             }
         }
     }

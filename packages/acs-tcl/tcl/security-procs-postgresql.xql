@@ -15,12 +15,6 @@
       </querytext>
 </fullquery>
 
-<fullquery name="ad_set_client_property.prop_upsert">
-  <querytext>
-    select sec_session_property__upsert(:session_id, :module, :name, :value, :secure, :last_hit) from dual
-  </querytext>
-</fullquery>
-
 <fullquery name="sec_populate_secret_tokens_db.insert_random_token">
       <querytext>
 
