@@ -439,6 +439,10 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
     if { [info exists element(value)] } {
         set contents [template::util::richtext::get_property contents $element(value)]
         set format   [template::util::richtext::get_property format $element(value)]
+        if {![string is list $format] || $format ni [template::util::richtext::formats]} {
+            ns_log warning "Ignoring provided format '$format' for richtext widget with id $element(id)"
+            set format {}
+        }
     } else {
         set contents {}
         set format {}
