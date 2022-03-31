@@ -11,6 +11,37 @@ aa_register_case -cats {
     smoke
     production_safe
 } -procs {
+    template::util::get_opts
+} get_opts {
+    Test template::util::get_opts
+} {
+    set testcases {
+        {-datatype integer -widget hidden -value 0}
+        {widget hidden datatype integer value 0}
+
+        {-widget submit -label {       OK       } -datatype text}
+        {datatype text label {       OK       } widget submit}
+
+        {-datatype text -widget textarea -optional -label #acs-subsite.Caption# -value {-test} -html {rows "6" cols "50"}}
+        {label "#acs-subsite.Caption#" widget textarea datatype text html {rows "6" cols "50"} value {-test} optional 1}
+    }
+
+    foreach {input output} $testcases {
+        unset -nocomplain opts
+        template::util::get_opts $input
+
+        aa_equals "Array has exactly the keys we expect" [lsort [dict keys $output]] [lsort [array names opts]]
+        foreach {key value} $output {
+            aa_equals "The value stored for each option is the expected one" $value $opts($key)
+        }
+    }
+}
+
+aa_register_case -cats {
+    api
+    smoke
+    production_safe
+} -procs {
     template::util::number_list
 } number_list {
     Test template::util::number_list
