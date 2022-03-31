@@ -54,6 +54,84 @@ ad_proc -public template::element { command form_id element_id args } {
   template::element::$command $form_id $element_id {*}$args
 }
 
+ad_proc -private template::element::get_opts {
+    -widget
+    -datatype
+    -label
+    -html
+    -maxlength
+    -options
+    -fieldset
+    -legend
+    -legendtext
+    -value
+    -values
+    -validate
+    -sign:boolean
+    -help_text
+    -help:boolean
+    -optional:boolean
+    -mode
+    -nospell:boolean
+    -noquote:boolean
+    -before_html
+    -after_html
+    -display_value
+    -multiple:boolean
+    args
+} {
+    template::element::create syntax requires first two non
+    arguments (form and element name), then a set of option
+    flags. This is not the native Tcl syntax, where flags come before
+    unnamed arguments. To use native Tcl argument parsing for
+    remaining flags, we create this internal utility.
+
+    @see template::element::create
+
+    @return a dict of options
+} {
+    set opts [list]
+    foreach flag {
+        widget
+        datatype
+        label
+        html
+        maxlength
+        options
+        fieldset
+        legend
+        legendtext
+        value
+        values
+        validate
+        help_text
+        mode
+        before_html
+        after_html
+        display_value
+    } {
+        if {[info exists $flag]} {
+            dict set opts $flag [set $flag]
+        }
+    }
+    foreach boolean {
+        sign
+        help
+        optional
+        nospell
+        noquote
+        multiple
+    } {
+        if {[set ${boolean}_p]} {
+            dict set opts $boolean 1
+        }
+    }
+    if {[llength $args] > 0} {
+        ad_log warning "Ignoring undocumented args for template::element $args"
+    }
+    return $opts
+}
+
 ad_proc -public template::element::create { form_id element_id args } {
     Append an element to a form object.  If a submission is in progress,
     values for the element are prepared and validated.
@@ -196,7 +274,9 @@ ad_proc -public template::element::create { form_id element_id args } {
     if {[info exists form_properties(sec_legendtext)]} {set opts(sec_legendtext) $form_properties(sec_legendtext)}
   }
 
-  template::util::get_opts $args
+  if {[llength $args] > 0} {
+      array set opts [::template::element::get_opts {*}$args]
+  }
 
   # set a name if none specified
   if { ! [info exists opts(name)] } { set opts(name) $opts(id) }
