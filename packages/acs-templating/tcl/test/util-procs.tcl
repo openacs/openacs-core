@@ -14,6 +14,11 @@ aa_register_case -cats {
     template::util::get_opts
 } get_opts {
     Test template::util::get_opts
+
+    This test exposes a documented behavior that might not be obvious
+    to the user: when an argument is specified with its value, and the
+    latter is something starting with a "-" sign, the argument will be
+    treated as a flag and its value set to 1.
 } {
     set testcases {
         {-datatype integer -widget hidden -value 0}
@@ -23,7 +28,7 @@ aa_register_case -cats {
         {datatype text label {       OK       } widget submit}
 
         {-datatype text -widget textarea -optional -label #acs-subsite.Caption# -value {-test} -html {rows "6" cols "50"}}
-        {label "#acs-subsite.Caption#" widget textarea datatype text html {rows "6" cols "50"} value {-test} optional 1}
+        {label "#acs-subsite.Caption#" widget textarea datatype text html {rows "6" cols "50"} value 1 test 1 optional 1}
     }
 
     foreach {input output} $testcases {
