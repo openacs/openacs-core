@@ -80,11 +80,12 @@ ad_proc -private template::element::get_opts {
     -multiple:boolean
     args
 } {
-    template::element::create syntax requires first two non
-    arguments (form and element name), then a set of option
-    flags. This is not the native Tcl syntax, where flags come before
-    unnamed arguments. To use native Tcl argument parsing for
-    remaining flags, we create this internal utility.
+    template::element::create syntax requires first two non-positional
+    arguments (form and element name), then a set of named-argument
+    flags to transform into options. This is not the native Tcl
+    syntax, where named-arguments come before unnamed ones. To use
+    native Tcl argument parsing for remaining flags, we create this
+    internal utility.
 
     @see template::element::create
 
