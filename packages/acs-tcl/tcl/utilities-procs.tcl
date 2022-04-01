@@ -4066,7 +4066,42 @@ namespace eval util::resources {
         }
         return $can_install
     }
-
+    
+    ad_proc -private ::util::resources::download_helper {
+        -url
+    } {
+        Helper for ::util::resources::download, since some download
+        sites tend to redirect.
+        
+        @result dict as returned by ns_http.
+    } {
+        #set result [util::http::get -url $url -spool]
+        set result [ns_http run -spoolsize 1 $url]
+        set fn ""
+        switch [dict get $result status] {
+            200 {
+                set fn [dict get $result file]
+            }
+            302 {
+                set location [ns_set iget [dict get $result headers] location]
+                ns_log notice "download redirected to $location"
+                #set result [util::http::get -url $location -spool]
+                set result [ns_http run -spoolsize 1 $location]
+                if {[dict get $result status] == 200} {
+                    set fn [dict get $result file]
+                }
+            }
+            default {
+                ns_log warning "::util::resources::download $url" \
+                    "lead to HTTP status code [dict get $result status]"
+            }
+        }
+        if {$fn eq ""} {
+            error "download from $url failed: $result"
+        }
+        return $result
+    }
+    
     ad_proc -public ::util::resources::download {
         {-resource_info:required}
         {-version_dir ""}
@@ -4118,14 +4153,11 @@ namespace eval util::resources {
                           [dict get $resource_info extraFiles] \
                          ] {
 
-            #ns_log notice "::util::resources::download $download_prefix/$file"
-            set result [util::http::get -url $download_prefix/$file -spool]
+            ns_log notice "::util::resources::download $download_prefix/$file"
+            set result [download_helper -url $download_prefix/$file]
             #ns_log notice "... returned status code [dict get $result status]"
-            if {[dict get $result status] == 200} {
-                set fn [dict get $result file]
-            } else {
-                error "download from $download_prefix/$file failed: $result"
-            }
+            set fn [dict get $result file]
+            
             set local_root [ad_file dirname $local_path/$file]
             if {![ad_file isdirectory $local_root]} {
                 file mkdir $local_root
@@ -4164,12 +4196,8 @@ namespace eval util::resources {
             # downloaders, which might call this function.
             #
             foreach url [dict get $resource_info downloadURLs] {
-                set result [util::http::get -url $url -spool]
-                if {[dict get $result status] == 200} {
-                    set fn [dict get $result file]
-                } else {
-                    error "download from $url failed: $result"
-                }
+                set result [download_helper -url $url]
+                set fn [dict get $result file]
                 set file [ad_file tail $url]
                 file rename -force -- $fn $local_path/$file
             }
