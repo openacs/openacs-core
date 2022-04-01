@@ -879,7 +879,7 @@ ad_proc -private sec_update_user_session_info {
 }
 
 ad_proc -private security::cookie_name {plain_name} {
-    
+
 } {
     #
     # Setting a cookie always requires a connection.
@@ -3088,6 +3088,26 @@ namespace eval ::security::csp {
         return $policy
     }
 
+    ad_proc -public ::security::csp::add_static_resource_header {
+        {-mime_type:required}
+    } {
+
+        Set the CSP rule on the current connection for a static
+        resource depending on the MIME type.
+
+        @param mime_type MIME type of the resource to be delivered
+    } {
+        if {![ns_conn isconnected]} {
+            error "Content-Security-Policy headers can be only set for active connections"
+        }
+        if {[dict exists $::security::csp::static_csp $mime_type]} {
+            ns_set iupdate [ns_conn outputheaders] \
+                "Content-Security-Policy" [dict get $::security::csp::static_csp $mime_type]
+            ns_log notice "STATIC $mime_type: Content-Security-Policy [dict get $::security::csp::static_csp $mime_type]"
+        } else {
+            ns_log notice "STATIC $mime_type: no Content-Security-Policy defined for this MIME type"
+        }
+    }
 }
 
 #TODO remove me: just for a transition phase

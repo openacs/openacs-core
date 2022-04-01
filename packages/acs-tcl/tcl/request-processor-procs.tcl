@@ -463,6 +463,9 @@ ad_proc -private rp_serve_resource_file { path } {
         }
         ns_setexpires $expireTime
     }
+    set mime_type [ns_guesstype $path]
+    ::security::csp::add_static_resource_header -mime_type $mime_type
+
     ns_returnfile 200 [ns_guesstype $path] $path
     return filter_return
 }

@@ -1,6 +1,6 @@
 ad_library {
 
-    Provides methods for authorizing and identifying ACS 
+    Provides methods for authorizing and identifying ACS
     (both logged in and not) and tracking their sessions.
 
     @creation-date 16 Feb 2000
@@ -23,7 +23,7 @@ ns_log Notice "security-init.tcl: Populating secret_tokens cache in nsvs..."
 sec_populate_secret_tokens_cache
 
 # These procedures are dynamically defined so that parameter::get
-# does not need to be called directly in the RP. 
+# does not need to be called directly in the RP.
 proc sec_session_timeout {} "
     return \"[parameter::get -package_id [ad_acs_kernel_id] -parameter SessionTimeout -default 1200]\"
 "
@@ -35,6 +35,20 @@ proc sec_session_renew {} "
 proc sec_login_timeout {} "
     return \"[parameter::get -package_id [ad_acs_kernel_id] -parameter LoginTimeout -default 28800]\"
 "
+
+#
+# Get content security policy rules for static resources from the
+# OpenACS configuration file. The definition can be there like e.g.
+#
+#  ns_section ns/server/$server/acs {
+#      ...
+#      ns_param StaticCSP {
+#          image/svg+xml "script-src 'none'"
+#      }
+#      ...
+#   }
+#
+set ::security::csp::static_csp [ns_config "ns/server/[ns_info server]/acs" StaticCSP]
 
 #
 # If there is a re-init, make sure the global handler-variables are reset
