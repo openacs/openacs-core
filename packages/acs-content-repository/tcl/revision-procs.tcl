@@ -140,9 +140,10 @@ ad_proc -private cr_write_content-file {
         # but work around it for now.
         set size [file size $filename]
         if {$size == 0} {
-            ns_set put [ns_conn outputheaders] "Content-Length" 0
+            ns_set iupdate [ns_conn outputheaders] "Content-Length" 0
             ns_return 200 text/plain {}
         } else {
+            ::security::csp::add_static_resource_header -mime_type $mime_type
             if {[namespace which ad_returnfile_background] eq "" || [security::secure_conn_p]} {
                 ns_returnfile 200 $mime_type $filename
             } else {
