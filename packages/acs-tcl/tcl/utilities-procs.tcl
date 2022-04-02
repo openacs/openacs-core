@@ -4076,17 +4076,20 @@ namespace eval util::resources {
         @result dict as returned by ns_http.
     } {
         #set result [util::http::get -url $url -spool]
-        set result [ns_http run -spoolsize 1 $url]
+        set host [dict get [ns_parseurl $url] host]
+        set result [ns_http run -hostname $host -spoolsize 1 $url]
         set fn ""
         switch [dict get $result status] {
             200 {
                 set fn [dict get $result file]
             }
+            301 -
             302 {
                 set location [ns_set iget [dict get $result headers] location]
                 ns_log notice "download redirected to $location"
                 #set result [util::http::get -url $location -spool]
-                set result [ns_http run -spoolsize 1 $location]
+                set host [dict get [ns_parseurl $url] host]
+                set result [ns_http run -hostname $host -spoolsize 1 $location]
                 if {[dict get $result status] == 200} {
                     set fn [dict get $result file]
                 }
