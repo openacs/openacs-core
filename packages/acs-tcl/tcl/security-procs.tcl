@@ -3105,7 +3105,7 @@ namespace eval ::security::csp {
                 "Content-Security-Policy" [dict get $::security::csp::static_csp $mime_type]
             ns_log notice "STATIC $mime_type: Content-Security-Policy [dict get $::security::csp::static_csp $mime_type]"
         } else {
-            ns_log notice "STATIC $mime_type: no Content-Security-Policy defined for this MIME type"
+            #ns_log notice "STATIC $mime_type: no Content-Security-Policy defined for this MIME type"
         }
     }
 }
