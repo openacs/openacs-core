@@ -100,7 +100,7 @@
   <msg key="Page">Seite</msg>
   <msg key="Page_Size">Größe der Liste</msg>
   <msg key="Plain_Text">Klartext</msg>
-  <msg key="Please_enter_the_captcha">Bitte geben Sie die im Captcha angezeigten Buchstaben ein</msg>
+  <msg key="Please_enter_the_captcha">Bitte geben Sie die im Captcha angezeigten Buchstaben und Zahlen ein</msg>
   <msg key="Previous_with_arrow">&lt;&lt; Zurück</msg>
   <msg key="required">Angabe erforderlich</msg>
   <msg key="reverse_sort_order_of_label">Sortierreihenfolge für %label% umkehren</msg>

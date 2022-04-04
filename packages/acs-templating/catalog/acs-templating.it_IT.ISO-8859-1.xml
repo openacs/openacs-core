@@ -106,7 +106,7 @@
   <msg key="Page">Pagina</msg>
   <msg key="Page_Size">Dimensione Pagina</msg>
   <msg key="Plain_Text">Testo Semplice</msg>
-  <msg key="Please_enter_the_captcha">Inserisci le lettere visualizzate nel captcha</msg>
+  <msg key="Please_enter_the_captcha">Inserisci i caratteri visualizzati nel captcha</msg>
   <msg key="Previous_with_arrow">&lt;&lt; Precedente</msg>
   <msg key="required">obbligatorio</msg>
   <msg key="reverse_sort_order_of_label">Inverti la direzione dell&#39;ordinamento di %label%</msg>
