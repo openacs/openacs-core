@@ -1035,6 +1035,68 @@ template::tag box { chunk params } {
     template::adp_append_code "append __adp_output {</div></div>}"
 }
 
+
+namespace eval ::template::icon {
+    set ::template::icon::map {
+        bootstrap-icons {
+            edit pencil-square
+            radio-checked check2-circle
+            radio-unchecked circle
+            checkbox-checked check2-square
+            checkbox-unchecked square
+        }
+        glyphicons {
+            edit pencil
+            radio-checked record
+            radio-unchecked /shared/images/radio.gif
+            checkbox-checked check
+            checkbox-unchecked unchecked
+        }
+        classic {
+            edit  /shared/images/Edit16.gif
+            trash /shared/images/Delete16.gif
+            radio-checked /shared/images/radiochecked.gif
+            radio-unchecked /shared/images/radio.gif
+            checkbox-checked /shared/images/checkboxchecked.gif
+            checkbox-unchecked /shared/images/checkbox.gif
+            arrow-down /resources/acs-subsite/arrow-down.gif
+            arrow-up /resources/acs-subsite/arrow-up.gif
+        }
+    }
+}
+
+template::tag adp:icon { params } {
+    set d [::template::icon \
+               -name [ns_set iget $params name] \
+               -class [ns_set iget $params class] \
+               -style [ns_set iget $params style] \
+               -title [ns_set iget $params title]]
+    dict with d {
+        template::adp_append_string $HTML
+        if {$cmd ne ""} {
+            template::adp_append_code $cmd
+        }
+    }
+}
+
+template::tag adp:toggle_button { chunk params } {
+    #
+    # In case we need to determine the toolit upon every call, we have
+    # to reconsider (e.g. add the toolkit to the namespace for
+    # compiled code, like template::code::adp::...)
+    #
+    set data [expr {[template::toolkit] eq "bootstrap5" ? "data-bs" : "data"}]
+    append value \
+        "<button type='button'" \
+        " class='[ns_set iget $params class]'" \
+        " $data-toggle='[ns_set iget $params toggle]'" \
+        " $data-target='[ns_set iget $params target]'>"
+    template::adp_append_string $value
+    template::adp_compile_chunk $chunk
+    template::adp_append_string </button>
+}
+
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
