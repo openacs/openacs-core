@@ -29,7 +29,7 @@ list::create \
         edit {
             label ""
             display_template {
-                <img src="/shared/images/Edit16.gif" alt="edit" width="16" height="16">
+                <adp:icon name="edit" title="Edit the message key">
             }
             link_url_col edit_url
         }

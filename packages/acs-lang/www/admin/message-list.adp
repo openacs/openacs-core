@@ -60,7 +60,9 @@
           <multiple name="messages">
             <tr style="background: #EEEEEE">
               <td>
-                <a href="@messages.edit_url@" title="Edit or comment on translation"><img src="/shared/images/Edit16.gif" width="16" height="16" alt="edit"></a>
+                <a href="@messages.edit_url@" title="Edit or comment on translation">
+                  <adp:icon name="edit" title="Edit or comment on translation">
+                </a>
               </td>
               <td>
                 <a href="@messages.edit_url@" title="Edit or comment on translation">@messages.message_key_pretty@</a>
@@ -90,7 +92,9 @@
                     <a href="@messages.undelete_url@" title="Undelete this message"><img src="/shared/images/Undelete16.gif" alt="undelete" width="16" height="16"></a>
                   </if>
                   <else>
-                    <a href="@messages.delete_url@" title="Delete this message"><img src="/shared/images/Delete16.gif" alt="delete" width="16" height="16"></a>
+                    <a href="@messages.delete_url@" title="Delete this message">
+                      <adp:icon name="trash" title="Delete this message">
+                    </a>
                   </else>
                 </td>
              </if>

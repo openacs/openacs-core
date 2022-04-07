@@ -17,7 +17,7 @@ list::create \
         edit {
             label ""
             display_template {
-                <img src="/shared/images/Edit16.gif" height="16" width="16" alt="Edit" style="border: 0">
+                <adp:icon name="edit" title="Edit this authority"> 
             }
             link_url_eval {[export_vars -base authority { authority_id {ad_form_mode edit}}]}
             link_html {title "Edit this authority"}
@@ -32,10 +32,14 @@ list::create \
             html { align center }
             display_template {
                 <if @authorities.enabled_p;literal@ true>
-                <a href="@authorities.enabled_p_url@" title="\#acs-admin.Disable_this_authority\#"><img src="/shared/images/checkboxchecked.gif" alt="enabled" height="13" width="13" style="background-color: white; border: 0;"></a>
+                <a href="@authorities.enabled_p_url@">
+                  <adp:icon name="checkbox-checked" title="\#acs-admin.Disable_this_authority\#"> 
+                </a>
                 </if>
                 <else>
-                <a href="@authorities.enabled_p_url@" title="\#acs-admin.Enable_this_authority\#"><img src="/shared/images/checkbox" height="13" width="13" style="background-color: white; border: 0;" alt="disabled"></a>
+                <a href="@authorities.enabled_p_url@">
+                  <adp:icon name="checkbox-unchecked" title="\#acs-admin.Enable_this_authority\#"> 
+                </a>
                 </else>
             }
         }
@@ -44,13 +48,17 @@ list::create \
             html { align center }
             display_template {
                 <if @authorities.sort_order@ ne @authorities.highest_sort_order@>
-                  <a href="@authorities.sort_order_url_up@" title="\#acs-admin.Move_this_authority_up\#"><img src="/resources/acs-subsite/arrow-up.gif" style="border: 0" width="15" height="15" alt="up"></a>
+                  <a href="@authorities.sort_order_url_up@" title="\#acs-admin.Move_this_authority_up\#">
+                    <adp:icon name="arrow-up" title="\#acs-admin.Move_this_authority_up\#">
+                  </a>
                 </if>
-                <else><img src="/resources/acs-subsite/spacer.gif" width="15" height="15" alt=""></else>
+                <else><span style="padding-left: 15px;"></span></else>
                 <if @authorities.sort_order@ ne  @authorities.lowest_sort_order@>
-                  <a href="@authorities.sort_order_url_down@" title="\#acs-admin.Move_this_authority_down\#"><img src="/resources/acs-subsite/arrow-down.gif" style="border: 0" width="15" height="15" alt="down"></a>
+                  <a href="@authorities.sort_order_url_down@">
+                     <adp:icon name="arrow-down" title="\#acs-admin.Move_this_authority_down\#">
+                  </a>
                 </if>
-                <else><img src="/resources/acs-subsite/spacer.gif" width="15" height="15" alt=""></else>
+                <else><span style="padding-left: 15px;"></span></else>
           }
         }
         registration {
@@ -59,13 +67,13 @@ list::create \
             display_template {
                 <switch @authorities.registration_status@>
                   <case value="selected">
-                    <img src="/resources/acs-subsite/radiochecked.gif" height="13" width="13" style="border: 0" alt="checked">
+                    <adp:icon name="radio-checked"> 
                   </case>
                   <case value="can_select">
                     <a href="@authorities.registration_url@"
                        title="\#acs-admin.Make_this_the_authority_for_registering_new_users\#"
                        id="@authorities.select_id;literal@">
-                <img src="/resources/acs-subsite/radio.gif" height="13" width="13" style="background-color: white; border: 0;" alt="unchecked">
+                       <adp:icon name="radio-unchecked" title="\#acs-admin.Make_this_the_authority_for_registering_new_users\#">
                     </a>
                   </case>
                   <case value="cannot_select">
@@ -90,7 +98,7 @@ list::create \
                   <a href="@authorities.delete_url@"
                      title="Delete this authority"
                      id="@authorities.delete_id;literal@">
-                    <img src="/shared/images/Delete16.gif" height="16" width="16" alt="\#acs-admin.Delete\#" style="border:0">
+                   <adp:icon name="trash" title="\#acs-admin.Delete\#">
                   </a>
                 </if>
             }

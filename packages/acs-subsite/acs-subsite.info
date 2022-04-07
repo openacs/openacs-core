@@ -22,6 +22,7 @@
         <requires url="acs-authentication" version="5.10.0"/>
         <requires url="acs-content-repository" version="5.10.0"/>
         <requires url="acs-kernel" version="5.10.0"/>
+        <requires url="acs-templating" version="5.10.1d6"/>
         <requires url="acs-tcl" version="5.10.0"/>
         <requires url="acs-lang" version="5.10.0"/>
         <requires url="acs-mail-lite" version="5.10.0"/>

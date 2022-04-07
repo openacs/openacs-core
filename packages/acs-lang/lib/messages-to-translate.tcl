@@ -31,8 +31,8 @@ template::list::create \
             label ""
             display_template {
                 <if @messages.translated_p;literal@ true>
-                  <a href="@messages.translate_url@" title="Edit the translation">
-                    <img src="/shared/images/Edit16.gif" height="16" width="16" alt="Edit" border="0">
+                  <a href="@messages.translate_url@">
+                    <adp:icon name="edit" title="Edit the translation">
                   </a>
                 </if>
             }

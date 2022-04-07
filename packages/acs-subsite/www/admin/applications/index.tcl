@@ -46,10 +46,9 @@ list::create \
         edit {
             sub_class narrow
             display_template {
-                <img src="/shared/images/Edit16.gif" height="16" width="16" alt="#acs-subsite.Edit_application_name_and_path#" style="border:0">
+                <adp:icon name="edit" title="#acs-subsite.Edit_application_name_and_path#">
             }
             link_url_eval {[export_vars -base application-add { node_id }]}
-            link_html { title "#acs-subsite.Edit_application_name_and_path#" }
         }
         instance_name {
             label "[_ acs-subsite.Name]"
@@ -76,10 +75,9 @@ list::create \
         delete {
             sub_class narrow
             display_template {
-                <img src="/shared/images/Delete16.gif" height="16" width="16" alt="#acs-subsite.Delete_this_application#" style="border:0">
+                <adp:icon name="trash" title="#acs-subsite.Delete_this_application#">
             }
             link_url_eval {[export_vars -base application-delete { node_id }]}
-            link_html { title "#acs-subsite.Delete_this_application#" }
         }
     } -filters {
         search {

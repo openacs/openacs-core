@@ -87,11 +87,9 @@ if {$subsite_number > 500} {
             sitemap {
                 sub_class narrow
                 display_template {
-                    <img src="/shared/images/Edit16.gif" height="16" width="16" alt="Manage sitemap" style="border:0">
-
+                    <adp:icon name="edit" title="Manage sitemap">                    
                 }
                 link_url_eval {[export_vars -base /admin/site-map { {root_id $node_id} }]}
-                link_html { title "Manage sitemap" }
             }
         }
 }

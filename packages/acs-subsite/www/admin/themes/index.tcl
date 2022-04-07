@@ -23,7 +23,7 @@ list::create \
             sub_class narrow
             display_template {
                 <if @themes.active_p;literal@ true>
-                <img src="/resources/acs-subsite/Edit16.gif" height="16" width="16" alt="#acs-subsite.Edit_this_theme#" style="border:0">
+                <adp:icon name="edit" title="#acs-subsite.Edit_this_theme#">
                 </if>
             }
             link_url_eval {[export_vars -base view { {theme $key} }]}
@@ -45,16 +45,15 @@ list::create \
             label "[_ acs-subsite.Active_theme]"
             display_template {
                 <if @themes.active_p;literal@ true>
-                <img src="/shared/images/radiochecked.gif" height="16" width="16" alt="#acs-subsite.Modified_theme#"
-                style="display: block; margin-left: auto; margin-right: auto;">
+                <adp:icon name="radio-checked" title="#acs-subsite.Modified_theme#">
                 </if>
                 <else>
                 <a href="set?theme=@themes.key@" title="#acs-subsite.Select_theme#">
-                <img src="/shared/images/radio.gif" height="16" width="16" alt="#acs-subsite.Select_theme#"
-                style="display: block; margin-left: auto; margin-right: auto;">
+                <adp:icon name="radio-unchecked" title="#acs-subsite.Select_theme#">                
                 </a>
                 </else>
             }
+            html { align center }
         }
         modified_p {
             label "[_ acs-subsite.Modified_theme]"
@@ -71,18 +70,18 @@ list::create \
                 </form>
                 </if>
                 <else>
-                <img src="/shared/images/radiochecked.gif" height="16" width="16" alt="#acs-subsite.Modified_theme#"
-                style="display: block; margin-left: auto; margin-right: auto;">
+                <adp:icon name="radio-checked" title="#acs-subsite.Modified_theme#">
                 <a href="./?rename_theme=@themes.key;literal@">Save new</a>
                 </else>
                 </if>
             }
+            html { align center }
         }
         delete {
             sub_class narrow
             display_template {
                 <if @themes.usage_count;literal@ eq 0>
-                <img src="/shared/images/Delete16.gif" height="16" width="16" alt="#acs-subsite.Delete_this_theme#" style="border:0">
+                <adp:icon name="trash" title="#acs-subsite.Delete_this_theme#">
                 </if>
             }
             link_url_eval {[export_vars -base delete { {theme $key} }]}

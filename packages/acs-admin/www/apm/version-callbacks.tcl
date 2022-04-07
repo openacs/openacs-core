@@ -35,9 +35,7 @@ template::list::create \
         edit {
             label {}
             sub_class narrow
-            display_template {
-                <img src="/resources/acs-subsite/Edit16.gif" width="16" height="16" border="0">
-            } 
+            display_template { <adp:icon name="edit" title="\#acs-admin.Edit_callback\#" } 
             link_url_eval {[export_vars -base "version-callback-add-edit" { version_id type }]}
             link_html { title "\#acs-admin.Edit_callback\#" }
         }
@@ -57,9 +55,7 @@ template::list::create \
         delete {
             label {}
             sub_class narrow
-            display_template {
-                <img src="/resources/acs-subsite/Delete16.gif" width="16" height="16" border="0">
-            } 
+            display_template { <adp:icon name="trash" title="#acs-admin.Delete_callback#"> } 
             link_url_eval {[export_vars -base "version-callback-delete" { version_id type }]}
             link_html { title "\#acs-admin.Delete_callback\#" }
         }
