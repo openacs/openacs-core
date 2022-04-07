@@ -501,7 +501,10 @@ ad_proc -public template::expand_percentage_signs { message } {
     return $formatted_message
 }
 
-ad_proc -public template::adp_compile { {-file ""} {-string ""} } {
+ad_proc -public template::adp_compile {
+    {-file ""}
+    {-string ""}
+} {
     Converts an ADP template into a chunk of Tcl code.  Caching this code
     avoids the need to reparse the ADP template with each request.
 
@@ -671,15 +674,6 @@ ad_proc -public template::adp_variable_regexp_noi18n {} {
     @creation-date June 2015
 } {
     return {(^|[^\\])@([[:alnum:]_:]+);noi18n@}
-}
-
-# NaviServer requires for disambiguation of flags and values at the
-# end of the argument processing a terminating "--" (like for other
-# commands). AOLserver does not allow the "--".
-if {[ns_info name] eq "NaviServer"} {
-    ad_proc template::adp_parse_string { chunk } {Parse string as ADP} {ns_adp_parse -string -- $chunk}
-} else {
-    ad_proc template::adp_parse_string { chunk } {Parse string as ADP} {ns_adp_parse -string $chunk}
 }
 
 ad_proc -private template::adp_compile_chunk { chunk } {
