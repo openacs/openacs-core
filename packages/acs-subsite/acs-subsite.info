@@ -9,7 +9,7 @@
     <implements-subsite-p>t</implements-subsite-p>
     <inherit-templates-p>t</inherit-templates-p>
 
-    <version name="5.10.1d1" url="http://openacs.org/repository/download/apm/acs-subsite-5.10.1d1.apm">
+    <version name="5.10.1d2" url="http://openacs.org/repository/download/apm/acs-subsite-5.10.1d2.apm">
         <owner url="http://openacs.org">OpenACS</owner>
         <summary>Subsite</summary>
         <release-date>2021-09-15</release-date>
@@ -18,7 +18,7 @@
         <license>GPL</license>
         <maturity>3</maturity>
 
-        <provides url="acs-subsite" version="5.10.1d1"/>
+        <provides url="acs-subsite" version="5.10.1d2"/>
         <requires url="acs-authentication" version="5.10.0"/>
         <requires url="acs-content-repository" version="5.10.0"/>
         <requires url="acs-kernel" version="5.10.0"/>
@@ -97,6 +97,8 @@ admin {
             <parameter scope="instance" datatype="number"  min_n_values="1"  max_n_values="1"  name="PersistentLoginDefault" default="1" description="Default for persistent login, when AllowPersistentLoginP is true" section_name="user-login"/>
             <parameter scope="instance" datatype="number"  min_n_values="1"  max_n_values="1"  name="AsmForRegisterId"  default="1" description="Assessment used in the registration process." section_name="user-login"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="ContextBarSeparator"  default=":" description="Default character to use as separator in context bar"/>
+            <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="CSSToolkit"  description="Configuration value for the CSS toolkit. Potential values are empty (''), 'bootstrap' or 'bootstrap5'. When empty, the value is determined by the ThemeKey." section_name="theming"/>
+            <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="IconSet"  description="Configuration value for the preferred icon set. Potential values are empty (''), 'classic', 'glyphicons' or 'bootstrap-icons'. When empty, the value is determined by the CSSToolkit." section_name="theming"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="DefaultFormStyle"  description="The default form template to use if a particular form doesn't have something more specific defined already.  Set by the admin theme-switching UI." section_name="theming"/>
 	    <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="DefaultDimensionalStyle"  description="The default dimensional template to use if a particular ad_dimensional doesn't have -style set already.  Set by the admin theme-switching UI." section_name="theming"/>
 	    <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="ResourceDir"  description="The directory, from which the resources of acs-templating are loaded. If not set, or the required resource is not found, the default is taken from /packages/acs-templating/resources/.   Set by the admin theme-switching UI." section_name="theming"/>
