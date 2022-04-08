@@ -1044,6 +1044,7 @@ namespace eval ::template::icon {
             radio-unchecked circle
             checkbox-checked check2-square
             checkbox-unchecked square
+            form-info-sign info-square
         }
         glyphicons {
             edit pencil
@@ -1051,6 +1052,8 @@ namespace eval ::template::icon {
             radio-unchecked /shared/images/radio.gif
             checkbox-checked check
             checkbox-unchecked unchecked
+            form-info-sign info-sign
+            download download-alt
         }
         classic {
             edit  /shared/images/Edit16.gif
