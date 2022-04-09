@@ -1045,6 +1045,10 @@ namespace eval ::template::icon {
             checkbox-checked check2-square
             checkbox-unchecked square
             form-info-sign info-square
+            text file-earmark-text
+            file file-earmark
+            eye-open eye-open
+            eye-closed eye-close
         }
         glyphicons {
             edit pencil
@@ -1054,6 +1058,9 @@ namespace eval ::template::icon {
             checkbox-unchecked unchecked
             form-info-sign info-sign
             download download-alt
+            text file
+            eye-open eye
+            eye-closed eye-slash            
         }
         classic {
             edit  /shared/images/Edit16.gif
@@ -1064,6 +1071,7 @@ namespace eval ::template::icon {
             checkbox-unchecked /shared/images/checkbox.gif
             arrow-down /resources/acs-subsite/arrow-down.gif
             arrow-up /resources/acs-subsite/arrow-up.gif
+            folder /resources/file-storage/folder.gif
         }
     }
 }
