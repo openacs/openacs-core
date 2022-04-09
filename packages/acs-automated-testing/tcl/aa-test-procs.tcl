@@ -1530,6 +1530,7 @@ namespace eval acs::test {
 
         set d [::acs::test::form_reply -user_id 0 -form $form]
         acs::test::reply_has_status_code $d 302
+        set ::__aa_testing_mode 1
 
         return $d
     }
@@ -1543,6 +1544,8 @@ namespace eval acs::test {
     } {
         set d [acs::test::http -last_request $last_request /register/logout]
         acs::test::reply_has_status_code $d 302
+        unset -nocomplain ::__aa_testing_mode 1
+
         return $d
     }
 
@@ -1603,7 +1606,11 @@ namespace eval acs::test {
     ad_proc -public ::acs::test::dom_html {var html body} {
     } {
         upvar $var root
-        dom parse -html $html doc
+        try {
+            dom parse -html $html doc
+        } on error {errorMsg} {
+            ns_log error "Failed to parse the following HTML text with message: $errorMsg\n$html"
+        }
         $doc documentElement root
         uplevel 1 $body
     }
