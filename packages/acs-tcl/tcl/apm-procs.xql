@@ -135,14 +135,6 @@
     </querytext>
   </fullquery>
 
-  <fullquery name="apm_package_key_from_id_mem.apm_package_key_from_id">
-    <querytext>
-      select package_key
-      from apm_packages
-      where package_id = :package_id
-    </querytext>
-  </fullquery>
-
   <fullquery name="apm_version_id_from_package_key.get_enabled_id">
     <querytext>
         select version_id
