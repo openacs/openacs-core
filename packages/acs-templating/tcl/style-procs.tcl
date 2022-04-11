@@ -86,6 +86,8 @@ ad_proc -private ::template::icon {
     }
     if {[string range $name 0 0] eq "/"} {
         set iconset default
+    } elseif {$name eq ""} {
+        set iconset text
     }
     set cmd ""
     switch $iconset {
@@ -95,6 +97,9 @@ ad_proc -private ::template::icon {
         "bootstrap-icons" {
             set cmd {template::head::add_css -href urn:ad:css:bootstrap-icons}
             set template {<i class='bi bi-$name$class' title='$title' aria-hidden='true' $styleAtt></i>}
+        }
+        "text" {
+            set template {<span class='$class' title='$title' $styleAtt>$title</span>}
         }
         default {
             set template {<img class='$class' src='$name' height='16' width='16' title='$title' alt='$title' style='border:0; $styleAtt'>}

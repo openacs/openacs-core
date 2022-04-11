@@ -1047,8 +1047,10 @@ namespace eval ::template::icon {
             form-info-sign info-square
             text file-earmark-text
             file file-earmark
-            eye-open eye-open
-            eye-closed eye-close
+            eye-open eye
+            eye-closed eye-slash
+            reload arrow-clockwise
+            watch eye
         }
         glyphicons {
             edit pencil
@@ -1059,8 +1061,10 @@ namespace eval ::template::icon {
             form-info-sign info-sign
             download download-alt
             text file
-            eye-open eye
-            eye-closed eye-slash            
+            eye-open eye-open
+            eye-closed eye-close
+            reload refresh
+            watch eye-open
         }
         classic {
             edit  /shared/images/Edit16.gif
@@ -1072,6 +1076,9 @@ namespace eval ::template::icon {
             arrow-down /resources/acs-subsite/arrow-down.gif
             arrow-up /resources/acs-subsite/arrow-up.gif
             folder /resources/file-storage/folder.gif
+            list ""
+            watch ""
+            reload ""
         }
     }
 }
