@@ -676,7 +676,7 @@ ad_proc -public template::adp_variable_regexp_noi18n {} {
     return {(^|[^\\])@([[:alnum:]_:]+);noi18n@}
 }
 
-ad_proc -private template::adp_compile_chunk { chunk } {
+ad_proc -public template::adp_compile_chunk { chunk } {
     Parses a single chunk of a template.  A chunk is either the entire
     template or the portion of a template contained within a balanced
     tag.  This procedure does not return the compiled chunk; compiled
