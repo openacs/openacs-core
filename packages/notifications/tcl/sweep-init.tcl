@@ -8,9 +8,10 @@ ad_library {
 
 }
 
-# DRB: The cleanup sweep interval should be made a parameter someday ... 
-
-ad_schedule_proc -thread t 900 notification::sweep::cleanup_notifications
+set cleanupInterval [parameter::get \
+                         -package_id [apm_package_id_from_key notifications] \
+                         -parameter CleanupSweepInterval -default 900]
+ad_schedule_proc -thread t $cleanupInterval notification::sweep::cleanup_notifications
 
 foreach interval [notification::get_all_intervals] {
     set n_seconds [lindex $interval 2]
@@ -18,7 +19,7 @@ foreach interval [notification::get_all_intervals] {
         set batched_p 1
     } else {
         set batched_p 0
-    } 
+    }
 
     # Send weekly and daily notifications at defined times rather than a week after
     # the server was started up, etc etc.   Hourly, instant, and exotic custom
@@ -32,7 +33,7 @@ foreach interval [notification::get_all_intervals] {
         ad_schedule_proc -thread t $n_seconds notification::sweep::sweep_notifications -interval_id [lindex $interval 1] -batched_p $batched_p
     } else {
         ad_schedule_proc -thread t 60 notification::sweep::sweep_notifications -interval_id [lindex $interval 1] -batched_p $batched_p
-    }        
+    }
 }
 
 # Local variables:

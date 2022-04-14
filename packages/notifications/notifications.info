@@ -8,7 +8,7 @@
     <singleton-p>t</singleton-p>
     <auto-mount>notifications</auto-mount>
 
-    <version name="5.10.0" url="http://openacs.org/repository/download/apm/notifications-5.10.0.apm">
+    <version name="5.10.1d1" url="http://openacs.org/repository/download/apm/notifications-5.10.1d1.apm">
         <owner url="http://openacs.org">OpenACS</owner>
         <summary>Email notifications management</summary>
         <release-date>2021-09-15</release-date>
@@ -17,7 +17,7 @@
         <maturity>3</maturity>
         <package_instance_name>#notifications.Notifications#</package_instance_name>
 
-        <provides url="notifications" version="5.10.0"/>
+        <provides url="notifications" version="5.10.1d1"/>
         <requires url="acs-kernel" version="5.10.0"/>
         <requires url="acs-tcl" version="5.10.0"/>
         <requires url="acs-mail-lite" version="5.10.0"/>
@@ -28,6 +28,7 @@
             <callback type="before-uninstall"  proc="notification::apm::before_uninstall"/>
         </callbacks>
         <parameters>
+            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="CleanupSweepInterval"  default="900" description="Run sweeper in the specified interval (seconds)"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="EmailDomain"  description="The domain for the notification email address" section_name="email"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="EmailQmailQueue"  description="The location of the qmail queue for incoming email, mail will be looked for in EmailQmailQueue/new/*" section_name="email"/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="EmailQmailQueueScanP"  default="0" description="Should the package scan the qmail queue for incoming mail? (1 is true, 0 is false)" section_name="email"/>
