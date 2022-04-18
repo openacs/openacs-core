@@ -1039,54 +1039,74 @@ template::tag box { chunk params } {
 namespace eval ::template::icon {
     set ::template::icon::map {
         bootstrap-icons {
-            edit pencil-square
-            radio-checked check2-circle
-            radio-unchecked circle
             checkbox-checked check2-square
             checkbox-unchecked square
-            form-info-sign info-square
-            text file-earmark-text
-            file file-earmark
-            eye-open eye
+            edit pencil-square
             eye-closed eye-slash
+            eye-open eye
+            file file-earmark
+            form-info-sign info-square
+            radio-checked check2-circle
+            radio-unchecked circle
             reload arrow-clockwise
+            text file-earmark-text
             watch eye
         }
+        fa-icons {
+            arrow-down           "fa-solid fa-arrow-down"
+            arrow-up             "fa-solid fa-arrow-up"
+            checkbox-checked     "fa-regular fa-square-check"
+            checkbox-unchecked   "fa-regular fa-square"
+            edit                 "fa-regular fa-pen-to-square"
+            eye-closed           "fa-regular fa-eye-slash"
+            eye-open             "fa-regular fa-eye"
+            file                 "fa-regular fa-file"
+            form-info-sign       "fa-solid fa-circle-info"
+            radio-checked        "fa-regular fa-circle-check"
+            radio-unchecked      "fa-regular fa-circle"
+            reload               "fa-solid fa-arrows-rotate"
+            text                 "fa-regular fa-file-lines"
+            trash                "fa-regular fa-trash-can"
+            watch                "fa-regular fa-eye"
+        }
         glyphicons {
-            edit pencil
-            radio-checked record
-            radio-unchecked /shared/images/radio.gif
             checkbox-checked check
             checkbox-unchecked unchecked
-            form-info-sign info-sign
             download download-alt
-            text file
-            eye-open eye-open
+            edit pencil
             eye-closed eye-close
+            eye-open eye-open
+            file file
+            form-info-sign info-sign
+            radio-checked record
+            radio-unchecked /shared/images/radio.gif
             reload refresh
+            text file
             watch eye-open
         }
         classic {
-            edit  /shared/images/Edit16.gif
-            trash /shared/images/Delete16.gif
-            radio-checked /shared/images/radiochecked.gif
-            radio-unchecked /shared/images/radio.gif
-            checkbox-checked /shared/images/checkboxchecked.gif
-            checkbox-unchecked /shared/images/checkbox.gif
             arrow-down /resources/acs-subsite/arrow-down.gif
             arrow-up /resources/acs-subsite/arrow-up.gif
+            checkbox-checked /shared/images/checkboxchecked.gif
+            checkbox-unchecked /shared/images/checkbox.gif
+            edit  /shared/images/Edit16.gif
             folder /resources/file-storage/folder.gif
             list ""
-            watch ""
+            radio-checked /shared/images/radiochecked.gif
+            radio-unchecked /shared/images/radio.gif
             reload ""
+            trash /shared/images/Delete16.gif
+            watch ""
         }
     }
 }
 
 template::tag adp:icon { params } {
     set d [::template::icon \
-               -name [ns_set iget $params name] \
+               -alt [ns_set iget $params alt] \
                -class [ns_set iget $params class] \
+               -iconset [ns_set iget $params iconset] \
+               -name [ns_set iget $params name] \
                -style [ns_set iget $params style] \
                -title [ns_set iget $params title]]
     dict with d {
