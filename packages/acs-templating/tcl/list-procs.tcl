@@ -1185,15 +1185,14 @@ ad_proc -private template::list::template {
 
     set file_stub [template::resource_path -type lists -style $style]
 
-    # ensure that the style template has been compiled and is up-to-date
-    template::adp_init adp $file_stub
-
-    # get result of template output procedure into __adp_output
-    # the only data source on which this template depends is the "elements"
-    # multirow data source.  The output of this procedure will be
-    # placed in __adp_output in this stack frame.
-
-    template::code::adp::$file_stub
+    #
+    # Ensure that the ADP template has been compiled and is
+    # up-to-date, and execute it to update __adp_output. The only data
+    # source on which this template depends is the "elements" multirow
+    # data source.  The output of this procedure will be placed in
+    # __adp_output in this stack frame.
+    #
+    [template::adp_init adp $file_stub]
 
     return $__adp_output
 }
@@ -1871,15 +1870,14 @@ ad_proc -public template::list::render_filters {
 
     set file_stub [template::resource_path -type lists -style $style]
 
-    # ensure that the style template has been compiled and is up-to-date
-    template::adp_init adp $file_stub
-
-    # get result of template output procedure into __adp_output
-    # the only data source on which this template depends is the "elements"
-    # multirow data source.  The output of this procedure will be
-    # placed in __adp_output in this stack frame.
-
-    template::code::adp::$file_stub
+    #
+    # Ensure that the ADP template has been compiled and is
+    # up-to-date, and execute it to update __adp_output. The only data
+    # source on which this template depends is the "elements" multirow
+    # data source.  The output of this procedure will be placed in
+    # __adp_output in this stack frame.
+    #
+    [template::adp_init adp $file_stub]
 
     return $__adp_output
 }
@@ -3193,16 +3191,15 @@ ad_proc -private template::list::render_form_filters {
     }
     set file_stub [template::resource_path -type lists -style $style]
 
-    # ensure that the style template has been compiled and is up-to-date
-    template::adp_init adp $file_stub
-
-    # get result of template output procedure into __adp_output
-    # the only data source on which this template depends is the "elements"
-    # multirow data source.  The output of this procedure will be
-    # placed in __adp_output in this stack frame.
-
-    template::code::adp::$file_stub
-
+    #
+    # Ensure that the ADP template has been compiled and is
+    # up-to-date, and execute it to update __adp_output. The only data
+    # source on which this template depends is the "elements" multirow
+    # data source.  The output of this procedure will be placed in
+    # __adp_output in this stack frame.
+    #
+    [template::adp_init adp $file_stub]
+    
     return $__adp_output
 }
 
