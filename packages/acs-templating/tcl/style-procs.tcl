@@ -85,7 +85,7 @@ ad_proc -private ::template::icon {
     e.g. style loading.
 
     The target icon can be (1) a font glyph, (2) an image or (3) just
-    a text. Method (1) is used for glyphicons and boostrap icons,
+    a text. Method (1) is used for glyphicons and bootstrap icons,
     which is signaled by a value in the icon::map starting with a
     plain character. When the value starts with a slash "/", then an
     image will be used. When the name has no graphical counterpart

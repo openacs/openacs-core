@@ -709,7 +709,7 @@ ad_proc -public template::adp_parse_tags {HTML} {
        template::adp_compile -string $HTML
     </blockquote>
     
-    but it just performs tag substion, but not ADP variable
+    but it just performs tag substitution, but not ADP variable
     substitution, since this is done differently in some contextes on
     the provided HTML chunk.  An example is the handling of instance
     attributes in xowiki.
@@ -748,7 +748,7 @@ ad_proc -private template::adp_parse_tags_and_localize {HTML} {
     
 } {
     if {$HTML ne ""} {
-        ns_log notice "YYYY adp_parse_tags_and_localize called with '$HTML'"
+        #ns_log notice "YYYY adp_parse_tags_and_localize called with '$HTML'"
         return [::lang::util::localize [adp_parse_tags $HTML]]        
     }
 }
