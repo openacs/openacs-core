@@ -1045,6 +1045,7 @@ namespace eval ::template::icon {
             eye-closed eye-slash
             eye-open eye
             file file-earmark
+            filetype-csv filetype-csv 
             form-info-sign info-square
             radio-checked check2-circle
             radio-unchecked circle
@@ -1061,6 +1062,7 @@ namespace eval ::template::icon {
             eye-closed           "fa-regular fa-eye-slash"
             eye-open             "fa-regular fa-eye"
             file                 "fa-regular fa-file"
+            filetype-csv         "fa-solid fa-file-csv"
             form-info-sign       "fa-solid fa-circle-info"
             radio-checked        "fa-regular fa-circle-check"
             radio-unchecked      "fa-regular fa-circle"
@@ -1077,6 +1079,7 @@ namespace eval ::template::icon {
             eye-closed eye-close
             eye-open eye-open
             file file
+            filetype-csv ""
             form-info-sign info-sign
             radio-checked record
             radio-unchecked /shared/images/radio.gif
@@ -1091,6 +1094,7 @@ namespace eval ::template::icon {
             checkbox-unchecked /shared/images/checkbox.gif
             edit  /shared/images/Edit16.gif
             folder /resources/file-storage/folder.gif
+            filetype-csv ""
             list ""
             radio-checked /shared/images/radiochecked.gif
             radio-unchecked /shared/images/radio.gif
