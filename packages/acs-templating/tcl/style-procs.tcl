@@ -126,11 +126,11 @@ ad_proc -private ::template::icon {
             set template {<i class='$name$class' title='$title' aria-hidden='true' $styleAtt></i>}
         }
         "text" {
-            set alt [expr {[info exists alt] ? $alt : $title}]
+            if {$alt eq ""} {set alt $title}
             set template {<span class='$class' title='$title' $styleAtt>$alt</span>}
         }
         default {
-            set alt [expr {[info exists alt] ? $alt : $title}]
+            if {$alt eq ""} {set alt $title}
             set template {<img class='$class' src='$name' height='16' width='16' title='$title' alt='$alt' style='border:0; $styleAtt'>}
         }
     }

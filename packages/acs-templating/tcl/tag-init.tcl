@@ -1058,12 +1058,15 @@ namespace eval ::template::icon {
             arrow-up             "fa-solid fa-arrow-up"
             checkbox-checked     "fa-regular fa-square-check"
             checkbox-unchecked   "fa-regular fa-square"
+            download             "fa-solid fa-download"
             edit                 "fa-regular fa-pen-to-square"
             eye-closed           "fa-regular fa-eye-slash"
             eye-open             "fa-regular fa-eye"
             file                 "fa-regular fa-file"
             filetype-csv         "fa-solid fa-file-csv"
+            folder               "fa-regular fa-folder"
             form-info-sign       "fa-solid fa-circle-info"
+            list                 "fa-solid fa-list"
             radio-checked        "fa-regular fa-circle-check"
             radio-unchecked      "fa-regular fa-circle"
             reload               "fa-solid fa-arrows-rotate"
@@ -1080,6 +1083,7 @@ namespace eval ::template::icon {
             eye-open eye-open
             file file
             filetype-csv ""
+            folder folder-open
             form-info-sign info-sign
             radio-checked record
             radio-unchecked /shared/images/radio.gif
@@ -1092,12 +1096,18 @@ namespace eval ::template::icon {
             arrow-up /resources/acs-subsite/arrow-up.gif
             checkbox-checked /shared/images/checkboxchecked.gif
             checkbox-unchecked /shared/images/checkbox.gif
+            download /shared/images/download16.png
             edit  /shared/images/Edit16.gif
-            folder /resources/file-storage/folder.gif
-            filetype-csv ""
-            list ""
+            eye-closed /shared/images/eye-slash16.png
+            eye-open /shared/images/eye16.png
+            filetype-csv /shared/images/csv16.png
+            file /shared/images/file.gif
+            folder /shared/images/Delete16.gif
+            form-info-sign /shared/images/info.gif
+            list /shared/images/list16.png
             radio-checked /shared/images/radiochecked.gif
             radio-unchecked /shared/images/radio.gif
+            text /shared/images/text16.png
             reload ""
             trash /shared/images/Delete16.gif
             watch ""
