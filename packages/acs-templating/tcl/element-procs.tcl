@@ -78,6 +78,7 @@ ad_proc -private template::element::get_opts {
     -after_html
     -display_value
     -multiple:boolean
+    -format
     args
 } {
     template::element::create syntax requires first two non-positional
@@ -110,6 +111,7 @@ ad_proc -private template::element::get_opts {
         before_html
         after_html
         display_value
+        format
     } {
         if {[info exists $flag]} {
             dict set opts $flag [set $flag]
@@ -231,6 +233,11 @@ ad_proc -public template::element::create { form_id element_id args } {
 
     @option multiple      A flag indicating that more than one value is expected
                           from the input element
+
+    @option format        Many form elements allow to specify a format,
+                          e.g. a way the element should be displayed
+                          or interpret its value. Refer to the
+                          specific widgets for the actual behavior.
 
     @see template::widget
     @see template::data::validate
