@@ -79,6 +79,7 @@ ad_proc -private template::element::get_opts {
     -display_value
     -multiple:boolean
     -format
+    -section
     args
 } {
     template::element::create syntax requires first two non-positional
@@ -112,6 +113,7 @@ ad_proc -private template::element::get_opts {
         after_html
         display_value
         format
+        section
     } {
         if {[info exists $flag]} {
             dict set opts $flag [set $flag]
@@ -238,6 +240,8 @@ ad_proc -public template::element::create { form_id element_id args } {
                           e.g. a way the element should be displayed
                           or interpret its value. Refer to the
                           specific widgets for the actual behavior.
+
+    @option section       Specify to which form section this form belongs
 
     @see template::widget
     @see template::data::validate
