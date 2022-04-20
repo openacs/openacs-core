@@ -22,7 +22,7 @@ if {[parameter::get \
 
 # When xotcl-core is enabled, update the OO documentation for
 # automatically-generated api
-if {[namespace::which ::xo::api] ne ""} {
+if {[namespace which ::xo::api] ne ""} {
     ::xo::api update_object_doc "" ::acs::db::[::acs::dc cget -driver]-[::acs::dc cget -backend] ""
 }
 
