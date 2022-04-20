@@ -877,7 +877,7 @@ ad_proc -public auth::get_registration_form_elements {
             # The form element is finished - add it to the list
             lappend form_elements $form_element
         } else {
-            lappend form_elements "${element}:text(hidden),optional [list value {}]"
+            lappend form_elements "${element}:text(hidden),optional {value {}}"
         }
     }
 
