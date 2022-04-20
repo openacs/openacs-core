@@ -241,7 +241,7 @@ ad_proc -public template::element::create { form_id element_id args } {
                           or interpret its value. Refer to the
                           specific widgets for the actual behavior.
 
-    @option section       Specify to which form section this form belongs
+    @option section       Specify to which form section this element belongs
 
     @see template::widget
     @see template::data::validate
