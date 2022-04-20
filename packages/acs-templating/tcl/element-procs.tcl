@@ -80,6 +80,7 @@ ad_proc -private template::element::get_opts {
     -multiple:boolean
     -format
     -section
+    -htmlarea_p
     args
 } {
     template::element::create syntax requires first two non-positional
@@ -114,6 +115,7 @@ ad_proc -private template::element::get_opts {
         display_value
         format
         section
+        htmlarea_p
     } {
         if {[info exists $flag]} {
             dict set opts $flag [set $flag]
@@ -242,6 +244,10 @@ ad_proc -public template::element::create { form_id element_id args } {
                           specific widgets for the actual behavior.
 
     @option section       Specify to which form section this element belongs
+
+    @option htmlarea_p    Only relevant for textarea kind of elements,
+                          tells if the element is supposed to be
+                          rendered as a richtext editor or not.
 
     @see template::widget
     @see template::data::validate
