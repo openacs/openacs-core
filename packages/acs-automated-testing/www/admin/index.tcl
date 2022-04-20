@@ -161,7 +161,16 @@ if {$view_by eq "package"} {
         lassign $results($testcase_id,$package_key) testcase_desc . categories \
             testcase_timestamp testcase_passes testcase_fails testcase_warnings
 
-        regexp {^(.+?\.)\s} $testcase_desc "" testcase_desc
+        set orig $testcase_desc
+        set testcase_desc [string trim $testcase_desc]
+        #
+        # Get the first paragraph of the description.
+        #
+        set p [string first \n\n $testcase_desc]
+        if {$p > -1} {
+            set testcase_desc [string range $testcase_desc 0 $p]
+        }
+        
         set categories_str     [join $categories ", "]
         #
         # Only add the testcase to the template multirow if either

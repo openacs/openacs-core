@@ -251,13 +251,14 @@
         <else>
           <tr class="even">
         </else>
-        <td> @tests.package_key@ </td>
+        <td style="white-space: nowrap;"> @tests.package_key@ </td>
         <td><a href="@tests.url@">@tests.id@</a></td>
         <td> @tests.categories@ </td>
         <td> @tests.description@ </td>
         <if @tests.timestamp@ eq "">
           <td>No data</td>
           <td>-</td>
+          <td class="package-table-cell">-</td>
           <td class="package-table-cell">-</td>
           <td class="package-table-cell">-</td>
         </if><else>
