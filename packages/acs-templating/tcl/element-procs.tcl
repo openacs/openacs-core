@@ -95,7 +95,12 @@ ad_proc -private template::element::get_opts {
     @return a dict of options
 } {
     set opts [list]
-    foreach flag {
+    #
+    ## These are the documented options we expect in widgets. We know
+    ## exactly which are key value pairs and which ones are one-valued
+    ## booleans
+    #
+    set flags {
         widget
         datatype
         label
@@ -116,23 +121,54 @@ ad_proc -private template::element::get_opts {
         format
         section
         htmlarea_p
-    } {
-        if {[info exists $flag]} {
-            dict set opts $flag [set $flag]
-        }
     }
-    foreach boolean {
+    set booleans {
         sign
         help
         optional
         nospell
         noquote
         multiple
-    } {
+    }
+    foreach flag $flags {
+        if {[info exists $flag]} {
+            dict set opts $flag [set $flag]
+        }
+    }
+    foreach boolean $booleans {
         if {[set ${boolean}_p]} {
             dict set opts $boolean 1
         }
     }
+    #
+    ## If additional args are found, we might deal with custom options
+    ## from user-defined widgets. We treat all of those as name value
+    ## pairs.
+    ## TODO: one could consider having custom argument parsers for
+    ## those widgets.
+    #
+    while {[llength $args] > 0} {
+        set arg [string range [lindex $args 0] 1 end]
+        if {![dict exists $opts $arg]} {
+            # Collect this name value pair as a custom option
+            set name $arg
+            set value [lindex $args 1]
+            dict set opts $name $value
+            ad_log notice "Collecting custom option for template::element name=$name, value=$value"
+        }
+        if {$arg in $booleans} {
+            # When this is one of the known booleans, just skip one
+            # argument.
+            set args [lrange $args 1 end]
+        } else {
+            # In all other cases, skip 2 arguments (treat options as
+            # name value pairs).
+            set args [lrange $args 2 end]
+        }
+    }
+    # After parsing of custom arguments, the list should be
+    # empty. That we still have stuff in there means something is not
+    # ok with the element specs.
     if {[llength $args] > 0} {
         ad_log warning "Ignoring undocumented args for template::element $args"
     }
