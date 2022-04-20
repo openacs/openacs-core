@@ -20,7 +20,11 @@ if {[parameter::get \
     ad_schedule_proc -thread t -once t 1 ::api_add_calling_info_to_procdoc
 }
 
-::xo::api update_object_doc "" ::acs::db::[::acs::dc cget -driver]-[::acs::dc cget -backend] ""
+# When xotcl-core is enabled, update the OO documentation for
+# automatically-generated api
+if {[namespace::which ::xo::api] ne ""} {
+    ::xo::api update_object_doc "" ::acs::db::[::acs::dc cget -driver]-[::acs::dc cget -backend] ""
+}
 
 # Local variables:
 #    mode: tcl
