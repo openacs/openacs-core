@@ -17,43 +17,47 @@ aa_register_case \
         template::adp_array_variable_regexp_noquote
     } \
     template_variable {
-    test adp variable parsing procedures
-} {
-    aa_run_with_teardown \
-        -test_code {
-            set code "=@test_array.test_key@"
-            aa_true "Regular array var name detected" [regexp [template::adp_array_variable_regexp] $code discard pre arr var]
-            aa_equals "Preceding char is '${pre}'"  "=" $pre
-            aa_equals "Array name is '${arr}'"  \
-                "test_array" $arr
-            aa_equals "Variable name is '${var}'"  \
-                "test_key" $var
+        test adp variable parsing procedures
+    } {
+        aa_run_with_teardown \
+            -test_code {
+                set code "=@test_array.test_key@"
+                aa_true "Regular array var name detected" \
+                    [regexp [template::adp_array_variable_regexp] $code discard pre arr var]
+                aa_equals "Preceding char is '${pre}'"  "=" $pre
+                aa_equals "Array name is '${arr}'"  \
+                    "test_array" $arr
+                aa_equals "Variable name is '${var}'"  \
+                    "test_key" $var
 
-            set code "=@formerror.test_array.test_key@"
-            aa_true "Formerror regular array var name detected" [regexp [template::adp_array_variable_regexp] $code discard pre arr var]
-            aa_equals "Preceding char is '${pre}'"  "=" $pre
-            aa_equals "Array name is '${arr}'"  \
-                "formerror" $arr
-            aa_equals "Variable name is '${var}'"  \
-                "test_array.test_key" $var
+                set code "=@formerror.test_array.test_key@"
+                aa_true "Formerror regular array var name detected" \
+                    [regexp [template::adp_array_variable_regexp] $code discard pre arr var]
+                aa_equals "Preceding char is '${pre}'"  "=" $pre
+                aa_equals "Array name is '${arr}'"  \
+                    "formerror" $arr
+                aa_equals "Variable name is '${var}'"  \
+                    "test_array.test_key" $var
 
-            set code "=@test_array.test_key;noquote@"
-            aa_true "Noquote array var name detected" [regexp [template::adp_array_variable_regexp_noquote] $code discard pre arr var]
-            aa_equals "Preceding char is '${pre}'"  "=" $pre
-            aa_equals "Array name is '${arr}'"  \
-                "test_array" $arr
-            aa_equals "Variable name is '${var}'"  \
-                "test_key" $var
+                set code "=@test_array.test_key;noquote@"
+                aa_true "Noquote array var name detected" \
+                    [regexp [template::adp_array_variable_regexp_noquote] $code discard pre arr var]
+                aa_equals "Preceding char is '${pre}'"  "=" $pre
+                aa_equals "Array name is '${arr}'"  \
+                    "test_array" $arr
+                aa_equals "Variable name is '${var}'"  \
+                    "test_key" $var
 
-            set code "=@formerror.test_array.test_key;noquote@"
-            aa_true "Noquote formerror array var name detected" [regexp [template::adp_array_variable_regexp_noquote] $code discard pre arr var]
-            aa_equals "Preceding char is '${pre}'"  "=" $pre
-            aa_equals "Array name is '${arr}'"  \
-                "formerror" $arr
-            aa_equals "Variable name is '${var}'"  \
-                "test_array.test_key" $var
-        }
-}
+                set code "=@formerror.test_array.test_key;noquote@"
+                aa_true "Noquote formerror array var name detected" \
+                    [regexp [template::adp_array_variable_regexp_noquote] $code discard pre arr var]
+                aa_equals "Preceding char is '${pre}'"  "=" $pre
+                aa_equals "Array name is '${arr}'"  \
+                    "formerror" $arr
+                aa_equals "Variable name is '${var}'"  \
+                    "test_array.test_key" $var
+            }
+    }
 
 aa_register_case \
     -cats {api smoke production_safe} \
@@ -61,36 +65,42 @@ aa_register_case \
         template::expand_percentage_signs
     } \
     expand_percentage_signs {
-    Test expand percentage signs to make sure it substitutes correctly
+        Test expand percentage signs to make sure it substitutes correctly
 
-    @author Dave Bauer
-    @creation-date 2005-11-20
-} {
-    set orig_message "Test message %one%"
-    set one "\[__does_not_exist__\]"
-    set message $orig_message
+        @author Dave Bauer
+        @creation-date 2005-11-20
+    } {
+        set orig_message "Test message %one%"
+        set one "\[__does_not_exist__\]"
+        set message $orig_message
 
-    aa_false "Expanded square bracket text" [catch {set expanded_message [template::expand_percentage_signs $message]} errmsg]
-    aa_log $errmsg
-    aa_equals "square brackets safe" $expanded_message "Test message \[__does_not_exist__\]"
+        aa_false "Expanded square bracket text" \
+            [catch {set expanded_message [template::expand_percentage_signs $message]} errmsg]
+        aa_log $errmsg
+        aa_equals "square brackets safe" $expanded_message "Test message \[__does_not_exist__\]"
 
-    set one "\$__does_not_exist"
-    aa_false "Expanded dollar test" [catch {set expanded_message [template::expand_percentage_signs $message]} errmsg]
-    aa_log $errmsg
-    aa_equals "dollar sign safe" $expanded_message "Test message \$__does_not_exist"
+        set one "\$__does_not_exist"
+        aa_false "Expanded dollar test" \
+            [catch {set expanded_message [template::expand_percentage_signs $message]} errmsg]
+        aa_log $errmsg
+        aa_equals "dollar sign safe" $expanded_message "Test message \$__does_not_exist"
 
-    set one "\$two(\$three(\[__does_not_exist\]))"
+        set one "\$two(\$three(\[__does_not_exist\]))"
 
-    aa_false "Square bracket in array key test" [catch {set expanded_message [template::expand_percentage_signs $message]} errmsg]
-    aa_log $errmsg
-    aa_equals "square brackets in array key safe" $expanded_message "Test message \$two(\$three(\[__does_not_exist\]))"
+        aa_false "Square bracket in array key test" \
+            [catch {set expanded_message [template::expand_percentage_signs $message]} errmsg]
+        aa_log $errmsg
+        aa_equals "square brackets in array key safe" \
+            $expanded_message "Test message \$two(\$three(\[__does_not_exist\]))"
 
-}
+    }
 
 aa_register_case \
     -cats {api smoke production_safe} \
     -procs {
         ::template::adp_parse_tags
+        ::template::adp_compile_chunk
+        ::template::icon
     } \
     adp_parse_tags {
 
