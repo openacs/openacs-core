@@ -32,6 +32,7 @@ aa_register_case -cats {
             } else {
                 ns_return 500 text/plain $message
             }
+            rename test ""
         }
 
         array set element {
