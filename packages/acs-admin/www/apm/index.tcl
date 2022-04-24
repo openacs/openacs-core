@@ -106,13 +106,21 @@ db_multirow -extend {package_url maintained status action_html} packages apm_tab
     }
 
     set file_link_list [list]
-    lappend file_link_list "<a href=\"version-files?version_id=$version_id\">view files</a>"
+    lappend file_link_list [subst {
+        <a href="version-files?version_id=$version_id"><adp:icon name='list' title='view files'></a>
+    }]
     if { $installed_p == "t" && $enabled_p == "t" } {
         if {!$performance_p} {
-            lappend file_link_list "<a href=\"package-watch?package_key=$package_key\">watch all files</a>"
+            lappend file_link_list [subst {
+                <a href="package-watch?package_key=$package_key">
+                <adp:icon name='watch' title='watch all files'></a>
+            }]
         }
         if { !$reload_links_p || [apm_version_load_status $version_id] eq "needs_reload"} {
-            lappend file_link_list "<a href=\"version-reload?version_id=$version_id\">reload changed</a>"
+            lappend file_link_list [subst {
+                <a href="version-reload?version_id=$version_id">
+                <adp:icon name='reload' title='reload changed'</a>
+            }]
         }
     }
     set action_html [join $file_link_list " | "]
@@ -122,9 +130,9 @@ db_multirow -extend {package_url maintained status action_html} packages apm_tab
 set page_url [export_vars -base [ad_conn url] {orderby owned_by supertype}]
 set href     [export_vars -base [ad_conn url] {orderby owned_by supertype reload_links_p}]
 if { $reload_links_p } {
-    set reload_filter "<a href=\"[ns_quotehtml $href]\">Do not check for changed files</a>"
+    set reload_filter "<a href='[ns_quotehtml $href]'>Do not check for changed files</a>"
 } else {
-    set reload_filter "<a href=\"[ns_quotehtml $href]\">Check for changed files</a>"
+    set reload_filter "<a href='[ns_quotehtml $href]'>Check for changed files</a>"
 }
 
 # Build the list of files we're watching.

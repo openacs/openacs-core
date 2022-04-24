@@ -81,7 +81,7 @@ if { [llength $files] == 0 } {
             set local_path [file join {*}[lrange [file split $file] 2 end]]
             set href [export_vars -base file-watch { version_id { paths $local_path } }]
             append body [subst {
-                (<a href="[ns_quotehtml $href]">watch this file</a>)
+                (<a href="[ns_quotehtml $href]"><adp:icon name="watch" alt="reload"> Watch this file</a>)
             }]
             lappend files_to_watch $local_path
         }
@@ -120,10 +120,10 @@ if { [info exists files_to_watch_p] } {
         select the "watch this file" link next to a filename to cause the interpreters to
         reload the file immediately whenever it is changed.<p>
         <ul class="action-links">
-        <li><a href="[ns_quotehtml $href]">Watch all above files</a></li>
+        <li><a href="[ns_quotehtml $href]"><adp:icon name="watch" alt="reload">  Watch all above files</a></li>
     }]
 } else {
-    append body "<ul class=\"action-links\">"
+    append body "<ul class='action-links'>"
 }
 
 append body [subst {
