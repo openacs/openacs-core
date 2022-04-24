@@ -513,7 +513,7 @@ aa_register_case \
     } {
 
         #
-        # iterate over all package_keys
+        # Iterate over all package_keys
         #
         set count 0
         foreach package_key [db_list _ {select package_key from apm_package_types order by 1}] {
@@ -524,9 +524,16 @@ aa_register_case \
             foreach path [apm_get_package_files -package_key $package_key -file_types content_page] {
                 set type [string range [file extension $path] 1 end]
                 if {$type in {tcl adp}} {
+                    #
+                    # Just call the template compiler for every
+                    # template to populate the cache for all
+                    # templates. These entries are needed below to
+                    # apply the usual code-analysis on it. The "call"
+                    # is never executed.
+                    #
                     set stub $::acs::rootdir/packages/$package_key/[file root $path]
                     append _ $package_key/$path \n
-                    template::adp_init $type $stub
+                    set call [template::adp_init $type $stub]
                     incr processed
                 } else {
                     append _ "ignore $package_key/$path (type $type)\n"
@@ -538,9 +545,13 @@ aa_register_case \
         }
 
         #aa_log "<pre>[ns_quotehtml $_]</pre>"
+        #
+        # Collect the compiled artefacts
+        #
         set procs {}
-        lappend procs {*}[info commands ::template::code::tcl::*]
-        lappend procs {*}[info commands ::template::code::adp::*]
+        foreach ns [lmap ns [namespace children ::template::code] {set ns}] {
+            lappend procs {*}[info commands ${ns}::*]
+        }
 
         foreach caller [lsort -dictionary $procs] {
             #set caller db_transaction
