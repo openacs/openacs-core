@@ -156,9 +156,9 @@ template::list::create \
     -multirow packages \
     -key package_key \
     -bulk_actions [list \
-                       "$operation_label checked applications" \
+                       "$operation_label selected applications" \
                        "install-2" \
-                       "$operation_label checked applications" ] \
+                       "$operation_label selected applications" ] \
     -bulk_action_export_vars {
         {repository_url $fetch_url}
     } \

@@ -30,7 +30,7 @@ should install from local files.</p><p>Basically, if you have a local CVS reposi
 code, you need to install from 'Local Files'. Otherwise,
 you can install from the OpenACS repository</p><p>If you want to install new packages, click on 'Install from
 Repository' or 'Install from Local'. Select the
-package, and click 'Install checked applications'. The
+package, and click 'Install selected applications'. The
 system will check to make sure you have all necessary packages that
 the package you want depends on. If you&#39;re installing from
 Local Files, and you are missing any packages, you may have to add
