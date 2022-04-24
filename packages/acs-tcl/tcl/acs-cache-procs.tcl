@@ -716,7 +716,7 @@ namespace eval ::acs {
 }
 
 namespace eval ::acs {
-    ad_proc -private try_cache {cache operation key args} {
+    ad_proc -private try_cache {cache operation args} {
 
         Function to support caching during bootstrap.  When the
         provided cache exists, then use it for caching, otherwise
@@ -727,11 +727,13 @@ namespace eval ::acs {
 
     } {
         if {[info commands $cache] ne ""} {
-            return [uplevel [list $cache $operation $key {*}$args]]
+            return [uplevel 1 [list $cache $operation {*}$args]]
         } else {
             if {$operation eq "eval"} {
+                nsf::parseargs {{-partition_key} {-expires:integer} key command} $args
                 ns_log warning "no cache $cache: need direct call $key $args"
-                return [uplevel {*}$args]
+                #ns_log warning "no cache $cache: need direct call $key [info exists partition_key] <$command>"
+                return [uplevel 1 $command]
             }
             ns_log warning "no cache $cache: call ignored"
         }
