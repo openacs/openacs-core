@@ -314,7 +314,7 @@ namespace eval acs_mail_lite {
                the file-storage.
 
         @param filesystem_files List of regular files on the
-               filesystem to be send as attachments.
+               filesystem to be sent as attachments.
 
         @param delete_filesystem_files_p Decides if we want files specified
                by the 'file' parameter to be deleted once sent.
@@ -486,7 +486,7 @@ namespace eval acs_mail_lite {
                stored in the file-storage.
 
         @param filesystem_files List of regular files on the
-               filesystem to be send as attachments.
+               filesystem to be sent as attachments.
 
         @param delete_filesystem_files_p Decides if we want files
                specified by the 'file' parameter to be deleted once
