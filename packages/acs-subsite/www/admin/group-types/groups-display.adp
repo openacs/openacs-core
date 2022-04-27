@@ -1,6 +1,6 @@
 <master>
 <property name="context">@context;literal@</property>
-<property name="doc(title)">All groups of type @group_type_pretty_name;noquote@</property>
+<property name="doc(title)">All groups of type @group_type_pretty_name;literal@</property>
 
 <ul>
 

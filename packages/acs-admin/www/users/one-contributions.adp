@@ -1,5 +1,5 @@
 <master>
-<property name="doc(title)">Contributions of @user_info.first_names;noquote@ @user_info.last_name;noquote@</property>
+<property name="doc(title)">Contributions of @user_info.first_names;literal@ @user_info.last_name;literal@</property>
 <property name="context">@context;literal@</property>
 
 <h1>Contributions of @user_info.name@</h1>

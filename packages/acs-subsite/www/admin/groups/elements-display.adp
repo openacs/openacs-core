@@ -1,6 +1,6 @@
 <master>
 <property name="context">@context;literal@</property>
-<property name="doc(title)">@role_pretty_plural;noquote@ of @group_name;noquote@</property>
+<property name="doc(title)">@role_pretty_plural;literal@ of @group_name;literal@</property>
 
 <include src="elements-display-list" group_id="@group_id;literal@" rel_type="@rel_type;literal@" member_state="@member_state;literal@">
 
