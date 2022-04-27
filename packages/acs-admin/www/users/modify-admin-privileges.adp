@@ -1,6 +1,6 @@
 <master>
 <property name="doc(title)">Confirm privilege modification for user #@user_id;noquote@</property>
-<property name=context>@context;noquote@</property>
+<property name=context>@context;literal@</property>
 
 Are you sure you wish to @action@ admin privileges for user
 <strong>@user_info.name@</strong> (@user_info.email@, #@user_id@) ?

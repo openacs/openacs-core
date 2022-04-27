@@ -1,5 +1,5 @@
 <master>
-<property name="doc(title)">@user_info.first_names;noquote@ @user_info.last_name;noquote@</property>
+<property name="doc(title)">@user_info.first_names;literal@ @user_info.last_name;literal@</property>
 <property name="context">@context;literal@</property>
 
 <h1>Basic Information</h1>
