@@ -1,6 +1,5 @@
 ad_library {
-    A captcha implementation for the template system based on
-    Imagemagick
+    A captcha implementation for the template system.
 
     @author Antonio Pisano
 }
@@ -8,15 +7,20 @@ ad_library {
 namespace eval captcha {}
 namespace eval captcha::image {}
 
-ad_proc -private captcha::image::generate {
-    {-size 150x50}
+ad_proc -private captcha::image::generate__convert {
+    -height:required
+    -width:required
     -text
     {-background "#ffffff"}
     {-fill "#000000"}
+    -path:required
 } {
-    Creates a distorted capcha image from a text.
+    Creates capcha image from a text. This is the implementation using
+    the popular convert command via exec. It will render the letters,
+    then perturbate them with a wave of random length and amplitude.
 
-    @param size the size expressed as \{width\}x\{height\} in pixel
+    @param height in pixels
+    @param width in pixels
     @param text the text to use for the captcha. When unspecified, a
                 random text will be used. The text can only contain
                 alphanumeric characters and spaces.
@@ -30,27 +34,6 @@ ad_proc -private captcha::image::generate {
             text the image represents) and chec ksum (a checksum for
             the image to use for matching).
 } {
-    set convert [::util::which convert]
-    if {$convert eq ""} {
-        error {'convert' command not available.}
-    }
-
-    if {![regexp -nocase {^(\d+)x(\d+)$} $size m width height]} {
-        error {Invalid size}
-    }
-    if {![regexp -nocase {^(\#([0-9]|[a-f]){6}){2}$} ${background}${fill}]} {
-        error {Invalid color}
-    }
-    if {[info exists text]} {
-        if {![regexp {^(\w| )*$} $text]} {
-            error {'text' can only contain alphanumerics and spaces}
-        }
-    } else {
-        set text [ad_generate_random_string 5]
-    }
-
-    set path [ad_tmpnam].png
-
     set amplitude [expr {round($height * 0.25)}]
     set wavelength [expr {round($width * 0.75)}]
     set offset [expr {round($width * rand())}]
@@ -69,6 +52,152 @@ ad_proc -private captcha::image::generate {
     if {![file exists $path]} {
         error "File '$destination' was not generated"
     }
+}
+
+ad_proc -private captcha::image::generate__tclgd {
+    -height:required
+    -width:required
+    -text
+    {-background "#ffffff"}
+    {-fill "#000000"}
+    -path:required
+} {
+    Creates a capcha image from a text. This is and implementation
+    using the libgd Tcl wrapper tclgd. Every character in the text
+    will be rotated by a random angle and sprinkled with some noise.
+
+    @param height in pixels
+    @param width in pixels
+    @param text the text to use for the captcha. When unspecified, a
+                random text will be used. The text can only contain
+                alphanumeric characters and spaces.
+    @param background the background color, as RGB 6 characters code.
+    @param fill the font color, background the background color, as
+                RGB 6 characters code.
+
+    @see https://flightaware.github.io/tcl.gd/
+
+    @return a dict of fields 'path' (path to the image), 'text' (the
+            text the image represents) and chec ksum (a checksum for
+            the image to use for matching).
+} {
+    # Convert the rgb colors
+    for {set i 1} {$i <= 5} {incr i 2} {
+        lappend bg_color [expr 0x[string range $background $i $i+1]]
+        lappend fg_color [expr 0x[string range $fill $i $i+1]]
+    }
+
+    package require tclgd
+
+    set n_chars [string length $text]
+
+    # Make sure there is space for the letters to be rotated without
+    # overlapping with the others.
+    set width [expr {int(max($width, $n_chars * $height * pow(2, -2)))}]
+
+    set font "[acs_root_dir]/packages/acs-templating/resources/fonts/LiberationSans-Regular.ttf"
+
+    # Rule of thumb to calculate the font size
+    set font_size [expr {($height / 500.0) * 300.0}]
+
+    set tot_width [expr {$width * $n_chars}]
+    GD create captcha $tot_width $height
+
+    set dest_y [expr {$height / 2}]
+
+    # Create the letters and copy them flipped on the captcha. Would
+    # be nice to generate them in place, but rotation expressed in the
+    # text subcommand is not applied to the center.
+    for {set i 0} {$i < $n_chars} {incr i} {
+        set l [string index $text $i]
+
+        GD create letter $width $height
+        set foreground [letter allocate_color {*}$fg_color]
+        set background [letter allocate_color {*}$bg_color]
+        letter fill 0 0 $background
+
+        set bbox [letter text_bounds $foreground $font $font_size 0 0 0 $l]
+        set font_x [expr {abs([lindex $bbox 4] - [lindex $bbox 0])}]
+        set font_y [expr {abs([lindex $bbox 5] - [lindex $bbox 1])}]
+
+        set x [expr {int(($width - $font_x) * 0.5)}]
+        set y [expr {int(($height + $font_y) * 0.5)}]
+        letter text $foreground $font $font_size 0 $x $y $l
+
+        set angle [expr {int(rand() * 360)}]
+        set dest_x [expr {$width * $i + $width / 2}]
+        captcha copy_rotated letter $dest_x $dest_y 0 0 $width $height $angle
+    }
+
+    # Spray some noise on 2% of the image
+    set grey [letter allocate_color 100 100 100 0]
+    set noisy_pixels [expr {int($tot_width * $height * 0.02)}]
+    for {set i 0} {$i < $noisy_pixels} {incr i} {
+        set x [expr {int(rand() * $tot_width)}]
+        set y [expr {int(rand() * $height)}]
+        captcha pixel $x $y $grey
+    }
+
+    set wfd [open $path w]
+    captcha write_png $wfd 1
+    close $wfd
+}
+
+ad_proc -private captcha::image::generate {
+    {-size 150x50}
+    -text
+    {-background "#ffffff"}
+    {-fill "#000000"}
+} {
+    Creates a distorted capcha image from a text.
+
+    @param size the size expressed as \{width\}x\{height\} in pixel
+    @param text the text to use for the captcha. When unspecified, a
+                random text will be used. The text can only contain
+                alphanumeric characters and spaces.
+    @param background the background color, as RGB 6 characters code.
+    @param fill the font color, background the background color, as
+                RGB 6 characters code.
+
+    @return a dict of fields 'path' (path to the image), 'text' (the
+            text the image represents) and chec ksum (a checksum for
+            the image to use for matching).
+} {
+    try {
+        package require tclgd
+    } on error {errmsg} {
+        set convert [::util::which convert]
+        if {$convert eq ""} {
+            error {'tclgd' or 'convert' command not available.}
+        }
+        set backend convert
+    } on ok {d} {
+        set backend tclgd
+    }
+
+    if {![regexp -nocase {^(\d+)x(\d+)$} $size m width height]} {
+        error {Invalid size}
+    }
+    if {![regexp -nocase {^(\#([0-9]|[a-f]){6}){2}$} ${background}${fill}]} {
+        error {Invalid color}
+    }
+    if {[info exists text]} {
+        if {![regexp {^(\w| )*$} $text]} {
+            error {'text' can only contain alphanumerics and spaces}
+        }
+    } else {
+        set text [ad_generate_random_string 5]
+    }
+
+    set path [ad_tmpnam].png
+
+    captcha::image::generate__$backend \
+        -height $height \
+        -width $width \
+        -text $text \
+        -background $background \
+        -fill $fill \
+        -path $path
 
     set checksum [ns_md file -digest sha1 $path]
 
