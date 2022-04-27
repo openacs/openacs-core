@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Add the new package to CVS}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Add the new package to CVS}</property>
 <property name="doc(title)">Add the new package to CVS</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"

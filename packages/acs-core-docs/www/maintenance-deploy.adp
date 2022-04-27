@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Staged Deployment for Production Networks}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Staged Deployment for Production Networks}</property>
 <property name="doc(title)">Staged Deployment for Production Networks</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"

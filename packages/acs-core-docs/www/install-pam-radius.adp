@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Install PAM Radius for use as external
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Install PAM Radius for use as external
 authentication}</property>
 <property name="doc(title)">Install PAM Radius for use as external
 authentication</property>

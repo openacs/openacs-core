@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {High Availability/High Performance Configurations}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {High Availability/High Performance Configurations}</property>
 <property name="doc(title)">High Availability/High Performance Configurations</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"

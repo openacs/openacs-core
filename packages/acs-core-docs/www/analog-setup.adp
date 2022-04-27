@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Set up Log Analysis Reports}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Set up Log Analysis Reports}</property>
 <property name="doc(title)">Set up Log Analysis Reports</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"

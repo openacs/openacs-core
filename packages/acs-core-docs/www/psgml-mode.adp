@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Using PSGML mode in Emacs}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Using PSGML mode in Emacs}</property>
 <property name="doc(title)">Using PSGML mode in Emacs</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"

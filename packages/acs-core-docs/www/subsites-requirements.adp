@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Subsites Requirements}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Subsites Requirements}</property>
 <property name="doc(title)">Subsites Requirements</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"

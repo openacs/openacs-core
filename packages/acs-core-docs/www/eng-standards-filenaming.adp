@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {ACS File Naming and Formatting Standards}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {ACS File Naming and Formatting Standards}</property>
 <property name="doc(title)">ACS File Naming and Formatting Standards</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"

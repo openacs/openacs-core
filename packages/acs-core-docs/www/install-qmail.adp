@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Install qmail (OPTIONAL)}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Install qmail (OPTIONAL)}</property>
 <property name="doc(title)">Install qmail (OPTIONAL)</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"

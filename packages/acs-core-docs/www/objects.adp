@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {OpenACS Data Models and the Object System}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {OpenACS Data Models and the Object System}</property>
 <property name="doc(title)">OpenACS Data Models and the Object System</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"

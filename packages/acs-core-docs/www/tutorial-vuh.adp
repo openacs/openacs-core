@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Using .vuh files for pretty URLs}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Using .vuh files for pretty URLs}</property>
 <property name="doc(title)">Using .vuh files for pretty URLs</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"

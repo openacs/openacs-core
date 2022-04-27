@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Enabling WYSIWYG}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Enabling WYSIWYG}</property>
 <property name="doc(title)">Enabling WYSIWYG</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"

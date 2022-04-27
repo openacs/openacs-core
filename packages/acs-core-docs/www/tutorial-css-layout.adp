@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Laying out a page with CSS instead of tables}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Laying out a page with CSS instead of tables}</property>
 <property name="doc(title)">Laying out a page with CSS instead of tables</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"

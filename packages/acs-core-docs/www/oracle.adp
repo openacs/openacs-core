@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Install Oracle 8.1.7}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Install Oracle 8.1.7}</property>
 <property name="doc(title)">Install Oracle 8.1.7</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"

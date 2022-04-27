@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {PL/SQL Standards}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {PL/SQL Standards}</property>
 <property name="doc(title)">PL/SQL Standards</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"

@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Debugging and Automated Testing}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Debugging and Automated Testing}</property>
 <property name="doc(title)">Debugging and Automated Testing</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"

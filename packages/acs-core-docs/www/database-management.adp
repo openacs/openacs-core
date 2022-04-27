@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Chapter 7. Database Management}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Chapter 7. Database Management}</property>
 <property name="doc(title)">Chapter 7. Database Management</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"

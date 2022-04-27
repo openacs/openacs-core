@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Package Manager Design}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Package Manager Design}</property>
 <property name="doc(title)">Package Manager Design</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"

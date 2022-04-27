@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Constraint naming standard}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Constraint naming standard}</property>
 <property name="doc(title)">Constraint naming standard</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
