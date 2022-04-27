@@ -30,8 +30,8 @@ described in the section on categories. The listing below adds a
 link to the Parameters UI of our package.</p><pre class="screen">[$OPENACS_SERVICE_NAME admin]$ <strong class="userinput"><code>vi index.adp</code></strong>
 </pre><pre class="programlisting">
 &lt;master&gt;
-&lt;property name="title"&gt;\@title;noquote\@&lt;/property&gt;
-&lt;property name="context"&gt;\@context;noquote\@&lt;/property&gt;
+&lt;property name="title"&gt;\@title;literal\@&lt;/property&gt;
+&lt;property name="context"&gt;\@context;literal\@&lt;/property&gt;
 
 &lt;ul class="action-links"&gt;
   &lt;li&gt;&lt;a href="\@parameters_url\@" title="Set parameters" class="action_link"&gt;Set parameters&lt;/a&gt;&lt;/li&gt;

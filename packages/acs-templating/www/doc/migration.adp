@@ -184,7 +184,7 @@ ad_return_template
 
 &lt;master&gt;
 &lt;property name="doc(title)"&gt;\@title\@&lt;/property&gt;
-&lt;property name="context"&gt;\@context;noquote\@&lt;/property&gt;
+&lt;property name="context"&gt;\@context;literal\@&lt;/property&gt;
 
 &lt;hr&gt;
 

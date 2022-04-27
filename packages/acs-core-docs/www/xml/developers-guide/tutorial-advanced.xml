@@ -399,8 +399,8 @@ done
 <screen>[$OPENACS_SERVICE_NAME admin]$ <userinput>vi index.adp</userinput></screen>
 <programlisting>
 &lt;master&gt;
-&lt;property name="title"&gt;@title;noquote@&lt;/property&gt;
-&lt;property name="context"&gt;@context;noquote@&lt;/property&gt;
+&lt;property name="title"&gt;@title;literal@&lt;/property&gt;
+&lt;property name="context"&gt;@context;literal@&lt;/property&gt;
 
 &lt;ul class="action-links"&gt;
   &lt;li&gt;&lt;a href="@parameters_url@" title="Set parameters" class="action_link"&gt;Set parameters&lt;/a&gt;&lt;/li&gt;
