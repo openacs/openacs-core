@@ -38,7 +38,7 @@ ad_proc -private captcha::image::generate__convert {
     set wavelength [expr {round($width * 0.75)}]
     set offset [expr {round($width * rand())}]
 
-    exec $convert \
+    exec [::util::which convert] \
         -size $size \
         -background $background \
         -fill $fill \
@@ -47,7 +47,6 @@ ad_proc -private captcha::image::generate__convert {
         -wave ${amplitude}x${wavelength} \
         -chop   ${offset}x0+0+0 \
         $path
-
 
     if {![file exists $path]} {
         error "File '$destination' was not generated"
