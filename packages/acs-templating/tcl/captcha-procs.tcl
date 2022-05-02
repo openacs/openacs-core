@@ -39,7 +39,7 @@ ad_proc -private captcha::image::generate__convert {
     set offset [expr {round($width * rand())}]
 
     exec [::util::which convert] \
-        -size $size \
+        -size ${width}x${height} \
         -background $background \
         -fill $fill \
         label:$text \
