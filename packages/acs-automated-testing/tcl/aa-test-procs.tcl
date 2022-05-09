@@ -588,7 +588,7 @@ ad_proc -private aa_runseries {
 } {
     # probably transitional code for testing purposes
     if {[info commands ::aa::coverage::add_traces] ne ""} {
-        aa::coverage::add_traces
+        catch {aa::coverage::add_traces}
     }
 
     set ::aa_run_quietly_p $quiet_p
@@ -1246,7 +1246,8 @@ namespace eval acs::test {
         {-depth 1}
         {-headers ""}
         {-prefix ""}
-        {-verbose:boolean 1}
+        {-verbose:boolean true}
+        {-basic_auth:boolean false}
         request
     } {
 
@@ -1309,6 +1310,14 @@ namespace eval acs::test {
             lappend extra_args -body $body
         }
 
+        if {[dict exists $user_info email]
+            && [dict exists $user_info password]
+        } {
+            set ah [ns_base64encode [dict get $user_info email]:[dict get $user_info password]]
+            aa_log "... user_info $user_info AH $ah"
+            lappend headers Authorization "Basic $ah"
+        }
+
         if {[llength $headers] > 0} {
             set requestHeaders [ns_set create]
             foreach {tag value} $headers {
@@ -1316,7 +1325,6 @@ namespace eval acs::test {
             }
             lappend extra_args -headers $requestHeaders
         }
-
 
         #
         # Construct a nice log line
@@ -1333,6 +1341,7 @@ namespace eval acs::test {
         #
         # Run actual request
         #
+        set d ""
         try {
             set location $url
             while {$depth > 0} {
@@ -1363,6 +1372,7 @@ namespace eval acs::test {
             set ms [format %.2f [expr {[ns_time format [dict get $d time]] * 1000.0}]]
             aa_log "${prefix}$method $request returns [dict get $d status] in ${ms}ms"
         }
+
         #aa_log "REPLY has headers [dict exists $d headers]"
         if {[dict exists $d headers]} {
             set cookies {}
