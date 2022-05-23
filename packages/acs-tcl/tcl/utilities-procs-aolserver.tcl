@@ -65,6 +65,7 @@ ad_proc -public ad_unset_cookie {
     {-secure f}
     {-domain ""}
     {-path "/"}
+    {-samesite lax}
     name
 } {
     Un-sets a cookie.
@@ -74,7 +75,7 @@ ad_proc -public ad_unset_cookie {
 } {
     ad_set_cookie -replace t -expire t -max_age 0 \
         -secure $secure -domain $domain -path $path \
-        $name ""
+        -samesite $samesite $name ""
 }
 
 #

@@ -118,6 +118,7 @@ namespace eval ::acs {
 ::acs::register_icanuse "ns_reflow_text -offset"    [acs::cmd_error_contains {ns_reflow_text} -offset]
 ::acs::register_icanuse "nsf::config profile"       [expr {[info exists ::nsf::config(profile)] ? $::nsf::config(profile) : 0}]
 ::acs::register_icanuse "ns_strcoll"                {[info commands ::ns_strcoll] ne ""}
+::acs::register_icanuse "ns_deletecookie -samesite" [acs::cmd_error_contains {ns_deletecookie ""} -samesite]
 
 #
 # At the time "ns_trim -prefix was introduced, a memory leak in

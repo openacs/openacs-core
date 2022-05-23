@@ -68,6 +68,7 @@ ad_proc -public ad_unset_cookie {
     {-secure f}
     {-domain ""}
     {-path "/"}
+    {-samesite lax}
     name
 } {
     Un-sets a cookie.
@@ -75,7 +76,11 @@ ad_proc -public ad_unset_cookie {
     @see ad_get_cookie
     @see ad_set_cookie
 } {
-    ns_deletecookie -domain $domain -path $path -replace t -secure $secure -- $name
+    if {[::acs::icanuse "ns_deletecookie -samesite"]} {
+        ns_deletecookie -domain $domain -path $path -replace t -secure $secure -samesite $samesite -- $name
+    } else {
+        ns_deletecookie -domain $domain -path $path -replace t -secure $secure -- $name
+    }
 }
 
 #
