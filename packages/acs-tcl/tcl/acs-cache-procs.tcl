@@ -499,7 +499,7 @@ namespace eval ::acs {
                     # A real pattern with wild-card was provided.
                     #
                     set keys [dict keys [set ${:prefix}] $pattern]
-                    ns_log notice "### dict flush ${:prefix} <$pattern> -> [llength $keys]]"
+                    ns_log notice "### dict flush ${:prefix} <$pattern> -> [llength $keys]"
                     foreach key $keys {
                         dict unset ${:prefix} $key
                     }
