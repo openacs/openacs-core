@@ -30,7 +30,7 @@ if {[server_cluster_enabled_p]} {
     foreach ip [parameter::get -package_id $::acs::kernel_id -parameter ClusterAuthorizedIP] {
         if {[string first * $ip] > -1} {
             ::acs::Cluster eval [subst {
-                lappend allowed_host_patterns $ip
+                lappend :allowed_host_patterns $ip
             }]
         } else {
             ::acs::Cluster eval [subst {
