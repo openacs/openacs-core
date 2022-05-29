@@ -412,7 +412,7 @@ ad_proc -public ad_parameter_from_file {
 }
 
 #
-# Implementation of ad_parameter_cache
+# There are three implementation of "ad_parameter_cache":
 # 1) for cachingmode none
 # 2) via "nsv_dict" (cluster aware)
 # 3) via "nsv" (not cluster aware)
