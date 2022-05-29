@@ -695,6 +695,18 @@ namespace eval ::acs {
         # Handling outgoing requests
         #
         :public object method broadcast args {
+            #
+            # Small optimization for cachingmode "none"
+            #
+            if {[ns_config "ns/parameters" cachingmode "per-node"] eq "none"
+                && [lindex $args 0] in {acs::cache_flush_all ns_cache}} {
+                #
+                # If caching mode is none, it is expected that all
+                # nodes have this parameter set. Therefore there is no
+                # need to communicate cache flushing commands.
+                #
+                return
+            }
             foreach server [:info instances] {
                 $server message {*}$args
             }
@@ -702,7 +714,6 @@ namespace eval ::acs {
 
         :public method message args {
             :log "--cluster outgoing request to ${:host}:${:port} // $args"
-
             try {
                 ns_http run http://${:host}:${:port}/${:url}?cmd=[ns_urlencode $args]
             } on error {errorMsg} {
