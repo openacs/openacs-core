@@ -101,7 +101,6 @@ ad_proc -private sec_handler_reset {} {
 } {
     set ::__csp_nonce [::security::csp::nonce]
     set ::__csrf_token ""
-    nsv_set sec_previous_session_id . .
 }
 
 ad_proc -private sec_handler {} {
@@ -818,13 +817,10 @@ ad_proc -private sec_setup_session {
 
         if { $prev_user_id != 0 && $prev_user_id != $new_user_id } {
             #
-            # This is a change in identity so we should create
-            # a new session so session-level data is not shared.
+            # This is a change in identity so we create
+            # a new session_id to avoid sharing of session-level data
             #
-            set old_session_id [ad_conn session_id]
             set session_id [sec_allocate_session]
-            ns_log notice "sec_allocate_session <$old_session_id> -> <$session_id>"
-            nsv_set sec_previous_session_id $session_id $old_session_id
         }
 
         if { $prev_user_id != $new_user_id } {
