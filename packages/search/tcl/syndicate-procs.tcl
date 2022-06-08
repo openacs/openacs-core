@@ -45,7 +45,7 @@ ad_proc -public -callback search::action -impl syndicate {} {
 
         set published [lc_time_fmt $syn(pubDate) "%a, %d %b %Y %H:%M:%S GMT"]
 
-        set xmlMap [list & "&amp;" < "&lt;" > "&gt;" \" "&quot;" ' "&apos;" \x00 ""]
+        set xmlMap [list & "&amp;" < "&lt;" > "&gt;" \" "&quot;" ' "&apos;"]
         set rss_xml_frag " <item>
   <title>[string map $xmlMap $d(title)]</title>
   <link>[string map $xmlMap $url]</link>
@@ -58,6 +58,12 @@ ad_proc -public -callback search::action -impl syndicate {} {
  </item>"
 
         db_dml nuke {delete from syndication where object_id = :object_id}
+
+        # Null character is forbidden in a database bind variable. We
+        # replace it with the empty string when found.
+        regsub -all \x00 $rss_xml_frag {} rss_xml_frag
+        regsub -all \x00 $body {} body
+
         db_dml insert {insert into syndication(object_id, rss_xml_frag, body, url)
             values (:object_id, :rss_xml_frag, :body, :url)
         }
