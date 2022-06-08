@@ -45,7 +45,7 @@ ad_proc -public -callback search::action -impl syndicate {} {
 
         set published [lc_time_fmt $syn(pubDate) "%a, %d %b %Y %H:%M:%S GMT"]
 
-   set xmlMap [list & "&amp;" < "&lt;" > "&gt;" \" "&quot;" ' "&apos;"]
+        set xmlMap [list & "&amp;" < "&lt;" > "&gt;" \" "&quot;" ' "&apos;" \x00 ""]
         set rss_xml_frag " <item>
   <title>[string map $xmlMap $d(title)]</title>
   <link>[string map $xmlMap $url]</link>
