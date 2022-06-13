@@ -59,10 +59,21 @@ ad_proc -public -callback search::action -impl syndicate {} {
 
         db_dml nuke {delete from syndication where object_id = :object_id}
 
+        #
         # Null character is forbidden in a database bind variable. We
         # replace it with the empty string when found.
-        regsub -all \x00 $rss_xml_frag {} rss_xml_frag
-        regsub -all \x00 $body {} body
+        #
+        set sanitized 0
+        incr sanitized [regsub -all \x00 $rss_xml_frag {} rss_xml_frag]
+        incr sanitized [regsub -all \x00 $body {} body]
+        #
+        # If we had to sanitize the content, we complain in the server
+        # log: probably one of the binary-to-text conversion is broken
+        # or needs to be revised.
+        #
+        if {$sanitized > 0} {
+            ad_log warning "Attempt to introduce forbidden characters in the syndication table by object ${object_id}"
+        }
 
         db_dml insert {insert into syndication(object_id, rss_xml_frag, body, url)
             values (:object_id, :rss_xml_frag, :body, :url)
