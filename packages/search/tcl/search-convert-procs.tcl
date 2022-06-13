@@ -66,7 +66,7 @@ ad_proc -public search::convert::binary_to_text {
                 file delete -- $tmp_filename                
                 return ""
             }
-            set convert_command {unzip -p $filename content.xml >$tmp_filename}
+            set convert_command {[util::which unzip] -p $filename content.xml >$tmp_filename}
         }
         application/vnd.openxmlformats-officedocument.presentationml.presentation {
             #
@@ -87,7 +87,7 @@ ad_proc -public search::convert::binary_to_text {
                 #
                 # Now we extract the markup from all slides...
                 #
-                set xml [exec -- unzip -p $filename ppt/slides/*.xml]
+                set xml [exec -- [util::which unzip] -p $filename ppt/slides/*.xml]
                 #
                 # ... and clean it up so that only the plain text remains.
                 #
