@@ -68,6 +68,40 @@ ad_proc -public search::convert::binary_to_text {
             }
             set convert_command {unzip -p $filename content.xml >$tmp_filename}
         }
+        application/vnd.openxmlformats-officedocument.presentationml.presentation {
+            #
+            # File claims to be a MS pptx
+            #
+
+            file delete -- $tmp_filename
+
+            #
+            # First check that we can unzip the file
+            #
+            if {![util::file_content_check -type zip -file $filename]} {
+                ns_log warning "search: $filename ($mime_type) is not a zip file; skip indexing"
+                return ""
+            }
+
+            ad_try {
+                #
+                # Now we extract the markup from all slides...
+                #
+                set xml [exec -- unzip -p $filename ppt/slides/*.xml]
+                #
+                # ... and clean it up so that only the plain text remains.
+                #
+                set txt ""
+                foreach {m t} [regexp -all -inline {<a:t>([^>]+)</a:t>} $xml] {
+                    lappend txt $t
+                }
+            } on error {errorMsg} {
+                ns_log error "SEARCH: conversion failed - cannot extract text from $filename ($mime_type): $errorMsg"
+                return ""
+            } on ok {d} {
+                return [join $txt]
+            }
+        }
         text/html {
             file delete -- $tmp_filename
             #
