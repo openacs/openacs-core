@@ -21,6 +21,7 @@ if {[server_cluster_enabled_p]} {
             }
             ns_log notice "Cluster: server $host $port is a cluster peer"
             ::acs::Cluster create CS_${host}_${port} \
+                -proto $proto \
                 -host $host \
                 -port $port \
                 -url $cluster_do_url

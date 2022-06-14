@@ -67,15 +67,28 @@ ad_proc -private server_cluster_my_config {} {
     return [list host $my_ips port $my_ports]
 }
 
-ad_proc -private server_cluster_get_config {hostport} {
+ad_proc -private server_cluster_get_config {location} {
     Return a dict parsed from the host and port spec.
-    If no port is specified, it defaults to 80
+    If no port is specified, it defaults to 80.
+    If no scheme is specified, it defaults to "http".
+    In case the hostname is provided as an DNS name, it is resolved.
 
-    @param hostport IP address with optional port
-    @return dict containing host and port
+    @param location location (e.g., https://localhost:8443) or just host with optional port
+    @return dict containing proto, host, and port
 } {
-    set d {port 80}
-    return [dict merge $d [ns_parsehostport $hostport]]
+    set d {port 80 proto http}
+    if {[regexp  {^([^:]+)://} $location . proto]} {
+        if {$proto eq "https"} {
+            set d {port 443 proto https}
+        }
+        set d [dict merge $d [ns_parseurl $location]]
+        dict unset d tail
+        dict unset d path
+    } else {
+        set d [dict merge $d [ns_parsehostport $location]]
+    }
+    dict set d host [ns_addrbyhost [dict get $d host]]
+    return $d
 }
 
 

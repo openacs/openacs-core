@@ -576,6 +576,7 @@ namespace eval ::acs {
     }
 
     nx::Class create Cluster {
+        :property {proto http}
         :property host
         :property {port 80}
         :property {url /acs-cluster-do}
@@ -713,15 +714,14 @@ namespace eval ::acs {
         }
 
         :public method message args {
-            :log "--cluster outgoing request to ${:host}:${:port} // $args"
+            :log "--cluster outgoing request to ${:proto}://${:host}:${:port} // $args"
             try {
-                ns_http run http://${:host}:${:port}/${:url}?cmd=[ns_urlencode $args]
+                ns_http run ${:proto}://${:host}:${:port}/${:url}?cmd=[ns_urlencode $args]
             } on error {errorMsg} {
-                ns_log warning "-cluster: send message to http://${:host}:${:port}/${:url}?cmd=[ns_urlencode $args] failed: $errorMsg"
+                ns_log warning "-cluster: send message to ${:proto}://${:host}:${:port}/${:url}?cmd=[ns_urlencode $args] failed: $errorMsg"
             } on ok {result} {
                 ns_log notice "-cluster: response $result"
             }
-            #util::http::get -url
         }
     }
 }
