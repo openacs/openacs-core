@@ -334,7 +334,7 @@ ad_proc -private template::adp_prepare {} {
             set __adp_remember_stub $__adp_stub
 
             # Ensure that data source preparation procedure exists and
-            # is up-to-date and execute it.            
+            # is up-to-date and execute it.
             [adp_init tcl $__adp_stub]
 
             # propagate aborting
@@ -388,7 +388,7 @@ ad_proc -public template::adp_init { type file_stub } {
     @param file_stub  The root (sans file extension) of the absolute path
                       to the .adp or .tcl file to source.
 } {
-    # 
+    #
     # Depending on the iconset, the result of the compiled template
     # might be different. So, cache per iconset
     #
@@ -704,11 +704,11 @@ ad_proc -public template::adp_parse_tags {HTML} {
 
     Parse the tags of the provided HTML text.  This function is
     similar to
-    
+
     <blockquote>
        template::adp_compile -string $HTML
     </blockquote>
-    
+
     but it just performs tag substitution, but not ADP variable
     substitution, since this is done differently in some contextes on
     the provided HTML chunk.  An example for specialized handling is
@@ -745,14 +745,14 @@ ad_proc -public template::adp_parse_tags {HTML} {
 }
 
 ad_proc -private template::adp_parse_tags_and_localize {HTML} {
-    
+
     Helper proc to combine "adp_parse_tags" and "lang::util::localize"
     as used in the regsub operations for resolving template variables.
-    
+
 } {
     if {$HTML ne ""} {
         #ns_log notice "YYYY adp_parse_tags_and_localize called with '$HTML'"
-        return [::lang::util::localize [adp_parse_tags $HTML]]        
+        return [::lang::util::localize [adp_parse_tags $HTML]]
     }
 }
 
