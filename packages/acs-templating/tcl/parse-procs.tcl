@@ -711,14 +711,17 @@ ad_proc -public template::adp_parse_tags {HTML} {
     
     but it just performs tag substitution, but not ADP variable
     substitution, since this is done differently in some contextes on
-    the provided HTML chunk.  An example is the handling of instance
-    attributes in xowiki.
+    the provided HTML chunk.  An example for specialized handling is
+    the handling of instance attributes in xowiki.
 
     @param HTML text containing potentially ADP tags
     @return HTML text with substituted ADP tags
 } {
     #
     #ns_log notice "adp_parse_tags BEGIN [info exists ::template::parse_list]: $HTML"
+    if {[string trim $HTML] eq ""} {
+        return $HTML
+    }
     set old_parse_list [expr {[info exists ::template::parse_list] ? $::template::parse_list : ""}]
     set ::template::parse_list ""
     #
@@ -734,7 +737,7 @@ ad_proc -public template::adp_parse_tags {HTML} {
         #ns_log notice "adp_parse_tags parse list '[join $::template::parse_list \n]'"
         set HTML [eval [join $::template::parse_list \n]]
     } on error {errorMsg} {
-        ad_log warning "adp_parse_tags failed on parsing:\n$HTML"
+        ad_log warning "adp_parse_tags failed on parsing:\n'$HTML'"
     }
     set ::template::parse_list $old_parse_list
     #ns_log notice "adp_parse_tags END: $HTML"
