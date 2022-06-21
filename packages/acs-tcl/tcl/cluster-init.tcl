@@ -2,31 +2,17 @@
 # Check if cluster is enabled, and if, set up the custer objects
 #
 if {[server_cluster_enabled_p]} {
-    set myConfig [server_cluster_my_config]
-    set cluster_do_url [::acs::Cluster eval {set :url}]
 
     #
-    # Iterate over all servers in the cluster and add Cluster objects
-    # for the ones, which are different from the current host (the
-    # peer hosts).
+    # Register the nodes, which are available at startup time.
     #
-    foreach hostport [server_cluster_all_hosts] {
-        set config [server_cluster_get_config $hostport]
-        dict with config {
-            if {$host in [dict get $myConfig host]
-                && $port in [dict get $myConfig port]
-            } {
-                ns_log notice "Cluster: server $host $port is no cluster peer"
-                continue
-            }
-            ns_log notice "Cluster: server $host $port is a cluster peer"
-            ::acs::Cluster create CS_${host}_${port} \
-                -proto $proto \
-                -host $host \
-                -port $port \
-                -url $cluster_do_url
-        }
-    }
+    ::acs::Cluster register_nodes
+
+    #
+    # Update the blueprint every 60s in case the cluster configuration
+    # has changed, or cluster nodes become available or unavailable.
+    #
+    ad_schedule_proc -all_servers t 20 ::acs::Cluster refresh_blueprint
 
     foreach ip [parameter::get -package_id $::acs::kernel_id -parameter ClusterAuthorizedIP] {
         if {[string first * $ip] > -1} {
