@@ -292,7 +292,7 @@ ad_proc -public template::widget::captcha {
                id="$captcha_checksum_id"
                name="$captcha_checksum_id"
                value="$checksum">
-        <div><img src="data:image/png;base64,$base64image"></div>
+        <div><img style="width:100%" src="data:image/png;base64,$base64image"></div>
         <div>[input text element $tag_attributes]</div>
     }]
 }
