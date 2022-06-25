@@ -525,10 +525,10 @@ ad_proc -deprecated template::util::list_opts { {array_ref opts} } {
 
 ad_proc -deprecated template::util::tcl_to_sql_list { lst } {
     Convert a Tcl list to a SQL list, for use with the "in" statement.
-    Uses double single quotes (similar to ns_dbquotevalue) to escape single quotes
+    Uses double single quotes to escape single quotes in values.
 
-    DEPRECATED: NaviServer now provides a native api for this and a
-    tcl-implemented fallback exists in current OpenACS code.
+    DEPRECATED: NaviServer now provides a native API ns_dbquotelist for this; a
+    tcl-implemented fallback for older NaviServer versions exists in current OpenACS code.
 
     @see ns_dbquotelist
 } {
