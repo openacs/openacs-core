@@ -7,6 +7,7 @@ ad_library {
 aa_register_case -cats {
     api
     smoke
+    stress
 } -procs {
     template::widget::captcha
     template::data::validate::captcha
