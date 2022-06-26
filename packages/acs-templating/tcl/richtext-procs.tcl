@@ -372,7 +372,7 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
     Example for the use of the <strong>xinha</strong> widget with options:
     <pre>
     text:richtext(richtext),nospell,optional
-    {label #xowiki.content#}
+    {label Content}
     {options {editor xinha plugins OacsFs height 350px file_types %pdf%}}
     {html {rows 15 cols 50 style {width: 100%}}}
     </pre>
