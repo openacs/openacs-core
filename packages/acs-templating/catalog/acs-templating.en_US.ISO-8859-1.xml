@@ -106,7 +106,6 @@
   <msg key="Page">Page</msg>
   <msg key="Page_Size">Page Size</msg>
   <msg key="Plain_Text">Plain Text</msg>
-  <msg key="Please_enter_the_captcha">Please enter the characters displayed in the captcha</msg>
   <msg key="Previous_with_arrow">&lt;&lt; Previous</msg>
   <msg key="required">required</msg>
   <msg key="reverse_sort_order_of_label">Reverse the sort order of %label%</msg>
@@ -131,5 +130,4 @@
   <msg key="Year">Year</msg>
   <msg key="year">year</msg>
   <msg key="Year_must_be_positive">Year must be positive</msg>
-  <msg key="Your_captcha_is_invalid">Your captcha is invalid</msg>
 </message_catalog>

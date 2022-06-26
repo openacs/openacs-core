@@ -10,4 +10,3 @@
 -- http://www.fsf.org/copyleft/gpl.html
 
 \i demo-create.sql
-\i captcha-create.sql
