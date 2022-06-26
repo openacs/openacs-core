@@ -316,7 +316,8 @@ ad_proc -private lang::user::site_wide_locale_not_cached {
     set system_locale [lang::system::site_wide_locale]
 
     if { $user_id == 0 } {
-        set locale [ad_get_cookie "ad_locale"]
+        set cookie_name [security::cookie_name locale]
+        set locale [ad_get_cookie $cookie_name]
         if {$locale ne ""} {
             #
             # Check, if someone hacked the cookie
@@ -327,7 +328,7 @@ ad_proc -private lang::user::site_wide_locale_not_cached {
                 #
                 # The cookie was invalid, so get rid of it.
                 #
-                ad_unset_cookie "ad_locale"
+                ad_unset_cookie $cookie_name
             }
         }
         #
@@ -402,7 +403,8 @@ ad_proc -public lang::user::set_locale {
 
     if { $user_id == 0 } {
         # Not logged in, use a cookie-based client locale
-        ad_set_cookie -replace t -max_age inf "ad_locale" $locale
+        set cookie_name [security::cookie_name locale]
+        ad_set_cookie -replace t -max_age inf -samesite strict $cookie_name $locale
 
         # Flush the site-wide user preference cache
         util_memoize_flush [list lang::user::site_wide_locale_not_cached $user_id]
