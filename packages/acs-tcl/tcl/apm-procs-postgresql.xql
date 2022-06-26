@@ -3,17 +3,6 @@
 <queryset>
    <rdbms><type>postgresql</type><version>7.1</version></rdbms>
 
-<fullquery name="apm_highest_version.apm_highest_version">
-      <querytext>
-
-	select  apm_package__highest_version (
-                    :package_key
-		    );
-
-      </querytext>
-</fullquery>
-
-
 <fullquery name="apm_highest_version_name.apm_highest_version_name">
       <querytext>
 

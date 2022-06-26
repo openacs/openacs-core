@@ -41,7 +41,12 @@ ad_proc -public parameter::set_global_value {
     @param value what value to set said parameter to
 } {
 
-    db_exec_plsql set_parameter_value {}
+    #db_exec_plsql set_parameter_value {}
+
+    ::acs::dc call apm set_value \
+        -package_key $package_key \
+        -parameter $parameter \
+        -attr_value $value
 
     acs::clusterwide callback subsite::global_parameter_changed \
         -package_key $package_key \
@@ -119,7 +124,20 @@ ad_proc -public parameter::set_value {
         set package_id [ad_requested_object_id]
     }
 
+    #
+    # We have two different definitions of set_parameter_value/3 with
+    # differently typed arguments.  Polyphorism is not supported
+    # yet. We should define set_value/4, or mirror the names we have
+    # here (set_value vs. set_global_value). For the time being, we
+    # keep the xql files for "db_exec_plsql" around, maybe some other
+    # use cases hint a different approach.
+    #
     db_exec_plsql set_parameter_value {}
+
+    #::acs::dc call apm set_value \
+    #    -package_id $package_id \
+    #    -parameter_name $parameter \
+    #    -attr_value $value
 
     acs::clusterwide callback subsite::parameter_changed \
         -package_id $package_id \
@@ -218,7 +236,7 @@ if {![db_table_exists apm_parameters]} {
         {-default ""}
     } {
         ns_log notice "parameter::get_from_package_key: called during initialization:" \
-            "$package_key.$parameter -> '$default' (default)" 
+            "$package_key.$parameter -> '$default' (default)"
         return $default
     }
 

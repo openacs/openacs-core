@@ -3,19 +3,6 @@
 <queryset>
    <rdbms><type>oracle</type><version>8.1.6</version></rdbms>
 
-<fullquery name="apm_highest_version.apm_highest_version">
-      <querytext>
-
-	begin
-	:1 := apm_package.highest_version (
-                    package_key => :package_key
-		    );
-	end;
-
-      </querytext>
-</fullquery>
-
-
 <fullquery name="apm_highest_version_name.apm_highest_version_name">
       <querytext>
 

@@ -1067,7 +1067,7 @@ ad_proc -public apm_highest_version {package_key} {
     Return the highest version of the indicated package.
     @return the version_id of the highest installed version of a package.
 } {
-    return [db_exec_plsql apm_highest_version {}]
+    return [acs::dc call apm_package highest_version -package_key $package_key]
 }
 
 ad_proc -public apm_highest_version_name {package_key} {

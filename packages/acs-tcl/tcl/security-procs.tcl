@@ -874,7 +874,7 @@ ad_proc -private sec_update_user_session_info {
     db_release_unused_handles
 }
 
-ad_proc -private security::cookie_name {plain_name} {
+ad_proc security::cookie_name {plain_name} {
 
 } {
     #
