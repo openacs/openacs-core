@@ -138,7 +138,7 @@ if { [auth::UseEmailForLoginP] } {
     ad_form -extend -name login \
         -form [list [list email:text($email_widget),nospell \
                          [list label "[_ acs-subsite.Email]"] \
-                         {html {style "width: 150px"  autocomplete "email"}}]]
+                         {html {style "width: 300px"  autocomplete "email"}}]]
     set user_id_widget_name email
     if { $email ne "" } {
         set focus "password"
@@ -159,7 +159,7 @@ if { [auth::UseEmailForLoginP] } {
     ad_form -extend -name login \
         -form [list [list username:text($username_widget),nospell \
                          [list label "[_ acs-subsite.Username]"] \
-                         {html {style "width: 150px" autocomplete "username"} }]]
+                         {html {style "width: 300px" autocomplete "username"} }]]
     set user_id_widget_name username
     if { $username ne "" } {
         set focus "password"
@@ -172,7 +172,7 @@ set focus "login.$focus"
 ad_form -extend -name login -form {
     {password:text(password)
         {label "[_ acs-subsite.Password]"}
-        {html {style "width: 150px" autocomplete "$password_autocomplete"}}
+        {html {style "width: 300px" autocomplete "$password_autocomplete"}}
     }
 }
 
