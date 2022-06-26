@@ -665,7 +665,7 @@ aa_register_case -cats {
 
 aa_register_case \
     -error_level warning \
-    -cats {smoke production_safe} \
+    -cats {smoke production_safe stress} \
     api__smells_of_hacking {
         Searches for "smells of hacking" inside every proc's doc and
         body.

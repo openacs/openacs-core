@@ -917,7 +917,10 @@ ad_proc -private api_add_calling_info_to_procdoc {{proc_name "*"}} {
     #
     set init_files packages/acs-bootstrap-installer/bootstrap.tcl
     foreach package_key [apm_enabled_packages] {
-        foreach file [apm_get_package_files -package_key $package_key -file_types {tcl_init content_page include_page}] {
+        foreach file [apm_get_package_files \
+                          -package_key $package_key \
+                          -file_types \
+                          {tcl_init content_page include_page}] {
             if {[file extension $file] eq ".tcl"} {
                 lappend init_files packages/$package_key/$file
             }
@@ -1091,7 +1094,7 @@ ad_proc -private api_call_graph_snippet {
     #
     set called_procs {}
     foreach c [api_called_proc_names -proc_name $proc_name] {
-        if {[namespace which $c] eq $c
+        if {[namespace which $c] eq "::$c"
             && $c ni $callers
             && $c ne $proc_name
         } {
@@ -2079,7 +2082,7 @@ ad_proc api_proc_url { {-source:boolean 1} proc } {
 }
 
 ad_proc -private api_proc_doc_url {-proc_name -source_p -version_id} {
-    Return the procdic url from procname and optionally from source_p and version_id
+    Return the procdoc url from procname and optionally from source_p and version_id
 } {
     if {[string range $proc_name 0 0] eq " " && [lindex $proc_name 0] in {Object Class}} {
         set object [lindex $proc_name end]
