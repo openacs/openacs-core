@@ -64,6 +64,7 @@ ad_proc -public aa::coverage::proc_list {
                          && !($proc_doc(deprecated_p) || $proc_doc(warn_p))
                          && ![regexp {^callback::.*::contract$} $proc_name]
                          && ![string match xo::db::sql::* $proc_name]
+                         && ![string match acs::db::nsdb* $proc_name]
                          && ![string match " Class *" $proc_name]
                          && ![string match " Object *" $proc_name]
                      } {

@@ -2082,6 +2082,7 @@ namespace eval acs::test::user {
 
     ad_proc ::acs::test::user::delete {
         {-user_id:required}
+        {-delete_created_acs_objects:boolean false}
     } {
         Remove a test user.
     } {
@@ -2095,13 +2096,19 @@ namespace eval acs::test::user {
             SET modifying_user = NULL
             where modifying_user = :user_id
         }
+        #
+        # If desired, delete the created acs_objects of this user.
+        #
+        if {$delete_created_acs_objects_p} {
+            db_dml unset_modifying_user {
+                delete from acs_objects where creation_user = :user_id
+            }
+        }
         acs_user::delete \
             -user_id $user_id \
             -permanent
     }
-
 }
-
 
 
 

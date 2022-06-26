@@ -95,6 +95,13 @@ db_foreach acs-automated-testing.results_queryx {
                 }
             } else {
                 # No category specified, add results.
+                set categories  [lindex $results($testcase_id,$package_key) 2]
+
+                ns_log notice "$testcase_id,$package_key categories /$categories/"
+                if {"stress" in $categories && !$stress} {
+                    continue
+                }
+                
                 incr package_total
                 incr package_pass     $passes
                 incr package_fail     $fails
@@ -129,7 +136,7 @@ if {$view_by eq "package"} {
         set proc_coverage [dict get [aa::coverage::proc_coverage -package_key $package_key] coverage]
         set proc_coverage_level [aa::coverage::proc_coverage_level $proc_coverage]
         set color [aa::percentage_to_color $proc_coverage]
-        #ns_log notice "view_by $view_by package_key=$package_key $proc_coverage_level $proc_coverage_color"
+        #ns_log notice "view_by $view_by package_key=$package_key $proc_coverage_level $color"
 
         set url [export_vars -base index -url {
             stress security_risk quiet
@@ -157,6 +164,11 @@ if {$view_by eq "package"} {
     foreach testcase [lsort [nsv_get aa_test cases]] {
         set testcase_id [lindex $testcase 0]
         set package_key [lindex $testcase 3]
+        set categories [lindex $testcase 4]
+        
+        if {"stress" in $categories && !$stress} {
+            continue
+        }
 
         lassign $results($testcase_id,$package_key) testcase_desc . categories \
             testcase_timestamp testcase_passes testcase_fails testcase_warnings
