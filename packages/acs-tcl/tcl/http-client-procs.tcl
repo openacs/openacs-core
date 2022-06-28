@@ -14,7 +14,7 @@ ad_library {
 namespace eval util {}
 namespace eval util::http {}
 
-ad_proc -private util::http::set_cookies {
+ad_proc -public util::http::set_cookies {
     -resp_headers:required
     {-headers ""}
     {-cookie_names ""}
