@@ -937,7 +937,7 @@ ad_proc ad_parse_html_attributes_upvar {
             # move past the tag-opening <
             incr i
 
-            if { ![regexp -indices -start $i {\A/?([-_a-zA-Z0-9]+)\s*} $html match name_idx] } {
+            if { ![regexp -indices -start $i {\A/?([-_a-zA-Z0-9:]+)\s*} $html match name_idx] } {
                 # The tag-opener isn't followed by USASCII letters (with or without optional initial slash)
                 # Not considered a tag. Shouldn't do any harm in browsers.
                 # (Tested with digits, with &#65; syntax, with whitespace)

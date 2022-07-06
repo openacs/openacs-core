@@ -9,7 +9,7 @@
     <implements-subsite-p>f</implements-subsite-p>
     <inherit-templates-p>t</inherit-templates-p>
 
-    <version name="5.10.1d7" url="http://openacs.org/repository/download/apm/acs-kernel-5.10.1d7.apm">
+    <version name="5.10.1d8" url="http://openacs.org/repository/download/apm/acs-kernel-5.10.1d8.apm">
         <owner url="mailto:oct@openacs.org">OpenACS Core Team</owner>
         <summary>Routines and data models providing the foundation for OpenACS-based Web services.</summary>
         <release-date>2021-09-15</release-date>
@@ -17,7 +17,7 @@
         <description format="text/html">The OpenACS kernel contains the core datamodel create and drop scripts for such things as objects, groups, parties and the supporting PL/SQL and PL/pgSQL procedures.</description>
         <maturity>3</maturity>
 
-        <provides url="acs-kernel" version="5.10.1d7"/>
+        <provides url="acs-kernel" version="5.10.1d8"/>
 
         <callbacks>
         </callbacks>
@@ -26,7 +26,7 @@
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="AllowPersistentLoginP"  default="1" description="do we allow persistent logins?" section_name="security"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="AllowedAttribute"  default="align alt border cellpadding cellspacing color face height href hspace id name size src style target title valign vspace width colspan rowspan class" description="A space separated list of allowed attribute names, e.g. title, src, etc.. You probably want to avoid onMouseOver and the like. Add a * to always allow all attributes." section_name="antispam"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="AllowedProtocol"  default="http https ftp mailto" description="A space separated list of protocols that are valid attributes of HTML tags in submitted content. Add a * to always all all protocols." section_name="antispam"/>
-            <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="AllowedTag"  default="A ADDRESS B BLOCKQUOTE BR CODE DIV DD DL DT EM FONT HR I LI OL P PRE SPAN STRIKE STRONG SUB SUP TABLE TBODY TD TR TT U UL EMAIL FIRST_NAMES LAST_NAME GROUP_NAME H1 H2 H3 H4 H5 H6" description="A space separated list of all the HTML tags that people may use. Add a * to always allow all tags." section_name="antispam"/>
+            <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="AllowedTag"  default="A ADDRESS ADP:ICON B BLOCKQUOTE BR CODE DIV DD DL DT EM FONT HR I LI OL P PRE SPAN STRIKE STRONG SUB SUP TABLE TBODY TD TR TT U UL EMAIL FIRST_NAMES LAST_NAME GROUP_NAME H1 H2 H3 H4 H5 H6" description="A space separated list of all the HTML tags that people may use. Add a * to always allow all tags." section_name="antispam"/>
             <parameter scope="instance" datatype="number"  min_n_values="1"  max_n_values="1"  name="ApprovalExpirationDays"  default="0" description="The number of days after which registration approval expires, which will cause the user to change state to &#39;needs_approval&#39;. Set to 0 to disable expiration of approval." section_name="security"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="BugTrackerInstance"  description="Use this parameter to indicate the instance of the bug tracker where the errors will be automatically submitted. You must use a relative url indicating where is mounted the instance of the bug tracker. For instance, if you have your bug tracker instance mounted under &#34;/bug&#34;, this parameter must be &#34;/bug&#34;.  Leave this parameter in blank if you do not want to use it." section_name="request-processor"/>
             <parameter scope="instance" datatype="number"  min_n_values="1"  max_n_values="1"  name="CSPEnabledP"  default="1" description="Enable automated generation of W3C ontent Security Policies (CSP)" section_name="security"/>
