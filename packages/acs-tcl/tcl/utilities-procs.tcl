@@ -1936,6 +1936,8 @@ ad_proc -public util_current_location {} {
 
     set default_port(http) 80
     set default_port(https) 443
+    set default_port(udp) 8000
+
     #
     # The package parameter "SuppressHttpPort" might be set when the
     # server is behind a proxy to hide the internal port.
