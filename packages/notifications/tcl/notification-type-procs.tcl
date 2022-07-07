@@ -78,7 +78,7 @@ namespace eval notification::type {
     } {
 	Remove a notification type. This is very rare.
     } {
-        set type_id [get_type_id -short_name $short_name]
+        set type_id [notification::type::get_type_id_not_cached $short_name]
 
         db_exec_plsql delete_notification_type {}
 
