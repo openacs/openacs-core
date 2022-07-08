@@ -45,13 +45,14 @@ aa_register_case \
         notification::request::request_ids
         notification::request::subscribers
         notification::new
+        notification::mark_sent
         notification::get_delivery_methods
-        notification::delivery::get_id
         notification::get_all_intervals
         notification::get_intervals
-        notification::interval::get_id_from_name
         notification::delete
         notification::email::get_package_id
+        notification::delivery::get_id
+        notification::interval::get_id_from_name
     } \
     notification_api_tests {
         Tests various API in the package
@@ -274,6 +275,16 @@ aa_register_case \
                     where type_id = :type_id and object_id = :object_id
                 }]
 
+            aa_log "Mark the notification on object '$object_id' to user '$user_id' as sent"
+            notification::mark_sent \
+                -notification_id $notification_id \
+                -user_id $user_id
+            aa_true "Notification was marked as expected" [db_0or1row q {
+                select 1 from notification_user_map
+                where notification_id = :notification_id
+                and user_id = :user_id
+            }]
+
             aa_log "Deleting the new notification '$notification_id'"
             notification::delete -notification_id $notification_id
 
@@ -317,5 +328,72 @@ aa_register_case \
             aa_false "No requests anymore" \
                 [db_0or1row q {select 1 from notification_requests where request_id = :request_id}]
 
+        }
+    }
+
+aa_register_case \
+    -cats {api smoke} \
+    -procs {
+        notification::delivery::new
+        notification::delivery::delete
+        notification::delivery::get_id
+    } \
+    notification_delivery_tests {
+        Tests delivery API
+    } {
+        aa_run_with_teardown -rollback -test_code {
+            db_1row q {
+                select delivery_method_id,
+                       sc_impl_id,
+                       short_name,
+                       pretty_name
+                from notification_delivery_methods
+                fetch first 1 rows only
+            }
+
+            aa_false "Trying to lookup the deleted delivery method succeeds" [catch {
+                notification::delivery::get_id -short_name $short_name
+            } errmsg]
+
+            aa_log "Deleting method '$short_name'"
+            notification::delivery::delete -delivery_method_id $delivery_method_id
+
+            aa_true "Trying to lookup the deleted delivery method fails" [catch {
+                notification::delivery::get_id -short_name $short_name
+            } errmsg]
+
+            aa_log "Recreating the delivery method as a new object"
+            set new_delivery_method_id [notification::delivery::new \
+                                            -sc_impl_id $sc_impl_id \
+                                            -short_name $short_name \
+                                            -pretty_name $pretty_name]
+
+            aa_true "The delivery method was recreated as expected " [db_0or1row q {
+                select 1
+                from notification_delivery_methods
+                where delivery_method_id = :new_delivery_method_id
+                  and sc_impl_id = :sc_impl_id
+                  and short_name = :short_name
+                  and pretty_name = :pretty_name
+            }]
+
+            aa_log "Deleting method '$short_name' again"
+            notification::delivery::delete -delivery_method_id $new_delivery_method_id
+
+            aa_log "Recreating the delivery method with the old id"
+            notification::delivery::new \
+                -delivery_method_id $delivery_method_id \
+                -sc_impl_id $sc_impl_id \
+                -short_name $short_name \
+                -pretty_name $pretty_name
+
+            aa_true "The delivery method was recreated as expected " [db_0or1row q {
+                select 1
+                from notification_delivery_methods
+                where delivery_method_id = :delivery_method_id
+                  and sc_impl_id = :sc_impl_id
+                  and short_name = :short_name
+                  and pretty_name = :pretty_name
+            }]
         }
     }
