@@ -46,7 +46,7 @@ aa_register_case \
         notification::request::subscribers
         notification::new
         notification::get_delivery_methods
-        notification::get_delivery_method_id
+        notification::delivery::get_id
         notification::get_all_intervals
         notification::get_intervals
         notification::interval::get_id_from_name
@@ -141,7 +141,7 @@ aa_register_case \
             foreach m $all_delivery_methods {
                 lassign $m id name
                 aa_equals "Lookup delivery method '$name' returns the right id" \
-                    [notification::get_delivery_method_id -name $name] $id
+                    [notification::delivery::get_id -name $name] $id
             }
 
             set one_delivery_method_id [lindex $delivery_methods 0 1]

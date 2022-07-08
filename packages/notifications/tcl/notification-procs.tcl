@@ -38,11 +38,16 @@ namespace eval notification {
         return [db_string select_interval_id {} -default ""]
     }
 
-    ad_proc -public get_delivery_method_id {
+    ad_proc -deprecated get_delivery_method_id {
         {-name:required}
     } {
         obtain the delivery method ID with the given name.
         Delivery method names are unique, but are not the primary key.
+
+        DEPRECATED: an API doing the exact same thing was moved into
+        an own namespace
+
+        @see notification::get_delivery_method_id
     } {
         return [db_string select_delivery_method_id {} -default ""]
     }
