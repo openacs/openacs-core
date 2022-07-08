@@ -29,7 +29,7 @@ set delivery_methods [notification::get_delivery_methods -type_id $type_id]
 #if group_id parameter exists then all users of this community are subscribed if they're not already subscribed
 if {$group_id ne ""} {        
     set interval_id [notification::interval::get_id_from_name -name instant]
-    set delivery_method_id [notification::delivery::get_id -name email]
+    set delivery_method_id [notification::delivery::get_id -short_name email]
         
     db_foreach get_member_id {} {
         # Add notification for this user if they're not already subscribed for an instant alert        

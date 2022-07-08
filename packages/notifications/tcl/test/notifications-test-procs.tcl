@@ -141,7 +141,7 @@ aa_register_case \
             foreach m $all_delivery_methods {
                 lassign $m id name
                 aa_equals "Lookup delivery method '$name' returns the right id" \
-                    [notification::delivery::get_id -name $name] $id
+                    [notification::delivery::get_id -short_name $name] $id
             }
 
             set one_delivery_method_id [lindex $delivery_methods 0 1]

@@ -225,7 +225,7 @@ namespace eval notification {
                 if { $default_request_data eq "" } {
                     set default_request_data [list \
                             interval_id [notification::interval::get_id_from_name -name "instant"] \
-                            delivery_method_id [notification::delivery::get_id -name "email"] \
+                            delivery_method_id [notification::delivery::get_id -short_name "email"] \
                             format "text"]
                 }
                 array set default_request $default_request_data
