@@ -51,12 +51,19 @@ aa_register_case \
         notification::get_intervals
         notification::interval::get_id_from_name
         notification::delete
+        notification::email::get_package_id
     } \
     notification_api_tests {
         Tests various API in the package
     } {
+        aa_section "We start with the easy stuff..."
+
         aa_equals "This API returns a constant..." \
             [notification::package_key] notifications
+
+        aa_equals "This API return the package id of the notifications instance" \
+            [notification::email::get_package_id] \
+            [apm_package_id_from_key notifications]
 
         aa_run_with_teardown -rollback -test_code {
             aa_section "Creating a notification type..."
@@ -105,9 +112,9 @@ aa_register_case \
             }
 
             aa_equals "No delivery methods have been assigned to the new type" \
-                0 [db_string q {select count(*) from notification_types_del_methods where type_id = :type_id}]
+                0 [llength [notification::get_delivery_methods -type_id $type_id]]
             aa_equals "No intervals have been assigned to the new type" \
-                0 [db_string q {select count(*) from notification_types_intervals where type_id = :type_id}]
+                0 [llength [notification::get_intervals -type_id $type_id]]
 
             aa_log "Deleleting notification type '$short_name'"
             notification::type::delete -short_name $short_name
