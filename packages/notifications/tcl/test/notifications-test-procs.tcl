@@ -27,8 +27,13 @@ aa_register_case \
         notification::package_key
         acs_sc::impl::new_from_spec
         notification::type::new
+        notification::type::get
         notification::type::get_type_id
         notification::type::get_impl_key
+        notification::type::delivery_method_enable
+        notification::type::delivery_method_disable
+        notification::type::interval_enable
+        notification::type::interval_disable
         notification::type::delete
         notification::request::new
         notification::request::delete
@@ -44,7 +49,7 @@ aa_register_case \
         notification::get_delivery_method_id
         notification::get_all_intervals
         notification::get_intervals
-        notification::get_interval_id
+        notification::interval::get_id_from_name
         notification::delete
     } \
     notification_api_tests {
@@ -92,12 +97,12 @@ aa_register_case \
             aa_equals "Implementation key retrieval works as expected" \
                 "notifications_test_notif_type" $impl_key
 
-            aa_equals "Short name is correct" \
-                $short_name [db_string q {select short_name from notification_types where type_id = :type_id}]
-            aa_equals "Description is correct" \
-                $description [db_string q {select description from notification_types where type_id = :type_id}]
-            aa_equals "Service Contract Implementation id is correct" \
-                $sc_impl_id [db_string q {select sc_impl_id from notification_types where type_id = :type_id}]
+            aa_log "Fetching the new type"
+            notification::type::get -short_name $short_name \
+                -column_array notif
+            foreach {key value} [array get notif] {
+                aa_equals "'$key' is correct" [set $key] $notif($key)
+            }
 
             aa_equals "No delivery methods have been assigned to the new type" \
                 0 [db_string q {select count(*) from notification_types_del_methods where type_id = :type_id}]
@@ -122,7 +127,7 @@ aa_register_case \
                 -all_intervals \
                 -all_delivery_methods
 
-            aa_section "Some fun with the delivery methods and intervals API"
+            aa_section "Some fun with the delivery methods API"
 
             set all_delivery_methods [db_list_of_lists q {
                 select delivery_method_id, short_name
@@ -139,6 +144,18 @@ aa_register_case \
                     [notification::get_delivery_method_id -name $name] $id
             }
 
+            set one_delivery_method_id [lindex $delivery_methods 0 1]
+            aa_log "Disabling delivery method '$one_delivery_method_id' for type '$type_id'"
+            notification::type::delivery_method_disable -type_id $type_id -delivery_method_id $one_delivery_method_id
+            aa_equals "Delivery methods are one less for the type" \
+                [llength [notification::get_delivery_methods -type_id $type_id]] [expr {[llength $delivery_methods] - 1}]
+            aa_log "Enabling delivery method '$one_delivery_method_id' for type '$type_id' again"
+            notification::type::delivery_method_enable -type_id $type_id -delivery_method_id $one_delivery_method_id
+            aa_equals "Delivery methods are back as before" \
+                [lsort $delivery_methods] [lsort [notification::get_delivery_methods -type_id $type_id]]
+
+            aa_section "Some fun with the intervals API"
+
             set all_intervals [notification::get_all_intervals]
             set intervals [notification::get_intervals -localized -type_id $type_id]
             aa_equals "All intervals have been assigned to the new type" \
@@ -148,8 +165,18 @@ aa_register_case \
                 lassign $i name id seconds
                 aa_true "Seconds '$seconds' is an integer" [string is integer -strict $seconds]
                 aa_equals "Lookup interval '$name' returns the right id" \
-                    [notification::get_interval_id -name $name] $id
+                    [notification::interval::get_id_from_name -name $name] $id
             }
+
+            set one_interval_id [lindex $intervals 0 1]
+            aa_log "Disabling interval '$one_interval_id' for type '$type_id'"
+            notification::type::interval_disable -type_id $type_id -interval_id $one_interval_id
+            aa_equals "Intervals are one less for the type" \
+                [llength [notification::get_intervals -type_id $type_id]] [expr {[llength $intervals] - 1}]
+            aa_log "Enabling interval '$one_interval_id' for type '$type_id' again"
+            notification::type::interval_enable -type_id $type_id -interval_id $one_interval_id
+            aa_equals "Intervals are back as before" \
+                [lsort $intervals] [lsort [notification::get_intervals -type_id $type_id]]
 
             aa_section "Creating a notification with no subscriptions..."
 
@@ -172,18 +199,8 @@ aa_register_case \
                 [db_0or1row q {select 1 from notifications where type_id = :type_id}]
 
             aa_section "Generating some subscriptions..."
-            set delivery_method_id [db_string q {
-                select delivery_method_id
-                from notification_types_del_methods
-                where type_id = :type_id
-                fetch first 1 rows only
-            }]
-            set interval_id [db_string q {
-                select interval_id
-                from notification_types_intervals
-                where type_id = :type_id
-                fetch first 1 rows only
-            }]
+            set delivery_method_id $one_delivery_method_id
+            set interval_id $one_interval_id
 
             aa_log "Creating a subscription for user_id '$user_id' on object_id '$object_id' and type_id '$type_id'"
             set request_id [notification::request::new \

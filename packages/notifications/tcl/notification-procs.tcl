@@ -24,11 +24,16 @@ namespace eval notification {
         return "notifications"
     }
 
-    ad_proc -public get_interval_id {
+    ad_proc -deprecated get_interval_id {
         {-name:required}
     } {
         obtain the interval ID for an interval with the given name.
         Interval names are unique, but are not the primary key.
+
+        DEPRECATED: an API doing the exact same thing was moved into
+        an own namespace
+
+        @see notification::interval::get_id_from_name
     } {
         return [db_string select_interval_id {} -default ""]
     }
@@ -214,7 +219,7 @@ namespace eval notification {
 
                 if { $default_request_data eq "" } {
                     set default_request_data [list \
-                            interval_id [get_interval_id -name "instant"] \
+                            interval_id [notification::interval::get_id_from_name -name "instant"] \
                             delivery_method_id [get_delivery_method_id -name "email"] \
                             format "text"]
                 }
