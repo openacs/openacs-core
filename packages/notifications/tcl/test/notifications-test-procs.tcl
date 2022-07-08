@@ -26,6 +26,8 @@ aa_register_case \
     -procs {
         acs_sc::impl::new_from_spec
         notification::type::new
+        notification::type::get_type_id
+        notification::type::get_impl_key
         notification::type::delete
         notification::request::new
         notification::request::delete
@@ -40,7 +42,7 @@ aa_register_case \
         notification::delete
     } \
     notification_api_tests {
-        Test the registration of a parameter
+        Tests various API in the package
     } {
         aa_run_with_teardown -rollback -test_code {
             aa_section "Creating a notification type..."
@@ -73,6 +75,13 @@ aa_register_case \
                              -short_name $short_name \
                              -pretty_name $pretty_name \
                              -description $description]
+
+            set api_type_id [notification::type::get_type_id -short_name $short_name]
+            aa_equals "id from API is the same as that from creation" $api_type_id $type_id
+
+            set impl_key [notification::type::get_impl_key -type_id $type_id]
+            aa_equals "Implementation key retrieval works as expected" \
+                "notifications_test_notif_type" $impl_key
 
             aa_equals "Short name is correct" \
                 $short_name [db_string q {select short_name from notification_types where type_id = :type_id}]
