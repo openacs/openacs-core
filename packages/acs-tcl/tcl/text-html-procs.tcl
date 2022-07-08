@@ -1066,8 +1066,16 @@ ad_proc ad_parse_html_attributes_upvar {
 
         set lmarker "<$marker>"
         set rmarker "</$marker>"
-        set doc [dom createDocument $marker]
-        set root [$doc documentElement]
+        if {[package vsatisfies [package require tdom] 0.9.3]} {
+            # tDOM 0.9.3 expects HTML DOM trees to be wrapped by an
+            # HTML element, if they are to be serialized properly.
+            set doc [dom createDocument html]
+            set root [[$doc documentElement] appendChild \
+                          [$doc createElement $marker]]
+        } else {
+            set doc [dom createDocument $marker]
+            set root [$doc documentElement]
+        }
 
         set queue {}
         lappend queue [list $root [$tree children [$tree children root]]]
@@ -1482,7 +1490,15 @@ ad_proc ad_parse_html_attributes_upvar {
             $doc delete
             return 1
         } else {
-            set html [$root asHTML]
+            if {[package vsatisfies [package require tdom] 0.9.3]} {
+                # tDOM 0.9.3 will return the tree including the
+                # parent.  To keep the previous behavior, one should
+                # specify the -onlyContents flag, that previous
+                # versions do not support.
+                set html [$root asHTML -onlyContents]
+            } else {
+                set html [$root asHTML]
+            }
             $doc delete
             # remove auxiliary root element from output
             set html [string range $html [string length $lmarker] end-[string length $rmarker]]
