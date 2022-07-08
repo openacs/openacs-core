@@ -24,6 +24,7 @@ ad_proc -private notification::test::notification__process_reply {
 aa_register_case \
     -cats {api smoke} \
     -procs {
+        notification::package_key
         acs_sc::impl::new_from_spec
         notification::type::new
         notification::type::get_type_id
@@ -39,11 +40,19 @@ aa_register_case \
         notification::request::request_ids
         notification::request::subscribers
         notification::new
+        notification::get_delivery_methods
+        notification::get_delivery_method_id
+        notification::get_all_intervals
+        notification::get_intervals
+        notification::get_interval_id
         notification::delete
     } \
     notification_api_tests {
         Tests various API in the package
     } {
+        aa_equals "This API returns a constant..." \
+            [notification::package_key] notifications
+
         aa_run_with_teardown -rollback -test_code {
             aa_section "Creating a notification type..."
 
@@ -113,19 +122,34 @@ aa_register_case \
                 -all_intervals \
                 -all_delivery_methods
 
-            aa_true "All delivery methods have been assigned to the new type" \
-                [db_0or1row q {select 1 from dual where
-                    (select count(*) from notification_delivery_methods)
-                    =
-                    (select count(*) from notification_types_del_methods where type_id = :type_id)
-                }]
+            aa_section "Some fun with the delivery methods and intervals API"
 
-            aa_true "All intervals have been assigned to the new type" \
-                [db_0or1row q {select 1 from dual where
-                    (select count(*) from notification_intervals)
-                    =
-                    (select count(*) from notification_types_intervals where type_id = :type_id)
-                }]
+            set all_delivery_methods [db_list_of_lists q {
+                select delivery_method_id, short_name
+                from notification_delivery_methods
+            }]
+            set delivery_methods [notification::get_delivery_methods -type_id $type_id]
+
+            aa_equals "All delivery methods have been assigned to the new type" \
+                [llength $all_delivery_methods] [llength $delivery_methods]
+
+            foreach m $all_delivery_methods {
+                lassign $m id name
+                aa_equals "Lookup delivery method '$name' returns the right id" \
+                    [notification::get_delivery_method_id -name $name] $id
+            }
+
+            set all_intervals [notification::get_all_intervals]
+            set intervals [notification::get_intervals -localized -type_id $type_id]
+            aa_equals "All intervals have been assigned to the new type" \
+                [llength $all_intervals] [llength $intervals]
+
+            foreach i $all_intervals {
+                lassign $i name id seconds
+                aa_true "Seconds '$seconds' is an integer" [string is integer -strict $seconds]
+                aa_equals "Lookup interval '$name' returns the right id" \
+                    [notification::get_interval_id -name $name] $id
+            }
 
             aa_section "Creating a notification with no subscriptions..."
 
