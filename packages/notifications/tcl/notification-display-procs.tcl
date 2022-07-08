@@ -115,18 +115,16 @@ ad_proc -public notification::display::get_urls {
     {-return_url {}}
     {-pretty_name}
 } {
-    Get both subscribe_url and unsubscribe_url as . 
-    At most one of them will be set.
+    Get both subscribe_url and unsubscribe_url as a list. At most one
+    of them will be set.
 
-    Example: <pre>
-    foreach { subscribe_url unsubscribe_url } \
-        [notification::display::get_urls \
+    Example:
+    <pre>
+    lassign [notification::display::get_urls \
              -type "my_notif_type" \
              -object_id $object_id \
-             -pretty_name $title] {}</pre>
-
-    The above foreach trick will cause subscribe_url and unsubscribe_url 
-    to be set correctly. Don't forget the end pair of curly braces.
+             -pretty_name $title] subscribe_url unsubscribe_url
+    </pre>
 
     @return a Tcl list with two elements (subscribe_url, unsubscribe_url)
 } {
