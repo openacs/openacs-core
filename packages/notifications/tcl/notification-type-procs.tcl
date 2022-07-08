@@ -51,8 +51,7 @@ namespace eval notification::type {
             db_dml enable_all_delivery_methods {}
         }
 
-        # Cache the new type_id right away
-        set type_id [notification::type::get_type_id -short_name $short_name]
+        acs::per_thread_cache flush -pattern notifications.get_type_id($short_name)
 
         return $type_id
     }
