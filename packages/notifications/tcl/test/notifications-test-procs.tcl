@@ -589,3 +589,182 @@ aa_register_case \
                 [string match *[ns_quotehtml $unsubscribe_url]* $widget]
         }
     }
+
+aa_register_case \
+    -cats {api smoke} \
+    -procs {
+        acs_sc::impl::new_from_spec
+        notification::type::new
+        notification::request::new
+        notification::security::can_admin_request_p
+        notification::security::can_notify_object_p
+        notification::security::can_notify_user
+        notification::security::require_admin_request
+        notification::security::require_notify_object
+    } \
+    notification_permission_tests {
+        Tests permission API
+    } {
+        try {
+
+            aa_section "Create the test notification type"
+            set spec {
+                contract_name "NotificationType"
+                owner "notifications"
+                name "notifications_test_notif_type"
+                pretty_name "Notifications Test Notification Type"
+                aliases {
+                    GetURL {
+                        alias notification::test::notification__get_url
+                        language TCL
+                    }
+                    ProcessReply {
+                        alias notification::test::notification__process_reply
+                        language TCL
+                    }
+                }
+            }
+            set sc_impl_id [acs_sc::impl::new_from_spec -spec $spec]
+
+            set short_name "notifications_test_notif"
+            set pretty_name "Test Notifications"
+            set description "These dummy notification type is created during automated tests."
+
+            set type_id [notification::type::new \
+                             -sc_impl_id $sc_impl_id \
+                             -short_name $short_name \
+                             -pretty_name $pretty_name \
+                             -description $description \
+                             -all_intervals \
+                             -all_delivery_methods]
+
+            aa_section "Create a fresh object, two users and one admin"
+            set object_id [acs::test::require_package_instance -package_key acs-subsite \
+                               -instance_name "test-notification-object"]
+            acs_object::set_context_id \
+                -object_id $object_id \
+                -context_id [acs_magic_object security_context_root]
+
+            set admin_info [acs::test::user::create -admin]
+            set admin_id [dict get $admin_info user_id]
+            set user_info [acs::test::user::create]
+            set user_id [dict get $user_info user_id]
+            set user_id_2 [dict get [acs::test::user::create] user_id]
+
+            set delivery_methods [notification::get_delivery_methods -type_id $type_id]
+            set intervals [notification::get_intervals -localized -type_id $type_id]
+            set one_delivery_method_id [lindex $delivery_methods 0 1]
+            set one_interval_id [lindex $intervals 0 1]
+
+            aa_log "Create a subscription"
+            set request_id [notification::request::new \
+                                -type_id $type_id \
+                                -user_id $user_id \
+                                -object_id $object_id \
+                                -interval_id $one_interval_id \
+                                -delivery_method_id $one_delivery_method_id]
+
+            aa_section "Can admin request '$request_id'?"
+            aa_true "The admin '$admin_id' can manage the subscription" \
+                [notification::security::can_admin_request_p \
+                     -user_id $admin_id \
+                     -request_id $request_id]
+            aa_true "The subscriber '$user_id' can manage the subscription" \
+                [notification::security::can_admin_request_p \
+                     -user_id $user_id \
+                     -request_id $request_id]
+            aa_false "The other user '$user_id_2' cannot manage the subscription" \
+                [notification::security::can_admin_request_p \
+                     -user_id $user_id \
+                     -request_id $request_id]
+
+            aa_section "Can subscribe to object '$object_id'?"
+            aa_true "The admin '$admin_id' can subscribe" \
+                [notification::security::can_notify_object_p \
+                     -user_id $admin_id \
+                     -object_id $object_id]
+            aa_false "The user '$user_id' cannot subscribe" \
+                [notification::security::can_notify_object_p \
+                     -user_id $user_id \
+                     -object_id $object_id]
+            aa_false "The other user '$user_id_2' can also not subscribe" \
+                [notification::security::can_notify_object_p \
+                     -user_id $user_id_2 \
+                     -object_id $object_id]
+            aa_log "Grant reading permission to the object for user '$user_id'"
+            permission::grant \
+                -party_id $user_id \
+                -object_id $object_id \
+                -privilege read
+            aa_true "The user '$user_id' can now subscribe" \
+                [notification::security::can_notify_object_p \
+                     -user_id $user_id \
+                     -object_id $object_id]
+
+            aa_section "Can be notified?"
+            foreach uid [list $admin_id $user_id $user_id_2] {
+                aa_true "Approved user 'uid' can be notified" \
+                    [notification::security::can_notify_user \
+                         -user_id $uid \
+                         -delivery_method_id $one_delivery_method_id]
+            }
+            aa_false "Guest user cannot be notified" \
+                [notification::security::can_notify_user \
+                     -user_id [acs_magic_object unregistered_visitor] \
+                     -delivery_method_id $one_delivery_method_id]
+
+            aa_section "Requiring admin permission for request '$request_id'"
+            ns_register_proc GET __notification_security_require_admin_request [subst -nocommands {
+                ns_return 200 text/plain [notification::security::require_admin_request \
+                                              -user_id $user_id \
+                                              -request_id $request_id]
+            }]
+            set d [acs::test::http __notification_security_require_admin_request]
+            aa_true "We get a redirect when we are not logged in" \
+                [regexp {^3\d\d$} [dict get $d status]]
+            set d [acs::test::http -user_info $user_info __notification_security_require_admin_request]
+            aa_true "As logged in we get true in the response" \
+                [dict get $d body]
+
+            aa_section "Requiring notification permissions for object '$object_id'"
+            ns_register_proc GET __notification_security_require_notify_object [subst -nocommands {
+                ns_return 200 text/plain [notification::security::require_notify_object \
+                                              -user_id $user_id \
+                                              -object_id $object_id]
+            }]
+            set d [acs::test::http __notification_security_require_notify_object]
+            aa_true "We get a redirect when we are not logged in" \
+                [regexp {^3\d\d$} [dict get $d status]]
+            set d [acs::test::http -user_info $user_info __notification_security_require_notify_object]
+            aa_true "As logged in we get true in the response" \
+                [dict get $d body]
+
+
+        } finally {
+            try {
+                ns_unregister_op GET __notification_security_require_admin_request
+                ns_unregister_op GET __notification_security_require_notify_object
+            } on error {errmsg} {
+                aa_log "Cannot unregister test endpoints: $errmsg"
+            }
+            try {
+                acs::test::user::delete -user_id $user_id -delete_created_acs_objects
+                acs::test::user::delete -user_id $user_id_2 -delete_created_acs_objects
+                acs::test::user::delete -user_id $admin_id -delete_created_acs_objects
+            } on error {errmsg} {
+                aa_log "Cannot delete test users: $errmsg"
+            }
+            try {
+                notification::type::delete -short_name $short_name
+            } on error {errmsg} {
+                aa_log "Cannot drop notification type: $errmsg"
+            }
+            try {
+                set contract_name "NotificationType"
+                set impl_name "notifications_test_notif_type"
+                acs_sc::impl::delete -contract_name $contract_name -impl_name $impl_name
+            } on error {errmsg} {
+                aa_log "Cannot drop service contract implementation: $errmsg"
+            }
+        }
+    }
