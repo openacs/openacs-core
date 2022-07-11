@@ -51,8 +51,12 @@ aa_register_case \
         notification::get_intervals
         notification::delete
         notification::email::get_package_id
+        notification::email::manage_notifications_url
+        notification::email::address_domain
+        notification::email::reply_address_prefix
         notification::delivery::get_id
         notification::interval::get_id_from_name
+        util::external_url_p
     } \
     notification_api_tests {
         Tests various API in the package
@@ -62,9 +66,31 @@ aa_register_case \
         aa_equals "This API returns a constant..." \
             [notification::package_key] notifications
 
+        set notification_email_package_id [notification::email::get_package_id]
         aa_equals "This API return the package id of the notifications instance" \
-            [notification::email::get_package_id] \
+            $notification_email_package_id \
             [apm_package_id_from_key notifications]
+
+        set manage_url [notification::email::manage_notifications_url]
+        aa_false "The manage notifications URL comes from us" \
+            [util::external_url_p $manage_url]
+
+        set domain_param [parameter::get \
+                              -package_id $notification_email_package_id \
+                              -parameter "EmailDomain" \
+                              -default ""]
+        set domain_url [ad_url]
+        set domain_api [notification::email::address_domain]
+        aa_true "Email address domain from api comes either from parameter or system URL" \
+            {[string match *$domain_api* $domain_param] || [string match *$domain_api* $domain_url]}
+
+        set reply_prefix_api [notification::email::reply_address_prefix]
+        set reply_prefix_param [parameter::get \
+                                    -package_id $notification_email_package_id \
+                                    -parameter "EmailReplyAddressPrefix" \
+                                    -default ""]
+        aa_equals "Reply address prefix looks as expected" \
+            $reply_prefix_api $reply_prefix_param
 
         aa_run_with_teardown -rollback -test_code {
             aa_section "Creating a notification type..."
