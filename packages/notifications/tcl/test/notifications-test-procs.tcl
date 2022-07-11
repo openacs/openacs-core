@@ -409,6 +409,7 @@ aa_register_case \
         notification::display::subscribe_url
         notification::display::unsubscribe_url
         notification::display::get_urls
+        notification::display::request_widget
         notification::get_intervals
         notification::get_delivery_methods
         util::external_url_p
@@ -489,6 +490,21 @@ aa_register_case \
             }
 
             set root_path [apm_package_url_from_key [notification::package_key]]
+
+            aa_log "Generate the subscription URL we expect from notification::display::subscribe_url"
+            set subscribe_url_api [notification::display::subscribe_url \
+                                   -type $short_name \
+                                   -object_id $object_id \
+                                   -url $return_url \
+                                   -user_id $user_id \
+                                   -pretty_name $pretty_name]
+            aa_equals "The API returns the expected subscription URL"\
+                $subscribe_url_api [export_vars -base "${root_path}request-new" {
+                    type_id user_id object_id pretty_name return_url
+                }]
+
+
+            aa_log "Generate the subscription URL we expect from notification::display::get_urls"
             set subscribe_url [export_vars -base "${root_path}request-new" {
                 type_id object_id pretty_name return_url
             }]
@@ -505,6 +521,19 @@ aa_register_case \
             aa_equals "Unsubscribe URL is correct" \
                 $unsubscribe_url [lindex $urls 1]
 
+            aa_log "Generate the request widget"
+            set widget [notification::display::request_widget \
+                            -type $short_name \
+                            -object_id $object_id \
+                            -pretty_name $pretty_name \
+                            -url $return_url \
+                            -user_id $user_id]
+            aa_true "The widget is HTML" [ad_looks_like_html_p $widget]
+            aa_false "Widget does not contain the subscribe URL" \
+                [string match *[ns_quotehtml $subscribe_url_api]* $widget]
+            aa_true "Widget contains the unsubscribe URL" \
+                [string match *[ns_quotehtml $unsubscribe_url]* $widget]
+
             aa_log "Unsubscribe user '$user_id'"
             notification::request::delete -request_id $request_id
 
@@ -519,5 +548,18 @@ aa_register_case \
                 "" [lindex $urls 1]
             aa_equals "Subscribe URL is correct" \
                 $subscribe_url [lindex $urls 0]
+
+            aa_log "Generate the request widget again"
+            set widget [notification::display::request_widget \
+                            -type $short_name \
+                            -object_id $object_id \
+                            -pretty_name $pretty_name \
+                            -url $return_url \
+                            -user_id $user_id]
+            aa_true "The widget is HTML" [ad_looks_like_html_p $widget]
+            aa_true "Widget contains the subscribe URL" \
+                [string match *[ns_quotehtml $subscribe_url_api]* $widget]
+            aa_false "Widget does not contain the unsubscribe URL" \
+                [string match *[ns_quotehtml $unsubscribe_url]* $widget]
         }
     }
