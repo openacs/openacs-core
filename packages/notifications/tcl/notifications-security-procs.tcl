@@ -78,11 +78,11 @@ namespace eval notification::security {
         if {[acs_user::site_wide_admin_p -user_id $user_id]} {
             set allowed 1
         } else {
-            set sql "select user_id from notification_requests where object_id = :request_id"
-            set owner_id [db_string get_user_id $sql -default ""]
-            if {$owner_id eq $user_id} {
-                set allowed 1
-            }
+            set allowed [db_0or1row check_owner {
+                select 1 from notification_requests
+                where request_id = :request_id
+                  and user_id = :user_id
+            }]
         }
         return $allowed
     }

@@ -675,7 +675,7 @@ aa_register_case \
                      -request_id $request_id]
             aa_false "The other user '$user_id_2' cannot manage the subscription" \
                 [notification::security::can_admin_request_p \
-                     -user_id $user_id \
+                     -user_id $user_id_2 \
                      -request_id $request_id]
 
             aa_section "Can subscribe to object '$object_id'?"
@@ -741,11 +741,14 @@ aa_register_case \
 
 
         } finally {
+            aa_section "Cleanup"
             try {
                 ns_unregister_op GET __notification_security_require_admin_request
                 ns_unregister_op GET __notification_security_require_notify_object
             } on error {errmsg} {
                 aa_log "Cannot unregister test endpoints: $errmsg"
+            } on ok {d} {
+                aa_log "Removed test endpoints"
             }
             try {
                 acs::test::user::delete -user_id $user_id -delete_created_acs_objects
@@ -753,11 +756,15 @@ aa_register_case \
                 acs::test::user::delete -user_id $admin_id -delete_created_acs_objects
             } on error {errmsg} {
                 aa_log "Cannot delete test users: $errmsg"
+            } on ok {d} {
+                aa_log "Deleted test users"
             }
             try {
                 notification::type::delete -short_name $short_name
             } on error {errmsg} {
                 aa_log "Cannot drop notification type: $errmsg"
+            } on ok {d} {
+                aa_log "Dropped notification type"
             }
             try {
                 set contract_name "NotificationType"
@@ -765,6 +772,8 @@ aa_register_case \
                 acs_sc::impl::delete -contract_name $contract_name -impl_name $impl_name
             } on error {errmsg} {
                 aa_log "Cannot drop service contract implementation: $errmsg"
+            } on ok {d} {
+                aa_log "Deleted service contract implementation"
             }
         }
     }
