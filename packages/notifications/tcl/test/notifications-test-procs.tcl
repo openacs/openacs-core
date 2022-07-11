@@ -337,6 +337,7 @@ aa_register_case \
         notification::delivery::new
         notification::delivery::delete
         notification::delivery::get_id
+        notification::get_delivery_methods
     } \
     notification_delivery_tests {
         Tests delivery API
@@ -395,5 +396,128 @@ aa_register_case \
                   and short_name = :short_name
                   and pretty_name = :pretty_name
             }]
+        }
+    }
+
+aa_register_case \
+    -cats {api smoke} \
+    -procs {
+        acs_sc::impl::new_from_spec
+        notification::type::new
+        notification::request::new
+        notification::request::delete
+        notification::display::subscribe_url
+        notification::display::unsubscribe_url
+        notification::display::get_urls
+        notification::get_intervals
+        notification::get_delivery_methods
+        util::external_url_p
+    } \
+    notification_display_tests {
+        Tests display API
+    } {
+        aa_run_with_teardown -rollback -test_code {
+
+            # Entire forum
+            set spec {
+                contract_name "NotificationType"
+                owner "notifications"
+                name "notifications_test_notif_type"
+                pretty_name "Notifications Test Notification Type"
+                aliases {
+                    GetURL {
+                        alias notification::test::notification__get_url
+                        language TCL
+                    }
+                    ProcessReply {
+                        alias notification::test::notification__process_reply
+                        language TCL
+                    }
+                }
+            }
+            set sc_impl_id [acs_sc::impl::new_from_spec -spec $spec]
+
+            set short_name "notifications_test_notif"
+            set pretty_name "Test Notifications"
+            set description "These dummy notification type is created during automated tests."
+
+            set type_id [notification::type::new \
+                             -sc_impl_id $sc_impl_id \
+                             -short_name $short_name \
+                             -pretty_name $pretty_name \
+                             -description $description \
+                             -all_intervals \
+                             -all_delivery_methods]
+
+            set object_id [db_string q {select object_id from acs_objects fetch first 1 rows only}]
+            set user_id [db_string q {select user_id from users fetch first 1 rows only}]
+            set return_url my-test-url
+
+            aa_log "Generate subscribe URL"
+            set subscribe_url [notification::display::subscribe_url \
+                                   -type $short_name \
+                                   -object_id $object_id \
+                                   -url $return_url \
+                                   -user_id $user_id \
+                                   -pretty_name $pretty_name]
+            aa_false "Returned URL is our own" [util::external_url_p $subscribe_url]
+            foreach p {type_id user_id object_id pretty_name return_url} {
+                aa_true "Returned URL contains the expected information $p" \
+                    [string match *[ns_urlencode [set p]]* $subscribe_url]
+            }
+
+            set delivery_methods [notification::get_delivery_methods -type_id $type_id]
+            set intervals [notification::get_intervals -localized -type_id $type_id]
+            set one_delivery_method_id [lindex $delivery_methods 0 1]
+            set one_interval_id [lindex $intervals 0 1]
+
+            aa_log "Create a subscription"
+            set request_id [notification::request::new \
+                                -type_id $type_id \
+                                -user_id $user_id \
+                                -object_id $object_id \
+                                -interval_id $one_interval_id \
+                                -delivery_method_id $one_delivery_method_id]
+
+            aa_log "Generate the unsubscribe URL"
+            set unsubscribe_url [notification::display::unsubscribe_url \
+                                     -request_id $request_id -url $return_url]
+            aa_false "Returned URL is our own" [util::external_url_p $subscribe_url]
+            foreach p {request_id return_url} {
+                aa_true "Returned URL contains the expected information $p" \
+                    [string match *[ns_urlencode [set p]]* $unsubscribe_url]
+            }
+
+            set root_path [apm_package_url_from_key [notification::package_key]]
+            set subscribe_url [export_vars -base "${root_path}request-new" {
+                type_id object_id pretty_name return_url
+            }]
+
+            aa_log "Generate the two URLs"
+            set urls [notification::display::get_urls \
+                          -type $short_name \
+                          -object_id $object_id \
+                          -return_url $return_url \
+                          -pretty_name $pretty_name \
+                          -user_id $user_id]
+            aa_equals "Subscribe URL is empty because user '$user_id' has subscribed" \
+                "" [lindex $urls 0]
+            aa_equals "Unsubscribe URL is correct" \
+                $unsubscribe_url [lindex $urls 1]
+
+            aa_log "Unsubscribe user '$user_id'"
+            notification::request::delete -request_id $request_id
+
+            aa_log "Generate the two URLs again"
+            set urls [notification::display::get_urls \
+                          -type $short_name \
+                          -object_id $object_id \
+                          -return_url $return_url \
+                          -pretty_name $pretty_name \
+                          -user_id $user_id]
+            aa_equals "Unsubscribe URL is empty because user '$user_id' has not subscribed" \
+                "" [lindex $urls 1]
+            aa_equals "Subscribe URL is correct" \
+                $subscribe_url [lindex $urls 0]
         }
     }
