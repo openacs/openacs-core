@@ -114,6 +114,7 @@ ad_proc -public notification::display::get_urls {
     {-object_id:required}
     {-return_url {}}
     {-pretty_name}
+    -user_id
 } {
     Get both subscribe_url and unsubscribe_url as a list. At most one
     of them will be set.
@@ -139,7 +140,11 @@ ad_proc -public notification::display::get_urls {
     }
 
     # Check if subscribed
-    set request_id [notification::request::get_request_id -type_id $type_id -object_id $object_id -user_id [ad_conn untrusted_user_id]]
+    if {![info exists user_id]} {
+        set user_id [ad_conn untrusted_user_id]
+    }
+    set request_id [notification::request::get_request_id \
+                        -type_id $type_id -object_id $object_id -user_id $user_id]
 
 
     if { $request_id eq "" } {
