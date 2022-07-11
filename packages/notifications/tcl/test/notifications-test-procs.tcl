@@ -383,6 +383,7 @@ aa_register_case \
             } errmsg]
 
             aa_log "Deleting method '$short_name'"
+            db_dml q {delete from notification_requests where delivery_method_id = :delivery_method_id}
             notification::delivery::delete -delivery_method_id $delivery_method_id
 
             aa_true "Trying to lookup the deleted delivery method fails" [catch {
