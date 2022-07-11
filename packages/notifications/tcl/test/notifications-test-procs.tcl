@@ -19,6 +19,7 @@ ad_proc -private notification::test::notification__process_reply {
     Example of a callback to process the reply to a notification.
 } {
     ns_log notice "Reply $reply_id processed"
+    return $reply_id
 }
 
 aa_register_case \
@@ -778,3 +779,249 @@ aa_register_case \
             }
         }
     }
+
+aa_register_case \
+    -cats {api smoke} \
+    -procs {
+        acs_sc::impl::new_from_spec
+        acs_sc_update_alias_wrappers
+        party::email
+        notification::delivery::scan_replies
+        notification::delivery::send
+        notification::email::send
+        notification::email::bounce_mail_message
+        notification::reply::new
+        notification::reply::get
+        notification::reply::delete
+        notification::type::process_reply
+    } \
+    notification_reply_tests {
+        Tests display API
+    } {
+        aa_stub acs_mail_lite::send {
+            return [list \
+                        to_addr $to_addr \
+                        from_addr $from_addr \
+                        mime_type $mime_type \
+                        subject $subject \
+                        content $body]
+        }
+        aa_run_with_teardown -rollback -test_code {
+
+            aa_section "Scan replies for all delivery methods"
+            db_foreach q {
+                select short_name, delivery_method_id from notification_delivery_methods
+            } {
+                aa_false "Scanning the replies for delivery method '$short_name' won't crash" [catch {
+                    notification::delivery::scan_replies \
+                        -delivery_method_id $delivery_method_id
+                } errmsg]
+            }
+
+            aa_section "Create the test notification type"
+            set spec {
+                contract_name "NotificationType"
+                owner "notifications"
+                name "notifications_test_notif_type"
+                pretty_name "Notifications Test Notification Type"
+                aliases {
+                    GetURL {
+                        alias notification::test::notification__get_url
+                        language TCL
+                    }
+                    ProcessReply {
+                        alias notification::test::notification__process_reply
+                        language TCL
+                    }
+                }
+            }
+            set sc_impl_id [acs_sc::impl::new_from_spec -spec $spec]
+
+            set short_name "notifications_test_notif"
+            set pretty_name "Test Notifications"
+            set description "These dummy notification type is created during automated tests."
+
+            set type_id [notification::type::new \
+                             -sc_impl_id $sc_impl_id \
+                             -short_name $short_name \
+                             -pretty_name $pretty_name \
+                             -description $description \
+                             -all_intervals \
+                             -all_delivery_methods]
+
+            aa_section "Test the reply API"
+            set object_id [acs::test::require_package_instance -package_key acs-subsite \
+                               -instance_name "test-notification-object"]
+            set subject "My test reply"
+            set content "This is the content of my reply"
+            set from_user [dict get [acs::test::user::create] user_id]
+            set to_user [dict get [acs::test::user::create] user_id]
+            set reply_date ""
+
+            aa_log "Inserting a reply"
+            set reply_id [notification::reply::new \
+                              -object_id $object_id \
+                              -type_id $type_id \
+                              -from_user $from_user \
+                              -subject $subject \
+                              -content $content]
+
+            aa_log "Fetching the reply"
+            notification::reply::get -reply_id $reply_id -array r
+            foreach {key value} [array get r] {
+                aa_equals "Attribute '$key' was stored as expected" \
+                    [set $key] $r($key)
+            }
+
+            aa_log "Deleting the reply"
+            notification::reply::delete -reply_id $reply_id
+
+            aa_false "Reply is no more" [db_0or1row q {
+                select 1 from notification_replies where reply_id = :reply_id
+            }]
+
+            aa_log "Inserting reply again with the same id"
+            set subject "My test reply 2"
+            set content "This is the content of my reply 2"
+            notification::reply::new \
+                -reply_id $reply_id \
+                -object_id $object_id \
+                -type_id $type_id \
+                -from_user $from_user \
+                -subject $subject \
+                -content $content
+
+            aa_log "Fetching the reply again"
+            notification::reply::get -reply_id $reply_id -array r
+            foreach {key value} [array get r] {
+                aa_equals "Attribute '$key' was stored as expected again" \
+                    [set $key] $r($key)
+            }
+
+            aa_log "Deleting the reply"
+            notification::reply::delete -reply_id $reply_id
+            aa_log "Inserting reply again with the same id and a date"
+            set subject "My test reply 3"
+            set content "This is the content of my reply 3"
+            set reply_date [clock format [clock seconds] -format {%Y-%m-%d %H:%M:%S}]
+            notification::reply::new \
+                -reply_id $reply_id \
+                -object_id $object_id \
+                -type_id $type_id \
+                -from_user $from_user \
+                -subject $subject \
+                -content $content \
+                -reply_date $reply_date
+
+            aa_log "Fetching the reply again"
+            notification::reply::get -reply_id $reply_id -array r
+            foreach {key value} [array get r] {
+                if {$key eq "reply_date"} {
+                    aa_true "Attribute '$key' was stored as expected" \
+                        [regexp ^$reply_date.*$ $r($key)]
+                } else {
+                    aa_equals "Attribute '$key' was stored as expected again" \
+                        [set $key] $r($key)
+                }
+            }
+
+            aa_log "Make sure Service Contract implementation procs are generated"
+            acs_sc_update_alias_wrappers
+            aa_equals "Processing the reply returns the value from the Service Contract implementation" \
+                $reply_id [notification::type::process_reply -type_id $type_id -reply_id $reply_id]
+
+            unset r
+            aa_section "Send a notification via email"
+            aa_log "Send as plain text"
+            set delivery_method_id [notification::delivery::get_id -short_name email]
+            set subject "NOTIFICATION TEST SUBJECT"
+            set content "NOTIFICATION TEST"
+            set from_addr [party::email -party_id $from_user]
+            set to_addr [party::email -party_id $to_user]
+            set r [notification::delivery::send \
+                       -delivery_method_id $delivery_method_id \
+                       -notification_type_id $type_id \
+                       -from_user_id $from_user \
+                       -to_user_id $to_user \
+                       -subject $subject \
+                       -content_text $content \
+                       -content_html {}]
+            aa_equals "From address is as expected" \
+                [dict get $r from_addr] $from_addr
+            aa_equals "To address is as expected" \
+                [dict get $r to_addr] $to_addr
+            aa_equals "Subject is as expected" \
+                [dict get $r subject] $subject
+            aa_equals "Mime-Type is as expected" \
+                [dict get $r mime_type] text/plain
+            aa_true "Content is as expected" \
+                [string match *$content* [dict get $r content]]
+
+            aa_log "Send as HTML"
+            set r [notification::delivery::send \
+                       -delivery_method_id $delivery_method_id \
+                       -notification_type_id $type_id \
+                       -from_user_id $from_user \
+                       -to_user_id $to_user \
+                       -subject $subject \
+                       -content_text {} \
+                       -content_html $content]
+            aa_equals "From address is as expected" \
+                [dict get $r from_addr] $from_addr
+            aa_equals "To address is as expected" \
+                [dict get $r to_addr] $to_addr
+            aa_equals "Subject is as expected" \
+                [dict get $r subject] $subject
+            aa_equals "Mime-Type is as expected" \
+                [dict get $r mime_type] text/html
+            aa_true "Content is as expected" \
+                [string match *$content* [dict get $r content]]
+
+            aa_log "Send to an invalid user"
+            set r [notification::delivery::send \
+                       -delivery_method_id $delivery_method_id \
+                       -notification_type_id $type_id \
+                       -from_user_id $from_user \
+                       -to_user_id [acs_magic_object unregistered_visitor] \
+                       -subject $subject \
+                       -content_text {} \
+                       -content_html $content]
+            aa_false "Notification won't be sent" {
+                [dict exists $r from_addr] ||
+                [dict exists $r to_addr] ||
+                [dict exists $r subject] ||
+                [dict exists $r mime_type] ||
+                [dict exists $r content]
+            }
+
+            aa_section "Send a bounce email"
+
+            set domain [notification::email::address_domain]
+            set bounce_to [notification::email::parse_email_address $to_addr]
+            set bounce_from "MAILER-DAEMON@$domain"
+            set subject "failure notice"
+            set message_headers "TEST HEADERS"
+            set reason "TEST REASON"
+            set r [notification::email::bounce_mail_message \
+                       -to_addr $to_addr \
+                       -from_addr $from_addr \
+                       -body $content \
+                       -message_headers $message_headers \
+                       -reason $reason]
+            aa_equals "From address is as expected" \
+                [dict get $r from_addr] $bounce_from
+            aa_equals "To address is as expected" \
+                [dict get $r to_addr] $bounce_to
+            aa_equals "Subject is as expected" \
+                [dict get $r subject] $subject
+            aa_equals "Mime-Type is as expected" \
+                [dict get $r mime_type] text/plain
+            aa_true "Content is as expected" {
+                [string match *$content* [dict get $r content]] &&
+                [string match *$message_headers* [dict get $r content]] &&
+                [string match *$reason* [dict get $r content]]
+            }
+        }
+    }
+
+
