@@ -38,7 +38,7 @@ namespace eval notification::reply {
                            ]
 
         set reply_id [package_instantiate_object -extra_vars $extra_vars notification_reply]
-        
+
         return $reply_id
     }
 
@@ -60,7 +60,7 @@ namespace eval notification::reply {
     } {
         db_exec_plsql delete_reply {}
     }
-    
+
 }
 
 # Local variables:

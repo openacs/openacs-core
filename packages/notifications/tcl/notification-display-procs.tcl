@@ -27,7 +27,7 @@ ad_proc -public notification::display::request_widget {
     if { [apm_package_url_from_key [notification::package_key]] eq "" } {
         return {}
     }
-    
+
     if {$user_id eq ""} {
         set user_id [ad_conn user_id]
     }
@@ -37,7 +37,7 @@ ad_proc -public notification::display::request_widget {
 
     # Check if subscribed
     set request_id [notification::request::get_request_id -type_id $type_id -object_id $object_id -user_id $user_id]
-    
+
     if {$request_id ne ""} {
         set icon /resources/acs-subsite/email_delete.gif
         set icon_alt [_ acs-subsite.icon_of_envelope]
