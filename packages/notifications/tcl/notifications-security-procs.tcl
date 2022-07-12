@@ -26,7 +26,7 @@ namespace eval notification::security {
         @param user_id
         @param delivery_method_id
     } {
-        return [db_string user_approved_p {} -default 0]
+        return [expr {[acs_user::get_user_info -user_id $user_id -element member_state] eq "approved"}]
     }
 
     ad_proc -public can_notify_object_p {
