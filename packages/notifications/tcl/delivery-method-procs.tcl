@@ -1,7 +1,7 @@
 ad_library {
 
     Notification Delivery Methods
-    
+
     Functions to support notification delivery methods. A delivery method is a means by which
     a notification is sent to a user. "Email" is a common one, but others, like "sms", may exist.
 
@@ -60,7 +60,7 @@ ad_proc -public notification::delivery::scan_replies {
     {-delivery_method_id:required}
 } {
     scan for replies.
-    
+
     Every delivery method allows for replies. This is the wrapper proc that
     indicates to the delivery method service contract implementation that it's time to
     scan for replies.
