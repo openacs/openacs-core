@@ -67,7 +67,12 @@ namespace eval notification::request {
     } {
         returns true if at least one request exists for this object and type
     } {
-        return [expr { [db_string request_count {}] > 0 }]
+        return [db_0or1row exists {
+            select 1 from notification_requests
+            where type_id = :type_id
+            and object_id = :object_id
+            fetch first 1 rows only
+        }]
     }
 
     ad_proc -public request_count {
