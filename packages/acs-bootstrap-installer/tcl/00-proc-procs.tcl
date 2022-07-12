@@ -1128,7 +1128,7 @@ ad_proc -deprecated ad_call_method {
     @param object_id the target, it is the first arg to the method
     @param args the remaining arguments
 } {
-    return [ad_apply ${method_name}__[util_memoize [list acs_object_type $object_id]] [concat $object_id $args]]
+    return [${method_name}__[util_memoize [list acs_object_type $object_id]] $object_id {*}$args]
 }
 
 ad_proc -deprecated ad_dispatch {

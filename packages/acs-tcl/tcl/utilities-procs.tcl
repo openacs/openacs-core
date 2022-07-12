@@ -1259,9 +1259,14 @@ ad_proc -public ad_return_top_of_page {
     }
 }
 
-ad_proc -public ad_apply {func arglist} {
+ad_proc -deprecated ad_apply {func arglist} {
     Evaluates the first argument with ARGLIST as its arguments, in the
     environment of its caller. Analogous to the Lisp function of the same name.
+
+    DEPRECATED: modern Tcl can achieve the same result simply by
+    expanding a list as arguments of a command.
+
+    @see {*}
 } {
     set func_and_args [concat $func $arglist]
     return [uplevel $func_and_args]
@@ -1279,7 +1284,7 @@ ad_proc -public ad_safe_eval args {
             return -code error "Unsafe argument to ad_safe_eval: $arg"
         }
     }
-    return [ad_apply uplevel $args]
+    return [uplevel {*}$args]
 }
 
 ad_proc -public ad_decode { value args } {
