@@ -89,6 +89,10 @@ ad_proc -deprecated ad_dbclick_check_dml {
     safe manner and will returnredirect to the page specified by
     return_url. if database insert fails, this procedure will return a
     sensible error message to the user.
+
+    @see xotcl-request-monitor provides a double-click protection
+         feature that does not rely on the database and is transparent
+         to the developer.
 } {
     if { [catch {
         if { $bind ne "" } {
@@ -1216,6 +1220,8 @@ ad_proc -deprecated ad_dimensional_set_variables {option_list {options_set ""}} 
     <p>
     You only really need to call this if you need the variables
     (for example to pick which select statement and table to actually use)
+
+    @see ns_set
 } {
     set out {}
 
@@ -1336,6 +1342,9 @@ ad_proc -deprecated ad_table {
     </ul>
 
     @param dbn The database name to use.  If empty_string, uses the default database.
+
+    @see template::list::create
+    @see ::xo::Table
 } {
 
     set full_statement_name [db_qd_get_fullname $statement_name]
@@ -1609,6 +1618,10 @@ ad_proc -deprecated ad_table_column_list {
 ad_proc -deprecated ad_sort_primary_key {orderby} {
     return the primary (first) key of an order spec
     used by
+
+    @see template::list::create
+    @see ::xo::Table
+    @see regexp
 } {
     if {[regexp {^([^*,]+)} $orderby match]} {
         return $match
@@ -1774,6 +1787,9 @@ ad_proc -deprecated ad_table_sort_form {
     <pre>
       ad_table_sort_form $tabledef select $return_url ticket_tracker_main_sort $ticket_sort $orderby
     </pre>
+
+    @see template::list::create
+    @see ::xo::Table
 } {
     # first build a map of all available columns
     set sel_list [ad_table_column_list -sortable t $datadef $allowed]
@@ -1870,6 +1886,9 @@ ad_proc -deprecated ad_table_sort_form {
 ad_proc -deprecated ad_order_by_from_sort_spec {sort_by tabledef} {
     Takes a sort_by spec, and translates it into an "order by" clause
     with each sort_by key dictated by the sort info in tabledef
+
+    @see template::list::create
+    @see ::xo::Table
 } {
     set order_by_clause {}
 
@@ -1915,6 +1934,9 @@ ad_proc -deprecated ad_new_sort_by {key keys} {
     different column are the same.  If that different column is used as the primary
     sort key to reorder, the things which have the same value for the newly-sorted
     column will remain in the same relative order.
+
+    @see template::list::create
+    @see ::xo::Table
 } {
     if { $keys eq "" } {
         return $key
@@ -1937,6 +1959,8 @@ ad_proc -deprecated ad_new_sort_by {key keys} {
 
 ad_proc -deprecated ad_same_page_link {variable value text {form ""}} {
     Makes a link to this page, with a new value for "variable".
+
+    @see export_vars
 } {
     if { $form eq "" } {
         set form [ns_getform]
@@ -1950,6 +1974,9 @@ ad_proc -deprecated ad_reverse order {
     returns the opposite sort order from the
     one it is given.  Mostly for columns whose natural
     sort order is not the default.
+
+    @see template::list::create
+    @see ::xo::Table
 } {
     switch [string tolower $order] {
         desc {return asc}
@@ -2016,6 +2043,9 @@ ad_proc -deprecated ad_custom_list {user_id item_group item_set item_type target
 ad_proc -deprecated ad_custom_page_defaults {defaults} {
     set the page defaults. If the form is
     empty do a returnredirect with the defaults set
+
+    @see ad_page_contract
+    @see ad_include_contract
 } {
     set form [ns_getform]
     if {$form eq ""
@@ -2070,6 +2100,12 @@ ad_proc -deprecated ad_dimensional_settings {define current} {
     defaults for the given slider.
 
     NB...this does not close either the table or the form...
+
+    @see ad_form
+    @see template::form
+    @see ::Generic::Form
+    @see ::xowiki::Form
+    @see ::xowiki::FormPage
 } {
     foreach opt $define {
         append html "<tr><th align=\"left\">[lindex $opt 1]</th><td>"
@@ -3173,6 +3209,8 @@ ad_proc -deprecated ad_return { args } {
     If you use ad_return instead, it'll contain what you wanted, namely
     1 (TCL_ERROR).
 
+    @see ad_try
+    @see try
 } {
     return {*}$args
 }
@@ -4069,6 +4107,7 @@ ad_proc -public -deprecated ad_ns_set_keys {
 
     @author Lars Pind (lars@pinds.com)
 
+    @see ns_set keys
 } {
     set keys [list]
     set size [ns_set size $set_id]
