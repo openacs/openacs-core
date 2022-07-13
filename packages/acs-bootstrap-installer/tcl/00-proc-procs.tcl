@@ -1105,6 +1105,12 @@ ad_proc -deprecated ad_method {
     @param argblock the argument description block, is passed to ad_proc
     @param docblock the documentation block, is passed to ad_proc
     @param body the body, is passed to ad_proc
+
+    @see ad_proc
+    @see xotcl-core package offers a real ORM interface for acs_object
+         types
+    @see NSF idioms
+    @see OO Tcl idioms
 } {
     ad_proc ${method_name}__$type $argblock $docblock $body
 }
@@ -1127,6 +1133,12 @@ ad_proc -deprecated ad_call_method {
     @param method_name method name
     @param object_id the target, it is the first arg to the method
     @param args the remaining arguments
+
+    @see expansion operator "{*}"
+    @see xotcl-core package offers a real ORM interface for acs_object
+         types
+    @see NSF idioms
+    @see OO Tcl idioms
 } {
     return [${method_name}__[util_memoize [list acs_object_type $object_id]] $object_id {*}$args]
 }
@@ -1145,6 +1157,12 @@ ad_proc -deprecated ad_dispatch {
     @param method_name method name
     @param type associated type
     @param args the remaining arguments
+
+    @see expansion operator "{*}"
+    @see xotcl-core package offers a real ORM interface for acs_object
+         types
+    @see NSF idioms
+    @see OO Tcl idioms
 } {
     return [ad_apply ${method_name}__$type $args]
 }
