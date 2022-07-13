@@ -76,6 +76,8 @@ ad_proc -deprecated -public ad_sql_append {
     Adds to the SQL statement.
 
     This is unused and untested code.
+
+    @see plain SQL statements + trivial Tcl idioms
 } {
     upvar $sqlarrayname sql
     if { $select ne "" } {

@@ -1580,6 +1580,9 @@ ad_proc -deprecated ad_table_column_list {
     returns a list of indexes into the columns one per column it found
     <p>
     -sortable from t/f/all
+
+    @see template::list::create
+    @see ::xo::Table
 } {
     set column_list {}
     if {$columns eq ""} {
@@ -1635,6 +1638,8 @@ ad_proc -deprecated ad_table_same varname {
     returns true if the variable has same value as
     on the previous row.  Always false for 1st row.
 
+    @see template::list::create
+    @see ::xo::Table
 } {
     if { [uplevel set Tcount]
          && [uplevel string compare \$$varname \$P$varname] == 0} {
@@ -1647,6 +1652,9 @@ ad_proc -deprecated ad_table_same varname {
 ad_proc -deprecated ad_table_span {str {td_html "align=\"left\""}} {
     given string the function generates a row which spans the
     whole table.
+
+    @see template::list::create
+    @see ::xo::Table
 } {
     return "<tr><td colspan=\"[uplevel llength \$Tcolumn_list]\" $td_html>$str</td></tr>"
 }
@@ -1666,6 +1674,14 @@ ad_proc -deprecated ad_table_form {
     <p>
     allowed is the list of all the displayable columns, if empty
     all columns are allowed.
+
+    @see ad_form
+    @see template::form
+    @see ::Generic::Form
+    @see ::xowiki::Form
+    @see ::xowiki::FormPage
+    @see template::list::create
+    @see ::xo::Table
 } {
     # first build a map of all available columns
     set sel_list [ad_table_column_list $datadef $allowed]
@@ -2132,6 +2148,9 @@ ad_proc -deprecated ad_dimensional_settings {define current} {
 ad_proc -deprecated ad_table_orderby_sql {datadef orderby order} {
     create the order by clause consistent with the orderby and order variables
     and the datadef which built the table
+
+    @see template::list::create
+    @see ::xo::Table
 } {
     set orderclause "order by $orderby $order"
     foreach col $datadef {
@@ -3804,6 +3823,8 @@ ad_proc -deprecated ad_var_type_check_integer_p {value} {
 
 ad_proc -deprecated ad_var_type_check_safefilename_p {value} {
     @return 0 if the file contains ".."
+
+    @see ad_sanitize_filename
 } {
 
     if { [string match "*..*" $value] } {
@@ -3815,6 +3836,8 @@ ad_proc -deprecated ad_var_type_check_safefilename_p {value} {
 
 ad_proc -deprecated ad_var_type_check_dirname_p {value} {
     @return 0 if $value contains a / or \, 1 otherwise.
+
+    @see ad_sanitize_filename
 } {
 
     if { [regexp {[/\\]} $value] } {
@@ -3826,6 +3849,9 @@ ad_proc -deprecated ad_var_type_check_dirname_p {value} {
 
 ad_proc -deprecated ad_var_type_check_number_p {value} {
     @return 1 if $value is a valid number
+
+    @see ad_page_contract
+    @see ad_include_contract
 } {
     if { [catch {expr {1.0 * $value}}] } {
         return 0
@@ -3837,6 +3863,9 @@ ad_proc -deprecated ad_var_type_check_number_p {value} {
 ad_proc -deprecated ad_var_type_check_word_p {value} {
     @return 1 if $value contains only letters, numbers, dashes,
             and underscores, otherwise returns 0.
+
+    @see ad_page_contract
+    @see ad_include_contract
 } {
 
     if { [regexp {[^-A-Za-z0-9_]} $value] } {
@@ -3854,12 +3883,18 @@ ad_proc -deprecated ad_var_type_check_nocheck_p {{value ""}} {
 
       ad_set_typed_form_variable_filter /my-dangerous-page.tcl {user_id nocheck}
       ad_set_typed_form_variable_filter /*.tcl user_id
+
+    @see ad_page_contract
+    @see ad_include_contract
 } {
     return 1
 }
 
 ad_proc -deprecated ad_var_type_check_noquote_p {value} {
     @return 1 if $value contains any single-quotes
+
+    @see ad_page_contract
+    @see ad_include_contract
 } {
 
     if { [string match "*'*" $value] } {
@@ -3874,6 +3909,9 @@ ad_proc -deprecated ad_var_type_check_integerlist_p {value} {
             Example '5, 3, 1'. Note: it doesn't allow negative numbers,
             because that could let people sneak in numbers that get
             treated like math expressions like '1, 5-2'
+
+    @see ad_page_contract
+    @see ad_include_contract
 } {
 
     if { [regexp {[^ 0-9,]} $value] } {
@@ -3886,6 +3924,9 @@ ad_proc -deprecated ad_var_type_check_integerlist_p {value} {
 ad_proc -deprecated ad_var_type_check_fail_p {value} {
     A check that always returns 0. Useful if you want to disable all access
     to a page.
+
+    @see ad_page_contract
+    @see ad_include_contract
 } {
     return 0
 }
@@ -3894,7 +3935,8 @@ ad_proc -deprecated ad_var_type_check_third_urlv_integer_p {{args ""}} {
     Deprecated: too specific to make sense as a public api, can be
     replaced via a simple tcl oneliner
 
-    @see simple tcl oneliner
+    @see ad_page_contract
+    @see ad_include_contract
 
     @return 1 if the third path element in the URL is integer.
 } {
