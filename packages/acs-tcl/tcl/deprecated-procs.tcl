@@ -1961,6 +1961,10 @@ ad_proc -deprecated ad_reverse order {
 ad_proc -deprecated ad_custom_load {user_id item_group item item_type} {
     load a persisted user customization as saved by
     for example table-custom.tcl.
+
+    This proc was ported from the old ACS, but the data model was not.
+
+    @see https://cvs.openacs.org/browse/OpenACS/web/openacs/www/doc/sql/user-custom.sql
 } {
 
     if {
@@ -1981,6 +1985,10 @@ ad_proc -deprecated ad_custom_load {user_id item_group item item_type} {
 ad_proc -deprecated ad_custom_list {user_id item_group item_set item_type target_url custom_url {new_string "new view"}} {
     Generates the HTML fragment for choosing, editing and creating
     user customized data
+
+    This proc was ported from the old ACS, but the data model was not.
+
+    @see https://cvs.openacs.org/browse/OpenACS/web/openacs/www/doc/sql/user-custom.sql
 } {
 
     set items [db_list custom_list {
