@@ -4336,6 +4336,17 @@ ad_proc -deprecated site_node::conn_url {
     return $joined_url
 }
 
+ad_proc -deprecated -public apm_db_type_keys {} {
+
+    Returns a list of valid database type keys.
+
+    @see db_known_database_types
+} {
+    return [lmap dbtype $::acs::known_database_types {lindex $dbtype 0}]
+    # return [util_memoize [list db_list db_type_keys {select db_type_key from apm_package_db_types}]]
+}
+
+
 ########################################################################
 # Functions based on undefined code
 ########################################################################

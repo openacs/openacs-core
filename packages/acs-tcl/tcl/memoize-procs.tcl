@@ -16,6 +16,10 @@ ad_proc -deprecated util_memoize_initialized_p {} {
     Return 1 if the util_memoize cache has been initialized
     and is ready to be used and 0 otherwise.
 
+    util_memoize has now a failsafe mechanism when invoked before the
+    cache is there.
+
+    @see util_memoize
 } -
 
 if { [catch {ns_cache set util_memoize __util_memoize_installed_p 1} error] } {
