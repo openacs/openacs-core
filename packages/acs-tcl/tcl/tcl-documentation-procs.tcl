@@ -1927,6 +1927,29 @@ ad_page_contract_filter tmpfile { name value } {
     return 0
 }
 
+ad_page_contract_filter clock { name value {formats "%Y-%m-%d"} } {
+    Ensures the supplied date string is in one of the specified clock
+    formats.
+
+    @author Antonio Pisano
+    @see clock
+} {
+    set valid_p 0
+    foreach format $formats {
+        if { ![catch { clock scan $value -format $format } errmsg] } {
+            set valid_p 1
+            break
+        }
+    }
+
+    if {!$valid_p} {
+        set time(time) $value
+        ad_complain [_  acs-tcl.lt_Invalid_time_timetime_2]
+    }
+
+    return $valid_p
+}
+
 ad_page_contract_filter -type post date { name date } {
     Validates date type variables
     @author Yonatan Feldman (yon@arsdigita.com)
