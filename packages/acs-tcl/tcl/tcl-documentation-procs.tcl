@@ -1845,7 +1845,7 @@ ad_page_contract_filter object_type { name object_id types } {
         set types acs_object
     }
 
-    # First make sure the object_id formally correct
+    # First make sure the object_id is formally correct
     if { ![ad_page_contract_filter_proc_object_id $name object_id] } {
         return 0
     }
