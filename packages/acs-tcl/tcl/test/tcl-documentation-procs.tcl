@@ -17,6 +17,7 @@ aa_register_case \
         ad_page_contract work as expected.
 
     } {
+        aa_section "Valid specs"
         foreach {spec expected_name expected_flags} {
             w:oneof(red|green)
             w
@@ -52,8 +53,15 @@ aa_register_case \
             aa_equals "flags for spec '$spec' OK" $expected_flags [lindex $r 1]
         }
 
+        aa_section "Invalid specs"
         foreach spec {
+            w::a
+
+            w::
+
             w:oneof(red|green))
+
+            w:notnull,,integer
 
             "my_page_parameter)"
 
@@ -64,6 +72,7 @@ aa_register_case \
             } errmsg]
         }
 
+        aa_section "Spec flags"
         foreach {flags flags_list} {
             oneof(red|green)
             oneof(red|green)
@@ -93,6 +102,7 @@ aa_register_case \
             aa_equals "Parsing flags '$flags' OK" $flags_list $r
         }
 
+        aa_section "Spec flag parameters"
         foreach {flag_parameters flag_parameters_list} {
             red|green
             {red green}
