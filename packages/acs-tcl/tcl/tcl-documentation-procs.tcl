@@ -217,6 +217,92 @@ ad_proc ad_page_contract_eval { args } {
 #
 ####################
 
+ad_proc -private ad_page_contract_parse_argspec {arg_spec} {
+
+    Parse the argument spec: this is a string in the form <name>:<flag_spec>[,<flag_spec>...]
+    - <name> is a token made of any non-space, non-tab and non-colon
+    - <flag_spec> is string in the form <flag_name>[(<flag_parameter>[|<flag_parameter>...])]
+    - <flag_parameter> is a string containing arbitrary characters,
+                       however, because parenthesys ")" and "(" and
+                       pipe "|" are separators in the argspec syntax,
+                       they need to be escaped via the character backslash (\)
+
+    Examples of valid argspecs:
+
+    - my_page_parameter
+    - my_page_parameter:integer
+    - my_page_parameter:integer,notnull
+    - my_page_parameter:integer,notnull,oneof(1|2|3)
+    - another_page_parameter:oneof(this is valid|This, is also valid|This is valid \(as well!\))
+
+} {
+   if { ![regexp {^([^ \t:]+)(?::([a-zA-Z0-9_]+(?:\((?:\\\(|\\\)|[^\)])+\))?(?:,[a-zA-Z0-9_]+(?:\((?:\\\(|\\\)|[^\)])+\))?)*))?$} $arg_spec match name flags] } {
+       error "Argspec '$arg_spec' doesn't have the right format. It must be var\[:flag\[,flag ...\]\]"
+   }
+
+   return [list $name $flags]
+}
+
+ad_proc -private ad_page_contract_split_argspec_flags {flags} {
+
+    Splits the flags in an argspec definition into a list.
+
+} {
+    set pre_flag_list [list]
+    while { [regexp {^([a-zA-Z0-9_]+(?:\((?:\\\(|\\\)|[^\)])+\))?)(?:,(.+)|)$} $flags _ flag rest] } {
+        lappend pre_flag_list $flag
+        set flags $rest
+    }
+
+   return $pre_flag_list
+}
+
+ad_proc -private ad_page_contract_split_argspec_flag_parameters {flag_parameters} {
+
+    Splits the flag parameters from an argespec into a list of values.
+
+    Flag parameters are a list of values expressed as <value>|[<value>..]
+
+} {
+    regsub -all {\\\(} $flag_parameters {(} flag_parameters
+    regsub -all {\\\)} $flag_parameters {)} flag_parameters
+
+    set parameters [list]
+    #ns_log warning flag_parameters=$flag_parameters
+    while {[string length $flag_parameters] > 0} {
+        set flag_parameter ""
+
+        # First, keep appending to the string as long as we find
+        # escaped occurrences of the pipe character.
+        while { [set quoted_sep_i [string first {\|} $flag_parameters]] >= 0 } {
+            append flag_parameter [string range $flag_parameters 0 ${quoted_sep_i}-1]|
+            set flag_parameters [string range $flag_parameters ${quoted_sep_i}+2 end]
+            #ns_log warning "Found"
+        }
+
+        # Now that all escaped occurrences are over, find the first
+        # unescaped one.
+        set pi [string first | $flag_parameters]
+        if {$pi == -1} {
+            # There was none, the entire remainder of the string is
+            # our parameter and we are done.
+            append flag_parameter $flag_parameters
+            set flag_parameters ""
+            #ns_log warning flag_parameter=$flag_parameter,END,$pi
+        } else {
+            # Our parameter is all of the remaining string up to the
+            # pipe character. We will keep parsing further.
+            append flag_parameter [string range $flag_parameters 0 ${pi}-1]
+            set flag_parameters [string range $flag_parameters ${pi}+1 end]
+            #ns_log warning flag_parameter=$flag_parameter,CONTINUE
+        }
+        lappend parameters $flag_parameter
+    }
+
+    #ns_log warning parameters=$parameters
+    return $parameters
+}
+
 # global:
 
 # ad_page_contract_variables: list of all the variables, required or
@@ -618,9 +704,7 @@ ad_proc -public ad_page_contract {
 
         set arg_spec [lindex $element 0]
 
-        if { ![regexp {^([^ \t:]+)(?::([a-zA-Z0-9_,(|)]*))?$} $arg_spec match name flags] } {
-            return -code error "Argspec '$arg_spec' doesn't have the right format. It must be var\[:flag\[,flag ...\]\]"
-        }
+        lassign [ad_page_contract_parse_argspec $arg_spec] name flags
 
         lappend apc_formals $name
         set apc_formal($name) 1
@@ -629,13 +713,10 @@ ad_proc -public ad_page_contract {
             set apc_default_value($name) [lindex $element 1]
         }
 
-        set pre_flag_list [split $flags ,]
-        # set pre_flag_list [split [string tolower $flags] ,]
-
         set flag_list [list]
 
         # find parameterized flags
-        foreach flag $pre_flag_list {
+        foreach flag [ad_page_contract_split_argspec_flags $flags] {
 
             #
             # The following statement is transitional code, and should
@@ -662,9 +743,9 @@ ad_proc -public ad_page_contract {
                 set flag [string range $flag 0 $left_paren-1]
 
                 lappend flag_list $flag
-                foreach flag_parameter [split $flag_parameters "|"] {
-                    lappend apc_filter_parameters($name:$flag) $flag_parameter
-                }
+
+                set apc_filter_parameters($name:$flag) \
+                    [ad_page_contract_split_argspec_flag_parameters $flag_parameters]
             }
         }
 
@@ -1770,6 +1851,7 @@ ad_page_contract_filter oneof { name value set } {
     @author Gustaf Neumann
     @creation-date Feb, 2018
 } {
+    #ns_log warning $value|$set
     if { $value ni $set } {
         ad_complain [_ acs-tcl.lt_name_is_not_valid]
         return 0
