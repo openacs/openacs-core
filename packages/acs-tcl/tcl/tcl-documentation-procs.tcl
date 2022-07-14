@@ -264,11 +264,11 @@ ad_proc -private ad_page_contract_split_argspec_flag_parameters {flag_parameters
     Flag parameters are a list of values expressed as <value>|[<value>..]
 
 } {
+    # First, unescape the parenthesys
     regsub -all {\\\(} $flag_parameters {(} flag_parameters
     regsub -all {\\\)} $flag_parameters {)} flag_parameters
 
     set parameters [list]
-    #ns_log warning flag_parameters=$flag_parameters
     while {[string length $flag_parameters] > 0} {
         set flag_parameter ""
 
@@ -277,7 +277,6 @@ ad_proc -private ad_page_contract_split_argspec_flag_parameters {flag_parameters
         while { [set quoted_sep_i [string first {\|} $flag_parameters]] >= 0 } {
             append flag_parameter [string range $flag_parameters 0 ${quoted_sep_i}-1]|
             set flag_parameters [string range $flag_parameters ${quoted_sep_i}+2 end]
-            #ns_log warning "Found"
         }
 
         # Now that all escaped occurrences are over, find the first
@@ -288,18 +287,15 @@ ad_proc -private ad_page_contract_split_argspec_flag_parameters {flag_parameters
             # our parameter and we are done.
             append flag_parameter $flag_parameters
             set flag_parameters ""
-            #ns_log warning flag_parameter=$flag_parameter,END,$pi
         } else {
             # Our parameter is all of the remaining string up to the
             # pipe character. We will keep parsing further.
             append flag_parameter [string range $flag_parameters 0 ${pi}-1]
             set flag_parameters [string range $flag_parameters ${pi}+1 end]
-            #ns_log warning flag_parameter=$flag_parameter,CONTINUE
         }
         lappend parameters $flag_parameter
     }
 
-    #ns_log warning parameters=$parameters
     return $parameters
 }
 
@@ -1851,7 +1847,6 @@ ad_page_contract_filter oneof { name value set } {
     @author Gustaf Neumann
     @creation-date Feb, 2018
 } {
-    #ns_log warning $value|$set
     if { $value ni $set } {
         ad_complain [_ acs-tcl.lt_name_is_not_valid]
         return 0
