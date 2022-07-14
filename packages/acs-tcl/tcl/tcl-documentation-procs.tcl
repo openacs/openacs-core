@@ -1831,6 +1831,30 @@ ad_page_contract_filter object_id { name value } {
     return 0
 }
 
+ad_page_contract_filter object_type { name object_id types } {
+
+    Checks whether the supplied object_id is an acs_object of one of
+    the types specified in the flag parameters.
+
+    The check will take the object_type hierarchy into account
+    e.g. will always succeed if one of the types is "acs_object". In
+    this case the filter will just behave as an existance check.
+
+} {
+    # First make sure the object_id formally correct
+    if { ![ad_page_contract_filter_proc_object_id $name object_id] } {
+        return 0
+    }
+
+    if { ![acs_object::is_type_p \
+               -object_id $object_id \
+               -object_types $types] } {
+        ad_complain [_ acs-tcl.lt_invalid_object_type]
+        return 0
+    }
+
+    return 1
+}
 
 ad_page_contract_filter range { name value range } {
     Checks whether the value falls between the specified range.
