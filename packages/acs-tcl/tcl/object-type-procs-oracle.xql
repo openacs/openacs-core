@@ -28,7 +28,7 @@
       </querytext>
 </partialquery>
 
-<fullquery name="acs_object_type::supertype.supertypes">
+<fullquery name="acs_object_type::supertypes.supertypes">
       <querytext>
           select object_type
             from acs_object_types
