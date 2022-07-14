@@ -33,6 +33,7 @@
   <msg key="lt_Invalid_date_The_year">Invalid date: The year must contain 4 digits.</msg>
   <msg key="lt_Invalid_number_of_arg">Invalid number of arguments declared for the proc: the argument name and the value and possibly parameters</msg>
   <msg key="lt_Invalid_number_of_par">Invalid number of parameters passed to filter range/</msg>
+  <msg key="lt_invalid_object_type">Invalid object type</msg>
   <msg key="lt_Invalid_time_time_ele">Invalid time: %time_element% is missing</msg>
   <msg key="lt_Invalid_time_time_is_">Invalid time: time is missing</msg>
   <msg key="lt_Invalid_time_timetime">Invalid time: %time.time% is in invalid format</msg>
