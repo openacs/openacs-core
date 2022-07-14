@@ -217,6 +217,12 @@ ad_proc ad_page_contract_eval { args } {
 #
 ####################
 
+ad_proc -private ad_page_contract_argspec_flag_regexp {} {
+   Returns the regexp defining what an argspec flag should look like.
+} {
+    return {[a-zA-Z0-9_]+(?:\((?:\\\(|\\\)|[^\)])+\))?}
+}
+
 ad_proc -private ad_page_contract_parse_argspec {arg_spec} {
 
     Parse the argument spec: this is a string in the form <name>:<flag_spec>[,<flag_spec>...]
@@ -236,11 +242,13 @@ ad_proc -private ad_page_contract_parse_argspec {arg_spec} {
     - another_page_parameter:oneof(this is valid|This, is also valid|This is valid \(as well!\))
 
 } {
-   if { ![regexp {^([^ \t:]+)(?::([a-zA-Z0-9_]+(?:\((?:\\\(|\\\)|[^\)])+\))?(?:,[a-zA-Z0-9_]+(?:\((?:\\\(|\\\)|[^\)])+\))?)*))?$} $arg_spec match name flags] } {
-       error "Argspec '$arg_spec' doesn't have the right format. It must be var\[:flag\[,flag ...\]\]"
-   }
+    set flag_rx [ad_page_contract_argspec_flag_regexp]
 
-   return [list $name $flags]
+    if { ![regexp [subst -nocommands {^([^ \t:]+)(?::(${flag_rx}(?:,${flag_rx})*))?$}] $arg_spec match name flags] } {
+        error "Argspec '$arg_spec' doesn't have the right format. It must be var\[:flag\[,flag ...\]\]"
+    }
+
+    return [list $name $flags]
 }
 
 ad_proc -private ad_page_contract_split_argspec_flags {flags} {
@@ -248,8 +256,10 @@ ad_proc -private ad_page_contract_split_argspec_flags {flags} {
     Splits the flags in an argspec definition into a list.
 
 } {
+    set flag_rx [ad_page_contract_argspec_flag_regexp]
+
     set pre_flag_list [list]
-    while { [regexp {^([a-zA-Z0-9_]+(?:\((?:\\\(|\\\)|[^\)])+\))?)(?:,(.+)|)$} $flags _ flag rest] } {
+    while { [regexp [subst -nocommands {^(${flag_rx})(?:,(.+)|)$}] $flags _ flag rest] } {
         lappend pre_flag_list $flag
         set flags $rest
     }
