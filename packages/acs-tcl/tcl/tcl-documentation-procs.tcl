@@ -508,6 +508,12 @@ ad_proc -public ad_page_contract {
     <dd>Pluggable filter, installed by default, that makes sure that argument contains a
     non-external url, which can be used in ad_returnredirect without throwing an error.
 
+    <dt><a href="proc-view?proc=ad_page_contract_filter_proc_clock"><b>clock</b></a>
+    <dd>Pluggable filter, installed by default, that makes sure that
+    argument is a time string formatted according to the format
+    specified in the flag. The format uses the syntax from the clock
+    Tcl command. Usage example time:clock(%H:%M:%S).
+
     </dl>
 
     <a href="/api-doc/proc-search?query_string=ad_page_contract_filter_proc&search_type=Search&name_weight=5&param_weight=3&doc_weight=2">more filters...</a>
