@@ -87,6 +87,8 @@ switch -exact $show {
     }
 }
 
+set return_url [ad_return_url]
+
 # Get the messages
 db_multirow -extend {
     edit_url
@@ -94,11 +96,105 @@ db_multirow -extend {
     undelete_url
     message_key_pretty
 } messages $multirow {} {
-    set edit_url        [export_vars -base edit-localized-message { locale package_key message_key show {return_url [ad_return_url]} }]
-    set undelete_url    [export_vars -base message-undelete { locale package_key message_key show {return_url [ad_return_url]} }]
-    set delete_url      [export_vars -base message-delete { locale package_key message_key show {return_url [ad_return_url]} }]
+    set edit_url        [export_vars -base edit-localized-message { locale package_key message_key show return_url }]
     set message_key_pretty "$package_key.$message_key"
+    if { $default_locale_p || $translated_message ne "" } {
+        if { $translation_deleted_p } {
+            set undelete_url [export_vars -base message-undelete { locale package_key message_key show return_url }]
+        } else {
+            set delete_url   [export_vars -base message-delete { locale package_key message_key show return_url }]
+        }
+    }
 }
+
+set actions [list]
+if {$create_p} {
+    lappend actions \
+        "Create new message" $new_message_url "Create new message"
+}
+if { [template::multirow size messages] > 0 } {
+    lappend actions \
+        "Batch edit these messages" $batch_edit_url "Batch edit these messages"
+    if { $site_wide_admin_p } {
+        lappend actions \
+            "Import messages for this package and locale from catalog files" \
+            $import_messages_url \
+            "Import messages for this package and locale from catalog files" \
+            \
+            "Export messages for this package and locale to catalog files" \
+            $export_messages_url \
+            "Export messages for this package and locale to catalog files"
+    }
+}
+
+set elements {
+    edit {
+        label {}
+        link_url_col edit_url
+        link_html {title "Edit or comment on translation"}
+        display_template {<adp:icon name="edit" title="Edit or comment on translation">}
+    }
+    message_key {
+        label "Message Key"
+        link_url_col edit_url
+        link_html {title "Edit or comment on translation"}
+        display_col message_key_pretty
+    }
+    default_message {
+        label "$default_locale_label Message"
+        display_template {
+            <if @messages.deleted_p;literal@ true>
+              <span style="color: red; font-style: italic;">DELETED</span> (@messages.default_message@)
+            </if>
+            <else>
+              @messages.default_message@
+            </else>
+        }
+    }
+}
+
+if { !$default_locale_p } {
+    append elements {
+        translated_message {
+            label "$current_locale_label Message"
+            display_template {
+                <if @messages.translation_deleted_p;literal@ true>
+                  <span style="color: red; font-style: italic;">DELETED</span> (@messages.translated_message@)
+                </if>
+                <else>
+                  <if @messages.translated_message@ not nil>@messages.translated_message@</if>
+                  <else><span style="color: gray; font-style: italic;">Not translated</span></else>
+                </else>
+            }
+        }
+    }
+}
+
+append elements {
+    delete {
+        label {}
+        display_template {
+            <if @messages.undelete_url@ not nil>
+               <a href="@messages.undelete_url@" title="Undelete this message">
+                 <img src="/shared/images/Undelete16.gif" alt="undelete" width="16" height="16">
+               </a>
+            </if>
+            <if @messages.delete_url@ not nil>
+              <a href="@messages.delete_url@" title="Delete this message">
+                <adp:icon name="trash" title="Delete this message">
+              </a>
+            </if>
+        }
+    }
+}
+
+template::list::create \
+    -name messages \
+    -multirow messages \
+    -actions $actions \
+    -elements $elements \
+    -no_data {No messages}
+
 
 # TODO: Create message
 
