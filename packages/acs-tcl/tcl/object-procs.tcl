@@ -186,29 +186,32 @@ ad_proc -private acs_object::is_type_p {
 } {
     Returns whether an object is of a given object type.
 } {
-    set object_types [ns_dbquotelist $object_types]
-    set no_hierarchy_p [expr {$no_hierarchy_p ? "t" : "f"}]
-    return [db_0or1row check_types [subst -nocommands {
-        with recursive hierarchy as
-        (
-         select o.object_type, t.supertype
-         from acs_objects o, acs_object_types t
-         where o.object_id = :object_id
-           and o.object_type = t.object_type
+    return [acs::per_request_cache eval \
+                -key acs-tcl.acs_object.is_type_p($object_id,$object_types,$no_hierarchy_p) {
+                    set object_types [ns_dbquotelist $object_types]
+                    set no_hierarchy_p [expr {$no_hierarchy_p ? "t" : "f"}]
+                    db_0or1row check_types [subst -nocommands {
+                        with recursive hierarchy as
+                        (
+                         select o.object_type, t.supertype
+                         from acs_objects o, acs_object_types t
+                         where o.object_id = :object_id
+                           and o.object_type = t.object_type
 
-         union
+                         union
 
-         select t.object_type, t.supertype
-         from acs_object_types t,
-              hierarchy h
-         where :no_hierarchy_p = 'f'
-           and t.object_type = h.supertype
-           and h.object_type not in ($object_types)
-         )
-        select 1 from hierarchy
-        where object_type in ($object_types)
-        fetch first 1 rows only
-    }]]
+                         select t.object_type, t.supertype
+                         from acs_object_types t,
+                              hierarchy h
+                         where :no_hierarchy_p = 'f'
+                           and t.object_type = h.supertype
+                           and h.object_type not in ($object_types)
+                         )
+                        select 1 from hierarchy
+                        where object_type in ($object_types)
+                        fetch first 1 rows only
+                    }]
+                }]
 }
 
 ad_proc -public acs_object::set_context_id {
