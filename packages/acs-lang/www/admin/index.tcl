@@ -112,6 +112,105 @@ foreach current_locale $locale_list {
 #
 template::util::list_to_multirow locales $locale_stat_list
 
+template::list::create \
+    -name locales \
+    -multirow locales \
+    -actions {
+        "#acs-lang.Create_New_Locale#" locale-new "#acs-lang.Create_New_Locale#"
+    } \
+    -elements {
+        edit {
+            label {}
+            link_url_col locale_edit_url
+            link_html {title "#acs-lang.Edit_definition_of_locale#"}
+            display_template {<adp:icon name="edit" title="#acs-lang.Edit_definition_of_locale#">}
+        }
+        locale {
+            label "#acs-lang.Locale#"
+        }
+        locale_label {
+            label "#acs-lang.Label#"
+            link_html {title "#acs-lang.Edit_localized_messages_for#"}
+            link_url_col msg_edit_url
+        }
+        num_translated {
+            label "#acs-lang.Translated#"
+            display_template {
+                <if @locales.enabled_p;literal@ true or @locales.num_translated;literal@ gt 0>
+                   <if @locales.num_translated;literal@ ne 0>@locales.num_translated_pretty@</if>
+                </if>
+            }
+            html {align right}
+        }
+        num_untranslated {
+            label "#acs-lang.Untranslated#"
+            display_template {
+                <if @locales.enabled_p;literal@ true or @locales.num_translated;literal@ gt 0>
+                  <if @locales.num_untranslated;literal@ ne 0>@locales.num_untranslated_pretty@</if>
+                </if>
+            }
+            html {align right}
+        }
+        num_deleted {
+            label "#acs-lang.Deleted#"
+            display_template {
+                <if @locales.enabled_p;literal@ true or @locales.num_translated;literal@ gt 0>
+                  <if @locales.num_deleted;literal@ ne 0>@locales.num_deleted_pretty@</if>
+                </if>
+            }
+            html {align right}
+        }
+        total {
+            label "#acs-lang.Total#"
+            display_template {
+                <if @locales.enabled_p;literal@ true or @locales.num_translated;literal@ gt 0>
+                  <if @locales.num_messages;literal@ ne 0>@locales.num_messages_pretty@</if>
+                </if>
+            }
+            html {align right}
+        }
+        enabled_p {
+            label "#acs-lang.Enabled#"
+            display_template {
+                <if @locales.enabled_p;literal@ true>
+                  <a href="@locales.locale_enabled_p_url@" title="#acs-lang.Disable_this_locale#">
+                    <adp:icon name="checkbox-checked" title="#acs-lang.Disable_this_locale#">
+                  </a>
+                </if>
+                <else>
+                  <a href="@locales.locale_enabled_p_url@" title="#acs-lang.Enable_this_locale#">
+                    <adp:icon name="checkbox-unchecked" title="#acs-lang.Enable_this_locale#">
+                  </a>
+                </else>
+            }
+            html {align center}
+        }
+        default_p {
+            label "#acs-lang.Default_Locale_For_Language#"
+            display_template {
+                <if @locales.default_p;literal@ true>
+                  <if @locales.num_locales_for_language;literal@ eq 1>
+                    <span style="font-style: italic; color: gray;" title="#acs-lang.This_is_the_only_locale_for_this_language#"></span>
+                  </if>
+                  <else>
+                    @locales.language@:
+                    <adp:icon name="radio-checked" title="#acs-lang.Default_Locale_For_Language#">
+                  </else>
+                </if>
+                <else>@locales.language@: <a href="@locales.locale_make_default_url@" title="#acs-lang.Make_this_locale_the_default_locale_for_language#">
+                   <adp:icon name="radio-unchecked" title="#acs-lang.Make_this_locale_the_default_locale_for_language#">
+                </a></else>
+            }
+            html {align center}
+        }
+        delete {
+            label {}
+            link_url_col locale_delete_url
+            link_html {title "#acs-lang.Delete_this_locale#"}
+            display_template {<adp:icon name="trash" title="#acs-lang.Delete_this_locale#">}
+        }
+    }
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
