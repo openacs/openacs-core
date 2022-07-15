@@ -39,16 +39,16 @@ list::create \
             html { align right }
         }
         member_state {
-            label "Member state"
+            label "[_ acs-subsite.Member_State]"
             display_template {
                 <switch @subsites.member_state@>
-                  <case value="approved">Approved</case>
-                  <case value="needs approval">Awaiting approval</case>
-                  <case value="rejected">Rejected</case>
+                  <case value="approved">#acs-kernel.member_state_Approved#</case>
+                  <case value="needs approval">#acs-kernel.common_Needs_Approval#</case>
+                  <case value="rejected">#acs-kernel.member_state_Rejected#</case>
                   <default>
                     @subsites.member_state@
-                    <if @subsites.join_policy@ eq "open"><a href="@subsites.join_url@" class="button">Join</a></if>
-                    <else><a href="@subsites.join_url@" class="button">Request membership</a></else>
+                    <if @subsites.join_policy@ eq "open"><a href="@subsites.join_url@" class="button">#acs-subsite.Join_subsite#</a></if>
+                    <else><a href="@subsites.join_url@" class="button">#acs-subsite.Request_membership#</a></else>
                   </default>
                 </switch>
             }
