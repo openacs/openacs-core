@@ -222,10 +222,10 @@
   <msg key="ISO_Code_List">Lista dei codici ISO</msg>
   <msg key="ISO_Codes_Not_Loaded">Codici ISO Non Caricati</msg>
   <msg key="ISO_Codes_not_loaded">Codici ISO non caricati</msg>
-  <msg key="Join_community">Partecipa alla comunità</msg>
-  <msg key="Join_group_name">Partecipa al gruppo %group_name%</msg>
-  <msg key="Join_policy">Policy di adesione</msg>
-  <msg key="Join_subsite">Partecipa al subsite</msg>
+  <msg key="Join_community">Iscriviti alla comunità</msg>
+  <msg key="Join_group_name">Iscriviti al gruppo %group_name%</msg>
+  <msg key="Join_policy">Politica di adesione</msg>
+  <msg key="Join_subsite">Iscriviti al subsite</msg>
   <msg key="Join_this_community">Partecipa a questa comunità</msg>
   <msg key="Join_this_subsite">Partecipa a questo subsite</msg>
   <msg key="Joined_group">Sei stato iscritto al gruppo %group_name%.</msg>
@@ -328,7 +328,7 @@
   <msg key="Manage_your_notifications">Gestisci le tue notifiche</msg>
   <msg key="Mem_list_not_allowed">Spiacenti, non ti è permesso vedere la lista dei membri.</msg>
   <msg key="Member">Membro</msg>
-  <msg key="Member_State">Stato del membro</msg>
+  <msg key="Member_State">Stato di iscrizione</msg>
   <msg key="Members">Membri</msg>
   <msg key="Members_only">Solo membri</msg>
   <msg key="Missing_argument">Argomento mancante</msg>
