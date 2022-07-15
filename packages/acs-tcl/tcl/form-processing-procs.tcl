@@ -855,7 +855,7 @@ ad_proc -public ad_form {
                     }
 
                     multiple -
-                    noquote -                    
+                    noquote -
                     nospell -
                     optional {
                         if { $af_element_parameters($element_name:$flag) ne "" } {
@@ -900,7 +900,10 @@ ad_proc -public ad_form {
             }
 
             foreach extra_arg $af_extra_args($element_name) {
-                lappend form_command "-[lindex $extra_arg 0]" [uplevel [list subst [lindex $extra_arg 1]]]
+                lappend form_command "-[lindex $extra_arg 0]"
+                if {[llength $extra_arg] == 2} {
+                    lappend form_command [uplevel [list subst [lindex $extra_arg 1]]]
+                }
             }
             {*}$form_command
 
