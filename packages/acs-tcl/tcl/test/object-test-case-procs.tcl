@@ -150,10 +150,61 @@ aa_register_case -cats {
         set object_id [db_nextval acs_object_id_seq]
         aa_false "Is $object_id an object?" [acs_object::object_p -id $object_id]
         #
+        # Fetch an existing object
+        #
+        set object_id [db_string q {select max(object_id) from acs_objects}]
+        aa_true "Is $object_id an object?" [acs_object::object_p -id $object_id]
+        #
         # Create an object and check
         #
         set object_id [package_instantiate_object acs_object]
         aa_true "Is $object_id an object?" [acs_object::object_p -id $object_id]
+    }
+}
+
+aa_register_case -cats {
+    api
+    smoke
+} -procs {
+    acs_object::is_type_p
+} is_object_type_p {
+    Test the acs_object::is_type_p proc.
+} {
+    aa_run_with_teardown -rollback -test_code {
+        aa_section "Check with an unused object_id"
+        set object_id [db_nextval acs_object_id_seq]
+        aa_false "Is $object_id an acs_object?" \
+            [acs_object::is_type_p -object_id $object_id -object_type acs_object]
+
+        aa_section "Check with an invalid object_id"
+        set object_id abc
+        aa_false "Is $object_id an acs_object?" \
+            [acs_object::is_type_p -object_id $object_id -object_type acs_object]
+
+        aa_section "Fetch an existing object"
+        set object_id [db_string q {select max(object_id) from acs_objects}]
+        aa_true "Is $object_id an acs_object?" \
+            [acs_object::is_type_p -object_id $object_id -object_type acs_object]
+
+        aa_section "Fetch an existing user"
+        set object_id [db_string q {select max(user_id) from users}]
+        aa_true "Is $object_id a user?" \
+            [acs_object::is_type_p -object_id $object_id -object_type user]
+        aa_true "Is $object_id a person?" \
+            [acs_object::is_type_p -object_id $object_id -object_type person]
+        aa_true "Is $object_id a party?" \
+            [acs_object::is_type_p -object_id $object_id -object_type party]
+        aa_true "Is $object_id a user (no hierachy)?" \
+            [acs_object::is_type_p -object_id $object_id -object_type user -no_hierarchy]
+        aa_false "Is $object_id a person (no hierachy)?" \
+            [acs_object::is_type_p -object_id $object_id -object_type person -no_hierarchy]
+        aa_false "Is $object_id a party (no hierachy)?" \
+            [acs_object::is_type_p -object_id $object_id -object_type party -no_hierarchy]
+
+        aa_section "Create an object and check"
+        set object_id [package_instantiate_object acs_object]
+        aa_true "Is $object_id an acs_object?" \
+            [acs_object::is_type_p -object_id $object_id -object_type acs_object]
     }
 }
 

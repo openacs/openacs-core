@@ -186,6 +186,9 @@ ad_proc -private acs_object::is_type_p {
 } {
     Returns whether an object is of a given object type.
 } {
+    if { ![string is integer -strict $object_id] } {
+        return 0
+    }
     return [acs::per_request_cache eval \
                 -key acs-tcl.acs_object.is_type_p($object_id,$object_types,$no_hierarchy_p) {
                     set object_types [ns_dbquotelist $object_types]
