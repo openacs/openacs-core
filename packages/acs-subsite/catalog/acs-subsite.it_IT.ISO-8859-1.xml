@@ -33,7 +33,7 @@
   <msg key="add_folder">aggiungi cartella</msg>
   <msg key="Add_group_type">Aggiungi tipologia gruppo</msg>
   <msg key="Add_multiple_applications">Aggiungi applicazioni multiple</msg>
-  <msg key="Add_new_app">Aggiungi una nuova application</msg>
+  <msg key="Add_new_app">Aggiungi una nuova applicazione</msg>
   <msg key="Add_Pair">Aggiungi Coppia</msg>
   <msg key="Add_permissible_relationship_type">Aggiungi una tipologia di relazione ammissibile</msg>
   <msg key="Add_relationship_for_group__group_type">Aggiungi una tipologia di relazione per %group_type%</msg>
