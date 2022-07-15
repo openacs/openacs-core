@@ -68,6 +68,71 @@ db_multirow -extend {
     set view_untranslated_url   [export_vars -base message-list { locale package_key { show "untranslated" } }]
 }
 
+set actions [list]
+if {$locale_enabled_p && $site_wide_admin_p} {
+    lappend actions \
+        "#acs-lang.Import_all_messages_for_this_locale#" \
+        $import_all_url \
+        "#acs-lang.Import_all_messages__title#" \
+        \
+        "#acs-lang.Export_all_messages_for_this_locale#" \
+        $export_all_url \
+        "#acs-lang.Export_all_messages__title#"
+}
+
+template::list::create \
+    -name packages \
+    -multirow packages \
+    -actions $actions \
+    -elements {
+        edit {
+            label {}
+            link_url_col batch_edit_url
+            display_template {<adp:icon name="edit" title="Batch edit all messages in package @packages.package_key@">}
+        }
+        package_key {
+            label "#acs-lang.Package#"
+            link_url_col view_messages_url
+            link_html {title "View all messages in package"}
+        }
+        num_translated {
+            label "#acs-lang.Translated#"
+            display_template {
+                <if @packages.num_translated_pretty@ ne 0>
+                   <a href="@packages.view_translated_url@" title="View all translated messages in package">@packages.num_translated_pretty@</a>
+                </if>
+            }
+            html {align right}
+        }
+        num_untranslated {
+            label "#acs-lang.Untranslated#"
+            display_template {
+                <if @packages.num_untranslated_pretty@ ne 0>
+                  <a href="@packages.view_untranslated_url@" title="View all untranslated messages in package">@packages.num_untranslated_pretty@</a>
+                </if>
+            }
+            html {align right}
+        }
+        num_deleted {
+            label "#acs-lang.Deleted#"
+            display_template {
+                <if @packages.num_deleted_pretty@ ne 0>
+                  <a href="@packages.view_deleted_url@" title="View all deleted messages in package">@packages.num_deleted_pretty@</a>
+                </if>
+            }
+            html {align right}
+        }
+        total {
+            label "#acs-lang.Total#"
+            display_template {
+                <if @packages.num_messages_pretty@ ne 0>
+                  <a href="@packages.view_messages_url@" title="View all messages in package">@packages.num_messages_pretty@</a>
+                </if>
+            }
+            html {align right}
+        }
+    }
+
 # Search form
 set search_locales [list \
                         [list "Current locale - [lang::util::get_label $current_locale]" $current_locale] \
