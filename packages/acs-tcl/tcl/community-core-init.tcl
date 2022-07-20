@@ -5,20 +5,20 @@
 # following:
 #
 #    ns_section ns/server/${server}/acs/acs-tcl
-#         ns_param PartyInfoCacheSize          2000000
-#         ns_param PartyInfoCacheTimeout          3600
+#         ns_param PartyInfoCacheSize             2MB
+#         ns_param PartyInfoCacheTimeout          1h
 #
 # The timeout is responsible, how precise/recent e.g. last_visit should be.
 #
 ns_cache create party_info_cache \
-    -size [parameter::get \
-               -package_id [apm_package_id_from_key acs-tcl] \
+    -size [parameter::get_from_package_key \
+               -package_key acs-tcl \
                -parameter PartyInfoCacheSize \
-               -default 2000000] \
-    -timeout [parameter::get \
-                  -package_id [apm_package_id_from_key acs-tcl] \
+               -default 2MB] \
+    -timeout [parameter::get_from_package_key \
+                  -package_key acs-tcl \
                   -parameter PartyInfoCacheTimeout \
-                  -default 3600]
+                  -default 1h]
 
 #
 # Create a cache for keeping person_info
@@ -27,20 +27,20 @@ ns_cache create party_info_cache \
 # following:
 #
 #    ns_section ns/server/${server}/acs/acs-tcl
-#         ns_param PersonInfoCacheSize          2000000
-#         ns_param PersonInfoCacheTimeout          3600
+#         ns_param PersonInfoCacheSize          2MB
+#         ns_param PersonInfoCacheTimeout       1h
 #
 # The timeout is responsible, how precise/recent e.g. last_visit should be.
 #
 ns_cache create person_info_cache \
-    -size [parameter::get \
-               -package_id [apm_package_id_from_key acs-tcl] \
+    -size [parameter::get_from_package_key \
+               -package_key acs-tcl \
                -parameter PersonInfoCacheSize \
-               -default 2000000] \
-    -timeout [parameter::get \
-                  -package_id [apm_package_id_from_key acs-tcl] \
+               -default 2MB] \
+    -timeout [parameter::get_from_package_key \
+                  -package_key acs-tcl \
                   -parameter PersonInfoCacheTimeout \
-                  -default 3600]
+                  -default 1h]
 
 
 #
@@ -50,20 +50,20 @@ ns_cache create person_info_cache \
 # following:
 #
 #    ns_section ns/server/${server}/acs/acs-tcl
-#         ns_param UserInfoCacheSize          2000000
-#         ns_param UserInfoCacheTimeout          3600
+#         ns_param UserInfoCacheSize          2MB
+#         ns_param UserInfoCacheTimeout       1h
 #
 # The timeout is responsible, how precise/recent e.g. last_visit should be.
 #
 ns_cache create user_info_cache \
-    -size [parameter::get \
-               -package_id [apm_package_id_from_key acs-tcl] \
+    -size [parameter::get_from_package_key \
+               -package_key acs-tcl \
                -parameter UserInfoCacheSize \
-               -default 2000000] \
-    -timeout [parameter::get \
-                  -package_id [apm_package_id_from_key acs-tcl] \
+               -default 2MB] \
+    -timeout [parameter::get_from_package_key \
+                  -package_key acs-tcl \
                   -parameter UserInfoCacheTimeout \
-                  -default 3600]
+                  -default 1h]
 
 
 

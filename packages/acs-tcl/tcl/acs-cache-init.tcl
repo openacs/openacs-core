@@ -7,4 +7,4 @@ set cacheType [expr {[::acs::icanuse "ns_hash"] ? "HashKeyPartitionedCache" : "C
 ::acs::$cacheType create ::acs::misc_cache \
     -package_key acs-tcl \
     -parameter MiscCache \
-    -default_size 100000
+    -default_size 100KB
