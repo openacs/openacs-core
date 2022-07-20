@@ -635,10 +635,14 @@ aa_register_case -error_level warning -cats {
         @author Nathan Coulter
         @creation-date 2020-08-20
 } {
-    set val1 \x00
-    set queries {
-        variable {sql {select :val1} status 1}
-    }
+    sset queries {}
+    #
+    # The NUL character is not allowed in plain data for PostgreSQL.
+    #
+    #set val1 \x00
+    #set queries {
+    #    variable {sql {select :val1} status 1}
+    #}
     switch [db_type] {
        postgresql {
            lappend queries literal {sql {select '\x00'::bytea} status 0}
