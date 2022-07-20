@@ -1424,66 +1424,6 @@ ad_proc -public db_list {
     }
 }
 
-
-ad_proc -public db_list_of_lists {
-    {-dbn ""}
-    -cache_key
-    {-cache_pool db_cache_pool}
-    -with_headers:boolean
-    {-subst all}
-    statement_name
-    sql
-    -bind
-} {
-
-    @param with_headers when specified, first line of returned list of
-    lists will always be the list of column names as reported by the
-    database. Useful when you want to dynamically assign variables to
-    values returned in the list of lists.
-
-    @return a Tcl list, each element of which is a list of all column
-    values in a row of the result of the SQL query<tt>sql</tt>. If
-    <tt>sql</tt> doesn't return any rows, returns an empty list,
-    unless with_headers flag was specified and in this case the only
-    element in the list will be the list of headers.
-
-    It checks if the element is I18N and replaces it, thereby
-    reducing the need to do this with every single package
-
-    @param dbn The database name to use.  If empty_string, uses the default database.
-    @param cache_key Cache the result using given value as the key.  Default is to not cache.
-    @param cache_pool Override the default db_cache_pool
-    @param subst Perform Tcl substitution in xql-files. Possible values: all, none, vars, commands
-    @param bind bind variables, passed either as an ns_set id, or via bind value list
-} {
-    set code {
-        set result [list]
-        set bindArg [expr {[info exists bind] ? [list -bind $bind] : ""}]
-        foreach selection [uplevel [list db_list_of_ns_sets -dbn $dbn -subst $subst $statement_name $sql {*}$bindArg]] {
-            set selection_array [ns_set array $selection]
-            if {[llength $result] == 0 && $with_headers_p} {
-                set headers [list]
-                foreach {key value} $selection_array {
-                    lappend headers $key
-                }
-                lappend result $headers
-            }
-            set row [list]
-            foreach {key value} $selection_array {
-                lappend row $value
-            }
-            lappend result $row
-        }
-        set result
-    }
-    if { [info exists cache_key] } {
-        return [ns_cache eval $cache_pool $cache_key $code]
-    } else {
-        return [eval $code]
-    }
-}
-
-
 ad_proc -public db_list_of_ns_sets {
     {-dbn ""}
     {-subst all}
@@ -1507,6 +1447,7 @@ ad_proc -public db_list_of_ns_sets {
 
     db_with_handle -dbn $dbn db {
         set result [list]
+        ns_log notice "db_list_of_ns_sets $full_statement_name $sql"
         set selection [db_exec -subst $subst select $db $full_statement_name $sql]
 
         while { [db_getrow $db $selection] } {
@@ -1519,6 +1460,82 @@ ad_proc -public db_list_of_ns_sets {
             } else {
                 set __columns [dict keys [ns_set array $selection]]
             }
+        }
+    }
+
+    return $result
+}
+
+ad_proc -public db_list_of_lists {
+    {-dbn ""}
+    -cache_key
+    {-cache_pool db_cache_pool}
+    -with_headers:boolean
+    {-subst all}
+    {-columns_var ""}
+    statement_name
+    sql
+    -bind
+} {
+    @param with_headers when specified, first line of returned list of
+    lists will always be the list of column names as reported by the
+    database. Useful when you want to dynamically assign variables to
+    values returned in the list of lists.
+
+    @return a Tcl list, each element of which is a list of all column
+    values in a row of the result of the SQL query<tt>sql</tt>. If
+    <tt>sql</tt> doesn't return any rows, returns an empty list,
+    unless with_headers flag was specified and in this case the only
+    element in the list will be the list of headers.
+
+    It checks if the element is I18N and replaces it, thereby
+    reducing the need to do this with every single package
+
+    @param dbn The database name to use.  If empty_string, uses the default database.
+    @param cache_key Cache the result using given value as the key.  Default is to not cache.
+    @param cache_pool Override the default db_cache_pool
+    @param subst Perform Tcl substitution in xql-files. Possible values: all, none, vars, commands
+    @param bind bind variables, passed either as an ns_set id, or via bind value list
+} {
+    set full_statement_name [db_qd_get_fullname $statement_name]
+
+    db_with_handle -dbn $dbn db {
+
+        set code {
+            set result {}
+            set selection [db_exec -subst $subst select $db $full_statement_name $sql]
+            #ns_log notice "ll2: $sql -> $selection"
+            #ns_log notice "ll2: $sql -> [ns_set array $selection]"
+
+            if {$with_headers_p || $columns_var ne ""} {
+                if {[acs::icanuse "ns_set keys"]} {
+                    set headers [ns_set keys $selection]
+                } else {
+                    set headers [dict keys [ns_set array $selection]]
+                }
+                if {$with_headers_p} {
+                    set result [list $headers]
+                } else {
+                    upvar 1 $columns_var $headers
+                }
+            }
+
+            if {[acs::icanuse "ns_set values"]} {
+                while { [db_getrow $db $selection] } {
+                    lappend result [ns_set values $selection]
+                }
+            } else {
+                while { [db_getrow $db $selection] } {
+                    lappend result [dict values [ns_set array $selection]]
+                }
+            }
+            set result
+        }
+
+        if { [info exists cache_key] } {
+            return [ns_cache eval $cache_pool $cache_key $code]
+        } else {
+            return [eval $code]
         }
     }
 
@@ -1590,15 +1607,24 @@ ad_proc -public db_foreach {
 
     set bindArg [expr {[info exists bind] ? [list -bind $bind] : ""}]
     set counter 0
-    foreach selection [uplevel [list db_list_of_ns_sets -dbn $dbn -subst $subst $statement_name $sql {*}${bindArg}]] {
+    set result [uplevel [list db_list_of_lists \
+                             -with_headers \
+                             -dbn $dbn \
+                             -subst $subst \
+                             $statement_name \
+                             $sql \
+                             {*}${bindArg}]]
+    #ns_log notice "RESULT $result"
+    set columns [lindex $result 0]
+    #ns_log notice "columns <$columns>"
+    foreach tuple [lrange $result 1 end] {
         incr counter
         if { ![info exists column_set] } {
-            set set_array [ns_set array $selection]
             if { [info exists column_array] } {
                 unset -nocomplain array_val
-                array set array_val $set_array
+                array set array_val [lmap a $columns v $tuple {list $a $v}]
             } else {
-                foreach {a v} $set_array { uplevel [list set $a $v] }
+                foreach a $columns v $tuple { uplevel [list set $a $v] }
             }
         }
         set errno [catch { uplevel 1 $code_block } error]
@@ -2880,7 +2906,7 @@ ad_proc -public db_source_sql_file {
                 return -code error -errorinfo $error_lines -errorcode $::errorCode $error_lines
             }
         }
-        
+
         nsodbc {
             error "$proc_name is not supported for this database."
         }
