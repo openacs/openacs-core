@@ -32,7 +32,7 @@ create table membership_rels (
 			constraint mr_member_state_nn not null
                         constraint mr_member_state_ck
                         check (member_state in ('merged','approved', 'needs approval',
-                                              'banned', 'rejected', 'deleted'))
+                                              'banned', 'rejected', 'deleted', 'expired'))
 );
 
 create table admin_rels (
