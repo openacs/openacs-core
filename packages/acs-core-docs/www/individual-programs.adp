@@ -312,9 +312,8 @@ from openacs.org.</p></li></ul></div>
 08:39:25 gustafn Exp $)</div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-			leftLink="install-steps" leftLabel="Prev" leftTitle="Basic Steps"
-			rightLink="complete-install" rightLabel="Next" rightTitle="Chapter 3. Complete
-Installation"
-			homeLink="index" homeLabel="Home" 
-			upLink="install-overview" upLabel="Up"> 
+	leftLink="install-steps" leftLabel="Prev" leftTitle="Basic Steps"
+	rightLink="complete-install" rightLabel="Next" rightTitle="Chapter 3. Complete Installation"
+	homeLink="index" homeLabel="Home" 
+	upLink="install-overview" upLabel="Up"> 
 		    
