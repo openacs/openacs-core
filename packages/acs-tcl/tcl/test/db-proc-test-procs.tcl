@@ -106,6 +106,20 @@ aa_register_case \
         aa_equals "db_foreach executes the 'no row' code block using the 'if_no_rows' syntax" \
             "not found" \
             $results
+
+        # 3 columns
+        set results ""
+        db_foreach query {select * from (values ('a1','b1','c1')) as X(a,b,c)} -column_array things {
+            set results [lsort [array get things]]
+        }
+        aa_equals "db_foreach with three columns" "{a a1} {b b1} {c c1}" $results
+
+        # 4 columns
+        set results ""
+        db_foreach query {select * from (values ('a1','b1','c1','d1')) as X(a,b,c,d)} -column_array things {
+            set results [lsort [array get things]]
+        }
+        aa_equals "db_foreach with four columns" "{a a1} {b b1} {c c1} {d d1}" $results
     }
 
 aa_register_case \
