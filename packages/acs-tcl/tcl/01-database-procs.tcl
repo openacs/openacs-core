@@ -1622,7 +1622,7 @@ ad_proc -public db_foreach {
         if { ![info exists column_set] } {
             if { [info exists column_array] } {
                 unset -nocomplain array_val
-                array set array_val [lmap a $columns v $tuple {list $a $v}]
+                array set array_val [concat {*}[lmap a $columns v $tuple {list $a $v}]]
             } else {
                 foreach a $columns v $tuple { uplevel [list set $a $v] }
             }

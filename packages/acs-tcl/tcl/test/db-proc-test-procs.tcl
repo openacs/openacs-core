@@ -109,17 +109,31 @@ aa_register_case \
 
         # 3 columns
         set results ""
-        db_foreach query {select * from (values ('a1','b1','c1')) as X(a,b,c)} -column_array things {
-            set results [lsort [array get things]]
+        db_foreach query {select * from (values ('a1','b1','c 1')) as X(a,b,c)} {
+            lappend results [list a $a b $b c $c]
         }
-        aa_equals "db_foreach with three columns" "{a a1} {b b1} {c c1}" $results
+        aa_equals "db_foreach with three columns instvars" "{a a1 b b1 c {c 1}}" $results
+
+        set results ""
+        db_foreach query {select * from (values ('a1','b1','c 1')) as X(a,b,c)} \
+            -column_array things {
+                lappend results [lsort [array get things]]
+            }
+        aa_equals "db_foreach with three columns" "{a a1 b b1 c {c 1}}" $results
 
         # 4 columns
         set results ""
-        db_foreach query {select * from (values ('a1','b1','c1','d1')) as X(a,b,c,d)} -column_array things {
-            set results [lsort [array get things]]
+        db_foreach query {select * from (values ('a1','b1','c 1','d1')) as X(a,b,c,d)} {
+            lappend results [list a $a b $b c $c d $d]
         }
-        aa_equals "db_foreach with four columns" "{a a1} {b b1} {c c1} {d d1}" $results
+        aa_equals "db_foreach with fopur columns instvars" "{a a1 b b1 c {c 1} d d1}" $results
+
+        set results ""
+        db_foreach query {select * from (values ('a1','b1','c 1','d1')) as X(a,b,c,d)} \
+            -column_array things {
+                lappend results [lsort [array get things]]
+            }
+        aa_equals "db_foreach with four columns" "{a a1 b b1 c {c 1} d d1}" $results
     }
 
 aa_register_case \
