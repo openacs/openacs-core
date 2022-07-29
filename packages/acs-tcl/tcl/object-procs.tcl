@@ -196,14 +196,14 @@ ad_proc -private acs_object::is_type_p {
                     db_0or1row check_types [subst -nocommands {
                         with recursive hierarchy as
                         (
-                         select o.object_type, t.supertype
+                         select o.object_type::varchar(1000), t.supertype
                          from acs_objects o, acs_object_types t
                          where o.object_id = :object_id
                            and o.object_type = t.object_type
 
                          union
 
-                         select t.object_type, t.supertype
+                         select t.object_type::varchar(1000), t.supertype
                          from acs_object_types t,
                               hierarchy h
                          where :no_hierarchy_p = 'f'
