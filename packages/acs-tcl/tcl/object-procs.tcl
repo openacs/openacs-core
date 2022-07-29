@@ -13,7 +13,7 @@ namespace eval acs_object {}
 ad_proc -private acs_lookup_magic_object_no_cache { name } {
     Non memoized version of acs_magic_object.
 
-    @return the magic object's object ID 
+    @return the magic object's object ID
 
     @see acs_magic_object
 } {
@@ -23,7 +23,7 @@ ad_proc -private acs_lookup_magic_object_no_cache { name } {
 ad_proc -private -deprecated acs_lookup_magic_object { name } {
     Non memoized version of acs_magic_object.
 
-    @return the magic object's object ID 
+    @return the magic object's object ID
 
     @see acs_magic_object
 } {
@@ -66,7 +66,7 @@ ad_proc -public acs_object_type { object_id } {
     } -default ""]
 }
 
-ad_proc -public acs_object::get { 
+ad_proc -public acs_object::get {
     {-object_id:required}
     {-array}
     {-element}
@@ -81,7 +81,7 @@ ad_proc -public acs_object::get {
 
     If called with "-element" it returns the denoted element (similar
     to e.g. "party::get").
-    
+
     @param array An array in the caller's namespace into which the info should be delivered (upvared)
     @param element to be returned
     @param object_id for which the information should be retrieved
@@ -122,9 +122,9 @@ ad_proc -public acs_object::package_id {
 
     @author Malte Sussdorff (malte.sussdorff@cognovis.de)
     @creation-date 2006-08-10
-    
+
     @param object_id the object to get the package_id for
-    
+
     @return package_id of the object. Empty string if the package_id is not stored
 } {
     return [util_memoize [list acs_object::package_id_not_cached -object_id $object_id]]
@@ -137,16 +137,16 @@ ad_proc -private acs_object::package_id_not_cached {
 
     @author Malte Sussdorff (malte.sussdorff@cognovis.de)
     @creation-date 2006-08-10
-    
+
     @param object_id the object to get the package_id for
-    
+
     @return package_id of the object. Empty string if the package_id is not stored
 } {
     return [db_string get_package_id {} -default ""]
 }
 
 
-ad_proc -public acs_object::get_element { 
+ad_proc -public acs_object::get_element {
     {-object_id:required}
     {-element:required}
 } {
