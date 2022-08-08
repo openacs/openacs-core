@@ -99,14 +99,14 @@ ad_proc -private acs_object_type::supertype {
     {-supertype:required}
     {-subtype:required}
 } {
-    Returns true if subtype is equal to, or a subtype of, supertype.
+    Returns true if subtype is equal to, or a subtype of supertype.
 
     @author Lee Denison (lee@thaum.net)
 } {
-    set supertypes [object_type::supertypes]
-    append supertypes $subtype
+    set supertypes [acs_object_type::supertypes -subtype $subtype]
+    lappend supertypes $subtype
 
-    return [expr {[lsearch $supertypes $supertype] >= 0}]
+    return [expr {$supertype in $supertypes}]
 }
 
 ad_proc -private acs_object_type::supertypes {
@@ -122,9 +122,9 @@ ad_proc -private acs_object_type::supertypes {
     } else {
         return [acs::per_thread_cache eval \
                     -key acs-tcl.acs_object_type.supertypes($subtype) {
-                        util_memoize [list acs_object_type::supertypes \
-                                          -subtype $subtype \
-                                          -no_cache]
+                        acs_object_type::supertypes \
+                            -subtype $subtype \
+                            -no_cache
                     }]
     }
 }

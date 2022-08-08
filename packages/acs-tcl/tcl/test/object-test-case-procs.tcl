@@ -168,6 +168,7 @@ aa_register_case -cats {
 } -procs {
     acs_object::is_type_p
     acs_object_type::supertypes
+    acs_object_type::supertype
 } is_object_type_p {
     Test the acs_object::is_type_p proc.
 } {
@@ -186,6 +187,14 @@ aa_register_case -cats {
         set object_id [db_string q {select max(object_id) from acs_objects}]
         aa_true "Is $object_id an acs_object?" \
             [acs_object::is_type_p -object_id $object_id -object_type acs_object]
+
+        aa_section "Supertypes"
+        aa_true "true supertype" \
+            [acs_object_type::supertype -supertype acs_object -subtype user]
+        aa_true "equlas supertype" \
+            [acs_object_type::supertype -supertype user -subtype user]
+        aa_false "false supertype" \
+            [acs_object_type::supertype -supertype user -subtype party]
 
         aa_section "Fetch an existing user"
         set object_id [db_string q {select max(user_id) from users}]
