@@ -120,9 +120,12 @@ ad_proc -private acs_object_type::supertypes {
     if {$no_cache_p} {
         return [db_list supertypes {}]
     } else {
-        return [util_memoize [list acs_object_type::supertypes \
-            -subtype $subtype \
-            -no_cache]]
+        return [acs::per_thread_cache eval \
+                    -key acs-tcl.acs_object_type.supertypes($subtype) {
+                        util_memoize [list acs_object_type::supertypes \
+                                          -subtype $subtype \
+                                          -no_cache]
+                    }]
     }
 }
 

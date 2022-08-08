@@ -185,36 +185,42 @@ ad_proc -private acs_object::is_type_p {
     -no_hierarchy:boolean
 } {
     Returns whether an object is of a given object type.
+
+    @return boolean
 } {
     if { ![string is integer -strict $object_id] } {
         return 0
     }
-    return [acs::per_request_cache eval \
-                -key acs-tcl.acs_object.is_type_p($object_id,$object_types,$no_hierarchy_p) {
-                    set object_types [ns_dbquotelist $object_types]
-                    set no_hierarchy_p [expr {$no_hierarchy_p ? "t" : "f"}]
-                    db_0or1row check_types [subst -nocommands {
-                        with recursive hierarchy as
-                        (
-                         select o.object_type::varchar(1000), t.supertype
-                         from acs_objects o, acs_object_types t
-                         where o.object_id = :object_id
-                           and o.object_type = t.object_type
 
-                         union
+    set object [acs::per_request_cache eval \
+                    -key acs-tcl.acs_object.is_type_p($object_id,$object_types,$no_hierarchy_p) {
 
-                         select t.object_type::varchar(1000), t.supertype
-                         from acs_object_types t,
-                              hierarchy h
-                         where :no_hierarchy_p = 'f'
-                           and t.object_type = h.supertype
-                           and h.object_type not in ($object_types)
-                         )
-                        select 1 from hierarchy
-                        where object_type in ($object_types)
-                        fetch first 1 rows only
+                        set object_type [acs_object_type $object_id]
+
+                        if {$object_type eq ""} {
+                            # Object was not found
+                            return 0
+                        } elseif {$object_type in $object_types} {
+                            # Object is one of the types we look for
+                            return 1
+                        } elseif {$no_hierarchy_p} {
+                            # Object is not one of the types we look
+                            # for and we were told to not look into
+                            # the hierarchy
+                            return 0
+                        } else {
+                            # We expand the object type hierarchy and
+                            # see if one of our supertypes is a type
+                            # we look for
+                            foreach supertype [acs_object_type::supertypes -subtype $object_type] {
+                                if {$supertype in $object_types} {
+                                    return 1
+                                }
+                            }
+
+                            return 0
+                        }
                     }]
-                }]
 }
 
 ad_proc -public acs_object::set_context_id {

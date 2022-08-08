@@ -167,6 +167,7 @@ aa_register_case -cats {
     smoke
 } -procs {
     acs_object::is_type_p
+    acs_object_type::supertypes
 } is_object_type_p {
     Test the acs_object::is_type_p proc.
 } {
@@ -200,6 +201,23 @@ aa_register_case -cats {
             [acs_object::is_type_p -object_id $object_id -object_type person -no_hierarchy]
         aa_false "Is $object_id a party (no hierachy)?" \
             [acs_object::is_type_p -object_id $object_id -object_type party -no_hierarchy]
+
+        aa_true "Is $object_id a user os a package?" \
+            [acs_object::is_type_p -object_id $object_id -object_type {apm_package user}]
+        aa_true "Is $object_id a person or a package?" \
+            [acs_object::is_type_p -object_id $object_id -object_type {apm_package person}]
+        aa_true "Is $object_id a party or a package?" \
+            [acs_object::is_type_p -object_id $object_id -object_type {apm_package party}]
+        aa_true "Is $object_id a user or a package (no hierachy)?" \
+            [acs_object::is_type_p -object_id $object_id -object_type {apm_package user} -no_hierarchy]
+        aa_false "Is $object_id a person or a package (no hierachy)?" \
+            [acs_object::is_type_p -object_id $object_id \
+                 -object_type {apm_package person} \
+                 -no_hierarchy]
+        aa_false "Is $object_id a party or a package (no hierachy)?" \
+            [acs_object::is_type_p -object_id $object_id \
+                 -object_type {apm_package party} -no_hierarchy]
+
 
         aa_section "Create an object and check"
         set object_id [package_instantiate_object acs_object]
