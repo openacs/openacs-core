@@ -1040,19 +1040,19 @@ namespace eval ::template::icon {
     set ::template::icon::map {
         bootstrap-icons {
             add-new-item plus-circle
-            checkbox-checked check2-square
-            checkbox-unchecked square
-            edit pencil-square
-            eye-closed eye-slash
-            eye-open eye
-            file file-earmark
-            filetype-csv filetype-csv 
-            form-info-sign info-square
-            radio-checked check2-circle
-            radio-unchecked circle
-            reload arrow-clockwise
-            text file-earmark-text
-            watch eye
+            checkbox-checked     check2-square
+            checkbox-unchecked   square
+            edit                 pencil-square
+            eye-closed           eye-slash
+            eye-open             eye
+            file                 file-earmark
+            filetype-csv         filetype-csv
+            form-info-sign       info-square
+            radio-checked        check2-circle
+            radio-unchecked      circle
+            reload               arrow-clockwise
+            text                 file-earmark-text
+            watch                eye
         }
         fa-icons {
             add-new-item         "fa-solid fa-plus"
@@ -1077,44 +1077,44 @@ namespace eval ::template::icon {
             watch                "fa-regular fa-eye"
         }
         glyphicons {
-            add-new-item         "plus-sign"
-            checkbox-checked check
-            checkbox-unchecked unchecked
-            download download-alt
-            edit pencil
-            eye-closed eye-close
-            eye-open eye-open
-            file file
-            filetype-csv ""
-            folder folder-open
-            form-info-sign info-sign
-            radio-checked record
-            radio-unchecked /shared/images/radio.gif
-            reload refresh
-            text file
-            watch eye-open
+            add-new-item         plus-sign
+            checkbox-checked     check
+            checkbox-unchecked   unchecked
+            download             download-alt
+            edit                 pencil
+            eye-closed           eye-close
+            eye-open             eye-open
+            file                 file
+            filetype-csv         ""
+            folder               folder-open
+            form-info-sign       info-sign
+            radio-checked        record
+            radio-unchecked      /shared/images/radio.gif
+            reload               refresh
+            text                 file
+            watch                eye-open
         }
         classic {
-            add-new-item "+"
-            arrow-down /resources/acs-subsite/arrow-down.gif
-            arrow-up /resources/acs-subsite/arrow-up.gif
-            checkbox-checked /shared/images/checkboxchecked.gif
-            checkbox-unchecked /shared/images/checkbox.gif
-            download /shared/images/download16.png
-            edit  /shared/images/Edit16.gif
-            eye-closed /shared/images/eye-slash16.png
-            eye-open /shared/images/eye16.png
-            filetype-csv /shared/images/csv16.png
-            file /shared/images/file.gif
-            folder /shared/images/Delete16.gif
-            form-info-sign /shared/images/info.gif
-            list /shared/images/list16.png
-            radio-checked /shared/images/radiochecked.gif
-            radio-unchecked /shared/images/radio.gif
-            text /shared/images/text16.png
-            reload ""
-            trash /shared/images/Delete16.gif
-            watch ""
+            add-new-item         "+"
+            arrow-down           /resources/acs-subsite/arrow-down.gif
+            arrow-up             /resources/acs-subsite/arrow-up.gif
+            checkbox-checked     /shared/images/checkboxchecked.gif
+            checkbox-unchecked   /shared/images/checkbox.gif
+            download             /shared/images/download16.png
+            edit                 /shared/images/Edit16.gif
+            eye-closed           /shared/images/eye-slash16.png
+            eye-open             /shared/images/eye16.png
+            filetype-csv         /shared/images/csv16.png
+            file                 /shared/images/file.gif
+            folder               /shared/images/Delete16.gif
+            form-info-sign       /shared/images/info.gif
+            list                 /shared/images/list16.png
+            radio-checked        /shared/images/radiochecked.gif
+            radio-unchecked      /shared/images/radio.gif
+            text                 /shared/images/text16.png
+            reload               ""
+            trash                /shared/images/Delete16.gif
+            watch                ""
         }
     }
 }
