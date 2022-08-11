@@ -1039,6 +1039,7 @@ template::tag box { chunk params } {
 namespace eval ::template::icon {
     set ::template::icon::map {
         bootstrap-icons {
+            add-new-item plus-circle
             checkbox-checked check2-square
             checkbox-unchecked square
             edit pencil-square
@@ -1054,6 +1055,7 @@ namespace eval ::template::icon {
             watch eye
         }
         fa-icons {
+            add-new-item         "fa-solid fa-plus"
             arrow-down           "fa-solid fa-arrow-down"
             arrow-up             "fa-solid fa-arrow-up"
             checkbox-checked     "fa-regular fa-square-check"
@@ -1075,6 +1077,7 @@ namespace eval ::template::icon {
             watch                "fa-regular fa-eye"
         }
         glyphicons {
+            add-new-item         "plus-sign"
             checkbox-checked check
             checkbox-unchecked unchecked
             download download-alt
@@ -1092,6 +1095,7 @@ namespace eval ::template::icon {
             watch eye-open
         }
         classic {
+            add-new-item "+"
             arrow-down /resources/acs-subsite/arrow-down.gif
             arrow-up /resources/acs-subsite/arrow-up.gif
             checkbox-checked /shared/images/checkboxchecked.gif
