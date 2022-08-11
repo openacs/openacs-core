@@ -18,12 +18,18 @@ set resource_dir  [dict get $resource_info resourceDir]
 set cdn           [dict get $resource_info cdn]
 set resource_name [dict get $resource_info resourceName]
 
+set version_dir [expr {
+                       [dict exists $resource_info versionDir]
+                       ? [dict get $resource_info versionDir]
+                       : $version
+                   }]
+
 #
 # Check, if the resources are already installed.
 #
 set is_installed [::util::resources::is_installed_locally \
               -resource_info $resource_info \
-              -version_dir $version ]
+              -version_dir $version_dir ]
 if {$is_installed} {
     #
     # Tell the users, where the resources are installed.
@@ -36,7 +42,7 @@ if {$is_installed} {
     #
     set writable [util::resources::can_install_locally \
               -resource_info $resource_info \
-              -version_dir $version]
+              -version_dir $version_dir]
     if {!$writable} {
         #
         # If we cannot install locally, tell the user were we want to

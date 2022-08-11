@@ -4006,6 +4006,9 @@ namespace eval util::resources {
         @author Gustaf Neumann
     } {
         set installed 1
+        set version_dir [version_dir \
+                             -version_dir $version_dir \
+                             -resource_info $resource_info]
         set resource_dir [dict get $resource_info resourceDir]
         set downloadFiles {}
         ns_log notice "check downloadURLs <[dict exists $resource_info downloadURLs]> // [lsort [dict keys $resource_info]]"
@@ -4050,6 +4053,10 @@ namespace eval util::resources {
         @author Gustaf Neumann
     } {
         set can_install 1
+        set version_dir [version_dir \
+                             -version_dir $version_dir \
+                             -resource_info $resource_info]
+
         set resource_dir [dict get $resource_info resourceDir]
 
         if {![ad_file isdirectory $resource_dir]} {
@@ -4072,6 +4079,21 @@ namespace eval util::resources {
             }
         }
         return $can_install
+    }
+
+    ad_proc -public ::util::resources::version_dir {
+        {-resource_info:required}
+        {-version_dir ""}
+    } {
+
+        Obtain the version_dir either form the provided string or from
+        the resource_info dict.
+
+    } {
+        if {$version_dir eq "" && [dict exists $resource_info versionDir]} {
+            set version_dir [dict get $resource_info versionDir]
+        }
+        return $version_dir
     }
 
     ad_proc -private ::util::resources::download_helper {
@@ -4126,6 +4148,10 @@ namespace eval util::resources {
         @author Gustaf Neumann
     } {
         set resource_dir [dict get $resource_info resourceDir]
+        set version_dir [version_dir \
+                             -version_dir $version_dir \
+                             -resource_info $resource_info]
+
         set can_install [::util::resources::can_install_locally \
                              -resource_info $resource_info \
                              -version_dir $version_dir]
