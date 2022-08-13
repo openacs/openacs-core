@@ -1048,10 +1048,12 @@ namespace eval ::template::icon {
             file                 file-earmark
             filetype-csv         filetype-csv
             form-info-sign       info-square
+            list-alt             card-heading
             radio-checked        check2-circle
             radio-unchecked      circle
             reload               arrow-clockwise
             text                 file-earmark-text
+            user                 person
             watch                eye
         }
         fa-icons {
@@ -1069,6 +1071,8 @@ namespace eval ::template::icon {
             folder               "fa-regular fa-folder"
             form-info-sign       "fa-solid fa-circle-info"
             list                 "fa-solid fa-list"
+            list-alt             "fa-regular fa-rectangle-list"
+            user                 "fa-solid fa-user"
             radio-checked        "fa-regular fa-circle-check"
             radio-unchecked      "fa-regular fa-circle"
             reload               "fa-solid fa-arrows-rotate"
@@ -1088,10 +1092,12 @@ namespace eval ::template::icon {
             filetype-csv         ""
             folder               folder-open
             form-info-sign       info-sign
+            list-alt             list-alt
             radio-checked        record
             radio-unchecked      /shared/images/radio.gif
             reload               refresh
             text                 file
+            user                 user            
             watch                eye-open
         }
         classic {
@@ -1109,11 +1115,13 @@ namespace eval ::template::icon {
             folder               /shared/images/Delete16.gif
             form-info-sign       /shared/images/info.gif
             list                 /shared/images/list16.png
+            list-alt             /shared/images/Preferences16.gif
             radio-checked        /shared/images/radiochecked.gif
             radio-unchecked      /shared/images/radio.gif
             text                 /shared/images/text16.png
             reload               ""
             trash                /shared/images/Delete16.gif
+            user                 /shared/images/profile-16.png
             watch                ""
         }
     }
