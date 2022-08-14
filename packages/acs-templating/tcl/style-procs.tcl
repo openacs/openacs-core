@@ -112,18 +112,19 @@ ad_proc -private ::template::icon {
     } elseif {$name eq ""} {
         set iconset text
     }
+    set _class [expr {$class ne "" ? " $class" : ""} ]
     set cmd ""
     switch $iconset {
         "glyphicons" {
-            set template {<span class='glyphicon glyphicon-$name$class' title='$title' aria-hidden='true' $styleAtt></span>}
+            set template {<span class='glyphicon glyphicon-$name$_class' title='$title' aria-hidden='true' $styleAtt></span>}
         }
         "bootstrap-icons" {
             set cmd {template::head::add_css -href urn:ad:css:bootstrap-icons}
-            set template {<i class='bi bi-$name$class' title='$title' aria-hidden='true' $styleAtt></i>}
+            set template {<i class='bi bi-$name$_class' title='$title' aria-hidden='true' $styleAtt></i>}
         }
         "fa-icons" {
             set cmd {template::head::add_css -href urn:ad:css:fa-icons}
-            set template {<i class='$name$class' title='$title' aria-hidden='true' $styleAtt></i>}
+            set template {<i class='$name$_class' title='$title' aria-hidden='true' $styleAtt></i>}
         }
         "text" {
             if {$alt eq ""} {set alt $title}

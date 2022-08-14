@@ -1054,6 +1054,7 @@ namespace eval ::template::icon {
             reload               arrow-clockwise
             text                 file-earmark-text
             user                 person
+            warn                 exclamation-triangle-fill
             watch                eye
         }
         fa-icons {
@@ -1078,6 +1079,7 @@ namespace eval ::template::icon {
             reload               "fa-solid fa-arrows-rotate"
             text                 "fa-regular fa-file-lines"
             trash                "fa-regular fa-trash-can"
+            warn                 "fa-solid fa-triangle-exclamation"
             watch                "fa-regular fa-eye"
         }
         glyphicons {
@@ -1097,7 +1099,8 @@ namespace eval ::template::icon {
             radio-unchecked      /shared/images/radio.gif
             reload               refresh
             text                 file
-            user                 user            
+            user                 user
+            warn                 alert
             watch                eye-open
         }
         classic {
@@ -1122,6 +1125,7 @@ namespace eval ::template::icon {
             reload               ""
             trash                /shared/images/Delete16.gif
             user                 /shared/images/profile-16.png
+            warn                 /shared/images/diamond.gif
             watch                ""
         }
     }
