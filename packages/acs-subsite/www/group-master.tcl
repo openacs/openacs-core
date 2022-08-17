@@ -1,22 +1,24 @@
-# Expects properties:
-#   doc(title)
-#   focus
-#   head
-#   section
-#   subnavbar_link
-#
-#  Allowed properties
-#  skip_link, href of link to skip to. Should be of format #skip_link
-#  defaults to #content-wrapper
+ad_page_contract {
+    Expects properties:
+      doc(title)
+      focus
+      head
+      section
+      subnavbar_link
 
-# DRB: This is a TEMPORARY kludge to get 5.3.2 out.  This should really set the navigation
-# tab info then "master" to the site default-master, not site-master.  However, Lee's first
-# implementation of the new master scheme only provides for a single-level tab system for
-# tab navigation, rather than the two-level tab system implemented by the group master template.
+     Allowed properties
+     skip_link, href of link to skip to. Should be of format #skip_link
+     defaults to #content-wrapper
 
-# This should be generalized and ideally, someday, tied in with portal navigation.
+    DRB: This is a TEMPORARY kludge to get 5.3.2 out.  This should really set the navigation
+    tab info then "master" to the site default-master, not site-master.  However, Lee's first
+    implementation of the new master scheme only provides for a single-level tab system for
+    tab navigation, rather than the two-level tab system implemented by the group master template.
 
-# But for now - kludge city.
+    This should be generalized and ideally, someday, tied in with portal navigation.
+
+    But for now - kludge city.
+}
 
 set system_name [ad_system_name]
 if {[ad_conn url] eq "/"} {
