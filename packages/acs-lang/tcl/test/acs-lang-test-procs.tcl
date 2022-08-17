@@ -1245,7 +1245,7 @@ ad_proc -private lang::test::get_all_package_files {} {
         set d [lindex $directories 0]
         set directories [lrange $directories 1 end]
         lappend directories {*}[glob -directory $d -nocomplain -types d *]
-        lappend files {*}[glob -directory $d -nocomplain -types {f r} *.{info,adp,sql,tcl}]
+        lappend files {*}[glob -directory $d -nocomplain -types {f r} *.{adp,sql,tcl}]
     }
     return $files
 }
