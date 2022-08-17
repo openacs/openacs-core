@@ -1,3 +1,7 @@
+ad_include_contract {
+    Render the developer support menubar
+}
+
 # TODO: Handle the case when developer-support is not mounted
 set ip_address [ns_info address]:[ns_config [ns_driversection] port]
 

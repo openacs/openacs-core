@@ -1,3 +1,7 @@
+ad_include_contract {
+    Render the developer support footer
+}
+
 # TODO: Go through request-processor to see what other information should be exposed to developer-support
 
 # TODO: Always show comments inline by default?
