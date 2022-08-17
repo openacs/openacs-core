@@ -663,7 +663,7 @@ aa_register_case -error_level warning -cats {
         @author Nathan Coulter
         @creation-date 2020-08-20
 } {
-    sset queries {}
+    set queries {}
     #
     # The NUL character is not allowed in plain data for PostgreSQL.
     #
