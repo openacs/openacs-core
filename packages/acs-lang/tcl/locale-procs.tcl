@@ -530,9 +530,19 @@ ad_proc -private lang::conn::locale_not_cached {
 } {
     if { $site_wide_p } {
         set locale [lang::user::site_wide_locale]
+
         if { $locale eq "" } {
             set locale [lang::system::site_wide_locale]
         }
+
+        #
+        # Fallback to en_US when no locale is found or is not one of
+        # those we support.
+        #
+        if { $locale eq "" || $locale ni [lang::system::get_locales]} {
+            set locale en_US
+        }
+
         return $locale
     }
 
