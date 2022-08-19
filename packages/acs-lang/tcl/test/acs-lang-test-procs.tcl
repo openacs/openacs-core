@@ -1256,15 +1256,51 @@ aa_register_case \
         Makes sure that message key usages are consistent with the
         package dependencies.
     } {
+        #
+        # Some packages define 'install' packages in their info files,
+        # that will be also installed, but that are not a dependency
+        # in a technical sense. For the purposes of this test, we will
+        # treat them as normal dependencies.
+        #
+        db_foreach get_packages {
+            select distinct i.package_key, a.attribute_value as install
+            from apm_package_version_info i,
+                 apm_package_version_attr a
+            where a.version_id = i.version_id
+              and a.attribute_name = 'install'
+              and i.enabled_p = 't'
+        } {
+            foreach i $install {
+                lappend installed($package_key) \
+                    $i {*}[apm_package_load_libraries_order $i]
+                set installed($package_key) [lsort -unique $installed($package_key)]
+            }
+        }
+
         # Retrieve dependencies for every package known to the system
         foreach package_key [db_list get_packages {
-            select package_key from apm_package_types p
-            where exists (select 1 from apm_package_version_info
-                           where package_key = p.package_key
-                             and enabled_p)
+            select distinct i.package_key, a.attribute_value as installed
+            from apm_package_version_info i
+                 left join apm_package_version_attr a
+                        on a.version_id = i.version_id
+                       and a.attribute_name = 'install'
+            where i.enabled_p = 't'
         }] {
-            set dependencies($package_key) \
-                [apm_package_load_libraries_order $package_key]
+            set dependencies($package_key) {}
+            foreach pk [apm_package_load_libraries_order $package_key] {
+                #
+                # 'Real' dependency
+                #
+                lappend dependencies($package_key) $pk
+                if {[info exists installed($pk)]} {
+                    #
+                    # Dependencies derived by packages that are
+                    # istalled by one of my dependencies.
+                    #
+                    lappend dependencies($package_key) {*}$installed($pk)
+                }
+            }
+            set dependencies($package_key) [lsort -unique $dependencies($package_key)]
         }
 
         # Create a lookup array for every message key on the system to
