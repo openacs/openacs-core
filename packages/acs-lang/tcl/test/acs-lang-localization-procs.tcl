@@ -262,6 +262,62 @@ aa_register_case \
         }
     }
 
+aa_register_case \
+    -cats {api smoke} \
+    -procs {
+        lang::user::set_locale
+        lang::user::site_wide_locale
+        lang::util::localize
+    } \
+    lang_test__lang_user_site_wide_locale {
+
+        Tests what happens when a user has an unsupported locale
+        stored in the preferences.
+
+    } {
+        aa_run_with_teardown -rollback -test_code {
+            set one_user_id [db_string q {select user_id from user_preferences fetch first 1 rows only}]
+
+            set user_locale [lang::user::site_wide_locale -user_id $one_user_id]
+            aa_log "Locale for user '$one_user_id' is '$user_locale'"
+
+            set unsupported_locale [db_string q {
+                select min(locale) from ad_locales
+                where enabled_p = 'f'
+            } -default ""]
+
+            if {$unsupported_locale eq ""} {
+                aa_log "There are no unsupported locales on the system."
+            } else {
+                lang::user::set_locale -user_id $one_user_id $unsupported_locale
+
+                set user_locale_db [db_string q {
+                    select locale from user_preferences where user_id = :one_user_id
+                }]
+                aa_equals "Locale was stored in the user_preferences" \
+                    $user_locale_db $unsupported_locale
+
+                set user_locale [lang::user::site_wide_locale -user_id $one_user_id]
+                aa_equals "The api retrieves the unsupported locale" \
+                    $user_locale $unsupported_locale
+
+                set error_p [catch {
+                    set t [lang::util::localize \
+                               {lang_test__lang_user_site_wide_locale #acs-lang.Locale#} \
+                               $user_locale]
+                } errmsg]
+                aa_false "Localizing a message key using an unsupported locale does not fail" $error_p
+
+                if {$error_p} {
+                    aa_log "Error: $errmsg"
+                } else {
+                    aa_true "Test string was localized as '$t'" \
+                        [regexp {^lang_test__lang_user_site_wide_locale .*$} $t]
+                }
+            }
+        }
+    }
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4

@@ -763,7 +763,11 @@ if {[ns_info name] eq "NaviServer"} {
         if {[info exists varname]} {
             upvar 1 $varname var
         }
-        return [nsv_get lang_message_$locale $key var]
+        try {
+            return [nsv_get lang_message_$locale $key var]
+        } on error {errmsg} {
+            return 0
+        }
     }
 } else {
     #
