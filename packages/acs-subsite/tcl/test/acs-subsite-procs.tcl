@@ -762,6 +762,54 @@ aa_register_case -cats {
     }
 }
 
+aa_register_case -cats {
+    api
+    web
+    smoke
+} -procs {
+    auth::UseEmailForLoginP
+    parameter::set_value
+    ad_acs_kernel_id
+    parameter::get
+    acs::test::reply_has_status_code
+    acs::test::http
+} -urls {
+    /register/recover-password
+} password_recovery_page {
+
+    Ensure the password recovery page works.
+
+} {
+    set use_email_for_login_p [auth::UseEmailForLoginP]
+
+    aa_equals "auth::UseEmailForLoginP returns the expected value" \
+        [parameter::get -boolean -parameter UseEmailForLoginP \
+             -package_id [ad_acs_kernel_id] -default 1] \
+        $use_email_for_login_p
+
+    try {
+        set d [acs::test::http /register/recover-password]
+        acs::test::reply_has_status_code $d 200
+
+        aa_log "Flip UseEmailForLoginP"
+        parameter::set_value \
+            -package_id [ad_acs_kernel_id] \
+            -parameter UseEmailForLoginP -value [expr {!$use_email_for_login_p}]
+
+        aa_equals "auth::UseEmailForLoginP returns the expected value" \
+            [auth::UseEmailForLoginP] \
+            [expr {!$use_email_for_login_p}]
+
+        set d [acs::test::http /register/recover-password]
+        acs::test::reply_has_status_code $d 200
+
+    } finally {
+        parameter::set_value \
+            -package_id [ad_acs_kernel_id] \
+            -parameter UseEmailForLoginP -value $use_email_for_login_p
+    }
+}
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4

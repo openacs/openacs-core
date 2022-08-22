@@ -49,11 +49,12 @@ if { [auth::UseEmailForLoginP] } {
     set user_id_widget_name email
     set focus "email"
 } else {
+    set authority_options [auth::authority::get_authority_options]
     if { [llength $authority_options] > 1 } {
         ad_form -extend -name recover -form {
             {authority_id:integer(select)
                 {label {[_ acs-kernel.authentication_authority]}}
-                {options [auth::authority::get_authority_options]}
+                {options $authority_options}
             }
         }
     }
