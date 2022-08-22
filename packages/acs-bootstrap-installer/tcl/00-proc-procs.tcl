@@ -555,7 +555,7 @@ proc ad_proc args {
 
     set log_code ""
     if { $warn_p } {
-        set log_code "ns_log Notice \"Deprecated proc $proc_name used:\\n\[ad_get_tcl_call_stack\]\"\n"
+        set log_code [list ad_log_deprecated proc $proc_name]
     }
 
     if { $callback ne "" && $impl ne "" } {
@@ -1038,6 +1038,37 @@ ad_proc -public callback {
     return $returns
 }
 
+
+ad_proc ad_log_deprecated {what oldCmd {newCmd ""}} {
+    
+    Provide a standardized interface for reporting deprecated ad_procs
+    or other artifacts. In some situations, the flag "-deprecated" in
+    the proc is not sufficient. When "newCmd" is not specified, this
+    function tries to get the replacement command from the @see
+    specification of the documentation.
+
+    @param what type of artifact being used (e.g. "proc" or "class")
+    @param oldCmd the name of the deprecated command
+    @param newCmd replacement command, when specified
+    
+} {
+    set msg "*** $what $oldCmd is deprecated."
+    if {$newCmd eq "" && $what eq "proc"} {
+        #
+        # If no replacement command is provided, use whatever is
+        # specified in the @see property of the definition.
+        #
+        if {[nsv_get api_proc_doc template::util::date::now_min_interval_plus_hour dict]
+            && [dict exists $dict see]
+        } {
+            set newCmd [dict get $dict see]
+        }
+    }
+    if {$newCmd ne ""} {
+        append msg " Use '$newCmd' instead."
+    }      
+    ns_log warning "$msg\n[uplevel ad_get_tcl_call_stack]"
+}
 
 ad_proc ad_library {
     doc_string
