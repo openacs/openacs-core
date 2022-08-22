@@ -58,6 +58,7 @@ ad_proc -public acs_sc::invoke {
     set proc_name [acs_sc_generate_name $contract $impl $operation]
 
     if { [namespace which $proc_name] ne "" } {
+        #ns_log notice "CALL FORMER ad_apply [list $proc_name {*}$call_args]"
         return [$proc_name {*}$call_args]
     }
 
