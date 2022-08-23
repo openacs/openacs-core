@@ -212,7 +212,7 @@ ad_proc -public api_script_documentation {
     #         array set as_default_value $doc_elements(as_default_value)
 
     #         if { [llength $doc_elements(as_arg_names)] > 0 } {
-    #         append out "<dt><b>Query Parameters:</b><dd>\n"
+    #         append out "<dt>Query Parameters:</dt><dd>\n"
     #         foreach arg_name $doc_elements(as_arg_names) {
     #         append out "<b>$arg_name</b>"
     #         set notes [list]
@@ -235,11 +235,11 @@ ad_proc -public api_script_documentation {
     #         append out "</dd>\n"
     #     }
     #     if { [info exists doc_elements(type)] && $doc_elements(type) ne "" } {
-    #         append out "<dt><b>Returns Type:</b><dd><a href=\"type-view?type=$doc_elements(type)\">$doc_elements(type)</a>\n"
+    #         append out "<dt>Returns Type:</dt><dd><a href=\"type-view?type=$doc_elements(type)\">$doc_elements(type)</a>\n"
     #     }
     #     # XXX: Need to support "Returns Properties:"
     #     }
-    append out "<dt><b>Location:</b><dd>$path\n"
+    append out "<dt>Location:</dt><dd>$path\n"
     append out [::apidoc::format_common_elements doc_elements]
 
     append out "</dl></blockquote>"
@@ -270,19 +270,19 @@ ad_proc -public api_library_documentation {
         append out [lindex $doc_elements(main) 0]
 
         append out "<dl>\n"
-        append out "<dt><b>Location:</b>\n<dd>[ns_quotehtml $path]\n"
+        append out "<dt>Location:</dt>\n<dd>[ns_quotehtml $path]\n"
         if { [info exists doc_elements(creation-date)] } {
-            append out "<dt><b>Created:</b>\n<dd>[lindex $doc_elements(creation-date) 0]\n"
+            append out "<dt>Created:</dt>\n<dd>[lindex $doc_elements(creation-date) 0]\n"
         }
         if { [info exists doc_elements(author)] } {
-            append out "<dt><b>Author[expr {[llength $doc_elements(author)] > 1 ? "s" : ""}]:</b>\n"
+            append out "<dt>Author[expr {[llength $doc_elements(author)] > 1 ? "s" : ""}]:</dt>\n"
             foreach author $doc_elements(author) {
                 append out "<dd>[::apidoc::format_author $author]\n"
             }
         }
         if { [info exists doc_elements(cvs-id)] } {
             append out [subst {
-                <dt><b>CVS Identification:</b>
+                <dt>CVS Identification:</dt>
                 <dd><code>[ns_quotehtml [lindex $doc_elements(cvs-id) 0]]</code>
             }]
         }
@@ -354,7 +354,7 @@ ad_proc -deprecated -public api_type_documentation {
 
     append out \
         [::apidoc::format_common_elements doc_elements] \
-        "<dt><b>Location:</b><dd>$doc_elements(script)\n" \
+        "<dt>Location:</dt><dd>$doc_elements(script)\n" \
         "</dl></blockquote>\n"
 
     return $out
@@ -545,9 +545,9 @@ ad_proc -public api_proc_documentation {
 
     set switches [concat $doc_elements(switches0) $doc_elements(switches1)]
     if { [llength $switches] > 0 } {
-        append blocks_out "<dt><b>Switches:</b></dt><dd><dl>\n"
+        append blocks_out "<dt>Switches:</dt><dd><dl>\n"
         foreach switch $switches {
-            append blocks_out "<dt><b>-$switch</b>"
+            append blocks_out "<dt>-$switch</dt>"
             if {"boolean" in $flags($switch)} {
                 append blocks_out " (boolean)"
             }
@@ -572,7 +572,7 @@ ad_proc -public api_proc_documentation {
     }
 
     if { [llength $doc_elements(positionals)] > 0 } {
-        append blocks_out "<dt><b>Parameters:</b></dt><dd>\n"
+        append blocks_out "<dt>Parameters:</dt><dd>\n"
         foreach positional $doc_elements(positionals) {
             append blocks_out "<b>$positional</b>"
             if { [info exists default_values($positional)] } {
@@ -600,7 +600,7 @@ ad_proc -public api_proc_documentation {
         append blocks_out "<b>Options:</b><dl>"
         foreach param $doc_elements(option) {
             if { [regexp {^([^ \t]+)[ \t](.+)$} $param "" name value] } {
-                append blocks_out "<dt><b>-$name</b></dt><dd>$value<br></dd>"
+                append blocks_out "<dt>-$name</dt><dd>$value<br></dd>"
             }
         }
         append blocks_out "</dl>"
@@ -608,11 +608,11 @@ ad_proc -public api_proc_documentation {
 
 
     if { [info exists doc_elements(return)] } {
-        append blocks_out "<dt><b>Returns:</b></dt><dd>[join $doc_elements(return) "<br>"]</dd>\n"
+        append blocks_out "<dt>Returns:</dt><dd>[join $doc_elements(return) "<br>"]</dd>\n"
     }
 
     if { [info exists doc_elements(error)] } {
-        append blocks_out "<dt><b>Error:</b></dt><dd>[join $doc_elements(error) "<br>"]</dd>\n"
+        append blocks_out "<dt>Error:</dt><dd>[join $doc_elements(error) "<br>"]</dd>\n"
     }
 
     append blocks_out [::apidoc::format_common_elements doc_elements]
@@ -627,10 +627,10 @@ ad_proc -public api_proc_documentation {
     set callgraph [util::inline_svg_from_dot -css $css \
                        [api_call_graph_snippet -proc_name $proc_name -maxnodes 5]]
     if {$callgraph ne ""} {
-        append blocks_out "<p><dt><b>Partial Call Graph (max 5 caller/called nodes):</b></dt><dd>$callgraph</dd>\n"
+        append blocks_out "<p><dt>Partial Call Graph (max 5 caller/called nodes):</dt><dd>$callgraph</dd>\n"
     }
 
-    append blocks_out "<p><dt><b>Testcases:</b></dt><dd>\n"
+    append blocks_out "<p><dt>Testcases:</dt><dd>\n"
 
     if {[info exists doc_elements(testcase)]} {
         set cases {}
@@ -650,12 +650,12 @@ ad_proc -public api_proc_documentation {
                  -package_key acs-api-browser \
                  -parameter FancySourceFormattingP \
                  -default 1]} {
-            set source_out [subst {<dt><b>Source code:</b></dt><dd>
+            set source_out [subst {<dt>Source code:</dt><dd>
                 <pre class="code">[::apidoc::tcl_to_html $proc_name]</pre>
                 </dd>
             }]
         } else {
-            set source_out [subst {<dt><b>Source code:</b></dt><dd>
+            set source_out [subst {<dt>Source code:</dt><dd>
                 <pre class="code">[ns_quotehtml [api_get_body $proc_name]]</pre>
                 </dd>
             }]
@@ -673,7 +673,7 @@ ad_proc -public api_proc_documentation {
         if { [file exists $::acs::rootdir/$xql_fn] } {
             set content [apidoc::get_xql_snippet -proc_name $proc_name -xql_file $xql_fn]
             if {$content ne ""} {set content "<pre class='code'>$content</pre>"}
-            append there [subst {<dt><b>Generic XQL file:</b> </dt>
+            append there [subst {<dt>Generic XQL file:</dt>
                 <dd>$content
                 <a href="[ns_quotehtml [export_vars -base content-page-view {{source_p 1} {path $xql_fn}}]]">$xql_fn</a>
                 <p>
@@ -688,7 +688,7 @@ ad_proc -public api_proc_documentation {
             set content [apidoc::get_xql_snippet -proc_name $proc_name -xql_file $xql_fn]
             if {$content ne ""} {set content "<pre class='code'>$content</pre>"}
             set href [export_vars -base content-page-view {{source_p 1} {path $xql_fn}}]
-            append there [subst {<dt><b>PostgreSQL XQL file:</b></dt>
+            append there [subst {<dt>PostgreSQL XQL file:</dt>
                 <dd>$content
                 <a href="[ns_quotehtml $href]">$xql_fn</a>
                 <p>
@@ -703,7 +703,7 @@ ad_proc -public api_proc_documentation {
             set content [apidoc::get_xql_snippet -proc_name $proc_name -xql_file $xql_fn]
             if {$content ne ""} {set content "<pre class='code'>$content</pre>"}
             set href [export_vars -base content-page-view {{source_p 1} {path $xql_fn}}]
-            append there [subst {<dt><b>Oracle XQL file:</b></dt>
+            append there [subst {<dt>Oracle XQL file:</dt>
                 <dd>$content
                 <a href="[ns_quotehtml $href]">$xql_fn</a>
                 <p>
@@ -713,7 +713,7 @@ ad_proc -public api_proc_documentation {
             lappend missing Oracle
         }
         if {[llength $missing] > 0} {
-            set xql_out [subst {<dt><b>XQL Not present:</b></dt><dd>[join $missing ", "]</dd>}]
+            set xql_out [subst {<dt>XQL Not present:</dt><dd>[join $missing ", "]</dd>}]
         }
         append xql_out $there
     } else {
@@ -1319,7 +1319,7 @@ namespace eval ::apidoc {
     ad_proc -private format_changelog_list { changelog } {
         Format the change log info
     } {
-        append out "<dt><b>Changelog:</b>\n"
+        append out "<dt>Changelog:</dt>\n"
         foreach change $changelog {
             append out "<dd>[format_changelog_change $change]</dd>\n"
         }
@@ -1346,7 +1346,7 @@ namespace eval ::apidoc {
         if { [llength $authors] == 0 } {
             return ""
         }
-        append out "<dt><b>Author[expr {[llength $authors] > 1 ? "s" : ""}]:</b>\n"
+        append out "<dt>Author[expr {[llength $authors] > 1 ? "s" : ""}]:</dt>\n"
         foreach author $authors {
             append out "<dd>[format_author $author]</dd>\n"
         }
@@ -1362,13 +1362,13 @@ namespace eval ::apidoc {
             append out [format_author_list $doc_elements(author)]
         }
         if { [info exists doc_elements(creation-date)] } {
-            append out "<dt><b>Created:</b>\n<dd>[lindex $doc_elements(creation-date) 0]</dd>\n"
+            append out "<dt>Created:</dt>\n<dd>[lindex $doc_elements(creation-date) 0]</dd>\n"
         }
         if { [info exists doc_elements(change-log)] } {
             append out [format_changelog_list $doc_elements(change-log)]
         }
         if { [info exists doc_elements(cvs-id)] } {
-            append out "<dt><b>CVS ID:</b>\n<dd><code>[ns_quotehtml [lindex $doc_elements(cvs-id) 0]]</code></dd>\n"
+            append out "<dt>CVS ID:</dt>\n<dd><code>[ns_quotehtml [lindex $doc_elements(cvs-id) 0]]</code></dd>\n"
         }
         if { [info exists doc_elements(see)] } {
             append out [format_see_list $doc_elements(see)]
@@ -1380,11 +1380,11 @@ namespace eval ::apidoc {
     ad_proc -private format_see_list { sees } {
         Generate an HTML list of referenced procs and pages.
     } {
-        append out "<br><strong>See Also:</strong>\n<ul>"
+        append out "<dt>See Also:</dt>\n<dd><ul>"
         foreach see $sees {
             append out "<li>[format_see $see]\n"
         }
-        append out "</ul>\n"
+        append out "</ul></dd>\n"
 
         return $out
     }

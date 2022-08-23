@@ -13,8 +13,8 @@
 # ns_section ns/server/${server}/acs/acs-api-browser
 #         ns_param IncludeCallingInfo true
 #
-if {[parameter::get \
-        -package_id [apm_package_id_from_key acs-api-browser] \
+if {[parameter::get_from_package_key \
+        -package_key acs-api-browser \
         -parameter IncludeCallingInfo \
         -default false]} {
     ad_schedule_proc -thread t -once t 1 ::api_add_calling_info_to_procdoc
