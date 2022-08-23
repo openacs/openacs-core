@@ -773,6 +773,7 @@ aa_register_case -cats {
     parameter::get
     acs::test::reply_has_status_code
     acs::test::http
+    subsite::main_site_id
 } -urls {
     /register/recover-password
 } password_recovery_page {
@@ -780,33 +781,65 @@ aa_register_case -cats {
     Ensure the password recovery page works.
 
 } {
+    set main_subsite_id [subsite::main_site_id]
+    set acs_kernel_id [ad_acs_kernel_id]
+
     set use_email_for_login_p [auth::UseEmailForLoginP]
 
-    aa_equals "auth::UseEmailForLoginP returns the expected value" \
-        [parameter::get -boolean -parameter UseEmailForLoginP \
-             -package_id [ad_acs_kernel_id] -default 1] \
-        $use_email_for_login_p
+    set email_forgotten_password_p [parameter::get \
+                                        -boolean \
+                                        -parameter EmailForgottenPasswordP \
+                                        -package_id $main_subsite_id \
+                                        -default 1]
 
     try {
-        set d [acs::test::http /register/recover-password]
-        acs::test::reply_has_status_code $d 200
+        foreach {
+            test_use_email_for_login_p
+            test_email_forgotten_password_p
+        } {
+            1 1
+            1 0
+            0 1
+            0 0
+        } {
+            set pr [expr {$test_email_forgotten_password_p ? "enabled" : "disabled"}]
+            set ue [expr {$test_use_email_for_login_p ? "" : "not"}]
+            aa_section "Password recovery $pr, $ue using email for login"
 
-        aa_log "Flip UseEmailForLoginP"
-        parameter::set_value \
-            -package_id [ad_acs_kernel_id] \
-            -parameter UseEmailForLoginP -value [expr {!$use_email_for_login_p}]
+            if {$test_email_forgotten_password_p} {
+                set expected_status_code 200
+            } else {
+                set expected_status_code 403
+            }
 
-        aa_equals "auth::UseEmailForLoginP returns the expected value" \
-            [auth::UseEmailForLoginP] \
-            [expr {!$use_email_for_login_p}]
+            parameter::set_value \
+                -package_id $acs_kernel_id \
+                -parameter UseEmailForLoginP \
+                -value $test_use_email_for_login_p
 
-        set d [acs::test::http /register/recover-password]
-        acs::test::reply_has_status_code $d 200
+            parameter::set_value \
+                -package_id $main_subsite_id \
+                -parameter EmailForgottenPasswordP \
+                -value $test_email_forgotten_password_p
+
+            aa_equals "auth::UseEmailForLoginP returns the expected value" \
+                [auth::UseEmailForLoginP] \
+                $test_use_email_for_login_p
+
+            set d [acs::test::http /register/recover-password]
+            acs::test::reply_has_status_code $d $expected_status_code
+        }
 
     } finally {
         parameter::set_value \
-            -package_id [ad_acs_kernel_id] \
-            -parameter UseEmailForLoginP -value $use_email_for_login_p
+            -package_id $acs_kernel_id \
+            -parameter UseEmailForLoginP \
+            -value $use_email_for_login_p
+
+        parameter::set_value \
+            -package_id $main_subsite_id \
+            -parameter EmailForgottenPasswordP \
+            -value $email_forgotten_password_p
     }
 }
 
