@@ -1,13 +1,6 @@
 <master>
 <property name="doc(title)">@title;literal@</property>
 <property name="context">@context;literal@</property>
-<property name="head">
-  <style type="text/css">
-  div.api-doc {background: #e4e4e4;}
-  div.api-doc dd {margin-left: 2em;}
-  </style>
-</property>
-
 <if @error_msg@ ne "">
 @error_msg;noquote@
 </if>

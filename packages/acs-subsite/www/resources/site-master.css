@@ -628,6 +628,12 @@ html>body #tabs { bottom: 0px }
   width: 100%;
 }
 
+/*
+ * api-doc classes
+ */
+div.api-doc {background: #f5f5f5;}
+div.api-doc dd {margin-left: 2em;}
+
 
 /**********************************************************************
 /* DEPRECATED CLASSES
