@@ -25,59 +25,66 @@ ad_proc -public template::util::file_transform { element_id } {
     @return the list { file_name temp_file_name content_mime_type }.
 
 } {
-    #
-    # Check if these have already been converted, then return them as they are.
-    #
-    # This may happen, for instance, during the 'preview' action of a form.
-    #
     if { [ns_queryget $element_id.tmpfile] eq "" } {
-        set files [ns_querygetall $element_id]
+        #
+        # When the widget value was already converted before, we won't
+        # find a tempfile. The values will all come from the main
+        # query parameter.
+        #
+        # This may happen, for instance, during the 'preview' action of a form.
+        #
+        # However, we cannot just trust these values, they will need
+        # to go through the sanitization again.
+        #
+        set filenames [list]
+        set tmpfiles  [list]
+        set types     [list]
+        foreach f [ns_querygetall $element_id] {
+            if {[::string is list $f]} {
+                lappend filenames [lindex $f 0]
+                lappend tmpfiles  [lindex $f 1]
+                lappend types     [lindex $f 2]
+            }
+        }
+    } elseif {[ns_info name] eq "NaviServer"} {
+        #
+        # NaviServer
+        #
+        # Get the files information using 'ns_querygetall'
+        #
+        set filenames [ns_querygetall $element_id]
+        set tmpfiles  [ns_querygetall $element_id.tmpfile]
+        set types     [ns_querygetall $element_id.content-type]
     } else {
-        if {[ns_info name] eq "NaviServer"} {
-            #
-            # NaviServer
-            #
-            # Get the files information using 'ns_querygetall'
-            #
-            set filenames [ns_querygetall $element_id]
-            set tmpfiles  [ns_querygetall $element_id.tmpfile]
-            set types     [ns_querygetall $element_id.content-type]
-        } else {
-            #
-            # AOLserver
-            #
-            # ns_querygetall behaves differently in AOLserver, using the ns_queryget
-            # legacy version instead
-            #
-            set filenames [ns_queryget $element_id]
-            set tmpfiles  [ns_queryget $element_id.tmpfile]
-            set types     [ns_queryget $element_id.content-type]
-        }
         #
-        # No files, get out
+        # AOLserver
         #
-        if {$filenames eq ""} {
-            return ""
-        }
+        # ns_querygetall behaves differently in AOLserver, using the ns_queryget
+        # legacy version instead
         #
-        # Return the files info in a list per file
+        set filenames [ns_queryget $element_id]
+        set tmpfiles  [ns_queryget $element_id.tmpfile]
+        set types     [ns_queryget $element_id.content-type]
+    }
+
+    #
+    # Return the files info in a list per file
+    #
+    set files [list]
+    for {set file 0} {$file < [llength $filenames]} {incr file} {
+        set filename [lindex $filenames $file]
+        set tmpfile  [lindex $tmpfiles $file]
+        set type     [lindex $types $file]
         #
-        set files [list]
-        for {set file 0} {$file < [llength $filenames]} {incr file} {
-            set filename [lindex $filenames $file]
-            set tmpfile  [lindex $tmpfiles $file]
-            set type     [lindex $types $file]
-            #
-            # Cleanup filenames
-            #
-            regsub -all -- {\\+} $filename {/} filename
-            regsub -all -- { +} $filename {_} filename
-            set filename [lindex [split $filename "/"] end]
-            #
-            # Append to the list of lists
-            #
-            lappend files [list $filename $tmpfile $type]
-        }
+        # Cleanup filenames
+        #
+        regsub -all -- {\\+} $filename {/} filename
+        regsub -all -- { +} $filename {_} filename
+        set filename [lindex [split $filename "/"] end]
+        #
+        # Append to the list of lists
+        #
+        lappend files [list $filename $tmpfile $type]
     }
 
     return $files
