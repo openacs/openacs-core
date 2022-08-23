@@ -6,7 +6,7 @@ ad_page_contract {
   You should NEVER need to modify this file.  
   
   Most of the time your pages or master templates should not directly set this
-  file in their <master> tag.  They should instead use site-master with 
+  file in their &lt;master&gt; tag.  They should instead use site-master with 
   provides a set of standard OpenACS content.  Only pages which need to return
   raw HTML should use this template directly.
 
@@ -26,7 +26,7 @@ ad_page_contract {
   ad_conn -set language       Must be used to override the document language
                               if necessary.
 
-  To add a CSS or JavaScript files to the <head> section of the document you can 
+  To add a CSS or JavaScript files to the &lt;head&gt; section of the document you can 
   call the corresponding template::head::add_* functions within your page.
 
   @see template::head::add_css
