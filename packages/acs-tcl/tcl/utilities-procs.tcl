@@ -3776,13 +3776,12 @@ ad_proc -public util::request_info {
 
 ad_proc util::trim_leading_zeros {
     string
-} {
-    Returns a string w/ leading zeros trimmed.
-    Used to get around Tcl interpreter problems w/ thinking leading
-    zeros are octal.
+} {    
+    Returns a string with leading zeros trimmed.  Used to get around
+    Tcl interpreter problems without thinking leading zeros are octal.
 
-    If string is real and mod(number)<1, then we have pulled off
-    the leading zero; i.e. 0.231 -> .231 -- this is still fine
+    <p>If string is real and mod(number)&lt;1, then we have pulled off
+    the leading zero; i.e. 0.231 -&gt; .231 - this is still fine
     for Tcl though...
 } {
     if {$string ne ""} {

@@ -51,7 +51,9 @@ namespace eval acs_mail_lite {
     ad_proc -private parse_email_address {
         -email:required
     } {
-        Extracts the email address out of a mail address (like Joe User <joe@user.com>)
+        Extracts the email address out of a mail address
+        (like Joe User &lt;joe@user.com&gt;)
+        
         @option email mail address to be parsed
         @return only the email address part of the mail address
     } {

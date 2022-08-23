@@ -1495,7 +1495,7 @@ namespace eval ::apidoc {
     ad_proc -public tcl_to_html {proc_name} {
 
         Given a proc name, formats it as HTML, including highlighting syntax in
-        various colors and creating hyperlinks to other proc definitions.<BR>
+        various colors and creating hyperlinks to other proc definitions.
         The inspiration for this proc was the tcl2html script created by Jeff Hobbs.
         <p>
         Known Issues:
@@ -1680,7 +1680,7 @@ namespace eval ::apidoc {
     ad_proc -public tclcode_to_html {{-scope ""} {-proc_namespace ""} script} {
 
         Given a script, this proc formats it as HTML, including highlighting syntax in
-        various colors and creating hyperlinks to other proc definitions.<BR>
+        various colors and creating hyperlinks to other proc definitions.
         The inspiration for this proc was the tcl2html script created by Jeff Hobbs.
 
         @param script script to be formatted in HTML

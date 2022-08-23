@@ -225,22 +225,27 @@ ad_proc -private ad_page_contract_argspec_flag_regexp {} {
 
 ad_proc -private ad_page_contract_parse_argspec {arg_spec} {
 
-    Parse the argument spec: this is a string in the form <name>:<flag_spec>[,<flag_spec>...]
-    - <name> is a token made of any non-space, non-tab and non-colon
-    - <flag_spec> is string in the form <flag_name>[(<flag_parameter>[|<flag_parameter>...])]
-    - <flag_parameter> is a string containing arbitrary characters,
+    Parse the argument spec: this is a string in the form
+    &lt;name&gt;:&lt;flag_spec&gt;[,&lt;flag_spec&gt;...]
+    <ul>
+    <li> &lt;name&gt; is a token made of any non-space, non-tab and non-colon
+    <li> &lt;flag_spec&gt; is string in the form
+         &lt;flag_name&lgt;[(&lt;flag_parameter&gt;[|&lt;flag_parameter&gt;...])]
+    <li> &lt;flag_parameter&gt; is a string containing arbitrary characters,
                        however, because parenthesys ")" and "(" and
                        pipe "|" are separators in the argspec syntax,
                        they need to be escaped via the character backslash (\)
+    </ul>                                                      
 
     Examples of valid argspecs:
-
+                                                                            
+<pre>
     - my_page_parameter
     - my_page_parameter:integer
     - my_page_parameter:integer,notnull
     - my_page_parameter:integer,notnull,oneof(1|2|3)
     - another_page_parameter:oneof(this is valid|This, is also valid|This is valid \(as well!\))
-
+</pre>
 } {
     set flag_rx [ad_page_contract_argspec_flag_regexp]
 
@@ -271,7 +276,7 @@ ad_proc -private ad_page_contract_split_argspec_flag_parameters {flag_parameters
 
     Splits the flag parameters from an argespec into a list of values.
 
-    Flag parameters are a list of values expressed as <value>|[<value>..]
+    Flag parameters are a list of values expressed as &lt;value&gt;[|&lt;value&gt; ...]
 
 } {
     # First, unescape the parenthesys
@@ -337,14 +342,14 @@ ad_proc -public ad_page_contract {
     <blockquote><pre>ad_page_contract  {
         Some documentation.
         &#64;author me (my@email)
-        &#64;cvs-id $<foo>Id</foo>$
+        &#64;cvs-id $Id$
     } {
         foo
         bar:integer,notnull,multiple,trim
         {greble:integer {[expr {[lindex $bar 0] + 1}]}}
     } -validate {
         greble_is_in_range -requires {greble:integer} {
-            if { $greble < 1 || $greble > 100 } {
+            if { $greble &lt; 1 || $greble &gt; 100 } {
                 ad_complain
             }
         }
@@ -596,7 +601,7 @@ ad_proc -public ad_page_contract {
 
     <p>
 
-    Each validation block can also have a <b><fcode>-requires</code></b> switch, which takes a list of
+    Each validation block can also have a <code>-requires</code> switch, which takes a list of
     validations that must already have been successfully passed, for the validation to get executed.
     The intent is that you want to provide as much feedback as possible at once, but you don't want
     redundant feedback, like "foo must be an integer" <em>and</em> "foo must be in range 10 to 20".
@@ -1349,12 +1354,12 @@ ad_proc -public ad_page_contract_get_variables { } {
 
 ad_proc ad_include_contract {docstring args} {
 
-    Define interface between a page and an <include> similar to the
-    page_contract. This is a light-weight implementation based on the
-    ad_page_contract. It allows one to check the passed arguments (types,
-    optionality) and can be used for setting defaults the usual way.
-    Using ad_include_contracts helps to improve documentation of
-    included content.
+    Define an interface between a page and an ADP &lt;include&gt;
+    similar to the page_contract. This is a light-weight
+    implementation based on the ad_page_contract. It allows one to
+    check the passed arguments (types, optionality) and can be used
+    for setting defaults the usual way.  Using ad_include_contracts
+    helps to improve documentation of included content.
 
     @param docstring documentation of the include
     @param args passed parameter

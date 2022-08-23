@@ -3300,19 +3300,20 @@ ad_proc -deprecated check_for_form_variable_naughtiness {
     back from the users
 
     if the form looked like
-    <input type=text name=yow> and <input type=text name=bar>
+    &lt;input type=text name=yow&gt; and
+    &lt;input type=text name=bar&gt;
     then after you run this function you'll have Tcl vars
     $foo and $bar set to whatever the user typed in the form
-
+    <p>
     this uses the initially nauseating but ultimately delicious
     Tcl system function "uplevel" that lets a subroutine bash
     the environment and local vars of its caller.  It ain't Common Lisp...
-
+    <p>
     This is an ad-hoc check to make sure users aren't trying to pass in
     "naughty" form variables in an effort to hack the database by passing
     in SQL. It is called in all instances where a Tcl variable
     is set from a form variable.
-
+    <p>
     Checks the given variable for against known form variable exploits.
     If it finds anything objectionable, it throws an error.
 } {

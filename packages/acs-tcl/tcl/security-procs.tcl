@@ -2997,6 +2997,7 @@ namespace eval ::security::csp {
         #
         security::csp::require default-src 'self'
         security::csp::require script-src 'self'
+        security::csp::require script-src 'strict-dynamic'
         security::csp::require style-src 'self'
         security::csp::require img-src 'self'
         security::csp::require font-src 'self'
@@ -3129,12 +3130,15 @@ namespace eval ::security::csrf {
         Request Forgery).  The token is set (and cached) in a global
         per-thread variable and can be included in forms e.g. via the
         following command.
-
-        <if @::__csrf_token@ defined><input type="hidden" name="__csrf_token" value="@::__csrf_token;literal@"></if>
-
+        <p>
+        <pre>
+        &lt;if @::__csrf_token@ defined&gt;
+            &lt;input type="hidden" name="__csrf_token" value="@::__csrf_token;literal@"&gt;
+        &lt;/if&gt;
+</pre><p>
         The token is automatically cleared together with other global
         variables at the end of the processing of every request.
-
+<p>
         The optional argument user_id is currently ignored, but it is
         there, since there are algorithms published to calculate the
         CSRF token based on a user_id. So far, i found no evidence

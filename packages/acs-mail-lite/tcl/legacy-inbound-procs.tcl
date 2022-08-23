@@ -24,7 +24,7 @@ namespace eval acs_mail_lite {
         [&lt;SitePrefix&gt;][-]&lt;ReplyPrefix&gt;-Whatever@&lt;BounceDomain&gt;
 
         [] = optional
-        <> = Package Parameters
+        &lt;&gt; = Package Parameters
         </pre>
 
         If no SitePrefix is set we assume that there is only one

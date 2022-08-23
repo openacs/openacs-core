@@ -356,7 +356,7 @@ ad_proc -public publish::item_include_tag { item_id {extra_args {}} } {
 ad_proc -public publish::handle::image { item_id args } {
 
   The basic image handler. Writes the image blob to the filesystem,
-  then either merges with the template or provides a default <img>
+  then either merges with the template or provides a default &lt;img&gt;
   tag. Uses the title for alt text if no alt text is specified
   externally.
 

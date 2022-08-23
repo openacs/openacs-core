@@ -40,15 +40,23 @@ ad_proc -public -callback acs_mail_lite::incoming_email -impl notifications {
     -array:required
     -package_id
 } {
-    Implementation of the interface acs_mail_lite::incoming_email for notifications. Notification
-    listens to replies sent out initially from notifications. According to the notification signature
-    <EmailReplyAddressPrefix>-$object_id-$type_id@<EmailDomain> it tries to figure out for which notification
-    type the email was from. The type corresponds to the service contract implementation. If the object_id
-    exists notification creates an entry in the table notification_email_hold and tries to inform implementations
-    of acs_mail_lite::incoming_email interested. Since the service contract NotificationType is implemented
-    only once for a package the table acs_mail_lite_reply_prefixes is used simply figure out which package corresponds
-    to the found type_id and has a valid package key. If a package key is found the callback implementation is
-    called.
+    
+    Implementation of the interface acs_mail_lite::incoming_email for
+    notifications. Notification listens to replies sent out initially
+    from notifications. According to the notification signature
+    &lt;EmailReplyAddressPrefix&gt;$object_id-$type_id@&lt;EmailDomain&gt;
+    it tries to figure out for which notification type the email was
+    from.
+    
+    <p>The type corresponds to the service contract
+    implementation. If the object_id exists notification creates an
+    entry in the table notification_email_hold and tries to inform
+    implementations of acs_mail_lite::incoming_email interested. Since
+    the service contract NotificationType is implemented only once for
+    a package the table acs_mail_lite_reply_prefixes is used simply
+    figure out which package corresponds to the found type_id and has
+    a valid package key. If a package key is found the callback
+    implementation is called.
 
     @author Nima Mazloumi (nima.mazloumi@gmx.de)
     @creation-date 2005-07-15

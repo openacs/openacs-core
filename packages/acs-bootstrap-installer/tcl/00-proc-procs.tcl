@@ -788,7 +788,7 @@ ad_proc -public ::foobar::new {
     description), but one cannot read the mind of the original programmer to find out
     what s/he had in mind.
 
-    \@author Roberto Mello <rmello at fslc.usu.edu>
+    \@author Roberto Mello
     \@creation-date 2002-01-21
 
     \@param oacs_user   If this user is already an OpenACS user. oacs_user_p is defined

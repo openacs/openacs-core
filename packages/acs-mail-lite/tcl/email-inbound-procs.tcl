@@ -1036,7 +1036,7 @@ ad_proc -private acs_mail_lite::inbound_queue_insert {
     #   h_arr(aml_size_chars)   size_chars
     #   h_arr(aml_processed_p)  processed_p
 
-    #   p_arr($section_id,<field>)  acs_mail_lite_ie_parts (content of a part)
+    #   p_arr($section_id,&lt;field&gt;)  acs_mail_lite_ie_parts (content of a part)
     #   p_arr($section_id,nv_list)  acs_mail_lite_part_nv_pairs
     #   p_arr(section_id_list) list of section_ids
     #
@@ -1412,7 +1412,7 @@ ad_proc -private acs_mail_lite::inbound_queue_pull_one {
 
     Email parts (of body) are kept in a separate array:
 
-    p_arr($section_ref,<field>)  acs_mail_lite_ie_parts (content of a part)
+    p_arr($section_ref,&lt;field&gt;)  acs_mail_lite_ie_parts (content of a part)
     p_arr($section_ref,nv_list)  acs_mail_lite_part_nv_pairs
     p_arr(section_ref_list) list of section_refs
 

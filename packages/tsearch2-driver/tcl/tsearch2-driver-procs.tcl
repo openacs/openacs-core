@@ -292,7 +292,7 @@ ad_proc tsearch2::build_query_tcl { -query } {
 
 ad_proc -private tsearch2::build_query_postgres { -query } {
     Convert conjunctions to query characters for tsearch2
-    use websearch_to_tsquery which is integrated in postgres >= 11
+    use websearch_to_tsquery which is integrated in postgres &gt;= 11
 
     websearch_to_tsquery creates a tsquery value from querytext using
     an alternative syntax in which simple unformatted text is a valid
@@ -303,9 +303,9 @@ ad_proc -private tsearch2::build_query_postgres { -query } {
 
     <ul>
         <li>unquoted text: text not inside quote marks will be converted
-        to terms separated by & operators, as if processed by plainto_tsquery.</li>
+        to terms separated by &amp; operators, as if processed by plainto_tsquery.</li>
         <li>"quoted text": text inside quote marks will be converted to terms
-        separated by <-> operators, as if processed by phraseto_tsquery.</li>
+        separated by &lt;-&gt; operators, as if processed by phraseto_tsquery.</li>
         <li>OR: logical or will be converted to the | operator.</li>
         <li>-: the logical not operator, converted to the ! operator.</li>
     </ul>
@@ -318,7 +318,8 @@ ad_proc -private tsearch2::build_query_postgres { -query } {
     ad_try {
         db_1row build_querystring {select websearch_to_tsquery(:query) as query from dual}
     } on error {errorMsg} {
-        ns_log warning "tsearch2 websearch_to_tsquery failed, fall back to tcl query builder query was: $query errorMsg: $errorMsg"
+        ns_log warning "tsearch2 websearch_to_tsquery failed," \
+            "fall back to tcl query builder query was: $query errorMsg: $errorMsg"
         set query [tsearch2::build_query_tcl -query $query]
     }
     return $query
