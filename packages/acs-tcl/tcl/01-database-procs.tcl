@@ -1508,6 +1508,9 @@ ad_proc -public db_list_of_lists {
             #ns_log notice "ll2: $sql -> [ns_set array $selection]"
 
             if {$with_headers_p || $columns_var ne ""} {
+                if {$columns_var ne ""} {
+                    upvar 1 $columns_var headers
+                }
                 if {[acs::icanuse "ns_set keys"]} {
                     set headers [ns_set keys $selection]
                 } else {
@@ -1515,8 +1518,6 @@ ad_proc -public db_list_of_lists {
                 }
                 if {$with_headers_p} {
                     set result [list $headers]
-                } else {
-                    upvar 1 $columns_var $headers
                 }
             }
 
@@ -1690,7 +1691,7 @@ ad_proc -private db_multirow_helper {} {
         # Execute the query in one sweep, similar to 'db_foreach'.
         #
         upvar 1 __db_multirow__local_columns local_columns
-        set __selections [uplevel 1 [list db_list_of_ns_sets -dbn $dbn \
+        set __selections [uplevel 1 [list db_list_of_lists -dbn $dbn \
                                          -subst $subst \
                                          -columns_var __db_multirow__local_columns \
                                          $full_statement_name $sql]]
@@ -1723,6 +1724,7 @@ ad_proc -private db_multirow_helper {} {
             } else {
                 break
             }
+            #ns_log notice "$local_counter: $selection"
 
             #
             # Setup the 'columns' part, now that we know the columns
@@ -1767,7 +1769,9 @@ ad_proc -private db_multirow_helper {} {
                 incr counter
                 upvar $level_up "$var_name:$counter" array_val
                 set array_val(rownum) $counter
-                array set array_val [ns_set array $selection]
+                array set array_val [join [lmap __column $local_columns __value $selection {
+                    list $__column $__value
+                }]]
             } else {
                 #
                 # There is a code block to execute.
@@ -1781,15 +1785,16 @@ ad_proc -private db_multirow_helper {} {
                 # Pull values from the query into next_row
                 unset -nocomplain next_row
                 if { $more_rows_p } {
-                    set next_row [ns_set array $selection]
+                    set next_row $selection
                 }
 
                 # Process the row
                 if { [info exists this_row] } {
                     # Pull values from this_row into local variables
-                    foreach name [dict keys $this_row] {
+                    foreach name $local_columns __value $this_row {
                         upvar 1 $name column_value
-                        set column_value [dict get $this_row $name]
+                        set column_value $__value
+                        # ns_log notice "... [list set $name $__value]"
                     }
 
                     # Initialize the "extend" columns to the empty string
@@ -2028,7 +2033,9 @@ ad_proc -public db_multirow {
     }
 
     if { [info exists cache_key] } {
-
+        #
+        # Call helper with cache key
+        #
         set value [ns_cache eval $cache_pool $cache_key {
             db_multirow_helper
 
@@ -2051,6 +2058,9 @@ ad_proc -public db_multirow {
             incr count
         }
     } else {
+        #
+        # Call helper without cache key
+        #
         db_multirow_helper
     }
 

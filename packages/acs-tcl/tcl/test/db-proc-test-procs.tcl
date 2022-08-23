@@ -741,7 +741,23 @@ aa_register_case \
             set r [$cmd x {select object_id from acs_objects where object_id = :b} -bind $s]
             aa_true "$cmd query with provided bind variable from ns_set" {$r == -1}
         }
-
+        #
+        # Test combinations of "-columns_var" and "-with_headers" of db_list_of_lists
+        #
+        foreach {optionSet expected} {
+            {}                                  {1 0}
+            {-columns_var __cols}               {1 1}
+            {-with_headers}                     {2 0}
+            {-columns_var __cols -with_headers} {2 1}
+        } {            
+            set r [db_list_of_lists {*}$optionSet ..x {
+                select object_id, package_id from acs_objects where object_id = -1
+            }]
+            aa_equals "db_list_of_lists $optionSet" \
+                [list [llength $r] [info exists __cols]] \
+                $expected
+            unset -nocomplain __cols
+        }
     }
 
 aa_register_case \
