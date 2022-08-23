@@ -1704,12 +1704,13 @@ ad_proc -private acs_mail_lite::inbound_filters {
 
 ad_proc -private acs_mail_lite::inbound_cache_clear {
 } {
-    Clears table of all email uids for all history.
-    All unread input emails will be considered new and reprocessed.
-    To keep history, just temporarily forget it instead:
-    append a revision date to acs_mail_lite_email_src_ext_id_map.src_ext
-    <br/><br/>
-    If you are not sure if this will do what you want, try setting
+    
+    Clears table of all email uids for all history.  All unread input
+    emails will be considered new and reprocessed.  To keep history,
+    just temporarily forget it instead (delete it from
+    acs_mail_lite_email_uid_id_map).
+
+    <p>If you are not sure if this will do what you want, try setting
     reprocess_old_p to '1'.
     @see acs_mail_lite::sched_parameters
 
@@ -1717,7 +1718,6 @@ ad_proc -private acs_mail_lite::inbound_cache_clear {
     db_dml acs_mail_lite_email_uid_map_d {
         update acs_mail_lite_email_uid_id_map {
             delete from acs_mail_lite_email_uid_id_map
-
         }
     }
     return 1
