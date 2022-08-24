@@ -2997,7 +2997,7 @@ namespace eval ::security::csp {
         #
         security::csp::require default-src 'self'
         security::csp::require script-src 'self'
-        security::csp::require script-src 'strict-dynamic'
+        #security::csp::require script-src 'strict-dynamic'
         security::csp::require style-src 'self'
         security::csp::require img-src 'self'
         security::csp::require font-src 'self'
