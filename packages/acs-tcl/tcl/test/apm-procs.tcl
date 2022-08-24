@@ -53,3 +53,27 @@ aa_register_case \
                 [lsort $db_dependencies]
         }
     }
+
+aa_register_case \
+    -cats {api smoke} \
+    -procs {
+        apm_version_get
+        apm_file_type_names
+        apm_file_type_keys
+    } \
+    apm_version_api {
+        Tests for the apm version interface
+    } {
+        apm_version_get -package_key acs-kernel -array versions
+        aa_true "got reasonable version_id '$versions(version_id)'" {$versions(version_id) > 0}
+        set dict [apm_file_type_names]
+        foreach name {tcl_procs tcl_init content_page} {
+            aa_true "File type names for '$name'" {[dict exists $dict $name]}
+            aa_true "$name in file type keys" {$name in [apm_file_type_keys]}
+        }
+        set package_id [apm_package_id_from_key acs-kernel]
+        aa_true "Kernel package_id '$package_id' plausible " {$package_id > 0}
+        
+        set package_key [apm_package_key_from_id $package_id]
+        aa_true "Kernel package_key '$package_key' plausible " {$package_key eq "acs-kernel"}
+    }
