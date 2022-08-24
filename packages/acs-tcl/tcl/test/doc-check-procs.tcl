@@ -45,7 +45,58 @@ aa_register_case -cats {smoke production_safe} -procs {
         }
         array unset pa
     }
-    aa_log "Found $good good of $count checked"
+    aa_log "Found $good public procs with proper documentation (out of $count checked)"
+
+    if {[info commands ::ns_parsehtml] ne ""} {
+        set nrTags 0
+        set nrNotAllowedTags 0
+        set allowedTags {
+            h3 /h3
+            h4 /h4
+            p /p
+            a /a
+            blockquote /blockquote
+            dd /dd
+            dt /dt
+            dl /dl
+            ul /ul
+            ol /ol
+            li /li
+            table /table
+            td /td
+            th /th
+            tr /tr
+            pre /pre
+            code /code
+            tt /tt
+            strong /strong
+            b /b
+            i /i
+            em /em
+            span /span
+            br
+        }
+        foreach p [lsort -dictionary [nsv_array names api_proc_doc]] {
+            set dict [nsv_get api_proc_doc $p]
+            if {[dict exists $dict main]} {
+                set text [dict get $dict main]
+                foreach chunk [::ns_parsehtml $text] {
+                    lassign $chunk what from to content
+                    if {$what eq "tag"} {
+                        incr nrTags
+                        set tag [lindex $content 0]
+                        if {$tag ni $allowedTags} {
+                            aa_error "[api_proc_link $p]: tag '$tag' not allowed '[ns_quotehtml <$content>]'"
+                            incr nrNotAllowedTags
+                        }
+                    }
+                }
+            }
+        }
+        aa_log "Found $nrTags tags in documentation, $nrNotAllowedTags not allowed"
+    }
+
+
 }
 
 
