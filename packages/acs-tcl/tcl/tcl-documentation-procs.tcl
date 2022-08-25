@@ -1949,22 +1949,40 @@ ad_page_contract_filter html { name value } {
     return 1
 }
 
-ad_page_contract_filter tmpfile { name value } {
-    Checks to see that the tmpfile path is allowed on the system
+ad_page_contract_filter tmpfile { name value {options ""} } {
+    Validate a tmpfile path. This must belong to one of the configured
+    tmpfolders, either in the subsite settings or in the server-wide
+    parameter.
+
+    One can also specify the filter in "strict" mode as
+    tmpfile(strict). In this case, only the tempfolder from the
+    server-wide settings is allowed, the tempfile must be a direct
+    child of the tmpfolder and must also exist. This mimicks the
+    behavior of Aolserver/Naviserver when a tmpfile is created and can
+    be used to validate such paths.
+
     @author Lars Pind (lars@pinds.com)
     @creation-date 25 July 2000
 } {
-    if {[security::safe_tmpfile_p \
-             -recursive \
-             -subsite_id [ad_conn subsite_id] \
-             $value]} {
-        return 1
+    set strict_p [expr {"strict" in $options}]
+
+    if {$strict_p} {
+        set tmpfile_p [security::safe_tmpfile_p \
+                           -must_exist \
+                           $value]
+    } else {
+        set tmpfile_p [security::safe_tmpfile_p \
+                           -recursive \
+                           -subsite_id [ad_conn subsite_id] \
+                           $value]
     }
 
-    ad_log warning "They tried to sneak in invalid tmpfile '$value'"
+    if {!$tmpfile_p} {
+        ad_log warning "They tried to sneak in invalid tmpfile '$value'"
+        ad_complain [_ acs-tcl.lt_You_specified_a_path_]
+    }
 
-    ad_complain [_ acs-tcl.lt_You_specified_a_path_]
-    return 0
+    return $tmpfile_p
 }
 
 ad_page_contract_filter clock { name value {formats "%Y-%m-%d"} } {
