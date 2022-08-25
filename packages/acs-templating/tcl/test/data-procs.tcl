@@ -306,13 +306,20 @@ aa_register_case -cats {
     @author Héctor Romojaro <hector.romojaro@gmail.com>
     @creation-date 28 June 2021
 } {
-    #
-    # Currently, the file widget is assumed to never fail...
-    #
-    set file_true {my_file lalala}
+
+    set values {
+        my_file false
+        lalala false
+        {Afile /tmp/testfile text/plain} true
+        {A/file /tmp/testfile2 ""} false
+        {A/file /tmp/testfile2 a} true
+        {\\afile /tmp/testfile3 a} false
+        {afile /etc/passwd text/css} false
+    }
+
     set message ""
-    foreach value $file_true {
-        aa_true "Is $value a file?" \
+    foreach {value expected} $values {
+        aa_$expected "Is $value a file?" \
             [template::data::validate file value message]
     }
 }

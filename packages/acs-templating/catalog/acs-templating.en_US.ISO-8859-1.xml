@@ -74,6 +74,7 @@
   <msg key="Invalid_email_format">Invalid email format</msg>
   <msg key="Invalid_enumeration">Invalid enumeration</msg>
   <msg key="Invalid_enumeration_duplicate_elements">Invalid enumeration. &#34;%value%&#34; does not contain unique values.</msg>
+  <msg key="Invalid_file">Invalid file</msg>
   <msg key="Invalid_filename">Invalid filename</msg>
   <msg key="Invalid_integer">Invalid integer</msg>
   <msg key="Invalid_item">Invalid item</msg>
