@@ -110,7 +110,7 @@ ad_proc -public template::data::validate::file { value_ref message_ref } {
         # file_transform.
         #
         set result 0
-    } elseif { ![security::safe_tmpfile_p [lindex $value 1]] } {
+    } elseif { ![security::safe_tmpfile_p -must_exist [lindex $value 1]] } {
         #
         # The tmpfile is not safe
         #

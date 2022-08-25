@@ -306,16 +306,29 @@ aa_register_case -cats {
     @author Héctor Romojaro <hector.romojaro@gmail.com>
     @creation-date 28 June 2021
 } {
+    #
+    # A valid, existing tmpfile
+    #
+    set tmpfile [ad_tmpnam]
+    set wfd [open $tmpfile w]
+    puts $wfd 1234
+    close $wfd
 
-    set values {
-        my_file false
-        lalala false
-        {Afile /tmp/testfile text/plain} true
-        {A/file /tmp/testfile2 ""} false
-        {A/file /tmp/testfile2 a} true
-        {\\afile /tmp/testfile3 a} false
-        {afile /etc/passwd text/css} false
-    }
+    #
+    # A tmpfile that does not exist
+    #
+    set tmpfile_missing [ad_tmpnam]
+
+    set values [list \
+                    my_file false \
+                    lalala false \
+                    [list Afile $tmpfile text/plain] true \
+                    [list A/file $tmpfile ""] false \
+                    [list A/file $tmpfile a] true \
+                    [list A/file $tmpfile_missing a] false \
+                    [list \\afile $tmpfile a] false \
+                    {afile /etc/passwd text/css} false \
+                   ]
 
     set message ""
     foreach {value expected} $values {
