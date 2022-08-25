@@ -304,33 +304,42 @@ aa_register_case \
 
 aa_register_case \
     -cats {api smoke} \
-    -procs {util_convert_line_breaks_to_html} \
+    -procs {
+        util_convert_line_breaks_to_html
+    } \
     util_convert_line_breaks_to_html {
     Test if it converts spaces and line breaks correctly.
 } {
-    #Convert leading and trailing spaces or tabs
+    # Convert leading and trailing spaces or tabs
     set html "\tinter spaces  "
     aa_log "html= '$html' - Contains tabs and spaces"
     set result [util_convert_line_breaks_to_html $html]
     aa_false "Now html='$result'" [regexp {\sinter spaces\s} $result]
 
-    #convert single break
+    # convert single break
     set html "\r\n inter\r\nbreaks \r\n"
     aa_log "html= '$html' - Contains a single break"
     set result [util_convert_line_breaks_to_html $html]
     aa_false "Now html='$result'" [regexp {inter<b />\nspaces} $result]
 
-    #convert paragraph break
+    # convert paragraph break
     set html "\r\n inter\r\n\r\nbreaks \r\n"
     aa_log "html= '$html' - Contains a double break"
     set result [util_convert_line_breaks_to_html $html]
     aa_false "Now html='$result'" [regexp {inter</p><p style="margin-bottom: 0px;">spaces} $result]
 
-    #convert more than 2 breaks
+    # convert more than 2 breaks
     set html "\r\n inter\r\n\r\n\r\nbreaks \r\n"
     aa_log "html= '$html' - Contains more than 2 breaks"
     set result [util_convert_line_breaks_to_html $html]
     aa_false "Now html='$result'" [regexp {inter<b />\n<b />\n<b />\nspaces} $result]
+
+    # do not trim spaces before and after some tags
+    set html "We could use a <div> instead than a <table> layout\r\nfor the list for example."
+    aa_log "html= '[ns_quotehtml $html]' - Contains more than 2 breaks"
+    set result [util_convert_line_breaks_to_html $html]
+    aa_true "Now html='[ns_quotehtml $result]'" [regexp {a <table> layout} $result]
+
 }
 
 

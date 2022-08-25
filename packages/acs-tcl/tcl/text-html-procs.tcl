@@ -169,7 +169,7 @@ ad_proc -public ad_text_to_html {
         foreach ch $myChars entity $myHTML {
             lappend map $ch $entity
         }
-        set text [string map $map $text]
+        set text [string map $map $text]        
     }
 
     # Convert lines starting with a ">" into blockquotes.
@@ -309,10 +309,11 @@ ad_proc -public util_convert_line_breaks_to_html {
     # Wrap P's around paragraphs
     regsub -all -- {([^\n\s])\n\n+([^\n\s])} $text {\1<p>\2} text
 
-    # remove line breaks right before and after HTML tags that will insert a paragraph break themselves
+    # Remove line breaks right before and after HTML tags that will
+    # insert a paragraph break themselves.
     if { $includes_html_p } {
         set tags [join { ul ol li blockquote p div table tr td th } |]
-        regsub -all -nocase "\\s*(</?($tags)\\s*\[^>\]*>)\\s*" $text {\1} text
+        regsub -all -nocase "\[\r\n\]*(</?($tags)\[\r\n\]*\[^>\]*>)\[\r\n\]*" $text {\1} text
     }
 
     # Convert _single_ CRLF's to <br>'s to preserve line breaks
