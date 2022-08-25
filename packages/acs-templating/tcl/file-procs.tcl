@@ -85,10 +85,10 @@ ad_proc -public template::util::file_transform { element_id } {
 }
 
 ad_proc -public template::data::validate::file { value_ref message_ref } {
-    Validate the values in the file widget. In particular:
-    - make sure values are a list of lists of 3 elements
+    Validate the value in the file widget. In particular:
+    - make sure value is a list of 3 elements
     - ensure character cleanup has been performed
-    - ensure tmpfiles are safe
+    - ensure tmpfile is safe
 
     @return boolean
 } {
