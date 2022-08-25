@@ -380,7 +380,7 @@ ad_proc util::http::get {
                 -spool=$spool_p]
 }
 
-ad_proc util::http::post {
+ad_proc util::http::post_payload {
     -url
     {-files {}}
     -base64:boolean
@@ -398,7 +398,7 @@ ad_proc util::http::post {
     -spool:boolean
     {-preference {native curl}}
 } {
-    Implement client-side HTTP POST request.
+    Build the payload for a POST request
 
     @param body is the payload for the request and will be passed as
                 is (useful for many purposes, such as webDav).  A
@@ -451,73 +451,13 @@ ad_proc util::http::post {
     specified, and 'multipart/form-data' otherwise. If '-multipart'
     flag is set, format will be forced to multipart.
 
-    @param headers specifies an ns_set of extra headers to send to the
-                   server when doing the request.  Some options exist
-                   that allow one to avoid the need to specify headers
-                   manually, but headers will always take precedence
-                   over options.
+    @param headers Processing the payload might set some request
+                   headers. Provide yours to either override the
+                   default behavior, or to merge your headers with
+                   those from the payload. The resulting headers will
+                   be returned in the dict.
 
-    @param gzip_request informs the server that we are sending data in
-                        gzip format. Data will be automatically
-                        compressed.  Notice that not all servers can
-                        treat gzipped requests properly, and in such
-                        cases response will likely be an error.
-
-    @param gzip_response informs the server that we are capable of
-                         receiving gzipped responses.  If server
-                         complies to our indication, the result will
-                         be automatically decompressed.
-
-    @param force_ssl specifies whether we want to use SSL despite the
-                     url being in http:// form.  Default behavior is
-                     to use SSL on https:// URLs only.
-
-    @param spool enables file spooling of the request on the file
-                 specified. It is useful when we expect large
-                 responses from the server. The result is spooled to a
-                 temporary file, the name is returned in the file
-                 component of the result.
-
-    @param post_redirect decides what happens when we are POSTing and
-                         server replies with 301, 302 or 303
-                         redirects. RFC 2616/10.3.2 states that method
-                         should not change when 301 or 302 are
-                         returned, and that GET should be used on a
-                         303 response, but most HTTP clients fail in
-                         respecting this and switch to a GET request
-                         independently. This option forces this kinds
-                         of redirect to conserve their original
-                         method.
-
-    @param max_depth is the maximum number of redirects the proc is
-                     allowed to follow. A value of 0 disables
-                     redirection. When max depth for redirection has
-                     been reached, proc will return response from the
-                     last page we were redirected to. This is
-                     important if redirection response contains data
-                     such as cookies we need to obtain anyway. Be
-                     aware that when following redirects, unless it is
-                     a code 303 redirect, url and POST urlencoded
-                     variables will be sent again to the redirected
-                     host. Multipart variables won't be sent again.
-                     Sending to the redirected host can be dangerous,
-                     if such host is not trusted or uses a lower level
-                     of security.
-
-    @param preference decides which available implementation prefer in
-                      respective order. Choice is between 'native',
-                      based on ns_ api, available for NaviServer only
-                      and giving the best performances and 'curl',
-                      which wraps the command line utility (available
-                      on every system with curl installed).
-
-    @param timeout Timeout in seconds. The value can be an integer, a
-                   floating point number or an ns_time value.
-
-    @return the data as dict with elements 'headers', 'page', 'file',
-           'status', 'time' (elapsed request time in ns_time format),
-           and 'modified'.
-
+    @return a dict with fields 'payload', 'payload_file' and 'headers'
 } {
     set this_proc [lindex [info level 0] 0]
 
@@ -712,7 +652,168 @@ ad_proc util::http::post {
                  $payload_file_fd]
     lassign $app payload payload_file payload_file_fd
 
-    if {$payload_file_fd ne ""} {close $payload_file_fd}
+    if {$payload_file_fd ne ""} {
+        close $payload_file_fd
+    }
+
+    return [list \
+                payload $payload \
+                payload_file $payload_file \
+                headers $headers]
+}
+
+ad_proc util::http::post {
+    -url
+    {-files {}}
+    -base64:boolean
+    {-formvars ""}
+    {-body ""}
+    {-max_body_size 25000000}
+    {-headers ""}
+    {-timeout 30}
+    {-max_depth 10}
+    -force_ssl:boolean
+    -multipart:boolean
+    -gzip_request:boolean
+    -gzip_response:boolean
+    -post_redirect:boolean
+    -spool:boolean
+    {-preference {native curl}}
+} {
+    Implement client-side HTTP POST request.
+
+    @param body is the payload for the request and will be passed as
+                is (useful for many purposes, such as webDav).  A
+                convenient way to specify form variables through this
+                argument is passing a string obtained by 'export_vars
+                -url'.
+
+    @param max_body_size this value in number of characters will tell
+                         how big can the whole body payload get before
+                         we start spooling its content to a file. This
+                         is important in case of big file uploads,
+                         when keeping the entire request in memory is
+                         just not feasible. The handling of the
+                         spooling is taken care of in the API.  This
+                         value takes into account also the encoding
+                         required by the content type, so its value
+                         could not reflect the exact length of body's
+                         string representation.
+
+    @param files File upload can be specified using actual files on
+                 the filesystem or binary strings of data using the
+                 '-files' parameter.  '-files' must be a dict (flat
+                 list of key value pairs).  Keys of '-files' parameter
+                 are:
+
+     - data: binary data to be sent. If set, has precedence on 'file' key
+     - file: path for the actual file on filesystem
+     - filename: name the form will receive for this file
+     - fieldname: name the field this file will be sent as
+     - mime_type: mime_type the form will receive for this file
+
+    If 'filename' is missing and an actual file is being sent, it will
+    be set as the same name as the file. If 'mime_type' is missing, it
+    will be guessed from 'filename'. If result is */* or an empty
+    mime_type, 'application/octet-stream' will be used If '-base64'
+    flag is set, files will be base64 encoded (useful for some kind of
+    form).
+
+    @param formvars Other form variables can be passed easily
+                    through'-formvars' using 'export_vars -url' and
+                    will be translated for the proper type of
+                    form. This is useful when we intend to send files
+                    together with variables to a form. URL variables,
+                    as with GET requests, are also sent, but an error
+                    is thrown if URL variables conflict with those
+                    specified in other ways.
+
+     Default behavior is to build payload as an
+    'application/x-www-form-urlencoded' payload if no files are
+    specified, and 'multipart/form-data' otherwise. If '-multipart'
+    flag is set, format will be forced to multipart.
+
+    @param headers specifies an ns_set of extra headers to send to the
+                   server when doing the request.  Some options exist
+                   that allow one to avoid the need to specify headers
+                   manually, but headers will always take precedence
+                   over options.
+
+    @param gzip_request informs the server that we are sending data in
+                        gzip format. Data will be automatically
+                        compressed.  Notice that not all servers can
+                        treat gzipped requests properly, and in such
+                        cases response will likely be an error.
+
+    @param gzip_response informs the server that we are capable of
+                         receiving gzipped responses.  If server
+                         complies to our indication, the result will
+                         be automatically decompressed.
+
+    @param force_ssl specifies whether we want to use SSL despite the
+                     url being in http:// form.  Default behavior is
+                     to use SSL on https:// URLs only.
+
+    @param spool enables file spooling of the request on the file
+                 specified. It is useful when we expect large
+                 responses from the server. The result is spooled to a
+                 temporary file, the name is returned in the file
+                 component of the result.
+
+    @param post_redirect decides what happens when we are POSTing and
+                         server replies with 301, 302 or 303
+                         redirects. RFC 2616/10.3.2 states that method
+                         should not change when 301 or 302 are
+                         returned, and that GET should be used on a
+                         303 response, but most HTTP clients fail in
+                         respecting this and switch to a GET request
+                         independently. This option forces this kinds
+                         of redirect to conserve their original
+                         method.
+
+    @param max_depth is the maximum number of redirects the proc is
+                     allowed to follow. A value of 0 disables
+                     redirection. When max depth for redirection has
+                     been reached, proc will return response from the
+                     last page we were redirected to. This is
+                     important if redirection response contains data
+                     such as cookies we need to obtain anyway. Be
+                     aware that when following redirects, unless it is
+                     a code 303 redirect, url and POST urlencoded
+                     variables will be sent again to the redirected
+                     host. Multipart variables won't be sent again.
+                     Sending to the redirected host can be dangerous,
+                     if such host is not trusted or uses a lower level
+                     of security.
+
+    @param preference decides which available implementation prefer in
+                      respective order. Choice is between 'native',
+                      based on ns_ api, available for NaviServer only
+                      and giving the best performances and 'curl',
+                      which wraps the command line utility (available
+                      on every system with curl installed).
+
+    @param timeout Timeout in seconds. The value can be an integer, a
+                   floating point number or an ns_time value.
+
+    @return the data as dict with elements 'headers', 'page', 'file',
+           'status', 'time' (elapsed request time in ns_time format),
+           and 'modified'.
+
+} {
+    set payload_data [util::http::post_payload \
+                          -url $url \
+                          -files $files \
+                          -base64=$base64_p \
+                          -formvars $formvars \
+                          -body $body \
+                          -max_body_size $max_body_size \
+                          -headers $headers \
+                          -multipart=$multipart_p]
+
+    set payload      [dict get $payload_data payload]
+    set payload_file [dict get $payload_data payload_file]
+    set headers      [dict get $payload_data headers]
 
     return [util::http::request \
                 -method          POST \
