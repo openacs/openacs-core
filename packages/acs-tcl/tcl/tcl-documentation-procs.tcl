@@ -1954,23 +1954,14 @@ ad_page_contract_filter tmpfile { name value } {
     @author Lars Pind (lars@pinds.com)
     @creation-date 25 July 2000
 } {
-    # ensure no .. in the path
-    ns_normalizepath $value
-
-    # check to make sure path is to an authorized directory
-    set tmpdir_list [ad_parameter_all_values_as_list -package_id [ad_conn subsite_id] TmpDir]
-    if { $tmpdir_list eq "" } {
-        set tmpdir_list [list [ns_config ns/parameters tmpdir] "/var/tmp" "/tmp"]
+    if {[security::safe_tmpfile_p \
+             -recursive \
+             -subsite_id [ad_conn subsite_id] \
+             $value]} {
+        return 1
     }
 
-    foreach tmpdir $tmpdir_list {
-        if { [string match "$tmpdir*" $value] } {
-            return 1
-        }
-    }
-
-    # Log details about this filter failing, to make it easier to debug.
-    ns_log Notice "ad_page_contract tmpfile filter on variable '$name' at URL '[ad_conn url]': The tmpfile given was '$value', and the list of valid directories is '$tmpdir_list'."
+    ad_log warning "They tried to sneak in invalid tmpfile '$value'"
 
     ad_complain [_ acs-tcl.lt_You_specified_a_path_]
     return 0

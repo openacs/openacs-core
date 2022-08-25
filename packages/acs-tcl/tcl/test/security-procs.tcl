@@ -120,15 +120,38 @@ aa_register_case \
         aa_true "An existing tmpfile is safe" [security::safe_tmpfile_p -must_exist $tmpfile]
         file delete -- $tmpfile
 
+        aa_section {Path to an existing file in a tmpdir subfolder}
+        set tmpdir [ad_tmpnam]
+        file mkdir $tmpdir
+        set tmpfile $tmpdir/onefile
+        set wfd [open $tmpfile w]
+        puts $wfd 1234
+        close $wfd
+        aa_false "File is not considered safe when not searching recursively" \
+            [security::safe_tmpfile_p -must_exist $tmpfile]
+        aa_true "File is considered safe when searching recursively" \
+            [security::safe_tmpfile_p -recursive -must_exist $tmpfile]
+        file delete -force -- $tmpdir
+
         aa_section {Path to a tmpfile in a folder of the tmpdir}
         set tmpfile [ad_tmpnam]/test
         aa_false "A safe tmpfile can only be a direct child of the tmpdir" \
             [security::safe_tmpfile_p $tmpfile]
 
+        aa_section {Path to a tmpfile in a folder of the tmpdir when we allow recursive paths}
+        set tmpfile [ad_tmpnam]/test
+        aa_true "A safe tmpfile can be a at any depth in the hierachy of a tmpdir" \
+            [security::safe_tmpfile_p -recursive $tmpfile]
+
         aa_section {Trying to confuse the proc with ".."}
-        set tmpfile [ad_tmpnam]/../test
+        set tmpfile [ad_tmpnam]/../../test
         aa_false "Proc is not fooled by .." \
             [security::safe_tmpfile_p $tmpfile]
+
+        aa_section {Trying to confuse the proc with ".." when we allow recursive paths}
+        set tmpfile [ad_tmpnam]/../test
+        aa_true "Proc is not fooled by .." \
+            [security::safe_tmpfile_p -recursive $tmpfile]
 
         aa_section {Trying to confuse the proc with "~"}
         set tmpfile ~/../../test
@@ -139,4 +162,10 @@ aa_register_case \
         set tmpfile [acs_root_dir]/mypreciouscode
         aa_false "A safe tmpfile can only be a direct child of the tmpdir" \
             [security::safe_tmpfile_p $tmpfile]
+
+        aa_section {Path to a file outside of the tmpdir when we allow recursive paths}
+        set tmpfile [acs_root_dir]/mypreciouscode
+        aa_false "A safe tmpfile can only be in the hierachy of the tmpdir" \
+            [security::safe_tmpfile_p $tmpfile]
+
     }
