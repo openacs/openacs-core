@@ -41,12 +41,12 @@ ad_proc -public parameter::set_global_value {
     @param value what value to set said parameter to
 } {
 
-    #db_exec_plsql set_parameter_value {}
+    db_exec_plsql set_parameter_value {}
 
-    ::acs::dc call apm set_value \
-        -package_key $package_key \
-        -parameter $parameter \
-        -attr_value $value
+    # ::acs::dc call apm set_value \
+    #     -package_key $package_key \
+    #     -parameter $parameter \
+    #     -attr_value $value
 
     acs::clusterwide callback subsite::global_parameter_changed \
         -package_key $package_key \
