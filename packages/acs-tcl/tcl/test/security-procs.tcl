@@ -108,11 +108,16 @@ aa_register_case \
         aa_section {Path to a tmpfile that does not exist yet}
         aa_true "A temporary filename is safe" [security::safe_tmpfile_p $tmpfile]
 
+        set tmpfile [ad_tmpnam]
+        aa_section {Path to a tmpfile that we demand to exist}
+        aa_false "A temporary filename is not safe if the file des not exist" \
+            [security::safe_tmpfile_p -must_exist $tmpfile]
+
         aa_section {Path to an existing tmpfile}
         set wfd [open $tmpfile w]
         puts $wfd 1234
         close $wfd
-        aa_true "An existing tmpfile is safe" [security::safe_tmpfile_p $tmpfile]
+        aa_true "An existing tmpfile is safe" [security::safe_tmpfile_p -must_exist $tmpfile]
         file delete -- $tmpfile
 
         aa_section {Path to a tmpfile in a folder of the tmpdir}

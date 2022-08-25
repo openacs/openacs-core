@@ -1172,7 +1172,10 @@ ad_proc security::get_register_subsite {} {
                 host_node_id $host_node_id]
 }
 
-ad_proc security::safe_tmpfile_p {tmpfile} {
+ad_proc security::safe_tmpfile_p {
+    -must_exist:boolean
+    tmpfile
+} {
 
     Checks that a file is a safe tmpfile, that is, it belongs to the
     configured tmpdir.
@@ -1182,6 +1185,7 @@ ad_proc security::safe_tmpfile_p {tmpfile} {
     - file must be readable and writeable by the current system user
 
     @param tmpfile absolute path to a possibly existing tmpfile
+    @param must_exist make sure the file exists
 
     @return boolean
 } {
@@ -1194,9 +1198,10 @@ ad_proc security::safe_tmpfile_p {tmpfile} {
 
     if {![ad_file exists $tmpfile]} {
         #
-        # File does not exist yet: safe
+        # File does not exist yet: safe, unless we demand for the file
+        # to exist.
         #
-        return true
+        return [expr {!$must_exist_p}]
     }
 
     if {![ad_file owned $tmpfile]} {
