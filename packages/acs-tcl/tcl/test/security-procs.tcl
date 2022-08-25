@@ -90,3 +90,48 @@ aa_register_case \
                 ns_unregister_op GET $test_url
             }
     }
+
+aa_register_case \
+    -cats { api } \
+    -procs {
+        security::safe_tmpfile_p
+        ad_tmpnam
+        acs_root_dir
+        ad_file
+    } \
+    safe_tmpfile_p {
+
+        Test security::safe_tmpfile_p proc
+
+    } {
+        set tmpfile [ad_tmpnam]
+        aa_section {Path to a tmpfile that does not exist yet}
+        aa_true "A temporary filename is safe" [security::safe_tmpfile_p $tmpfile]
+
+        aa_section {Path to an existing tmpfile}
+        set wfd [open $tmpfile w]
+        puts $wfd 1234
+        close $wfd
+        aa_true "An existing tmpfile is safe" [security::safe_tmpfile_p $tmpfile]
+        file delete -- $tmpfile
+
+        aa_section {Path to a tmpfile in a folder of the tmpdir}
+        set tmpfile [ad_tmpnam]/test
+        aa_false "A safe tmpfile can only be a direct child of the tmpdir" \
+            [security::safe_tmpfile_p $tmpfile]
+
+        aa_section {Trying to confuse the proc with ".."}
+        set tmpfile [ad_tmpnam]/../test
+        aa_false "Proc is not fooled by .." \
+            [security::safe_tmpfile_p $tmpfile]
+
+        aa_section {Trying to confuse the proc with "~"}
+        set tmpfile ~/../../test
+        aa_false "Proc is not fooled by ~" \
+            [security::safe_tmpfile_p $tmpfile]
+
+        aa_section {Path to a file outside of the tmpdir}
+        set tmpfile [acs_root_dir]/mypreciouscode
+        aa_false "A safe tmpfile can only be a direct child of the tmpdir" \
+            [security::safe_tmpfile_p $tmpfile]
+    }

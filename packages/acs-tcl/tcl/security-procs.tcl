@@ -1172,6 +1172,59 @@ ad_proc security::get_register_subsite {} {
                 host_node_id $host_node_id]
 }
 
+ad_proc security::safe_tmpfile_p {tmpfile} {
+
+    Checks that a file is a safe tmpfile, that is, it belongs to the
+    configured tmpdir.
+
+    When the file exists, we also enforce additional criteria:
+    - file must belong to the current system user
+    - file must be readable and writeable by the current system user
+
+    @param tmpfile absolute path to a possibly existing tmpfile
+
+    @return boolean
+} {
+    if {[ad_file dir $tmpfile] ne [ns_config ns/parameters tmpdir]} {
+        #
+        # File does not belong to the tmpdir: not safe
+        #
+        return false
+    }
+
+    if {![ad_file exists $tmpfile]} {
+        #
+        # File does not exist yet: safe
+        #
+        return true
+    }
+
+    if {![ad_file owned $tmpfile]} {
+        #
+        # File does not belong to us: not safe
+        #
+        return false
+    }
+
+    if {![ad_file readable $tmpfile]} {
+        #
+        # We cannot read the file: not safe
+        #
+        return false
+    }
+
+    if {![ad_file writable $tmpfile]} {
+        #
+        # We cannot write the file: not safe
+        #
+        return false
+    }
+
+    #
+    # The file is safe
+    #
+    return true
+}
 
 ad_proc -public ad_get_login_url {
     {-authority_id ""}
