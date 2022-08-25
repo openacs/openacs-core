@@ -9,6 +9,7 @@ aa_register_case \
     -procs {
         util::http::get
         util::http::post
+        util::http::post_payload
         ad_tmpnam
         ad_url
 
@@ -144,6 +145,7 @@ aa_register_case \
         export_vars
         util::http::get
         util::http::post
+        util::http::post_payload
         ns_http
     } \
     postman_echo {

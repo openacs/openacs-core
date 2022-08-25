@@ -17,6 +17,7 @@ aa_register_case -cats {
     ad_form
     template::adp_eval
     template::adp_compile
+    util::http::post_payload
 } template_widget_file {
     Test template::widget::file.
 
