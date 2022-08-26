@@ -1174,8 +1174,6 @@ ad_proc security::get_register_subsite {} {
 
 ad_proc security::safe_tmpfile_p {
     -must_exist:boolean
-    -recursive:boolean
-    -subsite_id
     tmpfile
 } {
 
@@ -1188,13 +1186,6 @@ ad_proc security::safe_tmpfile_p {
 
     @param tmpfile absolute path to a possibly existing tmpfile
     @param must_exist make sure the file exists
-    @param recursive accept also files in a subfolder of a valid
-                     tmpfolder
-    @param subsite_id when specified, the list of allowed tmpdirs will
-                      be taken from the TmpDir subsite
-                      parameter. Server-wide configuration will be
-                      used if no subsite is specified or if the
-                      parameter turns out to be empty.
 
     @return boolean
 } {
@@ -1203,36 +1194,11 @@ ad_proc security::safe_tmpfile_p {
     #
     set tmpfile [ns_normalizepath $tmpfile]
 
-    if {[info exists subsite_id]} {
-        #
-        # We fetch the tmpdirs from the subsite parameter
-        #
-        set tmpdirs [parameter::get -package_id $subsite_id -parameter TmpDir]
-    } else {
-        set tmpdirs [list]
-    }
-
-    if {[llength $tmpdirs] == 0} {
-        #
-        # Server-wide tmpdirs
-        #
-        set tmpdirs [ns_config ns/parameters tmpdir]
-    }
-
-    if {!$recursive_p && [ad_file dirname $tmpfile] ni $tmpdirs} {
+    if {[ad_file dirname $tmpfile] ni [ns_config ns/parameters tmpdir]} {
         #
         # File is not a direct child of one of the tmpfolders: not safe
         #
         return false
-    } else {
-        #
-        # File does not belong to the hierarchy of any of the
-        # tmpfolders: not safe
-        #
-        set separator [file separator]
-        if { ![regexp ^([join $tmpdirs |])${separator}.*\$ $tmpfile] } {
-            return false
-        }
     }
 
     if {![ad_file exists $tmpfile]} {

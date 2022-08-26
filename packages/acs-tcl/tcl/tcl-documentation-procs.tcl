@@ -1949,33 +1949,19 @@ ad_page_contract_filter html { name value } {
     return 1
 }
 
-ad_page_contract_filter tmpfile { name value {options ""} } {
-    Validate a tmpfile path. This must belong to one of the configured
-    tmpfolders, either in the subsite settings or in the server-wide
-    parameter.
+ad_page_contract_filter tmpfile { name value } {
+    Validate a tmpfile path. This must exist, be a direct child of the
+    configured tmpfolder in the server-wide parameter and be readable
+    and writable by the current user.
 
-    One can also specify the filter in "strict" mode as
-    tmpfile(strict). In this case, only the tempfolder from the
-    server-wide settings is allowed, the tempfile must be a direct
-    child of the tmpfolder and must also exist. This mimicks the
-    behavior of Aolserver/Naviserver when a tmpfile is created and can
-    be used to validate such paths.
+    Example usage: uploaded_file.tmpfile:tmpfile,optional
 
     @author Lars Pind (lars@pinds.com)
     @creation-date 25 July 2000
 } {
-    set strict_p [expr {"strict" in $options}]
-
-    if {$strict_p} {
-        set tmpfile_p [security::safe_tmpfile_p \
-                           -must_exist \
-                           $value]
-    } else {
-        set tmpfile_p [security::safe_tmpfile_p \
-                           -recursive \
-                           -subsite_id [ad_conn subsite_id] \
-                           $value]
-    }
+    set tmpfile_p [security::safe_tmpfile_p \
+                       -must_exist \
+                       $value]
 
     if {!$tmpfile_p} {
         ad_log warning "They tried to sneak in invalid tmpfile '$value'"

@@ -9,7 +9,7 @@
     <implements-subsite-p>t</implements-subsite-p>
     <inherit-templates-p>t</inherit-templates-p>
 
-    <version name="5.10.1d4" url="http://openacs.org/repository/download/apm/acs-subsite-5.10.1d4.apm">
+    <version name="5.10.1d5" url="http://openacs.org/repository/download/apm/acs-subsite-5.10.1d5.apm">
         <owner url="http://openacs.org">OpenACS</owner>
         <summary>Subsite</summary>
         <release-date>2021-09-15</release-date>
@@ -18,12 +18,12 @@
         <license>GPL</license>
         <maturity>3</maturity>
 
-        <provides url="acs-subsite" version="5.10.1d4"/>
+        <provides url="acs-subsite" version="5.10.1d5"/>
         <requires url="acs-authentication" version="5.10.0"/>
         <requires url="acs-content-repository" version="5.10.0"/>
         <requires url="acs-kernel" version="5.10.0"/>
         <requires url="acs-templating" version="5.10.1d6"/>
-        <requires url="acs-tcl" version="5.10.0"/>
+        <requires url="acs-tcl" version="5.10.1d22"/>
         <requires url="acs-lang" version="5.10.0"/>
         <requires url="acs-mail-lite" version="5.10.0"/>
 
@@ -149,14 +149,14 @@ admin {
             <parameter scope="instance" datatype="text"  min_n_values="1"  max_n_values="1"  name="ThemeJS"  default=""
 		       description="A list of lists of JS specifications of the form '-attribute value' pairs to use with this theme. The allowed attributes are defined by the arguments of template::add_script.  Set by the admin theme-switching UI." section_name="theming"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="ThemeKey"  default="default_plain" description="Key of the acs-templating theme for this subsite.  Set by the admin theme-switching UI." section_name="theming"/>
-            <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="TmpDir"  default="" description="What tmp directories are used on this system? Could be something like '/tmp /var/tmp', note the leading / character. If this value is empty, 'ns_config ns/parameters tmpdir' is used"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="UserHomeTemplate"  default="/packages/acs-subsite/lib/home" description="Name of the template used for the user home page" section_name="Templates"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="UserInfoTemplate"  default="/packages/acs-subsite/lib/user-info" description="Name of the template used for description of a user" section_name="Templates"/>
             <parameter scope="instance" datatype="text"  min_n_values="1"  max_n_values="1"  name="UserNavbarTabsList"  default="home {label #acs-subsite.Subsite_Home#}" description="Navigation tabs to show to users" section_name="Navigation Tabs"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="UserNewTemplate"  default="/packages/acs-subsite/lib/user-new" description="Name of the template used for creation of a new user" section_name="Templates"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="application"  default="default" description="Name of the ETP application to use (default, faq, wiki, or create your own with the etp::define_application procedure)" section_name="EditThisPage"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="subtopic_application"  default="default" description="Name of the ETP application to use when creating a subtopic" section_name="EditThisPage"/>
-        </parameters>
+            <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="TmpDir"  default="" description="What tmp directories are used on this system? Could be something like '/tmp /var/tmp', note the leading / character. If this value is empty, 'ns_config ns/parameters tmpdir' is used. NOTICE: this parameter is deprecated hand has no effect. Please use ns_config ns/parameters tmpdir to configure your temporary folder." section_name="Deprecated"/>
+          </parameters>
 
     </version>
 </package>
