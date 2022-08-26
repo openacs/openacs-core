@@ -111,7 +111,6 @@ aa_register_case \
     -procs {
         ad_html_security_check
 
-        ad_parameter_all_values_as_list
         ad_parse_html_attributes_upvar
     } \
     ad_html_security_check_href_allowed {
@@ -128,7 +127,6 @@ aa_register_case \
     -procs {
         ad_html_security_check
 
-        ad_parameter_all_values_as_list
         ad_parse_html_attributes_upvar
     } \
     ad_html_security_check_forbidden_protolcols {

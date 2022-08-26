@@ -399,7 +399,7 @@ ad_proc -private apm_system_paths {} {
     @return a list of acceptable system paths to search for executables in.
 
 } {
-    set paths [ad_parameter_all_values_as_list -package_id [ad_acs_kernel_id] SystemCommandPaths acs-kernel]
+    set paths [parameter::get -package_id [ad_acs_kernel_id] -parameter SystemCommandPaths]
     if {$paths eq ""} {
         return [list "/usr/local/bin" "/usr/bin" "/bin" "/usr/sbin" "/sbin" "/usr/sbin"]
     } else {

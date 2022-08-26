@@ -901,31 +901,17 @@ ad_proc ad_parse_html_attributes_upvar {
             return "For security reasons, you're not allowed to have the less-than-percent combination in your input."
         }
 
-        if {[info exists allowed_tags]} {
-            lappend allowed_tags {*}$extra_tags
-        } else {
-            set allowed_tags [concat \
-                                  $extra_tags \
-                                  [ad_parameter_all_values_as_list \
-                                       -package_id $::acs::kernel_id \
-                                       AllowedTag antispam] \
-                                  [ad_parameter_all_values_as_list AllowedTag antispam]]
+        if {![info exists allowed_tags]} {
+            set allowed_tags [parameter::get -package_id $::acs::kernel_id -parameter AllowedTag]
         }
+        lappend allowed_tags {*}$extra_tags
 
         if {![info exists allowed_attributes]} {
-            set allowed_attributes [concat \
-                                        [ad_parameter_all_values_as_list \
-                                             -package_id $::acs::kernel_id \
-                                             AllowedAttribute antispam] \
-                                        [ad_parameter_all_values_as_list AllowedAttribute antispam]]
+            set allowed_attributes [parameter::get -package_id $::acs::kernel_id -parameter AllowedAttribute]
         }
 
         if {![info exists allowed_protocols]} {
-            set allowed_protocols [concat \
-                                       [ad_parameter_all_values_as_list \
-                                            -package_id $::acs::kernel_id \
-                                            AllowedProtocol antispam] \
-                                       [ad_parameter_all_values_as_list AllowedProtocol antispam]]
+            set allowed_protocols [parameter::get -package_id $::acs::kernel_id -parameter AllowedProtocol]
         }
 
         foreach var {attributes tags protocols} {
@@ -1219,24 +1205,17 @@ ad_proc ad_parse_html_attributes_upvar {
 
         array set allowed_tag {}
         if {![info exists allowed_tags]} {
-            # Use the antispam tags for this package instance and whatever is on the kernel.
-            set allowed_tags {}
-            lappend allowed_tags_list {*}[ad_parameter_all_values_as_list -package_id $::acs::kernel_id AllowedTag antispam]
-            lappend allowed_tags_list {*}[ad_parameter_all_values_as_list AllowedTag antispam]
+            set allowed_tags [parameter::get -package_id $::acs::kernel_id -parameter AllowedTag]
         }
 
         array set allowed_attribute {}
         if {![info exists allowed_attributes]} {
-            set allowed_attributes {}
-            lappend allowed_attributes {*}[ad_parameter_all_values_as_list -package_id $::acs::kernel_id AllowedAttribute antispam]
-            lappend allowed_attributes {*}[ad_parameter_all_values_as_list AllowedAttribute antispam]
+            set allowed_attributes [parameter::get -package_id $::acs::kernel_id -parameter AllowedAttribute]
         }
 
         array set allowed_protocol {}
         if {![info exists allowed_protocols]} {
-            set allowed_protocols {}
-            lappend allowed_protocols {*}[ad_parameter_all_values_as_list -package_id $::acs::kernel_id AllowedProtocol antispam]
-            lappend allowed_protocols {*}[ad_parameter_all_values_as_list AllowedProtocol antispam]
+            set allowed_protocols [parameter::get -package_id $::acs::kernel_id -parameter AllowedProtocol]
         }
 
         if {"*" in $allowed_tags} {

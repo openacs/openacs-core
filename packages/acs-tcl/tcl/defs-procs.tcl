@@ -614,20 +614,6 @@ ad_proc -private ad_parameter_cache_all {} {
     }
 }
 
-# returns particular parameter values as a Tcl list (i.e., it selects
-# out those with a certain key)
-
-ad_proc -public ad_parameter_all_values_as_list {
-    {-package_id ""}
-    name {subsection ""}
-} {
-
-    Returns multiple values for a parameter as a list.
-
-} {
-    return [join [parameter::get -package_id $package_id -parameter $name ] " "]
-}
-
 ad_proc doc_return {args} {
 
     A wrapper to be used instead of ns_return.  It calls
