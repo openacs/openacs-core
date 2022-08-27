@@ -2,7 +2,14 @@ ad_library {
 
     Provides a collection of deprecated procs to provide backward
     compatibility for sites who have not yet removed calls to the
-    deprecated functions.
+    deprecated functions. This file should contain only
+    long-time deprecated functions, which are going to be removed
+    unless there is a good reason not to do.
+
+    Note, that FRESHLY DEPRECATED PROCS SHOULD NOT BE moved here,
+    otherwise, site using "WithDeprecatedCode" set to 0 will
+    break immediately. One should give people at least
+    one release time to fix invocation of deprecated code.
 
     In order to skip loading of deprecated code, use the following
     snippet in your config file
@@ -4347,25 +4354,6 @@ ad_proc -deprecated -public apm_db_type_keys {} {
     # return [util_memoize [list db_list db_type_keys {select db_type_key from apm_package_db_types}]]
 }
 
-ad_proc -deprecated ad_parameter_all_values_as_list {
-    {-package_id ""}
-    name {subsection ""}
-} {
-
-    Returns multiple values for a parameter as a list.
-
-    DEPRECATED: this proc does not do much that joining a string
-    coming from a parameter, which does not make an invalid string
-    into a list. Best to take the value from the parameter directly
-    and rely on proper quoting by the user. Furthermore, the
-    'subsection' argument is not used anywhere.
-
-    @see parameter::get
-    @see join
-
-} {
-    return [join [parameter::get -package_id $package_id -parameter $name ] " "]
-}
 
 ########################################################################
 # Functions based on undefined code

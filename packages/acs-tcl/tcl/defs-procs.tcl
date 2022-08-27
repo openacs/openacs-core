@@ -61,7 +61,7 @@ ad_proc -public ad_pvt_home {} {
 }
 
 ad_proc -public ad_admin_home {} {
-   Returns the directory for the admin home.
+    Returns the directory for the admin home.
 } {
     return "[subsite::get_element -element url]admin"
 }
@@ -202,7 +202,7 @@ ad_proc -public ad_return_complaint {
 } {
     Return a page complaining about the user's input
     (as opposed to an error in our software, for which ad_return_error
-    is more appropriate)
+     is more appropriate)
 
     @param exception_count Number of exceptions. Used to say either 'a problem' or 'some problems'.
 
@@ -614,6 +614,26 @@ ad_proc -private ad_parameter_cache_all {} {
     }
 }
 
+ad_proc -deprecated ad_parameter_all_values_as_list {
+    {-package_id ""}
+    name {subsection ""}
+} {
+
+    Returns multiple values for a parameter as a list.
+
+    DEPRECATED: this proc does not do much that joining a string
+    coming from a parameter, which does not make an invalid string
+    into a list. Best to take the value from the parameter directly
+    and rely on proper quoting by the user. Furthermore, the
+    'subsection' argument is not used anywhere.
+
+    @see parameter::get
+    @see join
+
+} {
+    return [join [parameter::get -package_id $package_id -parameter $name ] " "]
+}
+
 ad_proc doc_return {args} {
 
     A wrapper to be used instead of ns_return.  It calls
@@ -671,7 +691,7 @@ ad_proc -public ad_return_url {
 } {
 
     if { $urlencode_p } {
-        ns_log warning "deprecated flag -urlencode; result us encoded per default"
+        ns_log warning "deprecated flag -urlencode; result is encoded per default"
     }
 
     if {[ns_conn isconnected]} {
