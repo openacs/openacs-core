@@ -4,7 +4,6 @@ ad_library {
     @author Jeff Davis
     @author Héctor Romojaro <hector.romojaro@gmail.com>
     @creation-date 2005-02-28
-    @cvs-id $Id$
 }
 
 aa_register_case -cats {smoke production_safe} -procs {
@@ -17,7 +16,7 @@ aa_register_case -cats {smoke production_safe} -procs {
     set count 0
     set good 0
     #
-    # Certain procs are defined outside of the OpenACS installation
+    # Certain procs are defined outside the OpenACS installation
     # source tree, e.g. in nsf. If they fail the test, the regular
     # OpenACS administrator cannot do much about it, so we only
     # generate a warning for them.
@@ -47,7 +46,7 @@ aa_register_case -cats {smoke production_safe} -procs {
     }
     aa_log "Found $good public procs with proper documentation (out of $count checked)"
 
-    if {[info commands ::ns_parsehtml] ne ""} {
+    if {[::acs::icanuse "ns_parsehtml"] ne ""} {
         set nrTags 0
         set nrNotAllowedTags 0
         set allowedTags {
@@ -81,7 +80,7 @@ aa_register_case -cats {smoke production_safe} -procs {
             if {[dict exists $dict main]} {
                 set text [dict get $dict main]
                 foreach chunk [::ns_parsehtml $text] {
-                    lassign $chunk what from to content
+                    lassign $chunk what chunk content
                     if {$what eq "tag"} {
                         incr nrTags
                         set tag [lindex $content 0]
@@ -284,7 +283,7 @@ aa_register_case -cats {smoke production_safe} -error_level warning -procs {
     Sometimes proc parameter changes are not reflected in the proc doc, this
     should take care of some of these cases.
 
-    Test is case sensitive.
+    Test is case-sensitive.
 
     @author Héctor Romojaro <hector.romojaro@gmail.com>
 
