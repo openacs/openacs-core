@@ -318,7 +318,7 @@ ad_proc -public ad_text_to_html {
     if {$closeTags} {
         if {[ns_conn isconnected]} {
             append reason " called in [ns_conn url]?[ns_conn query]"
-        }        
+        }
         ns_log notice "early call closeTags, reason: $reason"
         set text [util_close_html_tags_ns_parsehtml $text]
     }
@@ -422,7 +422,7 @@ ad_proc -public util_convert_line_breaks_to_html {
         regsub -all -nocase "\[\r\n\]*(</?($tags)\[\r\n\]*\[^>\]*>)\[\r\n\]*" $text {\1} text
     }
     ns_log notice "... before pre handling <$text>"
-    
+
     if {[::acs::icanuse "ns_parsehtml"] && $contains_pre_p} {
         #
         # Convert _single_ CRLF's to <br>'s to preserve line breaks
@@ -928,7 +928,9 @@ ad_proc ad_parse_html_attributes {
     html
     {pos 0}
 } {
-    This is a wrapper proc for <a href="/api-doc/proc-view?proc=ad_parse_html_attributes_upvar"><code>ad_parse_html_attributes_upvar</code></a>, so you can parse attributes from a string without upvar'ing.
+    This is a wrapper proc for <a href="/api-doc/proc-view?proc=ad_parse_html_attributes_upvar">
+    <code>ad_parse_html_attributes_upvar</code></a>, so you can parse
+    attributes from a string without upvar'ing.
     See the documentation for the other proc.
 
     @author Lars Pind (lars@pinds.com)
@@ -943,7 +945,7 @@ ad_proc ad_parse_html_attributes {
 }
 
 
-ad_proc ad_parse_html_attributes_upvar {
+ad_proc -private ad_parse_html_attributes_upvar {
     -attribute_array
     html_varname
     pos_varname
@@ -1144,69 +1146,167 @@ ad_proc ad_parse_html_attributes_upvar {
             set allow_all_$var [expr {"*" in [set allowed_$var]}]
         }
 
-        # loop over all tags
-        for { set i [string first < $html] } { $i != -1 } { set i [string first < $html $i] } {
-            # move past the tag-opening <
-            incr i
+        foreach var {attributes tags protocols} {
+            if {[set allow_all_$var]} {
+                set allowed_$var *
+            }
+        }
 
-            if { ![regexp -indices -start $i {\A/?([-_a-zA-Z0-9:]+)\s*} $html match name_idx] } {
-                # The tag-opener isn't followed by USASCII letters (with or without optional initial slash)
-                # Not considered a tag. Shouldn't do any harm in browsers.
-                # (Tested with digits, with &#65; syntax, with whitespace)
-            } else {
-                #
-                # The tag is potentially ok ... now let's see if it's
-                # on the allowed list.
-                #
-                set tagname [string tolower [string range $html [lindex $name_idx 0] [lindex $name_idx 1]]]
+        return [ad_html_security_check_helper \
+                    -allowed_tags $allowed_tags \
+                    -allowed_attributes $allowed_attributes \
+                    -allowed_protocols $allowed_protocols \
+                    $html]
+    }
 
-                if { !$allow_all_tags && $tagname ni $allowed_tags } {
+    ad_proc -private ad_html_security_check_protocol {
+        -attr_name
+        -attr_value
+        -allowed_protocols
+    } {
+        Check for allowed protocol in attribute value
+    } {
+        if { [regexp {^\s*(([^\s:]+):\/\/|(data|javascript|blob):)} $attr_value match . p1 p2] } {
+            set protocol [string tolower [expr {$p1 ne "" ? $p1 : $p2}]]
+            if { $protocol ni $allowed_protocols } {
+                return [subst {The allowed URLs can only use these protocols:
+                    [join $allowed_protocols ", "].
+                    You have a '$protocol' protocol in attribute '$attr_name' there.}]
+            }
+        }
+        return ""
+    }
+
+    if {[::acs::icanuse "ns_parsehtml"]} {
+        ad_proc -private ad_html_security_check_helper {
+            -allowed_tags:required
+            -allowed_attributes:required
+            -allowed_protocols:required
+            html
+        } {
+            Helper proc for ad_html_security_check doing the hard work
+            @see ad_html_security_check
+        } {
+            # loop over all tags
+            set parseListElements [ns_parsehtml -onlytags $html]
+            foreach parseListElement $parseListElements {
+                lassign [string tolower $parseListElement] tag dict
+
+                if {[string range $tag 0 0] eq "/"} {
+                    #
+                    # Ignore closing tags
+                    #
+                    continue
+                }
+                if {$allowed_tags ne "*" && $tag ni $allowed_tags} {
                     #
                     # This tag is not allowed.
                     #
                     return [subst {For security reasons we only accept the submission of HTML
                         containing the following tags: [join $allowed_tags " "].
-                        You have a '[string toupper $tagname]' tag in there.
+                        You have a '[string toupper $tag]' tag in there.
                     }]
                 } else {
                     #
-                    # Valid and allowed tag. Make i point to the first
-                    # character inside the tag, after the tag name and
-                    # any whitespace.
+                    # Valid and allowed tag. Check attributes.
                     #
-                    set i [expr { [lindex $match 1] + 1}]
-
-                    set attr_list [ad_parse_html_attributes_upvar html i]
-
-                    foreach attribute $attr_list {
-                        #
-                        # All attribute names in $attr_list are
-                        # already lowercase.
-                        #
-                        lassign $attribute attr_name attr_value
-
-                        if { !$allow_all_attributes
-                             && $attr_name ni $allowed_attributes} {
-                            return "The attribute '$attr_name' is not allowed for $tagname tags"
-                        }
-
-                        if { !$allow_all_protocols && $attr_name ne "style" } {
-                            if { [regexp {^\s*(([^\s:]+):\/\/|(data|javascript|blob):)} $attr_value match . p1 p2] } {
-                                set protocol [string tolower [expr {$p1 ne "" ? $p1 : $p2}]]
-                                if { $protocol ni $allowed_protocols } {
-                                    return [subst {The allowed URLs can only use these protocols:
-                                        [join $allowed_protocols ", "].
-                                        You have a '$protocol' protocol in there.}]
+                    if { $allowed_attributes ne "*"} {
+                        foreach attr_name [dict keys $dict] {
+                            if {$attr_name ni $allowed_attributes} {
+                                return "The attribute '$attr_name' is not allowed for $tagname tags"
+                            }
+                            #
+                            # Attribute is allowed. Check now protocols
+                            #
+                            if { $allowed_protocols ne "*" && $attr_name ne "style" } {
+                                set r [ad_html_security_check_protocol \
+                                           -attr_name $attr_name \
+                                           -attr_value [dict get $dict $attr_name] \
+                                           -allowed_protocols $allowed_protocols]
+                                if {$r ne ""} {
+                                    return $r
                                 }
                             }
                         }
                     }
                 }
             }
+            return ""
         }
-        return ""
-    }
+    } else {
+        ad_proc -private ad_html_security_check {
+            -allowed_tags:required
+            -allowed_attributes:required
+            -allowed_protocols:required
+            html
+        } {
+            Helper proc for ad_html_security_check doing the hard work
+            @see ad_html_security_check
+        } {
+            # loop over all tags
 
+            for { set i [string first < $html] } { $i != -1 } { set i [string first < $html $i] } {
+                # move past the tag-opening <
+                incr i
+
+                if { ![regexp -indices -start $i {\A/?([-_a-zA-Z0-9:]+)\s*} $html match name_idx] } {
+                    # The tag-opener isn't followed by USASCII letters (with or without optional initial slash)
+                    # Not considered a tag. Shouldn't do any harm in browsers.
+                    # (Tested with digits, with &#65; syntax, with whitespace)
+                } else {
+                    #
+                    # The tag is potentially ok ... now let's see if it's
+                    # on the allowed list.
+                    #
+                    set tagname [string tolower [string range $html [lindex $name_idx 0] [lindex $name_idx 1]]]
+
+                    if {$allowed_tags ne "*" && $tagname ni $allowed_tags } {
+                        #
+                        # This tag is not allowed.
+                        #
+                        return [subst {For security reasons we only accept the submission of HTML
+                            containing the following tags: [join $allowed_tags " "].
+                            You have a '[string toupper $tagname]' tag in there.
+                        }]
+                    } else {
+                        #
+                        # Valid and allowed tag. Make i point to the first
+                        # character inside the tag, after the tag name and
+                        # any whitespace.
+                        #
+                        set i [expr { [lindex $match 1] + 1}]
+
+                        set attr_list [ad_parse_html_attributes_upvar html i]
+
+                        foreach attribute $attr_list {
+                            #
+                            # All attribute names in $attr_list are
+                            # already lowercase.
+                            #
+                            lassign $attribute attr_name attr_value
+
+                            if { $allowed_attributes ne "*"
+                                 && $attr_name ni $allowed_attributes
+                             } {
+                                return "The attribute '$attr_name' is not allowed for $tagname tags"
+                            }
+
+                            if { $allowed_protocols ne "*" && $attr_name ne "style" } {
+                                set r [ad_html_security_check_protocol \
+                                           -attr_name $attr_name \
+                                           -attr_value $attr_value \
+                                           -allowed_protocols $allowed_protocols]
+                                if {$r ne ""} {
+                                    return $r
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return ""
+        }
+    }
     # This was created in order to pre-process some content to be fed
     # to tDOM in ad_sanitize_html. In fact, even with its least picky
     # behavior, tDOM cannot swallow whatever markup you give it. This
@@ -2653,7 +2753,7 @@ ad_proc -public ad_html_text_convert {
             if {[info exists tags_are_closed]} {
                 ns_log notice "No need to call util_close_html_tags"
             } else {
-                ns_log notice "regular call closeTags (from $from to $to)"                
+                ns_log notice "regular call closeTags (from $from to $to)"
                 set text [util_close_html_tags $text $truncate_len $truncate_len $ellipsis $more]
             }
         }
