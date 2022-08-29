@@ -70,18 +70,9 @@ ad_proc -public template::util::is_nil { ref } {
     @return 1 if the variable either not exist or is an empty string.  0 if
     the variable is either an array reference or a nonempty scalar.
 } {
-
     upvar $ref var
 
-    # check for an array as well
-    if { [array exists var] } { return 0 }
-
-    if { [info exists var] && $var ne {} } {
-        set result 0
-    } else {
-        set result 1
-    }
-    return $result
+    return [expr { ![array exists var] && (![info exists var] || $var eq "") }]
 }
 
 ad_proc -public template::util::is_unique { table columns values } {
