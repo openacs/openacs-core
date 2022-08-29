@@ -10,7 +10,7 @@ aa_register_case \
         apm_get_repository_channels
     } \
     apm_respositories_api {
-        Check the api to retrieve upstream repositories
+        Check the API to retrieve upstream repositories
     } {
         set repos failed
 

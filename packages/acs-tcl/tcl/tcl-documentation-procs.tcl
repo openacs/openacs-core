@@ -1843,7 +1843,7 @@ ad_page_contract_filter object_type { name object_id types } {
 
     The check will take the object_type hierarchy into account
     e.g. will always succeed if one of the types is "acs_object". In
-    this case the filter will just behave as an existance check.
+    this case the filter will just behave as an existence check.
 
 } {
     if { $types eq "" } {

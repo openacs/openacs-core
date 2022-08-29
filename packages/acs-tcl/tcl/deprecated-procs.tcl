@@ -6,7 +6,7 @@ ad_library {
     long-time deprecated functions, which are going to be removed
     unless there is a good reason not to do.
 
-    Note, that FRESHLY DEPRECATED PROCS SHOULD NOT BE moved here,
+    Note that FRESHLY DEPRECATED PROCS SHOULD NOT BE moved here,
     otherwise, site using "WithDeprecatedCode" set to 0 will
     break immediately. One should give people at least
     one release time to fix invocation of deprecated code.

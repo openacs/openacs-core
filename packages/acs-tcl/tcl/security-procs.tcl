@@ -1182,7 +1182,7 @@ ad_proc security::safe_tmpfile_p {
 
     When the file exists, we also enforce additional criteria:
     - file must belong to the current system user
-    - file must be readable and writeable by the current system user
+    - file must be readable and writable by the current system user
 
     @param tmpfile absolute path to a possibly existing tmpfile
     @param must_exist make sure the file exists

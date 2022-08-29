@@ -154,7 +154,7 @@ aa_register_case \
     aa_true "Tag a is not allowed - empty tag list" {[ad_html_security_check -allowed_tags "" $html] ne {}}
 
     set html "hello <a href='/foo'>An Link</a> world."
-    aa_true "Tag a is not allowed - non-empty tag list" {[ad_html_security_check -allowed_tags "b h1" $html] ne {}}
+    aa_true "Tag a is not allowed - nonempty tag list" {[ad_html_security_check -allowed_tags "b h1" $html] ne {}}
 
     set html "hello <a href='/foo'>An Link</a> world."
     aa_equals "Tag 'a' is allowed" [ad_html_security_check -allowed_tags "a b h1" $html] ""
@@ -169,9 +169,14 @@ aa_register_case \
 } {
     aa_equals "" [util_close_html_tags "<b>Foobar"] "<b>Foobar</b>"
     aa_equals "" [util_close_html_tags "<b>Foobar</b>"] "<b>Foobar</b>"
-    aa_equals "" [util_close_html_tags "<b>Foobar</b> is <i>a very long word</i>"] "<b>Foobar</b> is <i>a very long word</i>"
-    aa_equals "" [util_close_html_tags "<b>Foobar</b> is <i>a very long word</i>" 15] "<b>Foobar</b> is <i>a</i>"
-    aa_equals "" [util_close_html_tags "<b>Foobar</b> is <i>a very long word</i>" 0 20 "..."] "<b>Foobar</b> is <i>a very</i>..."
+    aa_equals "" [util_close_html_tags "<b>Foobar</b> is <i>a very long word</i>"] \
+        "<b>Foobar</b> is <i>a very long word</i>"
+    aa_equals "" [util_close_html_tags "<b>Foobar</b> is <i>a very long word</i>" 15] \
+        "<b>Foobar</b> is <i>a</i>"
+    aa_equals "" [util_close_html_tags "<b>Foobar</b> is <i>a very long word</i>" 0 20 "..."] \
+        "<b>Foobar</b> is <i>a very</i>..."
+    set result [util_close_html_tags "<div><b>Foobar</b> 'i' <i>and 'div' not closed"]
+    aa_true [ns_quotehtml $result] {$result eq "<div><b>Foobar</b> 'i' <i>and 'div' not closed</i></div>"}
 }
 
 
@@ -197,7 +202,8 @@ aa_register_case \
     aa_equals "" [ad_html_text_convert -from "text/enhanced" -to "text/html" -truncate_len 14 -- $string] \
         [ad_enhanced_text_to_html "What?\n<i>Never</i>..."]
 
-    # The string is longer in plaintext, because the "_" symbol to denote italics is counted as well.
+    # The string is longer in plaintext, because the "_" symbol to
+    # denote italics is counted as well.
     aa_equals "" [ad_html_text_convert -from "text/enhanced" -to "text/plain" -truncate_len 15 -- $string] "What?\n_Never..."
 
     #----------------------------------------------------------------------
@@ -337,6 +343,19 @@ aa_register_case \
     aa_log "html= '[ns_quotehtml $html]' - Contains more than 2 breaks"
     set result [util_convert_line_breaks_to_html $html]
     aa_true "Now html='[ns_quotehtml $result]'" [regexp {a <table> layout} $result]
+
+    # do not add <br> inside <pre>
+    set text "text begin\r\n<pre>\nline1\nline2\n</pre>text\nend\n"
+    aa_log "Input: <pre>[ns_quotehtml $text]</pre>"
+    set result [util_convert_line_breaks_to_html -contains_pre $text]
+    aa_log "result is <pre>[ns_quotehtml $result]</pre>"
+    set nrBr [regsub -all <br> $result <br> .]
+    aa_true "text contains some [ns_quotehtml <br>] tags" {$nrBr > 0}
+    
+    if {[::acs::icanuse "ns_parsehtml"]} {
+        aa_true "text contains $nrBr [ns_quotehtml <br>] tags" {$nrBr == 2}
+    }
+    
 
 }
 
@@ -550,6 +569,45 @@ aa_register_case \
 }
 
 aa_register_case \
+    -cats {api smoke} \
+    -procs {
+        ad_text_to_html
+        util_convert_line_breaks_to_html
+    } \
+    ad_text_to_html {
+    Test rendering of a more or less standard HTML text
+} {
+    set text {We could use a <div> instead than a <table> layout » <p> for the list for example.»}
+    set result [ad_text_to_html -no_quote -includes_html -- $text]
+    aa_log "Input:\n[ns_quotehtml $text]"
+    aa_log "Result:\n[ns_quotehtml $result]"
+    if {[::acs::icanuse "ns_parsehtml"]} {
+        aa_true "text contains sample code" [string match *<samp>* $result]
+    }
+    aa_true "gullimet » preserved" [string match *»* $result]
+
+    #
+    # This calls util_convert_line_breaks_to_html as well, but
+    # strangely when this is called with -includes_html" it removes
+    # newlines around <pre> although "pre" is not included in the
+    # regular expression.
+    #
+    set text "text begin\n<pre>\nline1\nline2\n</pre>text\nend\n"
+    aa_log "Input: <pre>[ns_quotehtml $text]</pre>"
+    set result [ad_text_to_html -includes_html -no_quote $text]
+    aa_log "result is <pre>[ns_quotehtml $result]</pre>"
+    set nrBr [regsub -all <br> $result <br> .]
+    aa_true "text contains [ns_quotehtml <br>] tags" {$nrBr > 0}
+    
+    if {[::acs::icanuse "ns_parsehtml"]} {
+        aa_true "text contains $nrBr [ns_quotehtml <br>] tags" {$nrBr == 1}
+    }
+    #aa_equals "new: $html _version should be the same" $html_version $string_with_img
+    
+}
+
+
+aa_register_case \
     -cats {api} \
     -bugs 1450 \
     -procs {ad_enhanced_text_to_html} \
@@ -559,11 +617,12 @@ aa_register_case \
         @author Nima Mazloumi
     } {
 
-        set string_with_img {<img src="http://test.test/foo.png">}
-        aa_log "Original string is $string_with_img"
-        set html_version [ad_enhanced_text_to_html $string_with_img]
-        aa_equals "new: $html_version should be the same" $html_version $string_with_img
-}
+        set text_with_pre "text\n<pre>\nline1\nline2\n</pre>text end\n"
+        aa_log "Original string is [ns_quotehtml $text_with_pre]"
+        set html [ad_enhanced_text_to_html $text_with_pre]
+        aa_log "result is [ns_quotehtml $html]"
+        #aa_equals "new: $html _version should be the same" $html_version $string_with_img
+    }
 
 aa_register_case \
     -cats {api smoke} \

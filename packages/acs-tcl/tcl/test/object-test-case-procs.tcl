@@ -204,11 +204,11 @@ aa_register_case -cats {
             [acs_object::is_type_p -object_id $object_id -object_type person]
         aa_true "Is $object_id a party?" \
             [acs_object::is_type_p -object_id $object_id -object_type party]
-        aa_true "Is $object_id a user (no hierachy)?" \
+        aa_true "Is $object_id a user (no hierarchy)?" \
             [acs_object::is_type_p -object_id $object_id -object_type user -no_hierarchy]
-        aa_false "Is $object_id a person (no hierachy)?" \
+        aa_false "Is $object_id a person (no hierarchy)?" \
             [acs_object::is_type_p -object_id $object_id -object_type person -no_hierarchy]
-        aa_false "Is $object_id a party (no hierachy)?" \
+        aa_false "Is $object_id a party (no hierarchy)?" \
             [acs_object::is_type_p -object_id $object_id -object_type party -no_hierarchy]
 
         aa_true "Is $object_id a user os a package?" \
@@ -217,13 +217,13 @@ aa_register_case -cats {
             [acs_object::is_type_p -object_id $object_id -object_type {apm_package person}]
         aa_true "Is $object_id a party or a package?" \
             [acs_object::is_type_p -object_id $object_id -object_type {apm_package party}]
-        aa_true "Is $object_id a user or a package (no hierachy)?" \
+        aa_true "Is $object_id a user or a package (no hierarchy)?" \
             [acs_object::is_type_p -object_id $object_id -object_type {apm_package user} -no_hierarchy]
-        aa_false "Is $object_id a person or a package (no hierachy)?" \
+        aa_false "Is $object_id a person or a package (no hierarchy)?" \
             [acs_object::is_type_p -object_id $object_id \
                  -object_type {apm_package person} \
                  -no_hierarchy]
-        aa_false "Is $object_id a party or a package (no hierachy)?" \
+        aa_false "Is $object_id a party or a package (no hierarchy)?" \
             [acs_object::is_type_p -object_id $object_id \
                  -object_type {apm_package party} -no_hierarchy]
 

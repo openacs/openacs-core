@@ -1,6 +1,6 @@
 ad_library {
 
-    Tests for low level interface for defining the basic classes for
+    Tests for low-level interface for defining the basic classes for
     the DB interface.
 
 }
