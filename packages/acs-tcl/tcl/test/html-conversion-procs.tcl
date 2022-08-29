@@ -177,6 +177,18 @@ aa_register_case \
         "<b>Foobar</b> is <i>a very</i>..."
     set result [util_close_html_tags "<div><b>Foobar</b> 'i' <i>and 'div' not closed"]
     aa_true [ns_quotehtml $result] {$result eq "<div><b>Foobar</b> 'i' <i>and 'div' not closed</i></div>"}
+
+    #
+    # wrong nesting of tags and unclosed tags
+    #
+    set text {1 <em> 2 <b> 3 <em> 4 </em> 5 <div> 6}
+    set result [util_close_html_tags $text]
+    aa_log "Input: <pre>[ns_quotehtml $text]</pre>"
+    aa_log "Result: <pre>[ns_quotehtml $result]</pre>"
+    if {[::acs::icanuse "ns_parsehtml"]} {
+        aa_true "tags are closed:" {[string range $result end-14 end] eq "</div></b></em>"}
+    }
+
 }
 
 
@@ -617,12 +629,11 @@ aa_register_case \
         @author Nima Mazloumi
     } {
 
-        set text_with_pre "text\n<pre>\nline1\nline2\n</pre>text end\n"
-        aa_log "Original string is [ns_quotehtml $text_with_pre]"
-        set html [ad_enhanced_text_to_html $text_with_pre]
-        aa_log "result is [ns_quotehtml $html]"
-        #aa_equals "new: $html _version should be the same" $html_version $string_with_img
-    }
+        set string_with_img {<img src="http://test.test/foo.png">}
+        aa_log "Original string is $string_with_img"
+        set html_version [ad_enhanced_text_to_html $string_with_img]
+        aa_equals "new: $html_version should be the same" $html_version $string_with_img
+    }        
 
 aa_register_case \
     -cats {api smoke} \

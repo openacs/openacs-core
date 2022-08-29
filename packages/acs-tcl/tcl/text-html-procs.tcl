@@ -64,6 +64,65 @@ ad_proc -private ad_text_cite_to_blockquote {text} {
     return $result
 }
 
+ad_proc -private enhanced_text_escape_disallowed {text} {
+} {
+    set tagDict {}
+    #ns_log notice "enhanced_text_escape_disallowed called on [ns_conn url]?[ns_conn query]"
+    if {[::acs::icanuse "ns_parsehtml"]} {
+        if {[ns_conn isconnected]} {
+            ns_log notice "PARSE called by [ns_conn url]?[ns_conn query]"
+        }
+        set parsed [ns_parsehtml -noangle -- $text]
+        set allowed_tags {
+            p /p
+            a /a
+            li /li
+            ul /ul
+            ol /ol
+            i /i
+            b /b
+            em /em
+            tt /tt
+            pre /pre
+            code /code
+            strong /strong
+            small /small
+            blockquote /blockquote
+            br hr img
+        }
+        # strike not supported by HTML5
+        set delimiter {{< <samp>&lt;} {> &gt;</samp>}}
+        set out ""
+        foreach token $parsed {
+            lassign $token kind chunk parsed
+            if {$kind eq "tag"} {
+                set tag [string tolower [lindex $parsed 0]]
+                set disallowed [expr {$tag ni $allowed_tags}]
+                if {$disallowed} {
+                    ns_log notice "do not allow tag $tag [ns_conn url]?[ns_conn query]"
+                    set t [ns_quotehtml $chunk]
+                } else {
+                    if {[string range $tag 0 0] eq "/"} {
+                        dict incr tagDict [string range $tag 1 end] -1
+                    } else {
+                        dict incr tagDict $tag 1
+                    }
+                    set t $chunk
+                }
+                append out \
+                    [lindex $delimiter 0 $disallowed] \
+                    $t \
+                    [lindex $delimiter 1 $disallowed]
+            } else {
+                append out [ns_quotehtml $chunk]
+            }
+        }
+        set text $out
+        ns_log notice "tagDict <$tagDict>"
+    }
+    return [list text $text tagDict $tagDict]
+}
+
 ad_proc -public ad_text_to_html {
     -no_links:boolean
     -no_lines:boolean
@@ -90,6 +149,17 @@ ad_proc -public ad_text_to_html {
         return ""
     }
     set orig_text $text
+
+    # Convert lines starting with a ">" into blockquotes.
+    set text [ad_text_cite_to_blockquote $text]
+
+    if {$includes_html_p} {
+        set d [enhanced_text_escape_disallowed $text]
+        set text [dict get $d text]
+        set tagDict [dict get $d tagDict]
+    } else {
+        set tagDict ""
+    }
 
     set space_added 0
     set nr_links 0
@@ -169,15 +239,22 @@ ad_proc -public ad_text_to_html {
         foreach ch $myChars entity $myHTML {
             lappend map $ch $entity
         }
-        set text [string map $map $text]        
+        set text [string map $map $text]
     }
 
-    # Convert lines starting with a ">" into blockquotes.
-    set text [ad_text_cite_to_blockquote $text]
 
     # Convert line breaks
     if { !$no_lines_p } {
-        set text [util_convert_line_breaks_to_html -includes_html=$includes_html_p -- $text]
+        if {![info exists tagDict] || ![dict exists $tagDict pre]} {
+            set contains_pre ""
+        } else {
+            set contains_pre "-contains_pre"
+        }
+        #ns_log notice "... contains_pre <$contains_pre> "
+        set text [util_convert_line_breaks_to_html \
+                      -includes_html=$includes_html_p \
+                      {*}$contains_pre \
+                      -- $text]
         #
         # The function strips all leading white space!
         #
@@ -223,6 +300,28 @@ ad_proc -public ad_text_to_html {
         set text [string range $text 1 end]
     }
 
+    if {[info exists tagDict]} {
+        set closeTags 0
+        set reason ""
+        foreach {tag count} $tagDict {
+            if {$count > 0} {
+                set reason "count of $tag not 0"
+                set closeTags 1
+                break
+            }
+        }
+        ns_log notice "closeTags $closeTags tagDict <$tagDict> includes_html_p $includes_html_p"
+    } else {
+        set reason "no tag dict"
+        set closeTags 1
+    }
+    if {$closeTags} {
+        if {[ns_conn isconnected]} {
+            append reason " called in [ns_conn url]?[ns_conn query]"
+        }        
+        ns_log notice "early call closeTags, reason: $reason"
+        set text [util_close_html_tags_ns_parsehtml $text]
+    }
     return $text
 }
 
@@ -291,10 +390,12 @@ ad_proc -public ad_html_qualify_links {
 
 ad_proc -public util_convert_line_breaks_to_html {
     {-includes_html:boolean}
+    {-contains_pre:boolean}
     text
 } {
     Convert line breaks to &lt;p&gt; and &lt;br&gt; tags, respectively.
 } {
+    ns_log notice "util_convert_line_breaks_to_html called with <$text> contains_pre=$contains_pre_p includes_html=$includes_html_p"
     # Remove any leading or trailing whitespace
     regsub {^[\s]+} $text {} text
     regsub {[\s]+$} $text {} text
@@ -303,21 +404,53 @@ ad_proc -public util_convert_line_breaks_to_html {
     regsub -all -- {\r\n} $text "\n" text
     regsub -all -- {\r} $text "\n" text
 
+    ns_log notice "... 1 <$text>"
+
     # Remove whitespace before \n's
     regsub -all -- {[ \t]+\n} $text "\n" text
 
     # Wrap P's around paragraphs
     regsub -all -- {([^\n\s])\n\n+([^\n\s])} $text {\1<p>\2} text
 
+    ns_log notice "... 2 <$text>"
+
     # Remove line breaks right before and after HTML tags that will
     # insert a paragraph break themselves.
     if { $includes_html_p } {
         set tags [join { ul ol li blockquote p div table tr td th } |]
+        ns_log notice "... 3 RE <\[\r\n\]*(</?($tags)\[\r\n\]*\[^>\]*>)\[\r\n\]*>"
         regsub -all -nocase "\[\r\n\]*(</?($tags)\[\r\n\]*\[^>\]*>)\[\r\n\]*" $text {\1} text
     }
-
-    # Convert _single_ CRLF's to <br>'s to preserve line breaks
-    regsub -all -- {\n} $text "<br>\n" text
+    ns_log notice "... before pre handling <$text>"
+    
+    if {[::acs::icanuse "ns_parsehtml"] && $contains_pre_p} {
+        #
+        # Convert _single_ CRLF's to <br>'s to preserve line breaks
+        # unless inside <PRE> elements.
+        #
+        set parsed [ns_parsehtml $text]
+        set out ""
+        set inside_pre 0
+        foreach token $parsed {
+            lassign $token kind chunk parsed
+            if {$kind eq "tag"} {
+                set tag [string tolower [lindex $parsed 0]]
+                if {$tag eq "pre"} {
+                    incr inside_pre
+                } elseif {$tag eq "/pre"} {
+                    incr inside_pre -1
+                }
+            }
+            if {$inside_pre == 0} {
+                regsub -all -- {\n} $chunk "<br>\n" chunk
+            }
+            append out $chunk
+        }
+        set text $out
+    } else {
+        # Convert _single_ CRLF's to <br>'s to preserve line breaks
+        regsub -all -- {\n} $text "<br>\n" text
+    }
 
     # Add line breaks to P tags
     #regsub -all -- {</p>} $text "</p>\n" text
@@ -353,6 +486,88 @@ ad_proc -public ad_unquotehtml {arg} {
 #
 ####################
 
+ad_proc -private util_close_html_tags_ns_parsehtml {
+    html_fragment
+} {
+
+    Faster version of util_close_html_tags based on ns_parse, but
+    closer to the original semantics and faster than the tdom variant
+
+    @see util_close_html_tags
+} {
+    #ns_log notice "util_close_html_tags_ns_parsehtml"
+    set close_tags {
+        abbr acronym b bdo big blockquote center cite code del dfn dir
+        div dl em font h1 h2 h3 h4 h5 h6 i ins kbo menu ol pre q s
+        samp small span strike strong sub sup table tt u ul var
+    }
+
+    set depth 0
+    set parseListElements [ns_parsehtml -onlytags $html_fragment]
+    foreach parseListElement $parseListElements {
+        set tag [string tolower [lindex $parseListElement 0]]
+        if {$tag in $close_tags} {
+            set stack($depth) $tag
+            incr open($tag)
+            incr depth
+        } elseif {[string range $tag 0 0] eq "/" && [string range $tag 1 end] in $close_tags} {
+            set ctag [string range $tag 1 end]
+            if {$depth > 0} {
+                incr depth -1
+                if {$stack($depth) eq $ctag} {
+                    incr open($ctag) -1
+                } else {
+                    #
+                    # The current tag to be closed (top stack
+                    # element) is not closed by the parsed
+                    # ctag. Try to find on the stack a
+                    # corresponding open tag for the ctag.
+                    #
+                    #ns_log notice "... search depth $depth"
+                    set d $depth
+                    for {set d $depth} {$d > 0} {incr d -1} {
+                        ns_log notice "... check stack($d) ?[info exists stack($d)] == $ctag"
+                        if {$stack($d) eq $ctag} {
+                            incr open($ctag) -1
+                            break
+                        }
+                    }
+                    #ns_log notice "... final depth $d"
+                    set depth $d
+                }
+            }
+        }
+    }
+    if {[ns_conn isconnected]} {
+        ns_log notice "util_close_html_tags_ns_parsehtml called in [ns_conn url]?[ns_conn query]"
+    }
+    ns_log notice "===== final depth: $depth stack: <[array get stack]> open: <[array get open]>"
+    set closing_html ""
+    #
+    # If the stack is not unwound, close the elements in the right
+    # order.
+    #
+    for {set d $depth} {$d > 0} {incr d -1} {
+        set d1 [expr {$d-1}]
+        append closing_html "</$stack($d1)>"
+        set r [incr open($stack($d1)) -1]
+        if {$r == 0} {
+            unset stack($d1)
+        }
+    }
+    #
+    # For unbalanced tags (where the tags in not closed in the right
+    # order) close the tags in any order.
+    #
+    #ns_log notice "===== final open: [array get open]"
+    foreach {k v} [array get open] {
+        for {set i 0} {$i < $v} {incr i} {
+            append closing_html "</$k>"
+        }
+    }
+    ns_log notice "===== final html '$closing_html'"
+    return "$html_fragment$closing_html"
+}
 
 #
 # lars@pinds.com, 19 July 2000:
@@ -426,6 +641,16 @@ ad_proc -public util_close_html_tags {
     # -gustaf neumann    (Jan 2009)
 
     if {$break_soft == 0 && $break_hard == 0} {
+
+        if {[::acs::icanuse "ns_parsehtml"]} {
+            #
+            # In case, we have have the command "ns_parsehtml" use it
+            # for closing tags. In cases, were we haved used the
+            # command before, we could obtain from the first pass the
+            # information about unbalanced tags for optimization.
+            #
+            return [util_close_html_tags_ns_parsehtml $html_fragment]
+        }
         #
         # We have to protect against crashes, that might happen due to
         # unsupported numeric entities in tdom. Therefore, we map
@@ -878,8 +1103,8 @@ ad_proc ad_parse_html_attributes_upvar {
         @param html The HTML text being validated.
 
         @return a human-readable, plaintext explanation of what's
-               wrong with the user's input.  If everthing is ok,
-               return an empty string.
+        wrong with the user's input.  If everything is ok,
+        return an empty string.
 
         @author Lars Pind (lars@pinds.com)
         @creation-date 20 July 2000
@@ -956,7 +1181,7 @@ ad_proc ad_parse_html_attributes_upvar {
                     foreach attribute $attr_list {
                         #
                         # All attribute names in $attr_list are
-                        # already lower case.
+                        # already lowercase.
                         #
                         lassign $attribute attr_name attr_value
 
@@ -1011,7 +1236,7 @@ ad_proc ad_parse_html_attributes_upvar {
         @param html Markup to process
 
         @param marker Root element use to enforce a single root of the
-               DOM tree.
+        DOM tree.
 
         @param dom When this flag is set, instead of returning markup,
         the proc will return the tDOM object built during the
@@ -1087,7 +1312,7 @@ ad_proc ad_parse_html_attributes_upvar {
                                 [string match "'*'" $attvalue]} {
                                 set attvalue [string range $attvalue 1 end-1]
                             }
-                        # attribute with no value
+                            # attribute with no value
                         } elseif {[regexp {^([^\s]+)} $data m attname]} {
                             set attvalue ""
                         } else {
@@ -1429,7 +1654,7 @@ ad_proc ad_parse_html_attributes_upvar {
                                 if {[regsub ^($our_locations) $url {} url]} {
                                     set url /[string trimleft $url "/"]
                                     $node setAttribute $att $url
-                                # ...this is not, points elsewhere!
+                                    # ...this is not, points elsewhere!
                                 } else {
                                     # invalid attribute!
                                     if {$validate_p} {
@@ -2270,11 +2495,15 @@ ad_proc -public ad_html_text_convert {
 
     @param truncate_len  The maximum total length of the output, included ellipsis.
 
-    @param ellipsis      This will get put at the end of the truncated string, if the string was truncated.
-    However, this counts towards the total string length, so that the returned string
-    including ellipsis is guaranteed to be shorter than the 'truncate_len' provided.
+    @param ellipsis      This will get put at the end of the truncated
+                         string, if the string was truncated.
+                         However, this counts towards the total
+                         string length, so that the returned string
+                         including ellipsis is guaranteed to be
+                         shorter than the 'truncate_len' provided.
 
-    @param more          This will get put at the end of the truncated string, if the string was truncated.
+    @param more          This will get put at the end of the truncated string,
+                         if the string was truncated.
 
     @author Lars Pind (lars@pinds.com)
     @creation-date 19 July 2000
@@ -2315,6 +2544,7 @@ ad_proc -public ad_html_text_convert {
             switch -- $to {
                 text/html {
                     set text [ad_enhanced_text_to_html $text]
+                    set tags_are_closed 1
                 }
                 text/plain {
                     set text [ad_enhanced_text_to_plain_text -maxlen $maxlen -- $text]
@@ -2346,21 +2576,21 @@ ad_proc -public ad_html_text_convert {
 
                             if {0} {
                                 template::head::add_css \
-                                    -href //cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css
+                                    -href //cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/default.min.css
                                 template::head::add_javascript \
-                                    -src "//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"
+                                    -src //cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js
                                 security::csp::require script-src cdnjs.cloudflare.com
                                 security::csp::require style-src cdnjs.cloudflare.com
 
                                 template::add_body_script -script "hljs.initHighlightingOnLoad();"
                                 #
-                                # In case we have Tcl, load the extra lang
-                                # support which is not included in the
-                                # default package.
+                                # In case we have Tcl, load the extra
+                                # language support which is not
+                                # included in the default package.
                                 #
-                                if {[dict get $d tcl]} {
+                                if {[dict exists $d tcl] && [dict get $d tcl]} {
                                     template::head::add_javascript \
-                                        -src "//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/tcl.min.js"
+                                        -src "//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/languages/tcl.min.js"
                                 }
                             }
                             ::Markdown::reset_lang_counter
@@ -2378,6 +2608,7 @@ ad_proc -public ad_html_text_convert {
             switch -- $to {
                 text/html {
                     set text [ad_text_to_html -- $text]
+                    set tags_are_closed 1
                 }
                 text/plain {
                     set text [ns_reflow_text -width $maxlen -- $text]
@@ -2419,7 +2650,12 @@ ad_proc -public ad_html_text_convert {
     # Handle closing of HTML tags, truncation
     switch -- $to {
         text/html {
-            set text [util_close_html_tags $text $truncate_len $truncate_len $ellipsis $more]
+            if {[info exists tags_are_closed]} {
+                ns_log notice "No need to call util_close_html_tags"
+            } else {
+                ns_log notice "regular call closeTags (from $from to $to)"                
+                set text [util_close_html_tags $text $truncate_len $truncate_len $ellipsis $more]
+            }
         }
         text/plain {
             set text [ad_string_truncate -ellipsis $ellipsis -more $more -len $truncate_len -- $text]
@@ -2542,8 +2778,8 @@ ad_proc -deprecated string_truncate args {
     @param len       The length to truncate to. If zero, no truncation will occur.
 
     @param ellipsis  This will get put at the end of the truncated string, if the string was truncated.
-                     However, this counts towards the total string length, so that the returned string
-                     including ellipsis is guaranteed to be shorter or equal than the 'len' provided.
+    However, this counts towards the total string length, so that the returned string
+    including ellipsis is guaranteed to be shorter or equal than the 'len' provided.
 
     @param more      This will get put at the end of the truncated string, if the string was truncated.
 
@@ -2581,8 +2817,8 @@ ad_proc -public ad_string_truncate {
     @param len       The length to truncate to. If zero, no truncation will occur.
 
     @param ellipsis  This will get put at the end of the truncated string, if the string was truncated.
-                     However, this counts towards the total string length, so that the returned string
-                     including ellipsis is guaranteed to be shorter or equal than the 'len' provided.
+    However, this counts towards the total string length, so that the returned string
+    including ellipsis is guaranteed to be shorter or equal than the 'len' provided.
 
     @param more      This will get put at the end of the truncated string, if the string was truncated.
 
@@ -2666,11 +2902,11 @@ ad_proc -public ad_pad {
     @arg string String to be padded.
 
     @arg length length this string will be after padding. If string
-                this long or longer, will be truncated. The provided
-                value must be an integer > 0.
+    this long or longer, will be truncated. The provided
+    value must be an integer > 0.
 
     @arg padstring string that will be repeated until length of
-                   supplied string is equal or greater than length.
+    supplied string is equal or greater than length.
 
     @return padded string
 } {
