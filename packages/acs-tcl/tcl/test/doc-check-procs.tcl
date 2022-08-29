@@ -46,7 +46,7 @@ aa_register_case -cats {smoke production_safe} -procs {
     }
     aa_log "Found $good public procs with proper documentation (out of $count checked)"
 
-    if {[::acs::icanuse "ns_parsehtml"] ne ""} {
+    if {[::acs::icanuse "ns_parsehtml"]} {
         set nrTags 0
         set nrNotAllowedTags 0
         set allowedTags {
