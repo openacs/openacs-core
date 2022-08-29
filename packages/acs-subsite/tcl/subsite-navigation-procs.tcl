@@ -202,7 +202,7 @@ ad_proc -public subsite_navigation::get_section_info {
     }
 
     template::multirow foreach $navigation_multirow {
-        if { [template::util::is_true $selected_p] } {
+        if { [string is true -strict $selected_p] } {
             array set row [list label $label url $url]
             break
         }

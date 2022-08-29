@@ -612,7 +612,7 @@ ad_proc -public template::list::prepare {
         set list_properties(paginator_name) $paginator_name
 
         set flush_p f
-        if { [template::util::is_true $list_properties(page_flush_p)] } {
+        if { [string is true -strict $list_properties(page_flush_p)] } {
             set flush_p t
         }
 
@@ -1151,7 +1151,7 @@ ad_proc -private template::list::template {
                              -element_name $element_name]
         upvar #$level $element_ref element_properties
 
-        if { ![template::util::is_true $element_properties(hide_p)] } {
+        if { ![string is true -strict $element_properties(hide_p)] } {
             incr elements:rowcount
 
             # get a reference by index for the multirow data source
@@ -1636,7 +1636,7 @@ ad_proc -private template::list::prepare_filters {
                 }
             }
             # Get the clear_url
-            if { ![template::util::is_true $filter_properties(has_default_p)] }\
+            if { ![string is true -strict $filter_properties(has_default_p)] }\
                 {
                     set filter_properties(clear_url) [get_url \
                                                           -name $name \
@@ -1815,7 +1815,7 @@ ad_proc -public template::list::render_filters {
 
         upvar #$level $filter_ref filter_properties
 
-        if { ![template::util::is_true $filter_properties(hide_p)] } {
+        if { ![string is true -strict $filter_properties(hide_p)] } {
 
             # Loop over 'values' and 'url' simultaneously
             foreach \
@@ -3156,7 +3156,7 @@ ad_proc -private template::list::render_form_filters {
 
     foreach filter_ref $list_properties(filter_refs) {
         upvar #$level $filter_ref filter_properties
-        if { ![template::util::is_true $filter_properties(hide_p)] } {
+        if { ![string is true -strict $filter_properties(hide_p)] } {
             foreach \
                 elm $filter_properties(values) \
                 url $filter_properties(urls) \

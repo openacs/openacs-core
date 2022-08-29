@@ -61,7 +61,7 @@ template::tag master { params } {
     set src [ns_set iget $params src]
     set slave_properties_p [template::get_attribute master $params slave-properties-p 0]
 
-    if {[template::util::is_true $slave_properties_p]} {
+    if {[string is true -strict $slave_properties_p]} {
         template::adp_append_code {
             foreach {__key __value} $__args {
                 if {$__key ne "__adp_slave"} {

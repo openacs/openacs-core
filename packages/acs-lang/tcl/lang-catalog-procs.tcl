@@ -253,7 +253,7 @@ ad_proc -private lang::catalog::last_sync_messages {
 } {
     set message_list [list]
     db_foreach last_sync_messages {} {
-        if { ![template::util::is_true $deleted_p] } {
+        if { ![string is true -strict $deleted_p] } {
             lappend message_list $message_key $message
         }
     }

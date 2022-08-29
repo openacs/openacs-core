@@ -666,7 +666,7 @@ ad_proc -private group::member_p_not_cached {
     set cascade [db_boolean $cascade_p]
     set result [db_string user_is_member {} -default "f"]
 
-    return [template::util::is_true $result]
+    return [string is true -strict $result]
 }
 
 ad_proc -public group::party_member_p {

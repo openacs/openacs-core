@@ -162,7 +162,7 @@ ad_proc -public auth::sync::job::end {
                      -package_key "acs-authentication" \
                      -default 0]
 
-    if { ![template::util::is_true $job(interactive_p)] && $email_p } {
+    if { ![string is true -strict $job(interactive_p)] && $email_p } {
         # Only send out email if not an interactive job
 
         ad_try {

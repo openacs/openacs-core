@@ -262,7 +262,7 @@ ad_form -extend -name login -on_request {
                              -password $password \
                              -host_node_id $host_node_id \
                              -persistent=[expr {$allow_persistent_login_p
-                                                && [template::util::is_true $persistent_p]}]]
+                                                && [string is true -strict $persistent_p]}]]
 
     # Handle authentication problems
     switch -- $auth_info(auth_status) {

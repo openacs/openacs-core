@@ -22,7 +22,6 @@ aa_register_case \
         party::get_by_email
         acs_root_dir
         mime::uniqueID
-        template::util::is_true
         util::random
         util::random_list_element
         util::random_range
@@ -85,8 +84,8 @@ aa_register_case \
                         if { $pp in $bools_list } {
                             aa_equals "r48 Changed sched_parameter '${pp}' \
   value '$params_def(${pp})' to '${val}' set" \
-                                [template::util::is_true $params_new(${pp})] \
-                                [template::util::is_true $val]
+                                [string is true -strict $params_new(${pp})] \
+                                [string is true -strict $val]
                         } else {
                             if { $params_new(${pp}) eq $params_def(${pp}) } {
                                 if { $pp eq "mpri_max" \
@@ -108,8 +107,8 @@ aa_register_case \
                         if { $pp in $bools_list } {
                             aa_equals "r62 Unchanged sched_parameter '${pp}' \
   value '$params_def(${pp})' to '$params_new(${pp})' set" \
-                                [template::util::is_true $params_new(${pp})] \
-                                [template::util::is_true $params_def(${pp})]
+                                [string is true -strict $params_new(${pp})] \
+                                [string is true -strict $params_def(${pp})]
                         } else {
                             aa_equals "r67 Unchanged sched_parameter '${pp}' \
   value '$params_def(${pp})' to '$params_new(${pp})' set" \

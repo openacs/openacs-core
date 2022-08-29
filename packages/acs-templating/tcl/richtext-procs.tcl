@@ -469,7 +469,7 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
         }
 
         if { [info exists element(htmlarea_p)] && $element(htmlarea_p) ne "" } {
-            set htmlarea_p [template::util::is_true $element(htmlarea_p)]
+            set htmlarea_p [string is true -strict $element(htmlarea_p)]
         } else {
             set htmlarea_p [parameter::get \
                                 -package_id $package_id_templating \

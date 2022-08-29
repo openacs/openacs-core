@@ -552,7 +552,7 @@ ad_proc -public subsite::get_section_info {
     }
 
     template::multirow foreach $sections_multirow {
-        if { [template::util::is_true $selected_p] } {
+        if { [string is true -strict $selected_p] } {
             set row(label) $label
             set row(url) $url
             break

@@ -496,13 +496,13 @@ ad_proc -private template::form::render { id tag_attributes } {
     }
 
     if { [info exists form_properties(has_submit)]
-         && [template::util::is_true $form_properties(has_submit)]
+         && [string is true -strict $form_properties(has_submit)]
     } {
         set form_properties(edit_buttons) {}
     }
 
     if { [info exists form_properties(has_edit)]
-         && [template::util::is_true $form_properties(has_edit)]
+         && [string is true -strict $form_properties(has_edit)]
     } {
         set form_properties(display_buttons) {}
     }

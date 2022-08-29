@@ -336,7 +336,7 @@ ad_proc -public auth::authority::batch_sync {
             set doc_result(doc_message) $errorMsg
         }
 
-        set snapshot_p [template::util::is_true $doc_result(snapshot_p)]
+        set snapshot_p [string is true -strict $doc_result(snapshot_p)]
 
         auth::sync::job::end_get_document \
             -job_id $job_id \

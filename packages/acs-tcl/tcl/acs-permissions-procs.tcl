@@ -116,7 +116,7 @@ ad_proc -public permission::permission_p {
         && $party_id == 0
         && [ad_conn user_id] == 0
         && [ad_conn untrusted_user_id] != 0
-        && ![template::util::is_true $permission_p]
+        && ![string is true -strict $permission_p]
     } {
         #
         # In case, permission was granted above, the party and ad_conn

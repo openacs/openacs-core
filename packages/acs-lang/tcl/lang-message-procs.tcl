@@ -499,8 +499,8 @@ ad_proc -private lang::message::edit {
     # Deleting/undeleting?
     #
     if { [info exists edit_array(deleted_p)] } {
-        set edit_array(deleted_p) [db_boolean [template::util::is_true $edit_array(deleted_p)]]
-        if { [template::util::is_true $edit_array(deleted_p)] } {
+        set edit_array(deleted_p) [db_boolean [string is true -strict $edit_array(deleted_p)]]
+        if { [string is true -strict $edit_array(deleted_p)] } {
             set delete_p t
             set delete_comment "deleted"
         } else {

@@ -102,7 +102,7 @@ ad_proc -public parameter::get_global_value {
     # Special parsing for boolean parameters, true and false can be written
     # in many different ways
     if { $boolean_p } {
-        set value [template::util::is_true $value]
+        set value [string is true -strict $value]
     }
 
     return $value
@@ -201,7 +201,7 @@ ad_proc -public parameter::get {
     # can be written in many different ways.
     #
     if { $boolean_p } {
-        set value [template::util::is_true $value]
+        set value [string is true -strict $value]
     }
 
     return $value

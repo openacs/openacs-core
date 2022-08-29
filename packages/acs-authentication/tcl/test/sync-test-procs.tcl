@@ -80,7 +80,7 @@ aa_register_case \
 
             aa_log "Elapsed time: $job(run_time_seconds) seconds"
 
-            aa_false "Not interactive" [template::util::is_true $job(interactive_p)]
+            aa_false "Not interactive" [string is true -strict $job(interactive_p)]
 
             aa_equals "Number of actions" $job(num_actions) 2
 
@@ -360,7 +360,7 @@ aa_register_case \
 
             aa_true "Elapsed time less than 30 seconds" {$job(run_time_seconds) < 30}
 
-            aa_false "Not interactive" [template::util::is_true $job(interactive_p)]
+            aa_false "Not interactive" [string is true -strict $job(interactive_p)]
 
             aa_equals "Number of actions" $job(num_actions) 6
 
@@ -511,7 +511,7 @@ aa_register_case \
 
             aa_true "Elapsed time less than 30 seconds" {$job(run_time_seconds) < 30}
 
-            aa_false "Not interactive" [template::util::is_true $job(interactive_p)]
+            aa_false "Not interactive" [string is true -strict $job(interactive_p)]
 
             aa_equals "Number of actions" $job(num_actions) [expr {$num_users_not_banned + 1}]
 
@@ -713,7 +713,7 @@ aa_register_case \
                     -entry_id $entry_id \
                     -array entry
 
-                aa_false "Success_p is false" [template::util::is_true $entry(success_p)]
+                aa_false "Success_p is false" [string is true -strict $entry(success_p)]
 
                 array unset elm_msgs
                 array set elm_msgs $entry(element_messages)

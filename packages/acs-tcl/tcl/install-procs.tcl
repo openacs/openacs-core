@@ -173,7 +173,7 @@ ad_proc -public install::xml::action::mount { node } {
             -package_name $instance_name \
             -package_key $package_key]
 
-        if {![template::util::is_true $security_inherit_p]} {
+        if {![string is true -strict $security_inherit_p]} {
             permission::set_not_inherit -object_id $package_id
         }
 
@@ -300,7 +300,7 @@ ad_proc -public install::xml::action::create-package { node } {
         -package_key $package_key \
         -context_id $context_id]
 
-    if {![template::util::is_true $security_inherit_p]} {
+    if {![string is true -strict $security_inherit_p]} {
          permission::set_not_inherit -object_id $package_id
     }
 
@@ -503,7 +503,7 @@ ad_proc -public install::xml::action::create-user { node } {
     set site_wide_admin_p [apm_attribute_value -default "" $node site-wide-admin]
     set local_p [apm_attribute_value -default 0 $node local-p]
 
-    set local_p [template::util::is_true $local_p]
+    set local_p [string is true -strict $local_p]
 
     if {$salt ne ""} {
       set salt_password $password
@@ -562,7 +562,7 @@ ad_proc -public install::xml::action::create-user { node } {
     }
 
     if {$result(creation_status) eq "ok"} {
-        if {[template::util::is_true $site_wide_admin_p]} {
+        if {[string is true -strict $site_wide_admin_p]} {
             permission::grant -object_id [acs_magic_object "security_context_root"] \
                               -party_id $result(user_id) -privilege "admin"
         }
@@ -751,7 +751,7 @@ ad_proc -public install::xml::action::location { node } {
         set view [install::xml::util::get_id $view]
     }
 
-    set directory_p [template::util::is_true $directory_p]
+    set directory_p [string is true -strict $directory_p]
 
     set location_id [location::create -parent_id $parent \
         -name $name \
@@ -774,7 +774,7 @@ ad_proc -public install::xml::action::location { node } {
                 set type [apm_attribute_value -default literal $child type]
                 set subtree_p [apm_attribute_value -default f $child subtree-p]
 
-                set subtree_p [template::util::is_true $subtree_p]
+                set subtree_p [string is true -strict $subtree_p]
 
                 if {$type eq "id"} {
                     set value [install::xml::util::get_id $value]
@@ -791,7 +791,7 @@ ad_proc -public install::xml::action::location { node } {
                 set exports [apm_attribute_value -default "" $child exports]
                 set subtree_p [apm_attribute_value -default f $child subtree-p]
 
-                set subtree_p [template::util::is_true $subtree_p]
+                set subtree_p [string is true -strict $subtree_p]
 
                 location::parameter::create -location_id $location_id \
                     -name "forward::$name" \
@@ -901,7 +901,7 @@ ad_proc -public install::xml::action::wizard { node } {
 
         set directory_p [apm_attribute_value -default f $step directory-p]
         xml_node_set_attribute $step directory-p \
-            [template::util::is_true $directory_p]
+            [string is true -strict $directory_p]
 
         set step_id [::install::xml::action::location $step]
 

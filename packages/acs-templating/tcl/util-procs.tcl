@@ -102,10 +102,16 @@ ad_proc -public template::util::is_unique { table columns values } {
     return [expr {$count == 0}]
 }
 
-ad_proc -public template::util::is_true { x } {
+ad_proc -deprecated template::util::is_true { x } {
     interprets its argument as a boolean.
 
     @param x  the value to test
+
+    DEPRECATED: since October 2015 this proc is implemented via a
+    oneliner idiom that can be easily inlined.
+
+    @see https://fisheye.openacs.org/changelog/OpenACS?cs=oacs-5-9%3Agustafn%3A20151001184401
+    @see string
 
     @return 0 if the variable can be interpreted as false;
     1 for true if it can't.

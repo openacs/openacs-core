@@ -265,7 +265,7 @@ if { ![info exists property(db)] } {
             append value "$command $statement_pool $handle<pre>[ns_quotehtml $sql]</pre>"
         }
 
-        if { $command ne "getrow" || [template::util::is_true $getrow_p] } {
+        if { $command ne "getrow" || [string is true -strict $getrow_p] } {
             multirow append dbreqs $handle [lindex $command 0] $sql [format %.2f [expr { $end - $start }]] $value
         }
 

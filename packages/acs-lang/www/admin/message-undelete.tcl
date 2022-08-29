@@ -32,7 +32,7 @@ set form_export_vars [export_vars -form { locale package_key message_key show {c
 
 
 if { [info exists confirm_p] && $confirm_p ne ""
-     && [template::util::is_true $confirm_p]
+     && [string is true -strict $confirm_p]
  } {
     lang::message::undelete \
         -package_key $package_key \
