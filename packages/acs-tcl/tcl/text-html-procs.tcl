@@ -1234,7 +1234,7 @@ ad_proc -private ad_parse_html_attributes_upvar {
             return ""
         }
     } else {
-        ad_proc -private ad_html_security_check {
+        ad_proc -private ad_html_security_check_helper {
             -allowed_tags:required
             -allowed_attributes:required
             -allowed_protocols:required
