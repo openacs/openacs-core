@@ -119,6 +119,35 @@ aa_register_case -cats {
     aa_false "'test' is nil?" [template::util::is_nil test]
 }
 
+aa_register_case -cats {
+    api
+    smoke
+    production_safe
+} -procs {
+    template::util::list_to_lookup
+} util_list_to_lookup {
+    Test template::util::list_to_lookup
+} {
+    set values {
+        a
+        b
+        c
+        d
+        e
+        f
+        g
+    }
+    template::util::list_to_lookup $values lookup
+
+    set e {![info exists lookup(z)]}
+    aa_true "Element 'z' is not found in the lookup" $e
+
+    for {set i 1} {$i <= 7} {incr i} {
+        set e {$lookup([lindex $values $i-1]) == $i}
+        aa_true "Element '[lindex $values $i-1]' is at position '$i' of the lookup" $e
+    }
+}
+
 
 # Local variables:
 #    mode: tcl
