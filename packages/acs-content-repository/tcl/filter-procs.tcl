@@ -270,7 +270,9 @@ if { \"text/html\" ne \$content(mime_type) && !\[ad_html_text_convertible_p -fro
 }
 
 \# Ordinary text/* mime type.
-template::util::array_to_vars content
+foreach {key value} [array get content] {
+   set $key $value
+}
 
 set text \[cr_write_content -string -revision_id \$revision_id\]
 if { !\[string equal \"text/html\" \$content(mime_type)\] } {

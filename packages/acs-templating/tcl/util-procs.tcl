@@ -198,10 +198,14 @@ ad_proc -public template::util::lnest { listref value next args } {
     set inlist [array get values]
 }
 
-ad_proc -public template::util::array_to_vars { arrayname } {
+ad_proc -deprecated template::util::array_to_vars { arrayname } {
     Declare local variables for every key in an array.
 
     @param arrayname   The name of an array in the calling frame.
+
+    DEPRECATED: this is a trivial idiom that can just be inlined.
+
+    @see array
 } {
     upvar $arrayname arr
 
@@ -210,11 +214,15 @@ ad_proc -public template::util::array_to_vars { arrayname } {
     }
 }
 
-ad_proc -public template::util::vars_to_array { arrayname args } {
+ad_proc -deprecated template::util::vars_to_array { arrayname args } {
     Place local variables into an array
 
     @param arrayname   The name of an array in the calling frame.
     @param args        Any number of local variables to include in the array
+
+    DEPRECATED: this is a trivial idiom that can just be inlined.
+
+    @see array
 } {
     upvar $arrayname arr
 
