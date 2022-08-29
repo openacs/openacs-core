@@ -125,6 +125,29 @@ aa_register_case -cats {
     }
 }
 
+aa_register_case -cats {
+    api
+    smoke
+    production_safe
+} -procs {
+    template::util::is_nil
+} util_is_nil {
+    Test template::util::is_nil
+} {
+    aa_true "'test' is nil?" [template::util::is_nil test]
+
+    set test 1
+    aa_false "'test' is nil?" [template::util::is_nil test]
+
+    set test ""
+    aa_true "'test' is nil?" [template::util::is_nil test]
+
+    unset test
+    array set test {}
+    aa_false "'test' is nil?" [template::util::is_nil test]
+}
+
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
