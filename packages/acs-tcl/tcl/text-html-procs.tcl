@@ -395,7 +395,6 @@ ad_proc -public util_convert_line_breaks_to_html {
 } {
     Convert line breaks to &lt;p&gt; and &lt;br&gt; tags, respectively.
 } {
-    ns_log notice "util_convert_line_breaks_to_html called with <$text> contains_pre=$contains_pre_p includes_html=$includes_html_p"
     # Remove any leading or trailing whitespace
     regsub {^[\s]+} $text {} text
     regsub {[\s]+$} $text {} text
@@ -404,24 +403,19 @@ ad_proc -public util_convert_line_breaks_to_html {
     regsub -all -- {\r\n} $text "\n" text
     regsub -all -- {\r} $text "\n" text
 
-    ns_log notice "... 1 <$text>"
-
     # Remove whitespace before \n's
     regsub -all -- {[ \t]+\n} $text "\n" text
 
     # Wrap P's around paragraphs
     regsub -all -- {([^\n\s])\n\n+([^\n\s])} $text {\1<p>\2} text
 
-    ns_log notice "... 2 <$text>"
-
     # Remove line breaks right before and after HTML tags that will
     # insert a paragraph break themselves.
     if { $includes_html_p } {
         set tags [join { ul ol li blockquote p div table tr td th } |]
-        ns_log notice "... 3 RE <\[\r\n\]*(</?($tags)\[\r\n\]*\[^>\]*>)\[\r\n\]*>"
+        #ns_log notice "... 3 RE <\[\r\n\]*(</?($tags)\[\r\n\]*\[^>\]*>)\[\r\n\]*>"
         regsub -all -nocase "\[\r\n\]*(</?($tags)\[\r\n\]*\[^>\]*>)\[\r\n\]*" $text {\1} text
     }
-    ns_log notice "... before pre handling <$text>"
 
     if {[::acs::icanuse "ns_parsehtml"] && $contains_pre_p} {
         #
