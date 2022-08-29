@@ -229,7 +229,7 @@ ad_proc -deprecated template::util::vars_to_array { arrayname args } {
     }
 }
 
-ad_proc -public template::util::list_to_array { values array_ref columns } {
+ad_proc -deprecated template::util::list_to_array { values array_ref columns } {
     Converts a list of values into an array, using a list of
     corresponding column names for the array keys.
 
@@ -238,6 +238,12 @@ ad_proc -public template::util::list_to_array { values array_ref columns } {
     @param columns   A list of column names to use for the array keys.
     The length of this list should be the same as the values
     list.
+
+    DEPRECATED: as of August 2022 no OpenACS code is using this
+    proc. The operation it implements can be easily achieved via plain
+    Tcl idioms.
+
+    @see array
 } {
 
     upvar $array_ref array
