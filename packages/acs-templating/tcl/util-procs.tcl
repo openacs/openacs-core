@@ -529,8 +529,12 @@ ad_proc -public template::util::multirow_quote_html {multirow_ref column_ref} {
 }
 
 
-ad_proc -public template::util::nvl { value value_if_null } {
+ad_proc -deprecated template::util::nvl { value value_if_null } {
     Analogous to SQL NVL
+
+    DEPRECATED: a plain Tcl oneliner can easily replace this proc
+
+    @see expr {$value ne "" ? $value : $value_if_null}
 } {
     if {$value eq ""} {
         return $value_if_null
