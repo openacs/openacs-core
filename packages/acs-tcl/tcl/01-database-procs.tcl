@@ -2129,9 +2129,16 @@ ad_proc -public db_multirow_group_last_row_p {
         # If there is no next row, this is the last row
         return 1
     }
+    upvar 1 __db_multirow__local_columns columns
     upvar 1 $column column_value
-    # Otherwise, it's the last row in the group if the next row has a different value than this row
-    return [expr {$column_value ne [dict get $next_row $column] }]
+    set pos [lsearch $columns $column]
+    if {$pos == -1} {
+        error "column '$column' not found in columns list '$columns'"
+    }
+    # Otherwise, it's the last row in the group if the next row has a
+    # different value than this row
+    set next_value [lindex $next_row $pos]
+    return [expr {$next_value eq $column_value}]
 }
 
 
