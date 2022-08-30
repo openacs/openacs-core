@@ -88,9 +88,19 @@ ad_proc -private enhanced_text_escape_disallowed {text} {
             strong /strong
             small /small
             blockquote /blockquote
+            abbr /abbr
             br hr img
         }
-        # strike not supported by HTML5
+
+        # Tags NOT supported in HTML5:
+        #
+        #    acronym applet basefont big center dir font frame
+        #    frameset isindex noframes s strike tt u
+        #
+        # "tt" is deprecated (actually "not supported", but it
+        #    continues to work, since it is in wide use).
+        #    Alternatives: "samp", "kbd", "code", "var"
+        
         set delimiter {{< <samp>&lt;} {> &gt;</samp>}}
         set out ""
         foreach token $parsed {
@@ -118,7 +128,7 @@ ad_proc -private enhanced_text_escape_disallowed {text} {
             }
         }
         set text $out
-        ns_log notice "tagDict <$tagDict>"
+        #ns_log notice "tagDict <$tagDict>"
     }
     return [list text $text tagDict $tagDict]
 }
