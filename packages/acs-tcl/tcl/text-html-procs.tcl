@@ -64,10 +64,9 @@ ad_proc -private ad_text_cite_to_blockquote {text} {
     return $result
 }
 
-ad_proc -private enhanced_text_escape_disallowed {text} {
-} {
+ad_proc -private ad_enhanced_text_escape_disallowed {text} {
     set tagDict {}
-    #ns_log notice "enhanced_text_escape_disallowed called on [ns_conn url]?[ns_conn query]"
+    #ns_log notice "ad_enhanced_text_escape_disallowed called on [ns_conn url]?[ns_conn query]"
     if {[::acs::icanuse "ns_parsehtml"]} {
         if {[ns_conn isconnected]} {
             ns_log notice "PARSE called by [ns_conn url]?[ns_conn query]"
@@ -164,7 +163,7 @@ ad_proc -public ad_text_to_html {
     set text [ad_text_cite_to_blockquote $text]
 
     if {$includes_html_p} {
-        set d [enhanced_text_escape_disallowed $text]
+        set d [ad_enhanced_text_escape_disallowed $text]
         set text [dict get $d text]
         set tagDict [dict get $d tagDict]
     } else {
