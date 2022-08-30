@@ -3,7 +3,7 @@ ad_page_contract {
 
     @cvs-id $Id$
 } {
-    {user_id:naturalnum ""}
+    {user_id:object_type(user) ""}
     {return_url:localurl ""}
 } -properties {
     first_names:onevalue
@@ -37,13 +37,6 @@ if {$user_id eq ""} {
 }
 
 permission::require_permission -object_id $user_id -privilege "write"
-
-if {![person::person_p -party_id $user_id]} {
-    ad_return_error \
-        "Account Unavailable" \
-        "We can't find you (user #$user_id) in the users table.  Probably your account was deleted for some reason."
-    ad_script_abort
-}
 
 acs_user::get -user_id $user_id -array user
 set first_names $user(first_names)
