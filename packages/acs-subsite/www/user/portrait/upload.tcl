@@ -92,6 +92,14 @@ if { $portrait_p } {
 
 set mime_types [parameter::get -parameter AcceptablePortraitMIMETypes -default ""]
 set max_bytes [parameter::get -parameter MaxPortraitBytes -default ""]
+set max_bytes_pretty [expr {$max_bytes eq "" ? "" : [lc_content_size_pretty -size $max_bytes]}]
+
+set file_list [lindex [template::util::file_transform upload_file] 0]
+set filename     [template::util::file::get_property filename $file_list]
+set tmp_filename [template::util::file::get_property tmp_filename $file_list]
+set mime_type    [template::util::file::get_property mime_type $file_list]
+
+set system_name [ad_system_name]
 
 ad_form -extend -name "portrait_upload" -validate {
 
@@ -104,13 +112,13 @@ ad_form -extend -name "portrait_upload" -validate {
 
     {upload_file
 
-        { $mime_types eq "" || [lsearch $mime_types [ns_guesstype $upload_file]] > -1 }
+        { $mime_types eq "" || $mime_type in $mime_types }
         {Your image wasn't one of the acceptable MIME types: $mime_types}
     }
     {upload_file
 
-        { $max_bytes eq "" || [file size [ns_queryget upload_file.tmpfile]] <= $max_bytes }
-        {Your file is too large.  The publisher of [ad_system_name] has chosen to limit portraits to [lc_content_size_pretty -size $max_bytes].  You can use PhotoShop or the GIMP (free) to shrink your image}
+        { $max_bytes eq "" || [file size $tmp_filename] <= $max_bytes }
+        {Your file is too large.  The publisher of $system_name has chosen to limit portraits to $max_bytes_pretty.  You can use PhotoShop or the GIMP (free) to shrink your image}
     }
 
 } -on_submit {
@@ -120,8 +128,8 @@ ad_form -extend -name "portrait_upload" -validate {
         acs_user::create_portrait \
             -user_id $user_id \
             -description $portrait_comment \
-            -filename $upload_file \
-            -file [ns_queryget upload_file.tmpfile]
+            -filename $filename \
+            -file $tmp_filename
 
     }
 
