@@ -694,7 +694,9 @@ ad_proc -private template::element::validate { form_id element_id } {
                 lappend v_errors $message
                 set formerror($element_id:maxlength) $message
             }
-        } elseif { ! [template::data::validate $element(datatype) value message] } {
+        }
+
+        if { ! [template::data::validate $element(datatype) value message] } {
             #
             # The submission is formally invalid according to datatype
             # validation.
