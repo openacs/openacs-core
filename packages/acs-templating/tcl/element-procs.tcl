@@ -662,17 +662,29 @@ ad_proc -private template::element::validate { form_id element_id } {
 
     foreach value $values {
 
-        # something was submitted, now check if it is valid
+        #
+        # Something was submitted, now check if it is valid.
+        #
 
         if { $is_optional && $value eq "" } {
-            # This is an optional field and it's empty... skip validation
-            # (else things like the integer test will fail)
+            #
+            # This is an optional field and it's empty... Skip
+            # validation (else things like the integer test will
+            # fail).
+            #
             continue
         }
 
         if { [info exists element(maxlength)] } {
+            #
+            # A maximum length was specified for this element. Make
+            # sure it is respected first.
+            #
             set value_bytelength [string bytelength $value]
             if {  $value_bytelength > $element(maxlength) } {
+                #
+                # The element is too long.
+                #
                 set excess_no_bytes [expr { $value_bytelength - $element(maxlength) }]
                 if { $excess_no_bytes == 1 } {
                     set message [_ acs-templating.Element_is_too_long_Singular]
@@ -682,28 +694,34 @@ ad_proc -private template::element::validate { form_id element_id } {
                 lappend v_errors $message
                 set formerror($element_id:maxlength) $message
             }
-        }
-
-        if { ! [template::data::validate $element(datatype) value message] } {
-
-            # the submission is invalid
+        } elseif { ! [template::data::validate $element(datatype) value message] } {
+            #
+            # The submission is formally invalid according to datatype
+            # validation.
+            #
             lappend v_errors $message
             set formerror($element_id:data) $message
 
             if { $element(widget) in {hidden submit} } {
                 ad_log warning "template::element::validate: Invalid value for $element(widget) element $label: $message"
             }
-        }
+        } else {
+            #
+            # The submission is formally valid. Now go through the
+            # custom user-defined validation.
+            #
+            foreach { v_name v_code v_message } $element(validate) {
 
-        foreach { v_name v_code v_message } $element(validate) {
-
-            if { ! [eval $v_code] } {
-
-                # value is invalid according to custom validation code
-                # Do some expansion on $value, ${value}, $label, and ${label}
-                set v_message [util::var_subst_quotehtml $v_message]
-                lappend v_errors $v_message
-                set formerror($element_id:$v_name) $v_message
+                if { ! [eval $v_code] } {
+                    #
+                    # Value is invalid according to custom validation
+                    # code.  Do some expansion on $value, ${value},
+                    # $label, and ${label}
+                    #
+                    set v_message [util::var_subst_quotehtml $v_message]
+                    lappend v_errors $v_message
+                    set formerror($element_id:$v_name) $v_message
+                }
             }
         }
     }
