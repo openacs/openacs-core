@@ -10,12 +10,15 @@ aa_register_case -cats {
     production_safe
 } -procs {
     ad_dimensional
+    ad_dimensional_sql
     template::adp_compile
     template::adp_eval
     ad_looks_like_html_p
 } ad_dimensional {
     Test ad_dimensional
 } {
+    aa_section ad_dimensional
+
     set dimensional_list {
         {
             show_methods "Methods:" 1 {
@@ -65,5 +68,47 @@ aa_register_case -cats {
             }
         }
     }
+
+    aa_section ad_dimensional_sql
+
+    set options_set [ns_set create]
+    ns_set put $options_set show_variables 1
+    ns_set put $options_set show_methods 2
+    ns_set put $options_set bogus irrelevant
+    set sql_filters [ad_dimensional_sql $dimensional_list where and $options_set]
+    aa_equals "The dimensional_list has no where clauses, the result must be empty" \
+        $sql_filters ""
+
+    aa_log "Create new dimensional_list with clauses"
+    set dimensional_list {
+        {
+            show_methods "Methods:" 1 {
+                { 2 "All Methods" {where "one"}}
+                { 1 "Documented Methods" {where "two"}}
+                { 0 "Hide Methods" {where "three"}}
+            }
+        }
+        {
+            show_source "Source:" 0 {
+                { 1 "Display Source" {where "a"}}
+                { 0 "Hide Source" {where "b"}}
+            }
+        }
+        {
+            show_variables "Variables:" 0 {
+                { 1 "Show Variables" {where "1"}}
+                { 0 "Hide Variables" {where "2"}}
+            }
+        }
+    }
+
+    set sql_filters [ad_dimensional_sql $dimensional_list where and $options_set]
+    aa_equals "The dimensional_list has the expected value" \
+        $sql_filters " and one and b and 1"
+
+    set sql_filters [ad_dimensional_sql $dimensional_list where the_separator $options_set]
+    aa_equals "The dimensional_list has the expected value" \
+        $sql_filters " the_separator one the_separator b the_separator 1"
+
 }
 
