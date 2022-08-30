@@ -156,7 +156,7 @@
   <msg key="Edit_Options">Optionen editieren</msg>
   <msg key="Elements_not_editable">Einige Elemente können nicht bearbeitet werden, da sie von %authority_name% verwaltet werden.</msg>
   <msg key="Email">E-Mail-Adresse</msg>
-  <msg key="Email_already_exists">#acs-subsite.Email# existiert bereits</msg>
+  <msg key="Email_already_exists">Email existiert bereits</msg>
   <msg key="email_as_a_form">Zulassen, E-Mails über ein Formular an mich zu senden</msg>
   <msg key="email_as_a_form_admin">Den Kontakt mittels eines Formulars erlauben</msg>
   <msg key="email_as_image">Meine E-Mail-Adresse als Bild anzeigen</msg>

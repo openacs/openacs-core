@@ -140,7 +140,7 @@
   <msg key="Edit_Options">Редактировать опции</msg>
   <msg key="Elements_not_editable">Определённые элементы не могут быть отредактированы, так как они управляются  %authority_name%.</msg>
   <msg key="Email">Адрес электронной почты</msg>
-  <msg key="Email_already_exists">#acs-subsite.Email# уже существует</msg>
+  <msg key="Email_already_exists">Адрес электронной почты уже существует</msg>
   <msg key="email_as_a_form">Позволить другим связаться со мной через веб-форму</msg>
   <msg key="email_as_a_form_admin">Позволить связаться посредством формы</msg>
   <msg key="email_as_image">Показывать мой адрес электронной почты как изображение</msg>

@@ -151,7 +151,7 @@
   <msg key="Edit_this_theme">Modifica questo tema</msg>
   <msg key="Elements_not_editable">Certi elementi non sono modificabili, in quanto gestiti da %authority_name%.</msg>
   <msg key="Email">Email</msg>
-  <msg key="Email_already_exists">#acs-subsite.Email# già esistente</msg>
+  <msg key="Email_already_exists">Email già esistente</msg>
   <msg key="email_as_a_form">Permetti agli altri di contattarmi attraverso una web form</msg>
   <msg key="email_as_a_form_admin">Permetti contatto tramite form</msg>
   <msg key="email_as_image">Mostra la mia email come un&#39;immagine</msg>
