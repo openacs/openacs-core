@@ -179,111 +179,131 @@ ad_proc -public template::element::create { form_id element_id args } {
     Append an element to a form object.  If a submission is in progress,
     values for the element are prepared and validated.
 
-    @param form_id        The identifier of the form to which the element is to
-    be added.  The form must have been previously created
-    with a <tt>form create</tt> statement.
+    @param form_id        The identifier of the form to which the element is
+                          to be added.  The form must have been
+                          previously created with a <tt>form
+                          create</tt> statement.
 
-    @param element_id     A keyword identifier for the element that is unique
-    in the context of the form.
+    @param element_id     A keyword identifier for the element that is
+                          unique in the context of the form.
 
     @option widget        The name of an input widget for the element.  Valid
-    widgets must have a rendering procedure defined in
-    the <tt>template::widget</tt> namespace.
+                          widgets must have a rendering procedure
+                          defined in the <tt>template::widget</tt>
+                          namespace.
 
-    @option datatype      The name of a datatype for the element values.  Valid
-    datatypes must have a validation procedure defined in
-    the <tt>template::data::validate</tt> namespace.
+    @option datatype      The name of a datatype for the element values.
+                          Valid datatypes must have a validation
+                          procedure defined in the
+                          <tt>template::data::validate</tt> namespace.
 
     @option label         The label for the form element.
 
     @option html          A list of name-value attribute pairs to include in
-    the HTML tag for widget.  Typically used for additional
-    formatting options, such as <tt>cols</tt> or
-    <tt>rows</tt>, or for JavaScript handlers.
+                          the HTML tag for widget.  Typically used for
+                          additional formatting options, such as
+                          <tt>cols</tt> or <tt>rows</tt>, or for
+                          JavaScript handlers.
 
-    @option maxlength     The maximum allowable length in bytes. Will be checked using
-    'string bytelength'. Will also cause 'input' widgets (text, integer, etc.)
-    to get a maxlength="..." attribute.
+    @option maxlength     The maximum allowable length in bytes. Will be
+                          checked using 'string bytelength'. Will also
+                          cause 'input' widgets (text, integer, etc.)
+                          to get a maxlength="..." attribute.
 
-    @option options       A list of options for select lists and button groups
-    (check boxes or radio buttons).  The list contains
-    two-element lists in the form
-    { {label value} {label value} {label value} ...}
+    @option options       A list of options for select lists and button
+                          groups (check boxes or radio buttons).  The
+                          list contains two-element lists in the form
+                          { {label value} {label value} {label value}
+                          ...}
 
-    @option fieldset      A list of name-value attribute pairs to include in
-    the HTML tag for checkboxes and radio FIELDSET.
+    @option fieldset      A list of name-value attribute pairs to include
+                          in the HTML tag for checkboxes and radio
+                          FIELDSET.
 
     @option legend        A list of name-value attribute pairs to include in
-    the HTML tag for checkboxes and radio LEGEND.
+                          the HTML tag for checkboxes and radio
+                          LEGEND.
 
-    @option legendtext    A text for the LEGEND tag to include in
-    the checkboxes and radio FIELDSET block
+    @option legendtext    A text for the LEGEND tag to include in the
+                          checkboxes and radio FIELDSET block
 
     @option value         The default value of the element
 
-    @option values        The default values of the element, where multiple values
-    are allowed (checkbox groups and multiselect widgets)
+    @option values        The default values of the element, where multiple
+                          values are allowed (checkbox groups and
+                          multiselect widgets)
 
     @option validate      A list of custom validation blocks in the form
-    { name { script } { message } \
-          name { script } { message } ...}
-    where name is a unique identifier for the validation
-    step, expression is a block to Tcl code (script) that should
-    set the result to 1 or 0, and message is to be displayed to the user when
-    the validation step fails, that is, if the expression
-    evaluates to 0. Use the special variable <tt>$value</tt>
-    to refer to the value entered by the user in that field.
-    Note that e.g. in ad_form, all blocks are substituted,
-    therefore, the script might require escaping.
+                          {name { script } { message } \
+                           name { script } { message } ...}
+                          where name is a unique identifier for the
+                          validation step, expression is a block to
+                          Tcl code (script) that should set the result
+                          to 1 or 0, and message is to be displayed to
+                          the user when the validation step fails,
+                          that is, if the expression evaluates to
+                          0. Use the special variable <tt>$value</tt>
+                          to refer to the value entered by the user in
+                          that field.  Note that e.g. in ad_form, all
+                          blocks are substituted, therefore, the
+                          script might require escaping.
 
-    @option sign          specify for a hidden widget that its value should be
-    signed
+    @option sign          Specify for a hidden widget that its value should be
+                          signed
 
     @option help_text     Text displayed with the element
 
     @option help          Display helpful hints (date widget only?)
 
-    @option optional      A flag indicating that no value is required for this
-    element.  If a default value is specified, the default
-    is used instead.
+    @option optional      A flag indicating that no value is required for
+                          this element.  If a default value is
+                          specified, the default is used instead.
 
-    @option mode          Valid values are 'display', 'edit', and the empty string.
-    If set to 'display', the element will render as static HTML
-    which doesn't allow editing of the value, instead of the
-    HTML form element (e.g. &lt;input&gt;) which would otherwise
-    get used. If set to 'edit', the element is as normal, allowing
-    the user to edit the contents. If set to the empty string or
-    not specified at all, the form's 'mode' setting is used instead.
+    @option mode          Valid values are 'display', 'edit', and the empty
+                          string.  If set to 'display', the element
+                          will render as static HTML which doesn't
+                          allow editing of the value, instead of the
+                          HTML form element (e.g. &lt;input&gt;) which
+                          would otherwise get used. If set to 'edit',
+                          the element is as normal, allowing the user
+                          to edit the contents. If set to the empty
+                          string or not specified at all, the form's
+                          'mode' setting is used instead.
 
-    @option nospell       A flag indicating that no spell-checking should be performed on
-    this element. This overrides the 'SpellcheckFormWidgets' parameter.
+    @option nospell       A flag indicating that no spell-checking should be
+                          performed on this element. This overrides
+                          the 'SpellcheckFormWidgets' parameter.
 
-    @option noquote       A flag indicating that no value should not be quoted in a form.
-    In addition, the nonquoted inform field is not transmitted as
-    a hidden field (which can be attacked via noquote).
-    Currently only supported by the "inform" widget type.
+    @option noquote       A flag indicating that no value should not be
+                          quoted in a form.  In addition, the
+                          nonquoted inform field is not transmitted as
+                          a hidden field (which can be attacked via
+                          noquote).  Currently only supported by the
+                          "inform" widget type.
 
     @option before_html   A chunk of HTML displayed immediately before the rendered element.
 
     @option after_html    A chunk of HTML displayed immediately after the rendered element.
 
-    @option display_value Alternative value used when the element is in display mode.
-    If specified, this value is used when the mode is set to 'display',
-    instead of asking the element widget to render itself in display mode.
+    @option display_value Alternative value used when the element is
+                          in display mode.  If specified, this value
+                          is used when the mode is set to 'display',
+                          instead of asking the element widget to
+                          render itself in display mode.
 
-    @option multiple      A flag indicating that more than one value is expected
-    from the input element
+    @option multiple      A flag indicating that more than one value is
+                          expected from the input element
 
     @option format        Many form elements allow to specify a format,
-    e.g. a way the element should be displayed
-    or interpret its value. Refer to the
-    specific widgets for the actual behavior.
+                          e.g. a way the element should be displayed
+                          or interpret its value. Refer to the
+                          specific widgets for the actual behavior.
 
     @option section       Specify to which form section this element belongs
 
     @option htmlarea_p    Only relevant for textarea kind of elements,
-    tells if the element is supposed to be
-    rendered as a richtext editor or not.
+                          tells if the element is supposed to be
+                          rendered as a richtext editor or not.
 
     @see template::widget
     @see template::data::validate
@@ -808,9 +828,9 @@ ad_proc -private template::element::render { form_id element_id tag_attributes }
     @param form_id        The identifier of the form containing the element.
     @param element_id     The unique identifier of the element within the form.
     @param tag_attributes A name-value list of addditional HTML
-    attributes to include in the tag, such as JavaScript
-    handlers or special formatting (i.e. ROWS and COLS
-                                    for a TEXTAREA).
+                          attributes to include in the tag, such as
+                          JavaScript handlers or special formatting
+                          (i.e. ROWS and COLS for a TEXTAREA).
 
     @return A string containing the HTML for an INPUT, SELECT or TEXTAREA
     form element.
@@ -845,9 +865,9 @@ ad_proc -private template::element::options { form_id element_id tag_attributes 
     @param form_id        The identifier of the form containing the element.
     @param element_id     The unique identifier of the element within the form.
     @param tag_attributes A name-value list of addditional HTML
-    attributes to include in the INPUT tags for each
-    radio button or checkbox, such as JavaScript
-    handlers or special formatting.
+                          attributes to include in the INPUT tags for
+                          each radio button or checkbox, such as
+                          JavaScript handlers or special formatting.
 } {
     get_reference
 
