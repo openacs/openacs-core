@@ -381,16 +381,22 @@ ad_proc util::http::get {
 }
 
 ad_proc util::http::post_payload {
-    -url
+    {-url ""}
     {-files {}}
     -base64:boolean
     {-formvars ""}
+    {-formvars_dict ""}
     {-body ""}
     {-max_body_size 25000000}
     {-headers ""}
     -multipart:boolean
 } {
     Build the payload for a POST request
+
+    @param url does not affect the payload directly, but is used to
+               check that variables specified via the URL do not
+               conflict with those coming from other parameters. In
+               such case, an error is returned.
 
     @param body is the payload for the request and will be passed as
                 is (useful for many purposes, such as webDav).  A
@@ -429,16 +435,25 @@ ad_proc util::http::post_payload {
     flag is set, files will be base64 encoded (useful for some kind of
     form).
 
-    @param formvars Other form variables can be passed easily
-                    through'-formvars' using 'export_vars -url' and
-                    will be translated for the proper type of
-                    form. This is useful when we intend to send files
-                    together with variables to a form. URL variables,
-                    as with GET requests, are also sent, but an error
-                    is thrown if URL variables conflict with those
-                    specified in other ways.
+    @param formvars These are additional form variables already in
+                    URLencoded format, for instance, by using
+                    'export_vars -url'. They will be translated for
+                    the proper type of form (URLencoded or multipart)
+                    depending on the presence of 'files' or the
+                    'multipart' flag. Variables specified this way
+                    have precedence over those supplied via the
+                    'formvars_dict' parameter.
 
-     Default behavior is to build payload as an
+    @param formvars_dict These are additional form variables in dict
+                         format. They will be translated for the
+                         proper type of form (URLencoded or multipart)
+                         depending on the presence of files or the
+                         multipart flag.
+
+    The payload will be made by the sum of data coming from
+    'formvars', 'formvars_dict' and 'files' arguments.
+
+    Default behavior is to build payload as an
     'application/x-www-form-urlencoded' payload if no files are
     specified, and 'multipart/form-data' otherwise. If '-multipart'
     flag is set, format will be forced to multipart.
@@ -459,9 +474,15 @@ ad_proc util::http::post_payload {
         array set urlvars [ns_set array [ns_parsequery [dict get $parsed query]]]
     }
 
+    foreach {key val} [ns_set array [ns_parsequery $formvars]] {
+        if {$key ne ""} {
+            dict set formvars_dict $key $val
+        }
+    }
+
     # Check whether we don't have multiple variable definition in url
     # and payload.
-    foreach {key value} [ns_set array [ns_parsequery $formvars]] {
+    foreach {key value} $formvars_dict {
         if {[info exists urlvars($key)]} {
             return -code error "${this_proc}:  Variable '$key' already specified as url variable"
         }
@@ -590,7 +611,7 @@ ad_proc util::http::post_payload {
         }
 
         # Translate urlencoded vars into multipart variables
-        foreach {key val} [ns_set array [ns_parsequery $formvars]] {
+        foreach {key val} $formvars_dict {
             if {[info exists filevars($key)]} {
                 return -code error "${this_proc}:  Variable '$key' already specified as file variable"
             }
@@ -631,7 +652,11 @@ ad_proc util::http::post_payload {
             ns_set put $headers "Content-type" $req_content_type
         }
         set enc [util::http::get_channel_settings $req_content_type]
-        set payload $formvars
+        set payload {}
+        foreach {key val} $formvars_dict {
+            lappend payload [ad_urlencode_query $key]=[ad_urlencode_query $val]
+        }
+        set payload [join $payload &]
     }
 
     # Body will be appended as is to the payload
@@ -659,6 +684,7 @@ ad_proc util::http::post {
     {-files {}}
     -base64:boolean
     {-formvars ""}
+    {-formvars_dict ""}
     {-body ""}
     {-max_body_size 25000000}
     {-headers ""}
@@ -711,16 +737,25 @@ ad_proc util::http::post {
     flag is set, files will be base64 encoded (useful for some kind of
     form).
 
-    @param formvars Other form variables can be passed easily
-                    through'-formvars' using 'export_vars -url' and
-                    will be translated for the proper type of
-                    form. This is useful when we intend to send files
-                    together with variables to a form. URL variables,
-                    as with GET requests, are also sent, but an error
-                    is thrown if URL variables conflict with those
-                    specified in other ways.
+    @param formvars These are additional form variables already in
+                    URLencoded format, for instance, by using
+                    'export_vars -url'. They will be translated for
+                    the proper type of form (URLencoded or multipart)
+                    depending on the presence of 'files' or the
+                    'multipart' flag. Variables specified this way
+                    have precedence over those supplied via the
+                    'formvars_dict' parameter.
 
-     Default behavior is to build payload as an
+    @param formvars_dict These are additional form variables in dict
+                         format. They will be translated for the
+                         proper type of form (URLencoded or multipart)
+                         depending on the presence of files or the
+                         multipart flag.
+
+    The payload will be made by the sum of data coming from
+    'formvars', 'formvars_dict' and 'files' arguments.
+
+    Default behavior is to build payload as an
     'application/x-www-form-urlencoded' payload if no files are
     specified, and 'multipart/form-data' otherwise. If '-multipart'
     flag is set, format will be forced to multipart.
@@ -798,6 +833,7 @@ ad_proc util::http::post {
                           -files $files \
                           -base64=$base64_p \
                           -formvars $formvars \
+                          -formvars_dict $formvars_dict \
                           -body $body \
                           -max_body_size $max_body_size \
                           -headers $headers \
