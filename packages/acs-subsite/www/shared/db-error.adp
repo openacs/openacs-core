@@ -10,9 +10,11 @@
       @custom_message@
     </else>
   </p>
-  <p>#acs-subsite.lt_Heres_what_the_databa#
-    <blockquote>
-      @errmsg@
-    </blockquote>
-  </p>
+  <if @errmsg@ not nil>
+    <p>#acs-subsite.lt_Heres_what_the_databa#
+      <blockquote>
+        @errmsg@
+      </blockquote>
+    </p>
+  </if>
 
