@@ -388,15 +388,7 @@ ad_proc util::http::post_payload {
     {-body ""}
     {-max_body_size 25000000}
     {-headers ""}
-    {-timeout 30}
-    {-max_depth 10}
-    -force_ssl:boolean
     -multipart:boolean
-    -gzip_request:boolean
-    -gzip_response:boolean
-    -post_redirect:boolean
-    -spool:boolean
-    {-preference {native curl}}
 } {
     Build the payload for a POST request
 
