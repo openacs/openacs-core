@@ -233,6 +233,65 @@ aa_register_case \
         }
     }
 
+aa_register_case -cats {
+    api
+    smoke
+} -procs {
+    util::http::post_payload
+    util::http::post
+} util_http_post_vars {
+
+    Test the behavior of util::http::post with respect to its handling
+    of request variables.
+
+} {
+    set endpoint_name /acs-tcl-util-http-post-vars
+
+    set url [parameter::get \
+                 -package_id [apm_package_id_from_key acs-automated-testing] \
+                 -parameter TestURL \
+                 -default ""]
+    if {$url eq ""} {
+        set url [ns_conn location]
+    }
+    set urlInfo [ns_parseurl $url]
+    set url ${url}${endpoint_name}
+
+    set script {
+        ns_return 200 text/plain [ns_querygetall thevars]
+    }
+
+    try {
+        ns_register_proc POST $endpoint_name $script
+
+        aa_true "One cannot specify URLvars and POST vars at the same time" [catch {
+            util::http::post \
+                -url $url?thevars=1 \
+                -formvars [export_vars -url {{thevars 2}}] \
+                -formvars_list {thevars 3 thevars 4}
+        } errmsg]
+
+        aa_true "One cannot specify file vars and POST vars at the same time" [catch {
+            util::http::post \
+                -url $url \
+                -files {{file /tmp/myfile.txt fieldname thevars}} \
+                -formvars [export_vars -url {{thevars 2}}] \
+                -formvars_list {thevars 3 thevars 4}
+        } errmsg]
+
+        set r [util::http::post \
+                   -url $url \
+                   -formvars [export_vars -url {{thevars 2}}] \
+                   -formvars_list {thevars 3 thevars 4}]
+
+        aa_equals "'formvars' and 'formvars_list' are combined together" \
+            [lsort [dict get $r page]] {2 3 4}
+
+    } finally {
+        ns_unregister_op POST $endpoint_name
+    }
+}
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4

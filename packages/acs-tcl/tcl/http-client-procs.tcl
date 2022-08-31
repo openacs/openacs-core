@@ -385,7 +385,7 @@ ad_proc util::http::post_payload {
     {-files {}}
     -base64:boolean
     {-formvars ""}
-    {-formvars_dict ""}
+    {-formvars_list ""}
     {-body ""}
     {-max_body_size 25000000}
     {-headers ""}
@@ -441,17 +441,17 @@ ad_proc util::http::post_payload {
                     the proper type of form (URLencoded or multipart)
                     depending on the presence of 'files' or the
                     'multipart' flag. Variables specified this way
-                    have precedence over those supplied via the
-                    'formvars_dict' parameter.
+                    will be appended to those supplied via the
+                    'formvars_list' parameter.
 
-    @param formvars_dict These are additional form variables in dict
+    @param formvars_list These are additional form variables in list
                          format. They will be translated for the
                          proper type of form (URLencoded or multipart)
                          depending on the presence of files or the
                          multipart flag.
 
     The payload will be made by the sum of data coming from
-    'formvars', 'formvars_dict' and 'files' arguments.
+    'formvars', 'formvars_list' and 'files' arguments.
 
     Default behavior is to build payload as an
     'application/x-www-form-urlencoded' payload if no files are
@@ -474,15 +474,19 @@ ad_proc util::http::post_payload {
         array set urlvars [ns_set array [ns_parsequery [dict get $parsed query]]]
     }
 
-    foreach {key val} [ns_set array [ns_parsequery $formvars]] {
-        if {$key ne ""} {
-            dict set formvars_dict $key $val
+    if {[llength $formvars_list] % 2 == 1} {
+        error "'formvars_list' must have an even number of elements"
+    }
+
+    if {$formvars ne ""} {
+        foreach {key val} [ns_set array [ns_parsequery $formvars]] {
+            lappend formvars_list $key $val
         }
     }
 
     # Check whether we don't have multiple variable definition in url
     # and payload.
-    foreach {key value} $formvars_dict {
+    foreach {key value} $formvars_list {
         if {[info exists urlvars($key)]} {
             return -code error "${this_proc}:  Variable '$key' already specified as url variable"
         }
@@ -611,7 +615,7 @@ ad_proc util::http::post_payload {
         }
 
         # Translate urlencoded vars into multipart variables
-        foreach {key val} $formvars_dict {
+        foreach {key val} $formvars_list {
             if {[info exists filevars($key)]} {
                 return -code error "${this_proc}:  Variable '$key' already specified as file variable"
             }
@@ -653,7 +657,7 @@ ad_proc util::http::post_payload {
         }
         set enc [util::http::get_channel_settings $req_content_type]
         set payload {}
-        foreach {key val} $formvars_dict {
+        foreach {key val} $formvars_list {
             lappend payload [ad_urlencode_query $key]=[ad_urlencode_query $val]
         }
         set payload [join $payload &]
@@ -684,7 +688,7 @@ ad_proc util::http::post {
     {-files {}}
     -base64:boolean
     {-formvars ""}
-    {-formvars_dict ""}
+    {-formvars_list ""}
     {-body ""}
     {-max_body_size 25000000}
     {-headers ""}
@@ -743,17 +747,17 @@ ad_proc util::http::post {
                     the proper type of form (URLencoded or multipart)
                     depending on the presence of 'files' or the
                     'multipart' flag. Variables specified this way
-                    have precedence over those supplied via the
-                    'formvars_dict' parameter.
+                    will be appended to those supplied via the
+                    'formvars_list' parameter.
 
-    @param formvars_dict These are additional form variables in dict
+    @param formvars_list These are additional form variables in list
                          format. They will be translated for the
                          proper type of form (URLencoded or multipart)
                          depending on the presence of files or the
                          multipart flag.
 
     The payload will be made by the sum of data coming from
-    'formvars', 'formvars_dict' and 'files' arguments.
+    'formvars', 'formvars_list' and 'files' arguments.
 
     Default behavior is to build payload as an
     'application/x-www-form-urlencoded' payload if no files are
@@ -833,7 +837,7 @@ ad_proc util::http::post {
                           -files $files \
                           -base64=$base64_p \
                           -formvars $formvars \
-                          -formvars_dict $formvars_dict \
+                          -formvars_list $formvars_list \
                           -body $body \
                           -max_body_size $max_body_size \
                           -headers $headers \
