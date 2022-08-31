@@ -18,4 +18,3 @@
     </p>
   </if>
 
-<% ad_log warning "This error template is deprecated. Please use acs-subsite/lib/shared/db-error instead." %>
