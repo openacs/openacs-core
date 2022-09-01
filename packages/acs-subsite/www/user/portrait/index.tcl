@@ -38,6 +38,11 @@ if {$user_id eq ""} {
 }
 
 if { $current_user_id == $user_id } {
+    #
+    # When the user is myself, we will show links to administrate the
+    # portrait picture. In this case we also make sure that we have
+    # write permissions on our own user.
+    #
     set admin_p 1
     permission::require_permission -object_id $user_id -privilege "write"
 } else {
