@@ -99,10 +99,10 @@ ad_proc -public ad_return_exception_template {
 }
 
 
-ad_proc adp_parse_ad_conn_file {} {
+ad_proc -private adp_parse_ad_conn_file {} {
 
     Handle a request for an adp and/or Tcl file in the template system
-    based on the current setting of [ad_conn file]. This file is
+    based on the current setting of [ad_conn file]. This proc is
     registered via rp_register_extension_handler
 
     @see rp_register_extension_handler
