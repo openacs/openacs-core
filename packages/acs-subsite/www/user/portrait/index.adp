@@ -33,10 +33,6 @@
 </if>
 </case>
 
-<case value="no_user">
-<p>#acs-subsite.lt_We_cant_find_you#</p>
-</case>
-
 <case value="no_portrait_info">
 <p>
 #acs-subsite.lt_The_picture_of_you_in#
