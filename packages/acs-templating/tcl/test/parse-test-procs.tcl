@@ -13,50 +13,73 @@ aa_register_case \
         production_safe
     } \
     -procs {
+        template::adp_variable_regexp
+        template::adp_variable_regexp_noquote
+        template::adp_variable_regexp_no18n
+        template::adp_variable_regexp_literal
         template::adp_array_variable_regexp
         template::adp_array_variable_regexp_noquote
+        template::adp_array_variable_regexp_no18n
+        template::adp_array_variable_regexp_literal
     } \
     template_variable {
         test adp variable parsing procedures
     } {
-        aa_run_with_teardown \
-            -test_code {
-                set code "=@test_array.test_key@"
-                aa_true "Regular array var name detected" \
-                    [regexp [template::adp_array_variable_regexp] $code discard pre arr var]
-                aa_equals "Preceding char is '${pre}'"  "=" $pre
-                aa_equals "Array name is '${arr}'"  \
-                    "test_array" $arr
-                aa_equals "Variable name is '${var}'"  \
-                    "test_key" $var
+        aa_section "Testing plain variable"
 
-                set code "=@formerror.test_array.test_key@"
-                aa_true "Formerror regular array var name detected" \
-                    [regexp [template::adp_array_variable_regexp] $code discard pre arr var]
-                aa_equals "Preceding char is '${pre}'"  "=" $pre
-                aa_equals "Array name is '${arr}'"  \
-                    "formerror" $arr
-                aa_equals "Variable name is '${var}'"  \
-                    "test_array.test_key" $var
+        set code "=@test_var@"
+        aa_true "Variable detected" \
+            [regexp [template::adp_variable_regexp] $code discard pre var]
+        aa_equals "Preceding char is '${pre}'"  "=" $pre
+        aa_equals "Variable name is '${var}'"  \
+            "test_var" $var
 
-                set code "=@test_array.test_key;noquote@"
-                aa_true "Noquote array var name detected" \
-                    [regexp [template::adp_array_variable_regexp_noquote] $code discard pre arr var]
-                aa_equals "Preceding char is '${pre}'"  "=" $pre
-                aa_equals "Array name is '${arr}'"  \
-                    "test_array" $arr
-                aa_equals "Variable name is '${var}'"  \
-                    "test_key" $var
+        set code "=@test_array.test_key@"
+        aa_true "Regular array var name detected" \
+            [regexp [template::adp_array_variable_regexp] $code discard pre arr var]
+        aa_equals "Preceding char is '${pre}'"  "=" $pre
+        aa_equals "Array name is '${arr}'"  \
+            "test_array" $arr
+        aa_equals "Variable name is '${var}'"  \
+            "test_key" $var
 
-                set code "=@formerror.test_array.test_key;noquote@"
-                aa_true "Noquote formerror array var name detected" \
-                    [regexp [template::adp_array_variable_regexp_noquote] $code discard pre arr var]
-                aa_equals "Preceding char is '${pre}'"  "=" $pre
-                aa_equals "Array name is '${arr}'"  \
-                    "formerror" $arr
-                aa_equals "Variable name is '${var}'"  \
-                    "test_array.test_key" $var
-            }
+        set code "=@formerror.test_array.test_key@"
+        aa_true "Formerror regular array var name detected" \
+            [regexp [template::adp_array_variable_regexp] $code discard pre arr var]
+        aa_equals "Preceding char is '${pre}'"  "=" $pre
+        aa_equals "Array name is '${arr}'"  \
+            "formerror" $arr
+        aa_equals "Variable name is '${var}'"  \
+            "test_array.test_key" $var
+
+        foreach modifier {noquote literal noi18n} {
+            aa_section "Testing ;$modifier modifier"
+
+            set code "=@test_var;$modifier@"
+            aa_true "Variable detected" \
+                [regexp [template::adp_variable_regexp_$modifier] $code discard pre var]
+            aa_equals "Preceding char is '${pre}'"  "=" $pre
+            aa_equals "Variable name is '${var}'"  \
+                "test_var" $var
+
+            set code "=@test_array.test_key;$modifier@"
+            aa_true "$modifier array var name detected" \
+                [regexp [template::adp_array_variable_regexp_$modifier] $code discard pre arr var]
+            aa_equals "Preceding char is '${pre}'"  "=" $pre
+            aa_equals "Array name is '${arr}'"  \
+                "test_array" $arr
+            aa_equals "Variable name is '${var}'"  \
+                "test_key" $var
+
+            set code "=@formerror.test_array.test_key;$modifier@"
+            aa_true "$modifier formerror array var name detected" \
+                [regexp [template::adp_array_variable_regexp_$modifier] $code discard pre arr var]
+            aa_equals "Preceding char is '${pre}'"  "=" $pre
+            aa_equals "Array name is '${arr}'"  \
+                "formerror" $arr
+            aa_equals "Variable name is '${var}'"  \
+                "test_array.test_key" $var
+        }
     }
 
 aa_register_case \
