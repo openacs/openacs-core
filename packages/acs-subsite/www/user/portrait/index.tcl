@@ -23,7 +23,7 @@ ad_page_contract {
     user_id:onevalue
     return_code:onevalue
 }
-   
+
 set current_user_id [ad_conn user_id]
 set subsite_url     [subsite::get_element -element url]
 set return_url      "[subsite::get_element -element url]user/portrait/"
@@ -57,7 +57,7 @@ set portrait_p [expr {$item_id != 0}]
 if {$portrait_p} {
     set revision_id [content::item::get_live_revision -item_id $item_id]
 }
-    
+
 if { $admin_p } {
     set doc(title) [_ acs-subsite.Your_Portrait]
 } else {
