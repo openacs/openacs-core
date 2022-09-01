@@ -192,6 +192,151 @@ aa_register_case \
         }
     }
 
+aa_register_case \
+    -cats {api smoke production_safe} \
+    -procs {
+        template::adp_include
+        template::add_body_handler
+        template::add_body_script
+        template::add_confirm_handler
+        template::add_event_listener
+        template::add_refresh_on_history_handler
+    } \
+    templates_and_scripts {
+
+        Test api to introduce javascript handlers inside a template.
+
+    } {
+        #
+        # Note: we use placeholders instead of real values to better
+        # find them in the output.
+        #
+
+        aa_section template::add_body_handler
+
+        template::add_body_handler \
+            -event __template::add_body_handler_event \
+            -script __template::add_body_handler_script \
+            -identifier __template::add_body_handler_identifier
+
+        template::add_body_handler \
+            -event __template::add_body_handler_event \
+            -script __template::add_body_handler_script \
+            -identifier __template::add_body_handler_identifier
+
+        template::add_body_handler \
+            -event __template::add_body_handler_event2 \
+            -script __template::add_body_handler_script2 \
+            -identifier __template::add_body_handler_identifier2
+
+
+        aa_section template::add_body_script
+
+        template::add_body_script \
+            -charset __template::add_body_script_charset \
+            -crossorigin __template::add_body_script_crossorigin \
+            -integrity __template::add_body_script_integrity \
+            -script __template::add_body_script_script \
+            -src __template::add_body_script_src \
+            -type __template::add_body_script_type \
+            -async=false \
+            -defer=false
+
+
+        aa_section template::add_confirm_handler
+
+        template::add_confirm_handler \
+            -event __template::add_confirm_handler_event \
+            -message __template::add_confirm_handler_message \
+            -id __template::add_confirm_handler_id
+
+        template::add_confirm_handler \
+            -event __template::add_confirm_handler_event \
+            -message __template::add_confirm_handler_message \
+            -CSSclass __template::add_confirm_handler_CSSclass
+
+        template::add_confirm_handler \
+            -event __template::add_confirm_handler_event \
+            -message __template::add_confirm_handler_message \
+            -formfield {
+                __template::add_confirm_handler_formfield1
+                __template::add_confirm_handler_formfield2
+            }
+
+        template::add_confirm_handler \
+            -event __template::add_confirm_handler_event \
+            -message __template::add_confirm_handler_message \
+            -selector __template::add_confirm_handler_selector
+
+
+        aa_section template::add_event_listener
+
+        template::add_event_listener \
+            -event __template::add_event_listener_event \
+            -id __template::add_event_listener_id \
+            -script __template::add_event_listener_script
+
+        template::add_event_listener \
+            -event __template::add_event_listener_event \
+            -CSSclass __template::add_event_listener_CSSclass \
+            -script __template::add_event_listener_script
+
+        template::add_event_listener \
+            -event __template::add_event_listener_event \
+            -formfield {
+                __template::add_event_listener_formfield1
+                __template::add_event_listener_formfield2
+            } \
+            -script __template::add_event_listener_script
+
+        template::add_event_listener \
+            -event __template::add_event_listener_event \
+            -selector __template::add_event_listener_selector \
+            -script __template::add_event_listener_script
+
+
+        aa_section template::add_refresh_on_history_handler
+
+        template::add_refresh_on_history_handler
+
+
+        set page [template::adp_include /packages/acs-templating/lib/body_scripts {}]
+
+        aa_true "Page contains script tags" \
+            {[string first "<script" $page] >= 0}
+
+        foreach expected {
+            __template::add_body_handler_event
+            __template::add_body_handler_script
+            __template::add_body_handler_event2
+            __template::add_body_handler_script2
+            __template::add_body_script_charset
+            __template::add_body_script_crossorigin
+            __template::add_body_script_integrity
+            __template::add_body_script_script
+            __template::add_body_script_src
+            __template::add_body_script_type
+            __template::add_confirm_handler_event
+            __template::add_confirm_handler_message
+            __template::add_confirm_handler_id
+            __template::add_confirm_handler_CSSclass
+            __template::add_confirm_handler_formfield1
+            __template::add_confirm_handler_formfield2
+            __template::add_confirm_handler_selector
+            __template::add_event_listener_event
+            __template::add_event_listener_id
+            __template::add_event_listener_script
+            __template::add_event_listener_CSSclass
+            __template::add_event_listener_formfield1
+            __template::add_event_listener_formfield2
+            __template::add_event_listener_selector
+            "window.addEventListener( \"pageshow\""
+        } {
+            aa_true "'$expected' was rendered by the template" \
+                {[string first $expected $page] >= 0}
+        }
+    }
+
 
 # Local variables:
 #    mode: tcl
