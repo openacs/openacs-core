@@ -79,13 +79,15 @@ if {! $portrait_p } {
 # we have revision_id now
 
 
-if {[catch {db_1row get_picture_info "
-select i.width, i.height, cr.title, cr.description, cr.publish_date
-from images i, cr_revisions cr
-where i.image_id = cr.revision_id
-and image_id = :revision_id
-"} errmsg]} {
-    # There was an error obtaining the picture information
+if {![db_0or1row get_picture_info {
+    select i.width, i.height, cr.title, cr.description, cr.publish_date
+    from images i, cr_revisions cr
+    where i.image_id = cr.revision_id
+    and image_id = :revision_id
+}]} {
+    #
+    # We found no profile picture.
+    #
     set context [list "Invalid Picture"]
     set return_code "no_portrait_info"
     ad_return_template
