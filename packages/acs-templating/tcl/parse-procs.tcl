@@ -309,8 +309,9 @@ ad_proc -public template::adp_level { { up "" } } {
 }
 
 
-ad_proc -public template::adp_levels {} {
+ad_proc -deprecated template::adp_levels {} {
     @return all stack frame levels
+    @see template::adp_level
 } {
     if { [info exists ::template::parse_level] } {return $::template::parse_level}
     return ""
