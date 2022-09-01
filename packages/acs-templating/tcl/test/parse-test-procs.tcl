@@ -15,11 +15,11 @@ aa_register_case \
     -procs {
         template::adp_variable_regexp
         template::adp_variable_regexp_noquote
-        template::adp_variable_regexp_no18n
+        template::adp_variable_regexp_noi18n
         template::adp_variable_regexp_literal
         template::adp_array_variable_regexp
         template::adp_array_variable_regexp_noquote
-        template::adp_array_variable_regexp_no18n
+        template::adp_array_variable_regexp_noi18n
         template::adp_array_variable_regexp_literal
     } \
     template_variable {
@@ -157,6 +157,39 @@ aa_register_case \
         set adp {2 + 2 = <%= [expr {2 + 2}] %> !!!}
         aa_equals "Result is correct" \
             [template::adp_parse_string $adp] {2 + 2 = 4 !!!}
+    }
+
+aa_register_case \
+    -cats {api smoke production_safe} \
+    -procs {
+        ::template::adp_level
+    } \
+    adp_level {
+
+        Test template::adp_level
+
+    } {
+        set template_adp_level $::template::parse_level
+        try {
+            unset -nocomplain ::template::parse_level
+            aa_equals "When no parse level is set, result is empty" \
+                [template::adp_level] ""
+
+            set ::template::parse_level [list 1 2 3]
+
+            aa_equals "With a parse level, result is the last level" \
+                [template::adp_level] 3
+
+            aa_true "Up must be an integer" [catch {
+                template::adp_level broken
+            } errmsg]
+
+            aa_equals "Up is the number of elements we go up in the parse level" \
+                [template::adp_level 3] 1
+
+        } finally {
+            set ::template::parse_level $template_adp_level
+        }
     }
 
 
