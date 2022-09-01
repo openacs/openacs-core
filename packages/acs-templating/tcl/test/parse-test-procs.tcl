@@ -101,6 +101,7 @@ aa_register_case \
         ::template::adp_parse_tags
         ::template::adp_compile_chunk
         ::template::icon
+        ::template::adp_append_code
     } \
     adp_parse_tags {
 

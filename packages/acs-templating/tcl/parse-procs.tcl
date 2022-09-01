@@ -786,7 +786,9 @@ ad_proc -private template::adp_append_string { s } {
 
 ad_proc -public template::adp_append_code { code { nobreak "" } } {
     Adds a line of code to the Tcl output from the compiler.
-    Called also from developer support.
+
+    Called by basically any adp custom tag implementation and also
+    from developer support.
 
     @param code       A line of Tcl code
 
