@@ -239,6 +239,7 @@ aa_register_case -cats {
 } -procs {
     util::http::post_payload
     util::http::post
+    export_vars
 } util_http_post_vars {
 
     Test the behavior of util::http::post with respect to its handling
@@ -258,12 +259,20 @@ aa_register_case -cats {
     set url ${url}${endpoint_name}
 
     set script {
-        ns_return 200 text/plain [ns_querygetall thevars]
+        set files [list]
+        foreach f [ns_querygetall files.tmpfile] {
+            lappend files [ns_md file $f]
+        }
+        set vars [ns_querygetall vars]
+        set vars_urlencoded [ns_querygetall vars_urlencoded]
+        set vars_list [ns_querygetall vars_list]
+        ns_return 200 text/plain [list $files $vars $vars_urlencoded $vars_list]
     }
 
     try {
         ns_register_proc POST $endpoint_name $script
 
+        aa_section "Try to send the same parameter as URL and POST"
         aa_true "One cannot specify URLvars and POST vars at the same time" [catch {
             util::http::post \
                 -url $url?thevars=1 \
@@ -271,6 +280,7 @@ aa_register_case -cats {
                 -formvars_list {thevars 3 thevars 4}
         } errmsg]
 
+        aa_section "Try to send the same parameter as file and non-file"
         aa_true "One cannot specify file vars and POST vars at the same time" [catch {
             util::http::post \
                 -url $url \
@@ -279,13 +289,62 @@ aa_register_case -cats {
                 -formvars_list {thevars 3 thevars 4}
         } errmsg]
 
+        aa_section "Combine URLencoded and list parameters in a urlencoded POST request"
         set r [util::http::post \
                    -url $url \
-                   -formvars [export_vars -url {{thevars 2}}] \
-                   -formvars_list {thevars 3 thevars 4}]
+                   -formvars [export_vars -url {{vars 2} {vars_urlencoded:multiple {c d e f}}}] \
+                   -formvars_list {vars 3 vars 4 vars_list a vars_list b}]
+        lassign [dict get $r page] files vars vars_urlencoded vars_list
+        aa_equals "'files' has been sent correctly" \
+            [lsort $files] [list]
+        aa_equals "'vars' have been sent correctly" \
+            [lsort $vars] {2 3 4}
+        aa_equals "'vars_urlencoded' has been sent correctly" \
+            [lsort $vars_urlencoded] {c d e f}
+        aa_equals "'vars_list' has been sent correctly" \
+            [lsort $vars_list] {a b}
 
-        aa_equals "'formvars' and 'formvars_list' are combined together" \
-            [lsort [dict get $r page]] {2 3 4}
+        aa_section "Combine URLencoded, list parameters and files in a multipart POST request"
+        set files [list]
+        set files_checksums [list]
+        foreach c {abc 123 ÄÜÖ} {
+            set f [ad_tmpnam]
+            set wfd [open $f w]
+            puts -nonewline $wfd $c
+            close $wfd
+            lappend files [list file $f fieldname files]
+            lappend files_checksums [ns_md file $f]
+        }
+        set r [util::http::post \
+                   -url $url \
+                   -files $files \
+                   -formvars [export_vars -url {{vars 2} {vars_urlencoded:multiple {c d e f}}}] \
+                   -formvars_list {vars 3 vars 4 vars_list a vars_list b}]
+        lassign [dict get $r page] files vars vars_urlencoded vars_list
+        aa_equals "'files' has been sent correctly" \
+            [lsort $files] [lsort $files_checksums]
+        aa_equals "'vars' have been sent correctly" \
+            [lsort $vars] {2 3 4}
+        aa_equals "'vars_urlencoded' has been sent correctly" \
+            [lsort $vars_urlencoded] {c d e f}
+        aa_equals "'vars_list' has been sent correctly" \
+            [lsort $vars_list] {a b}
+
+        aa_section "Combine URLencoded and list parameters in a multipart POST request"
+        set r [util::http::post \
+                   -url $url \
+                   -multipart \
+                   -formvars [export_vars -url {{vars 2} {vars_urlencoded:multiple {c d e f}}}] \
+                   -formvars_list {vars 3 vars 4 vars_list a vars_list b}]
+        lassign [dict get $r page] files vars vars_urlencoded vars_list
+        aa_equals "'files' has been sent correctly" \
+            [lsort $files] [list]
+        aa_equals "'vars' have been sent correctly" \
+            [lsort $vars] {2 3 4}
+        aa_equals "'vars_urlencoded' has been sent correctly" \
+            [lsort $vars_urlencoded] {c d e f}
+        aa_equals "'vars_list' has been sent correctly" \
+            [lsort $vars_list] {a b}
 
     } finally {
         ns_unregister_op POST $endpoint_name
