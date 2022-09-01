@@ -26,7 +26,7 @@ ad_page_contract {
 
 set current_user_id [ad_conn user_id]
 set subsite_url     [subsite::get_element -element url]
-set return_url      "[subsite::get_element -element url]user/portrait/"
+set return_url      ${subsite_url}user/portrait/
 
 set return_code "no_error"
 # Other possibilities:
