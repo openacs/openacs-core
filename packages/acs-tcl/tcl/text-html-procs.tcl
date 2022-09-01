@@ -2753,7 +2753,7 @@ ad_proc -public ad_html_text_convert {
     # Handle closing of HTML tags, truncation
     switch -- $to {
         text/html {
-            if {[info exists tags_are_closed]} {
+            if {[info exists tags_are_closed] && $truncate_len == 0} {
                 ns_log notice "No need to call util_close_html_tags"
             } else {
                 ns_log notice "regular call closeTags (from $from to $to)"
