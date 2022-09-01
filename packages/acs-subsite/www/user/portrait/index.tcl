@@ -7,7 +7,7 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     {return_url:localurl "" }
-    {user_id:naturalnum ""}
+    {user_id:object_type(user) ""}
 } -properties {
     first_names:onevalue
     last_name:onevalue
@@ -30,7 +30,6 @@ set return_url      "[subsite::get_element -element url]user/portrait/"
 
 set return_code "no_error"
 # Other possibilities:
-# no_user          : Unknown user_id, not in DB.
 # no_portrait      : No portrait uploaded yet for this user.
 # no_portrait_info : Unable to retrieve information on portrait.
 
@@ -47,13 +46,6 @@ if { $current_user_id == $user_id } {
 
 set portrait_image_url [export_vars -base ${subsite_url}shared/portrait-bits.tcl {user_id}]
 set export_edit_vars   [export_vars {user_id return_url}]
-
-if {![person::person_p -party_id $user_id]} {
-    set return_code "no_user"
-    set context [list "Account Unavailable"]
-    ad_return_template
-    return
-}
 
 set person [person::get -person_id $user_id]
 set first_names [dict get $person first_names]
