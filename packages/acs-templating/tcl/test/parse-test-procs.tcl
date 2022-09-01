@@ -144,6 +144,21 @@ aa_register_case \
             [regexp {@} $result]
     }
 
+aa_register_case \
+    -cats {api smoke production_safe} \
+    -procs {
+        ::template::adp_parse_string
+    } \
+    adp_parse_string {
+
+        Test template::adp_parse_string
+
+    } {
+        set adp {2 + 2 = <%= [expr {2 + 2}] %> !!!}
+        aa_equals "Result is correct" \
+            [template::adp_parse_string $adp] {2 + 2 = 4 !!!}
+    }
+
 
 # Local variables:
 #    mode: tcl
