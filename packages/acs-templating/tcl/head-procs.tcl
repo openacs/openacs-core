@@ -773,7 +773,7 @@ ad_proc -private template::head::require_csp {
     }
 }
 
-ad_proc template::head::prepare_multirows {} {
+ad_proc -private template::head::prepare_multirows {} {
     Generate multirows for meta, css, scripts
     Called only from blank-master.tcl
 } {
