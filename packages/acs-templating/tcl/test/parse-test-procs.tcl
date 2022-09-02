@@ -201,6 +201,9 @@ aa_register_case \
         template::add_confirm_handler
         template::add_event_listener
         template::add_refresh_on_history_handler
+        template::get_body_event_handlers
+        template::prepare_body_script_multirow
+        template::multirow
     } \
     templates_and_scripts {
 
