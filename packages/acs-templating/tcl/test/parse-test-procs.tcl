@@ -305,6 +305,12 @@ aa_register_case \
         aa_equals "Page contains exactly 11 scripts (body handlers are grouped together)" \
             [regsub -all "<script" $page {} _] 11
 
+        aa_true "There is a nonce declaration in the page " [regexp {nonce="\w*"} $page nonce]
+        if {[info exists nonce]} {
+            aa_equals "All nonces on the page are the same, one per script" \
+                [regsub -all $nonce $page {} _] 11
+        }
+
         aa_equals "Page contains only 1 handler per identifier" \
             [regsub -all __template::add_body_handler_script\[^2\] $page {} _] 1
 
