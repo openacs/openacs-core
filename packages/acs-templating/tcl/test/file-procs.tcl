@@ -88,37 +88,6 @@ aa_register_case -cats {
         set file_name afile
 
         #
-        # Here we send an unsafe tmpfile using a urlencoded request.
-        #
-        aa_section "- EVIL - Send an unsafe tmpfile using a urlencoded request."
-
-        set tmpfile [ad_tmpnam]/inafolder/test.txt
-        file mkdir [file dirname $tmpfile]
-        set wfd [open $tmpfile w]
-        puts $wfd aaaa
-        close $wfd
-
-        aa_true "Tmpfile '$tmpfile' exists" [file exists $tmpfile]
-
-        set d [::acs::test::form_reply \
-                   -last_request $d \
-                   -form $form \
-                   -update [list \
-                                upload_file $file_name \
-                                upload_file.tmpfile $tmpfile \
-                                upload_file.content-type text/plain \
-                                title $file_name \
-                                description $file_name]]
-
-        aa_true "Tmpfile '$tmpfile' still exists" [file exists $tmpfile]
-
-        #
-        # Here we expect 200 because the file does not count as sent.
-        #
-        acs::test::reply_has_status_code $d 200
-
-
-        #
         # Here we send an unsafe tmpfile using the 3 elements list
         # format.
         #

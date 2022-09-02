@@ -1211,28 +1211,59 @@ namespace eval acs::test {
             set form_content [dict remove $form_content {*}$remove]
             ns_log notice "DEBUG: after removing <$remove> from <$form_content>"
         }
+
+        #
+        # Update the values coming from the form with our values.
+        #
         foreach {att value} $update {
-            dict set form_content $att $value
+            if {[regexp {^(.*)\.(tmpfile|content-type)$} $att _ fieldname type]} {
+                #
+                # This parameter is the attribute of a file.
+                #
+                lappend files($fieldname) $type $value
+            } else {
+                #
+                # This is a normal parameter
+                #
+                dict set form_content $att $value
+            }
         }
-        #ns_log notice "final form_content $form_content"
+
         #
-        # Transform the dict into export format. Since export_vars
-        # will skip all names containing a ":", such as
-        # "formbutton:ok", we do this "manually".
+        # Cleanup all form parameters that will be sent as files
         #
-        set export {}
-        foreach {att value} $form_content {
-            lappend export [ad_urlencode_query $att]=[ad_urlencode_query $value]
+        set form_content [dict remove $form_content {*}[array names files]]
+
+        #
+        # Now take all of the parameters that are files and build up
+        # the list to pass to the payload creation.
+        #
+        set fs {}
+        foreach {fieldname attrs} [array get files] {
+            if {![dict exists $attrs tmpfile]} {
+                error "'$fieldname' looks like a file upload, but no .tmpfile was specified"
+            }
+            set f [list \
+                       fieldname $fieldname \
+                       file [dict get $attrs tmpfile]]
+            if {[dict exists $attrs content_type]} {
+                lappend f mime_type [dict get $attrs content_type]
+            }
+            lappend fs $f
         }
-        set body [join $export &]
-        ns_log notice "body=$body"
+
+        set payload [util::http::post_payload \
+                         -files $fs \
+                         -formvars_list $form_content]
         #
         # Send the POST request
         #
         return [http \
-                    -user_id $user_id -last_request $last_request \
-                    -method POST -body $body \
-                    -headers {Content-Type application/x-www-form-urlencoded} \
+                    -user_id $user_id \
+                    -last_request $last_request \
+                    -method POST \
+                    -body [dict get $payload payload] \
+                    -headers [ns_set array [dict get $payload headers]] \
                     $url]
     }
 
