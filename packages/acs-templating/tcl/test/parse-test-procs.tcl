@@ -302,22 +302,25 @@ aa_register_case \
 
         set page [template::adp_include /packages/acs-templating/lib/body_scripts {}]
 
-        aa_true "Page contains script tags" \
-            {[string first "<script" $page] >= 0}
+        aa_equals "Page contains exactly 11 scripts (body handlers are grouped together)" \
+            [regsub -all "<script" $page {} _] 11
+
+        aa_equals "Page contains only 1 handler per identifier" \
+            [regsub -all __template::add_body_handler_script\[^2\] $page {} _] 1
 
         foreach expected {
             __template::add_body_handler_event
             __template::add_body_handler_script
             __template::add_body_handler_event2
             __template::add_body_handler_script2
-            __template::add_body_script_charset
-            __template::add_body_script_crossorigin
-            __template::add_body_script_integrity
+            {charset="__template::add_body_script_charset"}
+            {crossorigin="__template::add_body_script_crossorigin"}
+            {integrity="__template::add_body_script_integrity"}
             __template::add_body_script_script
-            __template::add_body_script_src
-            __template::add_body_script_type
+            {src="__template::add_body_script_src"}
+            {type="__template::add_body_script_type"}
             __template::add_confirm_handler_event
-            __template::add_confirm_handler_message
+            "if (!confirm(`__template::add_confirm_handler_message`)) \{"
             __template::add_confirm_handler_id
             __template::add_confirm_handler_CSSclass
             __template::add_confirm_handler_formfield1
