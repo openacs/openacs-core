@@ -208,6 +208,14 @@ aa_register_case \
 
     } {
         #
+        # Other tests might already have set handlers on the
+        # page. Let's count them beforehand.
+        #
+        template::get_body_event_handlers
+        template::prepare_body_script_multirow
+        set starting_body_scripts [template::multirow size body_scripts]
+
+        #
         # Note: we use placeholders instead of real values to better
         # find them in the output.
         #
@@ -299,16 +307,15 @@ aa_register_case \
 
         template::add_refresh_on_history_handler
 
-
         set page [template::adp_include /packages/acs-templating/lib/body_scripts {}]
 
         aa_equals "Page contains exactly 11 scripts (body handlers are grouped together)" \
-            [regsub -all "<script" $page {} _] 11
+            [regsub -all "<script" $page {} _] [expr {$starting_body_scripts + 11}]
 
         aa_true "There is a nonce declaration in the page " [regexp {nonce="\w*"} $page nonce]
         if {[info exists nonce]} {
             aa_equals "All nonces on the page are the same, one per script" \
-                [regsub -all $nonce $page {} _] 11
+                [regsub -all $nonce $page {} _] [expr {$starting_body_scripts + 11}]
         }
 
         aa_equals "Page contains only 1 handler per identifier" \
