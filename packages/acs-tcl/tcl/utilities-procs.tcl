@@ -2147,18 +2147,6 @@ ad_proc -public ad_ns_set_to_tcl_vars {
     }
 }
 
-ad_proc -public util_sets_equal_p { list1 list2 } {
-    Tests whether each unique string in list1 occurs as many
-    times in list1 as in list2 and vice versa (regardless of order).
-
-    @return 1 if the lists have identical sets and 0 otherwise
-
-    @author Peter Marklund
-} {
-    return [expr {[llength $list1] == [llength $list2] &&
-                  [lsort $list1] eq [lsort $list2]}]
-}
-
 ad_proc -public util_subset_p {
     list1
     list2
