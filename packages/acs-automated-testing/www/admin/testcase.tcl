@@ -96,7 +96,7 @@ set direct_testcase_procs ""
 set indirect_testcase_procs ""
 set var direct_testcase_procs
 foreach line [split [string trim $testcase_procs] \n] {
-    if {[string trim $line] eq ""} {
+    if {[string is space $line]} {
         set var indirect_testcase_procs 
     } else {
         append $var $line " "
