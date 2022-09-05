@@ -201,7 +201,7 @@ ad_proc -public lang::message::register {
     } else {
         set cols(sync_time) "null"
     }
-    if { [string trim $message] eq "" } {
+    if { [string is space $message] } {
         set cols(message) "null"
     } else {
         set cols(message) [db_map message]

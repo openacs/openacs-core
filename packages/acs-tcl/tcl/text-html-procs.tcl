@@ -46,7 +46,7 @@ ad_proc -private ad_text_cite_to_blockquote {text} {
                 #set doBlockquotes 1
                 append result $line \n
             }
-        } elseif {[string trim $line] eq ""} {
+        } elseif {[string is space $line]} {
             #set doBlockquotes 1
             append result $line \n
         } elseif {$doBlockquotes && [string range $line 0 0] eq ">"} {

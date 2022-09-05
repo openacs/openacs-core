@@ -720,7 +720,7 @@ ad_proc -public template::adp_parse_tags {HTML} {
 } {
     #
     #ns_log notice "adp_parse_tags BEGIN [info exists ::template::parse_list]: $HTML"
-    if {[string trim $HTML] eq ""} {
+    if {[string is space $HTML]} {
         return $HTML
     }
     set old_parse_list [expr {[info exists ::template::parse_list] ? $::template::parse_list : ""}]

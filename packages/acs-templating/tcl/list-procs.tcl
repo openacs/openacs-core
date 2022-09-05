@@ -762,13 +762,13 @@ ad_proc -public template::list::from_clauses {
 
     set result {}
 
-    if { [string trim "[lindex $list_properties(from_clauses) 0]"] ne "" && $comma_p && ![string match "left*" [string trim [lindex $list_properties(from_clauses) 0]]]} {
+    if { ![string is space [lindex $list_properties(from_clauses) 0]] && $comma_p && ![string match "left*" [string trim [lindex $list_properties(from_clauses) 0]]]} {
         append result ", "
     }
     set i 0
     foreach elm $list_properties(from_clauses) {
 
-        if {([string trim $elm] ne "" && ![string match "left*" [string trim $elm]])
+        if {(![string is space $elm] && ![string match "left*" [string trim $elm]])
             && ($comma_p || $i > 0)} {
             append results ","
         }
@@ -1678,13 +1678,10 @@ ad_proc -private template::list::prepare_filters {
         # Now generate selected_p, urls, add_urls
         foreach elm $filter_properties(values) {
 
-            # Set label and value from the list element
-            # We do an lrange here, otherwise values would be set wrong
-            # in case someone accidentally supplies a list with too many elements,
-            # because then the foreach loop would run more than once
-            foreach { label value count } [lrange $elm 0 2] {}
+            # Set label, value and count from the list element
+            lassign $elm label value count
 
-            if { [string trim $label] eq "" } {
+            if { [string is space $label] } {
                 set label $filter_properties(null_label)
             }
             switch -- $filter_properties(type) {
@@ -1831,7 +1828,7 @@ ad_proc -public template::list::render_filters {
                     # then the foreach loop would run more than once
                     foreach { label value count } [lrange $elm 0 2] {}
 
-                    if { [string trim $label] eq "" } {
+                    if { [string is space $label] } {
                         set label $filter_properties(null_label)
                     }
 
@@ -3381,7 +3378,7 @@ ad_proc -private template::list::prepare_filter_form {
                     # because then the foreach loop would run more than once
                     foreach { label value count } [lrange $elm 0 2] {}
 
-                    if { [string trim $label] eq "" } {
+                    if { [string is space $label] } {
                         set label $filter_properties(null_label)
                     }
                     lappend  options [list $label $value]

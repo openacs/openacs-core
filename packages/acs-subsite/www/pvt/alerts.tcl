@@ -20,7 +20,7 @@ set last_name   [dict get $user_info last_name]
 set email       [dict get $user_info email]
 set url         [dict get $user_info url]
 set full_name   [dict get $user_info name]
-if { [string trim $full_name] eq "" } {
+if { [string is space $full_name] } {
     set full_name "name unknown"
 }
 
