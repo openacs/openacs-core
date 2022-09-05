@@ -3336,7 +3336,7 @@ ad_proc -public util::find_all_files {
     return $files
 }
 
-ad_proc -public util::string_check_urlsafe {
+ad_proc -deprecated util::string_check_urlsafe {
     s1
 } {
     This proc accepts a string and verifies if it is url safe.
@@ -3344,6 +3344,10 @@ ad_proc -public util::string_check_urlsafe {
     - make sure there is no special characters except '-' or '_'
     Returns 1 if yes and 0 if not.
     Meant to be used in the validation section of ad_form.
+
+    DEPRECATED: this proc is not in use in upstream code as of
+    2022-09-5. It also looks as if this will return true when a string
+    is NOT safe.
 } {
     return [regexp {[<>:\"|/@\#%&+\\ ]} $s1]
 }
