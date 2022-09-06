@@ -90,7 +90,7 @@ if {$combine_method eq "any"} {
 if { ![info exists passthrough] } {
     set passthrough_parameters ""
 } else {
-    set passthrough_parameters "[export_entire_form_as_url_vars $passthrough]"
+    set passthrough_parameters [export_vars -url -formvars $passthrough]
 }
 
 

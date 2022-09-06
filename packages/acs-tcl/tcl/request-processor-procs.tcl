@@ -695,7 +695,7 @@ ad_proc -private rp_filter { why } {
         if { $host_header ne "" && $host_no_port ne $desired_host_no_port  } {
             set query [ns_getform]
             if { $query ne "" } {
-                set query "?[export_entire_form_as_url_vars]"
+                set query ?[export_vars -url -entire_form]
             }
             ad_returnredirect -allow_complete_url "[ns_conn location][ns_conn url]$query"
             return filter_return
@@ -877,7 +877,7 @@ ad_proc -private rp_report_error {
         #
         set message $::errorInfo
     }
-    set error_url "[ad_url][ad_conn url]?[export_entire_form_as_url_vars]"
+    set error_url [ad_url][ad_conn url]?[export_vars -url -entire_form]
     set error_file [ad_conn file]
     set prev_url [util::get_referrer -trusted]
     set feedback_id [db_nextval acs_object_id_seq]

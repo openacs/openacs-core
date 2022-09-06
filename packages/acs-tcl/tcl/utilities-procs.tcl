@@ -416,6 +416,7 @@ ad_proc -public export_vars {
     {-exclude {}}
     {-override {}}
     {-set {}}
+    {-formvars {}}
     {vars {}}
 } {
 
@@ -597,9 +598,16 @@ ad_proc -public export_vars {
                            ad_urlencode_url proc
 
     @param set a ns_set that we want to export together with our
-               variables. It has no effect when also the 'entire_form'
+               variables. It has no effect when also the '-entire_form'
                flag is specified and will otherwise behave as if the
                current request form data was the supplied ns_set.
+
+    @param formvars a list of parameters that will be looked up into
+                    the current request and exported. Won't have any
+                    effect if '-entire_form' or '-set' are specified
+                    and will otherwise behave as if the current
+                    request form data was a subset of the whole form
+                    containing only the selected variables.
 
     @author Lars Pind (lars@pinds.com)
     @creation-date December 7, 2000
@@ -631,10 +639,29 @@ ad_proc -public export_vars {
     set noprocessing_vars [list]
 
     if { $entire_form_p } {
+        #
+        # We are exporting all of the request's variables.
+        #
         set the_form [ns_getform]
     } elseif { $set ne "" } {
+        #
+        # We are exporting a custom ns_set
+        #
         set the_form $set
+    } elseif { $formvars ne "" } {
+        #
+        # We are exporting a subset of the request's variables.
+        #
+        set the_form [ns_set create]
+        foreach var $formvars {
+            if {[ns_queryexists $var]} {
+                ns_set put $the_form $var [ns_queryget $var]
+            }
+        }
     } else {
+        #
+        # We won't export any ns_set
+        #
         set the_form ""
     }
 
@@ -973,7 +1000,7 @@ ad_proc -deprecated export_ns_set_vars {
 }
 
 
-ad_proc -public export_entire_form_as_url_vars {
+ad_proc -deprecated export_entire_form_as_url_vars {
     {vars_to_passthrough ""}
 } {
     export_vars is now the preferred interface.
@@ -1013,7 +1040,7 @@ ad_proc -public util_get_current_url {} {
 
     set query [ns_getform]
     if { $query ne "" } {
-        append url "?[export_entire_form_as_url_vars]"
+        append url ?[export_vars -url -entire_form]
     }
 
     return $url
