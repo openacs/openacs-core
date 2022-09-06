@@ -199,12 +199,19 @@ ad_proc util::unzip {
     exec $unzipCmd {*}$extra_options [expr {$overwrite_p ? "-o" : "-n"}] $source -d $destination
 }
 
-ad_proc util_report_library_entry {
+ad_proc -deprecated util_report_library_entry {
     {extra_message ""}
 } {
     Should be called at beginning of private Tcl library files so
     that it is easy to see in the error log whether or not
     private Tcl library files contain errors.
+
+    DEPRECATED: this proc is a leftover from the past, OpenACS does
+    inform about libraries being loaded in the logfile. If one needs a
+    special statement for debugging purposes, a custom ns_log oneliner
+    will do.
+
+    @see ns_log
 } {
     set tentative_path [info script]
     regsub -all -- {/\./} $tentative_path {/} scrubbed_path
