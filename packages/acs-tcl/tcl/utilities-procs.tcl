@@ -1027,9 +1027,14 @@ ad_proc -deprecated export_entire_form_as_url_vars {
     }
 }
 
-ad_proc -public util_get_current_url {} {
+ad_proc -deprecated util_get_current_url {} {
     Returns a URL for re-issuing the current request, with query variables.
     If a form submission is present, that is converted into query vars as well.
+
+    DEPRECATED: ad_return_url is a complete replacement for this api
+    that also allows better control over the behavior.
+
+    @see ad_return_url
 
     @return URL for the current page
 
