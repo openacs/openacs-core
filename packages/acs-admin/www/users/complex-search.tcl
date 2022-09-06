@@ -245,7 +245,7 @@ db_foreach user_search_admin $query {
 
 set user_search:rowcount $rowcount
 
-set export_authorize [export_ns_set_vars {url} {only_authorized_p}]
+set export_authorize [export_vars -url -entire_form -exclude {only_authorized_p}]
 
 # Local variables:
 #    mode: tcl

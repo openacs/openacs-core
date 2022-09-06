@@ -415,6 +415,7 @@ ad_proc -public export_vars {
     {-anchor}
     {-exclude {}}
     {-override {}}
+    {-set {}}
     {vars {}}
 } {
 
@@ -595,6 +596,11 @@ ad_proc -public export_vars {
                            <code>base</code> option will be encoded by
                            ad_urlencode_url proc
 
+    @param set a ns_set that we want to export together with our
+               variables. It has no effect when also the 'entire_form'
+               flag is specified and will otherwise behave as if the
+               current request form data was the supplied ns_set.
+
     @author Lars Pind (lars@pinds.com)
     @creation-date December 7, 2000
 } {
@@ -626,11 +632,17 @@ ad_proc -public export_vars {
 
     if { $entire_form_p } {
         set the_form [ns_getform]
-        # ns_getform will return the empty string outside a connection
-        if { $the_form ne "" } {
-            foreach {varname varvalue} [ns_set array $the_form] {
-                lappend noprocessing_vars [list $varname $varvalue]
-            }
+    } elseif { $set ne "" } {
+        set the_form $set
+    } else {
+        set the_form ""
+    }
+
+    # Note that ns_getform will return the empty string outside a
+    # connection.
+    if { $the_form ne "" } {
+        foreach {varname varvalue} [ns_set array $the_form] {
+            lappend noprocessing_vars [list $varname $varvalue]
         }
     }
 
@@ -918,7 +930,7 @@ ad_proc -deprecated export_entire_form {} {
     return $hidden
 }
 
-ad_proc export_ns_set_vars {
+ad_proc -deprecated export_ns_set_vars {
     {format "url"}
     {exclusion_list ""}
     {setid ""}
