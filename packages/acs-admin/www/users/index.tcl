@@ -19,7 +19,7 @@ set context [list "Users"]
 db_1row users_n_users {}
 db_1row users_deleted_users {}
 
-set n_users [util_commify_number $n_users]
+set n_users [lc_numeric $n_users]
 set last_registration [lc_time_fmt $last_registration "%q"]
 
 set groups "<option value='' selected>--</option>\n"

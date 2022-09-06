@@ -809,31 +809,31 @@ aa_register_case \
 
 aa_register_case \
     -cats {api smoke production_safe} \
-    -procs util_commify_number \
-    util__commify_number {
+    -procs lc_numeric \
+    lc__commify_number {
 
-        Test util_commify_number
+        Test lc_numeric
 
         @creation-date 2018-09-18
         @author Héctor Romojaro <hector.romojaro@gmail.com>
 } {
-    aa_equals "Empty value" [util_commify_number {}] {}
-    aa_equals "0" [util_commify_number 0] {0}
-    aa_equals "0.0" [util_commify_number 0.0] {0.0}
-    aa_equals ".0" [util_commify_number .0] {.0}
-    aa_equals "100" [util_commify_number 100] {100}
-    aa_equals "1000" [util_commify_number 1000] {1,000}
-    aa_equals "1000000" [util_commify_number 1000000] {1,000,000}
-    aa_equals "1000000000" [util_commify_number 1000000000] {1,000,000,000}
-    aa_equals "1000000000.0002340" [util_commify_number 1000000000.0002340] {1,000,000,000.0002340}
-    aa_equals "-0" [util_commify_number -0] {-0}
-    aa_equals "-.0" [util_commify_number -.0] {-.0}
-    aa_equals "-.0000" [util_commify_number -.0000] {-.0000}
-    aa_equals "-100" [util_commify_number -100] {-100}
-    aa_equals "-1000" [util_commify_number -1000] {-1,000}
-    aa_equals "-1000000" [util_commify_number -1000000] {-1,000,000}
-    aa_equals "-1000000000" [util_commify_number -1000000000] {-1,000,000,000}
-    aa_equals "-1000000000.0002340" [util_commify_number -1000000000.0002340] {-1,000,000,000.0002340}
+    aa_equals "Empty value" [lc_numeric {} "" en_US] {}
+    aa_equals "0" [lc_numeric 0 "" en_US] {0}
+    aa_equals "0.0" [lc_numeric 0.0 "" en_US] {0.0}
+    aa_equals ".0" [lc_numeric .0 "" en_US] {.0}
+    aa_equals "100" [lc_numeric 100 "" en_US] {100}
+    aa_equals "1000" [lc_numeric 1000 "" en_US] {1,000}
+    aa_equals "1000000" [lc_numeric 1000000 "" en_US] {1,000,000}
+    aa_equals "1000000000" [lc_numeric 1000000000 "" en_US] {1,000,000,000}
+    aa_equals "1000000000.0002340" [lc_numeric 1000000000.0002340 "" en_US] {1,000,000,000.0002340}
+    aa_equals "-0" [lc_numeric -0 "" en_US] {-0}
+    aa_equals "-.0" [lc_numeric -.0 "" en_US] {-.0}
+    aa_equals "-.0000" [lc_numeric -.0000 "" en_US] {-.0000}
+    aa_equals "-100" [lc_numeric -100 "" en_US] {-100}
+    aa_equals "-1000" [lc_numeric -1000 "" en_US] {-1,000}
+    aa_equals "-1000000" [lc_numeric -1000000 "" en_US] {-1,000,000}
+    aa_equals "-1000000000" [lc_numeric -1000000000 "" en_US] {-1,000,000,000}
+    aa_equals "-1000000000.0002340" [lc_numeric -1000000000.0002340 "" en_US] {-1,000,000,000.0002340}
 }
 
 aa_register_case \

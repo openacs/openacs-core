@@ -76,7 +76,7 @@ db_1row select_segment_info {
     where map.segment_id = :segment_id
     and acs_permission.permission_p(map.party_id, :user_id, 'read')
 }
-set number_elements [util_commify_number $number_elements]
+set number_elements [lc_numeric $number_elements]
 
 set admin_p [permission::permission_p -object_id $segment_id -privilege "admin"]
 

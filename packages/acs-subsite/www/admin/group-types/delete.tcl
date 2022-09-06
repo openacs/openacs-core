@@ -85,13 +85,13 @@ if { $rel_types_depend_p } {
 
 set export_form_vars [export_vars -form {group_type return_url}]
 
-set groups_of_this_type [util_commify_number [db_string groups_of_this_type {
+set groups_of_this_type [lc_numeric [db_string groups_of_this_type {
     select count(o.object_id)
       from acs_objects o
      where o.object_type = :group_type
 }]]
 
-set relations_to_this_type [util_commify_number [db_string relations_to_this_type {
+set relations_to_this_type [lc_numeric [db_string relations_to_this_type {
     select count(r.rel_id)
       from acs_rels r
      where r.rel_type in (select t.rel_type

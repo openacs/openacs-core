@@ -1010,10 +1010,15 @@ ad_proc -public util_get_current_url {} {
 
 # putting commas into numbers (thank you, Michael Bryzek)
 
-ad_proc -public util_commify_number { num } {
+ad_proc -deprecated util_commify_number { num } {
     Returns the number with commas inserted where appropriate. Number can be
     positive or negative and can have a decimal point.
     e.g. -1465.98 => -1,465.98
+
+    DEPRECATED: this proc has been long superseded by lc_numeric,
+    which also supports different locales and formats.
+
+    @see lc_numeric
 } {
     while { 1 } {
         # Regular Expression taken from Mastering Regular Expressions (Jeff Friedl)
@@ -1032,6 +1037,13 @@ ad_proc -public util_report_successful_library_load {
     Should be called at end of private Tcl library files so that it is
     easy to see in the error log whether or not private Tcl library
     files contain errors.
+
+    DEPRECATED: this proc is a leftover from the past, OpenACS does
+    inform about libraries being loaded in the logfile. If one needs a
+    special statement for debugging purposes, a custom ns_log oneliner
+    will do.
+
+    @see ns_log
 } {
     set tentative_path [info script]
     regsub -all -- {/\./} $tentative_path {/} scrubbed_path
