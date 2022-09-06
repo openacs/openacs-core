@@ -235,6 +235,23 @@ aa_register_case -cats {
     }
 }
 
+aa_register_case -cats {
+    api
+    smoke
+} -procs {
+    acs_magic_object
+} magic_objects {
+    Test the magic objects api
+} {
+    db_foreach get_objects {
+        select object_id, name from acs_magic_objects
+    } {
+        aa_equals "Api retrieves the correct magic object_id for '$name'" \
+            [acs_magic_object $name] $object_id
+    }
+}
+
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
