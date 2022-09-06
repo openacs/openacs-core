@@ -270,6 +270,26 @@ aa_register_case -cats {
     }
 }
 
+aa_register_case -cats {
+    api
+    smoke
+} -procs {
+    db_table_exists
+    acs_object_type::get_table_name
+} object_type_table_name {
+    Test the acs_object_type::get_table_name api
+} {
+    db_foreach get_objects {
+        select object_type, table_name from acs_object_types
+    } {
+        aa_equals "Api retrieves the correct table name '$table_name' for object_type '$object_type'" \
+            [acs_object_type::get_table_name -object_type $object_type] $table_name
+        if {$table_name ne ""} {
+            aa_true "Table 'table_name' exists" [db_table_exists $table_name]
+        }
+    }
+}
+
 
 
 # Local variables:
