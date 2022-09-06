@@ -2202,50 +2202,36 @@ ad_proc -public util_subset_p {
         return 1
     }
 
-    set sorted_list1 [lsort $list1]
-    set sorted_list2 [lsort $list2]
+    #
+    # We count every element of list1.
+    #
+    foreach e $list1 {
+        incr l($e)
+    }
 
-    set len1 [llength $sorted_list1]
-    set len2 [llength $sorted_list2]
-
-    # Loop over list1 and list2 in sort order, comparing the elements
-
-    set index1 0
-    set index2 0
-    while { $index1 < $len1 && $index2 < $len2 } {
-        set elm1 [lindex $sorted_list1 $index1]
-        set elm2 [lindex $sorted_list2 $index2]
-        set compare [string compare $elm1 $elm2]
-
-        switch -exact -- $compare {
-            -1 {
-                # elm1 < elm2
-                # The first element in list1 is smaller than any element in list2,
-                # therefore this element cannot exist in list2, and therefore list1 is not a subset of list2
-                return 0
-            }
-            0 {
-                # A match, great, next element
-                incr index1
-                incr index2
-                continue
-            }
-            1 {
-                # elm1 > elm2
-                # Move to the next element in list2, knowing that this will be larger, and therefore
-                # potentially equal to the element in list1
-                incr index2
+    #
+    # For every element in list2 that is in list1, we uncount. We exit
+    # as soon as all of the elements in list1 are accounted for.
+    #
+    foreach e $list2 {
+        if {[info exists l($e)] && [incr l($e) -1] <= 0} {
+            unset l($e)
+            if {[array size l] == 0} {
+                break
             }
         }
     }
 
-    if { $index1 == $len1 } {
-        # We've reached the end of list1, finding all elements along the way, we're done
-        return 1
-    } else {
-        # One or more elements in list1 not found in list2
-        return 0
+    #
+    # Now we just make sure that no counter is left that is positive.
+    #
+    foreach {k v} [array get l] {
+        if {$v > 0} {
+            return 0
+        }
     }
+
+    return 1
 }
 
 ad_proc -public util_get_subset_missing {
