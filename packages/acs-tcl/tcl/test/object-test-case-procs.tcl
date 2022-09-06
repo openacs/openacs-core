@@ -251,6 +251,26 @@ aa_register_case -cats {
     }
 }
 
+aa_register_case -cats {
+    api
+    smoke
+} -procs {
+    acs_object_name
+} object_name {
+    Test the acs_object_name api
+} {
+    db_foreach get_objects {
+        select object_id, acs_object.name(object_id) as name
+        from acs_objects
+        order by object_id desc
+        fetch first 10 rows only
+    } {
+        aa_equals "Api retrieves the correct name '$name' for object_id '$object_id'" \
+            [acs_object_name $object_id] $name
+    }
+}
+
+
 
 # Local variables:
 #    mode: tcl
