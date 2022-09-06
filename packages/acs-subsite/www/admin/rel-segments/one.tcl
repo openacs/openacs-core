@@ -43,7 +43,7 @@ if { ![db_0or1row select_segment_properties {
              where role = r.role_two) as role_pretty_plural
       from rel_segments s, acs_rel_types r
      where s.segment_id = :segment_id
-       and s.rel_type = r.rel_type    
+       and s.rel_type = r.rel_type
 } -column_array props] } {
     ad_return_error \
         "Segment does not exist" \
