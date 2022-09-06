@@ -1599,29 +1599,45 @@ ad_proc -public ad_returnredirect {
     {-allow_complete_url:boolean}
     target_url
 } {
-    Write the HTTP response required to get the browser to redirect to a different page,
-    to the current connection. This does not cause execution of the current page, including serving
-    an ADP file, to stop. If you want to stop execution of the page, you should call ad_script_abort
-    immediately following this call.
+    Write the HTTP response required to get the browser to redirect to
+    a different page, to the current connection. This does not cause
+    execution of the current page, including serving an ADP file, to
+    stop. If you want to stop execution of the page, you should call
+    ad_script_abort immediately following this call.
 
     <p>
 
-    This proc is a replacement for ns_returnredirect, but improved in two important respects:
+    This proc is a replacement for ns_returnredirect, but improved in
+    two important respects:
     <ul>
     <li>
-    When the supplied target_url isn't complete, (e.g. /foo/bar.tcl or foo.tcl)
-    the prepended location part is constructed by looking at the HTTP 1.1 Host header.
+    When the supplied target_url isn't complete, (e.g. /foo/bar.tcl or
+    foo.tcl) the prepended location part is constructed by looking at
+    the HTTP 1.1 Host header.
     </li>
     <li>
-    If a URL relative to the current directory is supplied (e.g. foo.tcl)
-    it prepends location and directory.
+    If a URL relative to the current directory is supplied
+    (e.g. foo.tcl) it prepends location and directory.
     </li>
     </ul>
 
-    @param message A message to display to the user. See util_user_message.
-    @param html Set this flag if your message contains HTML. If specified, you're responsible for proper quoting
-    of everything in your message. Otherwise, we quote it for you.
-    @param allow_complete_url By default we disallow redirecting to URLs outside the current host. This is based on the currently set host header or the hostname in the config file if there is no host header. Set allow_complete_url if you are redirecting to a known safe external web site. This prevents redirecting to a site by URL query hacking.
+    @param message A message to display to the user. See
+                   util_user_message.
+
+    @param html Set this flag if your message contains HTML. If
+                specified, you're responsible for proper quoting of
+                everything in your message. Otherwise, we quote it for
+                you.
+
+    @param allow_complete_url By default we disallow redirecting to
+                              URLs outside the current host. This is
+                              based on the currently set host header
+                              or the hostname in the config file if
+                              there is no host header. Set
+                              allow_complete_url if you are
+                              redirecting to a known safe external web
+                              site. This prevents redirecting to a
+                              site by URL query hacking.
 
     @see util_user_message
     @see ad_script_abort
