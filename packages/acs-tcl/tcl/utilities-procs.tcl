@@ -1031,7 +1031,7 @@ ad_proc -deprecated util_commify_number { num } {
     return $num
 }
 
-ad_proc -public util_report_successful_library_load {
+ad_proc -deprecated util_report_successful_library_load {
     {extra_message ""}
 } {
     Should be called at end of private Tcl library files so that it is
