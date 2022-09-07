@@ -24,8 +24,14 @@ ad_proc -public ad_restrict_to_https {conn args why} {
     return "filter_return"
 }
 
-ad_proc -public ad_approval_system_inuse_p {} {
+ad_proc -deprecated ad_approval_system_inuse_p {} {
     Returns 1 if the system is configured to use and approval system.
+
+    DEPRECATED: this proc's utility was probably transitional and is
+    as of 2022-09-07 not used anywhere in the codebase. One can always
+    query the parameters directly in case.
+
+    @see parameter::get
 } {
     if {[parameter::get -parameter RegistrationRequiresEmailVerification] &&
         [parameter::get -parameter RegistrationRequiresApprovalP] } {
