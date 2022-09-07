@@ -221,6 +221,108 @@ aa_register_case \
         }
     }
 
+aa_register_case \
+    -procs {
+        acs_user::site_wide_admin_p
+        acs::test::user::create
+        acs_user::get_user_info
+        acs_user::demote_user
+        acs_user::erase_portrait
+        acs_user::flush_cache
+        acs_user::flush_user_info
+        acs_user::flush_portrait
+        person::flush_cache
+        acs_user::create_portrait
+        acs_user::promote_person_to_user
+        person::get_person_info
+        acs_user::update
+        acs_user::get_user_id_by_screen_name
+        acs_user::reject
+        acs_user::unapprove
+    } \
+    -cats {
+        smoke api
+    } demote_promote_a_user {
+        Test demoting of a user to a party/person and then promoting
+        it again to user. Take the chance to test some other api as
+        well.
+    } {
+        aa_run_with_teardown -rollback -test_code {
+            aa_section "Create user"
+            set user [acs::test::user::create -admin]
+            set user_id [dict get $user user_id]
+
+            aa_true "User '$user_id' exists" \
+                [llength [acs_user::get_user_info -user_id $user_id]]
+            aa_true "User '$user_id' is an SWA" \
+                [acs_user::site_wide_admin_p -user_id $user_id]
+
+            aa_section "Update the user's screen name"
+            set screen_name "___A crazy screen name"
+            acs_user::update -user_id $user_id \
+                -screen_name $screen_name
+            aa_equals "We can find the user by its screen name" \
+                [acs_user::get_user_id_by_screen_name \
+                     -screen_name $screen_name] $user_id
+            aa_equals "Screen name is consitent between apis" \
+                [dict get [acs_user::get_user_info -user_id $user_id] screen_name] \
+                $screen_name
+
+            aa_section "Reject user"
+            acs_user::reject -user_id $user_id
+            aa_equals "User was rejected" \
+                [dict get [acs_user::get_user_info -user_id $user_id] member_state] rejected
+            aa_section "Unapprove user"
+            acs_user::unapprove -user_id $user_id
+            aa_equals "User was rejected" \
+                [dict get [acs_user::get_user_info -user_id $user_id] member_state] "needs approval"
+
+            aa_section "Demote user"
+            acs_user::demote_user -user_id $user_id
+
+            aa_false "User '$user_id' does not exist" \
+                [llength [acs_user::get_user_info -user_id $user_id]]
+            aa_false "User '$user_id' is not an SWA" \
+                [acs_user::site_wide_admin_p -user_id $user_id]
+            aa_true "'$user_id' is still a person" \
+                [llength [person::get_person_info -person_id $user_id]]
+
+            aa_section "Promote user"
+            acs_user::promote_person_to_user -person_id $user_id
+
+            aa_true "User '$user_id' exists" \
+                [llength [acs_user::get_user_info -user_id $user_id]]
+            aa_false "User '$user_id' is still not an SWA" \
+                [acs_user::site_wide_admin_p -user_id $user_id]
+
+            aa_section "Add portrait, then demote again"
+            set tmpfile [ad_tmpnam]
+            set wfd [open $tmpfile w]
+            puts $wfd abcd
+            close $wfd
+            set portrait_id [acs_user::create_portrait -user_id $user_id \
+                                 -description "Some test portrait" \
+                                 -filename test.png \
+                                 -mime_type image/png \
+                                 -file $tmpfile]
+            aa_equals "We can retrieve the portrait" \
+                [acs_user::get_portrait_id -user_id $user_id] $portrait_id
+
+            acs_user::demote_user -user_id $user_id -delete_portrait
+
+            aa_false "User '$user_id' does not exist" \
+                [llength [acs_user::get_user_info -user_id $user_id]]
+            aa_false "User '$user_id' is not an SWA" \
+                [acs_user::site_wide_admin_p -user_id $user_id]
+            aa_true "'$user_id' is still a person" \
+                [llength [person::get_person_info -person_id $user_id]]
+            aa_equals "Portrait is gone" \
+                [acs_user::get_portrait_id -user_id $user_id] 0
+        }
+    }
+
+
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
