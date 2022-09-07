@@ -52,21 +52,18 @@ ad_proc -private ad_acs_require_basic_schemata {} {
 }
 
 ad_proc -public ad_acs_admin_node {} {
-
-    @return The node id of the ACS administration service if it is mounted, 0 otherwise.
-
+    @return The node id of the ACS administration service if it is
+            mounted, 0 otherwise.
 } {
-    # Obtain the id of the ACS Administration node.
-
-    # DRB: this used to say "and rownum = 1" but I've changed it to an SQL92 form
-    # that's ummm...portable!
-
-    return [db_string acs_admin_node_p {
-        select case when count(object_id) = 0 then 0 else 1 end
-        from site_nodes
-        where object_id = (select package_id
-                           from apm_packages
-                           where package_key = 'acs-admin')
+    #
+    # acs-admin is a singleton, so there is no chance that we have
+    # multiple instances of it. If we do, something is wrong with our
+    # setup.
+    #
+    return [db_string acs_admin_node {
+        select node_id from site_nodes n, apm_packages p
+        where n.object_id = p.package_id
+        and p.package_key = 'acs-admin'
     } -default 0]
 }
 
