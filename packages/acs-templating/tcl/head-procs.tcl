@@ -715,7 +715,7 @@ ad_proc -public template::add_footer {
     @param html      literal html to include in the page.  This parameter will
                      be ignored if a values has been supplied for src.
 
-    @see template::add_footer
+    @see template::add_header
 } {
     variable ::template::footers
 
