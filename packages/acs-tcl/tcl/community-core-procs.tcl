@@ -1526,6 +1526,12 @@ ad_proc -public acs_user::demote_user {
     #
     acs_user::flush_cache -user_id $user_id
 
+    #
+    # All user's direct permissions have been revoked, flush the
+    # permissions cache as well.
+    #
+    permission::cache_flush -party_id $user_id
+
     return
 }
 
