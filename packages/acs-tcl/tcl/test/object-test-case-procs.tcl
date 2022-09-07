@@ -290,6 +290,81 @@ aa_register_case -cats {
     }
 }
 
+aa_register_case -cats {
+    api
+    smoke
+} -procs {
+    acs_object_type_hierarchy
+    lang::util::localize
+    acs_object_type::supertypes
+} object_type_hierarchy {
+    Test the acs_object_type_hierarchy api
+} {
+    set object_type user
+    set supertypes [list $object_type {*}[acs_object_type::supertypes -subtype $object_type]]
+
+    aa_section "When object_type is specified"
+
+    aa_equals "When object_type is not empty, indent_string, indent_width and join string have no effect" \
+        [acs_object_type_hierarchy \
+             -object_type $object_type \
+             -indent_string __test_indent_string \
+             -indent_width 3 \
+             -join_string __test_join_string \
+             -additional_html __test_additional_html] \
+        [acs_object_type_hierarchy \
+             -object_type $object_type \
+             -indent_string __test_indent_string2 \
+             -indent_width 1000 \
+             -join_string __test_join_string2 \
+             -additional_html __test_additional_html]
+
+    set hierarchy [acs_object_type_hierarchy \
+                       -object_type $object_type \
+                       -additional_html __test_additional_html]
+    #aa_log [ns_quotehtml $hierarchy]
+    aa_true "Hierarchy is HTML" \
+        [ad_looks_like_html_p $hierarchy]
+    aa_true "Additional HTML was appended at the end of the output" \
+        [regexp {^.*__test_additional_html$} $hierarchy]
+
+    foreach h $supertypes {
+        set pretty_name [db_string q {
+            select pretty_name
+            from acs_object_types
+            where object_type = :h
+        }]
+        set pretty_name [lang::util::localize $pretty_name]
+        aa_true "Pretty name '$pretty_name' is in the output" \
+            {[string first $pretty_name $hierarchy] >= 0}
+
+        set href [export_vars -base ./one {{object_type $h}}]
+        aa_true "URL '$href' is in the output" \
+            {[string first $href $hierarchy] >= 0}
+    }
+
+    aa_section "When object_type is not specified"
+
+    set n_types [db_string q {select count(*) from acs_object_types}]
+    set indent_width 97
+    set hierarchy [acs_object_type_hierarchy \
+                       -indent_string __test_indent_string \
+                       -indent_width $indent_width \
+                       -join_string __test_join_string \
+                       -additional_html __test_additional_html]
+    aa_true "Hierarchy is HTML" \
+        [ad_looks_like_html_p $hierarchy]
+
+    aa_true "Additional HTML was appended at the end of the output" \
+        [regexp {^.*__test_additional_html$} $hierarchy]
+
+    aa_true "There is a multiple of indent_width indent_strings:" \
+        {[regsub -all __test_indent_string $hierarchy {} _] % $indent_width == 0}
+
+    aa_true "There are n_object_types -1 join strings" \
+        {[regsub -all __test_join_string $hierarchy {} _] == ($n_types - 1)}
+
+}
 
 
 # Local variables:
