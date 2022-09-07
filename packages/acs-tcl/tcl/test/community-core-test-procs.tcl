@@ -180,6 +180,47 @@ aa_register_case \
         }]
     }
 
+aa_register_case \
+    -procs {
+        acs_user::ScreenName
+    } \
+    -cats {smoke api} \
+    user_screen_name_conf \
+    {
+        Test acs_user::ScreenName api
+    } {
+        set screen_name [parameter::get \
+                             -parameter ScreenName \
+                             -package_id $::acs::kernel_id \
+                             -default "solicit"]
+        try {
+            aa_section "Valid values"
+            foreach v {"none" "solicit" "require"} {
+                parameter::set_value \
+                    -parameter ScreenName \
+                    -package_id $::acs::kernel_id \
+                    -value $v
+                aa_equals "Value is correct" \
+                    [acs_user::ScreenName] $v
+            }
+            aa_section "Invalid values"
+            foreach v {"balooney" "gorbige" 10000} {
+                parameter::set_value \
+                    -parameter ScreenName \
+                    -package_id $::acs::kernel_id \
+                    -value $v
+                aa_equals "Value is correct" \
+                    [acs_user::ScreenName] solicit
+            }
+        } finally {
+            # Cleanup
+            parameter::set_value \
+                -parameter ScreenName \
+                -package_id $::acs::kernel_id \
+                -value $screen_name
+        }
+    }
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
