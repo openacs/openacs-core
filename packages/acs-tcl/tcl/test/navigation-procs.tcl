@@ -243,6 +243,56 @@ aa_register_case \
     aa_equals "Context bar" [ns_quotehtml $response_body] [ns_quotehtml $context_barp]
 }
 
+aa_register_case \
+    -cats {api smoke production_safe} \
+    -procs {
+        ad_navbar
+        ad_choice_bar
+    } \
+    ad_html_bars {
+
+        Test procs that produce some HTML bar from a list of options.
+
+    } {
+        aa_section "ad_choice_bar"
+
+        set items {1 2 3 4}
+        set links {a b c d}
+        set values {}
+        aa_equals "With no values, proc returns nothing" \
+            [ad_choice_bar $items $links $values] ""
+
+        set items {1 2 3 4}
+        set links {a b c d}
+        set values {what ever we want to do}
+        set bar [ad_choice_bar $items $links $values]
+        aa_equals "The 'values' argument decides the number of elements" \
+            [regsub -all -- {</a>} $bar {} _] [llength $values]
+        foreach i $items l $links {
+            aa_true "'$i' was rendered" {[string first $i $bar] >= 0}
+            aa_true "'$l' was rendered" {[string first $l $bar] >= 0}
+        }
+
+        set items {1 2 3 4}
+        set links {a b c d}
+        set values {what ever we want to do}
+        set selected what
+        aa_true "The item corresponding to the selected value is emphasized" \
+            {[string first <strong>1</strong> [ad_choice_bar $items $links $values $selected]] >= 0}
+
+        aa_section "ad_navbar"
+
+        set items {{a 1} {b 2} {c 3} {d 4}}
+        set bar [ad_navbar {*}$items]
+        aa_equals "A link is generated for every item in the arguments" \
+            [regsub -all -- {</a>} $bar {} _] [llength $items]
+        foreach i $items {
+            lassign $i link label
+            aa_true "'$link' was rendered" {[string first $link $bar] >= 0}
+            aa_true "'$label' was rendered" {[string first $label $bar] >= 0}
+        }
+    }
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
