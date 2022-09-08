@@ -1445,6 +1445,7 @@ if { [apm_first_time_loading_p] } {
 }
 
 ad_proc -public ad_page_contract_filter {
+    -deprecated:boolean
     {-type filter}
     {-priority 1000}
     name
@@ -1516,6 +1517,8 @@ ad_proc -public ad_page_contract_filter {
 
     @param doc_string Standard documentation-string. Tell other programmers what your filter does.
 
+    @param deprecated used to flag a filter as deprecated
+
     @author Lars Pind (lars@pinds.com)
     @creation-date 25 July 2000
 } {
@@ -1573,11 +1576,13 @@ ad_proc -public ad_page_contract_filter {
     # so that when the filter proc is passed the name of a variable, the body of the proc
     # will have access to that variable as if the value had been passed.
 
+    set visibility [expr {$deprecated_p ? "-deprecated" : "-public"}]
+
     lassign $proc_args arg0 arg1 arg2
     if { $proc_args_len == 2 } {
-        ad_proc -public $proc_name [list $arg0 ${arg1}_varname] $doc_string "upvar \$${arg1}_varname $arg1\n$body"
+        ad_proc $visibility $proc_name [list $arg0 ${arg1}_varname] $doc_string "upvar \$${arg1}_varname $arg1\n$body"
     } else {
-        ad_proc -public $proc_name [list $arg0 ${arg1}_varname $arg2] $doc_string "upvar \$${arg1}_varname $arg1\n$body"
+        ad_proc $visibility $proc_name [list $arg0 ${arg1}_varname $arg2] $doc_string "upvar \$${arg1}_varname $arg1\n$body"
     }
 }
 
@@ -1844,6 +1849,8 @@ ad_page_contract_filter object_type { name object_id types } {
     The check will take the object_type hierarchy into account
     e.g. will always succeed if one of the types is "acs_object". In
     this case the filter will just behave as an existence check.
+
+    Example: some_user_id:object_type(user),notnull
 
 } {
     if { $types eq "" } {
