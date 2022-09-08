@@ -12,6 +12,8 @@ aa_register_case \
         acs_community_member_page
         acs_community_member_url
         acs_community_member_link
+        subsite::get_element
+        ad_admin_home
     } \
     user_links_api {
         Test the various procs that generate a community member URL.
@@ -69,4 +71,8 @@ aa_register_case \
         aa_true "Link '$link' contains the user name" \
             {[string first [person::name -person_id $user_id] $link] >= 0}
 
+        aa_section "Admin home URL"
+        aa_equals "The admin home URL is as expected" \
+            [ad_admin_home] [subsite::get_element -element url]admin
+        
     }
