@@ -17,9 +17,13 @@ ad_proc -public acs_message_p {
     }]
 }
 
-ad_page_contract_filter acs_message_id { name value } {
+ad_page_contract_filter -deprecated acs_message_id { name value } {
     Checks whether the value (assumed to be an integer) is the id
     of an already-existing OpenACS message.
+
+    DEPRECATED: OpenACS now has a generic filter object_type.
+
+    @see ad_page_contract_filter_proc_object_type
 } {
     # empty is okay (handled by notnull)
     if {$value eq ""} {
