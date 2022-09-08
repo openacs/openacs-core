@@ -345,7 +345,7 @@ ad_proc ad_db_select_widget {
     }
 }
 
-ad_proc ad_html_colors {} "Returns an array of HTML colors and names." {
+ad_proc -deprecated ad_html_colors {} "Returns an array of HTML colors and names." {
     return {
         { Black 0 0 0 }
         { Silver 192 192 192 }
@@ -366,7 +366,14 @@ ad_proc ad_html_colors {} "Returns an array of HTML colors and names." {
     }
 }
 
-ad_proc ad_color_widget_js {} "Returns JavaScript code necessary to use color widgets." {
+ad_proc -deprecated ad_color_widget_js {} {
+    Returns JavaScript code necessary to use color widgets.
+
+    DEPRECATED: HTML now has a native color widget that requires no
+    custom implementation.
+
+    @see https://developer.mozilla.org/en-US/docs/Web/HTML/Element/Input/color
+} {
     return {
 
         var adHexTupletValues = '0123456789ABCDEF';
@@ -426,12 +433,17 @@ ad_proc ad_color_widget_js {} "Returns JavaScript code necessary to use color wi
     }
 }
 
-ad_proc ad_color_widget {
+ad_proc -deprecated ad_color_widget {
     name
     default
     { use_js 0 }
 } {
     Returns a color selection widget, optionally using JavaScript. Default is a string of the form '0,192,255'.
+
+    DEPRECATED: HTML now has a native color widget that requires no
+    custom implementation.
+
+    @see https://developer.mozilla.org/en-US/docs/Web/HTML/Element/Input/color
 } {
     set out {<table cellspacing="0" cellpadding="0"><tr><td>}
     append out [subst {<select name="$name.list"}]
@@ -485,8 +497,13 @@ ad_proc ad_color_widget {
     return $out
 }
 
-ad_proc ad_process_color_widgets args {
+ad_proc -deprecated ad_process_color_widgets args {
     Sets variables corresponding to the color widgets named in $args.
+
+    DEPRECATED: HTML now has a native color widget that requires no
+    custom implementation.
+
+    @see https://developer.mozilla.org/en-US/docs/Web/HTML/Element/Input/color
 } {
     foreach field $args {
         upvar $field var
