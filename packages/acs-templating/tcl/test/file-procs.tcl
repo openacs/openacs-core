@@ -28,15 +28,7 @@ aa_register_case -cats {
 } {
     set endpoint_name /acs-templating-test-template-widget-file
 
-    set url [parameter::get \
-                 -package_id [apm_package_id_from_key acs-automated-testing] \
-                 -parameter TestURL \
-                 -default ""]
-    if {$url eq ""} {
-        set url [ns_conn location]
-    }
-    set urlInfo [ns_parseurl $url]
-    set url ${url}${endpoint_name}
+    set url [acs::test::url]${endpoint_name}
 
     set script {
         set ::template::parse_level 0

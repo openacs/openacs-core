@@ -16,15 +16,7 @@ aa_register_case -cats {
 } {
     set endpoint_name /acs-templating-test-ad-return-exception-template
 
-    set url [parameter::get \
-                 -package_id [apm_package_id_from_key acs-automated-testing] \
-                 -parameter TestURL \
-                 -default ""]
-    if {$url eq ""} {
-        set url [ns_conn location]
-    }
-    set urlInfo [ns_parseurl $url]
-    set url ${url}${endpoint_name}
+    set url [acs::test::url]${endpoint_name}
 
     try {
         ns_register_proc GET $endpoint_name {

@@ -32,19 +32,7 @@ aa_register_case \
                     }
                 }
 
-                #
-                # Check, if a testURL was specified in the config file
-                #
-                # ns_section ns/server/${server}/acs/acs-automated-testing
-                #         ns_param TestURL http://127.0.0.1:8080/
-                #
-                set url [parameter::get \
-                             -package_id [apm_package_id_from_key acs-automated-testing] \
-                             -parameter TestURL  -default ""]
-                if {$url eq ""} {
-                    set url [ns_conn location]
-                }
-                set url "$url/$test_url"
+                set url [acs::test::url]/${test_url}
 
                 # This test strictly requires a cookie-based
                 # authentication, and not e.g. a test authentication

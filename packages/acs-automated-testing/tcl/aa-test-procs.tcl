@@ -1267,6 +1267,29 @@ namespace eval acs::test {
                     $url]
     }
 
+    ad_proc -public ::acs::test::url {} {
+        @return the test URL representing our system for testing. This
+        would normally look like the output of ns_conn location,
+        unless it was overridden via the TestURL parameter in this
+        package.
+    } {
+        #
+        # Check, if a testURL was specified in the config file
+        #
+        # ns_section ns/server/${server}/acs/acs-automated-testing
+        #         ns_param TestURL http://127.0.0.1:8080/
+        #
+        set url [parameter::get \
+                     -package_id [apm_package_id_from_key acs-automated-testing] \
+                     -parameter TestURL \
+                     -default ""]
+        if {$url eq ""} {
+            set url [ns_conn location]
+        }
+
+        return $url
+    }
+
     ad_proc -public ::acs::test::http {
         {-user_id 0}
         {-user_info ""}
@@ -1302,19 +1325,7 @@ namespace eval acs::test {
         #aa_log "HTTP: user_info [ns_quotehtml <$user_info>]"
         #aa_log "HTTP: start session_info [ns_quotehtml <$session>]"
 
-        #
-        # Check, if a testURL was specified in the config file
-        #
-        # ns_section ns/server/${server}/acs/acs-automated-testing
-        #         ns_param TestURL http://127.0.0.1:8080/
-        #
-        set url [parameter::get \
-                     -package_id [apm_package_id_from_key acs-automated-testing] \
-                     -parameter TestURL \
-                     -default ""]
-        if {$url eq ""} {
-            set url [ns_conn location]
-        }
+        set url [acs::test::url]
         set urlInfo [ns_parseurl $url]
         set address [dict get $urlInfo host]
         set url "$url/$request"
