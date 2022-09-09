@@ -23,6 +23,7 @@ aa_register_case \
         acs::test::reply_has_status_code
         acs::test::user::create
         acs::test::user::delete
+        acs::test::url
 
         aa_register_case
         aa_runseries
