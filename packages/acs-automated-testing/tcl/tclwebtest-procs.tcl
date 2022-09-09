@@ -24,7 +24,7 @@ ad_proc twt::do_request { page_url } {
 
     # Qualify page_url if necessary
     if { [regexp {^/} $page_url] } {
-        set page_url "[twt::server_url]${page_url}"
+        set page_url [acs::test::url]${page_url}
     }
 
     set retry_count 0
@@ -67,11 +67,16 @@ ad_proc twt::log { message } {
     ns_log Notice "twt::log - $message"
 }
 
-ad_proc twt::server_url {} {
+ad_proc -deprecated twt::server_url {} {
     Get the URL of the server (like ad_url) using the IP number of the server.
     Is more bulletproof than using the domain name.
 
     @author Peter Marklund
+
+    DEPRECATED: a more reliable api is now available that also allows
+    to override it via parameter.
+
+    @see acs::test::url
 } {
     set ip_address [ns_config ns/server/[ns_info server]/module/nssock Address]
 
@@ -132,7 +137,7 @@ ad_proc twt::user::login { email password {username ""}}  {
     tclwebtest::cookies clear
 
     # Request the start page
-    ::twt::do_request "[twt::server_url]/register"
+    ::twt::do_request [acs::test::url]/register
 
     # Login the user
     tclwebtest::form find ~n login
@@ -174,7 +179,7 @@ ad_proc twt::user::login { email password {username ""}}  {
 ad_proc twt::user::logout {} {
     tclwebtest for logging the user out.
 } {
-    twt::do_request "[twt::server_url]/register/logout"
+    twt::do_request [acs::test::url]/register/logout
 }
 
 # Local variables:
