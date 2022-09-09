@@ -325,6 +325,22 @@ aa_register_case \
         }
     }
 
+aa_register_case \
+    -cats {api smoke production_safe} \
+    -procs {
+        acs::test::visualize_control_chars
+    } \
+    visualize_control_chars {
+        Test the acs::test::visualize_control_chars api
+    } {
+        foreach {i o} {
+            "ciao  \n miao \\ bau\r" "ciao  \\n\n miao \\\\ bau\\r"
+            "I am  normal" "I am  normal"
+        } {
+            aa_equals "'$i' becomes '$o'" \
+                [acs::test::visualize_control_chars $i] $o
+        }
+    }
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
