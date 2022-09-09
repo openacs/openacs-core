@@ -239,6 +239,90 @@ aa_register_case \
         }
     }
 
+aa_register_case \
+    -cats {api smoke production_safe} \
+    -procs {
+        acs::test::get_form
+        acs::test::xpath::get_form
+        acs::test::form_get_fields
+        acs::test::form_is_empty
+        acs::test::xpath::get_text
+        acs::test::xpath::equals
+        acs::test::xpath::non_empty
+        acs::test::dom_html
+    } \
+    markup_parsing {
+        Test the markup parsing api
+    } {
+        aa_section "Markup with form"
+
+        set form {
+            <div><span></span><form> <input name="a" type="number" value="1">
+            <input name="a" type="number" value="1">
+            <br/>
+            <input name="b" type="button" value="Clicked">
+            <span>Test stuff</span>
+            <input name="c" type="date" value="2022-09-09">
+            <input name="d" type="radio" value="a">
+            <input name="d" type="radio" value="b">
+            <input name="d" type="radio" value="c">
+            <input name="e" type="radio" value="a" checked>
+            <input name="e" type="radio" value="b">
+            <input name="e" type="radio" value="c">
+            <input type="color" name="f" value="#ff0000">
+            <select name="g"><option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            </select>
+            <select name="h"><option value="1">1</option>
+            <option value="2" selected>2</option>
+            <option value="3">3</option>
+            </select></div>
+        }
+
+        set form [acs::test::get_form $form //form]
+
+        set fields [acs::test::form_get_fields $form]
+
+        aa_false "Form is not empty" \
+            [acs::test::form_is_empty $form]
+
+        foreach {k v} {
+            a 1
+            b Clicked
+            c 2022-09-09
+            e "a"
+            f "#ff0000"
+            h 2
+        } {
+            aa_equals "'$k' has value '$v' in the form" \
+                [dict get $fields $k] $v
+        }
+
+        foreach empty {d g} {
+            aa_false "Field '$empty' had no value and is not in the fields" \
+                [dict exists $fields $empty]
+        }
+
+        aa_section "Markup with no form"
+        set form {
+            <html>
+            <div><span>1</span></div>
+            <br/>
+            <span>Test stuff</span>
+            </html>
+        }
+
+        aa_true "Form is empty" \
+            [acs::test::form_is_empty [acs::test::get_form $form //form]]
+
+        acs::test::dom_html root $form {
+            aa_equals "We get the text from the second span" \
+                [acs::test::xpath::get_text $root "/html/span"] "Test stuff"
+            acs::test::xpath::equals $root {"/html/span" "Test stuff"}
+            acs::test::xpath::non_empty $root "/html/span"
+        }
+    }
 
 # Local variables:
 #    mode: tcl
