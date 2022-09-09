@@ -100,7 +100,7 @@ ad_proc -deprecated twt::server_url {} {
 #
 #########################
 
-ad_proc twt::user::create {
+ad_proc -deprecated twt::user::create {
     {-user_id {}}
     {-admin:boolean}
  } {
@@ -112,14 +112,18 @@ ad_proc twt::user::create {
             the additional keys email and password.
 
     @author Peter Marklund
+
+    @see acs::test::user::create
  } {
      return [acs::test::user::create -user_id $user_id -admin=$admin_p]
 }
 
-ad_proc twt::user::delete {
+ad_proc -deprecated twt::user::delete {
     {-user_id:required}
 } {
     Remove a test user.
+
+    @see ::acs::test::user_delete
 } {
     ::acs::test::user_delete -user_id $user_id
 }

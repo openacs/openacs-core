@@ -231,7 +231,7 @@ aa_register_case \
             
             # Make a site-wide admin user for this test
             # We use an admin to avoid permission issues
-            array set user_info [twt::user::create -admin -user_id $user_id]
+            array set user_info [acs::test::user::create -admin -user_id $user_id]
             
             # Login the user
             twt::user::login $user_info(email) $user_info(password)
@@ -292,7 +292,7 @@ aa_register_case \
             
         } -teardown_code {
             
-            twt::user::delete -user_id $user_id
+            acs::test::user::delete -user_id $user_id
         }
     }
 
