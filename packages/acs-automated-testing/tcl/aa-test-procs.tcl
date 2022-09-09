@@ -1648,11 +1648,7 @@ namespace eval acs::test {
     ad_proc -public ::acs::test::visualize_control_chars {lines} {
         Quotes and therefore makes visible control chars in input lines
     } {
-        set output $lines
-        regsub -all {\\} $output {\\\\} output
-        regsub -all {\r} $output {\\r} output
-        regsub -all {\n} $output "\\n\n" output
-        return $output
+        return [string map {\\ \\\\ \r \\r \n "\\n\n"} $lines]
     }
 
     ad_proc -public ::acs::test::dom_html {var html body} {
