@@ -139,6 +139,9 @@ ad_proc -public aa_stub {
 ad_proc -public aa_unstub {
     proc_name
 } {
+    Copies (back) a proc with "_unstubbed" suffix to its supposedly
+    unpostfixed original name.
+
     @author Peter Harper
     @creation-date 24 July 2001
 } {
@@ -889,6 +892,8 @@ ad_proc -public aa_log_result {
     test_result
     args
 } {
+    Log a test result
+
     @author Peter Harper
     @creation-date 24 July 2001
 } {
@@ -1652,6 +1657,14 @@ namespace eval acs::test {
     }
 
     ad_proc -public ::acs::test::dom_html {var html body} {
+        Parses HTML into a tDOM object and executes some code.
+
+        @param var the variable name that body can refer to as
+                   documentElement of the document (e.g. "root").
+        @param html the markup to be parsed.
+        @param body a tcl script executed in the caller scope that can
+                    assume the document to be pased and be available
+                    in "var".
     } {
         upvar $var root
         try {
