@@ -16,12 +16,15 @@ if {[namespace which ::try] eq ""} {
 }
 
 ad_proc -public ad_raise {exception {value ""}} {
-    @author rhs@mit.edu
-    @creation-date 2000-09-09
-
     Raise an exception.
 
     If you use this I will kill you.
+
+    Note: despite the warning, this proc has been used in
+    acs-authentication.
+
+    @author rhs@mit.edu
+    @creation-date 2000-09-09
 } {
     return -code error -errorcode [list "AD" "EXCEPTION" $exception] $value
 }
