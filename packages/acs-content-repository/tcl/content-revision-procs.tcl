@@ -775,8 +775,10 @@ ad_proc -public content::revision::write_xml {
 }
 
 
-ad_proc -public content::revision::update_attribute_index {
-} {
+ad_proc -deprecated content::revision::update_attribute_index {} {
+    DEPRECATED: the db api for this proc was deleted in 2005
+
+    @see https://github.com/openacs/openacs-core/commit/1cf48b17dd5faa0a2cbd988ab28d3127d3e25c61#diff-f580056c1afc98a3c8bda629878b7ea8
 } {
     return [package_exec_plsql content_revision update_attribute_index]
 }
