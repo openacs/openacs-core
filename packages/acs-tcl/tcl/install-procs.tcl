@@ -1113,12 +1113,14 @@ ad_proc -public install::xml::object_id::application-group { node } {
 }
 
 ad_proc -public install::xml::object_id::member-group { node } {
+    @return an object_id for a member group of a given package.
 } {
     set package_id [::install::xml::object_id::package $node]
     return [subsite::get_member_group -package_id $package_id]
 }
 
 ad_proc -public install::xml::object_id::admin-group { node } {
+    @return an object_id for an admin group of a given package.
 } {
     set package_id [::install::xml::object_id::package $node]
     return [subsite::get_admin_group -package_id $package_id]

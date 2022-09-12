@@ -1085,6 +1085,8 @@ ad_proc -public lang::message::update_description {
     {-message_key:required}
     {-description:required}
 } {
+    Update the description of a message key.
+
     @author Simon Carstensen
     @creation-date 2003-08-12
 } {
