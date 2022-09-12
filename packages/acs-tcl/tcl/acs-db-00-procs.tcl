@@ -6,6 +6,7 @@ ad_library {
     @creation-date 2022-02-07
 }
 
+
 namespace eval ::acs {}
 namespace eval ::acs::db {
     #
@@ -83,8 +84,16 @@ namespace eval ::acs::db {
     # Driver specific and Driver/backend specific hooks
     #
     ::nx::Class create ::acs::db::nsdb             -superclasses ::acs::db::Driver
-    ::nx::Class create ::acs::db::nsdb-postgresql  -superclasses {::acs::db::nsdb ::acs::db::postgresql}
-    ::nx::Class create ::acs::db::nsdb-oracle      -superclasses {::acs::db::nsdb ::acs::db::oracle}
+    ::nx::Class create ::acs::db::nsdb-postgresql  -superclasses {::acs::db::nsdb ::acs::db::postgresql} {
+        #
+        # Postgres specific backend
+        #
+    }
+    ::nx::Class create ::acs::db::nsdb-oracle      -superclasses {::acs::db::nsdb ::acs::db::oracle} {
+        #
+        # Oracle specific backend
+        #
+    }
 
     ::nx::Class create ::acs::db::nsdbi            -superclasses ::acs::db::Driver
     ::nx::Class create ::acs::db::nsdbi-postgresql -superclasses {::acs::db::nsdbi ::acs::db::postgresql}
