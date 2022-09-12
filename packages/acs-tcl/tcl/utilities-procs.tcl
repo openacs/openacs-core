@@ -3674,6 +3674,16 @@ ad_proc -public util::disk_cache_eval {
     -key:required
     -id:required
 } {
+    Evaluate an expression. When the acs-tcl.DiskCache parameter is
+    set, cache the result on the disk. If a cache already exists,
+    return the cached value.
+
+    @param call a tcl snippet executed in the caller scope.
+    @param key a key used to name the directory where the disk cache
+               will be stored.
+    @param id an id used to name the file where the disk cache will be
+              stored. The name will also depend on a hash of the
+              actual snippet.
 } {
     set cache [::parameter::get_from_package_key \
                  -package_key acs-tcl \
