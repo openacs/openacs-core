@@ -33,7 +33,8 @@ aa_register_case -cats {smoke production_safe} -procs {
             incr count
             if { [string is space [join $pa(main)]] &&
                  (![info exists pa(return)] || [string is space [join $pa(return)]]) &&
-                 (![info exists pa(param)] || [string is space [join $pa(param)]])
+                 (![info exists pa(param)] || [string is space [join $pa(param)]]) &&
+                 (![info exists pa(see)] || [string is space [join $pa(see)]])
              } {
                 if {[regexp "^([join $ignored_namespaces |])::.*\$" $p m]} {
                     set test_result warning
