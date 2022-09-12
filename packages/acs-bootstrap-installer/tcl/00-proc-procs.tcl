@@ -13,6 +13,11 @@ nsv_array set proc_source_file [list]
 if {![info exists ::acs::useNsfProc]} {
     ns_log notice "use fallback value for ::acs::useNsfProc"
     set ::acs::useNsfProc 0
+} else {
+    #
+    # Keep the initcmds of classes for documentation purposes.
+    #
+    ::nsf::configure keepcmds 1
 }
 if {![info exists ::acs::useNaviServer]} {
     ns_log notice "use fallback value for ::acs::useNaviServer"
