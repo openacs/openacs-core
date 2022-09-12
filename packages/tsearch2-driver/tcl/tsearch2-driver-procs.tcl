@@ -215,15 +215,9 @@ ad_proc -callback search::driver_info -impl tsearch2-driver {
     return [tsearch2::driver_info]
 }
 
-ad_proc -public tsearch2::driver_info {
-} {
-
+ad_proc -private tsearch2::driver_info {} {
     @author Dave Bauer (dave@thedesignexperience.org)
     @creation-date 2004-06-05
-
-    @return
-
-    @error
 } {
     return [list package_key tsearch2-driver version 2 automatic_and_queries_p 0  stopwords_p 1]
 }
