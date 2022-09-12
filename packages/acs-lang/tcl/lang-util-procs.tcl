@@ -859,6 +859,14 @@ ad_proc -public lang::util::edit_lang_key_url {
     -message:required
     {-package_key "acs-translations"}
 } {
+    Generates the URL to edit a message key.
+
+    @param message key with or without hashes, such as
+           \#acs-admin.Actions\# or acs-admin.Actions.
+    @param package_key must correspond to that in the message key.
+
+    @return a local URL or the empty string when no URL can be
+            generated.
 } {
     if { [regsub "^${package_key}." [string trim $message "\#"] {} message_key] } {
         set edit_url [export_vars -base "[apm_package_url_from_key "acs-lang"]admin/edit-localized-message" {
