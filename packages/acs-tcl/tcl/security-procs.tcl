@@ -875,7 +875,9 @@ ad_proc -private sec_update_user_session_info {
 }
 
 ad_proc security::cookie_name {plain_name} {
-
+    @return the supplied cookie name, but potentially prefixed
+            according to the NaviServer CookieNamespace parameter, to
+            make it unique for this particular domain.
 } {
     #
     # Setting a cookie always requires a connection.
