@@ -951,7 +951,18 @@ ad_proc -public template::multirow {
 }
 
 ad_proc -public template::url { command args } {
+    Maintains a ns_set of parameters that can be bulk converted to URL
+    parameters.
 
+    It is not clear if this api makes a lot of sense, many
+    alternatives exist to export parameters in various forms...
+
+    @see export_vars
+
+    @param command one of 'set_param *name* *value*' (set a
+           parameter), 'get_param *name* *default*' (get a parameter
+           value), or 'get_query' (export all parameters as URL
+           query).
 } {
 
     global __template_url_params
