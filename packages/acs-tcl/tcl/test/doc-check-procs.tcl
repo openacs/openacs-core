@@ -23,6 +23,7 @@ aa_register_case -cats {smoke production_safe} -procs {
     #
     set ignored_namespaces {
         nx
+        nsshell
     }
     foreach p [lsort -dictionary [nsv_array names api_proc_doc]] {
         array set pa [nsv_get api_proc_doc $p]
