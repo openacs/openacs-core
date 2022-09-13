@@ -1994,7 +1994,7 @@ ad_page_contract_filter clock { name value {formats "%Y-%m-%d"} } {
     }
 
     if {!$valid_p} {
-        set time(time) $value
+        set time(time) [ns_quotehtml $value]
         ad_complain [_  acs-tcl.lt_Invalid_time_timetime_2]
     }
 
