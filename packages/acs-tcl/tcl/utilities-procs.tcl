@@ -3661,9 +3661,17 @@ ad_proc -public util::disk_cache_flush {
     -key:required
     -id:required
 } {
+    Flushes the filesystem cache.
+
+    @param key the key used to name the directory where the disk cache
+               is stored.
+    @param id the id used to name the file where the disk cache is
+              stored.
+
+    @see util::disk_cache_eval
 } {
-    set dir [ad_tmpdir]/$key
-    foreach file [flib -nocomplain $dir/$id-*] {
+    set dir [ad_tmpdir]/oacs-cache/$key
+    foreach file [glob -nocomplain $dir/$id-*] {
         file delete -- $file
         ns_log notice "FLUSH file delete -- $file"
     }
