@@ -2969,7 +2969,8 @@ ad_proc util_background_exec {
 ad_proc util_background_running_p {
     {-name:required}
 } {
-
+    @return a boolean telling whether a background execution with this
+            name is currently running.
 } {
     set running_p [nsv_exists util_background_exec $name]
     return $running_p
