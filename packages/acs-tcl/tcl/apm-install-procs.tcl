@@ -1026,10 +1026,8 @@ ad_proc -public apm_package_install {
             -arg_list [list from_version_name $upgrade_from_version_name to_version_name $version(name)]
     }
 
-    if {[info commands ::acs::misc_cache] ne ""} {
-        # Flush the installed_p cache
-        acs::misc_cache flush apm_package_installed-$package_key
-    }
+    # Flush the installed_p cache
+    acs::try_cache acs::misc_cache flush apm_package_installed-$package_key
 
     return $version_id
 }
@@ -1242,7 +1240,8 @@ ad_proc -public apm_package_delete {
     }
 
     # Flush the installed_p cache
-    acs::misc_cache flush apm_package_installed-$package_key
+    acs::try_cache acs::misc_cache flush apm_package_installed-$package_key
+
     apm_callback_and_log $callback "<p>Done."
 }
 
