@@ -37,7 +37,7 @@ aa_register_case -cats {smoke production_safe} -procs {
                  (![info exists pa(param)] || [string is space [join $pa(param)]]) &&
                  (![info exists pa(see)] || [string is space [join $pa(see)]])
              } {
-                if {[regexp "^([join $ignored_namespaces |])::.*\$" $p m]} {
+                if {[regexp "^(\\s+Class ::)?([join $ignored_namespaces |])::.*\$" $p m]} {
                     set test_result warning
                 } else {
                     set test_result fail
