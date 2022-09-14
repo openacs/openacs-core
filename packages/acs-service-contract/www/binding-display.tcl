@@ -49,7 +49,16 @@ db_multirow -extend {check} binding binding {
 } {
     if {$impl_pl eq "TCL"} {
         regsub {^::} $impl_alias {} impl_alias
-        if {[namespace which ::$impl_alias] ne ""} {
+        if {[namespace which ::nsf::procs::$impl_alias] ne ""} {
+            #
+            # We are using NSF to define procs, so the arguments need
+            # to be looked up on the NSF alias.
+            #
+            append impl_alias "</b> {[info args ::nsf::procs::$impl_alias]}"
+        } elseif {[namespace which ::$impl_alias] ne ""} {
+            #
+            # This proc was defined via plain Tcl proc command.
+            #
             append impl_alias "</b> {[info args ::$impl_alias]}"
         } elseif {[llength $impl_alias] > 1
           && [namespace which ::xotcl::Object] ne ""
