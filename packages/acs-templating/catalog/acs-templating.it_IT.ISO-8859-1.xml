@@ -74,6 +74,7 @@
   <msg key="Invalid_email_format">Formato email non valido</msg>
   <msg key="Invalid_enumeration">Enumerazione non valida</msg>
   <msg key="Invalid_enumeration_duplicate_elements">Enumerazione non valida. &#34;%value%&#34; non contiene valori unici.</msg>
+  <msg key="Invalid_file">File non valido</msg>
   <msg key="Invalid_filename">Nome del file non valido</msg>
   <msg key="Invalid_integer">Intero non valido</msg>
   <msg key="Invalid_item">Oggetto non valido</msg>
