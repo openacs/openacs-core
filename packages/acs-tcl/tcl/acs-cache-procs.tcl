@@ -550,7 +550,10 @@ namespace eval ::acs {
         calls with this function.
 
     } {
-        if {[info commands $cache] ne ""} {
+        if {
+            [namespace which $cache] ne "" &&
+            [$cache info lookup methods $operation] ne ""
+        } {
             return [uplevel 1 [list $cache $operation {*}$args]]
         } else {
             if {$operation eq "eval"} {
