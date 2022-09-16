@@ -31,9 +31,9 @@ aa_register_case \
                     Authenticate {
                         description {
                             Validate this username/password combination, and return the result.
-                            Valid auth_status codes are 'ok', 'no_account', 'bad_password', 'auth_error', 'failed_to_connect'. 
+                            Valid auth_status codes are 'ok', 'no_account', 'bad_password', 'auth_error', 'failed_to_connect'.
                             The last, 'failed_to_connect', is reserved for communications or implementation errors.
-                            auth_message is a human-readable explanation of what went wrong, may contain HTML. 
+                            auth_message is a human-readable explanation of what went wrong, may contain HTML.
                             Only checked if auth_status is not ok.
                             Valid account_status codes are 'ok' and 'closed'.
                             account_message may be supplied regardless of account_status, and may contain HTML.
@@ -73,7 +73,7 @@ aa_register_case \
                     GetParameters auth::local::authentication::GetParameters
                 }
             }
-            
+
             set impl_id [acs_sc::impl::new_from_spec -spec $spec]
 
             acs_sc::impl::get -impl_id $impl_id -array impl
