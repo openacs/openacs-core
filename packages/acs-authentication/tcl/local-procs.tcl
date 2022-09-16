@@ -355,7 +355,6 @@ ad_proc -private auth::local::password::ResetPassword {
     username
     parameters
     {authority_id {}}
-    {new_password {}}
 } {
     Implements the ResetPassword operation of the auth_password
     service contract for the local account implementation.
@@ -372,11 +371,7 @@ ad_proc -private auth::local::password::ResetPassword {
     }
 
     # Reset the password
-    if { $new_password ne "" } {
-        set password $new_password
-    } else {
-        set password [ad_generate_random_string]
-    }
+    set password [ad_generate_random_string]
 
     ad_change_password $user_id $password
 
