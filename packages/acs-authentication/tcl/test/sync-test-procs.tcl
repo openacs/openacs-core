@@ -1041,6 +1041,7 @@ aa_register_case \
         ad_sign
         ad_get_signed_cookie_with_expr
         ad_verify_signature_with_expr
+        auth::sync::get_doc::http::GetDocument
     } \
     sync_http_get_document {
     Test the HTTPGet implementation of GetDocument service contract.
@@ -1082,9 +1083,10 @@ aa_register_case \
     -procs {
         acs_sc::invoke
         template::util::read_file
+        auth::sync::get_doc::file::GetDocument
     } \
     sync_file_get_document {
-    Test the HTTPGet implementation of GetDocument service contract.
+    Test the LocalFilesystem implementation of GetDocument service contract.
 } {
     set path "$::acs::rootdir/www/SYSTEM/dbtest.tcl"
 
@@ -1101,6 +1103,37 @@ aa_register_case \
     aa_true "result.doc_message is empty" {$result(doc_message) eq ""}
     aa_equals "result.document is 'success'" $result(document) [template::util::read_file $path]
 }
+
+aa_register_case \
+    -cats {api web} \
+    -procs {
+        auth::sync::get_doc::http::GetParameters
+        auth::sync::get_doc::file::GetParameters
+    } \
+    sync_get_parameters {
+
+        Test the HTTPGet and LocalFilesystem implementations of
+        GetParameter service contract.
+
+    } {
+        set result [acs_sc::invoke \
+                        -error \
+                        -contract auth_sync_retrieve \
+                        -impl HTTPGet \
+                        -operation GetParameters]
+
+        aa_equals "Impl 'HTTPGet' parameters are ok" \
+            [lsort [dict keys $result]] {IncrementalURL SnapshotURL}
+
+        set result [acs_sc::invoke \
+                        -error \
+                        -contract auth_sync_retrieve \
+                        -impl LocalFilesystem \
+                        -operation GetParameters]
+
+        aa_equals "Impl 'LocalFilesystem' parameters are ok" \
+            [lsort [dict keys $result]] {IncrementalPath SnapshotPath}
+    }
 
 aa_register_case \
     -cats {api web} \
