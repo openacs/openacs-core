@@ -753,6 +753,7 @@ aa_register_case \
         auth::authority::create
         auth::driver::set_parameter_value
         auth::sync::GetElements
+        auth::sync::process_doc::ims::GetElements
         auth::sync::job::get
         auth::sync::job::get_entries
         auth::sync::job::get_entry
@@ -1100,6 +1101,217 @@ aa_register_case \
     aa_true "result.doc_message is empty" {$result(doc_message) eq ""}
     aa_equals "result.document is 'success'" $result(document) [template::util::read_file $path]
 }
+
+aa_register_case \
+    -cats {api web} \
+    -procs {
+        auth::sync::process_doc::ims::GetAcknowledgementDocument
+        auth::sync::process_doc::ims::GetElements
+        auth::sync::process_doc::ims::GetParameters
+        auth::sync::process_doc::ims::ProcessDocument
+        auth::sync::job::start
+        auth::sync::job::create_entry
+    } \
+    auth_sync_process_ims_implementations {
+        Test the IMS_Enterprise_v_1p1 implementations of
+        auth_sync_process service contract.
+    } {
+        aa_section auth::sync::process_doc::ims::GetParameters
+
+        set parameters [acs_sc::invoke \
+                            -contract auth_sync_process \
+                            -impl IMS_Enterprise_v_1p1 \
+                            -operation GetParameters]
+
+        aa_equals "Parameters are correct" \
+            [dict keys $parameters] Elements
+
+        aa_section auth::sync::process_doc::ims::GetElements
+
+        aa_equals "Elements correspond to the 'Elements' value in the parameters" \
+            [acs_sc::invoke \
+                 -contract auth_sync_process \
+                 -impl IMS_Enterprise_v_1p1 \
+                 -operation GetElements \
+                 -call_args [list $parameters]] \
+            [dict get $parameters Elements]
+
+        aa_section auth::sync::process_doc::ims::GetAcknowledgementDocument
+
+        aa_run_with_teardown \
+            -rollback \
+            -test_code {
+                set user [acs::test::user::create]
+                set authority_id [acs_user::get \
+                                      -user_id [dict get $user user_id] \
+                                      -element authority_id]
+
+                set job_id [auth::sync::job::start \
+                                -authority_id $authority_id]
+
+                array set recstatus {
+                    insert 1
+                    update 2
+                    delete 3
+                }
+
+                aa_log "One insert operation"
+
+                auth::sync::job::create_entry \
+                    -job_id $job_id \
+                    -operation insert \
+                    -username [dict get $user username] \
+                    -success
+
+                set timestamp 12345
+
+                set doc ""
+                append doc {<?xml version="1.0" encoding="} [ns_config "ns/parameters" OutputCharset] {"?>} \n
+                append doc {<enterprise>} \n
+                append doc {  <properties>} \n
+                append doc {    <type>acknowledgement</type>} \n
+                append doc {    <datetime>} $timestamp {</datetime>} \n
+                append doc {  </properties>} \n
+
+                # Loop over successful actions
+                db_foreach select_success_actions {
+                    select entry_id,
+                    operation,
+                    username
+                    from   auth_batch_job_entries
+                    where  job_id = :job_id
+                    and    success_p = 't'
+                    order  by entry_id
+                } {
+                    if { [info exists recstatus($operation)] } {
+                        append doc {  <person recstatus="} $recstatus($operation)  {">} \n
+                        append doc {    <sourcedid><source>OpenACS</source><id>} $username {</id></sourcedid>} \n
+                        append doc {  </person>} \n
+                    }
+                }
+                append doc {</enterprise>} \n
+
+                aa_equals "Document was built as expected" \
+                    [acs_sc::invoke \
+                         -contract auth_sync_process \
+                         -impl IMS_Enterprise_v_1p1 \
+                         -operation GetAcknowledgementDocument \
+                         -call_args [list $job_id $doc [list]]] \
+                    $doc
+
+                aa_log "One invalid operation"
+
+                aa_true "With invalid operations, call returns an error" [catch {
+                    # This is in fact the call that will fail, because
+                    # of a check constraint on the 'operation' column.
+                    auth::sync::job::create_entry \
+                        -job_id $job_id \
+                        -operation broken \
+                        -username [dict get $user username] \
+                        -success
+
+                    # If the check was not there in the database, this
+                    # call would also fail, as the check is
+                    # implemented in tcl as well.
+                    acs_sc::invoke \
+                        -contract auth_sync_process \
+                        -impl IMS_Enterprise_v_1p1 \
+                        -operation GetAcknowledgementDocument \
+                        -call_args [list $job_id $doc [list]]
+                }]
+
+            }
+
+        aa_section auth::sync::process_doc::ims::ProcessDocument
+
+        aa_run_with_teardown \
+            -rollback \
+            -test_code {
+                # This user will be updated
+                set existing_user [acs::test::user::create]
+                set existing_user_id [dict get $existing_user user_id]
+                set authority_id [acs_user::get \
+                                      -user_id $existing_user_id \
+                                      -element authority_id]
+                set job_id [auth::sync::job::start \
+                                -authority_id $authority_id]
+
+                set existing_username [dict get $existing_user username]
+                set existing_first_names AAAA
+                set existing_last_name BBBB
+
+                # This user will be created
+                set new_user_username [db_string get_new_username {
+                    select max(username) || 'A' from users
+                }]
+                set new_user_email [string tolower $new_user_username@test.com]
+                set new_user_first_names AAAA
+                set new_user_last_name BBBB
+
+                # This user will be deleted
+                set rascal_user [acs::test::user::create]
+                set rascal_user_id [dict get $rascal_user user_id]
+                set rascal_username [dict get $rascal_user username]
+
+                set doc ""
+                append doc {<?xml version="1.0" encoding="} [ns_config "ns/parameters" OutputCharset] {"?>} \n
+                append doc {<enterprise>} \n
+                append doc {  <properties>} \n
+                append doc {    <type>acknowledgement</type>} \n
+                append doc {    <datetime>2022-09-19</datetime>} \n
+                append doc {  </properties>} \n
+
+                append doc {  <person recstatus="1">} \n
+                append doc {    <email>} $new_user_email {</email>} \n
+                append doc {    <name><n><given>} $new_user_first_names {</given><family>} $new_user_last_name {</family></n></name>} \n
+                append doc {    <sourcedid><source>OpenACS</source><id>} $new_user_username {</id></sourcedid>} \n
+                append doc {  </person>} \n
+
+                append doc {  <person recstatus="2">} \n
+                append doc {    <sourcedid><source>OpenACS</source><id>} $existing_username {</id></sourcedid>} \n
+                append doc {    <name><n><given>} $existing_first_names {</given><family>} $existing_last_name {</family></n></name>} \n
+                append doc {  </person>} \n
+
+                append doc {  <person recstatus="3">} \n
+                append doc {    <sourcedid><source>OpenACS</source><id>} $rascal_username {</id></sourcedid>} \n
+                append doc {  </person>} \n
+
+                append doc {</enterprise>} \n
+
+                acs_sc::invoke \
+                    -contract auth_sync_process \
+                    -impl IMS_Enterprise_v_1p1 \
+                    -operation ProcessDocument \
+                    -call_args [list $job_id $doc [list]]
+
+                set existing_user [acs_user::get -user_id $existing_user_id]
+                aa_equals "User '$existing_user_id' First Names was modified" \
+                    [dict get $existing_user first_names] $existing_first_names
+                aa_equals "User '$existing_user_id' Last Name was modified" \
+                    [dict get $existing_user last_name] $existing_last_name
+
+                set new_user_id [acs_user::get_by_username \
+                                     -authority_id $authority_id \
+                                     -username $new_user_username]
+                aa_true "New User was created" {$new_user_id ne ""}
+                if {$new_user_id ne ""} {
+                    set new_user [acs_user::get -user_id $new_user_id]
+                    aa_equals "User '$new_user_id' Email was modified" \
+                        [dict get $new_user email] $new_user_email
+                    aa_equals "User '$new_user_id' First Names was modified" \
+                        [dict get $new_user first_names] $new_user_first_names
+                    aa_equals "User '$new_user_id' Last Name was modified" \
+                        [dict get $new_user last_name] $new_user_last_name
+                }
+
+                aa_equals "Rascal user '$rascal_user_id' was banned" \
+                    [acs_user::get \
+                         -user_id $rascal_user_id \
+                         -element member_state] \
+                    banned
+            }
+
+    }
 
 # Local variables:
 #    mode: tcl
