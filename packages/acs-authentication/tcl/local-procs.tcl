@@ -481,12 +481,14 @@ ad_proc -private auth::local::registration::Register {
     # We don't create anything here, so creation always succeeds
     # And we don't check local account, either
 
+    set subsite_id [ad_conn subsite_id]
+
     # LARS TODO: Move this out of the local driver and into the auth framework
     # Generate random password?
     set generated_pwd_p 0
     if { $password eq ""
          || [parameter::get \
-                 -package_id [ad_conn subsite_id] \
+                 -package_id $subsite_id \
                  -parameter RegistrationProvidesRandomPasswordP \
                  -default 0]
      } {
@@ -508,12 +510,12 @@ ad_proc -private auth::local::registration::Register {
     # Send password confirmation email to user
     if { [set email_reg_confirm_p [parameter::get \
                                        -parameter EmailRegistrationConfirmationToUserP \
-                                       -package_id [ad_conn subsite_id] -default 1]] != 0
+                                       -package_id $subsite_id -default 1]] != 0
      } {
         if { $generated_pwd_p
              || [parameter::get \
                      -parameter RegistrationProvidesRandomPasswordP \
-                     -package_id [ad_conn subsite_id] -default 0]
+                     -package_id $subsite_id -default 0]
              || $email_reg_confirm_p
          } {
             ad_try {
@@ -523,7 +525,7 @@ ad_proc -private auth::local::registration::Register {
                     -password $password \
                     -from [parameter::get \
                                -parameter NewRegistrationEmailAddress \
-                               -package_id [ad_conn subsite_id] \
+                               -package_id $subsite_id \
                                -default [ad_system_owner]] \
                     -subject_msg_key "acs-subsite.email_subject_Registration_password" \
                     -body_msg_key "acs-subsite.email_body_Registration_password"
@@ -536,11 +538,14 @@ ad_proc -private auth::local::registration::Register {
 
     # LARS TODO: Move this out of the local driver and into the auth framework
     # Notify admin on new registration
-    if { [parameter::get -parameter  NotifyAdminOfNewRegistrationsP -default 0] } {
+    if { [parameter::get \
+              -parameter NotifyAdminOfNewRegistrationsP \
+              -package_id $subsite_id \
+              -default 0] } {
         ad_try {
             set admin_email [parameter::get \
                                  -parameter NewRegistrationEmailAddress \
-                                 -package_id [ad_conn subsite_id] \
+                                 -package_id $subsite_id \
                                  -default [ad_system_owner]]
             set admin_id [party::get_by_email -email $admin_email]
             if { $admin_id eq "" } {
