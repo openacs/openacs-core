@@ -440,3 +440,50 @@ aa_register_case \
         aa_equals "No emails were sent" $::auth_registration_implementations_to_addr ""
 
     }
+
+aa_register_case \
+    -cats {api smoke} \
+    -procs {
+        auth::local::user_info::GetParameters
+        auth::local::user_info::GetUserInfo
+    } \
+    auth_user_info_implementations {
+        Test implementations of the auth_user_info contract
+    } {
+        aa_equals "GetParameters returns nothing" \
+            [acs_sc::invoke \
+                 -contract auth_user_info \
+                 -operation GetParameters \
+                 -impl local] \
+            ""
+
+        set authority_id [auth::authority::get]
+        if {![db_0or1row get_any_user {
+            select user_id, first_names, last_name, username, email
+            from cc_users
+            where authority_id = :authority_id
+            fetch first 1 rows only
+        } -column_array user_info]} {
+            aa_log "No user in the default authority. Exit immediately."
+            return
+        }
+
+        set result(info_status) [auth::get_local_account_status -user_id $user_info(user_id)]
+        set result(info_message) ""
+        set result(user_info) [array get user_info]
+
+        set sc_result [acs_sc::invoke \
+                           -contract auth_user_info \
+                           -operation GetUserInfo \
+                           -impl local \
+                           -call_args [list $user_info(username) [list]]]
+        foreach key {info_status info_message} {
+            aa_equals "'$key' is correct" [dict get $sc_result $key] $result($key)
+        }
+
+        foreach key [dict keys $result(user_info)] {
+            aa_equals "'$key' is correct" \
+                [dict get $sc_result user_info $key] \
+                [dict get $result(user_info) $key]
+        }
+    }
