@@ -210,7 +210,7 @@ aa_register_case \
             }
         } finally {
             aa_log "Resetting parameters"
-            parameter::set_value -parameter UseEmailForLoginP -package_id $kernel_id -value UseEmailForLoginP
+            parameter::set_value -parameter UseEmailForLoginP -package_id $kernel_id -value $UseEmailForLoginP
             parameter::set_value -package_id $subsite_id -parameter RegistrationProvidesRandomPasswordP -value $RegistrationProvidesRandomPasswordP
             parameter::set_value -package_id $kernel_id -parameter RequireQuestionForPasswordResetP -value $RequireQuestionForPasswordResetP
             parameter::set_value -package_id $kernel_id -parameter UseCustomQuestionForPasswordReset -value $UseCustomQuestionForPasswordReset
