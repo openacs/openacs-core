@@ -669,6 +669,10 @@ ad_proc -public lang::message::format {
 
     The frog jumped across the fence. About 50% of the time, he stumbled, or maybe it was %20 %times%.
 } {
+    if {[llength $value_array_list] % 2 != 0} {
+        ad_log error "Invalid value_array_list passed in: <$value_array_list>"
+    }
+
     array set value_array $value_array_list
     set value_array_keys [array names value_array]
     set remaining_message $localized_message
