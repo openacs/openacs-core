@@ -154,7 +154,7 @@ ad_proc -private template::element::get_opts {
             set name $arg
             set value [lindex $args 1]
             dict set opts $name $value
-            ad_log notice "Collecting custom option for template::element name=$name, value=$value"
+            #ad_log notice "Collecting custom option for template::element name=$name, value=$value"
         }
         if {$arg in $booleans} {
             # When this is one of the known booleans, just skip one
