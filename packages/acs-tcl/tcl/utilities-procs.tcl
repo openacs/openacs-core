@@ -3796,7 +3796,7 @@ ad_proc -public util::request_info {
 
 ad_proc util::trim_leading_zeros {
     string
-} {    
+} {
     Returns a string with leading zeros trimmed.  Used to get around
     Tcl interpreter problems without thinking leading zeros are octal.
 
@@ -4257,6 +4257,111 @@ namespace eval util::resources {
                 file rename -force -- $fn $local_path/$file
             }
         }
+    }
+}
+
+ad_proc -deprecated ad_tcl_vars_to_ns_set {
+    -set_id
+    -put:boolean
+    args
+} {
+    Takes a list of variable names and <code>ns_set update</code>s values in an ns_set
+    correspondingly: key is the name of the var, value is the value of
+    the var. The caller is (obviously) responsible for freeing the set if need be.
+
+    DEPRECATED 5.10.1: modern ns_set idioms make this proc obsolete
+
+    @see ns_set
+
+    @param set_id If this switch is specified, it'll use this set instead of
+    creating a new one.
+
+    @param put If this boolean switch is specified, it'll use <code>ns_set put</code> instead
+    of <code>ns_set update</code> (update is default)
+
+    @param args A number of variable names that will be transported into the ns_set.
+
+    @author Lars Pind (lars@pinds.com)
+
+} {
+    ns_log notice "deprecated call: [info level [info level]]"
+
+    if { ![info exists set_id] } {
+        set set_id [ns_set create]
+    }
+
+    if { $put_p } {
+        set command put
+    } else {
+        set command update
+    }
+
+    foreach varname $args {
+        upvar $varname var
+        ns_set $command $set_id $varname $var
+    }
+    return $set_id
+}
+
+ad_proc -deprecated ad_tcl_vars_list_to_ns_set {
+    -set_id
+    -put:boolean
+    vars_list
+} {
+    Takes a Tcl list of variable names and <code>ns_set update</code>s values in an ns_set
+    correspondingly: key is the name of the var, value is the value of
+    the var. The caller is (obviously) responsible for freeing the set if need be.
+
+    DEPRECATED 5.10.1: modern ns_set idioms make this proc obsolete
+
+    @see ns_set
+
+    @param set_id If this switch is specified, it'll use this set instead of
+    creating a new one.
+
+    @param put If this boolean switch is specified, it'll use <code>ns_set put</code> instead
+    of <code>ns_set update</code> (update is default)
+
+    @param vars_list A Tcl list of variable names that will be transported into the ns_set.
+
+    @author Lars Pind (lars@pinds.com)
+
+} {
+    ns_log notice "deprecated call: [info level [info level]]"
+    if { ![info exists set_id] } {
+        set set_id [ns_set create]
+    }
+
+    if { $put_p } {
+        set command put
+    } else {
+        set command update
+    }
+
+    foreach varname $vars_list {
+        upvar $varname var
+        ns_set $command $set_id $varname $var
+    }
+    return $set_id
+}
+
+ad_proc -deprecated oacs_util::vars_to_ns_set {
+    {-ns_set:required}
+    {-var_list:required}
+} {
+    Does an ns_set put on each variable named in var_list
+
+    DEPRECATED 5.10.1: modern ns_set idioms make this proc obsolete
+
+    @see ns_set
+
+    @param var_list list of variable names in the calling scope
+    @param ns_set an ns_set id that already exists.
+} {
+    ns_log notice "deprecated call: [info level [info level]]"
+    foreach var $var_list {
+        upvar $var one_var
+        ns_set put $ns_set $var $one_var
     }
 }
 
