@@ -1063,7 +1063,10 @@ ad_proc ad_log_deprecated {what oldCmd {newCmd ""}} {
         # If no replacement command is provided, use whatever is
         # specified in the @see property of the definition.
         #
-        if {[nsv_get api_proc_doc template::util::date::now_min_interval_plus_hour dict]
+        # The "oldCmd" should be fully qualified but with no leading
+        # colons, like "template::util::date::now_min_interval_plus_hour"
+        #
+        if {[nsv_get api_proc_doc $oldCmd dict]
             && [dict exists $dict see]
         } {
             set newCmd [dict get $dict see]
