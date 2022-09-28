@@ -107,17 +107,15 @@ ad_proc -deprecated template::util::is_true { x } {
 
     @param x  the value to test
 
-    DEPRECATED: since October 2015 this proc is implemented via a
-    oneliner idiom that can be easily inlined.
+    DEPRECATED 5.10.1: since October 2015 this proc is implemented via the
+    standard Tcl idiom "string is true -strict ..." that can be easily inlined.
 
-    @see https://fisheye.openacs.org/changelog/OpenACS?cs=oacs-5-9%3Agustafn%3A20151001184401
     @see string
 
     @return 0 if the variable can be interpreted as false;
     1 for true if it can't.
 } {
     #expr {[string tolower $x] ni {0 f false n no off ""}}
-    #ns_log notice "TRUE [expr {[string tolower $x] ni {0 f false n no off ""}}] [string is true -strict $x]"
     string is true -strict $x
 }
 
