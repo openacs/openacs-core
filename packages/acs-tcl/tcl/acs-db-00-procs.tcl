@@ -86,17 +86,21 @@ namespace eval ::acs::db {
     ::nx::Class create ::acs::db::nsdb             -superclasses ::acs::db::Driver
     ::nx::Class create ::acs::db::nsdb-postgresql  -superclasses {::acs::db::nsdb ::acs::db::postgresql} {
         #
-        # Postgres specific backend
+        # PostgreSQL backend for nsdb driver
         #
     }
     ::nx::Class create ::acs::db::nsdb-oracle      -superclasses {::acs::db::nsdb ::acs::db::oracle} {
         #
-        # Oracle specific backend
+        # Oracle backend for nsdb driver
         #
     }
 
     ::nx::Class create ::acs::db::nsdbi            -superclasses ::acs::db::Driver
-    ::nx::Class create ::acs::db::nsdbi-postgresql -superclasses {::acs::db::nsdbi ::acs::db::postgresql}
+    ::nx::Class create ::acs::db::nsdbi-postgresql -superclasses {::acs::db::nsdbi ::acs::db::postgresql} {
+        #
+        # PostgreSQL backend for nsdbi driver
+        #        
+    }
     #
     # Preliminary list of functions (to be extended/refined)
     #

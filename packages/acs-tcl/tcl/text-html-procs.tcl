@@ -319,7 +319,7 @@ ad_proc -public ad_text_to_html {
                 break
             }
         }
-        ns_log notice "closeTags $closeTags tagDict <$tagDict> includes_html_p $includes_html_p"
+        #ns_log notice "closeTags $closeTags tagDict <$tagDict> includes_html_p $includes_html_p"
     } else {
         set reason "no tag dict"
         set closeTags 1
@@ -544,7 +544,7 @@ ad_proc -private util_close_html_tags_ns_parsehtml {
     if {[ns_conn isconnected]} {
         ns_log notice "util_close_html_tags_ns_parsehtml called in [ns_conn url]?[ns_conn query]"
     }
-    ns_log notice "===== final depth: $depth stack: <[array get stack]> open: <[array get open]>"
+    #ns_log notice "===== final depth: $depth stack: <[array get stack]> open: <[array get open]>"
     set closing_html ""
     #
     # If the stack is not unwound, close the elements in the right
@@ -568,7 +568,7 @@ ad_proc -private util_close_html_tags_ns_parsehtml {
             append closing_html "</$k>"
         }
     }
-    ns_log notice "===== final html '$closing_html'"
+    #ns_log notice "===== final html '$closing_html'"
     return "$html_fragment$closing_html"
 }
 
@@ -2754,9 +2754,9 @@ ad_proc -public ad_html_text_convert {
     switch -- $to {
         text/html {
             if {[info exists tags_are_closed] && $truncate_len == 0} {
-                ns_log notice "No need to call util_close_html_tags"
+                #ns_log notice "No need to call util_close_html_tags"
             } else {
-                ns_log notice "regular call closeTags (from $from to $to)"
+                #ns_log notice "regular call closeTags (from $from to $to)"
                 set text [util_close_html_tags $text $truncate_len $truncate_len $ellipsis $more]
             }
         }
