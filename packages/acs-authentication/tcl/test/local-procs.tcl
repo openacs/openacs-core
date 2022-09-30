@@ -240,7 +240,16 @@ aa_register_case \
 
         set EmailRegistrationConfirmationToUserP [parameter::get -parameter EmailRegistrationConfirmationToUserP -package_id $subsite_id -default 1]
         set NotifyAdminOfNewRegistrationsP [parameter::get -parameter NotifyAdminOfNewRegistrationsP -package_id $subsite_id -default 0]
-        set NewRegistrationEmailAddress [parameter::get -parameter NewRegistrationEmailAddress -package_id $subsite_id -default [ad_system_owner]]
+
+        set mail_package_id [apm_package_id_from_key acs-mail-lite]
+        set fixed_sender [parameter::get -parameter "FixedSenderEmail" -package_id $mail_package_id]
+        if { $fixed_sender ne ""} {
+            set NewRegistrationEmailAddress $fixed_sender
+        } else {
+            set NewRegistrationEmailAddress [parameter::get -parameter NewRegistrationEmailAddress -package_id $subsite_id -default [ad_system_owner]]
+        }
+
+        set AdminNotificationEmailAddress [parameter::get -parameter NewRegistrationEmailAddress -package_id $subsite_id -default [ad_system_owner]]
 
         set user [acs::test::user::create]
         set user_id [dict get $user user_id]
@@ -402,7 +411,7 @@ aa_register_case \
             aa_true "One notification email was sent by the configured outgoing sender" \
                 {[ad_outgoing_sender] in $::auth_registration_implementations_from_addr}
             aa_true "One notification email was sent to the system administrator" \
-                {$NewRegistrationEmailAddress in $::auth_registration_implementations_to_addr}
+                {$AdminNotificationEmailAddress in $::auth_registration_implementations_to_addr}
 
         } finally {
             parameter::set_value -package_id $subsite_id -parameter EmailRegistrationConfirmationToUserP -value $EmailRegistrationConfirmationToUserP
