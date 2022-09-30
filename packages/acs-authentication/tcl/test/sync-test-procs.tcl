@@ -1275,7 +1275,7 @@ aa_register_case \
 
                 # This user will be created
                 set new_user_username [db_string get_new_username {
-                    select max(username) || 'A' from users
+                    select max(username) || 'a' from users
                 }]
                 set new_user_email [string tolower $new_user_username@test.com]
                 set new_user_first_names AAAA
