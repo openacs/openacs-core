@@ -3,7 +3,7 @@
 <queryset>
    <rdbms><type>postgresql</type><version>7.1</version></rdbms>
 
-<fullquery name="select_applications">      
+<fullquery name="select_applications">
       <querytext>
     select node_id from (
        WITH RECURSIVE site_node_tree AS (
@@ -28,14 +28,14 @@
       </querytext>
 </fullquery>
 
-<fullquery name="select_applications_page">      
+<fullquery name="select_applications_page">
       <querytext>
     select
        node_id, name, package_id, instance_name, package_pretty_name, parameters_p,
        (char_length(url)-char_length(replace(url, '/', ''))-1) as treelevel
     from (
-       select n.node_id, 
-              n.name, 
+       select n.node_id,
+              n.name,
               p.package_id,
               p.instance_name,
               site_node__url(n.node_id) as url,
@@ -49,5 +49,5 @@
       </querytext>
 </fullquery>
 
- 
+
 </queryset>
