@@ -82,7 +82,9 @@ list::create \
     } -filters {
         search {
             hide_p 1
-            where_clause {(:search is null or upper(coalesce(coalesce(m.message, md.message), p.instance_name) || n.name || pt.pretty_name) like '%' || upper(:search) || '%')}
+            where_clause {
+                (:search is null or n.name || ' ' || p.instance_name || ' ' || pt.pretty_name || ' ' || coalesce(m.message, '') || ' ' || coalesce(md.message, '') ilike '%' || :search || '%')
+            }
         }
     }
 
