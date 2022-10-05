@@ -974,6 +974,48 @@ ad_proc template::get_footer_html {
     return $footer
 }
 
+ad_proc -private template::register_double_click_handler {} {
+} {
+    template::add_body_script -script [ns_trim {
+        function oacs_reenable_double_click_handler(target) {
+            if ( target.dataset.oacsClicked == 'true') {
+                target.dataset.oacsClicked = false;
+                target.disabled = false;
+                target.classList.remove("disabled");
+                console.log("re-enable click handler");
+            }
+        };
+        for (e of document.getElementsByClassName('prevent-double-click')) {
+            if (!e.dataset.oacsDoubleClickHandlerRegistered) {
+                e.addEventListener('click', function(event) {
+                    let target = event.target || event.srcElement;
+                    if ( target.dataset.oacsClicked == 'true') {
+                        event.stopPropagation();
+                        event.preventDefault();
+                        console.log("blocked double-click");
+                        return false;
+                    } else {
+                        target.dataset.oacsClicked = true;
+                        target.classList.add("disabled");
+                        let timeout = target.dataset.oacsTimeout || 1000;
+                        console.log('reactivate in ' + timeout);
+                        setTimeout(function() {oacs_reenable_double_click_handler(target);}, timeout);
+                        setTimeout(function() {target.disabled = true;});
+                        return true;
+                    }
+                }, true);
+                // In case the page has changed before the button was reenabled
+                // and the user uses the brower's back button, we have to establish
+                // a clickable state.
+                e.addEventListener('focus', function(event) {
+                    oacs_reenable_double_click_handler(event.target || event.srcElement);
+                });
+                e.dataset.oacsDoubleClickHandlerRegistered = true;
+            }
+        };
+    }]
+}
+
 ad_proc template::get_body_event_handlers {
 } {
 
@@ -982,6 +1024,7 @@ ad_proc template::get_body_event_handlers {
     after having processed its content.
 
 } {
+    template::register_double_click_handler
     #
     # Concatenate the JavaScript event handlers for the body tag
     #
