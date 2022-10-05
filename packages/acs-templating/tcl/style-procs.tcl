@@ -138,6 +138,111 @@ ad_proc -private ::template::icon {
     return [list HTML [subst -nocommands $template] cmd $cmd]
 }
 
+namespace eval ::template::icon {
+    set ::template::icon::map {
+        bootstrap-icons {
+            add-new-item plus-circle
+            checkbox-checked     check2-square
+            checkbox-unchecked   square
+            edit                 pencil-square
+            eye-closed           eye-slash
+            eye-open             eye
+            file                 file-earmark
+            filetype-csv         filetype-csv
+            form-info-sign       info-square
+            list-alt             card-heading
+            next                 chevron-right
+            previous             chevron-left
+            radio-checked        check2-circle
+            radio-unchecked      circle
+            reload               arrow-clockwise
+            text                 file-earmark-text
+            user                 person
+            warn                 exclamation-triangle-fill
+            watch                eye
+        }
+        fa-icons {
+            add-new-item         "fa-solid fa-plus"
+            arrow-down           "fa-solid fa-arrow-down"
+            arrow-up             "fa-solid fa-arrow-up"
+            checkbox-checked     "fa-regular fa-square-check"
+            checkbox-unchecked   "fa-regular fa-square"
+            download             "fa-solid fa-download"
+            edit                 "fa-regular fa-pen-to-square"
+            eye-closed           "fa-regular fa-eye-slash"
+            eye-open             "fa-regular fa-eye"
+            file                 "fa-regular fa-file"
+            filetype-csv         "fa-solid fa-file-csv"
+            folder               "fa-regular fa-folder"
+            form-info-sign       "fa-solid fa-circle-info"
+            list                 "fa-solid fa-list"
+            list-alt             "fa-regular fa-rectangle-list"
+            next                 "fa-solid fa-chevron-right"
+            previous             "fa-solid fa-chevron-left"
+            user                 "fa-solid fa-user"
+            radio-checked        "fa-regular fa-circle-check"
+            radio-unchecked      "fa-regular fa-circle"
+            reload               "fa-solid fa-arrows-rotate"
+            text                 "fa-regular fa-file-lines"
+            trash                "fa-regular fa-trash-can"
+            warn                 "fa-solid fa-triangle-exclamation"
+            watch                "fa-regular fa-eye"
+        }
+        glyphicons {
+            add-new-item         plus-sign
+            checkbox-checked     check
+            checkbox-unchecked   unchecked
+            download             download-alt
+            edit                 pencil
+            eye-closed           eye-close
+            eye-open             eye-open
+            file                 file
+            filetype-csv         ""
+            folder               folder-open
+            form-info-sign       info-sign
+            list-alt             list-alt
+            next                 menu-right
+            previous             menu-left
+            radio-checked        record
+            radio-unchecked      /shared/images/radio.gif
+            reload               refresh
+            text                 file
+            user                 user
+            warn                 alert
+            watch                eye-open
+        }
+        classic {
+            add-new-item         "+"
+            arrow-down           /resources/acs-subsite/arrow-down.gif
+            arrow-up             /resources/acs-subsite/arrow-up.gif
+            checkbox-checked     /shared/images/checkboxchecked.gif
+            checkbox-unchecked   /shared/images/checkbox.gif
+            download             /shared/images/download16.png
+            edit                 /shared/images/Edit16.gif
+            eye-closed           /shared/images/eye-slash16.png
+            eye-open             /shared/images/eye16.png
+            filetype-csv         /shared/images/csv16.png
+            file                 /shared/images/file.gif
+            folder               /shared/images/Delete16.gif
+            form-info-sign       /shared/images/info.gif
+            list                 /shared/images/list16.png
+            list-alt             /shared/images/Preferences16.gif
+            next                 "rlaquo;"
+            previous             "&laquo;"
+            radio-checked        /shared/images/radiochecked.gif
+            radio-unchecked      /shared/images/radio.gif
+            text                 /shared/images/text16.png
+            reload               ""
+            trash                /shared/images/Delete16.gif
+            user                 /shared/images/profile-16.png
+            warn                 /shared/images/diamond.gif
+            watch                ""
+        }
+    }
+}
+
+
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
