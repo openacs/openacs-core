@@ -976,10 +976,7 @@ ad_proc template::get_footer_html {
 
 ad_proc -private template::register_double_click_handler {} {
 } {
-    template::add_body_handler \
-        -event load \
-        -identifier template::register_double_click_handler \
-        -script [ns_trim {
+    template::add_body_script -script [ns_trim {
         function oacs_reenable_double_click_handler(target) {
             if ( target.dataset.oacsClicked == 'true') {
                 target.dataset.oacsClicked = false;

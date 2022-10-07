@@ -216,7 +216,7 @@ aa_register_case \
         #
         template::get_body_event_handlers
         template::prepare_body_script_multirow
-        set starting_body_scripts [template::multirow size body_scripts]
+        set starting_body_scripts [template::multirow size body_script]
 
         #
         # Note: we use placeholders instead of real values to better
