@@ -289,8 +289,7 @@ Calendar = function (mondayFirst, dateStr, onSelected, onClose, dateFormat) {
 Calendar._C = null;
 
 /// detect a special case of "web browser"
-Calendar.is_ie = ( /msie/i.test(navigator.userAgent) &&
-                   !/opera/i.test(navigator.userAgent) );
+Calendar.is_ie = (window.document.documentMode);
 
 // short day names array (initialized at first constructor call)
 Calendar._DN3 = null;
