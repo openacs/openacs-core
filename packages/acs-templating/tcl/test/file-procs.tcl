@@ -185,11 +185,15 @@ aa_register_case -cats {
 
         set tmpdir [file dirname $tmpfile]
         set new_path $tmpdir/acs-templating-test-template-widget-file
+        aa_log "exec ls -ltr $new_path <pre>[exec ls -ltr $tmpdir/ | tail]</pre>"
+        catch {exec -ignorestderr find /tmp/ -mmin -1 -type f 2> /dev/null} err
+        aa_log "<pre>$err</pre>"
+        aa_log "new path exists $new_path -&gt; [file exists $new_path]"
+        aa_log "old file exists $tmpfile -&gt; [file exists $tmpfile]"
         aa_true "Form received a different file" [file exists $new_path]
         aa_equals "The other file has the same content of our file" \
             [ns_md file $new_path] [ns_md file $tmpfile]
         file delete -- $new_path
-
 
         #
         # Here we expect 302 because the form redirects on success
