@@ -3,12 +3,12 @@
 # file like the following:
 #
 # ns_section ns/server/${server}/acs/acs-subsite
-#   ns_param GroupCache        2000000
+#   ns_param GroupCache        2MB
 #
 ::acs::KeyPartitionedCache create ::acs::group_cache \
     -package_key acs-subsite \
     -parameter GroupCache \
-    -default_size 2000000
+    -default_size 2MB
 
 # Local variables:
 #    mode: tcl
