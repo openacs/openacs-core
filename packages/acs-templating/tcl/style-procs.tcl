@@ -232,11 +232,11 @@ namespace eval ::template::icon {
             radio-checked        /shared/images/radiochecked.gif
             radio-unchecked      /shared/images/radio.gif
             text                 /shared/images/text16.png
-            reload               ""
+            reload               /shared/images/recylce16.png
             trash                /shared/images/Delete16.gif
             user                 /shared/images/profile-16.png
             warn                 /shared/images/diamond.gif
-            watch                ""
+            watch                /shared/images/eye16.png
         }
     }
 }
