@@ -53,8 +53,7 @@ aa_register_case -cats {
                 set new_path $tmpdir/acs-templating-test-template-widget-file
                 file rename -force -- $tmpfile $new_path
 
-                ad_returnredirect /
-                ad_script_abort
+                ns_return 200 text/plain $new_path
             }
 
         set template [template::adp_compile -string {
@@ -179,27 +178,14 @@ aa_register_case -cats {
                    -files [list [list \
                                      file $tmpfile \
                                      fieldname upload_file]]]
-        dict set d body [dict get $d page]
 
         aa_true "Tmpfile '$tmpfile' still exists" [file exists $tmpfile]
 
-        set tmpdir [file dirname $tmpfile]
-        set new_path $tmpdir/acs-templating-test-template-widget-file
-        aa_log "exec ls -ltr $tmpdir/ <pre>[exec ls -ltr $tmpdir/ | tail]</pre>"
-        catch {exec -ignorestderr find /tmp/ -mmin -1 -type f 2> /dev/null} err
-        aa_log "<pre>$err</pre>"
-        aa_log "new path exists $new_path -&gt; [file exists $new_path]"
-        aa_log "old file exists $tmpfile -&gt; [file exists $tmpfile]"
+        set new_path [dict get $d page]
         aa_true "Form received a different file" [file exists $new_path]
         aa_equals "The other file has the same content of our file" \
             [ns_md file $new_path] [ns_md file $tmpfile]
         file delete -- $new_path
-
-        #
-        # Here we expect 302 because the form redirects on success
-        #
-        acs::test::reply_has_status_code $d 302
-
 
     } finally {
         ns_unregister_op GET  $endpoint_name
