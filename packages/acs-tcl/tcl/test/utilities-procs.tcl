@@ -350,6 +350,88 @@ aa_register_case -cats {
     }
 }
 
+aa_register_case -cats {
+    api
+    smoke
+} -procs {
+    util_user_message
+    util_get_user_messages
+    template::multirow
+} util_user_messages {
+    Test api to provide user messages
+} {
+    aa_section "Replacing existing messages"
+
+    util_user_message -message ciao
+    util_user_message -message ciao
+    util_user_message -message ciao
+    util_user_message -message miao
+    util_user_message -message ciao
+
+    util_user_message -replace -message test
+
+    util_get_user_messages -multirow test_util_get_user_messages
+
+    aa_equals "We have only one message" \
+        [template::multirow size test_util_get_user_messages] 1
+    aa_equals "Message is the last one" \
+        [template::multirow get test_util_get_user_messages 1 message] test
+
+
+    aa_section "Quoting HTML in messages"
+
+    util_user_message -html -message <div>ciao</div>
+    util_user_message -message <div>ciao</div>
+
+    util_get_user_messages -multirow test_util_get_user_messages
+
+    aa_equals "We have only one message" \
+        [template::multirow size test_util_get_user_messages] 2
+    aa_equals "First message was NOT quoted" \
+        [template::multirow get test_util_get_user_messages 1 message] <div>ciao</div>
+    aa_equals "Second message was quoted" \
+        [template::multirow get test_util_get_user_messages 2 message] [ns_quotehtml <div>ciao</div>]
+
+
+    aa_section "Repeating messages"
+
+    util_user_message -message ciao
+    util_user_message -message ciao
+    util_user_message -message ciao
+    util_user_message -message miao
+    util_user_message -message ciao
+
+    util_get_user_messages -multirow test_util_get_user_messages
+
+    aa_equals "We have 2 messages" \
+        [template::multirow size test_util_get_user_messages] 2
+    aa_equals "Repeated message includes a counter" \
+        [template::multirow get test_util_get_user_messages 1 message] "ciao (4)"
+    aa_equals "Single message is unchanged" \
+        [template::multirow get test_util_get_user_messages 2 message] miao
+
+
+    aa_section "Keeping messages"
+
+    util_user_message -message ciao
+    util_user_message -message ciao
+    util_user_message -message ciao
+    util_user_message -message miao
+    util_user_message -message ciao
+
+    util_get_user_messages -keep -multirow test_util_get_user_messages
+
+    aa_equals "We have 2 messages" \
+        [template::multirow size test_util_get_user_messages] 2
+
+    aa_log "Creating multirow"
+    util_get_user_messages -multirow test_util_get_user_messages
+
+    aa_equals "We have 2 messages again" \
+        [template::multirow size test_util_get_user_messages] 2
+}
+
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4

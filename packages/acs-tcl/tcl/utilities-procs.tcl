@@ -1768,7 +1768,7 @@ ad_proc -public util_user_message {
         if { !$html_p } {
             set message [ns_quotehtml $message]
         }
-        lappend messages $message
+        dict incr messages $message
     }
     ad_set_client_property "acs-kernel" "general_messages" $messages
 }
@@ -1800,7 +1800,10 @@ ad_proc -public util_get_user_messages {
         ad_set_client_property "acs-kernel" "general_messages" {}
     }
     template::multirow create $multirow message
-    foreach message $messages {
+    foreach {message count} $messages {
+        if {$count > 1} {
+            append message " ($count)"
+        }
         template::multirow append $multirow $message
     }
 }
