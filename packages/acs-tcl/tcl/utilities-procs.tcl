@@ -1770,7 +1770,7 @@ ad_proc -public util_user_message {
         }
         dict incr messages $message
     }
-    ad_set_client_property "acs-kernel" "general_messages" $messages
+    ad_set_client_property -persistent f "acs-kernel" "general_messages" $messages
 }
 
 ad_proc -public util_get_user_messages {
@@ -1797,7 +1797,7 @@ ad_proc -public util_get_user_messages {
         set keep_p 1
     }
     if { !$keep_p && $messages ne "" } {
-        ad_set_client_property "acs-kernel" "general_messages" {}
+        ad_set_client_property -persistent f "acs-kernel" "general_messages" {}
     }
     template::multirow create $multirow message
     foreach {message count} $messages {
