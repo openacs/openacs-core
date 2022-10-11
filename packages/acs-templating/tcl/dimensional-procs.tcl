@@ -123,7 +123,7 @@ ad_proc ad_dimensional_sql {
 
     @param option_list the structure with the option data provided
     @param what look for such keys in the option_list
-    @param joiner join string for combining multiple clases
+    @param joiner join string for combining multiple clauses
     @param options_set ns_set for reading variables
     @return SQL clause
 
