@@ -73,6 +73,7 @@ namespace eval acs_admin {
                     set to_addr [ad_host_administrator]
                 }
                 if {$to_addr ne ""} {
+                    set mailSubject "Certificate of [ad_system_name] expires soon"
                     set report ""
                     if {[info commands ::letsencrypt::Client] ne ""} {
 
@@ -135,15 +136,18 @@ namespace eval acs_admin {
 
                         } on ok {result} {
                             ns_log notice "letsencrypt: automated renew request succeeded: $result"
+                            set success "success"
                         } on error {errorMsg} {
                             append report "Error: $errorMsg\nConsider upgrading to letsencrypt 0.6\n"
                             ns_log notice "letsencrypt: automated renew request failed: $errorMsg"
+                            set success "error"
                         }
 
                         parameter::set_value \
                             -package_id $::acs::kernel_id \
                             -parameter UseCanonicalLocation \
                             -value $oldValue
+                        set mailSubject "Certificate of [ad_system_name] renewal ($success)"
                     }
                     append report \n[string repeat = 72]\n
 
@@ -161,7 +165,7 @@ namespace eval acs_admin {
                     acs_mail_lite::send -send_immediately \
                         -to_addr $to_addr \
                         -from_addr [ad_system_owner] \
-                        -subject "Certificate of [ad_system_name] expires soon" \
+                        -subject $mailSubject \
                         -body [subst $body]
                 }
             }
