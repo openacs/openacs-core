@@ -15,7 +15,7 @@ aa_register_case \
         apm_version_id_from_package_key
     } \
     acs_system_information_api {
-        Test the api that returns information about the system.
+        Test the API that returns information about the system.
     } {
         aa_equals "The node_id of acs-admin is returned as expected" \
             [ad_acs_admin_node] \
