@@ -74,7 +74,7 @@ namespace eval ::acs {
             #
             # NaviServer variant
             #
-            :public method eval {{-partition_key} {-expires:integer} key command} {
+            :public method eval {{-partition_key} {-expires:integer} {-per_request:switch} key command} {
                 #
                 # Evaluate the command unless it is cached.
                 #
@@ -86,9 +86,17 @@ namespace eval ::acs {
                 } else {
                     set expires_flag {}
                 }
+                set cache_name [:cache_name $partition_key]
                 try {
-                    :uplevel [list ns_cache_eval {*}$expires_flag -- \
-                                  [:cache_name $partition_key] $key $command]
+                    if {$per_request} {
+                        acs::per_request_cache eval -key ::acs-${cache_name}($key) {
+                            :uplevel [list ns_cache_eval {*}$expires_flag -- \
+                                          $cache_name $key $command]
+                        }
+                    } else {
+                        :uplevel [list ns_cache_eval {*}$expires_flag -- \
+                                      $cache_name $key $command]
+                    }
 
                 } on break {r} {
                     #

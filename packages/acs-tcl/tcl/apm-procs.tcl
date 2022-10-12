@@ -1037,7 +1037,7 @@ ad_proc -public -debug apm_package_enabled_p {
     Returns 1 if there is an enabled package version corresponding to the package_key
     and 0 otherwise.
 } {
-    acs::try_cache ::acs::misc_cache eval apm_package_enabled-$package_key {
+    acs::try_cache ::acs::misc_cache eval -per_request apm_package_enabled-$package_key {
         db_0or1row apm_package_enabled_p {
             select 1 from apm_package_versions
             where package_key = :package_key
