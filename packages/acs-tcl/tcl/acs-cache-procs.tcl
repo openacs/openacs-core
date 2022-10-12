@@ -78,6 +78,13 @@ namespace eval ::acs {
                 #
                 # Evaluate the command unless it is cached.
                 #
+                # @param expires (passed straight through to NaviServer)
+                # @param partition_key Used for determining the cache
+                #        name in partitioned caches
+                # @param per_request when set, cache the result per
+                #        request. So far, no attempt is made to flush
+                #        the result inside the request.
+                #
                 if {![info exists partition_key]} {
                     set partition_key $key
                 }
@@ -150,15 +157,16 @@ namespace eval ::acs {
             #
             # AOLserver variant
             #
-            :public method eval {{-partition_key} {-expires:integer} key body} {
+            :public method eval {{-partition_key} {-expires:integer} {-per_request:switch} key command} {
                 #
                 # ignore "-expires", since not supported by AOLserver
+                # ignore "-per_request" optimization so far
                 #
                 if {![info exists partition_key]} {
                     set partition_key $key
                 }
                 try {
-                    :uplevel [list ns_cache eval [:cache_name $partition_key] $key $body]
+                    :uplevel [list ns_cache eval [:cache_name $partition_key] $key $command]
                 } on break {r} {
                     return 0
                 } on ok {r} {
@@ -572,7 +580,7 @@ namespace eval ::acs {
             }
             ns_log warning "no cache $cache: call ignored"
         }
-    }  
+    }
 }
 
 
