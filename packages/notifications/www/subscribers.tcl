@@ -24,7 +24,7 @@ if { ![db_0or1row select_name {
     fetch first 1 rows only
 }] } {
     # there are no notifications for this object
-    ad_return_error "[_ notifications.No_Notifications]" "[_ notifications.No_Notifications_text]"
+    ad_return_exception_page 200 [_ notifications.No_Notifications] [_ notifications.No_Notifications_text]
     ad_script_abort
 }
 
