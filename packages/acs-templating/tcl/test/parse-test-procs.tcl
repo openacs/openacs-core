@@ -212,8 +212,9 @@ aa_register_case \
     } {
         #
         # Other tests might already have set handlers on the
-        # page. Let's count them beforehand.
+        # page. Let's reset them beforehand.
         #
+        template::prepare_body_script_multirow
         template::get_body_event_handlers
         template::prepare_body_script_multirow
         set starting_body_scripts [template::multirow size body_script]
@@ -312,7 +313,7 @@ aa_register_case \
 
         set page [template::adp_include /packages/acs-templating/lib/body_scripts {}]
 
-        aa_equals "Page contains exactly 11 scripts (body handlers are grouped together)" \
+        aa_equals "Page contains exactly 11 additional scripts (body handlers are grouped together)" \
             [regsub -all "<script" $page {} _] [expr {$starting_body_scripts + 11}]
 
         aa_true "There is a nonce declaration in the page " [regexp {nonce="\w*"} $page nonce]
