@@ -1103,7 +1103,7 @@ ad_proc -public subsite::get_application_options {} {
     return [db_list_of_lists package_types {
         select pretty_name, package_key
         from   apm_package_types t
-        where  not (singleton_p and exists (select 1 from apm_packages
+        where  not (singleton_p = 't' and exists (select 1 from apm_packages
                                             where package_key = t.package_key))
         and    implements_subsite_p = 'f'
         and    package_type = 'apm_application'
@@ -1250,7 +1250,7 @@ ad_proc -public subsite::get_url {
         set mapped_vhost [db_list get_vhost {
             select host from host_node_map
             where node_id = :node_id
-            order by host = :search_vhost desc
+            order by case when host = :search_vhost then 2 else 1 end desc
             fetch first 1 row only
         }]
 

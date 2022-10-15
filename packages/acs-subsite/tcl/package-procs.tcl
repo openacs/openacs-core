@@ -18,7 +18,7 @@ ad_proc -public package_type_dynamic_p {
 } {
     return [db_0or1row object_type_dynamic_p {
         select 1 from acs_object_types
-         where dynamic_p and object_type = :object_type
+        where dynamic_p = 't' and object_type = :object_type
     }]
 }
 

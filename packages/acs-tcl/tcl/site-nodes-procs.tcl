@@ -105,6 +105,15 @@ ad_proc -public site_node::delete {
             apm_package_instance_delete $package_id
         }
         # ...then the node itself
+        #
+        # TODO: The names of the function in the database should be
+        # aligned.
+        #
+        if {[db_driverkey ""] eq "oracle"} {
+            acs::dc call site_node del -node_id $node_id
+        } else {
+            acs::dc call site_node delete -node_id $node_id
+        }
         acs::dc call site_node delete -node_id $node_id
         update_cache -node_id $node_id -url $url -object_id $package_id
     }
@@ -609,7 +618,7 @@ namespace eval ::acs {
                     WITH RECURSIVE site_node_tree(node_id, parent_id) AS (
                       select node_id, parent_id from site_nodes where node_id = :node_id
                     UNION ALL
-                      select child.node_id, child.parent_id from site_node_tree, site_nodes as child
+                      select child.node_id, child.parent_id from site_node_tree, site_nodes child
                       where  child.parent_id = site_node_tree.node_id
                     ) select [acs::dc map_function_name site_node__url(node_id)]
                     from site_node_tree where node_id != :node_id
@@ -1003,7 +1012,7 @@ namespace eval ::acs {
                     WITH RECURSIVE site_node_tree(node_id,parent_id,object_id)  AS (
                       select node_id, parent_id, object_id from site_nodes where node_id = :node_id
                     UNION ALL
-                      select child.node_id, child.parent_id, child.object_id from site_node_tree, site_nodes as child
+                      select child.node_id, child.parent_id, child.object_id from site_node_tree, site_nodes child
                       where  child.parent_id = site_node_tree.node_id
                       and :with_subtree
                     )
