@@ -38,11 +38,11 @@ aa_register_case \
         aa_true "Link '$link' contains 'One label'" \
             {[string first "One label" $link] >= 0}
 
-        aa_section "Admin link with default label (user name)"
+        aa_section "Admin link with default label (username)"
         set link [acs_community_member_admin_link -user_id $user_id]
         aa_true "Link '$link' contains '$url'" \
             {[string first [ns_quotehtml $url] $link] >= 0}
-        aa_true "Link '$link' contains the user name" \
+        aa_true "Link '$link' contains the username" \
             {[string first [person::name -person_id $user_id] $link] >= 0}
 
         set member_url [parameter::get -package_id $::acs::kernel_id -parameter CommunityMemberURL]
@@ -64,11 +64,11 @@ aa_register_case \
         aa_true "Link '$link' contains 'One label'" \
             {[string first "One label" $link] >= 0}
 
-        aa_section "Member link with default label (user name)"
+        aa_section "Member link with default label (username)"
         set link [acs_community_member_link -user_id $user_id]
         aa_true "Link '$link' contains '$url'" \
             {[string first [ns_quotehtml $url] $link] >= 0}
-        aa_true "Link '$link' contains the user name" \
+        aa_true "Link '$link' contains the username" \
             {[string first [person::name -person_id $user_id] $link] >= 0}
 
         aa_section "Admin home URL"
