@@ -9,7 +9,7 @@
 </p>
 
 <ul>
-  @exception_text;noquote@
+  @exception_text@
 </ul>
 
 <p>
