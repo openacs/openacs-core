@@ -55,8 +55,7 @@ rights to a user:</p><div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">
 <p>Create the user&#39;s account. On cvs.openacs.org:</p>
 <pre class="screen"><span class="action"><span class="action">sudo bash
-adduser --add_extra_groups cvs --gecos <span class="replaceable">"Real Name"</span> --shell <span class="replaceable">/bin/bash </span>
-<span class="replaceable">username</span></span>
+adduser --add_extra_groups cvs --gecos <span class="replaceable">"Real Name"</span> --shell <span class="replaceable">/bin/bash </span> <span class="replaceable">username</span></span>
 </pre>
 </li><li class="listitem">
 <p>Grant cvs access to the user account. On any machine, in a
