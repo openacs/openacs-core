@@ -73,8 +73,7 @@ cvs -q</action></screen>
         <listitem>
           <para>Create the user&#39;s account.  On cvs.openacs.org:</para>
           <screen><action>sudo bash
-/usr/sbin/useradd -c "<replaceable>Real Name</replaceable>" -G cvs -p <replaceable>passwd</replaceable> <replaceable>username</replaceable>
-/usr/sbin/usermod -G cvs,<replaceable>username</replaceable> <replaceable>username</replaceable>
+adduser --add_extra_groups cvs --gecos "<replaceable>Real Name</replaceable>" --shell <replaceable>/bin/bash </replaceable>  <replaceable>username</replaceable>
           </action></screen>
         </listitem>
         <listitem>

@@ -53,10 +53,11 @@ verbose output from commands. For example, it makes the output of
 <div class="titlepage"><div><div><p class="title"></p></div></div></div><p>Administrator Note: These are the steps to grant CVS commit
 rights to a user:</p><div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">
-<p>Create the user&#39;s account. On cvs.openacs.org:</p><pre class="screen"><span class="action"><span class="action">sudo bash
-/usr/sbin/useradd -c "<span class="replaceable"><span class="replaceable">Real Name</span></span>" -G cvs -p <span class="replaceable"><span class="replaceable">passwd</span></span><span class="replaceable"><span class="replaceable">username</span></span>
-/usr/sbin/usermod -G cvs,<span class="replaceable"><span class="replaceable">username</span></span><span class="replaceable"><span class="replaceable">username</span></span>
-</span></span></pre>
+<p>Create the user&#39;s account. On cvs.openacs.org:</p>
+<pre class="screen"><span class="action"><span class="action">sudo bash
+adduser --add_extra_groups cvs --gecos <span class="replaceable">"Real Name"</span> --shell <span class="replaceable">/bin/bash </span>
+<span class="replaceable">username</span></span>
+</pre>
 </li><li class="listitem">
 <p>Grant cvs access to the user account. On any machine, in a
 temporary directory:</p><pre class="screen"><span class="action"><span class="action">cvs -d :ext:cvs.openacs.org:/cvsroot co CVSROOT
