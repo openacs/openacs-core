@@ -150,6 +150,7 @@ namespace eval ::template::icon {
             file                 file-earmark
             filetype-csv         filetype-csv
             form-info-sign       info-square
+            link                 link
             list-alt             card-heading
             next                 chevron-right
             previous             chevron-left
@@ -175,6 +176,7 @@ namespace eval ::template::icon {
             filetype-csv         "fa-solid fa-file-csv"
             folder               "fa-regular fa-folder"
             form-info-sign       "fa-solid fa-circle-info"
+            link                 "fa-solid fa-link"
             list                 "fa-solid fa-list"
             list-alt             "fa-regular fa-rectangle-list"
             next                 "fa-solid fa-chevron-right"
@@ -200,6 +202,7 @@ namespace eval ::template::icon {
             filetype-csv         ""
             folder               folder-open
             form-info-sign       info-sign
+            link                 link
             list-alt             list-alt
             next                 menu-right
             previous             menu-left
@@ -225,6 +228,7 @@ namespace eval ::template::icon {
             file                 /shared/images/file.gif
             folder               /shared/images/Delete16.gif
             form-info-sign       /shared/images/info.gif
+            link                 /resources/acs-subsite/url-button.gif
             list                 /shared/images/list16.png
             list-alt             /shared/images/Preferences16.gif
             next                 "rlaquo;"
