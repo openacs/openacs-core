@@ -153,6 +153,7 @@ namespace eval ::template::icon {
             link                 link
             list-alt             card-heading
             next                 chevron-right
+            paperclip            paperclip
             previous             chevron-left
             radio-checked        check2-circle
             radio-unchecked      circle
@@ -180,6 +181,7 @@ namespace eval ::template::icon {
             list                 "fa-solid fa-list"
             list-alt             "fa-regular fa-rectangle-list"
             next                 "fa-solid fa-chevron-right"
+            paperclip            "fa-light fa-paperclip"
             previous             "fa-solid fa-chevron-left"
             user                 "fa-solid fa-user"
             radio-checked        "fa-regular fa-circle-check"
@@ -205,6 +207,7 @@ namespace eval ::template::icon {
             link                 link
             list-alt             list-alt
             next                 menu-right
+            paperclip            paperclip
             previous             menu-left
             radio-checked        record
             radio-unchecked      /shared/images/radio.gif
@@ -232,6 +235,7 @@ namespace eval ::template::icon {
             list                 /shared/images/list16.png
             list-alt             /shared/images/Preferences16.gif
             next                 "rlaquo;"
+            paperclip            /resources/acs-subsite/attach.png
             previous             "&laquo;"
             radio-checked        /shared/images/radiochecked.gif
             radio-unchecked      /shared/images/radio.gif
