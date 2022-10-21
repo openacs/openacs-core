@@ -1216,7 +1216,7 @@ ad_proc -private ad_parse_html_attributes_upvar {
                     if { $allowed_attributes ne "*"} {
                         foreach attr_name [dict keys $dict] {
                             if {$attr_name ni $allowed_attributes} {
-                                return "The attribute '$attr_name' is not allowed for $tagname tags"
+                                return "The attribute '$attr_name' is not allowed for $tag tags"
                             }
                             #
                             # Attribute is allowed. Check now protocols
