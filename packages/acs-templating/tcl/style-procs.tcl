@@ -28,6 +28,29 @@ ad_proc -private template::toolkit {-subsite_id} {
     return $toolkit
 }
 
+ad_proc ::template::icon::name {-iconset name} {
+
+    Return for the provided generic name the name in the specified or
+    current iconset the name mapping. This function is necessary in
+    boundary cases, where e.g. a display_template passes the generic
+    name of the icon via template variables which have to be
+    @-substituted before adp-tag resolution, which performs the
+    regular icon name mapping (otherwise, the tag resolver receives
+    e.g. ...name=@icon@...)
+
+    @param iconset
+    @param name
+    @return mapped icon name or the passed in generic name
+} {
+    if {![info exists iconset]} {
+        set iconset [template::iconset]
+    }
+    if {[dict exists $::template::icon::map $iconset $name]} {
+        set name [dict get $::template::icon::map $iconset $name]
+    }
+    return $name
+}
+
 ad_proc -private template::iconset {-subsite_id} {
 
     Return the configured or derived icon set.  Potential results are
@@ -135,13 +158,14 @@ ad_proc -private ::template::icon {
             set template {<img class='$class' src='$name' height='16' width='16' title='$title' alt='$alt' style='border:0; $styleAtt'>}
         }
     }
+    ns_log notice "RETURN  HTML [subst -nocommands $template] cmd $cmd]"
     return [list HTML [subst -nocommands $template] cmd $cmd]
 }
 
 namespace eval ::template::icon {
     set ::template::icon::map {
         bootstrap-icons {
-            add-new-item plus-circle
+            add-new-item         plus-circle
             checkbox-checked     check2-square
             checkbox-unchecked   square
             edit                 pencil-square
