@@ -100,13 +100,13 @@
       <group column="subrownum">
         <th class="@elements.class@"@elements.cell_attributes;noquote@ id="@list_properties.name@_@elements.name@">
           <if @elements.orderby_url@ not nil>
-            <if @elements.ordering_p;literal@ true>
-              <a href="@elements.orderby_url@" title="@elements.orderby_html_title@">@elements.label;noquote@</a>
-              <a href="@elements.orderby_url@" title="@elements.orderby_html_title@"><if @elements.orderby_direction@ eq "desc"><img src="/resources/acs-templating/sort-descending.png" alt="#acs-templating.descending_order#" style="border:0;" width="10" height="10"></if><else><img src="/resources/acs-templating/sort-ascending.png" alt="#acs-templating.ascending_order#" style="border:0;" width="10" height="10"></else></a>
-            </if>
-            <else>
-              <a href="@elements.orderby_url@" title="@elements.orderby_html_title@">@elements.label;noquote@</a> <img src="/resources/acs-templating/sort-neither.png" alt="#acs-templating.not_ordered#" style="border:0;" width="10" height="10">
-            </else>
+             <if @elements.ordering_p;literal@ true>
+               <a href="@elements.orderby_url@" title="@elements.orderby_html_title@">@elements.label;noquote@</a>
+               <a href="@elements.orderby_url@" title="@elements.orderby_html_title@"><if @elements.orderby_direction@ eq "desc"><span title="#acs-templating.descending_order#">↓</span></if><else><span title="#acs-templating.ascending_order#">↑</span></else></a>
+             </if>
+             <else>
+               <a href="@elements.orderby_url@" title="@elements.orderby_html_title@">@elements.label;noquote@</a> <a href="@elements.orderby_url@"><span title="#acs-templating.not_ordered#">↑↓</span></a>
+             </else>
           </if>
           <else>
             @elements.label;noquote@
