@@ -158,7 +158,7 @@ ad_proc -private ::template::icon {
             set template {<img class='$class' src='$name' height='16' width='16' title='$title' alt='$alt' style='border:0; $styleAtt'>}
         }
     }
-    ns_log notice "RETURN  HTML [subst -nocommands $template] cmd $cmd]"
+    #ns_log notice "RETURN  HTML [subst -nocommands $template] cmd $cmd]"
     return [list HTML [subst -nocommands $template] cmd $cmd]
 }
 
