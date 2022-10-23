@@ -9,8 +9,10 @@ ad_include_contract {
 }
 
 template::multirow create urns urn url
-foreach urn [lsort [array names ::template::head::urn $match]] {
-    template::multirow append urns $urn [template::head::resolve_urn $urn]
+foreach pattern $match {
+    foreach urn [lsort [array names ::template::head::urn $pattern]] {
+        template::multirow append urns $urn [template::head::resolve_urn $urn]
+    }
 }
 
 # Local variables:
