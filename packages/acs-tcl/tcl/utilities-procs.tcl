@@ -4093,6 +4093,11 @@ namespace eval util::resources {
             if {![ad_file isdirectory $path]} {
                 try {
                     file mkdir $path
+                    #
+                    # We check on the version-dir, if the package is
+                    # installed, therefore, dont create an empty one.
+                    #
+                    file delete $path
                 } on error {errorMsg} {
                     set can_install 0
                 }
