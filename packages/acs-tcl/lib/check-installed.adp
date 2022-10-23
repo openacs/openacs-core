@@ -1,6 +1,6 @@
 <p>
-The current version of the @resource_name@ is @version@.
-<if @resources@ not nil><p>This version of the @resource_name@ is installed locally
+The configured version of @resource_name@ is @version@.
+<if @resources@ not nil><p>This version of @resource_name@ is installed locally
 under <strong>@resources@</strong>.</if>
 <else><p>In the current installation the @resource_name@ is used via CDN <strong>@cdn@</strong>.
   <if @writable@ true>
