@@ -25,7 +25,7 @@ set context_id  $obj(context_id)
 set parent_object_name [acs_object_name $obj(context_id)]
 
 set elements [list]
-lappend elements grantee_name { 
+lappend elements grantee_name {
     label "[_ acs-subsite.Name]"
     link_url_col name_url
     display_template {
@@ -38,7 +38,7 @@ lappend elements grantee_name {
     }
 }
 
-foreach priv $privs { 
+foreach priv $privs {
     lappend select_clauses \
         "sum(ptab.${priv}_p) as ${priv}_p" \
         "(case when sum(ptab.${priv}_p) > 0 then 'checked' else '' end) as ${priv}_checked"
@@ -52,7 +52,7 @@ foreach priv $privs {
              label [string totitle [string map {_ { }} [_ acs-subsite.$priv]]] \
              display_template [subst {
                <if @permissions.${priv}_p@ ge 2>
-                 <img src="/shared/images/checkboxchecked.gif" style="border:0" height="13" width="13" alt="X" title="This permission is inherited, to remove, click the 'Do not inherit ...' button above.">
+                 <adp:icon name="checkbox-checked" title="This permission is inherited, to remove, click the 'Do not inherit ...' button above.">
                </if>
                <else>
                  <input type="checkbox" name="perm" value="@permissions.grantee_id@,${priv}" @permissions.${priv}_checked@>
@@ -63,11 +63,12 @@ foreach priv $privs {
 
 # Remove all
 lappend elements remove_all {
-    html { align center } 
+    html { align center }
     label "[_ acs-subsite.Remove_All]"
     display_template {<input type="checkbox" name="perm" value="@permissions.grantee_id@,remove">}
 }
 
+#lappend elements grantee_id
 
 
 set perm_url "[ad_conn subsite_url]permissions/"
@@ -128,12 +129,24 @@ set application_group_id [application_group::group_id_from_package_id -package_i
 
 # 2 = has permission, not direct => inherited
 # 1 = has permission, it's direct => direct
-# -1 = no permission 
+# -1 = no permission
 
 # NOTE:
 # We do not include site-wide admins in the list
 
 db_multirow -extend { name_url } permissions permissions {} {
+    #
+    # In case, the message key resolves to an empty string, show this
+    # message key. An example is on my local instance, the
+    # automatically generated group title:
+    #
+    #    #acs-translations.group_title_XXXX#
+    #
+    if { [string match #*# $grantee_name] } {
+        if {[::lang::util::localize $grantee_name] eq ""} {
+            set grantee_name [string range $grantee_name 0 end-1]
+        }
+    }
     if { $object_type eq "user" && $grantee_id != 0 } {
         set name_url [acs_community_member_url -user_id $grantee_id]
     }
