@@ -691,7 +691,9 @@ ad_proc -public lang::message::format {
                 # A substitution list is provided, the key should be in there
 
                 if {$variable_string ni $value_array_keys} {
-                    ns_log Warning "lang::message::format: The value_array_list \"$value_array_list\" does not contain the variable name $variable_string found in the message: $localized_message"
+                    ns_log Warning "lang::message::format: The value_array_list" \
+                        "\"$value_array_list\" does not contain the variable name" \
+                        "$variable_string found in the message: $localized_message"
 
                     # There is no value available to do the substitution with
                     # so don't substitute at all
@@ -716,7 +718,8 @@ ad_proc -public lang::message::format {
                         append formatted_message $local_variable($array_key)
                     }
                 } else {
-                    ns_log warning "Message contains a variable named '$variable_name' which doesn't exist in the caller's environment: message $localized_message"
+                    ns_log warning "Message contains a variable named '$variable_name' " \
+                        "which doesn't exist in the caller's environment: message $localized_message"
                     append formatted_message "MISSING: variable '$variable_name' is not available"
                 }
             }
@@ -1025,7 +1028,7 @@ ad_proc -private -deprecated _mr { locale key message } {
     Actually, there is very little need for this proc (which is not
     used in the 300+ packages in the repository), therefore, it is
     marked as deprecated. Use lang::message::register instead.
-    
+
     @param locale  Abbreviation for language of the message or the locale.
     @param key     Unique identifier for this message. Will be the same identifier
                    for each language
