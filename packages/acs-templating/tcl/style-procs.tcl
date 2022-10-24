@@ -118,7 +118,7 @@ ad_proc -private ::template::icon {
     The configuration of this method is performed via the Tcl dict
     ::template::icon::map, which is set in tag-init.tcl
 
-    @param alt used im classic images. When not specified, use 'title' attribute
+    @param alt used in classic images. When not specified, use 'title' attribute
     @param iconset force isage of this icon set
     @return dict containing 'HTML' and 'cmd'
 } {
@@ -136,6 +136,7 @@ ad_proc -private ::template::icon {
         set iconset text
     }
     set _class [expr {$class ne "" ? " $class" : ""} ]
+    set title [ns_quotehtml $title]
     set cmd ""
     switch $iconset {
         "glyphicons" {
