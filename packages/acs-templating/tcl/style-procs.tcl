@@ -174,10 +174,8 @@ namespace eval ::template::icon {
             file                 file-earmark
             filetype-csv         filetype-csv
             form-info-sign       info-square
-            link                 link
             list-alt             card-heading
             next                 chevron-right
-            paperclip            paperclip
             previous             chevron-left
             radio-checked        check2-circle
             radio-unchecked      circle
@@ -190,6 +188,8 @@ namespace eval ::template::icon {
         fa-icons {
             add-new-item         "fa-solid fa-plus"
             arrow-down           "fa-solid fa-arrow-down"
+            arrow-left           "fa-solid fa-arrow-left"
+            arrow-right          "fa-solid fa-arrow-right"
             arrow-up             "fa-solid fa-arrow-up"
             checkbox-checked     "fa-regular fa-square-check"
             checkbox-unchecked   "fa-regular fa-square"
@@ -244,6 +244,8 @@ namespace eval ::template::icon {
         classic {
             add-new-item         "+"
             arrow-down           /resources/acs-subsite/arrow-down.gif
+            arrow-left           /resources/acs-subsite/arrow-left.png
+            arrow-right          /resources/acs-subsite/arrow-right.png
             arrow-up             /resources/acs-subsite/arrow-up.gif
             checkbox-checked     /shared/images/checkboxchecked.gif
             checkbox-unchecked   /shared/images/checkbox.gif
@@ -272,8 +274,6 @@ namespace eval ::template::icon {
         }
     }
 }
-
-
 
 # Local variables:
 #    mode: tcl
