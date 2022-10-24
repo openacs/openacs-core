@@ -81,9 +81,7 @@ other packages.</p><pre class="screen">[$OPENACS_SERVICE_NAME www]$<strong class
         }
         delete {
             link_url_col delete_url 
-            display_template {
-                &lt;img src="/resources/acs-subsite/Delete16.gif" width="16" height="16" border="0"&gt;
-            }
+            display_template {&lt;adp:icon name="trash"&gt;}
             sub_class narrow
         }
     }
