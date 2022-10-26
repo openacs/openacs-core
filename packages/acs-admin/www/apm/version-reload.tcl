@@ -27,7 +27,7 @@ set files [apm_mark_version_for_reload $version_id]
 set files_to_watch [list]
 
 if { [llength $files] == 0 } {
-    append body "There are no changed files to reload in this package.<p>"
+    append body "<adp:icon name='form-info-sign'> There are no changed files to reload in this package.<p>"
 } else {
     append body "Marked the following file[expr {[llength $files] == 1 ? "" : "s"}] for reloading:<ul id='files'>\n"
 

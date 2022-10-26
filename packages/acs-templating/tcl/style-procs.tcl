@@ -169,6 +169,7 @@ namespace eval ::template::icon {
             add-new-item         plus-circle
             checkbox-checked     check2-square
             checkbox-unchecked   square
+            check                check-lg
             edit                 pencil-square
             eye-closed           eye-slash
             eye-open             eye
@@ -192,6 +193,7 @@ namespace eval ::template::icon {
             arrow-left           "fa-solid fa-arrow-left"
             arrow-right          "fa-solid fa-arrow-right"
             arrow-up             "fa-solid fa-arrow-up"
+            check                "fa-solid fa-check"
             checkbox-checked     "fa-regular fa-square-check"
             checkbox-unchecked   "fa-regular fa-square"
             download             "fa-solid fa-download"
@@ -250,6 +252,7 @@ namespace eval ::template::icon {
             arrow-up             /resources/acs-subsite/arrow-up.gif
             checkbox-checked     /shared/images/checkboxchecked.gif
             checkbox-unchecked   /shared/images/checkbox.gif
+            check                /shared/images/checkboxchecked.gif
             download             /shared/images/download16.png
             edit                 /shared/images/Edit16.gif
             eye-closed           /shared/images/eye-slash16.png

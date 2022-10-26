@@ -57,11 +57,11 @@
   @instance_createHTML;noquote@
 </ul>
 
-<h4>Reload</h4>
+<h4>Update Blueprint</h4>
 
 <ul class="action-links">
-  <li><adp:icon name="reload" alt="reload"> Reload this package</a></li>
-  <li><adp:icon name="watch" alt="reload"> Watch all files in package</a></li>
+  <li><a href="@reload_href;noi18n@"><adp:icon name="reload" alt="reload"> Reload this package</a></li>
+  <li><a href="@watch_href;noi18n@"><adp:icon name="watch" alt="reload"> Watch all files in package</a></li>
 </ul>
 
 <h4>XML .info package specification file</h4>

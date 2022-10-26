@@ -1,5 +1,6 @@
 ad_page_contract {
     Views information about a package.
+    
     @author Jon Salz (jsalz@arsdigita.com)
     @creation-date 17 April 2000
     @cvs-id $Id$
