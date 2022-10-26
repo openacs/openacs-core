@@ -230,7 +230,7 @@ Please visit the following link to change your password now:
   <msg key="First_select_the_supertype">First, select the supertype for the new relationship type</msg>
   <msg key="Forgot_your_password">Forgot your password?</msg>
   <msg key="forum_moderate">Forum moderate</msg>
-  <msg key="Confirm_Permissions">Confirm Permissions</msg>
+  <msg key="Confirm_Permissions">Confirm Permission Settings</msg>
   <msg key="Filter_username_and_email">Filter for username and email</msg>
   <msg key="Frequency">Frequency</msg>
   <msg key="Gender">Gender</msg>
