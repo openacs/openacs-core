@@ -17,7 +17,7 @@ ad_page_contract {
 
 #
 # Avoid page caching, across all browsers, no matter how the other
-# site wide caching parameters are set. For discussion and deatils,
+# site wide caching parameters are set. For discussion and details,
 # see:
 #
 # https://stackoverflow.com/questions/49547/how-to-control-web-page-caching-across-all-browsers

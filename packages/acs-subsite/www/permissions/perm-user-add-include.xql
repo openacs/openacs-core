@@ -10,6 +10,7 @@
            u.email
     from   cc_users u
     where  [template::list::page_where_clause -name users]
+    and    [template::list::filter_where_clauses -name users]
     order  by upper(first_names), upper(last_name)
 
       </querytext>

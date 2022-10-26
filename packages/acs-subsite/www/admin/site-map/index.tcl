@@ -246,7 +246,7 @@ db_foreach nodes_select {} {
     # Values for expand_mode:
     #  0: no children
     #  1: has children, node is not open
-    #  2: has chilren, node is open
+    #  2: has children, node is open
     #
     set expand_mode 0
     if {!$root_p && $n_children > 0} {

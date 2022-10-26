@@ -70,7 +70,7 @@ if { $party_id ne "" } {
                 #
                 # TODO: Move this to the form, by moving the form to an include template
                 #
-                ad_return_complaint 1 "<li>User has an acccount on the system, but has been removed from the main site. Only a site-wide administrator can re-add the user."
+                ad_return_complaint 1 "<li>User has an account on the system, but has been removed from the main site. Only a site-wide administrator can re-add the user."
                 ad_script_abort
             }
         }

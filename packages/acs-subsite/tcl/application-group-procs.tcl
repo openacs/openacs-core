@@ -365,7 +365,7 @@ ad_proc -deprecated application_group::child_application_groups {
     -node_id:required
     {-package_key ""}
 } {
-    DEPRECATED: as of 2022-09-12 this api is not used in upstream
+    DEPRECATED: as of 2022-09-12 this API is not used in upstream
     codebase, and was still undocumented.
 } {
     set group_list [list]

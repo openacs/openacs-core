@@ -11,7 +11,8 @@
     from   cc_users u
     where  u.user_id not in (
        select grantee_id from acs_permission.permissions_all(:object_id)
-    )
+       )
+    and    [template::list::filter_where_clauses -name users]
     order  by upper(first_names), upper(last_name)
 
   </querytext>
