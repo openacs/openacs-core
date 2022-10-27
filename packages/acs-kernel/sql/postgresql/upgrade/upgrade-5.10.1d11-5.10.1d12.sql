@@ -19,7 +19,28 @@ DROP FUNCTION IF EXISTS acs_objects_context_id_up_tr();
 --
 -- Drop the two (!) materialized views for the privilege hierarchy.
 --
-DROP TABLE IF EXISTS acs_privilege_descendant_map;
+
+--
+-- In case the script was already executed, the DROP TABLE IF EXISTS
+-- will lead to an error that "acs_privilege_descendant_map" is not a table
+--    HINT:  Use DROP VIEW to remove a view.
+-- So, we apply here the old fashioned approach by querying pg_tables.
+-- 
+DO $$
+DECLARE
+        v_found boolean;
+BEGIN
+    SELECT EXISTS (
+       SELECT 1 FROM pg_tables WHERE 
+         schemaname = 'public' AND 
+         tablename  = 'acs_privilege_descendant_map'
+    ) into v_found;
+    
+    if v_found IS TRUE then
+       DROP TABLE acs_privilege_descendant_map;
+    end if;
+END $$;
+
 DROP TABLE IF EXISTS acs_privilege_hierarchy_index CASCADE;
 
 DROP TRIGGER  IF EXISTS acs_priv_hier_ins_del_tr ON acs_privilege_hierarchy;
