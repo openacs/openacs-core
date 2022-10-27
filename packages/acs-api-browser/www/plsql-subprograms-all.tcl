@@ -1,4 +1,3 @@
-# /packages/api-doc/www/api-doc/plsql-subprograms-all.tcl
 ad_page_contract {
     Lists all subprograms (packages, procedures, or functions) in the
     database.

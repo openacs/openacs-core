@@ -144,7 +144,6 @@ ad_proc -public api_read_script_documentation {
     }
 
     return [array get doc_elements]
-
 }
 
 ad_proc -public api_script_documentation {

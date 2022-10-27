@@ -125,7 +125,7 @@ proc $proc {[info args $proc]} {
         }
 
         if {$url ne ""} {
-            ns_log notice "api-doc/www/proc-view got URL <$url>"
+            #ns_log notice "api-doc/www/proc-view got URL <$url>"
             ad_returnredirect -allow_complete_url $url
             ad_script_abort
         }

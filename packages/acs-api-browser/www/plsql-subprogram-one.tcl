@@ -1,4 +1,3 @@
-# /packages/acs-api-browser/www/api-doc/plsql-subprogram-one.tcl
 ad_page_contract {
     Returns the specification for a given PL/SQL subprogram (package,
     procedure, or function).
