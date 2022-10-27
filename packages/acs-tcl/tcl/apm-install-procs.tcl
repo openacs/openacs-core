@@ -1848,15 +1848,28 @@ ad_proc -private apm_mount_core_packages {} {
 
     # Mount the acs-api-browser
     ns_log Notice "apm_mount_core_packages: Mounting acs-api-browser"
-    set api_browser_id \
+    set api_browser_package_id \
         [site_node::instantiate_and_mount -node_name api-doc \
              -package_key acs-api-browser]
-    # Only registered users should have permission to access the
-    # api-browser
-    permission::grant -party_id [acs_magic_object registered_users] \
-        -object_id $api_browser_id \
-        -privilege read
-    permission::set_not_inherit -object_id $api_browser_id
+    #
+    # Over many years, all "Registered Users" got per default access
+    # to /api-doc. This is probably OK, when one assumes that the
+    # registered users are developers. However, providing source code
+    # access to all registered users can pose a security thread,
+    # especially on large sites. 
+    #
+    if {0} {
+        # Only registered users should have permission to access the
+        # api-browser
+        #
+        permission::grant -party_id [acs_magic_object registered_users] \
+            -object_id $api_browser_package_id \
+            -privilege read
+    }
+    #
+    # Do not inherit from the parent object (if set).
+    #
+    permission::set_not_inherit -object_id $api_browser_package_id
 
     # Mount acs-automated-testing
     ns_log Notice "apm_mount_core_packages: Mounting acs-automated-testing"
