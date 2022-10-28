@@ -101,6 +101,7 @@ ad_proc -private ::template::icon {
     {-iconset ""}
     {-style ""}
     {-title ""}
+    {-invisible:boolean f}
 } {
 
     Return a dict containing the HTML rendering and a potentially
@@ -134,6 +135,9 @@ ad_proc -private ::template::icon {
         set iconset default
     } elseif {$name eq ""} {
         set iconset text
+    } elseif {![string match {[a-z]} [string range $name 0 0]]} {
+        set iconset text
+        set alt $name
     }
     set _class [expr {$class ne "" ? " $class" : ""} ]
     set title [ns_quotehtml $title]
@@ -159,6 +163,9 @@ ad_proc -private ::template::icon {
             set template {<img class='$class' src='$name' height='16' width='16' title='$title' alt='$alt' style='border:0; $styleAtt'>}
         }
     }
+    if {$invisible_p} {
+        set template "<span style='visibility:hidden;'>$template</span>"
+    }           
     #ns_log notice "RETURN  HTML [subst -nocommands $template] cmd $cmd]"
     return [list HTML [subst -nocommands $template] cmd $cmd]
 }
@@ -167,28 +174,35 @@ namespace eval ::template::icon {
     set ::template::icon::map {
         bootstrap-icons {
             add-new-item         plus-circle
+            admin                wrench-adjustable
             checkbox-checked     check2-square
             checkbox-unchecked   square
             check                check-lg
+            cog                  gear
             edit                 pencil-square
             eye-closed           eye-slash
             eye-open             eye
             file                 file-earmark
             filetype-csv         filetype-csv
+            folder-add           folder-plus
             form-info-sign       info-square
             list-alt             card-heading
             next                 chevron-right
+            permissions          lock
             previous             chevron-left
             radio-checked        check2-circle
             radio-unchecked      circle
             reload               arrow-clockwise
+            search               search
             text                 file-earmark-text
+            unmount              eject
             user                 person
             warn                 exclamation-triangle-fill
             watch                eye
         }
         fa-icons {
             add-new-item         "fa-solid fa-plus"
+            admin                "fa-solid fa-wrench"
             arrow-down           "fa-solid fa-arrow-down"
             arrow-left           "fa-solid fa-arrow-left"
             arrow-right          "fa-solid fa-arrow-right"
@@ -196,6 +210,7 @@ namespace eval ::template::icon {
             check                "fa-solid fa-check"
             checkbox-checked     "fa-regular fa-square-check"
             checkbox-unchecked   "fa-regular fa-square"
+            cog                  "fa-solid fa-gear"
             download             "fa-solid fa-download"
             edit                 "fa-regular fa-pen-to-square"
             eye-closed           "fa-regular fa-eye-slash"
@@ -203,26 +218,32 @@ namespace eval ::template::icon {
             file                 "fa-regular fa-file"
             filetype-csv         "fa-solid fa-file-csv"
             folder               "fa-regular fa-folder"
+            folder-add           "fa-solid fa-plus"
             form-info-sign       "fa-solid fa-circle-info"
             link                 "fa-solid fa-link"
             list                 "fa-solid fa-list"
             list-alt             "fa-regular fa-rectangle-list"
             next                 "fa-solid fa-chevron-right"
             paperclip            "fa-light fa-paperclip"
+            permissions          "fa-solid fa-lock"
             previous             "fa-solid fa-chevron-left"
             user                 "fa-solid fa-user"
             radio-checked        "fa-regular fa-circle-check"
             radio-unchecked      "fa-regular fa-circle"
             reload               "fa-solid fa-arrows-rotate"
+            search               "fa-solid fa-magnifying-glass"
             text                 "fa-regular fa-file-lines"
+            unmount              "fa-solid fa-eject"
             trash                "fa-regular fa-trash-can"
             warn                 "fa-solid fa-triangle-exclamation"
             watch                "fa-regular fa-eye"
         }
         glyphicons {
+            admin                wrench
             add-new-item         plus-sign
             checkbox-checked     check
             checkbox-unchecked   unchecked
+            cog                  cog
             download             download-alt
             edit                 pencil
             eye-closed           eye-close
@@ -230,22 +251,27 @@ namespace eval ::template::icon {
             file                 file
             filetype-csv         ""
             folder               folder-open
+            folder-add           plus-sign
             form-info-sign       info-sign
             link                 link
             list-alt             list-alt
             next                 menu-right
             paperclip            paperclip
+            permissions          lock
             previous             menu-left
             radio-checked        record
             radio-unchecked      /shared/images/radio.gif
             reload               refresh
+            search               search
             text                 file
+            unmount              eject
             user                 user
             warn                 alert
             watch                eye-open
         }
         classic {
             add-new-item         "+"
+            admin                ""
             arrow-down           /resources/acs-subsite/arrow-down.gif
             arrow-left           /resources/acs-subsite/arrow-left.png
             arrow-right          /resources/acs-subsite/arrow-right.png
@@ -253,6 +279,7 @@ namespace eval ::template::icon {
             checkbox-checked     /shared/images/checkboxchecked.gif
             checkbox-unchecked   /shared/images/checkbox.gif
             check                /shared/images/checkboxchecked.gif
+            cog                  " parameters"
             download             /shared/images/download16.png
             edit                 /shared/images/Edit16.gif
             eye-closed           /shared/images/eye-slash16.png
@@ -260,19 +287,23 @@ namespace eval ::template::icon {
             filetype-csv         /shared/images/csv16.png
             file                 /shared/images/file.gif
             folder               /shared/images/Delete16.gif
+            folder-add           "+"
             form-info-sign       /shared/images/info.gif
             link                 /resources/acs-subsite/url-button.gif
             list                 /shared/images/list16.png
-            list-alt             /shared/images/Preferences16.gif
-            next                 "rlaquo;"
+            list-alt             /resources/acs-subsite/Preferences16.gif
+            next                 "&raquo;"
             paperclip            /resources/acs-subsite/attach.png
+            permissions          ""
             previous             "&laquo;"
             radio-checked        /shared/images/radiochecked.gif
             radio-unchecked      /shared/images/radio.gif
             text                 /shared/images/text16.png
             reload               /shared/images/recylce16.png
+            search               /resources/acs-subsite/Zoom16.gif
             trash                /shared/images/Delete16.gif
-            user                 /shared/images/profile-16.png
+            unmount              ""
+            user                 /resources/acs-subsite/profile-16.png
             warn                 /shared/images/diamond.gif
             watch                /shared/images/eye16.png
         }

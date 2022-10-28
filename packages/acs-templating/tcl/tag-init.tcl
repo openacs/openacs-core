@@ -1044,7 +1044,9 @@ template::tag adp:icon { params } {
                -iconset [ns_set iget $params iconset] \
                -name [ns_set iget $params name] \
                -style [ns_set iget $params style] \
-               -title [ns_set iget $params title]]
+               -title [ns_set iget $params title] \
+               -invisible=[ns_set iget $params invisible f] \
+              ]
     dict with d {
         template::adp_append_string $HTML
         if {$cmd ne ""} {
