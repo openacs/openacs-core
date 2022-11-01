@@ -165,7 +165,7 @@ ad_proc -private ::template::icon {
     }
     if {$invisible_p} {
         set template "<span style='visibility:hidden;'>$template</span>"
-    }           
+    }
     #ns_log notice "RETURN  HTML [subst -nocommands $template] cmd $cmd]"
     return [list HTML [subst -nocommands $template] cmd $cmd]
 }
@@ -194,6 +194,7 @@ namespace eval ::template::icon {
             radio-unchecked      circle
             reload               arrow-clockwise
             search               search
+            sitemap              diagram-3
             text                 file-earmark-text
             unmount              eject
             user                 person
@@ -232,6 +233,7 @@ namespace eval ::template::icon {
             radio-unchecked      "fa-regular fa-circle"
             reload               "fa-solid fa-arrows-rotate"
             search               "fa-solid fa-magnifying-glass"
+            sitemap              "fa-solid fa-sitemap"
             text                 "fa-regular fa-file-lines"
             unmount              "fa-solid fa-eject"
             trash                "fa-regular fa-trash-can"
@@ -263,6 +265,7 @@ namespace eval ::template::icon {
             radio-unchecked      /shared/images/radio.gif
             reload               refresh
             search               search
+            sitemap              /resources/acs-subsite/sitemap.svg
             text                 file
             unmount              eject
             user                 user
@@ -301,6 +304,7 @@ namespace eval ::template::icon {
             text                 /shared/images/text16.png
             reload               /shared/images/recylce16.png
             search               /resources/acs-subsite/Zoom16.gif
+            sitemap              /resources/acs-subsite/sitemap.svg
             trash                /shared/images/Delete16.gif
             unmount              ""
             user                 /resources/acs-subsite/profile-16.png
