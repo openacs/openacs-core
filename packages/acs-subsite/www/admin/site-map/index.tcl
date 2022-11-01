@@ -147,33 +147,41 @@ template::list::create \
                 @nodes.type;noquote@
             }
         } actions {
-            label "Action"
+            label "Actions"
             html "align left"
             display_template {
                 <if @nodes.add_folder_url@ ne "">
-                  <a href="@nodes.add_folder_url@#add">[_ acs-subsite.add_folder]</a>
+                  <a href="@nodes.add_folder_url@#add"><adp:icon name='folder-add' title='[_ acs-subsite.add_folder]'></a>
                 </if>
-                <if @nodes.new_app_url@ ne "">
-                  <a href="@nodes.new_app_url@#new">[_ acs-subsite.new_application]</a>
-                </if>
+                <else><adp:icon name='folder-add' invisible='true'></else>
                 <if @nodes.unmount_url@ ne "">
-                  <a href="@nodes.unmount_url@">[_ acs-subsite.unmount]</a>
+                  <a href="@nodes.unmount_url@"><adp:icon name='unmount' title='[_ acs-subsite.unmount]'></a>
                 </if>
-                <if @nodes.mount_url@ ne "">
-                  <a href="@nodes.mount_url@">[_ acs-subsite.mount]</a>
-                </if>
+                <else><adp:icon name='unmount' invisible='true'></else>
                 <if @nodes.rename_url@ ne "">
-                  <a href="@nodes.rename_url@#rename">[_ acs-subsite.rename]</a>
+                  <a href="@nodes.rename_url@#rename"><adp:icon name='edit' title='[_ acs-subsite.rename]'></a>
                 </if>
+                <else><adp:icon name='edit' invisible='true'></else>
                 <if @nodes.delete_url@ ne "">
-                <a href="@nodes.delete_url@" id="@nodes.delete_id;literal@">[_ acs-subsite.delete]</a>
+                <a href="@nodes.delete_url@" id="@nodes.delete_id;literal@"><adp:icon name='trash' title='[_ acs-subsite.delete]'></a>
                 </if>
+                <else><adp:icon name='trash' invisible='true'></else>
                 <if @nodes.parameters_url@ ne "">
-                  <a href="@nodes.parameters_url@">[_ acs-subsite.parameters]</a>
+                  <a href="@nodes.parameters_url@"><adp:icon name='cog' title='[_ acs-subsite.parameters]'></a>
                 </if>
+                <else><adp:icon name='trash' invisible='true'></else>
                 <if @nodes.permissions_url@ ne "">
-                  <a href="@nodes.permissions_url@">[_ acs-subsite.permissions]</a>
+                  <a href="@nodes.permissions_url@"><adp:icon name='permissions' title='[_ acs-subsite.permissions]'></a>
                 </if>
+                <else><adp:icon name='permissions' invisible='true'></else>
+                <if @nodes.new_app_url@ ne "">
+                  <a href="@nodes.new_app_url@#new"><adp:icon name='add-new-item' title='[_ acs-subsite.new_application]'></a>
+                </if>
+                <else><adp:icon name='add-new-item' invisible='true'></else>
+                <if @nodes.mount_url@ ne "">
+                  <a href="@nodes.mount_url@"><adp:icon name='search' title='[_ acs-subsite.mount]'></a>
+                </if>
+                <else><adp:icon name='search' invisible='true'></else>
                 <if @nodes.extra_form_part@ ne "">
                   @nodes.extra_form_part;noquote@
                 </if>
@@ -205,7 +213,7 @@ db_foreach nodes_select {} {
     if {$name eq ""} {
         set name "/"
     }
-    
+
     if {$directory_p == "t"} {
         set add_folder_url [export_vars -base . {expand:multiple root_id node_id {new_parent $node_id} {new_type folder}}]
         if {$object_id eq ""} {
