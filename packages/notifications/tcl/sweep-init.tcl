@@ -8,9 +8,10 @@ ad_library {
 
 }
 
-set cleanupInterval [parameter::get \
-                         -package_id [apm_package_id_from_key notifications] \
-                         -parameter CleanupSweepInterval -default 900]
+set cleanupInterval [parameter::get_from_package_key \
+                         -package_key notifications \
+                         -parameter CleanupSweepInterval \
+                         -default 900]
 ad_schedule_proc -thread t $cleanupInterval notification::sweep::cleanup_notifications
 
 foreach interval [notification::get_all_intervals] {
