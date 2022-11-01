@@ -82,6 +82,7 @@ template::list::create -name package_list \
         }
         action {
             label ""
+            html {style {white-space:nowrap;}}
             display_template {@packages.action_html;noquote@}
         }
     } -filters {owned_by {} supertype {} status {}}
@@ -123,7 +124,7 @@ db_multirow -extend {package_url maintained status action_html} packages apm_tab
             }]
         }
     }
-    set action_html [join $file_link_list " | "]
+    set action_html [join $file_link_list " "]
 }
 
 # The reload links make the page slow, so make them optional

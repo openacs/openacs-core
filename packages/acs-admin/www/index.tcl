@@ -50,16 +50,16 @@ template::list::create \
         }
         admin_url {
             label "Site-Wide Administration"
-            link_html { title "Site-wide Administration" }
+            link_html { align center title "Site-wide Administration" }
             link_url_col admin_url
-            display_template {<if @packages.admin_url@ not nil>#acs-admin.Administration#</if>}
+            display_template {<if @packages.admin_url@ not nil><adp:icon name="admin"> #acs-admin.Administration#</if>}
             html {align left}
         }
         global_param_url {
             label "Global Parameters"
             link_html {title "Manage Global Parameters" }
             link_url_col global_param_url
-            display_template {<if @packages.global_param_url@ not nil>#acs-admin.Parameters#</if>}
+            display_template {<if @packages.global_param_url@ not nil><adp:icon name="cog"> #acs-admin.Parameters#</if>}
             html {align left}
         }
     }

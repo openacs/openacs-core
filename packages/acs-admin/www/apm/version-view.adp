@@ -50,7 +50,8 @@
 <ul class="action-links">
   <li><a href="@version_files_href@">Files</a></li>
   <li><a href="@version_dependency_href@">Dependencies and Provides</a></li>
-  <li><a href="@version_parameters_href@">Parameters</a></li>
+  <li><a href="@version_parameters_href@">Parameters <adp:icon name="cog"></a></li>
+  <if @sitewide_admin_href@ not nil><li><a href="@sitewide_admin_href@">Sitewide Admin <adp:icon name="admin"></a></li></if>
   <li><a href="@version_callbacks_href@">Tcl Callbacks (install, instantiate, mount)</a></li>
   <li><a href="@i18_href@">Internationalization</a></li>
   <li>@instancesHTML;noquote@</li>
@@ -60,8 +61,8 @@
 <h4>Update Blueprint</h4>
 
 <ul class="action-links">
-  <li><a href="@reload_href;noi18n@"><adp:icon name="reload" alt="reload"> Reload this package</a></li>
-  <li><a href="@watch_href;noi18n@"><adp:icon name="watch" alt="reload"> Watch all files in package</a></li>
+  <li><a href="@reload_href;noi18n@">Reload this package <adp:icon name="reload" alt="reload"></a></li>
+  <li><a href="@watch_href;noi18n@">Watch all files in package <adp:icon name="watch" alt="reload"></a></li>
 </ul>
 
 <h4>XML .info package specification file</h4>

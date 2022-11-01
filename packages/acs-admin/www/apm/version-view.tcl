@@ -222,6 +222,14 @@ set reload_href             [export_vars -base version-reload {version_id {retur
 set watch_href              [export_vars -base package-watch  {package_key {return_url [ad_return_url]}}]
 set version_generate_href   [export_vars -base version-generate-info {version_id}]
 
+if {[apm_package_installed_p $package_key]
+    && [file exists "[acs_package_root_dir $package_key]/www/sitewide-admin/"]
+} {
+    set sitewide_admin_href "/acs-admin/package/$package_key/"
+} else {
+    set sitewide_admin_href ""
+}
+
 if { ![info exists installed_version_id] ||
      ($installed_version_id == $version_id && $distribution_uri eq "")
  } {

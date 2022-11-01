@@ -18,36 +18,49 @@ set context [list \
                  $title]
 set return_url [export_vars -base [ad_conn url] { package_key }]
 
-append body <h3>$title</h3><ul>
-
+append body \
+    <h1>$title</h1><ul><p> \
+    "<table class='table table-striped'>" \
+    "<tr><th>Package ID</th></th><th>Instance Name</th><th>Mount Point</th><th>Actions</th></tr>\n"
+    
+set lines {}
 db_foreach get_version_info {
     select package_id, instance_name from apm_packages where package_key = :package_key
     order by package_id
 } {
+    ns_log notice "GOT $package_id, $instance_name "
     set URLs [site_node::get_url_from_object_id -object_id $package_id]
+    set actions ""
     if {[llength $URLs] > 0} {
+        ns_log notice "GOT $package_id, $instance_name -> URLs $URLs"
+ 
         foreach url $URLs {
             set node_id [dict get [site_node::get -url $url] node_id]
             set delete_href [export_vars -base /admin/applications/application-delete { node_id return_url }]
             set smap_href [export_vars -base /admin/site-map { {root_id $node_id} return_url }]
-            append body [subst {
-                <li>$package_id $instance_name <a href="$url">$url</a> (node_id $node_id): 
-                \[<a href="[ns_quotehtml $delete_href]">delete</a>,
-                <a href="[ns_quotehtml $smap_href]">Site Map</a>\]
-                </li>
+            set permissions_href [export_vars -base /permissions/one {{object_id $package_id}}]
+            set line [subst {
+                <td>$package_id</td><td>$instance_name</td><td><a href="$url">$url</a></td><td> 
+                <a href="[ns_quotehtml $delete_href]"><adp:icon name="trash" title="Delete Instance"></a>
+                <a href="[ns_quotehtml $smap_href]"><adp:icon name="sitemap" title="Site Map"></a>
+                <a href="[ns_quotehtml $permissions_href]"><adp:icon name="permissions" title="Permissions"></a>
+                </td>
             }]
+            lappend lines $line
         }
     } else {
         set delete_href [export_vars -base /admin/applications/application-delete { package_id return_url }]
-        append body [subst {
-            <li>$package_id $instance_name (unmounted): 
-            \[<a href="[ns_quotehtml $delete_href]">delete</a>\]
-            </li>
+        set line [subst {
+            <td>$package_id</td><td>$instance_name</td><td>(unmounted)</td><td>
+            <a href="[ns_quotehtml $delete_href]"><adp:icon name="trash" title="delete instance"></a></td>
         }]
-    }
+        lappend lines $line
+    }    
 }
-
-append body </ul>
+foreach line $lines {
+    append body <tr>$line</tr>\n
+}
+append body </table>
 
 ad_return_template apm
 

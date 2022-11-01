@@ -24,6 +24,7 @@ if {$subsite_number > 500} {
         path_pretty
         node_url
         parameter_url
+        sitemap_url
     } subsites subsite_admin_urls [subst {
         select s.node_id,
                p.package_id
@@ -40,6 +41,7 @@ if {$subsite_number > 500} {
         set parameter_url [export_vars -base /shared/parameters {package_id {return_url "[ad_conn url]"}}]
         set theme [parameter::get -parameter ThemeKey -package_id $package_id]
         set theme_url ${admin_url}themes/
+        set sitemap_url [export_vars -base /admin/site-map { {root_id $node_id} }]
 
         while { $parent_id ne "" } {
             set node [site_node::get -node_id $parent_id]
@@ -70,26 +72,15 @@ if {$subsite_number > 500} {
                 link_url_col theme_url
                 html {align left}
             }
-            admin_url {
-                label "Subsite Administration"
-                link_html { title "Subsite Administration" }
-                link_url_col admin_url
-                display_template {<if @subsites.admin_url@ not nil>#acs-admin.Administration#</if>}
-                html {align left}
-            }
-            parameter_url {
-                label "Parameters"
-                link_html {title "Manage Subsite Parameters" }
-                display_template {\#acs-admin.Parameters#}
-                link_url_col parameter_url
-                html {align left}
-            }
-            sitemap {
-                sub_class narrow
+            actions {
+                label "Actions"
+                html {style {white-space:nowrap;}}
                 display_template {
-                    <adp:icon name="edit" title="Manage sitemap">                    
+                    <if @subsites.admin_url@ not nil><adp:icon name="admin" title="#acs-admin.Administration#"></if>
+                    <else><adp:icon name="admin" visible="false"></else>&nbsp;
+                    <a href="@subsites.parameter_url@"><adp:icon name="cog" title="#acs-admin.Parameters#"></a>&nbsp;
+                    <a href="@subsites.sitemap_url@"><adp:icon name="sitemap" title="Manage sitemap">
                 }
-                link_url_eval {[export_vars -base /admin/site-map { {root_id $node_id} }]}
             }
         }
 }
