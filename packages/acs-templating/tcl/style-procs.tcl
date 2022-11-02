@@ -131,11 +131,12 @@ ad_proc -private ::template::icon {
     if {[dict exists $::template::icon::map $iconset $name]} {
         set name [dict get $::template::icon::map $iconset $name]
     }
-    if {[string range $name 0 0] eq "/"} {
+    set firstchar [string range $name 0 0]
+    if {$firstchar eq "/"} {
         set iconset default
     } elseif {$name eq ""} {
         set iconset text
-    } elseif {![string match {[a-z]} [string range $name 0 0]]} {
+    } elseif {![string match {[a-z@]} $firstchar]} {
         set iconset text
         set alt $name
     }
