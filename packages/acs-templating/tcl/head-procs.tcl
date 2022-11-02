@@ -976,7 +976,11 @@ ad_proc template::get_footer_html {
 
 ad_proc -private template::register_double_click_handler {} {
 } {
-    template::add_body_script -script [ns_trim {
+    set default_timeout [parameter::get_from_package_key \
+                             -package_key acs-templating \
+                             -parameter DefaultPreventDoubleClickTimeoutMs \
+                             -default 2000]
+    template::add_body_script -script [subst -nobackslashes -nocommands [ns_trim {
         function oacs_reenable_double_click_handler(target) {
             if ( target.dataset.oacsClicked == 'true') {
                 target.dataset.oacsClicked = false;
@@ -997,7 +1001,7 @@ ad_proc -private template::register_double_click_handler {} {
                     } else {
                         target.dataset.oacsClicked = true;
                         target.classList.add("disabled");
-                        let timeout = target.dataset.oacsTimeout || 1000;
+                        let timeout = target.dataset.oacsTimeout || $default_timeout;
                         console.log('reactivate in ' + timeout);
                         setTimeout(function() {oacs_reenable_double_click_handler(target);}, timeout);
                         setTimeout(function() {target.disabled = true;});
@@ -1013,7 +1017,7 @@ ad_proc -private template::register_double_click_handler {} {
                 e.dataset.oacsDoubleClickHandlerRegistered = true;
             }
         };
-    }]
+    }]]
 }
 
 ad_proc template::get_body_event_handlers {
