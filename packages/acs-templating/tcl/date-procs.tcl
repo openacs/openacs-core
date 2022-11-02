@@ -834,7 +834,7 @@ ad_proc -public template::util::date::validate {
         }
     }
 
-    if { $year ne {} && $year < 0 } {
+    if { $year ne {} && $year < 1 } {
         lappend error_msg [_ acs-templating.Year_must_be_positive]
     }
 
