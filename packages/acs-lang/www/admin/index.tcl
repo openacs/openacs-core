@@ -126,6 +126,7 @@ template::list::create \
             display_template {<adp:icon name="edit" title="#acs-lang.Edit_definition_of_locale#">}
         }
         locale {
+            sub_class narrow           
             label "#acs-lang.Locale#"
         }
         locale_label {

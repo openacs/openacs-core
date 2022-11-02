@@ -26,7 +26,7 @@
       <td><a href="@history.key_url@">@history.package_key@.@history.message_key@</a></td>  
       <td>@history.overwrite_date@</td>  
       <td>@history.old_message@</td>  
-      <td>@history.user_name@
+      <td style="white-space:nowrap;">@history.user_name@
     </tr>
   </multiple>
 </table>

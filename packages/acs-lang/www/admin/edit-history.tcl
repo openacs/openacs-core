@@ -35,7 +35,7 @@ db_multirow -extend { key_url } history german_edit_history {
                             lma.message_key,
                             lma.package_key,
                             lma.locale,
-                            cu.first_names || cu.last_name as user_name
+                            cu.first_names || ' ' || cu.last_name as user_name
                      from lang_messages_audit lma,
                           cc_users cu
                      where cu.user_id = lma.overwrite_user

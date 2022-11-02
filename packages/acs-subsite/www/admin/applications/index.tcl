@@ -60,25 +60,24 @@ list::create \
         package_pretty_name {
             label "[_ acs-subsite.Application]"
         }
-        permissions {
-            label "[_ acs-subsite.Permissions]"
-            link_url_eval {[export_vars -base permissions { package_id }]}
-            display_template { #acs-subsite.Permissions# }
-            sub_class narrow
-        }
-        parameters {
-            label "[_ acs-subsite.Parameters]"
-            link_url_col parameter_url
-            display_template {<if @applications.parameter_url@ not nil>[_ acs-subsite.Parameters]</if>}
-            sub_class narrow
-        }
-        delete {
-            sub_class narrow
+        actions {
+            label "Actions"
+            html "align left"
             display_template {
-                <adp:icon name="trash" title="#acs-subsite.Delete_this_application#">
+                <if @applications.permissions_url@ ne "">
+                  <a href="@applications.permissions_url@"><adp:icon name='permissions' title='[_ acs-subsite.permissions]'></a>
+                </if>
+                <else><adp:icon name='permissions' invisible='true'></else>
+
+                <if @applications.parameter_url@ ne "">
+                  <a href="@applications.parameter_url@"><adp:icon name='cog' title='[_ acs-subsite.parameters]'></a>
+                </if>
+                <else><adp:icon name='cog' invisible='true'></else>
+
+                <a href="@applications.delete_url@"><adp:icon name="trash" title="#acs-subsite.Delete_this_application#"></a>
             }
-            link_url_eval {[export_vars -base application-delete { node_id }]}
         }
+
     } -filters {
         search {
             hide_p 1
@@ -89,11 +88,13 @@ list::create \
     }
 
 
-db_multirow -extend { parameter_url } applications select_applications_page {} {
+db_multirow -extend { parameter_url permissions_url delete_url} applications select_applications_page {} {
     set instance_name [string repeat "- " $treelevel]$instance_name
     if { $parameters_p } {
         set parameter_url [export_vars -base ../../shared/parameters { package_id { return_url [ad_return_url] } }]
     }
+    set delete_url [export_vars -base application-delete { node_id }]
+    set permissions_url [export_vars -base permissions { package_id }]
 }
 
 # Local variables:
