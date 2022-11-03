@@ -980,6 +980,9 @@ ad_proc -private template::register_double_click_handler {} {
                              -package_key acs-templating \
                              -parameter DefaultPreventDoubleClickTimeoutMs \
                              -default 2000]
+    if {$default_timeout == 0} {
+        return
+    }
     template::add_body_script -script [subst -nobackslashes -nocommands [ns_trim {
         function oacs_reenable_double_click_handler(target) {
             if ( target.dataset.oacsClicked == 'true') {
