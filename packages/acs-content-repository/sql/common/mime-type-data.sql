@@ -572,7 +572,8 @@ insert into cr_mime_types(label, mime_type, file_extension) select 'Microsoft Of
 insert into cr_mime_types(label, mime_type, file_extension) select 'Microsoft Office PowerPoint Template macro enabled', 'application/vnd.ms-powerpoint.template.macroenabled.12', 'potm' from dual;
 insert into cr_mime_types(label, mime_type, file_extension) select 'Microsoft Office PowerPoint Slideshow macro enabled', 'application/vnd.ms-powerpoint.slideshow.macroenabled.12', 'ppsm' from dual;
 
-
+-- Video subtitles
+insert into cr_mime_types (label,mime_type,file_extension) values ( 'Web Video Text Tracks Format', 'text/vtt', 'vtt' );
 
 --  Here are some less common mime types and extensions not defined here.
 --
