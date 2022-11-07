@@ -891,6 +891,7 @@ ad_proc -public export_vars {
     return $export_string
 }
 
+
 ad_proc -private export_vars_sign {
     {-params ""}
     value
@@ -3598,6 +3599,44 @@ ad_proc util::external_url_p { url } {
     }
     return $external_url_p
 }
+
+ad_proc util::potentially_unsafe_eval_p { -warn:boolean string } {
+
+    Check content of the string to identify potentially unsafe content
+    in the provided string. The content is unsafe, when it contains
+    externally provided content, which might be provided e.g. via
+    query variables, or via user values stored in the database. When
+    such content contains square braces, a "subst" command on
+    theses can evaluate arbitrary commands, which is dangerous.
+
+} {
+    set unsafe_p 0
+    set original_string $string
+    while {1} {
+        set p [string first \[ $string ]
+        if {$p > 0} {
+            set previous_char [string range $string $p-1 $p-1]
+            set string [string range $string $p+1 end]
+            if {$previous_char eq "\\"} {
+                continue
+            }
+        }
+        if {$p < 0 || [string length $string] < 2} {
+            break
+        }
+        set unsafe_p 1
+        if {$warn_p} {
+            ad_log warning "potentially unsafe eval on '$original_string'"
+        }
+    }
+    return $unsafe_p
+}
+
+# potential test cases
+#util::potentially_unsafe_eval_p 123
+#util::potentially_unsafe_eval_p {123[aaa}
+#util::potentially_unsafe_eval_p {123\[aaa}
+#util::potentially_unsafe_eval_p {123\[aaa[567}
 
 ad_proc -public ad_job {
     {-queue jobs}
