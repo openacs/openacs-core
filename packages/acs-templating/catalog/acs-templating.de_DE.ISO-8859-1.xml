@@ -122,4 +122,5 @@
   <msg key="Year">Jahr</msg>
   <msg key="year">Jahr</msg>
   <msg key="Year_must_be_positive">Jahr muss positiv sein</msg>
+  <msg key="Year_must_be_between_1_and_9999">Jahr muss zwischen 1 und 9999 liegen</msg>
 </message_catalog>
