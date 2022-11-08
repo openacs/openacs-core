@@ -74,7 +74,7 @@ namespace eval ::acs {
             #
             # NaviServer variant
             #
-            :public method eval {{-partition_key} {-expires:integer} {-per_request:switch} key command} {
+            :public method eval {{-partition_key} {-expires:integer} {-timeout:integer} {-per_request:switch} key command} {
                 #
                 # Evaluate the command unless it is cached.
                 #
@@ -88,20 +88,23 @@ namespace eval ::acs {
                 if {![info exists partition_key]} {
                     set partition_key $key
                 }
-                if {[info exists expires]} {
-                    set expires_flag [list -expires $expires]
-                } else {
-                    set expires_flag {}
+                foreach optional_parameter {expires timeout} {
+                    if {[info exists $optional_parameter]} {
+                        set ${optional_parameter}_flag [list -$optional_parameter [set $optional_parameter]]
+                    } else {
+                        set ${optional_parameter}_flag ""
+                    }
                 }
                 set cache_name [:cache_name $partition_key]
                 try {
                     if {$per_request} {
                         acs::per_request_cache eval -key ::acs-${cache_name}($key) {
-                            :uplevel [list ns_cache_eval {*}$expires_flag -- \
+                            :uplevel [list ns_cache_eval \
+                                          {*}$expires_flag {*}$timeout_flag -- \
                                           $cache_name $key $command]
                         }
                     } else {
-                        :uplevel [list ns_cache_eval {*}$expires_flag -- \
+                        :uplevel [list ns_cache_eval {*}$expires_flag {*}$timeout_flag -- \
                                       $cache_name $key $command]
                     }
 
@@ -157,9 +160,10 @@ namespace eval ::acs {
             #
             # AOLserver variant
             #
-            :public method eval {{-partition_key} {-expires:integer} {-per_request:switch} key command} {
+            :public method eval {{-partition_key} {-expires:integer}  {-timeout:integer} {-per_request:switch} key command} {
                 #
                 # ignore "-expires", since not supported by AOLserver
+                # ignore "-timeout", since not supported by AOLserver
                 # ignore "-per_request" optimization so far
                 #
                 if {![info exists partition_key]} {
