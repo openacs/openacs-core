@@ -733,6 +733,9 @@ ad_proc -public export_vars {
 
                     if { [llength $var_spec] > 1 } {
                         if { $precedence_type ne "noprocessing_vars" } {
+                            if {[util::potentially_unsafe_eval_p -- [lindex $var_spec 1]]} {
+                                ad_log warning "potentially_unsafe_eval in variable/value pair $var_spec"
+                            }
                             set value [uplevel subst \{[lindex $var_spec 1]\}]
                         } else {
                             set value [lindex $var_spec 1]
@@ -3613,6 +3616,7 @@ ad_proc util::potentially_unsafe_eval_p { -warn:boolean string } {
     theses can evaluate arbitrary commands, which is dangerous.
 
 } {
+    #ns_log notice "util::potentially_unsafe_eval_p '$string'"
     set unsafe_p 0
     set original_string $string
     while {1} {
@@ -3624,6 +3628,7 @@ ad_proc util::potentially_unsafe_eval_p { -warn:boolean string } {
                 continue
             }
         }
+        #ns_log notice "util::potentially_unsafe_eval_p '$string' $p"        
         if {$p < 0 || [string length $string] < 2} {
             break
         }
@@ -3631,7 +3636,9 @@ ad_proc util::potentially_unsafe_eval_p { -warn:boolean string } {
         if {$warn_p} {
             ad_log warning "potentially unsafe eval on '$original_string'"
         }
+        break
     }
+    #ns_log notice "util::potentially_unsafe_eval_p '$string' ->  $unsafe_p"    
     return $unsafe_p
 }
 
