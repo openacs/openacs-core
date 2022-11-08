@@ -733,10 +733,10 @@ ad_proc -public export_vars {
 
                     if { [llength $var_spec] > 1 } {
                         if { $precedence_type ne "noprocessing_vars" } {
-                            if {[util::potentially_unsafe_eval_p -- [lindex $var_spec 1]]} {
-                                ad_log warning "potentially_unsafe_eval in variable/value pair $var_spec"
-                            }
-                            set value [uplevel subst \{[lindex $var_spec 1]\}]
+                            #if {[util::potentially_unsafe_eval_p -- [lindex $var_spec 1]]} {
+                            #    ad_log warning "potentially_unsafe_eval in variable/value pair $var_spec"
+                            #}
+                            set value [uplevel [list subst [lindex $var_spec 1]]]
                         } else {
                             set value [lindex $var_spec 1]
                         }
