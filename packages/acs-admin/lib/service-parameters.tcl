@@ -12,6 +12,7 @@ ad_include_contract {
 }
 
 set user_id [ad_conn user_id]
+set return_url [ad_return_url]
 set swadmin_p 0
 db_multirow -extend { url admin_url param_url sitewide_admin_url} packages services_select {
     select package_id,
@@ -44,7 +45,7 @@ db_multirow -extend { url admin_url param_url sitewide_admin_url} packages servi
         }
     }
     if { $parameter_count > 0 } {
-        set param_url [export_vars -base "/shared/parameters" { package_id { return_url {[ad_return_url]} } }]
+        set param_url [export_vars -base "/shared/parameters" {package_id return_url}]
     }
     set instance_name [lang::util::localize $instance_name]
 

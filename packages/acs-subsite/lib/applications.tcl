@@ -2,14 +2,18 @@ ad_include_contract {
     Show applications mounted under current subsite
 }
 
-set admin_p [permission::permission_p -object_id [ad_conn subsite_id] -privilege admin -party_id [ad_conn untrusted_user_id]]
+set admin_p [permission::permission_p \
+                 -object_id [ad_conn subsite_id] \
+                 -privilege admin \
+                 -party_id [ad_conn untrusted_user_id]]
 
 set actions [list]
 if { $admin_p } {
+    set return_url [ad_return_url]
     lappend actions \
         [_ acs-subsite.Add_new_app] \
         [export_vars -base "[subsite::get_element -element url]admin/applications/application-add" {
-            { return_url [ad_return_url] }
+            return_url
         }]
 }
 
