@@ -2477,13 +2477,16 @@ ad_proc ad_sanitize_filename {
             # way confusion through replacement of deleted content
             # with new stuff is avoided.
 
+            set str_length [string length "${str}${replace_with}"]
             set number 2
 
             foreach name $existing_names {
 
-                if { [regexp "${str}${replace_with}(\\d+)\$" $name match n] } {
-                    # matches the foo-123 pattern
-                    if { $n >= $number } { set number [expr {$n + 1}] }
+                if {[string range $name 0 $str_length-1] eq "${str}${replace_with}"} {
+                    set n [string range $name $str_length end]
+                    if {[string is integer -strict $n] && $n >= $number} {
+                        set number [incr n]
+                    }
                 }
             }
 
