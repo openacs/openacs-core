@@ -60,7 +60,7 @@ if {$admin_p} {
 set help_text [_ acs-subsite.lt_Use_the_Browse_button]
 
 ad_form -name "portrait_upload" -html {enctype "multipart/form-data"} -export {user_id return_url} -form {
-    {upload_file:text(file)
+    {upload_file:file(file)
         {label "#acs-subsite.Filename#"}
         {help_text $help_text}
     }
