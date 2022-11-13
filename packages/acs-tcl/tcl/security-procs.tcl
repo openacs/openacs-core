@@ -2063,13 +2063,23 @@ ad_proc -public ad_set_client_property {
                 #
                 # Perform an upsert operation via stored procedure
                 #
-                acs::dc call sec_session_property upsert \
-                    -session_id $session_id \
-                    -module $module \
-                    -name $name \
-                    -value $value \
-                    -secure $secure \
-                    -last_hit $last_hit
+                if {[db_driverkey ""] eq "oracle"} {
+                    acs::dc call sec_session_property upsert \
+                        -p_session_id $session_id \
+                        -p_module $module \
+                        -p_name $name \
+                        -p_value $value \
+                        -p_secure $secure \
+                        -p_last_hit $last_hit
+                } else {
+                    acs::dc call sec_session_property upsert \
+                        -session_id $session_id \
+                        -module $module \
+                        -name $name \
+                        -value $value \
+                        -secure $secure \
+                        -last_hit $last_hit
+                }
             }
         }
     }
