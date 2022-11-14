@@ -1021,6 +1021,11 @@ namespace eval ::acs {
                 }]
                 if {[db_driverkey ""] eq "oracle"} {
                     set sql [string map [list "WITH RECURSIVE" "WITH"] $sql]
+                    if { $with_subtree } {
+                        set sql [string map [list ":with_subtree" "1 = 1"] $sql]
+                    } else {
+                        set sql [string map [list ":with_subtree" "1 = 0"] $sql]
+                    }
                 }
 
                 set tree [::acs::dc list_of_lists -prepare {integer boolean} dbqd..get_subtree $sql]
