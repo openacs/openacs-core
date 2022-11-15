@@ -420,11 +420,23 @@ ad_proc -public template::element::create { form_id element_id args } {
 
     # check for submission
     if { [template::form is_submission $form_id] || [info exists opts(param)] } {
+
+        if {[info exists opts(param)]} {
+            ad_log warning "Outdated and deprecated form options detected," \
+                "The usage of opts(param) will be removed in versions past 5.10.1"
+        }
+
         validate $form_id $element_id
     } elseif { [ns_queryget "__edit"] ne "" } {
         # If the magic __edit button was hit, try to get values from the form still
         # but don't do any validation
         set opts(values) [querygetall opts]
+
+        ad_log warning "This if-branch is insecure since it bypasses validation." \
+            "the branch is deactivated rigjt now, and there is no know usage" \
+            "of the __edit flag. If you still need it, uncomment the following line" \
+            "and contact webmaster@openacs.org"
+        error "Outdated and vulnerable code detected, contact webmaster@openacs.org"
 
         # be careful not to clobber a default value if one has been specified
         if { [llength $opts(values)] || ! [info exists opts(value)] } {
