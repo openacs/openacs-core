@@ -14,10 +14,10 @@
                 language,
                 default_p,
                 enabled_p,
-                case when num_messages is null          then 0 else num_messages end,
-                case when num_translated is null        then 0 else num_translated end,
-                case when num_untranslated is null      then 0 else num_untranslated end,
-                case when num_deleted is null           then 0 else num_deleted end
+	        case when num_messages is null          then 0 else num_messages end as num_messages,
+	        case when num_translated is null        then 0 else num_translated end as num_translated,
+	        case when num_untranslated is null      then 0 else num_untranslated end as num_untranslated,
+	        case when num_deleted is null           then 0 else num_deleted end as num_deleted
             from (
                 select
                     locale,
@@ -50,6 +50,10 @@
                  al.locale = locale_summary.locale
             group by
                 al.locale,
+		al.label,
+	        language,
+	        default_p,
+	        enabled_p,
                 num_messages,
                 num_translated,
                 num_untranslated,
