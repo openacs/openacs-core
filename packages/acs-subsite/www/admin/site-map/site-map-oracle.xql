@@ -50,4 +50,21 @@
         </querytext>
     </fullquery>
 
+    <fullquery name="path_select">
+        <querytext>
+    WITH site_node_path(node_id,parent_id,name,object_id,directory_p,mylevel) AS (
+       select node_id, parent_id, name, object_id, directory_p, 1 as mylevel
+       from site_nodes where node_id = :root_id
+    UNION ALL
+       select c.node_id, c.parent_id, c.name, c.object_id, c.directory_p, p.mylevel+1 mylevel
+       from site_node_path p, site_nodes c where  c.node_id = p.parent_id
+    )
+    select
+       node_id, name, directory_p, mylevel,
+       acs_object.name(object_id) as obj_name,
+       acs_permission.permission_p(object_id, :user_id, 'admin') as admin_p
+    from   site_node_path order by mylevel desc
+        </querytext>
+    </fullquery>
+
 </queryset>
