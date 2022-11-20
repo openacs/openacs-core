@@ -167,25 +167,29 @@ ad_proc -private adp_parse_ad_conn_file {} {
                 set key [string range $parsed_template [lindex $key 0] [lindex $key 1]]
                 lassign [split $key "."] package_key message_key
 
+                set locale [ad_conn locale]
                 set edit_url [export_vars -base "${apm_package_url}admin/edit-localized-message" {
-                    { locale {[ad_conn locale]} } package_key message_key { return_url [ad_return_url] } }]
+                    { locale {$locale} } package_key message_key { return_url [ad_return_url] } }]
 
-                if { [lang::message::message_exists_p [ad_conn locale] $key] } {
-                    set edit_link [subst {<a class="acs-lang-localized" href="[ns_quotehtml $edit_url]" title="$key"></a>}]
+                if { [lang::message::message_exists_p $locale $key] } {
+                    set edit_link [subst {<a class="acs-lang-localized" href="[ns_quotehtml $edit_url]"
+                        title="$key"><adp:icon name="check" title="Message Key '$key': available in current locale $locale"></a>}]
                 } else {
                     if { [lang::message::message_exists_p "en_US" $key] } {
                         # Translation missing in this locale
-                        set edit_link [subst {<a class="acs-lang-us_only" href="[ns_quotehtml $edit_url]" title="$key"></a>}]
+                        set edit_link [subst {<a class="acs-lang-us_only" href="[ns_quotehtml $edit_url]"
+                            title="$key"><adp:icon name="warn" title="Message Key $key: missing in $locale"></a>}]
                     } else {
                         # Message key missing entirely
                         set new_url [export_vars -base "${apm_package_url}admin/localized-message-new" {
                             { locale en_US } package_key message_key { return_url [ad_return_url] }
                         }]
-                        set edit_link [subst {<a class="acs-lang-missing" href="[ns_quotehtml $new_url]" title="$key"></a>}]
+                        set edit_link [subst {<a class="acs-lang-missing" href="[ns_quotehtml $new_url]"
+                            title="$key"><adp:icon name="warn" title="Message Key '$key': undefined"></a>}]
                     }
                 }
 
-                set parsed_template "${before}${edit_link}${after}"
+                set parsed_template "${before}[::template::adp_parse_tags ${edit_link}]${after}"
             }
         }
 

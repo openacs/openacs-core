@@ -726,22 +726,21 @@ a.acs-lang-us_only,
 a.acs-lang-missing {
     padding: 1px 1px 1px 1px;
     text-decoration: none;
-    border: 1px solid red;
 }
-a.acs-lang-localized::after {
+a.acs-lang-localized {
+    border-radius: 25px;
+    border: 1px solid green;
     color: green;
-    font-weight: bold;
-    content: "o";
 }
-a.acs-lang-us_only::after {
+a.acs-lang-us_only {
+    border-radius: 25px;
+    border: 1px solid orange;
     color: orange;
-    font-weight: bold;
-    content: "*"; 
 }
-a.acs-lang-missing::after {
+a.acs-lang-missing {
+    border-radius: 25px;
+    border: 1px solid red;
     color: red;
-    font-weight: bold;
-    content:  "*"; 
 }
 
 
