@@ -54,35 +54,13 @@ db_multirow groups groups_select {
             and (app_group.package_id = :package_id
                  and app_group.element_id = g.group_id
                  or o.object_id = -2)
-	    and acs_permission.permission_p(g.group_id, :user_id, 'read')
+	    and acs_permission.permission_p(g.group_id, :user_id, 'read') = 't'
           order by g.group_name, g.group_id) my_view
     fetch first 26 rows only
 }
 
 # Select out all the attributes for groups of this type
-db_multirow -extend {one_attribute_url} attributes attributes_select {
-    with recursive group_hierarchy as (
-       select object_type, pretty_name, 1 as type_level
-       from acs_object_types
-       where object_type = 'group'
-
-       union all
-
-       select t.object_type, t.pretty_name, h.type_level + 1 as type_level
-       from acs_object_types t,
-            group_hierarchy h
-       where t.supertype = h.object_type
-    )
-    select a.attribute_id,
-           a.pretty_name,
-           a.ancestor_type,
-           t.pretty_name as ancestor_pretty_name
-      from acs_object_type_attributes a,
-           group_hierarchy t
-     where a.object_type = :group_type
-       and t.object_type = a.ancestor_type
-    order by type_level
-} {
+db_multirow -extend {one_attribute_url} attributes attributes_select {} {
     set one_attribute_url [export_vars -base "../attributes/one" {attribute_id return_url}]
 }
 
