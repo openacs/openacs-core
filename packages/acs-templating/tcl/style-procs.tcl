@@ -290,7 +290,7 @@ namespace eval ::template::icon {
             eye-open             /shared/images/eye16.png
             filetype-csv         /shared/images/csv16.png
             file                 /shared/images/file.gif
-            folder               /shared/images/Delete16.gif
+            folder               /resources/acs-subsite/Open16.gif
             folder-add           "+"
             form-info-sign       /shared/images/info.gif
             link                 /resources/acs-subsite/url-button.gif
