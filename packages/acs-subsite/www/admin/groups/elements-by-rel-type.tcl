@@ -41,7 +41,7 @@ db_multirow -extend {
     select
         g.group_id,
         g.rel_type,
-        g.group_id = null as rel_type_valid_p,
+        null as rel_type_valid_p,
         gr.group_rel_id,
         (select pretty_name from acs_object_types
           where object_type = g.rel_type) as rel_type_pretty_name,
@@ -51,8 +51,8 @@ db_multirow -extend {
         rr.pretty_name as role_pretty_name,
         rels.num_rels
     from rc_valid_rel_types g
-         left outer join rel_segments s using (group_id, rel_type)
-         left outer join group_rels gr using (group_id, rel_type)
+         left outer join rel_segments s on (s.group_id = g.group_id and s.rel_type = g.rel_type)
+         left outer join group_rels gr on (gr.group_id = g.group_id and gr.rel_type = g.rel_type)
          left outer join
            (select rel_type, count(*) as num_rels
               from group_component_map
@@ -65,7 +65,7 @@ db_multirow -extend {
              where group_id = :group_id
                and group_id = container_id
             group by rel_type
-         ) rels using (rel_type),
+         ) rels on (rels.rel_type = g.rel_type),
          acs_rel_types rel_types,
          acs_rel_roles rr
      where g.rel_type = rel_types.rel_type
