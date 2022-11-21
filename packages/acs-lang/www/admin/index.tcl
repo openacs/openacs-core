@@ -122,7 +122,6 @@ template::list::create \
         edit {
             label {}
             link_url_col locale_edit_url
-            link_html {title "#acs-lang.Edit_definition_of_locale#"}
             display_template {<adp:icon name="edit" title="#acs-lang.Edit_definition_of_locale#">}
         }
         locale {
@@ -207,7 +206,6 @@ template::list::create \
         delete {
             label {}
             link_url_col locale_delete_url
-            link_html {title "#acs-lang.Delete_this_locale#"}
             display_template {<adp:icon name="trash" title="#acs-lang.Delete_this_locale#">}
         }
     }

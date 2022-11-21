@@ -160,7 +160,15 @@ ad_proc -private ::template::icon {
             set template {<span class='$class' title='$title' $styleAtt>$alt</span>}
         }
         default {
-            if {$alt eq ""} {set alt $title}
+            #
+            # When "title" is a message key, and it is used e.g. in
+            # the "title" and "alt" fields, then the edit icon is
+            # displayed twice in TRN mode, which look like a bug. So,
+            # don't set alt per default to the message key, when it
+            # looks like a message key... Or maybe better, force the
+            # user to set the "alt" attribute.
+            #
+            #if {$alt eq "" && [string first "#" $title] == -1} {set alt $title}
             set template {<img class='$class' src='$name' height='16' width='16' title='$title' alt='$alt' style='border:0; $styleAtt'>}
         }
     }
