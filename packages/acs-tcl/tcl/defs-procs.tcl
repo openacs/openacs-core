@@ -269,7 +269,11 @@ ad_proc ad_return_error {
     along with the given title and explanation.  Should be used
     when an unexpected error is detected while processing a page.
 } {
-    ad_return_exception_page 500 $title $explanation
+    if {[ns_conn isconnected]} {
+        ad_return_exception_page 500 $title $explanation
+    } else {
+        ns_log errror "ad_return_error called without a connection: $title\n$explanation"
+    }
 }
 
 ad_proc ad_return_warning {
