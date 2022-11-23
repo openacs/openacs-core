@@ -29,7 +29,7 @@
                 lm1.locale = :default_locale
             and
                 lm1.package_key = :package_key
-        ) lang_messages;
+        ) lang_messages
 
     </querytext>
   </fullquery>
@@ -54,7 +54,7 @@
                 locale = :default_locale
             and
                 package_key = :package_key
-        ) lang_messages;
+        ) lang_messages
 
     </querytext>
   </fullquery>
