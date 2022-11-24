@@ -1,4 +1,4 @@
-ad_page_contract {
+ad_include_contract {
     Group type list
 } {
     group_type:notnull
