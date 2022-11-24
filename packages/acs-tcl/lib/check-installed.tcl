@@ -23,6 +23,9 @@ set version_dir [expr {
                        ? [dict get $resource_info versionDir]
                        : $version
                    }]
+if {[dict exists $resource_info versionCheckURL]} {
+    set versionCheckURL [dict get $resource_info versionCheckURL]
+}
 
 #
 # Check, if the resources are already installed.

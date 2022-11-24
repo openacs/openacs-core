@@ -1,5 +1,7 @@
 <p>
 The configured version of @resource_name@ is @version@.
+<if @versionCheckURL@ not nil>You might check for the newest version <a href="@versionCheckURL@">available upstream</a>.</if>
+
 <if @resources@ not nil><p>This version of @resource_name@ is installed locally
 under <strong>@resources@</strong>.</if>
 <else><p>In the current installation the @resource_name@ is used via CDN <strong>@cdn@</strong>.
