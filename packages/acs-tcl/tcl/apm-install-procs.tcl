@@ -1856,7 +1856,10 @@ ad_proc -private apm_mount_core_packages {} {
     # to /api-doc. This is probably OK, when one assumes that the
     # registered users are developers. However, providing source code
     # access to all registered users can pose a security thread,
-    # especially on large sites. 
+    # especially on large sites. By deactivating the following line,
+    # just "Main Site Administrators" will have rights on the
+    # /api-doc, which is probably the right thing to do on most sites.
+    # With the new permissions interface, providing more liberal rights via is 
     #
     if {0} {
         # Only registered users should have permission to access the
