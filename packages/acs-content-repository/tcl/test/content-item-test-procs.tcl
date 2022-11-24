@@ -418,7 +418,7 @@ aa_register_case \
             #########################################################
             # new from tmpfile
             #########################################################
-            set tmp_item_name [ns_mktemp "__content_item_test_XXXXXX"]
+            set tmp_item_name [ad_tmpnam "__content_item_test_XXXXXX"]
             set tmp_item_id [content::item::new \
                                  -name $tmp_item_name \
                                  -title $tmp_item_name \

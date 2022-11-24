@@ -103,7 +103,7 @@ aa_register_case \
 
         set tmp_filename "$::acs::rootdir/packages/acs-content-repository/tcl/test/test-image-1.jpg"
         set image_item_id_orig [db_nextval  "acs_object_id_seq"]
-        set image_name [ns_mktemp "XXXXXX"]
+        set image_name [ad_tmpnam "XXXXXX"]
         set image_item_id [image::new \
                                -item_id $image_item_id_orig \
                                -parent_id $first_folder_id \

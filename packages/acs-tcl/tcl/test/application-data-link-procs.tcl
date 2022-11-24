@@ -44,7 +44,7 @@ aa_register_case \
 } {
     aa_run_with_teardown -rollback -test_code {
         # create some test objects
-        set name [ns_mktemp "cr_item__XXXXXX"]
+        set name [ad_tmpnam "cr_item__XXXXXX"]
 
         for {set i 0} {$i<10} {incr i} {
             set o($i) [content::item::new \
@@ -139,7 +139,7 @@ aa_register_case \
 } {
     aa_run_with_teardown -rollback -test_code {
         # create some test objects
-        set name [ns_mktemp "cr_item__XXXXXX"]
+        set name [ad_tmpnam "cr_item__XXXXXX"]
 
         for {set i 0} {$i<10} {incr i} {
         set o($i) [content::item::new \
@@ -216,7 +216,7 @@ aa_register_case \
 } {
     aa_run_with_teardown -rollback -test_code {
         # create some test objects
-        set name [ns_mktemp "cr_item__XXXXXX"]
+        set name [ad_tmpnam "cr_item__XXXXXX"]
 
         for {set i 0} {$i<6} {incr i} {
         set o($i) [content::item::new \

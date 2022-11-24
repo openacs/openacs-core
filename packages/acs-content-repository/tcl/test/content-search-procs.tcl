@@ -51,7 +51,7 @@ ad_proc -private cr_item_search::test_setup {
 } {
     setup test environment for search trigger tests
 } {
-    set folder_name [ns_mktemp cr_item_search_XXXXXX]
+    set folder_name [ad_tmpnam cr_item_search_XXXXXX]
     set folder_id [content::folder::new -name $folder_name]
     content::folder::register_content_type -folder_id $folder_id -content_type content_revision -include_subtypes t
     return $folder_id
@@ -86,7 +86,7 @@ aa_register_case \
 	-test_code \
 	{
 	    set folder_id [cr_item_search::test_setup]
-	    set item_name [ns_mktemp cr_itemXXXXXX]
+	    set item_name [ad_tmpnam cr_itemXXXXXX]
 
 	    # test new item, not live
 	    set item_id [content::item::new \
