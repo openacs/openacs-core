@@ -2773,14 +2773,26 @@ ad_proc -public db_get_port {{-dbn ""}} {
 
 
 ad_proc -public db_get_database {{-dbn ""}} {
-    <strong>PostgreSQL only.</strong>
+    <strong>PostgreSQL and NSDB only.</strong>
 
-    <p>
-    @return the database name from the first database pool.  It assumes the
-    datasource is properly formatted since we've already verified that we
-    can connect to the pool.
+    Return the database name from the first database pool.  It assumes
+    the datasource is properly formatted since we've already verified
+    that we can connect to the pool.
+
+    On the longer range, it might be better to use SQL queries, at
+    least in cases, where database is already connected.
+
+    PostgreSQL:
+
+        SELECT current_database()
+
+    Oracle:
+
+        SELECT name from v$database;
+        SELECT ora_database_name FROM dual
 
     @param dbn The database name to use.  If empty_string, uses the default database.
+    @return database name
 } {
     set pool [lindex [db_available_pools $dbn] 0]
     set datasource [ns_config "ns/db/pool/$pool" DataSource]
@@ -2789,7 +2801,13 @@ ad_proc -public db_get_database {{-dbn ""}} {
         ns_log Error "datasource contains no \":\"? datasource = $datasource"
         return ""
     }
-    return [string range $datasource $last_colon_pos+1 end]
+    set dbname [string range $datasource $last_colon_pos+1 end]
+    set equal_pos [string first "=" $dbname]
+    if {$equal_pos > -1} {
+        # The value after the last colon is a
+        regexp {dbname=([^ ]+) ?} $dbname . dbname
+    }
+    return $dbname
 }
 
 
