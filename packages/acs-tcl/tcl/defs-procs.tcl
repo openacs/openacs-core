@@ -272,7 +272,7 @@ ad_proc ad_return_error {
     if {[ns_conn isconnected]} {
         ad_return_exception_page 500 $title $explanation
     } else {
-        ns_log errror "ad_return_error called without a connection: $title\n$explanation"
+        ns_log error "ad_return_error called without a connection: $title\n$explanation"
     }
 }
 
