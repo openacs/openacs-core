@@ -587,6 +587,82 @@ namespace eval ::acs {
     }
 }
 
+namespace eval ::acs {
+    #
+    # Experimental disk-cache, to test whether this can speed up long
+    # calls, producing potentially large output ..
+    #
+    # The interface should be probably streamlined with the other
+    # chaching infrastructure.
+    #
+    # Documentation follows.
+
+    if { [apm_first_time_loading_p] } {
+        nsv_set ad_disk_cache mutex [ns_mutex create disk_cache]
+    }
+
+    ad_proc -public disk_cache_flush {
+        -key:required
+        -id:required
+    } {
+        Flushes the filesystem cache.
+        
+        @param key the key used to name the directory where the disk cache
+               is stored.
+        @param id the id used to name the file where the disk cache is
+               stored.
+        
+        @see acs::disk_cache_eval
+    } {
+        set dir [ad_tmpdir]/oacs-cache/$key
+        foreach file [glob -nocomplain $dir/$id-*] {
+            file delete -- $file
+            ns_log notice "FLUSH file delete -- $file"
+        }
+    }
+
+    ad_proc -public disk_cache_eval {
+        -call:required
+        -key:required
+        -id:required
+    } {
+        Evaluate an expression. When the acs-tcl.DiskCache parameter is
+        set, cache the result on the disk. If a cache already exists,
+        return the cached value.
+
+        @param call a Tcl snippet executed in the caller scope.
+        @param key a key used to name the directory where the disk cache
+               will be stored.
+        @param id an id used to name the file where the disk cache will be
+              stored. The name will also depend on a hash of the
+              actual snippet.
+    } {
+        set cache [::parameter::get_from_package_key \
+                       -package_key acs-tcl \
+                       -parameter DiskCache \
+                       -default 1]
+        if {$cache} {
+            set hash [ns_sha1 $call]
+            set dir [ad_tmpdir]/oacs-cache/$key
+            set file_name $dir/$id-$hash
+            if {![ad_file isdirectory $dir]} {
+                file mkdir $dir
+            }
+            ns_mutex eval [nsv_get ad_disk_cache mutex] {
+                if {[ad_file readable $file_name]} {
+                    set result [template::util::read_file $file_name]
+                } else {
+                    set result [uplevel $call]
+                    template::util::write_file $file_name $result
+                }
+            }
+        } else {
+            set result [uplevel $call]
+        }
+        return $result
+    }
+}
+
 
 # Local variables:
 #    mode: tcl
