@@ -1266,7 +1266,7 @@ ad_proc ad_file {subcmd arg1 args} {
     if {[string range $arg1 0 0] eq {~}} {
         set arg1 ./$arg1
     }
-    ::file $subcmd $arg1 {*}$args
+    uplevel [list ::file $subcmd $arg1 {*}$args]
 }
 
 # if {[cmd_exists xxx]}
