@@ -3700,73 +3700,50 @@ ad_proc ad_tmpdir {} {
     return [ns_config ns/parameters tmpdir]
 }
 
-
-#
-# Experimental disk-cache, to test whether this can speed up e.g. openacs.org forums threads....
-# Documentation follows
-#
-
-if { [apm_first_time_loading_p] } {
-    nsv_set ad_disk_cache mutex [ns_mutex create disk_cache]
+ad_proc ad_opentmpfile {varFilename {template "oacs"}} {
+    
+    Wrapper for Tcl's "file tempfile ...", but respects the server's
+    tmpdir settings, e.g. when admin want to specify the temporary
+    directory.  The function is similar to "ns_opentmpfile", but
+    provides a default template and uses always the configured tmp
+    directory.
+    
+} {
+    uplevel [list file tempfile $varFilename [ns_config ns/parameters tmpdir]/$template]
 }
 
-ad_proc -public util::disk_cache_flush {
-    -key:required
-    -id:required
-} {
-    Flushes the filesystem cache.
-
-    @param key the key used to name the directory where the disk cache
-               is stored.
-    @param id the id used to name the file where the disk cache is
-              stored.
-
-    @see util::disk_cache_eval
-} {
-    set dir [ad_tmpdir]/oacs-cache/$key
-    foreach file [glob -nocomplain $dir/$id-*] {
-        file delete -- $file
-        ns_log notice "FLUSH file delete -- $file"
+if {$::tcl_version > 8.6} {
+    #
+    # Tcl 8.7 or newer
+    #    
+    ad_proc ad_mktmpdir {{prefix "oacs"}} {
+    
+        Wrapper for Tcl's "file tempdir ...", but respects the server's
+        tmpdir settings.
+    
+        @param prefix optional parameter, for easier
+               identification of the directory
+        @return name of the created directory
+    } {
+        file tempdir [ns_config ns/parameters tmpdir]/$prefix
     }
-}
+} else {
+    #
+    # Tcl 8.6 or earlier
+    #
+    ad_proc ad_mktmpdir {{prefix "oacs"}} {
+        
+        Wrapper for Tcl's "file tempdir ...", but respects the server's
+        tmpdir settings.
 
-ad_proc -public util::disk_cache_eval {
-    -call:required
-    -key:required
-    -id:required
-} {
-    Evaluate an expression. When the acs-tcl.DiskCache parameter is
-    set, cache the result on the disk. If a cache already exists,
-    return the cached value.
-
-    @param call a tcl snippet executed in the caller scope.
-    @param key a key used to name the directory where the disk cache
-               will be stored.
-    @param id an id used to name the file where the disk cache will be
-              stored. The name will also depend on a hash of the
-              actual snippet.
-} {
-    set cache [::parameter::get_from_package_key \
-                 -package_key acs-tcl \
-                 -parameter DiskCache \
-                 -default 1]
-    if {$cache} {
-        set hash [ns_sha1 $call]
-        set dir [ad_tmpdir]/oacs-cache/$key
-        set file_name $dir/$id-$hash
-        if {![ad_file isdirectory $dir]} {file mkdir $dir}
-        ns_mutex eval [nsv_get ad_disk_cache mutex] {
-            if {[ad_file readable $file_name]} {
-                set result [template::util::read_file $file_name]
-            } else {
-                set result [uplevel $call]
-                template::util::write_file $file_name $result
-            }
-        }
-    } else {
-        set result [uplevel $call]
+        @param prefix optional parameter, for easier
+               identification of the directory
+        @return name of the created directory        
+        
+    } {
+        package require fileutil 
+        ::fileutil::maketempdir -prefix ${prefix}_ -dir [ns_config ns/parameters tmpdir]
     }
-    return $result
 }
 
 ad_proc -private util::ns_set_pretty_print {
