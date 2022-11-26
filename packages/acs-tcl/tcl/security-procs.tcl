@@ -1196,7 +1196,7 @@ ad_proc security::safe_tmpfile_p {
     #
     set tmpfile [ns_normalizepath $tmpfile]
 
-    if {[ad_file dirname $tmpfile] ni [ns_config ns/parameters tmpdir]} {
+    if {[ad_file dirname $tmpfile] ne [ns_config ns/parameters tmpdir]} {
         #
         # File is not a direct child of one of the tmpfolders: not safe
         #

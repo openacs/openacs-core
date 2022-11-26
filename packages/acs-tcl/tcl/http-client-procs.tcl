@@ -922,7 +922,7 @@ ad_proc -private util::http::append_to_payload {
 
     if {$spool_file eq ""} {
         # create the spool file
-        set wfd [file tempfile spool_file [ad_tmpdir]/http-spool-XXXXXX]
+        set wfd [ad_opentmpfile spool_file]
         fconfigure $wfd -translation binary
         
         # flush currently collected payload
@@ -1816,7 +1816,7 @@ ad_proc -private util::http::curl::request {
     # and let it be read by curl.
     set create_body_file_p [expr {$body_file eq ""}]
     if {$create_body_file_p} {
-        set wfd [file tempfile body_file [ad_tmpdir]/http-spool-XXXXXX]
+        set wfd [ad_opentmpfile body_file http-spool]
         fconfigure $wfd -translation binary
         puts -nonewline $wfd $body
         close $wfd

@@ -584,8 +584,7 @@ ad_proc -public apm_load_apm_file {
     }
 
     apm_callback_and_log $callback  "Extracting the .info file (<tt>$info_file</tt>)..."
-    set tmpdir [ad_tmpnam]
-    file mkdir $tmpdir
+    set tmpdir [ad_mktmpdir]
     exec [apm_gzip_cmd] -d -q -c -S .apm $file_path | [apm_tar_cmd] -xf - -C $tmpdir $info_file 2> [apm_dev_null]
 
     #exec sh -c "cd $tmpdir ; [apm_gzip_cmd] -d -q -c -S .apm $file_path | [apm_tar_cmd] xf - $info_file" 2> [apm_dev_null]

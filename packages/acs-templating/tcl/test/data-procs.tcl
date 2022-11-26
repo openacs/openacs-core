@@ -309,8 +309,7 @@ aa_register_case -cats {
     #
     # A valid, existing tmpfile
     #
-    set tmpfile [ad_tmpnam]
-    set wfd [open $tmpfile w]
+    set wfd [ad_opentmpfile tmpfile]
     puts $wfd 1234
     close $wfd
 
@@ -335,6 +334,7 @@ aa_register_case -cats {
         aa_$expected "Is $value a file?" \
             [template::data::validate file value message]
     }
+    ad_file delete $tmpfile
 }
 
 aa_register_case -cats {

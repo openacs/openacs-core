@@ -10,7 +10,7 @@ aa_register_case \
         util::http::get
         util::http::post
         util::http::post_payload
-        ad_tmpnam
+        ad_opentmpfile
         ad_url
 
         db_1row
@@ -56,12 +56,13 @@ aa_register_case \
                     # encoding to the default one for application/json
                     # (which by RF4627 SHALL be some unicode version)
                     if {$m eq "GET"} {
-                        set tmpfile_app_json [ad_tmpnam]
+                        set F_json [ad_opentmpfile tmpfile_app_json]
                         if {$impl eq "curl"} {
-                            exec -ignorestderr curl $url -o $tmpfile_app_json
+                            puts $F_json [exec -ignorestderr curl $url -o -]
                         } else {
-                            ns_http run -method GET -spoolsize 0 -outputfile $tmpfile_app_json $url
+                            ns_http run -method GET -spoolsize 0 -outputchan $F_json $url
                         }
+                        close $F_json
                     }
 
                     ns_register_proc $m $endpoint_name [subst {
@@ -103,11 +104,12 @@ aa_register_case \
                     # Collect a sample of what is returned when we set
                     # encoding of the response to iso8859-2
                     if {$m eq "GET"} {
-                        set tmpfile_iso8859_2 [ad_tmpnam]
+                        set F_iso8859_2 [ad_opentmpfile tmpfile_iso8859_2]
+                        
                         if {$impl eq "curl"} {
-                            exec -ignorestderr curl $url -o $tmpfile_iso8859_2
+                            puts $F_iso8859_2 [exec -ignorestderr curl $url -o -]
                         } else {
-                            ns_http run -method GET -spoolsize 0 -outputfile $tmpfile_iso8859_2 $url
+                            ns_http run -method GET -spoolsize 0 -outputchan $F_iso8859_2 $url
                         }
                     }
 
@@ -297,15 +299,16 @@ aa_register_case -cats {
             [lsort $vars_list] {a b}
 
         aa_section "Combine URLencoded, list parameters and files in a multipart POST request"
-        set files [list]
-        set files_checksums [list]
+        set files {}
+        set files_checksums {}
+        set to_delete {}
         foreach c {abc 123 ÄÜÖ} {
-            set f [ad_tmpnam]
-            set wfd [open $f w]
-            puts -nonewline $wfd $c
-            close $wfd
-            lappend files [list file $f fieldname files]
-            lappend files_checksums [ns_md file $f]
+            set F [ad_opentmpfile tmpfile]
+            puts -nonewline $F $c
+            close $F
+            lappend files [list file $tmpfile fieldname files]
+            lappend files_checksums [ns_md file $tmpfile]
+            lappend to_delete $tmpfile
         }
         set r [util::http::post \
                    -url $url \
@@ -337,6 +340,7 @@ aa_register_case -cats {
             [lsort $vars_urlencoded] {c d e f}
         aa_equals "'vars_list' has been sent correctly" \
             [lsort $vars_list] {a b}
+        ad_file delete {*}$to_delete
 
     } finally {
         ns_unregister_op POST $endpoint_name

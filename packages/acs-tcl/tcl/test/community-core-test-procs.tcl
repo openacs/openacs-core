@@ -296,15 +296,15 @@ aa_register_case \
                 [acs_user::site_wide_admin_p -user_id $user_id]
 
             aa_section "Add portrait, then demote again"
-            set tmpfile [ad_tmpnam]
-            set wfd [open $tmpfile w]
-            puts $wfd abcd
-            close $wfd
+            set F [ad_opentmpfile tmpfile]
+            puts $F abcd
+            close $F
             set portrait_id [acs_user::create_portrait -user_id $user_id \
                                  -description "Some test portrait" \
                                  -filename test.png \
                                  -mime_type image/png \
                                  -file $tmpfile]
+            
             aa_equals "We can retrieve the portrait" \
                 [acs_user::get_portrait_id -user_id $user_id] $portrait_id
 
@@ -318,6 +318,8 @@ aa_register_case \
                 [llength [person::get_person_info -person_id $user_id]]
             aa_equals "Portrait is gone" \
                 [acs_user::get_portrait_id -user_id $user_id] 0
+
+            ad_file delete $tmpfile
         }
     }
 
