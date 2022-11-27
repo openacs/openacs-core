@@ -294,7 +294,7 @@ ad_proc -public template::element::create { form_id element_id args } {
     @option multiple      A flag indicating that more than one value is
                           expected from the input element
 
-    @option format        Many form elements allow to specify a format,
+    @option format        Many form elements allow one to specify a format,
                           e.g. a way the element should be displayed
                           or interpret its value. Refer to the
                           specific widgets for the actual behavior.

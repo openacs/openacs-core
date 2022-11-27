@@ -101,7 +101,7 @@ ad_proc -public template::data::validate::file { value_ref message_ref } {
          "" in $value
      } {
         #
-        # Value is not a list of 3 non-empty elements.
+        # Value is not a list of 3 nonempty elements.
         #
         set result 0
     } elseif { [regexp {(\\| )} [lindex $value 0]] } {

@@ -951,10 +951,10 @@ ad_proc -public template::multirow {
 }
 
 ad_proc -public template::url { command args } {
-    Maintains a ns_set of parameters that can be bulk converted to URL
+    Maintains an ns_set of parameters that can be bulk converted to URL
     parameters.
 
-    It is not clear if this api makes a lot of sense, many
+    It is not clear if this API makes a lot of sense, many
     alternatives exist to export parameters in various forms...
 
     @see export_vars
