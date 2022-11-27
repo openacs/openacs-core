@@ -251,7 +251,7 @@ if {[namespace which ::ns_uuid] eq ""} {
         NaviServer is used.
 
     } {
-        return "[clock clicks]-[sec_random_token]"
+        return "[clock clicks -microseconds]-[sec_random_token]"
     }
 }
 
