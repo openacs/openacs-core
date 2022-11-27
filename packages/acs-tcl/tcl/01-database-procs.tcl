@@ -383,8 +383,8 @@ ad_proc -public db_nextval {
     switch -- $driverkey {
 
         postgresql {
-            #             # the following query will return a nextval if the sequnce
-            #             # is of relkind = 'S' (a sequnce).  if it is not of relkind = 'S'
+            #             # the following query will return a nextval if the sequence
+            #             # is of relkind = 'S' (a sequence).  if it is not of relkind = 'S'
             #             # we will try querying it as a view:
 
             #             if { [db_0or1row -dbn $dbn nextval_sequence "
@@ -2294,7 +2294,7 @@ ad_proc -public db_0or1row {
     @param subst Perform Tcl substitution in xql-files. Possible values: all, none, vars, commands
     @param bind bind variables, passed either as an ns_set id, or via bind value list
     @param column_array array to be populated with values
-    @param column_set ns_set to tbe populated with values
+    @param column_set ns_set to be populated with values
 
 } {
     # Query Dispatcher (OpenACS - ben)

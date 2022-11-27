@@ -266,7 +266,7 @@ aa_register_case \
         set secret_answer "...the service contracts..."
 
         try {
-            aa_log "Password is non-empty"
+            aa_log "Password is nonempty"
             aa_log "EmailRegistrationConfirmationToUserP = 0"
             aa_log "RegistrationProvidesRandomPasswordP = 0"
             aa_log "NotifyAdminOfNewRegistrationsP = 0"
@@ -334,7 +334,7 @@ aa_register_case \
             aa_true "Password works" [ad_check_password $user_id $new_password]
             aa_equals "No emails were sent" $::auth_registration_implementations_to_addr ""
 
-            aa_log "Password is non-empty"
+            aa_log "Password is nonempty"
             aa_log "EmailRegistrationConfirmationToUserP = 1"
             aa_log "RegistrationProvidesRandomPasswordP = 0"
             aa_log "NotifyAdminOfNewRegistrationsP = 0"
@@ -369,7 +369,7 @@ aa_register_case \
             aa_equals "One confirmation email was sent to the user" \
                 $::auth_registration_implementations_to_addr [list $email]
 
-            aa_log "Password is non-empty"
+            aa_log "Password is nonempty"
             aa_log "EmailRegistrationConfirmationToUserP = 1"
             aa_log "RegistrationProvidesRandomPasswordP = 1"
             aa_log "NotifyAdminOfNewRegistrationsP = 1"
@@ -422,7 +422,7 @@ aa_register_case \
 
         aa_section acs::test::auth::registration::Register
 
-        aa_log "Password is non-empty"
+        aa_log "Password is nonempty"
 
         set password $new_password
 

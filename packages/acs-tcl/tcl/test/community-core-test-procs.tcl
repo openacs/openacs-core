@@ -264,7 +264,7 @@ aa_register_case \
             aa_equals "We can find the user by its screen name" \
                 [acs_user::get_user_id_by_screen_name \
                      -screen_name $screen_name] $user_id
-            aa_equals "Screen name is consitent between apis" \
+            aa_equals "Screen name is consistent between apis" \
                 [dict get [acs_user::get_user_info -user_id $user_id] screen_name] \
                 $screen_name
 

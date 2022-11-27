@@ -153,7 +153,7 @@ ad_proc -private cr_get_file_creation_log {} {
 
 ad_proc -private cr_check_file_entry {name} {
 
-    Check if an entriy from the content repository having the
+    Check if an entry from the content repository having the
     specified partial path their content field exists.
 
     @result boolean success

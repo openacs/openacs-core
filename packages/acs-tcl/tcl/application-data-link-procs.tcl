@@ -364,7 +364,7 @@ ad_proc -public application_data_link::link_exists {
     -to_object_id
     {-relation_tag ""}
 } {
-    Check if a link exists, only checks in the directon requested.
+    Check if a link exists, only checks in the direction requested.
     Optionally check if the link has the given tag.
 
     @param from_object_id

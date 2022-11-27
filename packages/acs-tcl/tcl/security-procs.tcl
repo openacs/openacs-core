@@ -2382,7 +2382,7 @@ if {[ns_info name] ne "NaviServer"} {
         configuration information about the network connection.
 
         @param driver (e.g. nssock)
-        @param server symobolic server name
+        @param server symbolic server name
         @return name of section of the drive in the config file
     } {
         if {$server eq ""} {set server [ns_info server]}

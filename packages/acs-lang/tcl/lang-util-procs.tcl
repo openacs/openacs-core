@@ -256,7 +256,7 @@ ad_proc lang::util::replace_temporary_tags_with_lookups {
                                         to be made unique. If the value was mistyped and should have been \
                                         the same as previously then you must manually remove the entry for \
                                         $unique_key from the catalog file and change the key in \
-                                        the file $file fom $unique_key to $message_key]
+                                        the file $file from $unique_key to $message_key]
                     } else {
                         ns_log Notice [list lang::util::replace_temporary_tags_with_lookups - Will be adding \
                                        new key $unique_key to catalog file for package $package_key]

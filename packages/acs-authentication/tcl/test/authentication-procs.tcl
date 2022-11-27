@@ -335,7 +335,7 @@ aa_register_case \
             aa_true "No attempts anymore..." \
                 {[llength [auth::login_attempts::get_all]] == 0}
 
-            aa_log "Record two attemps on different keys"
+            aa_log "Record two attempts on different keys"
 
             ::auth::login_attempts::record \
                 -login_attempt_key $login_attempt_key

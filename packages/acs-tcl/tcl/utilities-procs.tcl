@@ -597,7 +597,7 @@ ad_proc -public export_vars {
                            <code>base</code> option will be encoded by
                            ad_urlencode_url proc
 
-    @param set a ns_set that we want to export together with our
+    @param set an ns_set that we want to export together with our
                variables. It has no effect when also the '-entire_form'
                flag is specified and will otherwise behave as if the
                current request form data was the supplied ns_set.
@@ -1035,7 +1035,7 @@ ad_proc -deprecated util_get_current_url {} {
     Returns a URL for re-issuing the current request, with query variables.
     If a form submission is present, that is converted into query vars as well.
 
-    DEPRECATED: ad_return_url is a complete replacement for this api
+    DEPRECATED: ad_return_url is a complete replacement for this API
     that also allows better control over the behavior.
 
     @see ad_return_url
@@ -1361,7 +1361,7 @@ ad_proc -public ad_safe_eval args {
 
 ad_proc -public ad_decode { value args } {
 
-    This procedure is analogus to sql decode procedure. The first parameter is
+    This procedure is analogous to sql decode procedure. The first parameter is
     the value we want to decode. This parameter is followed by a list of
     pairs where first element in the pair is convert from value and second
     element is convert to value. The last value is default value, which will
@@ -3613,7 +3613,7 @@ ad_proc util::potentially_unsafe_eval_p { -warn:boolean string } {
     externally provided content, which might be provided e.g. via
     query variables, or via user values stored in the database. When
     such content contains square braces, a "subst" command on
-    theses can evaluate arbitrary commands, which is dangerous.
+    it can evaluate arbitrary commands, which is dangerous.
 
 } {
     #ns_log notice "util::potentially_unsafe_eval_p '$string'"
@@ -3890,7 +3890,7 @@ ad_proc -public util::var_subst_quotehtml {
     #
     regsub -all -- {\$([0-9a-zA-Z_:]+|[\{][^\}]+[\}])} $escaped {[ns_quotehtml $\1]} result
     #
-    # Finallly, "subst" the result.
+    # Finally, "subst" the result.
     #
     return [uplevel $ulevel [list ::subst $result]]
 }
@@ -4121,7 +4121,7 @@ namespace eval util::resources {
                     file mkdir $path
                     #
                     # We check on the version-dir, if the package is
-                    # installed, therefore, dont create an empty one.
+                    # installed, therefore, don't create an empty one.
                     #
                     file delete $path
                 } on error {errorMsg} {

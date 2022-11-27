@@ -1185,7 +1185,7 @@ ad_proc -public auth::update_local_account {
     <li> element_messages: list of (element_name, message, element_name, message, ...) of
     errors on the individual registration elements.
     to be relayed on to the user. If update_status is not ok, then either
-    udpate_message or element_messages is guaranteed to be nonempty, and both are
+    update_message or element_messages is guaranteed to be nonempty, and both are
     guaranteed to be in the array list. Cannot contain HTML.
     </ul>
 
@@ -1973,7 +1973,7 @@ ad_proc -private auth::user_info::GetUserInfo {
 # failed consecutive failed login attempts based on the ip-address and subsite.
 #
 # After the maximum number of consecutive failed login attempts
-# has been excedeed, all further login attempts will be automatically rejected
+# has been exceeded, all further login attempts will be automatically rejected
 # for a specified lock-out/cool-down time, even if the correct credentials have been
 # provided. Every successful login before reaching the threshold resets the
 # counter to 0 again. Beware, the counting is done via caching and is

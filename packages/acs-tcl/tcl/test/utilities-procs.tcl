@@ -83,7 +83,7 @@ aa_register_case \
                           $str]
         aa_equals "Sanitizing to an existing filename with resolving is fine" $resolved [string tolower "A_ßCoOOetcpasswdl#_f__ilename_.extension"]_2
 
-        aa_false "Sanitizing with not balanced parantheses in the filename does not throw an error" [catch {
+        aa_false "Sanitizing with not balanced parentheses in the filename does not throw an error" [catch {
             aa_equals "Sanitizing to an existing filename with resolving is fine" [ad_sanitize_filename -existing_names {foo( foo(-3} "foo("] "foo(-4"
         }]
     }

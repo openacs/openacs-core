@@ -107,7 +107,7 @@ aa_register_case \
     #
     # There is no easy way to change the conn::timezone. So set the
     # system timezone to the lang::conn::timezone to get a
-    # reproducable result. Since we are running in a transaction, no
+    # reproducible result. Since we are running in a transaction, no
     # harm is done.
     #
     lang::system::set_timezone [lang::conn::timezone]

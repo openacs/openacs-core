@@ -1662,8 +1662,8 @@ namespace eval acs::test {
         @param var the variable name that body can refer to as
                    documentElement of the document (e.g. "root").
         @param html the markup to be parsed.
-        @param body a tcl script executed in the caller scope that can
-                    assume the document to be pased and be available
+        @param body a Tcl script executed in the caller scope that can
+                    assume the document to be parsed and be available
                     in "var".
     } {
         upvar $var root
