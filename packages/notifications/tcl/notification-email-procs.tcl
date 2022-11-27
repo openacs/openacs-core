@@ -213,7 +213,7 @@ namespace eval notification::email {
         set bounce_subject "failure notice"
         set l "Hi.  This is the notification program at $domain.\n"
         append l "I'm afraid I wasn't able to deliver your message to the\n"
-        append l "following addresses.  This is a permament error; I've\n"
+        append l "following addresses.  This is a permanent error; I've\n"
         append l "given up.  Sorry it didn't work out.\n\n"
         append l "<$from_addr>:\n"
         append l "$reason\n\n"
