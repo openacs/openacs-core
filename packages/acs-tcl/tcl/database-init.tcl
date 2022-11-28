@@ -12,6 +12,11 @@ ad_library {
 ns_cache create db_cache_pool -size \
     [parameter::get -package_id [ad_acs_kernel_id] -parameter DBCacheSize -default 50000]
 
+set ::acs::DbLogMinDuration [parameter::get_from_package_key \
+                                 -package_key acs-tcl \
+                                 -parameter DbLogMinDuration \
+                                 -default 2000]
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4

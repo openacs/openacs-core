@@ -1319,9 +1319,17 @@ ad_proc -public db_exec { {-subst all} type db statement_name pre_sql {ulevel 2}
         }
     } error]
 
-    # JCD: we log the clicks, dbname, query time, and statement to catch long running queries.
-    # If we took more than 3 seconds yack about it.
-    if { [clock clicks -milliseconds] - $start_time > 3000 } {
+    #
+    # If db_exec took more than a threshold, yack about it. We have to
+    # be careful there, since this might be called during bootstrap,
+    # where "parameter::get_from_package_key" is not yet defined. We
+    # cannot use "parameter::get_from_package_key" directly, since
+    # this needs an SQL query, leading to an infinite recursion. So,
+    # we use a per-thread variable, which is set at startup and then
+    # updated, whenever the parameter changes.
+    #
+    set complain_time [expr {[info exists ::acs::DbLogMinDuration] ? $::acs::DbLogMinDuration : 2000 }]
+    if { [clock clicks -milliseconds] - $start_time > $complain_time} {
         set duration [format %.2f [expr {[clock clicks -milliseconds] - $start_time}]]
         ns_log Warning "db_exec: longdb $duration ms $db $type $statement_name"
     } else {
@@ -3833,6 +3841,54 @@ ad_proc -public db_bounce_pools {{-dbn ""}} {
 } {
     foreach pool [db_available_pools $dbn] {
         ns_db bouncepool $pool
+    }
+}
+
+ad_proc -public -callback subsite::parameter_changed -impl acs-tcl {
+    -package_id:required
+    -parameter:required
+    -value:required
+} {
+    Implementation of subsite::parameter_changed for acs-tcl.
+
+
+    @param package_id the package_id of the package the parameter was changed for
+    @param parameter  the parameter name
+    @param value      the new value
+
+} {
+    if {$parameter eq "DbLogMinDuration"} {
+        set new_value [expr {$value/1000.0}]
+        foreach pool [ns_db pools] {
+            set ns_db_old_value [ns_time format [ns_db logminduration $pool]]
+            set ns_db_old_ms [expr {int($ns_db_old_value * 1000)}]
+            set old_ms $::acs::DbLogMinDuration
+            ns_log notice "... pool $pool db old value $ns_db_old_value old_ms $old_ms ns_db_old_ms $ns_db_old_ms -> $new_value"
+            if {$ns_db_old_value > $new_value || $old_ms == $ns_db_old_ms} {
+                #
+                # If the "ns_db_old_value" is larger (less SQL
+                # logging) and the user wants more logging, then
+                # reduce it.  If there is already a more detailed
+                # logging turned on then leave it as it is.
+                #
+                # If the old value was probably set via such parameter
+                # settings, adjust as well.
+                #
+                # Note that "ns_db logminduration ..." has only an
+                # effect when SQL logging is turned on.
+                #
+                #     ns_logctl severity "Debug(sql)" on
+                #
+                ns_log notice "... adjust pool $pool old value $ns_db_old_value -> $new_value"
+                ns_db logminduration $pool $new_valuex
+            }
+        }
+        #
+        # We could use nsv instead of the per-thread variable, such as
+        # "nsv_set acs_properties DbLogMinDuration", which would be
+        # faster to change, but slower to test.
+        #
+        ns_eval [list set ::acs::DbLogMinDuration $value]
     }
 }
 

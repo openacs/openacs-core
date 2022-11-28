@@ -9,7 +9,7 @@
     <implements-subsite-p>f</implements-subsite-p>
     <inherit-templates-p>t</inherit-templates-p>
 
-    <version name="5.10.1d24" url="http://openacs.org/repository/download/apm/acs-tcl-5.10.1d24.apm">
+    <version name="5.10.1d25" url="http://openacs.org/repository/download/apm/acs-tcl-5.10.1d25.apm">
         <owner url="http://openacs.org">OpenACS</owner>
         <summary>The Kernel Tcl API library.</summary>
         <release-date>2021-09-15</release-date>
@@ -18,7 +18,7 @@
         <license>GPL version 2</license>
         <maturity>3</maturity>
 
-        <provides url="acs-tcl" version="5.10.1d24"/>
+        <provides url="acs-tcl" version="5.10.1d25"/>
         <requires url="acs-bootstrap-installer" version="5.10.0"/>
         <requires url="acs-kernel" version="5.10.1d3"/>
 
@@ -36,6 +36,7 @@ Activating this trace requires a new start of the server." section_name="tcltrac
 
 Activating this trace requires a new start of the server." section_name="tcltrace"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="UseHostnameDomainforReg"  default="0" description="Set to 1 if website uses domains mapped in host_nodes for public users and the hostname's domain as defined in config.tcl for registering users and their sessions."/>
+            <parameter scope="instance" datatype="number"  min_n_values="1"  max_n_values="1"  name="DbLogMinDuration"  default="2000" description="Log SQL calls over the db_exec interface above this duration; when SQL logging is on, log as well the SQL statement." section_name="Logging"/>
         </parameters>
 
     </version>
