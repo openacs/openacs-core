@@ -76,10 +76,11 @@ if {$subsite_number > 500} {
                 label "Actions"
                 html {style {white-space:nowrap;}}
                 display_template {
-                    <if @subsites.admin_url@ not nil><adp:icon name="admin" title="#acs-admin.Administration#"></if>
+                    <if @subsites.admin_url@ not nil><a href="@subsites.admin_url@"><adp:icon name="admin"
+                          title="#acs-admin.Administration#"></a></if>
                     <else><adp:icon name="admin" visible="false"></else>&nbsp;
                     <a href="@subsites.parameter_url@"><adp:icon name="cog" title="#acs-admin.Parameters#"></a>&nbsp;
-                    <a href="@subsites.sitemap_url@"><adp:icon name="sitemap" title="Manage sitemap">
+                    <a href="@subsites.sitemap_url@"><adp:icon name="sitemap" title="Manage sitemap"></a>
                 }
             }
         }
