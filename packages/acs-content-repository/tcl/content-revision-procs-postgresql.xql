@@ -20,7 +20,7 @@
     </querytext>
   </fullquery>
 
-  <fullquery name="content::revision::update_content-lob.update_content">     
+  <fullquery name="content::revision::update_content-lob.set_content">     
     <querytext>
 
 	update cr_revisions
@@ -40,6 +40,13 @@
 
       </querytext>
   </fullquery>
+
+  <fullquery name="content::revision::update_content-lob.update_content">
+    <querytext>
+      update cr_revisions set content=:content where
+      revision_id = :revision_id
+    </querytext>
+  </fullquery>  
 
   <fullquery name="content::revision::get_cr_file_path.get_storage_key_and_path">
     <querytext>	
