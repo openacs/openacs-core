@@ -175,7 +175,7 @@ namespace eval acs_mail_lite {
                {{from malte@cognovis.de} {to malte@cognovis.de}}
 
         @param delivery_dict dictionary of delivery parameters
-               including the SMTP* configurtion parameters
+               including the SMTP* configuration parameters
 
     } {
 
@@ -311,8 +311,7 @@ namespace eval acs_mail_lite {
 
         @param package_id Package ID of the sending package
 
-        @param file_ids List of file ids (items or revisions) to be
-               send as attachments. This will only work with files stored in
+        @param file_ids List of file ids (items or revisions) to be sent as attachments. This will only work with files stored in
                the file-storage.
 
         @param filesystem_files List of regular files on the
@@ -483,8 +482,7 @@ namespace eval acs_mail_lite {
 
         @param package_id Package ID of the sending package
 
-        @param file_ids List of file ids (items or revisions) to be
-               send as attachments. This will only work with files
+        @param file_ids List of file ids (items or revisions) to be sent as attachments. This will only work with files
                stored in the file-storage.
 
         @param filesystem_files List of regular files on the
@@ -709,7 +707,7 @@ namespace eval acs_mail_lite {
             mime::setheader $tokens [lindex $header 0] [lindex $header 1]
         }
 
-        # Get the delivery parameters, includeing SMTP
+        # Get the delivery parameters, including SMTP
         set deliveryDict [get_delivery_parameters]
 
         # Rollout support
