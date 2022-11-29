@@ -139,7 +139,7 @@ aa_register_case \
 } {
     aa_run_with_teardown -rollback -test_code {
         # create some test objects
-        set name "cr_item__[[ad_generate_random_string]"
+        set name "cr_item__[ad_generate_random_string]"
 
         for {set i 0} {$i<10} {incr i} {
         set o($i) [content::item::new \
