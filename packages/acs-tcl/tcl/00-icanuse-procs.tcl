@@ -13,6 +13,12 @@ if {[namespace which ::try] eq ""} {
     ns_log warning "*******************************************"
 }
 
+#
+# Set "softrecreate" in nsf to true to avoid full cleanup on a
+# redefinition of a class (e.g., during reloads, upgrading, etc.)
+#
+nsf::configure softrecreate true
+
 namespace eval ::acs {
     ad_proc -public icanuse {feature} {
 
