@@ -79,16 +79,19 @@ aa_register_case -cats {
         set file_name afile
 
         #
-        # Here we send an unsafe tmpfile using the 3 elements list
-        # format.
+        # Here we send a file that is not a direct child of the
+        # tmpfolder using the 3 elements list format. This is expected
+        # to fail.
         #
         aa_section "- EVIL - send an unsafe tmpfile using the 3 elements list format"
 
-        set tmpfile [ad_tmpnam]/inafolder/test.txt
-        file mkdir [file dirname $tmpfile]
-        set wfd [open $tmpfile w]
+        set tmpdir [ad_mktmpdir]
+        set wfd [ad_opentmpfile tmpfile]
         puts $wfd bbbb
         close $wfd
+
+        file rename -- $tmpfile $tmpdir/[file tail $tmpfile]
+        set tmpfile $tmpdir/[file tail $tmpfile]
 
         aa_true "Tmpfile '$tmpfile' exists" [file exists $tmpfile]
 
@@ -107,17 +110,25 @@ aa_register_case -cats {
         #
         acs::test::reply_has_status_code $d 200
 
+        #
+        # Cleanup
+        #
+        file delete -force -- $tmpdir
 
         #
-        # Here we send an unsafe tmpfile as part of a multipart request.
+        # Here we send a file that is not a direct child of the
+        # tmpfolder as part of a multipart request. This is expected
+        # to fail.
         #
         aa_section "- EVIL - Send an unsafe tmpfile as part of a multipart request"
 
-        set tmpfile [ad_tmpnam]/inafolder/test.txt
-        file mkdir [file dirname $tmpfile]
-        set wfd [open $tmpfile w]
+        set tmpdir [ad_mktmpdir]
+        set wfd [ad_opentmpfile tmpfile]
         puts $wfd cccc
         close $wfd
+
+        file rename -- $tmpfile $tmpdir/[file tail $tmpfile]
+        set tmpfile $tmpdir/[file tail $tmpfile]
 
         aa_true "Tmpfile '$tmpfile' exists" [file exists $tmpfile]
 
@@ -147,14 +158,17 @@ aa_register_case -cats {
         #
         acs::test::reply_has_status_code $d 200
 
+        #
+        # Cleanup
+        #
+        file delete -force -- $tmpdir
 
         #
         # Here we send a safe tmpfile via a genuine multipart request.
         #
         aa_section "- GOOD - Send a safe tmpfile via a genuine multipart request"
 
-        set tmpfile [ad_tmpnam].txt
-        set wfd [open $tmpfile w]
+        set wfd [ad_opentmpfile tmpfile]
         puts $wfd dddd
         close $wfd
 
@@ -185,7 +199,11 @@ aa_register_case -cats {
         aa_true "Form received a different file" [file exists $new_path]
         aa_equals "The other file has the same content of our file" \
             [ns_md file $new_path] [ns_md file $tmpfile]
-        file delete -- $new_path
+
+        #
+        # Cleanup
+        #
+        file delete -- $new_path $tmpfile
 
     } finally {
         ns_unregister_op GET  $endpoint_name
