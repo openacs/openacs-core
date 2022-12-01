@@ -36,6 +36,12 @@ create table membership_rels (
                                               'banned', 'rejected', 'deleted', 'expired'))
 );
 
+--
+-- Create a partial index for a very common case.
+--
+CREATE INDEX membership_rels_rel_id_approved_idx ON membership_rels(rel_id) WHERE member_state = 'approved';
+
+
 create table admin_rels (
         rel_id          integer constraint admin_rels_rel_id_fk
                         references membership_rels (rel_id)
