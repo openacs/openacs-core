@@ -1191,7 +1191,7 @@ ad_proc -private ad_parse_html_attributes_upvar {
             @see ad_html_security_check
         } {
             # loop over all tags
-            set parseListElements [ns_parsehtml -onlytags $html]
+            set parseListElements [ns_parsehtml -onlytags -- $html]
             foreach parseListElement $parseListElements {
                 lassign [string tolower $parseListElement] tag dict
 
