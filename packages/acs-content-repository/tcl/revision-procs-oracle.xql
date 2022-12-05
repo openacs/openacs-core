@@ -10,7 +10,7 @@
       </querytext>
 </fullquery>
 
-<fullquery name="cr_write_content.write_lob_content">
+<fullquery name="cr_write_content-lob.write_lob_content">
       <querytext>
           select content
           from cr_revisions
