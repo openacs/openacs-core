@@ -477,14 +477,13 @@ ad_proc -private apm_build_repository {
                             # The path to the 'packages' directory in the checkout
                             set packages_root_path [file join {*}[lrange [file split $spec_file] 0 end-2]]
 
-                            set tmp_filename [ad_tmpnam]
-                            lappend cmd -C $packages_root_path --files-from $tmp_filename
-
-                            set fp [open $tmp_filename w]
+                            set fp [ad_opentmpfile tmp_filename]
                             foreach file $files {
                                 puts $fp $package_key/$file
                             }
                             close $fp
+
+                            lappend cmd -C $packages_root_path --files-from $tmp_filename
 
                             lappend cmd "|" [apm_gzip_cmd] -c ">" $apm_file
                             ns_log Notice "Executing: exec $cd_helper $packages_root_path $cmd"
