@@ -48,7 +48,7 @@ ad_proc -public search::convert::binary_to_text {
         application/pdf {
             if {![util::file_content_check -type pdf -file $filename]} {
                 ns_log warning "search: $filename ($mime_type) is not a pdf file; skip indexing"
-                file delete -- $tmp_filename                
+                file delete -- $tmp_filename
                 return ""
             }
             set convert_command {pdftotext $filename $tmp_filename}
@@ -63,7 +63,7 @@ ad_proc -public search::convert::binary_to_text {
         application/vnd.oasis.opendocument.spreadsheet-template {
             if {![util::file_content_check -type zip -file $filename]} {
                 ns_log warning "search: $filename ($mime_type) is not a zip file; skip indexing"
-                file delete -- $tmp_filename                
+                file delete -- $tmp_filename
                 return ""
             }
             set convert_command {[util::which unzip] -p $filename content.xml >$tmp_filename}
