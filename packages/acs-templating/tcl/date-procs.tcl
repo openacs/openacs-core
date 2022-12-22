@@ -1693,7 +1693,7 @@ ad_proc -public template::widget::h5date {
     }
 
     if {[info exists element(step)]} {
-        if {[string is integer $element(step)]} {
+        if {[string is integer -strict $element(step)]} {
             dict set attributes step $element(step)
         } else {
             ns_log Warning {template::widget::h5date value of attribute "step" is not an integer!}
@@ -1846,7 +1846,7 @@ ad_proc -public template::widget::h5time {
     }
 
     if {[info exists element(step)]} {
-        if {[string is integer $element(step)]} {
+        if {[string is integer -strict $element(step)]} {
             dict set attributes step $element(step)
         } else {
             ns_log Warning {template::widget::h5time value of attribute "step" is not an integer!}

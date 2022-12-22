@@ -185,7 +185,7 @@ if {[regexp {^([0-9.]+)([MKk])B} $stacksize . number multiplicator]} {
     }
 }
 
-if { ![string is integer $stacksize]
+if { ![string is integer -strict $stacksize]
      || $stacksize < $acs_application(min_stack_size) * 1024
  } {
     append errors "<li><p><strong>The configured stacksize '$stacksize' is too small, missing, or a non-integer value.
