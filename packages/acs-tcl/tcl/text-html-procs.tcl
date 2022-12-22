@@ -431,7 +431,7 @@ ad_proc -public util_convert_line_breaks_to_html {
         # Convert _single_ CRLF's to <br>'s to preserve line breaks
         # unless inside <PRE> elements.
         #
-        set parsed [ns_parsehtml $text]
+        set parsed [ns_parsehtml -- $text]
         set out ""
         set inside_pre 0
         foreach token $parsed {
@@ -506,7 +506,7 @@ ad_proc -private util_close_html_tags_ns_parsehtml {
     }
 
     set depth 0
-    set parseListElements [ns_parsehtml -onlytags $html_fragment]
+    set parseListElements [ns_parsehtml -onlytags -- $html_fragment]
     foreach parseListElement $parseListElements {
         set tag [string tolower [lindex $parseListElement 0]]
         if {$tag in $close_tags} {

@@ -84,7 +84,7 @@ aa_register_case -cats {smoke production_safe} -procs {
             set dict [nsv_get api_proc_doc $p]
             if {[dict exists $dict main]} {
                 set text [dict get $dict main]
-                foreach chunk [::ns_parsehtml $text] {
+                foreach chunk [::ns_parsehtml -- $text] {
                     lassign $chunk what chunk content
                     if {$what eq "tag"} {
                         incr nrTags
