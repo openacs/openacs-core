@@ -80,8 +80,8 @@ if {$::tcl_version >= 8.6} {
         set extraTraps {}
         if {$auto_abort_p} {
             #
-            # The "subst" below is just used for resolving $body in
-            # the debug message.
+            # Add silent handling of "ad_script_abort" to
+            # the traps.
             #
             lappend extraTraps \
                 trap {AD EXCEPTION ad_script_abort} {result} {
@@ -129,8 +129,8 @@ if {$::tcl_version >= 8.6} {
         set extraTraps {}
         if {$auto_abort_p} {
             #
-            # The "subst" below is just used for resolving $body in
-            # the debug message.
+            # Add silent handling of "ad_script_abort" to
+            # the traps.
             #
             lappend extraTraps \
                 trap {AD EXCEPTION ad_script_abort} {result} {
