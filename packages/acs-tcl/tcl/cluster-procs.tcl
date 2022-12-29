@@ -145,7 +145,7 @@ namespace eval ::acs {
         # handle incoming request issues
         #
         :public object method incoming_request {} {
-            catch {::throttle do incr ::count(cluster:receive)}
+            catch {::throttle do incr ::count(cluster:received)}
             set cmd [ns_queryget cmd]
             set addr [lindex [ns_set iget [ns_conn headers] x-forwarded-for] end]
             set sender [ns_set iget [ns_conn headers] host]
