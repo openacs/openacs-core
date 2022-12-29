@@ -143,7 +143,7 @@ namespace eval ::acs {
                 # avoided. The partitioned variants can help to reduce
                 # the lock times.
                 #
-                return [ns_cache_flush -glob [:cache_name $partition_key] $pattern]
+                return [::acs::clusterwide ns_cache_flush -glob [:cache_name $partition_key] $pattern]
             }
 
             :method cache_create {name size} {
@@ -217,7 +217,7 @@ namespace eval ::acs {
             # Flush all entries in a cache. Both, NaviServer and
             # AOLserver support "ns_cache_flush".
             #
-            ns_cache_flush [:cache_name $partition_key]
+            ::acs::clusterwide ns_cache_flush [:cache_name $partition_key]
             #ns_log notice "flush_all -> ns_cache_flush [:cache_name $partition_key]"
             #ns_log notice "... content of ${:name}: [ns_cache_keys ${:name}]"
         }
@@ -297,7 +297,7 @@ namespace eval ::acs {
             # NaviServer and AOLserver support "ns_cache_flush".
             #
             for {set i 0} {$i < ${:partitions}} {incr i} {
-                ns_cache_flush ${:name}-$i
+                ::acs::clusterwide ns_cache_flush ${:name}-$i
                 #ns_log notice "flush_all: ns_cache_flush ${:name}-$i"
                 #ns_log notice "... content of ${:name}-$i: [ns_cache_keys ${:name}-$i]"
             }
@@ -313,7 +313,7 @@ namespace eval ::acs {
                 # a pattern.
                 #
                 for {set i 0} {$i < ${:partitions}} {incr i} {
-                    ns_cache_flush -glob ${:name}-$i $pattern
+                    ::acs::clusterwide ns_cache_flush -glob ${:name}-$i $pattern
                     ns_log notice "flush_pattern_in_all_partitions: ns_cache_flush ${:name}-$i $pattern"
                     #ns_log notice "... content of ${:name}-$i: [ns_cache_keys ${:name}-$i]"
                 }
@@ -503,12 +503,30 @@ namespace eval ::acs {
             return $value
         }
 
+        #:public method flush {
+        #   {-pattern *}
+        #} {
+        #    #
+        #    # Flush a cache entry based on the pattern (which might be
+        #    # wild-card-free).
+        #    #
+        #    ::acs::clusterwide [self] flush_local -pattern $pattern
+        #}
+
         :public method flush {
            {-pattern *}
         } {
             #
             # Flush a cache entry based on the pattern (which might be
-            # wild-card-free).
+            # wild-card-free). Currently, the clusterwide flushing is
+            # omitted.
+            #
+            # We have the per-request cache (clusterwide operations do
+            # not make sense for this) and per-thread caching. The
+            # per-thread caching application have to be aware that
+            # flushing is happening only in one thread, so clusterwide
+            # operations will only start to make sense, when the all
+            # threads of a server would be cleaned.
             #
             if {[info exists ${:prefix}]} {
                 if {$pattern eq "*"} {
@@ -524,6 +542,9 @@ namespace eval ::acs {
                         dict unset ${:prefix} $key
                     }
                 } elseif [dict exists [set ${:prefix}] $pattern] {
+                    #
+                    # A "pattern" without a wildcard was provided
+                    #
                     dict unset ${:prefix} $pattern
                 }
             }

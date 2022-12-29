@@ -55,10 +55,11 @@ if { [catch {ns_cache set util_memoize __util_memoize_installed_p 1} error] } {
 }
 
 
-ad_proc -private util_memoize_flush_local {script} {
-    Forget any cached value for <i>script</i>.  You probably want to use
-    <code>util_memoize_flush</code> to flush the caches on all servers
-    in the cluster, in case clustering is enabled.
+ad_proc -private util_memoize_flush_local {script} {    
+    Forget any cached value for <i>script</i> on the local server.
+    You probably want to use <code>util_memoize_flush</code> to flush
+    the caches on all servers in the cluster, in case clustering is
+    enabled.
 
     @param script The Tcl script whose cached value should be flushed.
 } {
@@ -74,7 +75,7 @@ ad_proc -public util_memoize_flush {script} {
     ::acs::clusterwide ns_cache flush util_memoize $script
 }
 
-ad_proc -public util_memoize_flush_regexp {
+ad_proc -private util_memoize_flush_regexp_local {
     -log:boolean
     expr
 } {
@@ -103,6 +104,29 @@ ad_proc -public util_memoize_flush_regexp {
         }
     }
 }
+
+ad_proc -public util_memoize_flush_regexp {
+    -log:boolean
+    expr
+} {
+    Loop through all cached entries, flushing all that match the
+    regular expression that was passed in.
+
+    It is recommended to use util_memoize_flush_pattern whenever
+    possible, since glob-match is in most cases sufficient and much
+    better performance-wise. the glob match can be better supported by
+    the built-in set of the server.
+
+    @see util_memoize_flush_pattern
+
+    @param expr The regular expression to match.
+    @param log Whether to log keys checked and flushed (useful for debugging).
+} {
+    ::acs::clusterwide util_memoize_flush_regexp_local \
+        {*}[expr {$log_p ? "-log" : ""}] \
+        $expr
+}
+
 
 # Local variables:
 #    mode: tcl
