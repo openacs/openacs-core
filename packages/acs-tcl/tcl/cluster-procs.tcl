@@ -135,7 +135,7 @@ namespace eval ::acs {
                 #
                 ns_log notice "--cluster acs_cache operation: $cmd"
                 set allowed 1
-            } else {                
+            } else {
                 set allowed 0
             }
             return $allowed
@@ -145,6 +145,7 @@ namespace eval ::acs {
         # handle incoming request issues
         #
         :public object method incoming_request {} {
+            catch {::throttle do incr ::count(cluster:receive)}
             set cmd [ns_queryget cmd]
             set addr [lindex [ns_set iget [ns_conn headers] x-forwarded-for] end]
             set sender [ns_set iget [ns_conn headers] host]
@@ -215,11 +216,11 @@ namespace eval ::acs {
 
             if {[ns_ictl epoch] > 0} {
                 foreach server [:info instances] {
-                    catch {::throttle do incr ::count(cluster:message)}
+                    catch {::throttle do incr ::count(cluster:sent)}
                     set t0 [clock clicks -microseconds]
                     $server message {*}$args
                     set ms [expr {([clock clicks -microseconds] - $t0)/1000}]
-                    catch {::throttle do incr ::agg_time(cluster:message) $ms}
+                    catch {::throttle do incr ::agg_time(cluster:sent) $ms}
                 }
             } else {
                 foreach server [:info instances] {
