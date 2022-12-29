@@ -3827,11 +3827,21 @@ ad_proc -public db_flush_cache {
     # from the cache, which can cause large mutex lock times.
     #
     if {[regexp {[*\]\[]} $cache_key_pattern]} {
-        foreach key [ns_cache names $cache_pool $cache_key_pattern] {
-            ns_cache flush $cache_pool $key
+        if {[namespace which ns_cache_eval] ne ""} {
+            #
+            # NaviServer variant
+            #
+            ::acs::clusterwide ns_cache_flush -glob $cache_pool $key
+        } else {
+            #
+            # AOLserver variant
+            #
+            foreach key [ns_cache names $cache_pool $cache_key_pattern] {
+                ns_cache flush $cache_pool $key
+            }
         }
     } else {
-        ns_cache flush $cache_pool $cache_key_pattern
+        acs::clusterwide ns_cache flush $cache_pool $cache_key_pattern
     }
 }
 

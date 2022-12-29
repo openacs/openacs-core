@@ -411,7 +411,7 @@ ad_proc -private template::get_cached_result { name type } {
                 if { $timeout > [ns_time] } {
                     set success 1
                 } else {
-                    ns_cache flush template_query_cache $cache_key
+                    acs::clusterwide ns_cache flush template_query_cache $cache_key
                 }
             }
         }
@@ -512,9 +512,9 @@ ad_proc -private template::query::flush_cache { cache_match } {
     foreach name $names {
         if { [string match $cache_match $name] } {
             ns_log debug "template::query::flush_cache: FLUSHING QUERY (persistent): $name"
-            ns_cache flush template_query_cache $name
+            acs::clusterwide ns_cache flush template_query_cache $name
             if {[ns_info name] ne "NaviServer"} {
-                ns_cache flush template_timeout_cache $name
+                acs::clusterwide ns_cache flush template_timeout_cache $name
             }
         }
     }
@@ -1032,8 +1032,8 @@ ad_proc -public template::cache { command cache_key args } {
                     # validate timeout
                     if { $timeout > [ns_time] } {
                         set result $value
-                   } else {
-                        ns_cache flush template_cache $cache_key
+                    } else {
+                        acs::clusterwide ns_cache flush template_cache $cache_key
                     }
                 }
             }
@@ -1064,13 +1064,13 @@ ad_proc -public template::cache { command cache_key args } {
         flush {
             # The key is actually a string match pattern
             if {[ns_info name] eq "NaviServer"} {
-                ns_cache_flush -glob template_cache $cache_key
+                acs::clusterwide ns_cache_flush -glob template_cache $cache_key
             } else {
                 set names [ns_cache names template_cache]
                 foreach name $names {
                     if { [string match $cache_key $name] } {
                         ns_log debug "template::cache: FLUSHING CACHE: $name"
-                        ns_cache flush template_cache $name
+                        acs::clusterwide ns_cache flush template_cache $name
                     }
                 }
             }
