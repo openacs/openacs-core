@@ -42,9 +42,20 @@ if {[server_cluster_enabled_p]} {
 
     #ns_register_filter trace GET $url ::acs::Cluster
     ns_register_filter preauth GET $url ::acs::Cluster
+    #ns_register_filter postauth GET $url ::acs::Cluster
     #ad_register_filter -priority 900 preauth GET $url ::acs::Cluster
-}
 
+    ns_register_proc GET $url ::acs::Cluster incoming_request
+
+    ns_atstartup {
+        ns_log notice "CHECK ::throttle '[::info commands ::throttle]'"
+        if {0 && [::info commands ::throttle] ne ""} {
+            ns_log notice "CHECK calling ::acs::Cluster check_nodes"
+            throttle do ::acs::Cluster check_nodes
+        }
+    }
+}
+ns_log notice "cluster-init done"
 #
 # Local variables:
 #    mode: tcl
