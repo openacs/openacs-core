@@ -148,7 +148,7 @@ ad_proc -public person::flush_person_info {
 
     @see person::get_person_info
 } {
-    ns_cache flush person_info_cache $person_id
+    acs::clusterwide ns_cache flush person_info_cache $person_id
 }
 
 ad_proc -deprecated -public person::name_flush {
@@ -390,7 +390,7 @@ ad_proc -public acs_user::get_by_username {
             if {$user_id eq ""} {
                 break
             }
-            return $user_id 
+            return $user_id
         }]
         break
     }
@@ -600,10 +600,10 @@ ad_proc -public acs_user::flush_user_info {
     @see acs_user::get_user_info
 } {
     set user [acs_user::get_user_info -user_id $user_id]
-    ns_cache flush user_info_cache [list get_by_username \
+    acs::clusterwide ns_cache flush user_info_cache [list get_by_username \
                                         -authority_id [dict get $user authority_id] \
                                         -username [dict get $user username]]
-    ns_cache flush user_info_cache [list get_user_info $user_id]
+    acs::clusterwide ns_cache flush user_info_cache [list get_user_info $user_id]
 }
 
 ad_proc -public acs_user::flush_cache {
@@ -734,9 +734,9 @@ ad_proc -public acs_user::registered_user_p {
 }
 
 
-ad_proc -public acs_user::ScreenName {} {    
+ad_proc -public acs_user::ScreenName {} {
     Get the value of the ScreenName parameter. Checked to ensure that
-    it only returns none, solicit, or require.    
+    it only returns none, solicit, or require.
 } {
     set value [parameter::get \
                    -parameter ScreenName \
@@ -872,9 +872,9 @@ ad_proc -public party::flush_cache {
     Flush the party cache
 } {
     set email [party::get -party_id $party_id -element email]
-    
+
     foreach key [list $party_id [list get_by_email $email]] {
-        ns_cache flush party_info_cache $key
+        acs::clusterwide ns_cache flush party_info_cache $key
     }
 }
 
@@ -1124,7 +1124,7 @@ ad_proc -public party::get_by_email {
         }]
         break
     }
-    
+
     return $party_id
 }
 
@@ -1214,7 +1214,7 @@ ad_proc -private acs_user::flush_portrait {
 } {
     # Flush the portrait cache
     set key [list get_portrait_id -user_id $user_id]
-    ns_cache flush user_info_cache $key
+    acs::clusterwide ns_cache flush user_info_cache $key
 }
 
 ad_proc -public acs_user::create_portrait {
