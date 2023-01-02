@@ -3831,7 +3831,7 @@ ad_proc -public db_flush_cache {
             #
             # NaviServer variant
             #
-            ::acs::clusterwide ns_cache_flush -glob $cache_pool $key
+            ::acs::clusterwide ns_cache_flush -glob $cache_pool $cache_key_pattern
         } else {
             #
             # AOLserver variant
