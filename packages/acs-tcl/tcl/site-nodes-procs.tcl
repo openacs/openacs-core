@@ -1028,7 +1028,7 @@ namespace eval ::acs {
                     }
                 }
 
-                set tree [::acs::dc list_of_lists -prepare {integer boolean} dbqd..get_subtree $sql]
+                set tree [::acs::dc list_of_lists -prepare integer,boolean dbqd..get_subtree $sql]
 
                 foreach entry $tree {
                     lassign $entry url node_id object_id
