@@ -121,6 +121,124 @@ aa_register_case \
 }
 
 aa_register_case \
+    -cats {
+        api smoke production_safe
+    } \
+    -procs {
+        lc_time_tz_convert
+        lc_list_all_timezones
+    } lang_test__lc_timezones {
+
+        Test conversion between timezones and other timezone-related
+        behavior.
+
+    } {
+
+        aa_section "From and to the same timezone"
+
+        set time [lc_time_tz_convert -from Europe/Vienna -to Europe/Vienna -time_value "2021-02-18 15:04:59"]
+        aa_equals "lc_time_tz_convert from and to Europe/Vienna (2021-02-18 15:04:59)" $time "2021-02-18 15:04:59"
+
+        set time [lc_time_tz_convert -from Europe/Vienna -to Europe/Vienna -time_value "0621-01-01 00:00:00"]
+        aa_equals "lc_time_tz_convert from and to Europe/Vienna (0621-01-01 00:00:00)" $time "0621-01-01 00:00:00"
+
+        set time [lc_time_tz_convert -from Europe/Vienna -to Europe/Vienna -time_value "1581-01-01 00:00:00"]
+        aa_equals "lc_time_tz_convert from and to Europe/Vienna (1581-01-01 00:00:00)" $time "1581-01-01 00:00:00"
+
+        set time [lc_time_tz_convert -from Europe/Vienna -to Europe/Vienna -time_value "1583-01-01 00:00:00"]
+        aa_equals "lc_time_tz_convert from and to Europe/Vienna (1583-01-01 00:00:00)" $time "1583-01-01 00:00:00"
+
+        set time [lc_time_tz_convert -from Europe/Vienna -to Europe/Vienna -time_value "2000-00-00 00:00:00"]
+        aa_equals "lc_time_tz_convert from and to Europe/Vienna (2000-00-00 00:00:00)" $time "1999-11-30 00:00:00"
+
+        aa_equals "lc_time_tz_convert from and to Europe/Vienna ('Broken!', invalid date)" \
+            [lc_time_tz_convert -from Europe/Vienna -to Europe/Vienna -time_value "Broken!"] ""
+
+        set time [lc_time_tz_convert -from Europe/Vienna -to Europe/Vienna -time_value "1900-01-01 00:00:00"]
+        aa_equals "lc_time_tz_convert from and to Europe/Vienna (1900-01-01 00:00:00)" $time "1900-01-01 00:00:00"
+
+
+        aa_section "From one timezone to another"
+
+        set time [lc_time_tz_convert -from Europe/Vienna -to America/New_York -time_value "2021-02-18 15:04:59"]
+        aa_equals "lc_time_tz_convert from Europe/Vienna to America/New_York (2021-02-18 15:04:59)" $time "2021-02-18 09:04:59"
+
+        set time [lc_time_tz_convert -from Europe/Vienna -to America/New_York -time_value "0621-01-01 00:00:00"]
+        aa_equals "lc_time_tz_convert from Europe/Vienna to America/New_York (0621-01-01 00:00:00, before USA Timezones 1893-11-18)" $time "0620-12-31 17:58:37"
+
+        set time [lc_time_tz_convert -from Europe/Vienna -to America/New_York -time_value "1581-01-01 00:00:00"]
+        aa_equals "lc_time_tz_convert from Europe/Vienna to America/New_York (1581-01-01 00:00:00, before USA Timezones 1893-11-18)" $time "1580-12-31 17:58:37"
+
+        set time [lc_time_tz_convert -from Europe/Vienna -to America/New_York -time_value "1893-11-19 00:00:00"]
+        aa_equals "lc_time_tz_convert from Europe/Vienna to America/New_York (1893-11-19 00:00:00, after USA Timezones 1893-11-18)" $time "1893-11-18 18:00:00"
+
+        set time [lc_time_tz_convert -from Europe/Vienna -to America/New_York -time_value "2000-00-00 00:00:00"]
+        aa_equals "lc_time_tz_convert from Europe/Vienna to America/New_York (2000-00-00 00:00:00)" $time "1999-11-29 18:00:00"
+
+        set time [lc_time_tz_convert -from Europe/Vienna -to America/New_York -time_value "1900-01-01 00:00:00"]
+        aa_equals "lc_time_tz_convert from Europe/Vienna to America/New_York (1900-01-01 00:00:00)" $time "1899-12-31 18:00:00"
+
+        set time [lc_time_tz_convert -from Europe/Vienna -to America/New_York -time_value "3000-01-01 00:00:00"]
+        aa_equals "lc_time_tz_convert from Europe/Vienna to America/New_York (3000-01-01 00:00:00, distant future)" $time "2999-12-31 18:00:00"
+
+        aa_equals "lc_time_tz_convert from Europe/Vienna to America/New_York ('Broken!', invalid date)" \
+            [lc_time_tz_convert -from Europe/Vienna -to America/New_York -time_value "Broken!"] ""
+
+        aa_equals "lc_time_tz_convert from Europe/Vienna to America/New_York ('Broken!', invalid date)" \
+            [lc_time_tz_convert -from Europe/Vienna -to America/New_York -time_value "Broken!"] ""
+
+
+        aa_section "From one timezone to another, checking daylight savings"
+
+        set time [lc_time_tz_convert -from Europe/Vienna -to Brazil/East -time_value "2016-02-01 00:00:00"]
+        aa_equals "lc_time_tz_convert from Europe/Vienna to Brazil/East (2016-02-01 00:00:00)" $time "2016-01-31 21:00:00"
+
+        set time [lc_time_tz_convert -from Europe/Vienna -to Brazil/East -time_value "2016-02-22 00:00:00"]
+        aa_equals "lc_time_tz_convert from Europe/Vienna to Brazil/East (2016-02-22 00:00:00)" $time "2016-02-21 20:00:00"
+
+        set time [lc_time_tz_convert -from Europe/Vienna -to Brazil/East -time_value "2016-03-28 00:00:00"]
+        aa_equals "lc_time_tz_convert from Europe/Vienna to Brazil/East (2016-03-28 00:00:00)" $time "2016-03-27 19:00:00"
+
+        set time [lc_time_tz_convert -from Europe/Vienna -to Brazil/East -time_value "2016-10-17 00:00:00"]
+        aa_equals "lc_time_tz_convert from Europe/Vienna to Brazil/East (2016-10-17 00:00:00)" $time "2016-10-16 20:00:00"
+
+        set time [lc_time_tz_convert -from Europe/Vienna -to Brazil/East -time_value "2016-10-31 00:00:00"]
+        aa_equals "lc_time_tz_convert from Europe/Vienna to Brazil/East (2016-10-31 00:00:00)" $time "2016-10-30 21:00:00"
+
+        set time [lc_time_tz_convert -from SystemV/AST4 -to Europe/Vienna -time_value "1942-05-04 00:00:00"]
+        aa_equals "lc_time_tz_convert from SystemV/AST4 to Europe/Vienna (1942-05-04 00:00:00, war time)" $time "1942-05-04 05:00:00"
+
+        set time [lc_time_tz_convert -from SystemV/AST4 -to Europe/Vienna -time_value "2016-10-31 00:00:00"]
+        aa_equals "lc_time_tz_convert from SystemV/AST4 to Europe/Vienna (2016-10-31 00:00:00)" $time "2016-10-31 05:00:00"
+
+
+        aa_section "Check that conversion to/from every supported timezone succeeds"
+
+        set timezones [lc_list_all_timezones]
+
+        foreach to $timezones {
+            set to [lindex $to 0]
+            aa_false "Converting valid date '2021-02-18 15:04:59' from 'Europe/Vienna' to valid timezone '$to' does not return empty" \
+                [expr {[lc_time_tz_convert -from Europe/Vienna -to $to -time_value "2021-02-18 15:04:59"] eq ""}]
+        }
+
+        foreach from $timezones {
+            set from [lindex $from 0]
+            aa_false "Converting valid date '2021-02-18 15:04:59' from valid timezone '$from' to 'Europe/Vienna' does not return empty" \
+                [expr {[lc_time_tz_convert -from $from -to Europe/Vienna -time_value "2021-02-18 15:04:59"] eq ""}]
+        }
+
+        aa_section "Check that invalid timezones are rejected instead"
+
+        aa_equals "Converting to an invalid 'Bogus' timezone returns empty" \
+            [lc_time_tz_convert -from Europe/Vienna -to Bogus -time_value "2021-02-18 15:04:59"] ""
+
+        aa_equals "Converting from an invalid 'Bogus' timezone returns empty" \
+            [lc_time_tz_convert -from Bogus -to Europe/Vienna -time_value "2021-02-18 15:04:59"] ""
+
+    }
+
+aa_register_case \
     -cats {api smoke production_safe} \
     -procs {
         lc_get
