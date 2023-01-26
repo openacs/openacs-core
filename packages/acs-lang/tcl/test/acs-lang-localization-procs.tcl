@@ -99,10 +99,10 @@ aa_register_case \
     aa_equals "lc_clock_to_ansi" $time "2021-02-18 15:04:59"
 
     set time [lc_time_tz_convert -from Europe/Vienna -to Europe/Vienna -time_value "2021-02-18 15:04:59"]
-    aa_equals "lc_time_tz_convert form and to Europe/Vienna" $time "2021-02-18 15:04:59"
+    aa_equals "lc_time_tz_convert from and to Europe/Vienna" $time "2021-02-18 15:04:59"
 
     set time [lc_time_tz_convert -from Europe/Vienna -to America/New_York -time_value "2021-02-18 15:04:59"]
-    aa_equals "lc_time_tz_convert form and to Europe/Vienna" $time "2021-02-18 09:04:59"
+    aa_equals "lc_time_tz_convert from and to Europe/Vienna" $time "2021-02-18 09:04:59"
 
     #
     # There is no easy way to change the conn::timezone. So set the
@@ -180,9 +180,6 @@ aa_register_case \
 
         set time [lc_time_tz_convert -from Europe/Vienna -to America/New_York -time_value "3000-01-01 00:00:00"]
         aa_equals "lc_time_tz_convert from Europe/Vienna to America/New_York (3000-01-01 00:00:00, distant future)" $time "2999-12-31 18:00:00"
-
-        aa_equals "lc_time_tz_convert from Europe/Vienna to America/New_York ('Broken!', invalid date)" \
-            [lc_time_tz_convert -from Europe/Vienna -to America/New_York -time_value "Broken!"] ""
 
         aa_equals "lc_time_tz_convert from Europe/Vienna to America/New_York ('Broken!', invalid date)" \
             [lc_time_tz_convert -from Europe/Vienna -to America/New_York -time_value "Broken!"] ""
