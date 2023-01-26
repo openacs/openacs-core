@@ -545,21 +545,83 @@ ad_proc -public lc_time_tz_convert {
 } {
     Converts a date from one timezone to another.
 
-    @param time_value        Timestamp in the 'from' timezone, in the ISO datetime format.
-    @return                  Timestamp in the 'to' timezone, also in ISO datetime format.
+    @param time_value         Timestamp in the 'from' timezone, in the ISO
+                              datetime format ("%Y-%m-%d %H:%M:%S" as
+                              per Tcl clock api). Some seemingly
+                              invalid dates such as "2000-00-00
+                              00:00:00" may be accepted and normalized
+                              to a valid date, also according to he
+                              behavior of the Tcl clock api.
+
+    @return                  Timestamp in the 'to' timezone, also in ISO datetime
+                             format, or the empty string when
+                             'time_value' or one of the timezones are
+                             invalid, or when it is otherwise
+                             impossible to determine the right
+                             conversion.
+
+    @see https://www.tcl.tk/man/tcl/TclCmd/clock.html#M25
 } {
-    ad_try {
-        set time_value [db_exec_plsql convert {}]
-    } on error {errorMsg} {
-        ad_log Warning "lc_time_tz_convert: Error converting timezone: $errorMsg"
+    try {
+        #
+        # Here we enforce that the timestamp format is correct and
+        # apply Tcl clock date normalization (e.g. 2000-00-00 00:00:00
+        # -> 1999-11-30 00:00:00) so that the behavior is consistent
+        # across DBMSs)
+        #
+        set clock_value [clock scan $time_value -format {%Y-%m-%d %H:%M:%S}]
+        set time_value [clock format $clock_value -format {%Y-%m-%d %H:%M:%S}]
+    } on error {errmsg} {
+        ad_log warning "lc_time_tz_convert: invalid date '$time_value'"
+        return ""
     }
-    return $time_value
+
+    try {
+        #
+        # Tcl-based conversion
+        #
+        # Tcl clock api can perform timezone conversion fairly easy,
+        # with the advantage that we do not have to maintain a local
+        # timezones database, including daylight savings, to get a
+        # correct and consistent result.
+        #
+        set clock_local [clock scan $time_value -format {%Y-%m-%d %H:%M:%S} -timezone $from]
+        set clock_gmt [clock scan $clock_local -format %s -gmt 1]
+        set date_to [clock format $clock_gmt -format {%Y-%m-%d %H:%M:%S} -timezone $to]
+    } on error {errmsg} {
+        ad_log notice \
+            "lc_time_tz_convert: '$time_value' from '$from' to '$to' via Tcl returned:" \
+            $errmsg
+
+        #
+        # DB-based conversion
+        #
+        # The typical Tcl installation will not deal with
+        # non-canonical timezones, but we may have this
+        # information in the ref-timezones datamodel. When the Tcl
+        # conversion fails, we try this approach instead.
+        #
+        set date_to [db_string tz_convert {
+            with gmt as
+            (
+             select cast(:time_value as timestamp) -
+                    cast(r.gmt_offset || ' seconds' as interval) as time
+               from timezones t, timezone_rules r
+              where t.tz_id = r.tz_id
+                and :time_value between r.local_start and r.local_end
+                and t.tz = :from
+             )
+            select to_char(gmt.time + cast(r.gmt_offset || ' seconds' as interval),
+                           'YYYY-MM-DD HH24:MI:SS')
+              from timezones t, timezone_rules r, gmt
+             where t.tz_id = r.tz_id
+               and gmt.time between r.utc_start and r.utc_end
+               and t.tz = :to
+        } -default ""]
+    }
+
+    return $date_to
 }
-
-
-
-
-
 
 
 ad_proc -public lc_list_all_timezones { } {
