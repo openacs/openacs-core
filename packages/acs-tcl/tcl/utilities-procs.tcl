@@ -3628,7 +3628,7 @@ ad_proc util::potentially_unsafe_eval_p { -warn:boolean string } {
                 continue
             }
         }
-        #ns_log notice "util::potentially_unsafe_eval_p '$string' $p"        
+        #ns_log notice "util::potentially_unsafe_eval_p '$string' $p"
         if {$p < 0 || [string length $string] < 2} {
             break
         }
@@ -3638,7 +3638,7 @@ ad_proc util::potentially_unsafe_eval_p { -warn:boolean string } {
         }
         break
     }
-    #ns_log notice "util::potentially_unsafe_eval_p '$string' ->  $unsafe_p"    
+    #ns_log notice "util::potentially_unsafe_eval_p '$string' ->  $unsafe_p"
     return $unsafe_p
 }
 
@@ -3701,13 +3701,13 @@ ad_proc ad_tmpdir {} {
 }
 
 ad_proc ad_opentmpfile {varFilename {template "oacs"}} {
-    
+
     Wrapper for Tcl's "file tempfile ...", but respects the server's
     tmpdir settings, e.g. when admin want to specify the temporary
     directory.  The function is similar to "ns_opentmpfile", but
     provides a default template and uses always the configured tmp
     directory.
-    
+
 } {
     uplevel [list file tempfile $varFilename [ns_config ns/parameters tmpdir]/$template]
 }
@@ -3715,12 +3715,12 @@ ad_proc ad_opentmpfile {varFilename {template "oacs"}} {
 if {$::tcl_version > 8.6} {
     #
     # Tcl 8.7 or newer
-    #    
+    #
     ad_proc ad_mktmpdir {{prefix "oacs"}} {
-    
+
         Wrapper for Tcl's "file tempdir ...", but respects the server's
         tmpdir settings.
-    
+
         @param prefix optional parameter, for easier
                identification of the directory
         @return name of the created directory
@@ -3732,16 +3732,16 @@ if {$::tcl_version > 8.6} {
     # Tcl 8.6 or earlier
     #
     ad_proc ad_mktmpdir {{prefix "oacs"}} {
-        
+
         Wrapper for Tcl's "file tempdir ...", but respects the server's
         tmpdir settings.
 
         @param prefix optional parameter, for easier
                identification of the directory
-        @return name of the created directory        
-        
+        @return name of the created directory
+
     } {
-        package require fileutil 
+        package require fileutil
         ::fileutil::maketempdir -prefix ${prefix}_ -dir [ns_config ns/parameters tmpdir]
     }
 }
