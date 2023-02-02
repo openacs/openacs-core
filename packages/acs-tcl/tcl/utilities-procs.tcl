@@ -3709,7 +3709,7 @@ ad_proc ad_opentmpfile {varFilename {template "oacs"}} {
     directory.
 
 } {
-    uplevel [list file tempfile $varFilename [ns_config ns/parameters tmpdir]/$template]
+    uplevel [list ::file tempfile $varFilename [ns_config ns/parameters tmpdir]/$template]
 }
 
 if {$::tcl_version > 8.6} {
@@ -3725,7 +3725,7 @@ if {$::tcl_version > 8.6} {
                identification of the directory
         @return name of the created directory
     } {
-        file tempdir [ns_config ns/parameters tmpdir]/$prefix
+        ::file tempdir [ns_config ns/parameters tmpdir]/$prefix
     }
 } else {
     #
