@@ -1,7 +1,7 @@
 <master>
   <property name="doc(title)">@page_title;literal@</property>
   <property name="context">@context;literal@</property>
-  <property name="focus">@focus;literal@</property>
+  <if @focus@ not nil><property name="focus">@focus;literal;no18b@</property></if>
 
 <if @global_param_url@ defined>
 <h2>Global parameters</h2> 
@@ -11,6 +11,8 @@
 <h2>Instance parameters</h2>
 </if>
 <if @counter@ gt 0>
+  @sections_header;noquote@
+  
   <formtemplate id="parameters"></formtemplate>
 
   <if @display_warning_p;literal@ true>

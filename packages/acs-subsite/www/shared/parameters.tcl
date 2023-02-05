@@ -125,9 +125,21 @@ db_foreach select_params {} {
     incr counter
 }
 
-set focus "parameters.$focus_elm"
+#set focus "parameters.$focus_elm"
+set sections_header ""
 
 if { $counter > 0 } {
+    #
+    # "Main" is always the first section
+    #
+    set section_list "<a href='#main'>[ns_quotehtml $sections(main)]</a>"
+    foreach section_name [lsort [array names sections]] {
+        if {$section_name ne "main"} {
+            lappend section_list "<a href='#$section_name'>[ns_quotehtml $sections($section_name)]</a>"
+        }
+    }
+    set sections_header "<p>Sections: <small>[join $section_list { - } ]</small></p>"
+
     # Close last section
     ad_form -extend -name parameters -form [list "-section"]
     ad_form -extend -name parameters -on_request {
