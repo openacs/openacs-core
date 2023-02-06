@@ -3298,7 +3298,7 @@ ad_proc -public db_column_type {{-dbn ""} {-complain:boolean} table_name column_
 }
 
 
-ad_proc -public ad_column_type {{-dbn ""} table_name column_name } {
+ad_proc -deprecated ad_column_type {{-dbn ""} table_name column_name } {
 
     @return 'numeric' for number type columns, 'text' otherwise
     Throws an error if no such column exists.
@@ -3306,6 +3306,16 @@ ad_proc -public ad_column_type {{-dbn ""} table_name column_name } {
     @param dbn The database name to use.  If empty_string, uses the default database.
 
     @author Yon Feldman (yon@arsdigita.com)
+
+    DEPRECATED: it is unclear what the purpose of this proc is. For
+                instance, on a Linux/Postgres installation,
+                ad_column_type acs_objects object_type ->
+                'numeric'. When things should happen based on the
+                column type, maybe a better approach is to rely on
+                more complete or consistent api, or on the information
+                schema.
+
+    @see db_column_type, https://wikipedia.org/wiki/Information_schema
 
 } {
     set column_type [db_column_type -dbn $dbn $table_name $column_name]
