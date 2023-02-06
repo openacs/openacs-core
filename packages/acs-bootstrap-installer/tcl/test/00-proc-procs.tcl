@@ -100,3 +100,47 @@ aa_register_case \
         set type [db_fullquery_get_query_type $full_query]
         aa_true "type: $type" {$type eq ""}
     }
+
+aa_register_case \
+    -cats {api smoke} \
+    -procs {
+        ad_with_deprecated_code_p
+    } \
+    ad_with_deprecated_code_p {
+        Basic test of ad_with_deprecated_code_p
+    } {
+        aa_equals "Returned value is as expected" \
+            [ad_with_deprecated_code_p] \
+            [ns_config ns/server/[ns_info server]/acs WithDeprecatedCode 1]
+    }
+
+aa_register_case \
+    -cats {api smoke} \
+    -procs {
+        ad_log_deprecated
+    } \
+    ad_log_deprecated {
+        Basic test of ad_with_deprecated_code_p
+    } {
+        #
+        # Trace-sandwich to intercept the log, expected by the call.
+        #
+        trace add execution ns_log enter {apply {args {
+            nsv_set __test_ad_log_deprecated . $args
+        }}}
+        ad_log_deprecated proc _old_test_command_ _new_test_command_
+        trace remove execution ns_log enter {apply {args {
+            nsv_set __test_ad_log_deprecated . $args
+        }}}
+
+        set result [nsv_get __test_ad_log_deprecated .]
+
+        aa_true "A warning was logged by the system" \
+            {[string first "ns_log warning" [string tolower $result]] >= 0}
+
+        aa_true "Warning message contains the two test procs" {
+            [string first _old_test_command_ $result] >= 0 &&
+            [string first _new_test_command_ $result] >= 0
+        }
+
+    }
