@@ -362,9 +362,7 @@ ad_proc ad_return_if_another_copy_is_running {
     return 1
 }
 
-# for pages that have optional decoration
-
-ad_proc ad_decorate_top {
+ad_proc -deprecated ad_decorate_top {
     simple_headline
     potential_decoration
 } {
@@ -372,6 +370,13 @@ ad_proc ad_decorate_top {
     defined in ad.ini; if the second argument isn't the empty
     string, ad_decorate_top will make a one-row table for the
     top of the page
+
+    DEPRECATED: use the template system, e.g. master and slave tags to
+                achieve better control of headers.
+
+    @see /doc/acs-templating/tagref/master
+    @see /doc/acs-templating/tagref/slave
+    @see /doc/acs-templating/tagref/include
 } {
     if { $potential_decoration eq "" } {
         return $simple_headline
