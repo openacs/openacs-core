@@ -459,25 +459,42 @@ aa_register_case \
         ad_page_contract_filter_proc_email
         ad_page_contract_filter_proc_float
         ad_page_contract_filter_proc_html
+        ad_page_contract_filter_proc_allhtml
+        ad_page_contract_filter_proc_nohtml
         ad_page_contract_filter_proc_integer
         ad_page_contract_filter_proc_localurl
         ad_page_contract_filter_proc_naturalnum
         ad_page_contract_filter_proc_negative_float
-        ad_page_contract_filter_proc_nohtml
         ad_page_contract_filter_proc_object_id
+        ad_page_contract_filter_proc_object_type
         ad_page_contract_filter_proc_printable
         ad_page_contract_filter_proc_sql_identifier
         ad_page_contract_filter_proc_token
         ad_page_contract_filter_proc_word
+        ad_page_contract_filter_proc_clock
+        ad_page_contract_filter_proc_date
+        ad_page_contract_filter_proc_time
+        ad_page_contract_filter_proc_oneof
+        ad_page_contract_filter_proc_path
+        ad_page_contract_filter_proc_phone
+        ad_page_contract_filter_proc_range
+        ad_page_contract_filter_proc_string_length
+        ad_page_contract_filter_proc_string_length_range
+        ad_page_contract_filter_proc_time
+        ad_page_contract_filter_proc_time24
+        ad_page_contract_filter_proc_tmpfile
 
         ad_complain
         ad_page_contract_filter_proc
         ad_page_contract_set_validation_passed
         util_complete_url_p
         util::external_url_p
+        ad_opentmpfile
     } ad_page_contract_filters {
         Test ad_page_contract_filters
     } {
+        aa_section {Filters without format spec}
+
         dict set cases integer { "1" 1 "a" 0 "1.2" 0 "'" 0 }
         dict set cases naturalnum { "1" 1 0 1 "-1" 0 "a" 0 "1.2" 0 "'" 0 }
         dict set cases float { "1" 1 "1.0" 1 "a" 0 "-1.0" 1 "1,0" 0 }
@@ -499,8 +516,67 @@ aa_register_case \
 
         dict set cases html { "'" 1 "<p>" 1 }
         dict set cases nohtml { "a" 1 "<p>" 0 }
+        dict set cases allhtml { "a" 1 "<p>" 1 "<script>alert('ciao');</script>" 1}
 
         dict set cases printable { "a" 1 "a b" 1 "a\x00b" 0 "name\xc0\x80.jpg" 0}
+
+        dict set cases date {
+            {day 1 month 1 year 2010} 1
+            {day 60 month 1 year 2010} 0
+            {day 31 month 11 year 2010} 0
+            {day 30 month 11 year <evil>} 0
+            {day "" month "" year ""} 1
+        }
+
+        dict set cases time {
+            {ampm am time 00:00:00} 0
+            {ampm am time 01:00:00} 1
+            {ampm pm time 01:00:00} 1
+            {ampm stuff time 01:00:00} 0
+            {ampm "" time 01:00:00} 0
+            {ampm am time 13:00:00} 0
+            {ampm am time 12:67:00} 0
+            {ampm am time 12:00:100} 0
+        }
+
+        dict set cases time24 {
+            {time 00:00:00} 1
+            {time 01:00:00} 1
+            {time 13:00:00} 1
+            {time 12:67:00} 0
+            {time 12:00:100} 0
+            {time 24:00:00} 0
+            {time 23:59:59} 1
+            {time 23:61:59} 0
+        }
+
+        dict set cases path {
+            $path 0
+            \\root\path 0
+            ../test/path 1
+            /my-test/path 1
+            ?wheremypath? 0
+        }
+
+        close [ad_opentmpfile tmpfilename]
+        dict set cases tmpfile [list \
+                                   $tmpfilename 1 \
+                                   /etc/passwd 0 \
+                                   /home/nsadmin/somefile.txt 0 \
+                                   bogusstring 0]
+
+        dict set cases phone {
+            "(800) 888-8888" 1
+            "800-888-8888" 1
+            "800.888.8888" 1
+            "8008888888" 1
+            "(800) 888-8888 extension 405" 1
+            "(800) 888-8888abcd" 1
+            "" 1
+            "1-800-888-8888" 0
+            "10-10-220 800.888.8888" 0
+            "abcd(800) 888-8888" 0
+        }
 
         foreach filter [dict keys $cases] {
             foreach { value result } [dict get $cases $filter] {
@@ -515,15 +591,101 @@ aa_register_case \
                 } else {
                     set print_value $value
                 }
-                if { $result } {
-                    aa_true "'[ns_quotehtml $print_value]' is $filter" \
-                        [ad_page_contract_filter_invoke $filter dummy value]
+                if {$filter in {"date" "time" "time24"}} {
+                    #
+                    # This filter passes an array
+                    #
+                    array set value_array $value
+                    if { $result } {
+                        aa_true "'[ns_quotehtml $print_value]' is $filter" \
+                            [ad_page_contract_filter_invoke $filter dummy value_array]
+                    } else {
+                        aa_false "'[ns_quotehtml $print_value]' is NOT $filter" \
+                            [ad_page_contract_filter_invoke $filter dummy value_array]
+                    }
+                    unset value_array
                 } else {
-                    aa_false "'[ns_quotehtml $print_value]' is NOT $filter" \
-                        [ad_page_contract_filter_invoke $filter dummy value]
+                    if { $result } {
+                        aa_true "'[ns_quotehtml $print_value]' is $filter" \
+                            [ad_page_contract_filter_invoke $filter dummy value]
+                    } else {
+                        aa_false "'[ns_quotehtml $print_value]' is NOT $filter" \
+                            [ad_page_contract_filter_invoke $filter dummy value]
+                    }
                 }
             }
         }
+
+        set cases {}
+
+        aa_section {Filters with format spec}
+
+        dict set cases clock {
+             1234 "%s" 1
+             2022-01-01 "%s" 0
+             2022-01-01 "%Y-%m-%d" 1
+             2022-01-01 {"%Y-%m-%d" "%s"} 1
+        }
+
+        dict set cases object_type [list \
+                                9999999999999999999999 acs_object 0 \
+                                [db_string q {select min(object_id) from acs_objects}] acs_object 1 \
+                                [db_string q {select min(object_id) from acs_objects where object_type <> 'user'}] user 0 \
+                                [db_string q {select min(object_id) from acs_objects where object_type = 'user'}] user 1 \
+                                [db_string q {select min(object_id) from acs_objects where object_type <> 'user'}] {user acs_object} 1 \
+                                [db_string q {select min(object_id) - 1 from acs_objects}] {user acs_object} 0 \
+                               ]
+
+        dict set cases oneof {
+             1234 {1234 5} 1
+             2022-01-01 {1234 6} 0
+             "apple" {"banana" "mango" "apple"} 1
+        }
+
+        dict set cases range {
+            1 {-1 10} 1
+            1 {-2 0} 0
+            0001 {-1000 10000} 1
+            42 {0 1} 0
+        }
+
+        dict set cases string_length {
+            abcd {max 2} 0
+            abcd {min 2} 1
+            abcd {max 6} 1
+            a {min 2} 0
+        }
+
+        dict set cases string_length_range {
+            abcd {0 2} 0
+            abcd {2 100} 1
+            abcd {0 6} 1
+            a {2 5} 0
+        }
+
+        foreach filter [dict keys $cases] {
+            foreach { value formats result } [dict get $cases $filter] {
+                if {[regexp {[^[:print:]]} $value]} {
+                    #
+                    # Use ns_urlencode to avoid error messages, when
+                    # invalid strings are added to the DB. We should
+                    # probably export NaviServer's
+                    # DStringAppendPrintable for such cases.
+                    #
+                    set print_value [ns_urlencode $value]
+                } else {
+                    set print_value $value
+                }
+                if { $result } {
+                    aa_true "'[ns_quotehtml $print_value]' is $filter ($formats)" \
+                        [ad_page_contract_filter_invoke $filter dummy value [list $formats]]
+                } else {
+                    aa_false "'[ns_quotehtml $print_value]' is NOT $filter ($formats)" \
+                        [ad_page_contract_filter_invoke $filter dummy value [list $formats]]
+                }
+            }
+        }
+
     }
 
 aa_register_case \
