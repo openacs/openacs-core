@@ -1956,7 +1956,7 @@ ad_proc util::join_location {{-proto ""} {-hostname} {-port ""}} {
         # When the specified port is equal to the default port, omit
         # it from the result.
         #
-        if {$port ne "" && $port eq [dict get {http 80 https 443} $proto]} {
+        if {$port ne "" && $port eq [dict get {http 80 https 443 udp "" smtp ""} $proto]} {
             set port ""
         }
     }
