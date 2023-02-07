@@ -438,7 +438,7 @@ ad_proc -public ad_page_contract {
     <dt><a href="proc-view?proc=ad_page_contract_filter_proc_date"><b>date</b></a>
     <dd>Pluggable filter, installed by default, that makes sure the array validates as a date.
     Use this filter with :array to do automatic date filtering.  To use it, set up in your HTML form
-    a call to [ad_dateentrywidget varname].  Then on the receiving page, specify the filter using
+    a call to a date formfield.  Then on the receiving page, specify the filter using
     <code>varname:array,date</code>.  If the date validates, there will be a variable set in your
     environment <code>varname</code> with four keys: <code>day, month, year,</code> and <code>date</code>.
     You can safely pass <code>$varname(date)</code> to Oracle.
