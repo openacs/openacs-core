@@ -9,7 +9,7 @@
     <implements-subsite-p>f</implements-subsite-p>
     <inherit-templates-p>t</inherit-templates-p>
 
-    <version name="5.10.1d14" url="http://openacs.org/repository/download/apm/acs-kernel-5.10.1d14.apm">
+    <version name="5.10.1d15" url="http://openacs.org/repository/download/apm/acs-kernel-5.10.1d15.apm">
         <owner url="mailto:oct@openacs.org">OpenACS Core Team</owner>
         <summary>Routines and data models providing the foundation for OpenACS-based Web services.</summary>
         <release-date>2021-09-15</release-date>
@@ -17,7 +17,7 @@
         <description format="text/html">The OpenACS kernel contains the core datamodel create and drop scripts for such things as objects, groups, parties and the supporting PL/SQL and PL/pgSQL procedures.</description>
         <maturity>3</maturity>
 
-        <provides url="acs-kernel" version="5.10.1d14"/>
+        <provides url="acs-kernel" version="5.10.1d15"/>
 
         <callbacks>
         </callbacks>
@@ -61,7 +61,7 @@
             <parameter scope="instance" datatype="number"  min_n_values="1"  max_n_values="1"  name="PerformanceModeP"  default="0" description="Setting this to 1 will tell the request processor to make the assumption that once a URL is mapped to a file, that mapping never changes. This obviously would cause problems on a development system, but will improve performance on a production server." section_name="request-processor"/>
             <parameter scope="instance" datatype="number"  min_n_values="1"  max_n_values="1"  name="PermissionCacheP"  default="0" description="Whether to cache permission_p calls.  Use with extreme caution.  Only direct permissions managed via the tcl api are properly handled and some packages modify permissions directly in the database and will not work properly when this is turned on. You must restart the server after changing this param." section_name="permissions"/>
             <parameter scope="instance" datatype="number"  min_n_values="1"  max_n_values="1"  name="PermissionCacheTimeout"  default="300" description="Number of seconds until the permissions cache times out." section_name="permissions"/>
-            <parameter scope="instance" datatype="number"  min_n_values="1"  max_n_values="1"  name="PrivacyControlEnabledP"  default="0" description="Whether we control privacy. One example of a package that uses this is forums. It doesn&#39;t show any forum posting content unless this is set to 1." section_name="privacy"/>
+            <parameter scope="instance" datatype="number"  min_n_values="1"  max_n_values="1"  name="PrivacyControlEnabledP"  default="0" description="Whether we control privacy. One example of a package that uses this is forums. It doesn&#39;t show any forum posting content unless this is set to 1. DEPRECATED: this functionality has been ported to dotlrn, which was the only upstream package using it." section_name="deprecated"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="PublisherName"  default="Yourdomain Network, Inc." description="for legal pages, full corporate entity" section_name="system-information"/>
             <parameter scope="instance" datatype="number"  min_n_values="1"  max_n_values="1"  name="RegisterRestrictEntireServerToRegisteredUsersFilters"  default="0" description="Register filters at startup that will allow each subsite to be restricted to registered users." section_name="security"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="RegisterRestrictToSSLFilters"  default="1" description="Whether to process the RestrictToSSL paths per site node on startup which can be quite slow on a site with many nodes." section_name="security"/>
