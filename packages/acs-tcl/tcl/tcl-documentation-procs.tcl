@@ -2313,10 +2313,15 @@ ad_page_contract_filter phone { name value } {
 }
 
 
-ad_page_contract_filter usphone { name value } {
+ad_page_contract_filter -deprecated usphone { name value } {
     Checks whether the value is more or less a valid US phone number with
     the area code.
     Exact filter is XXX-XXX-XXXX
+
+    DEPRECATED: this filter is US-specific. One should use less
+                specific alternatives.
+
+    @see ad_page_contract_filter_proc_phone
 
     @author Randy Beggs (randyb@arsdigita.com)
     @creation-date 22 August 2000
