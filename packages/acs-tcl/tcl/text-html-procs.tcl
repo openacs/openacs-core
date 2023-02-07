@@ -2792,7 +2792,7 @@ ad_proc -public ad_enhanced_text_to_plain_text {
 
 
 
-ad_proc -public ad_convert_to_html {
+ad_proc -deprecated ad_convert_to_html {
     {-html_p f}
     text
 } {
@@ -2801,6 +2801,10 @@ ad_proc -public ad_convert_to_html {
 
     @param html_p specify <code>t</code> if the value of
     <code>text</code> is formatted in HTML, or <code>f</code> if <code>text</code> is plaintext.
+
+    DEPRECATED: this proc is a trivial wrapper for ad_html_text_convert
+
+    @see ad_html_text_convert
 
     @author Lars Pind (lars@pinds.com)
     @creation-date 19 July 2000
@@ -2813,7 +2817,7 @@ ad_proc -public ad_convert_to_html {
     return [ad_html_text_convert -from $from -to "text/html" -- $text]
 }
 
-ad_proc -public ad_convert_to_text {
+ad_proc -deprecated ad_convert_to_text {
     {-html_p t}
     text
 } {
@@ -2822,6 +2826,10 @@ ad_proc -public ad_convert_to_text {
 
     @param html_p specify <code>t</code> if the value of
     <code>text</code> is formatted in HTML, or <code>f</code> if <code>text</code> is plaintext.
+
+    DEPRECATED: this proc is a trivial wrapper for ad_html_text_convert
+
+    @see ad_html_text_convert
 
     @author Lars Pind (lars@pinds.com)
     @creation-date 19 July 2000
