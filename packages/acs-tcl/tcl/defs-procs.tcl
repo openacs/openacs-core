@@ -66,10 +66,18 @@ ad_proc -public ad_admin_home {} {
     return "[subsite::get_element -element url]admin"
 }
 
-# is this accurate? (rbm, aug 2002)
-
-ad_proc -public ad_package_admin_home { package_key } {
+ad_proc -deprecated ad_package_admin_home { package_key } {
     @return directory for the especified package's admin home.
+
+    # is this accurate? (rbm, aug 2002)
+
+    DEPRECATED: a package URL may not have anything to do with the
+                package key. Furthermore, the admin pages are normally located in
+                "-package-/admin" and not in "/admin/-package-".
+                One is better off generating package URLs by way of the site_nodes.
+
+    @see site_node::get_url
+    @see site_node::get_from_object_id
 } {
     return "[ad_admin_home]/$package_key"
 }
