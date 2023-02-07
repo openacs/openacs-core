@@ -246,7 +246,7 @@ namespace eval ::acs::db {
             return {}
         }
 
-        set definitions [::acs::dc list_of_lists -dbn $dbn get_all_package_functions {
+        set definitions [::acs::dc list_of_lists -dbn $dbn dbqd..get_all_package_functions {
             select function, arg_name, arg_default
             from   acs_function_args
             order by function, arg_seq
@@ -275,7 +275,7 @@ namespace eval ::acs::db {
         # argument types, return type) from PostgreSQL system
         # catalogs.
         #
-        set pg_data [::acs::dc list_of_lists -dbn $dbn [current method] {
+        set pg_data [::acs::dc list_of_lists -dbn $dbn dbqd..[current method] {
             select distinct
             af.function,
             substring(af.function from 0 for position('__' in af.function)) as package_name,
