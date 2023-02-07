@@ -261,7 +261,7 @@ ad_proc -deprecated ad_dateentrywidget {column { value 0 } } {
     return $output
 }
 
-ad_proc ad_db_select_widget {
+ad_proc -deprecated ad_db_select_widget {
     {-size 0}
     {-multiple 0}
     {-default {}}
@@ -290,6 +290,13 @@ ad_proc ad_db_select_widget {
     <p>
     if -blank_if_no_db is true, then do not return a select widget unless
     there are rows from the database
+
+    DEPRECATED: the template system offers better ways to produce
+                markup from a query nowadays.
+
+    @see template::widget::select
+    @see template::widget::multiselect
+    @see /doc/acs-templating/tagref/multiple
 } {
     set retval {}
     set count 0
