@@ -7,6 +7,94 @@ ad_library {
 aa_register_case \
     -cats { api } \
     -procs {
+        ad_get_login_url
+        ad_get_logout_url
+        ad_return_url
+    } \
+    login_logout_urls {
+
+        Test generation of login and logout URLs via the API
+
+    } {
+        set return_url [ad_return_url]
+
+
+        aa_section {Login URL}
+
+        db_foreach get_user_info {
+            select username, authority_id
+            from users
+            fetch first 10 rows only
+        } {
+            set login_url [ad_get_login_url -authority_id $authority_id -username $username]
+            aa_true "Login URL '$login_url' is a local URL" [util_url_valid_p -relative $login_url]
+            aa_false "Login URL '$login_url' is not external" [util::external_url_p $login_url]
+
+            set login_url [ad_get_login_url -authority_id $authority_id -username $username -return]
+            aa_true "Login URL '$login_url' is a local URL" [util_url_valid_p -relative $login_url]
+            aa_false "Login URL '$login_url' is not external" [util::external_url_p $login_url]
+            aa_true "Login URL '$login_url' contains the return URL" {
+                [string first [ns_urlencode $return_url] $login_url] >= 0
+            }
+        }
+
+
+        aa_section {Logout URL}
+
+        set logout_url [ad_get_logout_url]
+        aa_true "Logout URL '$logout_url' is a local URL" [util_url_valid_p -relative $logout_url]
+        aa_false "Logout URL '$logout_url' is not external" [util::external_url_p $logout_url]
+
+        set logout_url [ad_get_logout_url -return]
+        aa_true "Logout URL '$logout_url' is a local URL" [util_url_valid_p -relative $logout_url]
+        aa_false "Logout URL '$logout_url' is not external" [util::external_url_p $logout_url]
+        aa_true "Logout URL '$logout_url' contains the return URL" {
+            [string first [ns_urlencode $return_url] $logout_url] >= 0
+        }
+
+        set logout_url [ad_get_logout_url -return -return_url __test__return__url]
+        aa_true "Logout URL '$logout_url' is a local URL" [util_url_valid_p -relative $logout_url]
+        aa_false "Logout URL '$logout_url' is not external" [util::external_url_p $logout_url]
+        aa_true "Logout URL '$logout_url' contains the return URL" {
+            [string first [ns_urlencode __test__return__url] $logout_url] >= 0
+        }
+
+        try {
+
+            set test_url acs-tcl-test-security-procs-login-logout-url
+            ns_register_proc GET $test_url {
+                if {[ad_conn user_id] == 0} {
+                    ns_return 403 text/plain Forbidden
+                } else {
+                    ns_return 200 text/plain OK
+                }
+            }
+
+            set user_info [::acs::test::user::create]
+            set user_id [dict get $user_info user_id]
+            set d [::acs::test::login $user_info]
+
+            aa_log "Requesting test endpoint as logged in user"
+            set d [acs::test::http -last_request $d /$test_url]
+            acs::test::reply_has_status_code $d 200
+
+            aa_log "Call the logout URL"
+            set d [acs::test::http -last_request $d $logout_url]
+
+            aa_log "Requesting test endpoint as logged out"
+            set d [acs::test::http -last_request $d /$test_url]
+            acs::test::reply_has_status_code $d 403
+
+        } finally {
+            ns_unregister_op GET $test_url
+            acs::test::user::delete -user_id $user_id
+        }
+
+    }
+
+aa_register_case \
+    -cats { api } \
+    -procs {
         ad_user_login
         apm_package_id_from_key
         parameter::get
