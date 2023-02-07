@@ -1,5 +1,4 @@
-#
-#    Copyright (C) 2022 Gustaf Neumann, neumann@wu-wien.ac.at
+#    Copyright (C) 2022-2023 Gustaf Neumann, neumann@wu-wien.ac.at
 #
 #       Vienna University of Economics and Business
 #       Institute of Information Systems and New Media
@@ -40,11 +39,11 @@ namespace eval ::acs {
         #
         # Then, distribute the command to all servers in the cluster.
         #
-        ::acs::Cluster broadcast {*}$args
+        ::acs::cluster broadcast {*}$args
         return $result
     }
 
-    proc cache_flush_all {cache pattern} {
+    proc cache_flush_pattern {cache pattern} {
         #
         # Provide means to perform a wildcard-based cache flushing on
         # (cluster) machines.
@@ -54,23 +53,44 @@ namespace eval ::acs {
         }
     }
 
+    proc cache_flush_all {} {
+        #
+        # Reset all caches and flush all of its contents.
+        #
+        foreach cache [ns_cache_names] {
+            ns_cache flush $cache
+        }
+    }
+
+    #::nsf::method::property nx::Object "object method" debug on
+    #::nsf::method::property nx::Class method debug on
+
     nx::Class create Cluster {
         :property {proto http}
         :property host
         :property {port 80}
         :property {url /acs-cluster-do}
-        :property {chan}
 
-        set :allowed_host_patterns [list]
-        set :url /acs-cluster-do
-        array set :allowed_host { "127.0.0.1" 1 }
 
+        # set cls [nx::Class create ::acs::ClusterMethodMixin {
+        #     :method "object method" args {
+        #         ns_log notice "[self] define object method $args"
+        #         next
+        #     }
+        #     :method method args {
+        #         ns_log notice "[self] define method $args"
+        #         next
+        #     }
+        # }]
+        # :object mixins add $cls
+
+        :variable allowed_host { "127.0.0.1" 1 }
         #
         # The allowed commands are of the form
         #   - command names followed by
         #   - optional "except patterns"
         #
-        set :allowed_command {
+        :variable allowed_command {
             set ""
             unset ""
             nsv_set ""
@@ -84,42 +104,70 @@ namespace eval ::acs {
             util_memoize_flush_regexp_local ""
             ns_urlspace ""
             acs::cache_flush_all ""
+            acs::cache_flush_pattern ""
+            ::acs::cluster "^::acs::cluster\s+join_request"
         }
 
-        :object method log {args} {
+        #
+        # Control verbosity
+        #
+        :method log {args} {
             ns_log notice "cluster: [join $args { }]"
         }
-        :method log {args} {
-            ns_log notice "cluster host ${:host} ${:port}: [join $args { }]"
+
+        :public method setup {} {
+            #
+            # Setup object specific variables. Make sure to call this
+            # method, when the called procs are available.
+            #
+            set :currentServerLocations [:current_server_locations]
+            set :currentServerLocation [:preferred_location ${:currentServerLocations}]
+
+            set :canonicalServer [parameter::get -package_id $::acs::kernel_id -parameter CanonicalServer]
+            set :canonicalServerLocation [:preferred_location [:qualified_location ${:canonicalServer}]]
+
+            set :current_server_is_canonical_server [:current_server_is_canonical_server]
+            set :staticServerLocations \
+                [lmap entry [parameter::get -package_id $::acs::kernel_id -parameter ClusterPeerIP] {
+                    :preferred_location [:qualified_location $entry]
+                }]
+        }
+
+        :method init {} {
+            nsv_set cluster . .
+            next
         }
 
         #
-        # Handling the ns_filter methods
+        # Handling the ns_filter methods (as defined in cluster-init.tcl)
         #
-        :public object method preauth args {
+        :public method preauth args {
+            #
+            # Process no more pre-authorization filters for this
+            # connection (avoid running of expensive filters).
+            #
             #ns_log notice "PREAUTH returns filter_break"
             return filter_break
         }
 
-        :public object method postauth args {
-            #ns_log notice "POSTAUTH returns filter_break"
-            return filter_break
-        }
+        # :public method postauth args {
+        #     #ns_log notice "POSTAUTH returns filter_break"
+        #     return filter_break
+        # }
 
-        :public object method trace args {
-            #:log "trace"
-            #ns_log notice "TRACE handles request"
-            #:incoming_request
-            #ns_log notice "TRACE returns filter_return"
-            return filter_return
-        }
+        # :public method trace args {
+        #     #:log "trace"
+        #     #ns_log notice "TRACE handles request"
+        #     #:incoming_request
+        #     #ns_log notice "TRACE returns filter_return"
+        #     return filter_return
+        # }
 
-        :public object method allowed_command {cmd} {
+        :method allowed_command {cmd} {
             #
             # Check, which command are allowed to be executed in the
             # cluster.
             #
-
             #ns_log notice "--cluster allowed [dict keys ${:allowed_command}]?"
             set cmd_name [lindex $cmd 0]
             #ns_log notice "--cluster can i execute $cmd_name? [dict exists ${:allowed_command} $cmd_name]"
@@ -128,8 +176,8 @@ namespace eval ::acs {
                 #ns_log notice "--cluster [list regexp $except_RE $cmd] -> [regexp $except_RE $cmd]"
                 set allowed [expr {$except_RE eq "" || ![regexp $except_RE $cmd]}]
             } elseif {[nsf::is object $cmd_name]
-                      && ($cmd_name ::nsf::methods::object::info::hastype acs::Cache
-                          || $cmd_name ::nsf::methods::object::info::hastype acs::LockfreeCache)} {
+                      && ([$cmd_name ::nsf::methods::object::info::hastype acs::Cache]
+                          || [$cmd_name ::nsf::methods::object::info::hastype acs::LockfreeCache])} {
                 #
                 # Allow operations on cache objects (e.g. needed for)
                 #
@@ -142,24 +190,35 @@ namespace eval ::acs {
         }
 
         #
-        # handle incoming request issues
+        # Handle incoming requests
         #
-        :public object method incoming_request {} {
+        :public method incoming_request {} {
+            #
+            # We received an incoming request from a cluster peer.
+            #
             catch {::throttle do incr ::count(cluster:received)}
-            set cmd [ns_queryget cmd]
-            set addr [lindex [ns_set iget [ns_conn headers] x-forwarded-for] end]
-            set sender [ns_set iget [ns_conn headers] host]
-            nsv_set cluster $sender-update [clock clicks -milliseconds]
-            nsv_incr cluster $sender-count
-            if {$addr eq ""} {set addr [ns_conn peeraddr]}
-            ns_log notice "--cluster got cmd='$cmd' from $addr // sender $sender"
+
             ad_try {
                 #ns_logctl severity Debug(connchan) on
                 #ns_logctl severity Debug(request) on
                 #ns_logctl severity Debug(ns:driver) on
                 #ns_logctl severity Debug on
+                set r [:message decode]
+                set receive_timestamp [clock clicks -milliseconds]
+                dict with r {
+                    #
+                    # We could check here the provided timepstamp and
+                    # honor only recent requests (protection against
+                    # replay attacks). However, the allowed requests
+                    # are non-destructive.
+                    #
+                    nsv_set cluster $peer-last-contact $receive_timestamp
+                    nsv_set cluster $peer-last-request $receive_timestamp
+                    nsv_incr cluster $peer-count
+                    ns_log notice "--cluster got cmd='$cmd' from $peer after [expr {$receive_timestamp - $timestamp}]ms"
 
-                set result [::acs::Cluster execute [ns_conn peeraddr] $cmd]
+                    set result [:execute $r]
+                }
             } on error {errorMsg} {
                 ns_log notice "--cluster error: $errorMsg"
                 ns_return 417 text/plain $errorMsg
@@ -170,31 +229,31 @@ namespace eval ::acs {
         }
 
         #
-        # Handling incoming requests from host
+        # Handling incoming requests from peeraddr
         #
-        :public object method execute {host cmd} {
-            if {![info exists :allowed_host($host)]} {
-                set ok 0
-                foreach g ${:allowed_host_patterns} {
-                    if {[string match $g $host]} {
-                        set ok 1
-                        break
-                    }
+        :method execute {messageDict} {
+            #:log execute $messageDict
+            dict with messageDict {
+                if {$peer ni [nsv_get cluster cluster_peer_nodes]} {
+                    ns_log notice ":execute: {$peer ni [nsv_get cluster cluster_peer_nodes]} // cmd $cmd"
+                    set ok [dict exists ${:allowed_host} $peeraddr]
+                } else {
+                    set ok 1
                 }
                 if {!$ok} {
-                    error "refuse to execute commands from $host (command: '$cmd')"
+                    ns_log notice "could refuse to execute commands from $peeraddr (command: '$cmd') allowed [dict keys ${:allowed_host}]"
                 }
+                if {[:allowed_command $cmd]} {
+                    ns_log notice "--cluster executes command '$cmd' from peeraddr $peeraddr port [ns_conn peerport]"
+                    return [{*}$cmd]
+                }
+                error "command '$cmd' from peeraddr $peeraddr not allowed"
             }
-            if {[::acs::Cluster allowed_command $cmd]} {
-                ns_log notice "--cluster executes command '$cmd' from host $host port [ns_conn peerport]"
-                return [eval $cmd]
-            }
-            error "command '$cmd' from host $host not allowed"
         }
 
-        :public object method broadcast args {
+        :public method broadcast args {
             #
-            # Send requests to all cluster nodes.
+            # Send requests to all cluster peers.
             #
             if {[ns_ictl epoch] > 0} {
                 catch {::throttle do incr ::count(cluster:broadcast)}
@@ -205,7 +264,11 @@ namespace eval ::acs {
             # caching in place.
             #
             if {[ns_config "ns/parameters" cachingmode "per-node"] eq "none"
-                && [lindex $args 0] in {acs::cache_flush_all ns_cache}} {
+                && [lindex $args 0] in {
+                    acs::cache_flush_pattern
+                    acs::cache_flush_all
+                    ns_cache}
+            } {
                 #
                 # If caching mode is none, it is expected that all
                 # nodes have this parameter set. Therefore, there is no
@@ -214,277 +277,608 @@ namespace eval ::acs {
                 return
             }
 
-            if {[ns_ictl epoch] > 0} {
-                foreach server [:info instances] {
-                    catch {::throttle do incr ::count(cluster:sent)}
-                    set t0 [clock clicks -microseconds]
-                    $server message {*}$args
-                    set ms [expr {([clock clicks -microseconds] - $t0)/1000}]
-                    catch {::throttle do incr ::agg_time(cluster:sent) $ms}
-                }
-            } else {
-                foreach server [:info instances] {
-                    $server message {*}$args
+            if {[nsv_get cluster cluster_peer_nodes locations]} {
+                #
+                # During startup the throttle thread might not be started,
+                # so omit these statistic values
+                #
+                if {[ns_ictl epoch] > 0} {
+                    foreach location $locations {
+                        catch {::throttle do incr ::count(cluster:sent)}
+                        set t0 [clock clicks -microseconds]
+                        :send $location {*}$args
+                        set ms [expr {([clock clicks -microseconds] - $t0)/1000}]
+                        catch {::throttle do incr ::agg_time(cluster:sent) $ms}
+                    }
+                } else {
+                    foreach location $locations {
+                        :send $location {*}$args
+                    }
                 }
             }
         }
 
-        :public object method refresh_blueprint {} {
+        :public method update_node_info {} {
             #
-            # Update the blueprint in case the nodes have
-            # changed. This might happen, when the configuration
-            # variables changed, or when nodes become
+            # Update cluster configuration when the when the
+            # configuration variables changed, or when nodes become
             # available/unvavailable after some time.
             #
-            set oldConfig [::acs::Cluster info instances]
-            :register_nodes
-            set newConfig [::acs::Cluster info instances]
-            if {$newConfig ne $oldConfig} {
-                set code ""
-                foreach obj $newConfig {
-                    append code [$obj serialize] \n
+            # Typically, this method is called via scheduled procedure
+            # every couple of seconds when clustering is enabled.
+            #
+
+            set dynamic_peers [parameter::get \
+                                   -package_id $::acs::kernel_id \
+                                   -parameter DynamicClusterPeers]
+
+            if {!${:current_server_is_canonical_server}} {
+                #
+                # The current node might be a static or a dynamic
+                # peer.  Do we have contact to the canonical_server?
+                #
+                if {![:reachable ${:canonicalServerLocation}]} {
+                    #
+                    # We lost contact to the canonical server. This is
+                    # for our server not a big problem, since all
+                    # other peer-to-peer updates will continue to
+                    # work.
+                    #
+                    # During downtime of the canonical server,
+                    # scheduled procedures (e.g. mail delivery) will
+                    # be interrupted, and no new servers can register.
+                    #
+                    ns_log warning "cluster node lost contact to " \
+                        "canonical server: ${:canonicalServerLocation}"
                 }
-                ns_log notice "cluster: node configuration changed:\n$code"
-                ns_eval $code
+                #
+                # Are we an dynamic peer and not listed in
+                # DynamicClusterPeers? This might happen in
+                # situations, where the canonical server was
+                # restarted (or separated for a while).
+                #
+                if {[:current_server_is_dynamic_cluster_peer]
+                    && ${:currentServerLocation} ni $dynamic_peers
+                } {
+                    ns_log warning "cluster node is not listed in dynamic peers." \
+                        "Must re-join canonical server: ${:canonicalServerLocation}"
+                    :send_join_request ${:canonicalServerLocation}
+                }
+            }
+
+            #
+            # Update cluster_peer_nodes if necessary
+            #
+            set oldConfig [lsort [nsv_get cluster cluster_peer_nodes]]
+            set newConfig [lsort [:peer_nodes $dynamic_peers]]
+            if {$newConfig ne $oldConfig} {
+                #
+                # The cluster configuration has changed
+                #
+                ns_log notice "cluster config changed:\nOLD $oldConfig\nNEW $newConfig"
+                nsv_set cluster cluster_peer_nodes $newConfig
             }
         }
 
-        :public object method check_nodes {} {
+        :public method last_contact {location} {
             #
-            # For the time being (testing only) just measure some
-            # times from the canonical server with hardcoded locations
+            # Return the number of seconds since the last contact with
+            # the denoted server. If there is no data available,
+            # the return values is empty.
             #
-            if {[ad_canonical_server_p]} {
-                ns_log notice "-------check nodes"
-                ::acs::CS_127.0.0.1_8101 message set x ns_http
-                ::acs::CS_127.0.0.1_8444 message set x ns_https
-                ::acs::CS_127.0.0.1_8101 message -delivery connchan set x ns_connchan
-                ::acs::CS_127.0.0.1_8444 message -delivery connchan set x https-connchan
-                ::acs::CS_127.0.0.1_8101 message -delivery udp set x udp
+            if {[nsv_get cluster $location-last-contact clicksms]} {
+                return [expr {([clock clicks -milliseconds] - $clicksms)/1000.0}]
             }
-            # foreach node [::acs::Cluster info instances] {
-            #     if {[$node require_connchan_channel]} {
-            #         if {$node eq "::acs::CS_127.0.0.1_8101"} {
-            #             #ns_log notice "[self] check_node $node is connected [$node cget -chan]"
-            #             #ns_logctl severity Debug(connchan) on
-            #             #ns_logctl severity Debug(request) on
-            #             #ns_logctl severity Debug(ns:driver) on
-            #             #ns_logctl severity Debug on
-            #             $node connchan_message set ok 123
-            #         }
-            #     } else {
-            #         #
-            #         # We see a warning message in the log file, when
-            #         # the server cannot connect to the node.
-            #         #
-            #         #ns_log notice "[self] check_node $node is not connected"
-            #     }
-            # }
-            set :to [::after 1000 [list [self] check_nodes]]
-
+        }
+        :public method last_request {location} {
+            #
+            # Return the number of seconds since the last request from
+            # the denoted server. If there is no data available,
+            # the return values is empty.
+            #
+            ns_log notice "check last-request <$location-last-request>"
+            if {[nsv_get cluster $location-last-request clicksms]} {
+                return [expr {([clock clicks -milliseconds] - $clicksms)/1000.0}]
+            }
         }
 
-        :public object method register_nodes {} {
-            #
-            # Register the defined cluster nodes
-            #
+        :method reachable {location} {
+            #:log "reachable $location"
+            set d [ns_parseurl $location]
+            #ns_log notice "reachable: $location -> $d"
+            set result 0
+            dict with d {
+                switch $proto {
+                    "udp" {
+                        #
+                        # assume, udp is always reachable
+                        #
+                        set result 1
+                    }
+                    "http" -
+                    "https" {
+                        #
+                        # We can check via ns_connchan
+                        #
+                        try {
+                            #ns_logctl severity Debug(connchan) on
+                            ns_connchan connect $host $port
+                        } on error {} {
+                            #
+                            # Not reachable, stick with the default 0
+                            #
+                        } on ok {chan} {
+                            set result 1
+                            ns_connchan close $chan
+                        }
+                    }
+                }
+            }
+            :log "node $location is reachable: $result" \
+                "last_contact [:last_contact $location]" \
+                "last_request [:last_request $location]"
+            if {$result} {
+                nsv_set cluster $location-last-contact [clock clicks -milliseconds]
+            }
+            return $result
+        }
 
+        :method is_current_server {location} {
             #
-            # First delete the old cluster node objects
+            # Check, if the provided location is the current server.
+            # We expect the that the method "setup" was already called.
             #
-            foreach node [::acs::Cluster info instances] {
-                $node destroy
+            set result [expr {$location in ${:currentServerLocations}}]
+            #ns_log notice "is_current_server called with proto -> $location -> $result"
+            return $result
+        }
+
+        :method is_configured_server {locations} {
+            #
+            # Check, if one of the provided locations is in the
+            # currently configured cluster nodes.
+            #
+            foreach location $locations {
+                if {$location in ${:configured_cluster_hosts}} {
+                    return 1
+                }
+            }
+            return 0
+        }
+
+        :method is_canonical_server {location} {
+            #
+            # Check, if provided location belongs to the the canonical
+            # server specs. The canonical server might listen on
+            # multiple protocols, IP addresses and ports.
+            #
+            if { ${:canonicalServer} eq "" } {
+                ns_log Error "Your configuration is not correct for server clustering." \
+                    "Please ensure that you have the CanonicalServer parameter set correctly."
+                return 1
             }
 
-            #
-            # Base configuration values
-            #
-            set cluster_do_url [::acs::Cluster eval {set :url}]
-            set myConfig [server_cluster_my_config]
+            set result [expr {$location in ${:canonicalServerLocation}}]
+            #ns_log notice "is_canonical_server $location -> $result"
+            return $result
+        }
 
+        :public method current_server_is_canonical_server {} {
             #
-            # Create new cluster node objects. Iterate over all
-            # servers in the cluster and add Cluster objects for the
-            # ones, which are different from the current host (the
-            # peer hosts).
+            # Check, if the current server is the canonical_server.
             #
+            if { ${:canonicalServer} eq "" } {
+                ns_log Error "Your configuration is not correct for server clustering." \
+                    "Please ensure that you have the CanonicalServer parameter set correctly."
+                return 1
+            }
+            set result 0
+            foreach location ${:currentServerLocations} {
+                if {[:is_canonical_server $location]} {
+                    set result 1
+                    break
+                }
+            }
+            #:log "current_server_is_canonical_server $result"
+            return $result
+        }
+
+        :method current_server_is_dynamic_cluster_peer {} {
+            #
+            # We are a dynamic cluster peer, when we are not the
+            # canonical server neither isted in the static server
+            # locations.
+            #
+            if {${:current_server_is_canonical_server}} {
+                return 0
+            }
+            return [expr {${:currentServerLocation} ni ${:staticServerLocations}}]
+        }
+
+        :method qualified_location {location} {
+            #
+            # Return a canonical representation of the provided
+            # location, where the DNS name is resolved and the
+            # protocol and port is always included. When there is no
+            # protocol provided, HTTP is assumed. There is no default
+            # provided for non-HTTP* locations.
+            #
+            # In theory, an input location might map to multiple
+            # values, when e.g., a provided DNS name refers to
+            # multiple IP addresses. For now, we just return always a
+            # single value.
+            #
+            set d {port 80 proto http}
+            if {[regexp {^([^:]+)://} $location . proto]} {
+                if {$proto eq "https"} {
+                    set d {port 443 proto https}
+                }
+                set d [dict merge $d [ns_parseurl $location]]
+                dict unset d tail
+                dict unset d path
+            } else {
+                set d [dict merge $d [ns_parsehostport $location]]
+            }
+            #
+            # To return all IP addresses, we could use "ns_addrbyhost
+            # -all ..." instead.
+            #
+            dict set d host [ns_addrbyhost [dict get $d host]]
+            dict with d {
+                set result [util::join_location -proto $proto -hostname $host -port $port]
+            }
+            return $result
+        }
+
+        :method preferred_location {locations:1..n} {
+            #
+            # Return the preferred location.
+            #
+            set preferred_location_regexp [parameter::get \
+                                               -package_id $::acs::kernel_id \
+                                               -parameter PreferredLocationRegexp \
+                                               -default https:// ]
+
+            set preferred_location ""
+            foreach location $locations {
+                if {[regexp $preferred_location_regexp $location]} {
+                    set preferred_location $location
+                    break
+                }
+            }
+            if {$preferred_location eq ""} {
+                set preferred_location [lindex $locations 0]
+            }
+            return $preferred_location
+        }
+
+        :method current_server_locations {
+            {-network_drivers {nssock nsssl nsudp}}
+        } {
+            #
+            # Return a list of valid locations of the current server.
+            #
+            # Since "ns_driver info" is not yet available at the time,
+            # the *-init files are loaded, this method goes a long way
+            # to check for properties of all of the loaded modules.
+            # Network drivers with empty "port" or port == 0 are
+            # ignored.
+            #
+            set result {}
+            set protos {nssock http nsssl https nsudp udp nscoap coap}
+            set module_file_regexp [join [dict keys $protos] |]
+
+            foreach module_section [list ns/server/[ns_info server]/modules ns/modules] {
+                set modules [ns_configsection $module_section]
+                if {$modules ne ""} {
+                    foreach {module file} [ns_set array $modules] {
+                        #
+                        # To obtain idependence of the driver name, we
+                        # check whether the name of the binary (*.so
+                        # or *.dylib) is one of the supported driver
+                        # modules.
+                        #
+                        if {![regexp ($module_file_regexp) $file . module_type]} {
+                            continue
+                        }
+
+                        #ns_log notice "current_server_locations: use module <$module> $file"
+                        set driver_section [ns_driversection -driver $module]
+                        foreach ip [ns_config $driver_section address] {
+                            foreach port [ns_config -int $driver_section port] {
+                                if {$port == 0} {
+                                    continue
+                                }
+                                lappend result [util::join_location \
+                                                    -proto [dict get $protos $module_type] \
+                                                    -hostname $ip \
+                                                    -port $port]
+                            }
+                        }
+                    }
+                }
+            }
+            set result [lsort -unique $result]
+            ns_log notice "current_server_locations returns $result"
+            return $result
+        }
+
+        :public method send_join_request {location} {
+            #
+            # Send a join request to the canonical server.
+            #
+            :log "send_join_request to $location"
+            set r [:send $location [self] join_request ${:currentServerLocation}]
+            #:log "... join_request returned $r"
+
+            if {[dict exists $r body]} {
+                #
+                # During startup/separation caches might not be in
+                # sync. Therefore, we have lost confidence in our
+                # caches and clear these.
+                #
+                :log "send_join_request returned $body, flushing all my caches"
+                acs::cache_flush_all
+            }
+        }
+
+        :public method join_request {peerLocation} -returns boolean {
+            #
+            # A join request was received
+            #
+            ns_log notice "Cluster join_request from '$peerLocation'"
+            set success 1
+            #
+            # Was the join request received by a canonical server?
+            #
+            if {![:current_server_is_canonical_server]} {
+                ns_log warning "Cluster join_request rejected," \
+                    "since it was received by a non-canonical server"
+                set success 0
+            } else {
+                #
+                # We know, we are running on the canonical server, an we
+                # know that the request is trustworthy.
+                #
+                ns_log notice "Cluster join_request $peerLocation accepted from $peerLocation"
+                set dynamicClusterNodes [parameter::get -package_id $::acs::kernel_id -parameter DynamicClusterPeers]
+                set dynamicClusterNodes [lsort -unique [concat $dynamicClusterNodes $peerLocation]]
+                #
+                # The parameter::set_value operation is broadcasted to all cluster nodes.
+                #
+                parameter::set_value -package_id $::acs::kernel_id -parameter DynamicClusterPeers -value $dynamicClusterNodes
+                ns_log notice "Cluster join_request leads to DynamicClusterPeers $dynamicClusterNodes"
+            }
+            return $success
+        }
+
+
+        :method peer_nodes {dynamic_peers} {
+            #
+            # Determine the peer nodes of the server cluster. These
+            # are cluster nodes which will receive intra-server
+            # commands.
+            #
+            set :configured_cluster_hosts {}
+            set peer_nodes {}
             foreach location [server_cluster_all_hosts] {
-                ns_log notice "creating ::acs::Cluster on $location"
+                #
+                # Since the input can depend on erroneous user input,
+                # use "try" to ease debugging.
+                #
                 try {
-                    server_cluster_get_config $location
-                } on ok {config} {
+                    :qualified_location $location
+                } on ok {qualified_location} {
+                    lappend :configured_cluster_hosts $qualified_location
                 } on error {errorMsg} {
-                    ns_log notice "ignore $hostport (server_cluster_get_config returned $errorMsg)"
+                    ns_log notice "ignore $location (:qualified_location returned $errorMsg)"
                     continue
                 }
-                dict with config {
-                    if {$host in [dict get $myConfig host]
-                        && $port in [dict get $myConfig port]
-                    } {
-                        ns_log debug "Cluster: server $host $port is no cluster peer"
-                        continue
+                if {[:is_current_server $qualified_location]} {
+                    #array:log "$qualified_location is the current server"
+                    continue
+                }
+                #
+                # For dynamic cluster peers, check the reachability
+                #
+                if {$qualified_location in $dynamic_peers
+                    && ![:reachable $qualified_location]
+                } {
+                    ns_log warning "cluster node lost contact to dynamic cluster peer: $qualified_location"
+                    continue
+                }
+
+                lappend peer_nodes $qualified_location
+            }
+            return $peer_nodes
+        }
+
+        :public method register_nodes {{-startup:switch false}} {
+            #
+            # Register the defined cluster nodes by
+            # creating/recreating cluster node objects.
+            #
+            :log ":register_nodes startup $startup"
+
+            #
+            # Configure base configuration values
+            #
+            #
+            set dynamic_peers [parameter::get -package_id $::acs::kernel_id -parameter DynamicClusterPeers]
+
+            # At startup, when we are running on the canonical server,
+            # check, whether the existing DynamicClusterPeers are
+            # still reachable. When the canonical server is started
+            # before the other cluster nodes, this parameter should be
+            # empty. However, when the canonical server is restarted,
+            # there might be some of the peer nodes already active.
+            #
+            if {$startup
+                && ${:current_server_is_canonical_server}
+                && $dynamic_peers ne ""
+            } {
+                #
+                # When we are starting the canonical server, it resets
+                # the potentially pre-existing dynamic nodes unless
+                # these are reachable.
+                #
+                set old_peer_locations $dynamic_peers
+                :log "canonical server starts with existing DynamicClusterPeers nodes: $old_peer_locations"
+                #
+                # Keep the reachable cluster nodes in
+                # "DynamicClusterPeers".
+                #
+                set new_peer_locations {}
+                foreach location $old_peer_locations {
+                    if {[:reachable $location]} {
+                        lappend new_peer_locations $location
                     }
-                    # try {
-                    #     ns_logctl severity Debug(connchan) on
-                    #     ns_connchan connect $host $port
-                    # } on error {} {
-                    #     ns_log notice "Cluster: server $host $port is not available"
-                    #     continue
-                    # } on ok {chan} {
-                    #     ns_connchan close $chan
-                    # }
-
-                    # ns_log debug "Cluster: server $host $port is an available cluster peer"
-                    ns_log notice "call create ::acs::Cluster create CS_${host}_${port}"
-
-                    ::acs::Cluster create CS_${host}_${port} \
-                        -proto $proto \
-                        -host $host \
-                        -port $port \
-                        -url $cluster_do_url
+                }
+                if {$new_peer_locations ne $old_peer_locations} {
+                    #
+                    # Update the DynamicClusterPeers in the database
+                    # such that the other nodes will pick it up as
+                    # well.
+                    #
+                    :log "updating DynamicClusterPeers to $new_peer_locations"
+                    parameter::set_value -package_id $::acs::kernel_id -parameter DynamicClusterPeers \
+                        -value $new_peer_locations
+                    set dynamic_peers $new_peer_locations
                 }
             }
-        }
-        :method name {} {
-            return ${:proto}://${:host}:${:port}
+
+            #
+            # Determine the peer nodes.
+            #
+            set cluster_peer_nodes [:peer_nodes $dynamic_peers]
+            nsv_set cluster cluster_peer_nodes $cluster_peer_nodes
+
+            if {![:is_configured_server ${:currentServerLocations}]} {
+                #
+                # Current node is not pre-registered.
+                #
+                ns_log notice "Current host ${:currentServerLocation} is not included in ${:configured_cluster_hosts}"
+                if {![:current_server_is_canonical_server]} {
+                    ns_log notice "... must join at canonical server ${:canonicalServerLocation}"
+                    :send_join_request ${:canonicalServerLocation}
+                }
+            } else {
+                #ns_log notice "Current host ${:currentServerLocation} is included in ${:configured_cluster_hosts}"
+            }
         }
 
-        :public method require_connchan_channel {} {
+        :public method secret_configured {} {
             #
+            # Check, whether the secret for signing messages in the
+            # intra-cluster talk is configured.
             #
+            # More checks for different secret definition methods
+            # might be added.
             #
-            if {![info exists :chan]} {
-                set tlsOption [expr {${:proto} in {https} ? "-tls" : ""}]
-                try {
-                    set :retry 0
-                    ns_connchan connect -timeout 10ms {*}$tlsOption ${:host} ${:port}
-                } on ok {result} {
-                    set :chan $result
-                    ns_log notice "-cluster: [:name] connected - channel ${:chan}"
-                } on error {errorMsg} {
-                    ns_log warning "-cluster: [:name] can not connect"
+            set secret [:secret]
+            return [expr {$secret ne ""}]
+        }
+
+        :method secret {} {
+            #
+            # Return secret used for signing messages
+            #
+            return [ns_config ns/server/[ns_info server]/acs ClusterSecret]
+        }
+        #
+        # Methods for message encoding/decoding
+        #
+        :method "message sign" {message} {
+            #
+            # Return signature for message
+            #
+            #:log "message sign: $message"
+            return [ns_crypto::hmac string -digest sha256 [:secret] $message]
+        }
+
+        :method "message verify" {message signature} {
+            #
+            # Verify if the signature of the message is ok and return
+            # boolean value.
+            #
+            #:log "message verify {$message $signature}"
+            set local_signature [ns_crypto::hmac string -digest sha256 [:secret] $message]
+            return [expr {$local_signature eq $signature}]
+        }
+
+        :method "message encode" {cmd} {
+            set timestamp [clock clicks -milliseconds]
+            append result \
+                cmd=[ns_urlencode $cmd] \
+                &f=[ns_urlencode ${:currentServerLocation}] \
+                &t=$timestamp \
+                &s=[:message sign [list $cmd $timestamp]]
+        }
+
+        :method "message decode" {} {
+            #
+            # Return a dict of the decoded message
+            # TODO: add timestamp?
+            #
+            dict set r cmd [ns_queryget cmd]
+            dict set r peer [ns_queryget f]
+            dict set r timestamp [ns_queryget t]
+            dict set r signature [ns_queryget s]
+            dict set r peeraddr [ns_conn peeraddr]
+            dict with r {
+                if {![:message verify [list $cmd $timestamp] $signature]} {
+                    error "received message from $peeraddr does not match signature: $r"
                 }
             }
-            return [info exists :chan]
-        }
-        :public method has_channel {} {
-            return [info exists :chan]
+            return $r
         }
 
-        :method connchan_retry_message {args} {
+        #
+        # Methods for message delivery
+        #
+        :public method send {{-delivery ns_http} location args} {
             #
-            # Make a single retry to send an HTTP message to this node
-            # and return its full HTTP response on success.
-            #
-
-            #
-            # Cleanup old connection
-            #
-            try {
-                ns_connchan close ${:chan}
-            } on error {errorMsg} {
-                ns_log notice "... connchan ${:chan} CLOSE returns error $errorMsg, giving up"
-                return
-            }
-            unset -nocomplain :chan
-            #
-            # Create at new connection, but notice retry mode to avoid
-            # endless retries for one message
-            #
-            #ns_log notice "... connchan ${:chan} CLOSED"
-            if {[:require_connchan_channel]} {
-                set :retry 1
-                ns_log notice "-cluster: [self] connchan RETRY channel ${:chan}"
-                :connchan_message {*}$args
-            }
-        }
-
-        :method connchan_message {args} {
-            #
-            # Send an HTTP message to this node and return its full HTTP
-            # response on success.
-            #
-            set reply ""
-            #set t0 [clock clicks -microseconds]
-            if {[:require_connchan_channel]} {
-                set message "GET /${:url}?cmd=[ns_urlencode $args] HTTP/1.1\r\nHost:localhost\r\n\r\n"
-                #ns_log notice "-cluster: send $message to ${:proto}://${:host}:${:port}"
-
-                try {
-                    ns_connchan write ${:chan} $message
-                    #set t2 [clock clicks -microseconds]
-                    #ns_log notice "... message sent"
-                    set reply [ns_connchan read ${:chan}]
-                    #set t3 [clock clicks -microseconds]
-
-                    #ns_log notice "... reply $reply"
-                } on error {errorMsg} {
-                    #ns_log notice "-cluster: send $args to ${:proto}://${:host}:${:port} returned ERROR $::errorInfo $errorMsg"
-                    ns_log notice "-cluster: send connchan ${:chan} error $errorMsg RETRY ${:retry}"
-                    if {${:retry} == 0} {
-                        set reply [:connchan_retry_message {*}$args]
-                    }
-                } on ok {result} {
-                    set :retry 0
-                    #ns_log notice "-cluster: [:name] sent OK " \
-                        "total [expr {([clock clicks -microseconds] - $t0)/1000.0}]ms" \
-                        "write [expr {($t2 - $t0)/1000.0}]ms" \
-                        "read [expr {($t3 - $t2)/1000.0}]ms" \
-                }
-            }
-            return $reply
-        }
-
-        :method ns_http_message args {
-            #:log "--cluster outgoing request to ${:proto}://${:host}:${:port} // $args"
-            try {
-                ns_http run ${:proto}://${:host}:${:port}/${:url}?cmd=[ns_urlencode $args]
-            } on error {errorMsg} {
-                ns_log warning "-cluster: send message to ${:proto}://${:host}:${:port}/${:url}?cmd=[ns_urlencode $args] failed: $errorMsg"
-                set result ""
-            } on ok {result} {
-                #ns_log notice "-cluster: response $result"
-            }
-            return $result
-        }
-
-        :method udp_message args {
-            #:log "--cluster outgoing request to ${:proto}://${:host}:${:port} // $args"
-            try {
-                ns_udp ${:host} ${:port} "GET /${:url}?cmd=[ns_urlencode $args] HTTP/1.0\n\n"
-            } on error {errorMsg} {
-                ns_log warning "-cluster: send message to ${:proto}://${:host}:${:port}/${:url}?cmd=[ns_urlencode $args] failed: $errorMsg"
-                set result ""
-            } on ok {result} {
-                #ns_log notice "-cluster: response $result"
-            }
-            return $result
-        }
-
-        :public method message {{-delivery ns_http} args} {
-            #
-            # Send a command by different means to the node server for
-            # intra-server talk.
+            # Send a command by different means to the cluster node
+            # for intra-server talk.
             #
             # Valid delivery methods are
             #  - ns_http (for HTTP and HTTPS)
             #  - connchan (for HTTP and HTTPS)
             #  - udp (plain UDP only)
             #
-            #:log "--cluster outgoing request to [:name] // $args"
+            :log "outgoing request to $location // $args"
             set t0 [clock clicks -microseconds]
             switch $delivery {
-                ns_http -
-                connchan -
-                udp     {set result [:${delivery}_message {*}$args]}
+                #connchan -
+                #udp      -
+                ns_http   {set result [:${delivery}_send $location {*}$args]}
                 default {error "unknown delivery method '$delivery'"}
             }
-            ns_log notice "-cluster: [:name] $args sent" \
+            ns_log notice "-cluster: $location $args sent" \
                 "total [expr {([clock clicks -microseconds] - $t0)/1000.0}]ms"
             return $result
         }
+
+        :method ns_http_send {location args} {
+            #:log "outgoing ns_http request to $location // $args"
+            try {
+                ns_http run $location/${:url}?[:message encode $args]
+            } on error {errorMsg} {
+                ns_log warning "-cluster: send message to $location/${:url}?cmd=[ns_urlencode $args] failed: $errorMsg"
+                set result ""
+            } on ok {result} {
+                #ns_log notice "-cluster: response $result"
+            }
+            return $result
+        }
+
     }
 
+    #
+    # Define the acs::cluster object, since this is used e.g. in
+    # "acs::clusterwide", which is used quite early during boot.
+    #
+    acs::Cluster create ::acs::cluster
 }
 
 
