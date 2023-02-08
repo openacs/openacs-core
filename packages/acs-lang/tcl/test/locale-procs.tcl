@@ -7,6 +7,28 @@ ad_library {
 aa_register_case \
     -cats {smoke api} \
     -procs {
+        lang::system::timezone_utc_offset
+        lang::system::timezone
+    } \
+    test_timezone_offset {
+
+        Test for api retrieving the locales
+
+    } {
+        set clock_offset [clock format [clock seconds] -format %z -timezone [lang::system::timezone]]
+        regexp {^(\+|-)0*(\d+)$} $clock_offset _ op hours
+        if {$op eq "-"} {
+            set expected -
+        }
+        append expected [expr {$hours / 100}]
+
+        aa_equals "lang::system::timezone_utc_offset returns expected" \
+            [lang::system::timezone_utc_offset] $expected
+    }
+
+aa_register_case \
+    -cats {smoke api} \
+    -procs {
         lang::system::get_locales
         lang::system::get_locale_options
         lang::util::get_locale_options
