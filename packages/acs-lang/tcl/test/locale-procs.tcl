@@ -9,9 +9,14 @@ aa_register_case \
     -procs {
         lang::system::get_locales
         lang::system::get_locale_options
+        lang::util::get_locale_options
         lang::system::language
         lang::system::locale
+        lang::util::get_label
+        lang::util::language_label
         lang::util::iso6392_from_language
+        lang::util::iso6392_from_locale
+        lang::util::nls_language_from_language
         lang::system::package_level_locale
         lang::system::use_package_level_locales_p
         lang::user::locale
@@ -19,6 +24,10 @@ aa_register_case \
         lang::user::package_level_locale
         lang::system::set_locale
         lang::user::set_locale
+        lang::conn::locale
+        lang::conn::charset
+        lang::conn::language
+        lang::util::charset_for_locale
     } \
     test_get_locales {
 
@@ -33,11 +42,61 @@ aa_register_case \
                 [lsort $system_locales] \
                 [lsort [db_list q {select locale from ad_locales where enabled_p = 't'}]]
 
+            set enabled_locale_options [lang::system::get_locale_options]
             aa_equals "lang::system::get_locale_options returns expected" \
-                [lsort [lang::system::get_locale_options]] \
+                [lsort $enabled_locale_options] \
                 [lsort [db_list_of_lists q {
                     select label, locale from ad_locales where enabled_p = 't'
                 }]]
+
+            foreach l $enabled_locale_options {
+                lassign $l label locale
+                set language [lindex [split $locale _] 0]
+                aa_equals "lang::util::nls_language_from_language returns expected for '$language'" \
+                    [lang::util::nls_language_from_language $language] \
+                    [db_string nls_language_from_language {
+                        select nls_language
+                        from   ad_locales
+                        where  lower(trim(language)) = lower(:language)
+                        and  enabled_p = 't'
+                        fetch first 1 rows only
+                    }]
+            }
+
+            set locale_options [lang::util::get_locale_options]
+            aa_equals "lang::util::get_locale_options returns expected" \
+                $locale_options \
+                [db_list_of_lists q {
+                    select label, locale from ad_locales order by label
+                }]
+
+            foreach l $locale_options {
+                lassign $l label locale
+                aa_equals "lang::util::get_label returns expected for '$locale'" \
+                    [lang::util::get_label $locale] $label
+
+                set language [lindex [split $locale _] 0]
+                set iso6392 [lang::util::iso6392_from_locale -locale $locale]
+                aa_equals "lang::util::iso6392_from_locale returns expected for '$locale'" \
+                    $iso6392 \
+                    [lang::util::iso6392_from_language -language $language]
+
+                if {$iso6392 ne ""} {
+                    aa_equals "lang::util::iso6392_from_language returns expected for '$locale'" \
+                        [lang::util::iso6392_from_language -language $language] \
+                        [db_string q {
+                            select iso_639_2 from language_639_2_codes
+                            where iso_639_1 = :language or iso_639_2 = :language
+                        }]
+
+                    aa_equals "lang::util::language_label returns expected for '$locale'" \
+                        [lang::util::language_label -language $language] \
+                        [db_string q {
+                            select label from language_639_2_codes
+                            where iso_639_1 = :language or iso_639_2 = :language
+                        }]
+                }
+            }
 
             aa_true "System locale belongs to the list of enabled locales" {
                 $system_locale in $system_locales
@@ -74,6 +133,30 @@ aa_register_case \
                 [lang::user::locale -package_id $package_id -user_id $user_id] \
                 de_DE
 
+            db_foreach q {
+                select locale, mime_charset
+                from ad_locales
+            } {
+                aa_equals "lang::util::charset_for_locale returns expected for '$locale'" \
+                    [lang::util::charset_for_locale $locale] $mime_charset
+
+                lappend charsets($locale) $mime_charset
+            }
+
+            set conn_locale [lang::conn::locale -package_id $package_id -user_id $user_id]
+            aa_equals "Conn locale is correct" $conn_locale de_DE
+            aa_equals "Conn language is correct" \
+                [lang::conn::language -package_id $package_id -user_id $user_id] de
+            aa_equals "Conn language is correct" \
+                [lang::conn::language -package_id $package_id -user_id $user_id -iso6392] deu
+
+
+            set conn_charset [lang::conn::charset]
+            aa_equals "Conn charset is correct" \
+                $conn_charset $charsets($system_locale)
+            aa_equals "Conn charset is correct" \
+                $conn_charset [lang::util::charset_for_locale $system_locale]
+
             aa_equals "User language returns expected" \
                 [lang::user::language -package_id $package_id -user_id $user_id] de
             aa_equals "User language returns expected (iso6392)" \
@@ -94,6 +177,14 @@ aa_register_case \
             aa_equals "User language returns expected (iso6392)" \
                 [lang::user::language -package_id $package_id -user_id $user_id -iso6392] \
                 [lang::util::iso6392_from_language -language en]
+
+            set conn_locale [lang::conn::locale -package_id $package_id -user_id $user_id]
+            set conn_language [lang::conn::language -package_id $package_id -user_id $user_id]
+            aa_equals "Conn locale is correct (Cached by request!)" $conn_locale de_DE
+            aa_equals "Conn language is correct (Cached by request!)" \
+                [lang::conn::language -package_id $package_id -user_id $user_id] de
+            aa_equals "Conn language is correct (Cached by request!)" \
+                [lang::conn::language -package_id $package_id -user_id $user_id -iso6392] deu
         }
 
     }
