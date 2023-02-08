@@ -66,11 +66,8 @@ namespace eval ::acs {
     #::nsf::method::property nx::Class method debug on
 
     nx::Class create Cluster {
-        :property {proto http}
-        :property host
-        :property {port 80}
         :property {url /acs-cluster-do}
-
+        :property {currentServerLocation ""}
 
         # set cls [nx::Class create ::acs::ClusterMethodMixin {
         #     :method "object method" args {
@@ -362,23 +359,22 @@ namespace eval ::acs {
 
         :public method last_contact {location} {
             #
-            # Return the number of seconds since the last contact with
-            # the denoted server. If there is no data available,
+            # Return the millseconds since the last contact
+            # with the denoted server. If there is no data available,
             # the return values is empty.
             #
             if {[nsv_get cluster $location-last-contact clicksms]} {
-                return [expr {([clock clicks -milliseconds] - $clicksms)/1000.0}]
+                return $clicksms
             }
         }
         :public method last_request {location} {
             #
-            # Return the number of seconds since the last request from
-            # the denoted server. If there is no data available,
-            # the return values is empty.
+            # Return the millseconds since the last request from the
+            # denoted server. If there is no data available, the
+            # return values is empty.
             #
-            ns_log notice "check last-request <$location-last-request>"
             if {[nsv_get cluster $location-last-request clicksms]} {
-                return [expr {([clock clicks -milliseconds] - $clicksms)/1000.0}]
+                return $clicksms
             }
         }
 
@@ -446,7 +442,7 @@ namespace eval ::acs {
             return 0
         }
 
-        :method is_canonical_server {location} {
+        :public method is_canonical_server {location} {
             #
             # Check, if provided location belongs to the the canonical
             # server specs. The canonical server might listen on
@@ -617,7 +613,7 @@ namespace eval ::acs {
                 # sync. Therefore, we have lost confidence in our
                 # caches and clear these.
                 #
-                :log "send_join_request returned $body, flushing all my caches"
+                :log "send_join_request returned [dict get $r body], flushing all my caches"
                 acs::cache_flush_all
             }
         }
@@ -637,14 +633,15 @@ namespace eval ::acs {
                 set success 0
             } else {
                 #
-                # We know, we are running on the canonical server, an we
-                # know that the request is trustworthy.
+                # We know, we are running on the canonical server, an
+                # we know that the request is trustworthy.
                 #
                 ns_log notice "Cluster join_request $peerLocation accepted from $peerLocation"
                 set dynamicClusterNodes [parameter::get -package_id $::acs::kernel_id -parameter DynamicClusterPeers]
                 set dynamicClusterNodes [lsort -unique [concat $dynamicClusterNodes $peerLocation]]
                 #
-                # The parameter::set_value operation is broadcasted to all cluster nodes.
+                # The parameter::set_value operation causes a
+                # clusterwide cache-flush for the parameters
                 #
                 parameter::set_value -package_id $::acs::kernel_id -parameter DynamicClusterPeers -value $dynamicClusterNodes
                 ns_log notice "Cluster join_request leads to DynamicClusterPeers $dynamicClusterNodes"
@@ -879,6 +876,12 @@ namespace eval ::acs {
     # "acs::clusterwide", which is used quite early during boot.
     #
     acs::Cluster create ::acs::cluster
+    #
+    # Refetch setup on reload operations of this file.
+    #
+    if {[ns_ictl epoch] > 0 && [server_cluster_enabled_p]} {
+        ::acs::cluster setup
+    }
 }
 
 
