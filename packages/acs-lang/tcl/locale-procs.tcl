@@ -152,23 +152,8 @@ ad_proc -public lang::system::timezone {} {
 
     @return  a timezone name from acs-reference package (e.g., Asia/Tokyo, America/New_York)
 } {
-    if { ![lang::system::timezone_support_p] } {
-        return ""
-    }
-
     set package_id [apm_package_id_from_key "acs-lang"]
     return [parameter::get -package_id $package_id -parameter SystemTimezone -default "Etc/UTC"]
-}
-
-ad_proc -private lang::system::timezone_support_p {} {
-    Return 1 if this installation of acs-lang offers
-    timezone services and 0 otherwise.
-
-    For the acs-lang package to offer timezone support the
-    ref-timezones and acs-reference packages need to be installed.
-    Those packages are currently not part of the OpenACS kernel.
-} {
-    return [expr {[apm_package_id_from_key ref-timezones] != 0}]
 }
 
 ad_proc -public lang::system::set_timezone {
@@ -178,10 +163,6 @@ ad_proc -public lang::system::set_timezone {
 
     @param timezone name from acs-reference package (e.g., Asia/Tokyo, America/New_York)
 } {
-    if { ![lang::system::timezone_support_p] } {
-        return ""
-    }
-
     set package_id [apm_package_id_from_key "acs-lang"]
     parameter::set_value -package_id $package_id -parameter SystemTimezone -value $timezone
 }
@@ -189,10 +170,6 @@ ad_proc -public lang::system::set_timezone {
 ad_proc -public lang::system::timezone_utc_offset { } {
     @return number of hours to subtract from local (database) time to get UTC
 } {
-    if { ![lang::system::timezone_support_p] } {
-        return ""
-    }
-
     set system_timezone [timezone]
     return [db_string system_utc_offset {}]
 }
@@ -479,7 +456,7 @@ ad_proc -public lang::user::timezone {} {
     @return  a timezone name from acs-reference package (e.g., Asia/Tokyo, America/New_York)
 } {
     set user_id [ad_conn user_id]
-    if { ![lang::system::timezone_support_p] || $user_id == 0 } {
+    if { $user_id == 0 } {
         return ""
     }
 
@@ -493,10 +470,6 @@ ad_proc -public lang::user::set_timezone {
 
     @param timezone name from acs-reference package (e.g., Asia/Tokyo, America/New_York)
 } {
-    if { ![lang::system::timezone_support_p] } {
-        return ""
-    }
-
     set user_id [ad_conn user_id]
 
     if { $user_id == 0 } {
@@ -763,10 +736,6 @@ ad_proc -public lang::conn::timezone {} {
 
     @return  a timezone name from acs-reference package (e.g., Asia/Tokyo, America/New_York)
 } {
-    if { ![lang::system::timezone_support_p] } {
-        return ""
-    }
-
     set timezone {}
     if { [ad_conn isconnected] } {
         set timezone [lang::user::timezone]

@@ -14,10 +14,7 @@
   </li>
 
   <li><a href="@parameter_url@">#acs-lang.Change_system_locale#</a>: #acs-lang.Current_system_locale_is#</li>
-
-<if @timezone_p;literal@ true>
   <li><a href="set-system-timezone">#acs-lang.Change_system_timezone#</a>: #acs-lang.Current_system_timezone_is#</li>
-</if>
 
 <li><a href="lookup">#acs-lang.Look_up_message#</a></li>
 <li><a href="edit-history?locale=@system_locale@">#acs-lang.Edit_history#</a></li>

@@ -12,7 +12,7 @@ ad_include_contract {
 # check for package level locale support
 set package_level_locales_p [expr {[lang::system::use_package_level_locales_p] && $package_id ne "" && [ad_conn user_id] != 0}]
 # check for timezone setting support
-set use_timezone_p [expr {[lang::system::timezone_support_p] && [ad_conn user_id]}]
+set use_timezone_p [expr {[ad_conn user_id] != 0}]
 
 # Create a list of lists containing the possible locale choiches
 set list_of_locales [list]

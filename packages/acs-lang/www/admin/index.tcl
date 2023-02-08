@@ -32,7 +32,6 @@ set system_locale_label [lang::util::get_label $system_locale]
 # Timezones
 #
 set timezone    [lang::system::timezone]
-set timezone_p  [lang::system::timezone_support_p]
 #
 # URLs
 #
