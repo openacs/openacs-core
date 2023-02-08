@@ -9,9 +9,15 @@ ad_library {
 
 aa_register_case \
     -procs {
+        acs_sc::contract::new
         acs_sc::contract::new_from_spec
+        acs_sc::contract::get_operations
+        acs_sc::contract::delete
+        acs_sc::contract::operation::new
+        acs_sc::contract::operation::delete
         acs_sc::impl::get
         acs_sc::impl::new_from_spec
+        acs_sc::msg_type::new
         auth::local::authentication::Authenticate
         auth::local::authentication::GetParameters
 
@@ -61,7 +67,7 @@ aa_register_case \
                 }
             }
 
-            acs_sc::contract::new_from_spec -spec $spec
+            set contract_id [acs_sc::contract::new_from_spec -spec $spec]
 
             set spec {
                 contract_name "foo_contract"
@@ -79,6 +85,87 @@ aa_register_case \
             acs_sc::impl::get -impl_id $impl_id -array impl
 
             aa_equals "pretty_name did not get inserted correctly" $impl(impl_pretty_name) "Foo Driver"
+
+            aa_equals "acs_sc::contract::get_operations returns expected" \
+                [lsort [acs_sc::contract::get_operations -contract_name "foo_contract"]] \
+                {Authenticate GetParameters}
+
+            aa_log "Delete Authenticate operation"
+            acs_sc::contract::operation::delete \
+                -contract_name foo_contract \
+                -operation_name Authenticate
+
+            aa_equals "acs_sc::contract::get_operations returns expected" \
+                [acs_sc::contract::get_operations -contract_name "foo_contract"] \
+                {GetParameters}
+
+            #
+            # TODO: acs_sc::contract::operation::delete won't delete the msg types.
+            #
+            # aa_log "Recreate Authenticate operation"
+            # acs_sc::contract::operation::new \
+            #     -contract_name foo_contract \
+            #     -operation Authenticate \
+            #     -description {
+            #         Validate this username/password combination, and return the result.
+            #         Valid auth_status codes are 'ok', 'no_account', 'bad_password', 'auth_error', 'failed_to_connect'.
+            #         The last, 'failed_to_connect', is reserved for communications or implementation errors.
+            #         auth_message is a human-readable explanation of what went wrong, may contain HTML.
+            #         Only checked if auth_status is not ok.
+            #         Valid account_status codes are 'ok' and 'closed'.
+            #         account_message may be supplied regardless of account_status, and may contain HTML.
+            #     } \
+            #     -input {
+            #         username:string
+            #         password:string
+            #         parameters:string,multiple
+            #     } \
+            #     -output {
+            #         auth_status:string
+            #         auth_message:string
+            #         account_status:string
+            #         account_message:string
+            #     }
+            # aa_equals "acs_sc::contract::get_operations returns expected" \
+            #     [lsort [acs_sc::contract::get_operations -contract_name "foo_contract"]] \
+            #     {Authenticate GetParameters}
+
+            aa_log "Create Authenticate2 operation"
+            acs_sc::contract::operation::new \
+                -contract_name foo_contract \
+                -operation Authenticate2 \
+                -description {
+                    Validate this username/password combination, and return the result.
+                    Valid auth_status codes are 'ok', 'no_account', 'bad_password', 'auth_error', 'failed_to_connect'.
+                    The last, 'failed_to_connect', is reserved for communications or implementation errors.
+                    auth_message is a human-readable explanation of what went wrong, may contain HTML.
+                    Only checked if auth_status is not ok.
+                    Valid account_status codes are 'ok' and 'closed'.
+                    account_message may be supplied regardless of account_status, and may contain HTML.
+                } \
+                -input {
+                    username:string
+                    password:string
+                    parameters:string,multiple
+                } \
+                -output {
+                    auth_status:string
+                    auth_message:string
+                    account_status:string
+                    account_message:string
+                }
+            aa_equals "acs_sc::contract::get_operations returns expected" \
+                [lsort [acs_sc::contract::get_operations -contract_name "foo_contract"]] \
+                {Authenticate2 GetParameters}
+
+
+            aa_log "Delete contract"
+            acs_sc::contract::delete -name foo_contract
+            aa_false "Contract was deleted" [db_0or1row check {
+                select 1 from acs_sc_contracts
+                where contract_id = :contract_id
+            }]
+
         }
 }
 
