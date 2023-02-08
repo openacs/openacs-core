@@ -18,6 +18,13 @@ ad_proc -private subsite::after_mount {
 
 } {
     subsite::default::create_app_group -package_id $package_id
+
+    #
+    # Set the theme-related parameters into the subsite
+    #
+    subsite::set_theme \
+        -subsite_id $package_id \
+        -theme [subsite::get_theme -subsite_id $package_id]
 }
 
 ad_proc -private subsite::package_install {} {} {
