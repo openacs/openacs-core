@@ -442,6 +442,7 @@ ad_proc -public lang::user::set_locale {
 
 ad_proc -public lang::user::language {
     {-package_id ""}
+    {-user_id ""}
     {-site_wide:boolean}
     {-iso6392:boolean}
 } {
@@ -449,14 +450,14 @@ ad_proc -public lang::user::language {
     This preliminary implementation only has one site-wide setting, though.
 
     @param package_id The package for which you want to get the language setting.
+    @param user_id The user we wish to get the language for, defaults to connection user.
     @param site_wide Set this if you want to get the site-wide language setting.
     @param iso6392   Set this if you want to force iso-639-2 code (3 digits)
 
     @return 3 chars language code if iso6392 is set, left part of locale otherwise
 
 } {
-
-    set locale [locale -package_id $package_id -site_wide=$site_wide_p]
+    set locale [locale -package_id $package_id -user_id $user_id -site_wide=$site_wide_p]
     set user_lang [lindex [split $locale "_"] 0]
 
     if { $iso6392_p } {
