@@ -13,11 +13,25 @@ aa_register_case \
         acs_sc::contract::new_from_spec
         acs_sc::contract::get_operations
         acs_sc::contract::delete
+
         acs_sc::contract::operation::new
         acs_sc::contract::operation::delete
+
         acs_sc::impl::get
         acs_sc::impl::new_from_spec
+        acs_sc::impl::new
+        acs_sc::impl::delete
+        acs_sc::impl::get_options
+
+        acs_sc::impl::binding::new
+
+        acs_sc::impl::alias::new
+
         acs_sc::msg_type::new
+        acs_sc::msg_type::delete
+
+        acs_sc_binding_exists_p
+
         auth::local::authentication::Authenticate
         auth::local::authentication::GetParameters
 
@@ -155,6 +169,28 @@ aa_register_case \
                 [lsort [acs_sc::contract::get_operations -contract_name "foo_contract"]] \
                 {Authenticate Authenticate2 GetParameters}
 
+            aa_equals "Getting the implementation options returns expected" \
+                [lsort [acs_sc::impl::get_options \
+                            -contract_name foo_contract \
+                            -empty_label AAA]] \
+                [list [list "AAA" ""] [list "Foo Driver" $impl_id]]
+
+            aa_equals "Getting the implementation options returns expected (excluded)" \
+                [acs_sc::impl::get_options \
+                     -contract_name foo_contract \
+                     -empty_label AAA \
+                     -exclude_names [list "Foo Driver"]] \
+                [list [list "AAA" ""]]
+
+            aa_true "acs_sc_binding_exists_p is true" [acs_sc_binding_exists_p foo_contract foo]
+
+            aa_log "Delete implementation '$impl_id'"
+            acs_sc::impl::delete -contract_name foo_contract -impl_name foo
+            aa_false "Deletion succeeded" [db_0or1row check {
+                select 1 from acs_sc_impls where impl_id = :impl_id
+            }]
+
+            aa_false "acs_sc_binding_exists_p is false" [acs_sc_binding_exists_p foo_contract foo]
 
             aa_log "Delete contract"
             acs_sc::contract::delete -name foo_contract
