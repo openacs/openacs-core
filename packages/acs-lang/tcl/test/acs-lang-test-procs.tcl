@@ -723,6 +723,7 @@ aa_register_case \
 aa_register_case \
         -procs {
             lang::message::get_embedded_vars
+            lang::message::embedded_vars_regexp
             util_get_subset_missing
             util_sets_equal_p
         } message__get_embedded_vars {
