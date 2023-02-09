@@ -713,6 +713,7 @@ ad_proc -public lang::util::translator_mode_set {
     @see lang::util::translator_mode_p
 } {
     ad_set_client_property acs-lang translator_mode_p $translator_mode_p
+    set ::acs_translator_mode_p $translator_mode_p
 }
 
 ad_proc -private lang::util::record_message_lookup {
