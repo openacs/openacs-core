@@ -165,33 +165,14 @@ ad_proc -public acs_sc::contract::delete {
 
         if { !$no_cascade_p } {
 
-            set operations [list]
-            set msg_types [list]
-
             db_foreach select_operations {
-                select operation_id,
-                       operation_inputtype_id,
-                       operation_outputtype_id
+                select operation_id
                 from   acs_sc_operations
                 where  contract_id = :contract_id
             } {
-                # Put them on list of message types and operations to delete
-                lappend msg_types $operation_inputtype_id
-                lappend msg_types $operation_outputtype_id
-                lappend operations $operation_id
-            }
-
-            # Delete the operations
-            foreach operation_id $operations {
                 acs_sc::contract::operation::delete -operation_id $operation_id
             }
 
-            # Delete msg types
-            foreach msg_type_id $msg_types {
-                if { $msg_type_id ne "" } {
-                    acs_sc::msg_type::delete -msg_type_id $msg_type_id
-                }
-            }
         }
 
         db_dml delete_contract {
@@ -274,19 +255,33 @@ ad_proc -public acs_sc::contract::operation::delete {
         error "You must supply either contract_name and operation_name, or operation_id"
     }
 
-    if {$operation_id eq ""} {
-        set operation_id [db_string get_id {
-            select operation_id
-            from acs_sc_operations
-            where contract_name = :contract_name
-            and operation_name = :operation_name
-        }]
+    db_1row get_operation {
+        select operation_id,
+               operation_inputtype_id,
+               operation_outputtype_id
+        from   acs_sc_operations
+        where operation_id = :operation_id or
+              (:operation_id is null
+               and contract_name = :contract_name
+               and operation_name = :operation_name)
     }
 
     db_dml delete_operation {
         delete from acs_sc_operations
         where operation_id = :operation_id
     }
+
+    set msg_types [list \
+                       $operation_inputtype_id \
+                       $operation_outputtype_id]
+
+    # Delete msg types
+    foreach msg_type_id $msg_types {
+        if { $msg_type_id ne "" } {
+            acs_sc::msg_type::delete -msg_type_id $msg_type_id
+        }
+    }
+
 }
 
 ad_proc -private acs_sc::contract::operation::parse_operations_spec {
