@@ -133,6 +133,12 @@ aa_register_case \
             set result [lang::catalog::import \
                             -package_key acs-lang -locales en_US]
 
+            #
+            # Avoid test side-effects by re-loading also other locales
+            #
+            lang::catalog::import \
+                -package_key acs-lang -locales [lang::system::get_locales]
+
             aa_equals "All keys for this package and locale have been processed" \
                 [dict get $result processed] \
                 $n_messages
