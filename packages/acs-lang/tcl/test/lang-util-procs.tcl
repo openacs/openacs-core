@@ -126,3 +126,28 @@ aa_register_case \
                 $r $e
         }
     }
+
+aa_register_case \
+    -cats {smoke api} \
+    -procs {
+        lang::util::translator_mode_set
+        lang::util::translator_mode_p
+    } \
+    test_translator_mode {
+        Test localizeing of a list of lists
+    } {
+        lang::util::translator_mode_set 0
+        aa_false "Translator mode is off" [lang::util::translator_mode_p]
+
+        lang::util::translator_mode_set 1
+        aa_true "Translator mode is on" [lang::util::translator_mode_p]
+
+        lang::util::translator_mode_set false
+        aa_false "Translator mode is off" [lang::util::translator_mode_p]
+
+        lang::util::translator_mode_set true
+        aa_true "Translator mode is on" [lang::util::translator_mode_p]
+
+        lang::util::translator_mode_set 0
+        aa_false "Translator mode is off" [lang::util::translator_mode_p]
+    }
