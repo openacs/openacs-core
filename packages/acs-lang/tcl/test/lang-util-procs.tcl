@@ -54,10 +54,13 @@ aa_register_case \
     -cats {smoke api production_safe} \
     -procs {
         lang::util::message_key_regexp
+        lang::util::message_tag_regexp
     } \
     test_message_regexp {
-        Test lang::util::message_key_regexp
+        Test regexp api
     } {
+        aa_section lang::util::message_key_regexp
+
         set r [lang::util::message_key_regexp]
 
         set values {
@@ -70,4 +73,21 @@ aa_register_case \
         foreach {v e} $values {
             aa_${e} "'$v'" [regexp $r $v]
         }
+
+        aa_section lang::util::message_tag_regexp
+        set r [lang::util::message_tag_regexp]
+
+        set values {
+            "<#apackage amessage#>" true
+            "<#apackageamessage#>" false
+            "<#apackage.amessage#>" false
+            "#apackage.amessage#>" false
+            "<#apackage.amessage#" false
+            "apackage.amessage" false
+            "<#apackage a message with spaces#>" true
+        }
+        foreach {v e} $values {
+            aa_${e} "'$v'" [regexp $r $v]
+        }
+
     }
