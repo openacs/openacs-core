@@ -99,36 +99,33 @@ aa_register_case \
                 [acs_sc::contract::get_operations -contract_name "foo_contract"] \
                 {GetParameters}
 
-            #
-            # TODO: acs_sc::contract::operation::delete won't delete the msg types.
-            #
-            # aa_log "Recreate Authenticate operation"
-            # acs_sc::contract::operation::new \
-            #     -contract_name foo_contract \
-            #     -operation Authenticate \
-            #     -description {
-            #         Validate this username/password combination, and return the result.
-            #         Valid auth_status codes are 'ok', 'no_account', 'bad_password', 'auth_error', 'failed_to_connect'.
-            #         The last, 'failed_to_connect', is reserved for communications or implementation errors.
-            #         auth_message is a human-readable explanation of what went wrong, may contain HTML.
-            #         Only checked if auth_status is not ok.
-            #         Valid account_status codes are 'ok' and 'closed'.
-            #         account_message may be supplied regardless of account_status, and may contain HTML.
-            #     } \
-            #     -input {
-            #         username:string
-            #         password:string
-            #         parameters:string,multiple
-            #     } \
-            #     -output {
-            #         auth_status:string
-            #         auth_message:string
-            #         account_status:string
-            #         account_message:string
-            #     }
-            # aa_equals "acs_sc::contract::get_operations returns expected" \
-            #     [lsort [acs_sc::contract::get_operations -contract_name "foo_contract"]] \
-            #     {Authenticate GetParameters}
+            aa_log "Recreate Authenticate operation"
+            acs_sc::contract::operation::new \
+                -contract_name foo_contract \
+                -operation Authenticate \
+                -description {
+                    Validate this username/password combination, and return the result.
+                    Valid auth_status codes are 'ok', 'no_account', 'bad_password', 'auth_error', 'failed_to_connect'.
+                    The last, 'failed_to_connect', is reserved for communications or implementation errors.
+                    auth_message is a human-readable explanation of what went wrong, may contain HTML.
+                    Only checked if auth_status is not ok.
+                    Valid account_status codes are 'ok' and 'closed'.
+                    account_message may be supplied regardless of account_status, and may contain HTML.
+                } \
+                -input {
+                    username:string
+                    password:string
+                    parameters:string,multiple
+                } \
+                -output {
+                    auth_status:string
+                    auth_message:string
+                    account_status:string
+                    account_message:string
+                }
+            aa_equals "acs_sc::contract::get_operations returns expected" \
+                [lsort [acs_sc::contract::get_operations -contract_name "foo_contract"]] \
+                {Authenticate GetParameters}
 
             aa_log "Create Authenticate2 operation"
             acs_sc::contract::operation::new \
@@ -156,7 +153,7 @@ aa_register_case \
                 }
             aa_equals "acs_sc::contract::get_operations returns expected" \
                 [lsort [acs_sc::contract::get_operations -contract_name "foo_contract"]] \
-                {Authenticate2 GetParameters}
+                {Authenticate Authenticate2 GetParameters}
 
 
             aa_log "Delete contract"
