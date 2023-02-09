@@ -91,3 +91,38 @@ aa_register_case \
         }
 
     }
+
+aa_register_case \
+    -cats {smoke api production_safe} \
+    -procs {
+        lang::util::localize
+        lang::util::localize_list_of_lists
+    } \
+    test_localize_list_of_lists {
+        Test localizeing of a list of lists
+    } {
+        set list_of_lists [list]
+        set list_of_expected [list]
+        db_foreach get_messages {
+            select message_key, package_key
+            from lang_message_keys
+            where package_key = 'acs-lang'
+            fetch first 10 rows only
+        } {
+            lappend list_of_lists [list \
+                                       "Test 1 #${package_key}.${message_key}#" \
+                                       "Test 2 #${package_key}.${message_key}#" \
+                                       "Test 3 #${package_key}.${message_key}#"]
+            lappend list_of_expected [list \
+                                          [lang::util::localize "Test 1 #${package_key}.${message_key}#"] \
+                                          [lang::util::localize "Test 2 #${package_key}.${message_key}#"] \
+                                          [lang::util::localize "Test 3 #${package_key}.${message_key}#"]]
+        }
+
+        set result [lang::util::localize_list_of_lists -list $list_of_lists]
+
+        foreach r $result e $list_of_expected {
+            aa_equals "Result is expected" \
+                $r $e
+        }
+    }
