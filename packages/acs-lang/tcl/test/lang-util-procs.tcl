@@ -5,7 +5,7 @@ ad_library {
 }
 
 aa_register_case \
-    -cats {smoke api} \
+    -cats {smoke api production_safe} \
     -procs {
         lang::util::edit_lang_key_url
     } \
@@ -48,4 +48,26 @@ aa_register_case \
             [string first [ns_urlencode [ad_return_url]] $url] >= 0
         }
 
+    }
+
+aa_register_case \
+    -cats {smoke api production_safe} \
+    -procs {
+        lang::util::message_key_regexp
+    } \
+    test_message_regexp {
+        Test lang::util::message_key_regexp
+    } {
+        set r [lang::util::message_key_regexp]
+
+        set values {
+            "#apackage.amessage#" true
+            "#apackage.amessage" false
+            "#apackageamessage#" false
+            "apackage.amessage" false
+            "#alongpackage.m#" true
+        }
+        foreach {v e} $values {
+            aa_${e} "'$v'" [regexp $r $v]
+        }
     }
