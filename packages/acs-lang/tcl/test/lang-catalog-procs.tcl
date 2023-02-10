@@ -89,7 +89,7 @@ aa_register_case \
                 en_US \
                 {Audit Comment} \
                 false \
-                [dt_systime] \
+                [clock format [clock seconds] -format {%Y-%m-%d %H:%M:%S}] \
                 false \
                 "no_upgrade"
 
