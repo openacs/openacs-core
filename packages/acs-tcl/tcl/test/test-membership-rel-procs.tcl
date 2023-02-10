@@ -16,6 +16,7 @@ aa_register_case \
         membership_rel::delete
         membership_rel::reject
         membership_rel::unapprove
+        membership_rel::expire
         membership_rel::change_state
         ::acs::test::user::create
     } \
@@ -71,6 +72,15 @@ aa_register_case \
         #Verifying if the state was changed
         aa_equals "Changed State to unapproved"  \
             $user(member_state) "needs approval"
+
+        #Try to change his state to expired
+        aa_log "We change the state to expired"
+        membership_rel::expire -rel_id $rel_id
+        acs_user::get -user_id $user_id -array user
+
+        #Verifying if the state was changed
+        aa_equals "Changed State to expired"  \
+            $user(member_state) "expired"
 
         #Try to change his state to deleted
         aa_log "We change the state to deleted"

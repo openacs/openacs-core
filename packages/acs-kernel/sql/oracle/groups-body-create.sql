@@ -596,6 +596,16 @@ as
     where rel_id = unapprove.rel_id;
   end;
 
+  procedure expire (
+    rel_id      in membership_rels.rel_id%TYPE
+  )
+  is
+  begin
+    update membership_rels
+    set member_state = 'expired'
+    where rel_id = unapprove.rel_id;
+  end;
+
   procedure deleted (
     rel_id      in membership_rels.rel_id%TYPE
   )

@@ -39,4 +39,9 @@
         </querytext>
     </fullquery>
 
+    <fullquery name="membership_rel::change_state.expire">
+        <querytext>
+            begin membership_rel.expire(rel_id => :rel_id); end;
+        </querytext>
+    </fullquery>
 </queryset>

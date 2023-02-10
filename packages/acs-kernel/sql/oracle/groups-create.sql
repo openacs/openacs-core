@@ -478,6 +478,10 @@ as
     rel_id      in membership_rels.rel_id%TYPE
   );
 
+  procedure expire (
+    rel_id      in membership_rels.rel_id%TYPE
+  );
+
   procedure del (
     rel_id      in membership_rels.rel_id%TYPE
   );

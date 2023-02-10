@@ -42,6 +42,7 @@ namespace eval membership_rel {
                 }
                 "needs approval" { db_exec_plsql unapprove {} }
                 "merged" { db_exec_plsql merge {} }
+                "expired" { db_exec_plsql expire {} }
             }
 
             # Record who changed the state
@@ -101,6 +102,14 @@ namespace eval membership_rel {
         Unapprove a membership relation
     } {
         change_state -rel_id $rel_id -state "needs approval"
+    }
+
+    ad_proc -public expire {
+        {-rel_id:required}
+    } {
+       Expire a membership relation
+    } {
+        change_state -rel_id $rel_id -state "expired"
     }
 
     ad_proc -public get {
