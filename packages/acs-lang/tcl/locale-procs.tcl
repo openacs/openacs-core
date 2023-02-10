@@ -308,16 +308,16 @@ ad_proc -private lang::user::site_wide_locale_not_cached {
                 ad_unset_cookie $cookie_name
             }
         }
-        #
-        # When no locale cookie is set, or the locale is invalid, fall
-        # back to system locale.
-        #
-        if { $locale eq "" } {
-            set locale $system_locale
-        }
-
     } else {
-        set locale [db_string get_user_site_wide_locale {} -default "$system_locale"]
+        set locale [db_string get_user_site_wide_locale {} -default ""]
+    }
+
+    #
+    # When no locale cookie is set, or the locale is invalid or empty,
+    # fall back to system locale.
+    #
+    if { $locale eq "" } {
+        set locale $system_locale
     }
 
     return $locale
