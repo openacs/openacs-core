@@ -19,7 +19,7 @@ ad_library {
 
 namespace eval lang::util {}
 
-ad_proc -public lang::util::lang_sort {
+ad_proc -deprecated lang::util::lang_sort {
     field
     {locale ""}
 } {
@@ -31,6 +31,14 @@ ad_proc -public lang::util::lang_sort {
     insert into lang_testsort values ('llama');
     insert into lang_testsort values ('lzim');
     </pre>
+
+    DEPRECATED: this api only supports Oracle. It also uses hardcoded
+    mapping between language and collation. It is unclear if an api is
+    needed for this, or if one can just have database-specific SQL in
+    xql files in order to achieve cross-db collation behavior.
+
+    @see https://www.postgresql.org/docs/current/collation.html
+    @see https://docs.oracle.com/cd/B14117_01/server.101/b10759/functions089.htm
 
     @author Jeff Davis (davis@xarg.net)
 
