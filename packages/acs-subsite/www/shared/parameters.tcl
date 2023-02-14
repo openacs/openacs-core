@@ -132,7 +132,9 @@ if { $counter > 0 } {
     #
     # "Main" is always the first section
     #
-    set section_list "<a href='#main'>[ns_quotehtml $sections(main)]</a>"
+    if { [info exists sections(main)] } {
+        set section_list "<a href='#main'>[ns_quotehtml $sections(main)]</a>"
+    }
     foreach section_name [lsort [array names sections]] {
         if {$section_name ne "main"} {
             lappend section_list "<a href='#$section_name'>[ns_quotehtml $sections($section_name)]</a>"
