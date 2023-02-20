@@ -98,6 +98,7 @@ aa_register_case \
         template::data::to_sql::timestamp
         template::data::to_sql::date
         template::util::date::get_property
+        template::util::date::unpack
     } template_date_api {
         Test api manipulating the template date format.
 
@@ -177,6 +178,26 @@ aa_register_case \
                 [template::data::to_sql::time_of_day $input] $expected
             aa_equals "template::data::from_sql::timestamp on '$input' returns expected" \
                 [template::data::to_sql::timestamp $input] $expected
+        }
+
+        set test_data {
+            {2023 2 20 0 0 0 {DD MONTH YYYY}}
+            2023-50-00
+            a
+            111
+            {1-1-1 a b c}
+            1-1-1
+            ""
+        }
+        set vars {year month day hours minutes seconds format}
+        foreach input $test_data {
+            template::util::date::unpack $input
+            set i 0
+            foreach v $vars {
+                aa_equals "template::util::date::unpack on '$input' for '$v' returns expected" \
+                    [set ${v}] [lindex $input $i]
+                incr i
+            }
         }
 
     }

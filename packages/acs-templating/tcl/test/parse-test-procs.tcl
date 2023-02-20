@@ -204,6 +204,7 @@ aa_register_case \
         template::get_body_event_handlers
         template::prepare_body_script_multirow
         template::multirow
+        template::collect_body_scripts
     } \
     templates_and_scripts {
 
@@ -311,7 +312,7 @@ aa_register_case \
 
         template::add_refresh_on_history_handler
 
-        set page [template::adp_include /packages/acs-templating/lib/body_scripts {}]
+        set page [template::collect_body_scripts]
 
         aa_equals "Page contains exactly 11 additional scripts (body handlers are grouped together)" \
             [regsub -all "<script" $page {} _] [expr {$starting_body_scripts + 11}]
