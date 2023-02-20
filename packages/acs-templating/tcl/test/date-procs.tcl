@@ -88,6 +88,8 @@ aa_register_case \
         api
         production_safe
     } -procs {
+        template::data::from_sql::time_of_day
+        template::data::from_sql::timestamp
         template::data::from_sql::date
         template::util::date::acquire
         template::util::date::create
@@ -109,6 +111,10 @@ aa_register_case \
         foreach {input expected} $test_data {
             aa_equals "template::data::from_sql::date on '$input' returns expected" \
                 [template::data::from_sql::date $input] $expected
+            aa_equals "template::data::from_sql::time_of_day on '$input' returns expected" \
+                [template::data::from_sql::time_of_day $input] $expected
+            aa_equals "template::data::from_sql::timestamp on '$input' returns expected" \
+                [template::data::from_sql::timestamp $input] $expected
         }
 
 
@@ -125,6 +131,12 @@ aa_register_case \
         foreach input $test_data {
             aa_true "template::data::from_sql::date on '$input' returns error" [catch {
                 template::data::from_sql::date $input
+            }]
+            aa_true "template::data::from_sql::time_of_day on '$input' returns error" [catch {
+                template::data::from_sql::time_of_day $input
+            }]
+            aa_true "template::data::from_sql::timestamp on '$input' returns error" [catch {
+                template::data::from_sql::timestamp $input
             }]
         }
     }
