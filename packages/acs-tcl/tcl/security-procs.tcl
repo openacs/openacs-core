@@ -3045,9 +3045,9 @@ namespace eval ::security::csp {
             lappend $var $value
         }
         if {$force_p} {
-            ns_log notice "CSP: forcing $directive $value"
             set var ::__csp__directive_forced($directive)
             if {![info exists $var] || $value ni [set $var]} {
+                ns_log notice "CSP: forcing $directive $value"
                 lappend $var $value
             }
         }
