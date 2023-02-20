@@ -49,6 +49,73 @@ aa_register_case \
     aa_equals "is 'f' already included" [template::head::included_p f] 0
 }
 
+aa_register_case \
+    -cats {api} \
+    -procs {
+        template::register_urn
+        template::head::can_resolve_urn
+    } \
+    urn_api {
+        Test the URN api
+    } {
+        try {
+            set urn test_urn
+
+            aa_section "Absolute URL"
+            set resource http://testresource
+
+            aa_false "Resource '$resource' cannot be found" \
+                [template::head::can_resolve_urn $urn]
+
+            aa_log "Register '$resource'"
+            template::register_urn \
+                -urn $urn \
+                -resource $resource \
+                -csp_list {a b c}
+
+            aa_true "Resource '$resource' can be found" \
+                [template::head::can_resolve_urn $urn]
+            aa_equals "CSP list is expected" \
+                $::template::head::urn_csp($urn) {a b c}
+
+
+            aa_section "Local URL"
+
+            set resource testresource
+
+            aa_log "Register '$resource'"
+            template::register_urn \
+                -urn $urn \
+                -resource $resource \
+                -csp_list {c d e}
+
+            aa_equals "CSP list was changed" \
+                $::template::head::urn_csp($urn) {c d e}
+
+
+            aa_section "Another Local URL (Ignored)"
+
+            set resource anything
+
+            aa_log "Register '$resource'"
+
+            template::register_urn \
+                -urn $urn \
+                -resource $resource \
+                -csp_list {f g h}
+
+            aa_equals "URN was NOT changed" \
+                $::template::head::urn($urn) testresource
+
+            aa_equals "CSP list was NOT changed" \
+                $::template::head::urn_csp($urn) {c d e}
+
+
+        } finally {
+            unset -nocomplain ::template::head::urn_csp($urn)
+            unset -nocomplain ::template::head::urn($urn)
+        }
+    }
 
 # Local variables:
 #    mode: tcl
