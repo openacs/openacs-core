@@ -94,10 +94,20 @@ aa_register_case \
         template::util::date::acquire
         template::util::date::create
         template::util::date::set_property
+        template::data::to_sql::time_of_day
+        template::data::to_sql::timestamp
+        template::data::to_sql::date
+        template::util::date::get_property
     } template_date_api {
         Test api manipulating the template date format.
+
+        Among the things this test shows, is the fact that this api
+        can swallow a lot of garbage without complaining. It is not
+        clear if this should change.
+
+        @author Antonio Pisano (antonio@elettrotecnica.it)
     } {
-        aa_section "Valid input"
+        aa_section "From SQL - Valid input"
 
         set test_data {
             2023-02-20 {2023 2 20 0 0 0 {DD MONTH YYYY}}
@@ -106,6 +116,8 @@ aa_register_case \
             {2023-02-20 22:10:900} {2023 2 20 22 10 9 {DD MONTH YYYY}}
             {2023-02-23 99-00-00} {2023 2 23 0 0 0 {DD MONTH YYYY}}
             2023-02-99 {2023 2 9 0 0 0 {DD MONTH YYYY}}
+            {0000-00-00 00:00:00} {0000 0 0 0 0 0 {DD MONTH YYYY}}
+            "" {{} {} {} {} {} {} {DD MONTH YYYY}}
         }
 
         foreach {input expected} $test_data {
@@ -118,7 +130,7 @@ aa_register_case \
         }
 
 
-        aa_section "Invalid input"
+        aa_section "From SQL - Invalid input"
 
         set test_data {
             2023-50-00
@@ -139,6 +151,34 @@ aa_register_case \
                 template::data::from_sql::timestamp $input
             }]
         }
+
+
+        aa_section "To SQL - Valid input"
+
+        set test_data {
+            {2023 2 20 0 0 0 {DD MONTH YYYY}} "to_timestamp('2023 02 20 00 00 00', 'YYYY MM DD HH24 MI SS')"
+            {2023 2 20 22 10 100 {DD MONTH YYYY}} "to_timestamp('2023 02 20 22 10 100', 'YYYY MM DD HH24 MI SS')"
+            {2023 2 20 22 10 900 {DD MONTH YYYY}} "to_timestamp('2023 02 20 22 10 900', 'YYYY MM DD HH24 MI SS')"
+            {2023 2 23 99 0 0 {DD MONTH YYYY}} "to_timestamp('2023 02 23 99 00 00', 'YYYY MM DD HH24 MI SS')"
+            {2023 2 99 0 0 0 {DD MONTH YYYY}} "to_timestamp('2023 02 99 00 00 00', 'YYYY MM DD HH24 MI SS')"
+            {0 0 0 0 0 0 {DD MONTH YYYY}} "to_timestamp('0000 00 00 00 00 00', 'YYYY MM DD HH24 MI SS')"
+            2023-50-00 "to_date('2023-50-00', 'YYYY')"
+            a "to_date('000a', 'YYYY')"
+            111 "to_date('0111', 'YYYY')"
+            {1-1-1 a b c} "to_timestamp('1-1-1 0a 0b 0c', 'YYYY MM DD HH24')"
+            1-1-1 "to_date('1-1-1', 'YYYY')"
+            "" NULL
+        }
+
+        foreach {input expected} $test_data {
+            aa_equals "template::data::from_sql::date on '$input' returns expected" \
+                [template::data::to_sql::date $input] $expected
+            aa_equals "template::data::from_sql::time_of_day on '$input' returns expected" \
+                [template::data::to_sql::time_of_day $input] $expected
+            aa_equals "template::data::from_sql::timestamp on '$input' returns expected" \
+                [template::data::to_sql::timestamp $input] $expected
+        }
+
     }
 
 # Local variables:
