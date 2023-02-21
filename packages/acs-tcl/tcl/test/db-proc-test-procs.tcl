@@ -136,11 +136,18 @@ aa_register_case \
         aa_equals "db_foreach with four columns" "{a a1 b b1 c {c 1} d d1}" $results
 
         set results ""
-        db_foreach query {select * from (values ('a1','b1','c 1','d1')) as X(a,b,c,d)} \
-            -column_set set_things {
-                lappend results [lsort [ns_set array $set_things]]
-            }
-        aa_equals "db_foreach with four columns" "{a a1 b b1 c {c 1} d d1}" $results
+        db_foreach query {
+            select *
+            from (values
+                  ('a1','b1','c 1','d1'),
+                  ('a2','b2','c 2','d2')
+                  ) as X(a,b,c,d)
+        } -column_set set_things {
+            lappend results [lsort [ns_set array $set_things]]
+        }
+        aa_equals "db_foreach with four columns" \
+            $results \
+            {{a a1 b b1 c {c 1} d d1} {a a2 b b2 c {c 2} d d2}}
 
     }
 
