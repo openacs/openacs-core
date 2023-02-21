@@ -1628,14 +1628,33 @@ ad_proc -public db_foreach {
     #ns_log notice "columns <$columns>"
     foreach tuple [lrange $result 1 end] {
         incr counter
-        if { ![info exists column_set] } {
-            if { [info exists column_array] } {
-                unset -nocomplain array_val
-                array set array_val [concat {*}[lmap a $columns v $tuple {list $a $v}]]
-            } else {
-                foreach a $columns v $tuple { uplevel [list set $a $v] }
+
+        #
+        # Result will be provided in different formats to the code
+        # block depending on the flags...
+        #
+        if { [info exists column_set] } {
+            #
+            # ns_set
+            #
+            if { [info exists selection] } {
+               ns_set free selection
             }
+            set selection [ns_set create]
+            foreach a $columns v $tuple { ns_set put $selection $a $v }
+        } elseif { [info exists column_array] } {
+            #
+            # array
+            #
+            unset -nocomplain array_val
+            array set array_val [concat {*}[lmap a $columns v $tuple {list $a $v}]]
+        } else {
+            #
+            # plain variables
+            #
+            foreach a $columns v $tuple { uplevel [list set $a $v] }
         }
+
         set errno [catch { uplevel 1 $code_block } error]
 
         #
