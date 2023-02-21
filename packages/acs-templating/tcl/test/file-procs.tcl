@@ -12,8 +12,12 @@ aa_register_case -cats {
     template::util::file::get_property
     template::data::validate::file
     template::widget::file
+    template::element
     template::element::create
+    template::element::set_error
     template::form
+    template::form::is_valid
+    template::form::get_errors
     ad_form
     template::adp_eval
     template::adp_compile
@@ -43,10 +47,16 @@ aa_register_case -cats {
                 set type      [template::util::file::get_property mime_type $upload_file]
 
                 if {$file_name eq ""} {
-                    ns_return 500 text/plain "Filename missing: '$upload_file'"
+                    ::template::element set_error test upload_file \
+                        "Filename missing: '$upload_file'"
                 }
                 if {![file exists $tmpfile]} {
-                    ns_return 500 text/plain "Tmpfile missing: '$upload_file'"
+                    ::template::element set_error test upload_file \
+                        "Tmpfile missing: '$upload_file'"
+                }
+
+                if {![::template::form is_valid test]} {
+                    ns_return 500 text/plain [::template::form get_errors test]
                 }
 
                 set tmpdir [file dirname $tmpfile]
