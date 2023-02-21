@@ -1638,7 +1638,7 @@ ad_proc -public db_foreach {
             # ns_set
             #
             if { [info exists selection] } {
-               ns_set free selection
+               ns_set free $selection
             }
             set selection [ns_set create]
             foreach a $columns v $tuple { ns_set put $selection $a $v }
