@@ -42,7 +42,6 @@ ad_proc -public template::form { command args } {
     @see template::form::set_properties
     @see template::form::get_properties
     @see template::form::exists
-    @see template::form::export
     @see template::form::get_combined_values
     @see template::form::get_values
     @see template::form::get_elements
@@ -868,10 +867,15 @@ ad_proc -public template::form::set_values { id array_ref } {
     }
 }
 
-ad_proc -public template::form::export {} {
+ad_proc -deprecated template::form::export {} {
     Generates hidden input tags for all values in a form submission.
     Typically used to create a confirmation page following an initial
     submission.
+
+    DEPRECATED: this proc has been superseded by export_vars, which
+                also offers additional features.
+
+    @see export_vars
 
     @return A string containing hidden input tags for inclusion in a
             form.
