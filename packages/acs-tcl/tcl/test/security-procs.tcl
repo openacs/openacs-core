@@ -181,19 +181,19 @@ aa_register_case \
 
     } {
         #
-        # One should not use [ad_tmpnam] !
+        # ad_tmpnam is currently not deprecated, but might be in the
+        # future, so we generate temporary filenames "manually"
         #
-        
-        #set tmpfile [ad_tmpnam]
-        #aa_section {Path to a tmpfile that does not exist yet}
-        #aa_true "A temporary filename is safe" [security::safe_tmpfile_p $tmpfile]
 
-        #set tmpfile [ad_tmpnam]
-        #aa_section {Path to a tmpfile that we demand to exist}
-        #aa_false "A temporary filename is not safe if the file des not exist" \
-        #    [security::safe_tmpfile_p -must_exist $tmpfile]
+        set tmpfile [ns_config ns/parameters tmpdir]/afile
+        aa_section {Path to a tmpfile that does not exist yet}
+        aa_true "A temporary filename is safe" [security::safe_tmpfile_p $tmpfile]
 
-        
+        set tmpfile [ns_config ns/parameters tmpdir]/afile-2
+        aa_section {Path to a tmpfile that we demand to exist}
+        aa_false "A temporary filename is not safe if the file des not exist" \
+           [security::safe_tmpfile_p -must_exist $tmpfile]
+
         aa_section {Path to an existing tmpfile}
         set F [ad_opentmpfile tmpfile]
         puts $F 1234
@@ -201,24 +201,24 @@ aa_register_case \
         aa_true "An existing tmpfile is safe" [security::safe_tmpfile_p -must_exist $tmpfile]
         ad_file delete $tmpfile
 
-        #aa_section {Path to a tmpfile in a folder of the tmpdir}
-        #set tmpfile [ad_tmpnam]/test
-        #aa_false "A safe tmpfile can only be a direct child of the tmpdir" \
-        #    [security::safe_tmpfile_p $tmpfile]
+        aa_section {Path to a tmpfile in a folder of the tmpdir}
+        set tmpfile [ns_config ns/parameters tmpdir]/afolder/test
+        aa_false "A safe tmpfile can only be a direct child of the tmpdir" \
+           [security::safe_tmpfile_p $tmpfile]
 
-        #aa_section {Trying to confuse the proc with ".."}
-        #set tmpfile [ad_tmpnam]/../../test
-        #aa_false "Proc is not fooled by .." \
-        #    [security::safe_tmpfile_p $tmpfile]
+        aa_section {Trying to confuse the proc with ".."}
+        set tmpfile [ns_config ns/parameters tmpdir]/afolder/../../test
+        aa_false "Proc is not fooled by .." \
+           [security::safe_tmpfile_p $tmpfile]
 
-        #aa_section {Trying to confuse the proc with "~"}
-        #set tmpfile ~/../../test
-        #aa_false "Proc is not fooled by ~" \
-        #    [security::safe_tmpfile_p $tmpfile]
+        aa_section {Trying to confuse the proc with "~"}
+        set tmpfile ~/../../test
+        aa_false "Proc is not fooled by ~" \
+           [security::safe_tmpfile_p $tmpfile]
 
-        #aa_section {Path to a file outside of the tmpdir}
-        #set tmpfile [acs_root_dir]/mypreciouscode
-        #aa_false "A safe tmpfile can only be a direct child of the tmpdir" \
-        #    [security::safe_tmpfile_p $tmpfile]
+        aa_section {Path to a file outside of the tmpdir}
+        set tmpfile [acs_root_dir]/mypreciouscode
+        aa_false "A safe tmpfile can only be a direct child of the tmpdir" \
+           [security::safe_tmpfile_p $tmpfile]
 
     }
