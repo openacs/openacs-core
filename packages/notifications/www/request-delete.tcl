@@ -7,7 +7,7 @@ ad_page_contract {
     @creation-date 2002-05-24
     @cvs-id $Id$
 } {
-    request_id:naturalnum,notnull
+    request_id:object_type(notification_request),notnull
     return_url:localurl
 }
 
