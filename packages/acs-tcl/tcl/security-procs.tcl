@@ -1195,10 +1195,11 @@ ad_proc security::safe_tmpfile_p {
     # Ensure no ".." in the path
     #
     set tmpfile [ns_normalizepath $tmpfile]
+    set tmpdir [string trimright [ns_config ns/parameters tmpdir] /]
 
-    if {[ad_file dirname $tmpfile] ne [ns_config ns/parameters tmpdir]} {
+    if {[ad_file dirname $tmpfile] ne $tmpdir} {
         #
-        # File is not a direct child of one of the tmpfolders: not safe
+        # File is not a direct child of the tmpfolder: not safe
         #
         return false
     }
@@ -1214,14 +1215,14 @@ ad_proc security::safe_tmpfile_p {
     if {![ad_file owned $tmpfile]} {
         #
         # File does not belong to us: not safe
-        #
+        #        
         return false
     }
 
     if {![ad_file readable $tmpfile]} {
         #
         # We cannot read the file: not safe
-        #
+        #       
         return false
     }
 
