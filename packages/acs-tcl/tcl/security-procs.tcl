@@ -3191,6 +3191,45 @@ namespace eval ::security::csp {
     }
 }
 
+namespace eval ::security::parameter {
+    
+    ad_proc -public signed {{-max_age ""} value} {
+
+        Compute a compact single-token signed value based on the
+        parametersecret.
+
+        @see ::security::parameter::validated
+    } {
+        set token_id [sec_get_random_cached_token_id]
+        set secret [ns_config "ns/server/[ns_info server]/acs" parametersecret ""]
+        set signature [ad_sign -max_age $max_age -secret $secret -token_id $token_id $value]
+        return [ns_base64urlencode [list $value $signature]]
+    }
+
+    ad_proc -public validated {input} {
+
+        Validate the single-token signed value and return its content value.
+        Raise an exception, when the signature is broken.
+
+        @see ::security::parameter::signed
+
+    } {
+        set success 0
+        set pair [ns_base64urldecode $input]
+        if {[string is list -strict $pair] && [llength $pair] == 2} {
+            lassign $pair value signature
+            set secret [ns_config "ns/server/[ns_info server]/acs" parametersecret ""]
+            set success [ad_verify_signature -secret $secret $value $signature]
+        }
+        if {$success} {
+            return $value
+        } else {
+            ad_raise invalid_signature
+        }
+    }
+}
+
+
 #TODO remove me: just for a transition phase
 proc ::security::nonce_token args {uplevel ::security::csp::nonce {*}$args}
 
