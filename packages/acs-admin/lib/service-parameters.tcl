@@ -74,7 +74,7 @@ template::list::create \
             link_url_col admin_url
             link_html { title "\#acs-admin.Service_administration\#" }
             display_template {<if @packages.admin_url@ not nil><adp:icon name="admin"> #acs-admin.Administration#</if>}
-            html {align left}
+            html {align left style "white-space: nowrap;"}
         }
         sitewide_admin {
             label "\#acs-admin.Site-Wide_Admin\#"
@@ -82,14 +82,14 @@ template::list::create \
             link_html { title "\#acs-admin.Service_administration\#" }
             display_template {<if @packages.sitewide_admin_url@ not nil><adp:icon name="admin"> #acs-admin.Administration#</if>}
             hide_p {[string is false $swadmin_p]}
-            html {align left}
+            html {align left style "white-space: nowrap;"}
         }
         parameters {
             label "\#acs-admin.Parameters\#"
             link_url_col param_url
             link_html { title "\#acs-admin.Service_parameters\#" }
             display_template {<if @packages.param_url@ not nil><adp:icon name="cog"> #acs-admin.Parameters#</if>}
-            html {align left}
+            html {align left style "white-space: nowrap;"}
         }
     }
 

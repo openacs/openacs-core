@@ -53,14 +53,14 @@ template::list::create \
             link_html { align center title "Site-wide Administration" }
             link_url_col admin_url
             display_template {<if @packages.admin_url@ not nil><adp:icon name="admin"> #acs-admin.Administration#</if>}
-            html {align left}
+            html {align left style "white-space: nowrap;"}
         }
         global_param_url {
             label "Global Parameters"
             link_html {title "Manage Global Parameters" }
             link_url_col global_param_url
             display_template {<if @packages.global_param_url@ not nil><adp:icon name="cog"> #acs-admin.Parameters#</if>}
-            html {align left}
+            html {align left style "white-space: nowrap;"}
         }
     }
 
