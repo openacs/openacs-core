@@ -3087,7 +3087,7 @@ namespace eval ::security::csp {
         security::csp::require connect-src 'self'
         #
         # Some browser (safari, chrome) need "font-src data:", maybe
-        # for plugins or diffent font settings. Seems safe enough.
+        # for plugins or different font settings. Seems safe enough.
         #
         security::csp::require font-src data:
 

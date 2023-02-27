@@ -359,7 +359,7 @@ namespace eval ::acs {
 
         :public method last_contact {location} {
             #
-            # Return the millseconds since the last contact
+            # Return the milliseconds since the last contact
             # with the denoted server. If there is no data available,
             # the return values is empty.
             #
@@ -369,7 +369,7 @@ namespace eval ::acs {
         }
         :public method last_request {location} {
             #
-            # Return the millseconds since the last request from the
+            # Return the milliseconds since the last request from the
             # denoted server. If there is no data available, the
             # return values is empty.
             #
@@ -444,7 +444,7 @@ namespace eval ::acs {
 
         :public method is_canonical_server {location} {
             #
-            # Check, if provided location belongs to the the canonical
+            # Check, if provided location belongs to the canonical
             # server specs. The canonical server might listen on
             # multiple protocols, IP addresses and ports.
             #

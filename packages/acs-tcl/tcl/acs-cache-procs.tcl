@@ -587,7 +587,7 @@ namespace eval ::acs {
         provided cache exists, then use it for caching, otherwise
         perform uncalled call. This function is made intentionally
         private, since this should only be required during
-        bootstraping. It does not make sense to wrap arbitrary caching
+        bootstrapping. It does not make sense to wrap arbitrary caching
         calls with this function.
 
     } {

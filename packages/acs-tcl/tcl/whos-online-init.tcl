@@ -1,6 +1,6 @@
 ad_library {
 
-    Initializes datastrctures for whos online.
+    Initializes data structures for who's online.
 
     @creation-date 03 October 2003
     @cvs-id $Id$

@@ -632,7 +632,7 @@ ad_proc -public zip_with {f xs ys} "takes two lists {x1 x2 x3 ...} and {y1 y2 y3
 # "Sandra Bullock" "Catherine Zeta-Jones" "Nicole Kidman"
 
 
-ad_proc -public transpose {lists} "tranposes a matrix (a list of lists)" {
+ad_proc -public transpose {lists} "transposes a matrix (a list of lists)" {
     set num_lists [llength $lists]
     if {!$num_lists} { return "" }
     for {set i 0} {$i<$num_lists} {incr i} {
