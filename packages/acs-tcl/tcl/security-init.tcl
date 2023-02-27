@@ -10,6 +10,15 @@ ad_library {
 
 }
 
+#
+# Check, if parametersecret is set (needed for signed parameters)
+#
+if {[ns_config "ns/server/[ns_info server]/acs" parametersecret ""] eq ""} {
+    ns_log warning "missing values for 'parametersecret' in section " \
+        "'ns/server/[ns_info server]/acs' in configuration file"
+}
+
+
 # Schedule a procedure to sweep for sessions.
 ad_schedule_proc -thread f [parameter::get -parameter SessionSweepInterval -default 7200] sec_sweep_sessions
 
