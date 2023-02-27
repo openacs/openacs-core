@@ -16,7 +16,7 @@ if {[nsv_exists rp_properties request_count] != 0} {
     #
     # This is a re-init. There is no need, to rerun the code
     # below. Setting e.g. filters multiple times might have unwanted
-    # behavor in the server
+    # behavior in the server.
     #
     ns_log notice "request-processor re-init"
     return
