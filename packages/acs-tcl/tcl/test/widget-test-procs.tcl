@@ -41,6 +41,25 @@ aa_register_case -cats {
     }
 }
 
+aa_register_case -cats {
+    api
+    smoke
+    production_safe
+} -procs {
+    ad_generic_optionlist
+} ad_generic_optionlist {
+    Test the ad_generic_optionlist proc.
+} {
+    set items {a b c}
+    set values {1 2 3}
+    set default 3
+
+    set options [ad_generic_optionlist $items $values $default]
+
+    aa_true "Options are expected" \
+        [regexp {^<option value="1">a</option>\s+<option value="2">b</option>\s+<option selected="selected" value="3">c</option>\s+$} $options]
+}
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
