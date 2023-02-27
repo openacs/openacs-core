@@ -1936,6 +1936,8 @@ ad_proc util::split_location {location protoVar hostnameVar portVar} {
             }
             set success 1
         } else {
+            ns_log warning "util::split_location <$location> fails" \
+                "no host and port information in <$urlInfo>"
             set success 0
         }
     }
