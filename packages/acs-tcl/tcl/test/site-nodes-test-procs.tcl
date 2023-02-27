@@ -177,7 +177,7 @@ aa_register_case \
         aa_equals "Verify url /doc2 for node2" [site_node::get_url -node_id $node2_node_id] "/$doc2_name/"
 
         #
-        # In secton 3, we checked this case positively
+        # In section 3, we checked this case positively
         #
         aa_false "Get url from node3 object_id $node3_object_id contains /$doc5_name/" {
             "/$doc5_name/$doc3_name/" in [site_node::get_url_from_object_id -object_id $node3_object_id]

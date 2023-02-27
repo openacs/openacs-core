@@ -368,7 +368,7 @@ aa_register_case \
         Test db_transaction
 } {
 
-    # create a temp table for testing
+    # Create a temporary table for testing
     catch {db_dml remove_table {drop table tmp_db_transaction_test}}
     db_dml new_table {create table tmp_db_transaction_test (a integer constraint tmp_db_transaction_test_pk primary key, b integer)}
 
@@ -630,7 +630,7 @@ aa_register_case \
             aa_log "Start test section 2"
 
             #
-            # Create a multirow woth 0 entries and append a row "manually"
+            # Create a multirow no entries and append a row "manually"
             # For details, see # https://openacs.org/bugtracker/openacs/bug?bug_number=3441
             #
             db_multirow person_mr1 noxql {

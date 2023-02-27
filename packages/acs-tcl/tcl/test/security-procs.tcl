@@ -74,7 +74,7 @@ aa_register_case \
             set user_id [dict get $user_info user_id]
             set d [::acs::test::login $user_info]
 
-            aa_log "Requesting test endpoint as logged in user"
+            aa_log "Requesting test endpoint as logged-in user"
             set d [acs::test::http -last_request $d /$test_url]
             acs::test::reply_has_status_code $d 200
 
