@@ -1503,7 +1503,13 @@ ad_proc -private __ad_verify_signature {
             ns_log Warning "__ad_verify_signature: token_id <$raw_token_id> is not an integer"
             return 0
         }
-        set secret_token [sec_get_token $raw_token_id]
+
+        try {
+            set secret_token [sec_get_token $raw_token_id]
+        } on error {errmsg} {
+            ns_log Warning "__ad_verify_signature: token_id <$raw_token_id> validation returns '$errmsg'"
+            return 0
+        }
 
     } else {
         set secret_token $secret
