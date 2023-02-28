@@ -6,6 +6,45 @@ ad_library {
     @creation-date 2019-06-26
 }
 
+aa_register_case \
+    -cats {api smoke production_safe} \
+    -procs ad_integer_optionlist \
+    ad_integer_optionlist {
+
+        Test the ad_integer_optionlist proc
+
+    } {
+        set result [ad_integer_optionlist 1 4 8]
+        aa_true "Result is expected" \
+            [regexp \
+                 {^\s*<option value="1">1</option>\s*<option value="2">2</option>\s*<option value="3">3</option>\s*<option value="4">4</option>\s*$} \
+                 $result]
+
+        set result [ad_integer_optionlist 1 4 bogus]
+        aa_true "Result is expected" \
+            [regexp \
+                 {^\s*<option value="1">1</option>\s*<option value="2">2</option>\s*<option value="3">3</option>\s*<option value="4">4</option>\s*$} \
+                 $result]
+
+        set result [ad_integer_optionlist 1 4 1]
+        aa_true "Result is expected" \
+            [regexp \
+                 {^\s*<option selected="selected" value="1">1</option>\s*<option value="2">2</option>\s*<option value="3">3</option>\s*<option value="4">4</option>\s*$} \
+                 $result]
+
+        set result [ad_integer_optionlist 1 4 1 f]
+        aa_true "Result is expected" \
+            [regexp \
+                 {^\s*<option selected="selected" value="1">1</option>\s*<option value="2">2</option>\s*<option value="3">3</option>\s*<option value="4">4</option>\s*$} \
+                 $result]
+
+        set result [ad_integer_optionlist 1 4 1 t]
+        aa_true "Result is expected" \
+            [regexp \
+                 {^\s*<option selected="selected" value="01">01</option>\s*<option value="02">02</option>\s*<option value="03">03</option>\s*<option value="04">04</option>\s*$} \
+                 $result]
+    }
+
 
 aa_register_case \
     -cats {api smoke production_safe} \
