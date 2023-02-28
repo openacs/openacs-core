@@ -9,6 +9,30 @@ ad_library {
 aa_register_case -cats {
     api
     smoke
+} -procs {
+    template::util::write_file
+    template::util::read_file
+    template::util::set_file_encoding
+} read_write_file {
+    Test utilities to read/write files.
+} {
+    set tmpfile [ns_config ns/parameters tmpdir]/__test_acs_templating_read_write_file.txt
+
+    foreach v {
+        avalue
+        anötervalue
+        1234
+        &scene
+    } {
+        template::util::write_file $tmpfile $v
+        aa_equals "In/out from file returns the same" \
+            [template::util::read_file $tmpfile] $v
+    }
+}
+
+aa_register_case -cats {
+    api
+    smoke
     production_safe
 } -procs {
     template::util::get_opts
