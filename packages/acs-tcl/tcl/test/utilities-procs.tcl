@@ -434,6 +434,29 @@ aa_register_case -cats {
         [template::multirow size test_util_get_user_messages] 2
 }
 
+aa_register_case -cats {
+    api
+    smoke
+} -procs {
+    ad_job
+} ad_job {
+    Test ad_job proc
+} {
+    set queue __test_acs_tcl_ad_job
+
+    set result [ad_job -queue $queue expr {1 + 1}]
+
+    aa_equals "Result is 2" \
+        $result 2
+
+    aa_true "Error when timeout is reached" [catch {
+        ad_job -queue $queue -timeout 0.1 after 200
+    }]
+
+    aa_true "Queue exists after calling the proc" {
+        $queue in [ns_job queues]
+    }
+}
 
 # Local variables:
 #    mode: tcl
