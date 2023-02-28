@@ -146,7 +146,7 @@ proc <  {a b} {expr {$a <  $b}}
 # map
 # --------------------------------------------------------------------------------
 
-ad_proc -public map {f xs} {
+ad_proc -deprecated map {f xs} {
     Takes a function f and a list { x1 x2 x3 ...},
     applies the function on each element of the list
     and returns the result, i.e. { f x1, f x2, f x3, ...}.
@@ -162,6 +162,11 @@ ad_proc -public map {f xs} {
     <code>map [lambda {row} {map sqr $row}] [list [list 1 2 3] [list 4 5 6]] = {{1 4 9} {16 25 36}}
     </code>
     </ul>
+
+    DEPRECATED: this proc is superseded by the Tcl command lmap,
+    available since Tcl 8.6.
+
+    @see lmap
 } {
     set result {}
     foreach x $xs {
