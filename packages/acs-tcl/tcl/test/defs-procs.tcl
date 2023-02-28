@@ -74,5 +74,31 @@ aa_register_case \
         aa_section "Admin home URL"
         aa_equals "The admin home URL is as expected" \
             [ad_admin_home] [subsite::get_element -element url]admin
-        
+    }
+
+aa_register_case \
+    -cats {api smoke} \
+    -procs {
+        ad_parameter_from_file
+    } \
+    ad_parameter_from_file {
+        Test ad_parameter_from_file proc
+    } {
+        foreach section [ns_configsections] {
+            set section_name [ns_set name $section]
+            if {[regexp ^ns/server/[ns_info server]/acs(.*)\$ $section_name _ package_key]} {
+                set found_p 1
+                set package_key [string trimleft $package_key /]
+                foreach key [ns_set keys $section] {
+                    set expected [ns_set get $section $key]
+                    set result [ad_parameter_from_file $key $package_key]
+                    aa_equals "Value is expected" \
+                        $result $expected
+                }
+            }
+        }
+
+        if {![info exists found_p]} {
+            aa_log "No parameter exposed to the api was found in the server conf."
+        }
     }
