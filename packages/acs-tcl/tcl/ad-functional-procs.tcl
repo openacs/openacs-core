@@ -10,7 +10,7 @@ ad_library {
     If you don't know what functional programming is,
     here's a good place to start:
     <ul>
-    <li><a href="http://www.haskell.org/aboutHaskell.html">http://www.haskell.org/aboutHaskell.html</a>
+    <li><a href="https://www.haskell.org/get-started/">https://www.haskell.org/get-started/</a>
     </ul>
     A general naming convention in this file is:
     <p>
@@ -18,14 +18,16 @@ ad_library {
     x  = an element <br>
     xs = a list of elements
 
+    This was part of ACS 3.
+
+    Added to OpenACS by bdolicki on 11 Feb 2004: I just converted
+    proc_doc to ad_proc, added ad_library, fixed an unmatched brace in
+    a doc string and wrapped everything in a namespace.
+
     @author Mark Dettinger (mdettinger@arsdigita.com)
     @creation-date March 29, 2000
-    @cvs-id $Id$
 
-    This was part of ACS 3
-    Added to OpenACS by bdolicki on 11 Feb 2004
-    I just converted proc_doc to ad_proc, added ad_library, fixed an unmatched
-    brace in a doc string  and wrapped everything in a namespace
+    @cvs-id $Id$
 }
 
 namespace eval ::f {
