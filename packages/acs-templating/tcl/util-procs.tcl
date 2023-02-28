@@ -435,7 +435,7 @@ ad_proc -public template::util::write_file { path text } {
 
     template::util::set_file_encoding $fd
 
-    puts $fd $text
+    puts -nonewline $fd $text
     close $fd
 }
 
