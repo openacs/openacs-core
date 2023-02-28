@@ -4,6 +4,26 @@ ad_library {
 
 }
 
+aa_register_case \
+    -cats {api smoke production_safe} \
+    -procs {
+        ad_complain
+        ad_complaints_get_list
+    } ad_complain {
+
+        Test ad_complain api specific behavior
+
+    } {
+        set key __test_acs_tcl_ad_complain_errorkey
+        set ::ad_page_contract_error_string($key) "A message from a key"
+        ad_complain "A Message"
+        ad_complain "Another Message"
+        ad_complain -key $key "This will be ignored"
+
+        aa_equals "Complaints are returned correctly" \
+            [ad_complaints_get_list] \
+            {{A Message} {Another Message} {A message from a key}}
+    }
 
 aa_register_case \
     -cats {api smoke production_safe} \
