@@ -333,10 +333,11 @@ ad_proc ad_return_if_another_copy_is_running {
     The call_adp_break_p argument is essential
     if you are calling this from an ADP page and want to avoid the
     performance hit of continuing to parse and run.
-
-    This proc is dangerous, and needs to be rewritten. See:
-    http://openacs.org/forums/message-view?message_id=203381
 } {
+    # Note: on AOLServer, ns_server was seemingly dangerous. This
+    # should not affect NaviServer though, see
+    # http://openacs.org/forums/message-view?message_id=203381
+
     # first let's figure out how many are running and queued
     set this_connection_url [ad_conn url]
     set n_matches 0
