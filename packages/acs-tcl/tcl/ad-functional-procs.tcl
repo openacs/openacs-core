@@ -654,7 +654,9 @@ ad_proc -public not_elem_p {x xs} {
     expr {[lsearch $xs $x]==-1 ? 1 : 0}
 }
 
-ad_proc -public nub {xs} "removes duplicates from xs" {
+ad_proc -public nub {xs} {
+    Removes duplicates from xs.
+} {
     set result {}
     foreach x $xs {
         if { [not_elem_p $x $result] } {
