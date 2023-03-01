@@ -159,11 +159,7 @@ ad_proc -public map {f xs} {
     f::map [f::lambda {row} {f::map sqr $row}] [list [list 1 2 3] [list 4 5 6]] = {{1 4 9} {16 25 36}}
 
 } {
-    set result {}
-    foreach x $xs {
-        lappend result [$f $x]
-    }
-    return $result
+    lmap x $xs {$f $x}
 }
 
 # --------------------------------------------------------------------------------
@@ -410,8 +406,7 @@ proc gcd' {x y} {
 ad_proc -public lcm {x y} {
     @return the least common multiple of x and y
 } {
-    if { $x==0} { return 0 }
-    if { $y==0} { return 0 }
+    if { $x==0 || $y == 0 } { return 0 }
     abs [expr {$x/[gcd $x $y]*$y}]
 }
 
@@ -553,25 +548,25 @@ ad_proc -public last {xs} {
 ad_proc -public init {xs} {
     @return all elements of a list but the last
 } {
-    lrange $xs 0 [expr {[llength $xs]-2}]
+    lrange $xs 0 end-1
 }
 
 ad_proc -public tail {xs} {
     @return all elements of a list but the first
 } {
-    lrange $xs 1 [expr {[llength $xs]-1}]
+    lrange $xs 1 end
 }
 
 ad_proc -public take {n xs} {
     @return the first n elements of xs
 } {
-    lrange $xs 0 [expr {$n-1}]
+    lrange $xs 0 ${n}-1
 }
 
 ad_proc -public drop {n xs} {
     @return the remaining elements of xs (without the first n)
 } {
-    lrange $xs $n [expr {[llength $xs]-1}]
+    lrange $xs $n end
 }
 
 ad_proc -public filter {pred xs} {
@@ -584,13 +579,12 @@ ad_proc -public filter {pred xs} {
     @return all elements of the list 'xs' that fulfill the predicate
             'pred'.
 } {
-    set result {}
-    foreach x $xs {
-        if { [$pred $x] } {
-            lappend result $x
+    lmap x $xs {
+        if { ![$pred $x] } {
+            continue
         }
+        set x
     }
-    return $result
 }
 
 ad_proc -public copy {n x} {
@@ -624,7 +618,7 @@ ad_proc -public cons {x xs} {
 
     @return list
 } {
-    concat [list $x] $xs
+    list $x {*}$xs
 }
 
 ad_proc -deprecated reverse {xs} {
@@ -643,7 +637,7 @@ ad_proc -public elem_p {x xs} {
 
     @return boolean
 } {
-    expr {[lsearch $xs $x]==-1 ? 0 : 1}
+    expr {$x in $xs}
 }
 
 ad_proc -public not_elem_p {x xs} {
@@ -651,19 +645,20 @@ ad_proc -public not_elem_p {x xs} {
 
     @return boolean
 } {
-    expr {[lsearch $xs $x]==-1 ? 1 : 0}
+    expr {$x ni $xs}
 }
 
 ad_proc -public nub {xs} {
     Removes duplicates from xs.
 } {
-    set result {}
-    foreach x $xs {
-        if { [not_elem_p $x $result] } {
-            lappend result $x
+    set result [list]
+    lmap x $xs {
+        if { $x in $result } {
+            continue
         }
+        lappend result $x
+        set x
     }
-    return $result
 }
 
 ad_proc -public null_p {xs} {
@@ -720,13 +715,12 @@ ad_proc -public zip_with {f xs ys} {
     $last_names = {{Sandra Bullock} {Catherine Zeta-Jones} {Nicole Kidman}}
 
 } {
-    set result {}
-    foreach x $xs y $ys {
-        if { !([null_p $x] || [null_p $y]) } {
-            lappend result [$f $x $y]
+    lmap x $xs y $ys {
+        if {[llength $x] == 0 || [llength $y] == 0} {
+            continue
         }
+        $f $x $y
     }
-    return $result
 }
 
 ad_proc -public transpose {lists} {
@@ -753,7 +747,6 @@ ad_proc -public transpose {lists} {
     #       Pretty fast, don't you think? :)
 }
 
-
 # --------------------------------------------------------------------------------
 # Other Functions (that maybe are too weird for the ACS)
 # --------------------------------------------------------------------------------
@@ -767,7 +760,7 @@ ad_proc -public iterate {n f x} {
 
     f::iterate 4 f::tail {1 2 3 4 5} = {{1 2 3 4 5} {2 3 4 5} {3 4 5} {4 5}}
 
-    @return {x (f x) (f (f x) (f (f (f x))) ...}}.
+    @return \{x (f x) (f (f x) (f (f (f x))) ...\}\}.
 } {
     set result {}
     for {set i 0} {$i<$n} {incr i} {
@@ -813,12 +806,10 @@ ad_proc -public split_at {n xs} {
 ad_proc -public take_while {p xs} {
     @return the longest initial segment of xs whose elements satisfy p
 } {
-    set index 0
-    foreach x $xs {
+    lmap x $xs {
         if { ![$p $x] } { break }
-        incr index
+        set x
     }
-    take $index $xs
 }
 
 ad_proc -public drop_while {p xs} {
