@@ -73,8 +73,16 @@ ad_proc -public -deprecated lambda {args body} {
 
     @see https://www.tcl-lang.org/man/tcl/TclCmd/apply.htm
 } {
-    proc $args.$body $args $body
-    return $args.$body
+    #
+    # To make the lambda proc universally accessible, we need to
+    # create a fully-qualified name in the global namespace.
+    #
+    set name $args.$body
+    regsub -all :: $name __ name
+    set name ::__acs_lambda_$name
+
+    proc $name $args $body
+    return $name
 }
 
 # I know, I know - it looks sooo harmless. But it unleashes the real power of Tcl.
