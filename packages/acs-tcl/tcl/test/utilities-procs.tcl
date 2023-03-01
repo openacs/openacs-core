@@ -5,6 +5,38 @@ ad_library {
 }
 
 aa_register_case \
+    -cats {api smoke production_safe} \
+    -procs {
+        ad_safe_eval
+    } \
+    ad_safe_eval {
+        Test ad_safe_eval
+    } {
+        aa_equals "Eval of expr returns expected" \
+            [ad_safe_eval expr {1 + 1}] 2
+        aa_equals "Eval of snippet returns expected" \
+            [ad_safe_eval {
+                set a 1
+                set b 2
+                expr {$a + $b}
+            }] \
+            3
+        aa_true "Subcommands in the code will fail (args)" [catch {
+            ad_safe_eval expr {1 + [expr {1 + 3}]}
+        }]
+        aa_true "Subcommands in the code will fail (snippet)" [catch {
+            ad_safe_eval {
+                set test "The clock is now [clock seconds]"
+            }
+        }]
+        aa_true "Chaining commands via semicolon in the code will fail" [catch {
+            ad_safe_eval {
+                expr {1 + 1}; expr {1 + 2}
+            }
+        }]
+    }
+
+aa_register_case \
     -cats {api smoke} \
     -procs {
         ad_sanitize_filename
