@@ -448,7 +448,7 @@ namespace eval ::acs {
             # server specs. The canonical server might listen on
             # multiple protocols, IP addresses and ports.
             #
-            if { ${:canonicalServer} eq "" } {
+            if { ![info exists :canonicalServer] || ${:canonicalServer} eq "" } {
                 ns_log Error "Your configuration is not correct for server clustering." \
                     "Please ensure that you have the CanonicalServer parameter set correctly."
                 return 1
@@ -463,7 +463,7 @@ namespace eval ::acs {
             #
             # Check, if the current server is the canonical_server.
             #
-            if { ${:canonicalServer} eq "" } {
+            if { ![info exists :canonicalServer] || ${:canonicalServer} eq "" } {
                 ns_log Error "Your configuration is not correct for server clustering." \
                     "Please ensure that you have the CanonicalServer parameter set correctly."
                 return 1
