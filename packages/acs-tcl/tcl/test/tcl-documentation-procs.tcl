@@ -14,15 +14,30 @@ aa_register_case \
         Test ad_complain api specific behavior
 
     } {
-        set key __test_acs_tcl_ad_complain_errorkey
-        set ::ad_page_contract_error_string($key) "A message from a key"
-        ad_complain "A Message"
-        ad_complain "Another Message"
-        ad_complain -key $key "This will be ignored"
+        set error_array [array get ::ad_page_contract_error_string]
+        try {
+            #
+            # Start from a blank slate
+            #
+            unset -nocomplain ::ad_page_contract_error_string
 
-        aa_equals "Complaints are returned correctly" \
-            [ad_complaints_get_list] \
-            {{A Message} {Another Message} {A message from a key}}
+            set key __test_acs_tcl_ad_complain_errorkey
+            set ::ad_page_contract_error_string($key) "A message from a key"
+            ad_complain "A Message"
+            ad_complain "Another Message"
+            ad_complain -key $key "This will be ignored"
+
+            aa_equals "Complaints are returned correctly" \
+                [ad_complaints_get_list] \
+                {{A Message} {Another Message} {A message from a key}}
+
+        } finally {
+            #
+            # Reset the real error array to the original
+            #
+            unset -nocomplain ::ad_page_contract_error_string
+            array set ::ad_page_contract_error_string $error_array
+        }
     }
 
 aa_register_case \
