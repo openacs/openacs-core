@@ -490,6 +490,71 @@ aa_register_case -cats {
     }
 }
 
+aa_register_case -cats {
+    api
+    smoke
+} -procs {
+    ad_schedule_proc
+    server_cluster_enabled_p
+    ad_canonical_server_p
+} ad_schedule_proc {
+    Test ad_schedule_proc
+} {
+    set cluster_p [server_cluster_enabled_p]
+    set canonical_server_p [ad_canonical_server_p]
+
+    foreach all_servers_p {t f} {
+        #
+        # We schedule a trivial proc.
+        #
+        set schedule_id [ad_schedule_proc \
+                             -thread t \
+                             -once t \
+                             -debug t \
+                             -all_servers $all_servers_p \
+                             100 \
+                             expr {1 + 1}]
+
+        #
+        # According to the instance configuration, our scheduling may
+        # be rejected.
+        #
+        set schedule_p [expr {$canonical_server_p || !$cluster_p || $all_servers_p}]
+
+        if {!$schedule_p} {
+            aa_equals "Proc should not be scheduled" \
+                $schedule_id ""
+        } else {
+            set found_p false
+            set proc ""
+            foreach s [ns_info scheduled] {
+                #
+                # We may test the correctness of all of these fields,
+                # but we will stick to the basics: the scheduled proc
+                # is there and the command is the right one.
+                #
+                set id          [lindex $s 0]
+                set flags       [lindex $s 1]
+                set next        [lindex $s 3]
+                set lastqueue   [lindex $s 4]
+                set laststart   [lindex $s 5]
+                set lastend     [lindex $s 6]
+                set proc        [lindex $s 7]
+                set arg         [lrange $s 8 end]
+                if {$id == $schedule_id} {
+                    set found_p true
+                    aa_true "Command was scheduled as expected" \
+                        [regexp {^ad_run_scheduled_proc.*expr \{\{1 \+ 1\}\}.*$} $arg]
+                    aa_log "Unscheduling the proc"
+                    ns_unschedule_proc $id
+                }
+            }
+            aa_true "We found the scheduled proc" \
+                $found_p
+        }
+    }
+}
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
