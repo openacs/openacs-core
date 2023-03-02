@@ -166,3 +166,59 @@ aa_register_case \
             aa_log "No parameter exposed to the api was found in the server conf."
         }
     }
+
+aa_register_case \
+    -cats {api smoke} \
+    -procs {
+        template::adp_include
+        ad_include_contract
+        ad_page_contract
+        ad_page_contract_filter
+        ad_page_contract_filter_proc_integer
+    } \
+    page_contracts {
+        Test ad_include_contract and ad_page_contract indirectly.
+    } {
+        set page {
+            ad_include_contract {
+                Test Contract
+            } {
+                integer:integer,notnull
+            }
+        }
+        set test_data {
+            {
+                integer abc
+            }
+            true
+
+            {
+                integer ""
+            }
+            true
+
+            {
+                integer 1
+            }
+            false
+        }
+
+        foreach {vars outcome} $test_data {
+            set wfd [ad_opentmpfile tmpfile .tcl]
+            puts -nonewline $wfd $page
+            close $wfd
+
+            set path /packages/acs-automated-testing/www/[file rootname [file tail $tmpfile]]
+            file rename -- $tmpfile [acs_root_dir]${path}.tcl
+
+            aa_$outcome "Template failure is $outcome?" [catch {
+                #
+                # The template is inflated in a background job so to
+                # not tamper with the actual request in case of error.
+                #
+                set result [ad_job template::adp_include $path $vars]
+            }]
+
+            file delete -- $tmpfile
+        }
+    }
