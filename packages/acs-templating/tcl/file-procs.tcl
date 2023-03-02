@@ -136,6 +136,14 @@ ad_proc -public template::util::file::get_property {
 
     @return The requested property from the file datatype structure.
 } {
+    if {![string is list $file_list]} {
+        #
+        # An invalid list may come from a file_list supplied by a
+        # malicious attacker.  Return empty in this case.
+        #
+        ad_log warning "Invalid list '$file_list'"
+        return
+    }
 
     switch -- $what {
         filename {
