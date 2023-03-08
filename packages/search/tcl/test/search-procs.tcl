@@ -43,3 +43,49 @@ aa_register_case \
             }
         }
     }
+
+aa_register_case \
+    -cats {api smoke production_safe} \
+    -procs {
+        search::extra_args
+        search::extra_args_names
+        search::extra_args_page_contract
+    } \
+    extra_args {
+
+        Test the api dealing with extra args introduced by the
+        full-text engine in use.
+
+    } {
+        set expected_names [list]
+        foreach procname [info procs ::callback::search::extra_arg::impl::*] {
+            lappend expected_names [namespace tail $procname]
+        }
+
+        aa_equals "Extra arg names are expected" \
+            [search::extra_args_names] $expected_names
+
+        foreach arg $expected_names {
+            unset -nocomplain $arg
+        }
+        aa_equals "Extra args returns empty when no var is defined" \
+            [search::extra_args] ""
+
+        set expected_values [list]
+        set i 0
+        foreach arg $expected_names {
+            set $arg $i
+            lappend expected_values $arg $i
+            incr i
+        }
+        aa_equals "Extra args returns the values defined in the caller scope" \
+            [lsort [search::extra_args]] [lsort $expected_values]
+
+
+        set expected_contract ""
+        foreach name $expected_names {
+            append expected_contract "\{$name \{\}\}\n"
+        }
+        aa_equals "Extra args contract returns expected" \
+            [search::extra_args_page_contract] $expected_contract
+    }
