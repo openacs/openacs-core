@@ -122,3 +122,38 @@ aa_register_case \
             search::queue -object_id $object_id -event BOGUS
         }]
     }
+
+aa_register_case \
+    -cats {api smoke} \
+    -procs {
+        search::driver_name
+        search::dotlrn::get_community_id
+    } \
+    misc {
+        Test miscellaneous api
+    } {
+        aa_section search::dotlrn::get_community_id
+
+        if {[apm_package_installed_p dotlrn]} {
+            set site_node [site_node::get_node_id_from_object_id -object_id $package_id]
+            set dotlrn_package_id [site_node::closest_ancestor_package  -node_id $site_node  -package_key dotlrn  -include_self]
+            set expected_community_id [db_string get_community_id {
+                select community_id from dotlrn_communities_all
+                where package_id = :dotlrn_package_id
+            } -default ""]
+        } else {
+            set expected_community_id ""
+        }
+
+        aa_equals "dotlrn community_id is returned as expected" \
+            [search::dotlrn::get_community_id] $expected_community_id
+
+
+        aa_section search::driver_name
+
+        aa_equals "Driver name is returned as expected" \
+            [search::driver_name] \
+            [parameter::get \
+                 -package_id [apm_package_id_from_key search] \
+                 -parameter FtsEngineDriver]
+    }
