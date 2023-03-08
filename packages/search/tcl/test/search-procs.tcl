@@ -89,3 +89,36 @@ aa_register_case \
         aa_equals "Extra args contract returns expected" \
             [search::extra_args_page_contract] $expected_contract
     }
+
+aa_register_case \
+    -cats {api smoke} \
+    -procs {
+        search::queue
+        search::dequeue
+    } \
+    queue_dequeue {
+
+        Test basic queuing, dequeuing of document indexing.
+
+    } {
+        set object_id [db_string get_object {select max(object_id) from acs_objects}]
+
+        foreach event {INSERT UPDATE DELETE} {
+            db_transaction {
+                search::queue -object_id $object_id -event $event
+                aa_true "Event '$event' was queued for '$object_id'" [db_0or1row check {
+                    select event_date from search_observer_queue
+                    where object_id = :object_id and event = :event and event_date = current_timestamp
+                }]
+                search::dequeue -object_id $object_id -event $event -event_date $event_date
+                aa_false "Event '$event' at '$event_date' was dequeued for '$object_id'" [db_0or1row check {
+                    select event_date from search_observer_queue
+                    where object_id = :object_id and event = :event and event_date = :event_date
+                }]
+            }
+        }
+
+        aa_true "Invalud event throws an error" [catch {
+            search::queue -object_id $object_id -event BOGUS
+        }]
+    }
