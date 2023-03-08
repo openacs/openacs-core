@@ -702,6 +702,9 @@ ad_proc -public export_vars {
                 regsub -all -- {\\:} $var_spec "!!cOlOn!!" var_spec
 
                 set name_spec [split [lindex $var_spec 0] ":"]
+                if {[lindex $name_spec 0] == ""} {
+                    set name_spec :[lindex $name_spec 1]
+                }
 
                 # Replace escaped colons with single colon
                 regsub -all -- {!!cOlOn!!} $name_spec ":" name_spec
@@ -712,11 +715,12 @@ ad_proc -public export_vars {
                 # Nothing after the colon, since we don't interpret any colons
                 set name_spec [list $name {}]
             }
+            set export_name [string trimleft $name :]
 
             # If we've already encountered this varname, ignore it
-            if { ![info exists exp_precedence_type($name)] } {
+            if { ![info exists exp_precedence_type($export_name)] } {
 
-                set exp_precedence_type($name) $precedence_type
+                set exp_precedence_type($export_name) $precedence_type
 
                 if { $precedence_type ne "exclude" } {
 
@@ -748,37 +752,37 @@ ad_proc -public export_vars {
                             if { [array exists upvar_variable] } {
                                 if { $no_empty_p } {
                                     # If the no_empty_p flag is set, remove empty string values first
-                                    set exp_value($name) [list]
+                                    set exp_value($export_name) [list]
                                     foreach { key value } [array get upvar_variable] {
                                         if { $value ne "" } {
-                                            lappend exp_value($name) $key $value
+                                            lappend exp_value($export_name) $key $value
                                         }
                                     }
                                 } else {
                                     # If no_empty_p isn't set, just do an array get
-                                    set exp_value($name) [array get upvar_variable]
+                                    set exp_value($export_name) [array get upvar_variable]
                                 }
-                                set exp_flag($name:array) 0
+                                set exp_flag($export_name:array) 0
                             } else {
-                                if { [info exists exp_flag($name:array)] } {
+                                if { [info exists exp_flag($export_name:array)] } {
                                     return -code error "Variable \"$name\" is not an array"
                                 }
                                 if { !$no_empty_p } {
-                                    set exp_value($name) $upvar_variable
+                                    set exp_value($export_name) $upvar_variable
                                 } else {
                                     # no_empty_p flag set, remove empty strings
-                                    if { [info exists exp_flag($name:multiple)] } {
+                                    if { [info exists exp_flag($export_name:multiple)] } {
                                         # This is a list, remove empty entries
-                                        set exp_value($name) [list]
+                                        set exp_value($export_name) {}
                                         foreach elm $upvar_variable {
                                             if { $elm ne "" } {
-                                                lappend exp_value($name) $elm
+                                                lappend exp_value($export_name) $elm
                                             }
                                         }
                                     } else {
                                         # Simple value, this is easy
                                         if { $upvar_variable ne "" } {
-                                            set exp_value($name) $upvar_variable
+                                            set exp_value($export_name) $upvar_variable
                                         }
                                     }
                                 }
