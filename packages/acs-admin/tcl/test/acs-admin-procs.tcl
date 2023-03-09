@@ -177,10 +177,19 @@ aa_register_case -cats {
     Basic check for acs_admin::require_site_wide_subsite and
     acs_admin::require_site_wide_package
 } {
+
+    #
+    # The site_wide_subsite we create outside of the transaction
+    # because it is cached per thread and rolling it back would make
+    # the cache inconsistent. This happens on those fresh
+    # installations that have not created one yet, for all others,
+    # this value is practically immutable.
+    #
+    set sws [acs_admin::require_site_wide_subsite]
+
     aa_run_with_teardown \
         -rollback \
         -test_code {
-            set sws [acs_admin::require_site_wide_subsite]
             set swp [acs_admin::require_site_wide_package -package_key acs-subsite]
 
             set subsite_name site-wide
