@@ -433,7 +433,7 @@ ad_proc -public search::driver_name {
 namespace eval search::dotlrn {}
 
 ad_proc -public search::dotlrn::get_community_id {
-    -package_id
+    -package_id:required
 } {
     If dotlrn is installed find the package's community_id
 

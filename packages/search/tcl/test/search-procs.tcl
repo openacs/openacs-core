@@ -134,9 +134,30 @@ aa_register_case \
     } {
         aa_section search::dotlrn::get_community_id
 
+        #
+        # This is the package we will test when no dotlrn is
+        # there. Basically, any package will do.
+        #
+        set package_id [db_string get_applet_package {
+            select max(package_id) from apm_packages
+        }]
+
         if {[apm_package_installed_p dotlrn]} {
+            #
+            # We try testing a package coming from a community_applet
+            # and fall back to any package in case we find none.
+            #
+            set package_id [db_string get_applet_package {
+                select coalesce((select max(package_id) from dotlrn_community_applets),
+                                :package_id)
+                from dual
+            }]
+
             set site_node [site_node::get_node_id_from_object_id -object_id $package_id]
-            set dotlrn_package_id [site_node::closest_ancestor_package  -node_id $site_node  -package_key dotlrn  -include_self]
+            set dotlrn_package_id [site_node::closest_ancestor_package \
+                                       -node_id $site_node \
+                                       -package_key dotlrn \
+                                       -include_self]
             set expected_community_id [db_string get_community_id {
                 select community_id from dotlrn_communities_all
                 where package_id = :dotlrn_package_id
@@ -145,8 +166,9 @@ aa_register_case \
             set expected_community_id ""
         }
 
-        aa_equals "dotlrn community_id is returned as expected" \
-            [search::dotlrn::get_community_id] $expected_community_id
+        aa_equals "dotlrn community_id is returned as expected for package '$package_id'" \
+            [search::dotlrn::get_community_id -package_id $package_id] \
+            $expected_community_id
 
 
         aa_section search::driver_name
