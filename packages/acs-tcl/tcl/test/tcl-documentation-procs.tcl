@@ -5,7 +5,7 @@ ad_library {
 }
 
 aa_register_case \
-    -cats {api smoke production_safe} \
+    -cats {api smoke} \
     -procs {
         ad_complain
         ad_complaints_get_list
@@ -14,12 +14,15 @@ aa_register_case \
         Test ad_complain api specific behavior
 
     } {
-        set error_array [array get ::ad_page_contract_error_string]
+        set complaints $::ad_page_contract_complaints
+        set error_strings [array get ::ad_page_contract_error_string]
         try {
             #
             # Start from a blank slate
             #
-            unset -nocomplain ::ad_page_contract_error_string
+            unset -nocomplain \
+                ::ad_page_contract_complaints \
+                ::ad_page_contract_error_string
 
             set key __test_acs_tcl_ad_complain_errorkey
             set ::ad_page_contract_error_string($key) "A message from a key"
@@ -33,10 +36,13 @@ aa_register_case \
 
         } finally {
             #
-            # Reset the real error array to the original
+            # Reset the real error variables to the original
             #
-            unset -nocomplain ::ad_page_contract_error_string
-            array set ::ad_page_contract_error_string $error_array
+            unset -nocomplain \
+                ::ad_page_contract_complaints \
+                ::ad_page_contract_error_string
+            set ::ad_page_contract_complaints $complaints
+            array set ::ad_page_contract_error_string $error_strings
         }
     }
 
