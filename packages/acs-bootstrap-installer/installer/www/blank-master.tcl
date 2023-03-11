@@ -204,16 +204,23 @@ template::head::add_meta \
 #     -content "text/javascript" \
 #     -http_equiv "Content-Script-Type"
 
-
-# Determine if we should be displaying the translation UI
 #
-if {[lang::util::translator_mode_p]} {
+# Determine if we should be displaying the translation UI.
+#
+# We just do this when the developer support is active, but this does
+# not have to be this way. By showing the translator mode only for ds,
+# we save for large sites a large number of client properties to be
+# set via "lang::util::translator_mode_p" and
+# "ad_get_client_property".
+#
+set ds_active [expr {[namespace which ::ds_show_p] ne {} && [::ds_show_p]}]
+if {$ds_active && [lang::util::translator_mode_p]} {
     template::add_footer -src "/packages/acs-lang/lib/messages-to-translate"
 }
 
 # Determine if developer support is installed and enabled
 #
-if {[namespace which ::ds_show_p] ne {} && [ds_show_p]} {
+if {$ds_active} {
     template::head::add_css \
         -href "/resources/acs-developer-support/acs-developer-support.css" \
         -media "all"
