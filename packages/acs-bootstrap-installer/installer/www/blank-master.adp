@@ -19,7 +19,7 @@
 
 <if @head@ not nil>@head;literal@</if>
 </head>
-<body<if @body.class@ not nil> class="@body.class;literal@"</if><if @body.id@ not nil> id="@body.id;literal@"</if>>
+<body<if @body.class@ not nil> class="@body.class;literal@"</if><if @body.id@ not nil> id="@body.id;literal@"</if><if @body.translate@ not nil> translate="@body.translate;literal@"</if>>
   @header;literal@
 <slave>
   @footer;literal@
