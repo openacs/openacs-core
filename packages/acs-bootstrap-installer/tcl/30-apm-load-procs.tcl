@@ -611,7 +611,7 @@ ad_proc apm_bootstrap_upgrade {
     Tcl files in the acs root directory. This makes it possible to
     incorporate changes to these files by only updating the
     acs-bootstrap-installer package (rather than a full tar file
-    install as in eralier versions).
+    install as in earlier versions).
 
     Caveat: don't modify these files in your local installation, adding
     extra files to $::acs::rootdir/tcl is fine.

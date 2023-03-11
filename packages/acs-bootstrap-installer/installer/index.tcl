@@ -73,7 +73,7 @@ if { [file exists [apm_install_xml_file_path]] } {
     set acs_application(min_stack_size) [apm_attribute_value -default 128 $root_node min_stack_size]
     append body "<p>
 The installer will automatically install the $acs_application(pretty_name)
-application after the basic OpenACS tookit has been installed.
+application after the basic OpenACS toolkit has been installed.
 "
 
     if { $acs_application(home) ne "" } {

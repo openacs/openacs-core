@@ -97,7 +97,7 @@ aa_register_case \
             set adpfile $tmpdir/www/[file tail $filename]
 
             #
-            # Call the api
+            # Call the API
             #
             apm_bootstrap_upgrade \
                 -from_version_name from_version_name \

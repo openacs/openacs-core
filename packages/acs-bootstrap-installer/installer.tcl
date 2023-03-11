@@ -504,7 +504,7 @@ ad_proc -private install_do_packages_install {} {
         if {[info commands ::acs::dc] ne ""} {
             #
             # Initialize DB function interface, to make functions
-            # e.g. avilable for apm_mount_core_packages.
+            # e.g. available for apm_mount_core_packages.
             #
             ns_log notice "Installer initializing db_function_interface"
             ::acs::dc create_db_function_interface ;# -verbose ;# -match test.*
