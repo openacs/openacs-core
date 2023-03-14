@@ -36,10 +36,13 @@ aa_register_case \
             pptx application/vnd.openxmlformats-officedocument.presentationml.presentation
         } {
             set filename [acs_root_dir]/packages/search/tcl/test/data/test.$extension
-            aa_true "Text was extracted correctly for '.$extension'/'$mime_type'" {
-                [string first "OpenACS" [search::convert::binary_to_text \
-                                             -filename $filename \
-                                             -mime_type $mime_type]] >= 0
+            set text [search::convert::binary_to_text \
+                          -filename $filename \
+                          -mime_type $mime_type]
+            set ok_p [expr {[string first "OpenACS" $text] >= 0}]
+            aa_true "Text was extracted correctly for '.$extension'/'$mime_type'" $ok_p
+            if {!$ok_p} {
+                aa_log "Extracted text: [ns_quotehtml $text]"
             }
         }
     }
