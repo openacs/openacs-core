@@ -32,7 +32,7 @@ ad_proc -public search::convert::binary_to_text {
     set tmp_filename [ad_tmpnam]
     set result ""
 
-    switch $mime_type {
+    switch -glob $mime_type {
         application/msword -
         application/vnd.ms-word {
             set convert_command {catdoc $filename >$tmp_filename}
@@ -68,10 +68,44 @@ ad_proc -public search::convert::binary_to_text {
             }
             set convert_command {[util::which unzip] -p $filename content.xml >$tmp_filename}
         }
-        application/vnd.openxmlformats-officedocument.presentationml.presentation {
+        application/vnd.openxmlformats-officedocument.* {
             #
-            # File claims to be a MS pptx
+            # File claims to be a MS Office Open XML Format
             #
+            # Similar to ODF, these files are in fact a zip archive
+            # containing a directory structure that describes the
+            # document. The text content we are looking for is located
+            # in a specific path for every document type, but the
+            # principle is always the same: unzip the xml location
+            # from the archive and return it stripped of any markup.
+            #
+
+            switch $mime_type {
+                application/vnd.openxmlformats-officedocument.presentationml.presentation {
+                    #
+                    # PowerPoint .pptx
+                    #
+                    set xml_path ppt/slides/*.xml
+                }
+                application/vnd.openxmlformats-officedocument.spreadsheetml.sheet {
+                    #
+                    # Excel .xlsx
+                    #
+                    set xml_path xl/sharedStrings.xml
+                }
+                application/vnd.openxmlformats-officedocument.wordprocessingml.document {
+                    #
+                    # Word .docx
+                    #
+                    set xml_path word/document.xml
+                }
+                default {
+                    #
+                    # We do not support this file, exit.
+                    #
+                    return ""
+                }
+            }
 
             file delete -- $tmp_filename
 
@@ -87,19 +121,14 @@ ad_proc -public search::convert::binary_to_text {
                 #
                 # Now we extract the markup from all slides...
                 #
-                set xml [exec -- [util::which unzip] -p $filename ppt/slides/*.xml]
+                set xml [exec -- [util::which unzip] -p $filename $xml_path]
                 #
                 # ... and clean it up so that only the plain text remains.
                 #
-                set txt ""
-                foreach {m t} [regexp -all -inline {<a:t>([^>]+)</a:t>} $xml] {
-                    lappend txt $t
-                }
+                return [string trim [ns_striphtml $xml]]
             } on error {errorMsg} {
                 ns_log error "SEARCH: conversion failed - cannot extract text from $filename ($mime_type): $errorMsg"
                 return ""
-            } on ok {d} {
-                return [join $txt]
             }
         }
         text/html {
