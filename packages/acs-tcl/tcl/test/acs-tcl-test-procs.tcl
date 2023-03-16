@@ -455,34 +455,34 @@ aa_register_case \
     -cats {api smoke} \
     -procs {
         ad_page_contract_filter_invoke
+        ad_page_contract_filter_proc_allhtml
         ad_page_contract_filter_proc_boolean
+        ad_page_contract_filter_proc_clock
+        ad_page_contract_filter_proc_date
         ad_page_contract_filter_proc_email
         ad_page_contract_filter_proc_float
         ad_page_contract_filter_proc_html
-        ad_page_contract_filter_proc_allhtml
-        ad_page_contract_filter_proc_nohtml
         ad_page_contract_filter_proc_integer
         ad_page_contract_filter_proc_localurl
         ad_page_contract_filter_proc_naturalnum
         ad_page_contract_filter_proc_negative_float
+        ad_page_contract_filter_proc_nohtml
         ad_page_contract_filter_proc_object_id
         ad_page_contract_filter_proc_object_type
-        ad_page_contract_filter_proc_printable
-        ad_page_contract_filter_proc_sql_identifier
-        ad_page_contract_filter_proc_token
-        ad_page_contract_filter_proc_word
-        ad_page_contract_filter_proc_clock
-        ad_page_contract_filter_proc_date
-        ad_page_contract_filter_proc_time
         ad_page_contract_filter_proc_oneof
         ad_page_contract_filter_proc_path
         ad_page_contract_filter_proc_phone
+        ad_page_contract_filter_proc_printable
         ad_page_contract_filter_proc_range
+        ad_page_contract_filter_proc_safetclchars
+        ad_page_contract_filter_proc_sql_identifier
         ad_page_contract_filter_proc_string_length
         ad_page_contract_filter_proc_string_length_range
         ad_page_contract_filter_proc_time
         ad_page_contract_filter_proc_time24
         ad_page_contract_filter_proc_tmpfile
+        ad_page_contract_filter_proc_token
+        ad_page_contract_filter_proc_word
 
         ad_complain
         ad_page_contract_filter_proc
@@ -509,6 +509,7 @@ aa_register_case \
 
         dict set cases word {red 1 " " 0 "hello_world" 1 {$a} 0 a1 1 <p> 0 "a.b" 0 "-flag" 0 "1,2" 0 "r: -1" 0}
         dict set cases token {red 1 " " 1 "hello_world" 1 {$a} 0 a1 1 <p> 0 "a.b" 1 "-flag" 1 "1,2" 1 "r: -1" 1}
+        dict set cases safetclchars {red 1 " " 1 "hello world" 1 {$a} 0 a1 1 <p> 1 "a.b" 1 "-flag" 1 "1,2" 1 "r: -1" 1 {a[b]c} 0 x\\y 0}
 
         dict set cases sql_identifier  {red 1 " " 0 "hello_world" 1 {$a} 0 a1 1 <p> 0 "a.b" 0 "-flag" 0 "1,2" 0 "r: -1" 0}
         dict set cases email { {philip@mit.edu} 1 {Philip Greenspun <philip@mit.edu>} 0 }

@@ -2380,6 +2380,29 @@ ad_page_contract_filter token { name value } {
     return 0
 }
 
+ad_page_contract_filter safetclchars { name value } {
+    
+    Checks whether the value contains just characters, which can be
+    used safely in a Tcl eval or subst command. This means, that the characters
+    '$', '[', ']' and '\' disallowed,.
+
+    @author Gustaf Neumann
+    @creation-date 15 Mar 2023
+} {
+
+    if {[info commands ns_valid_utf8] ne ""
+        && ![ns_valid_utf8 $value]} {
+        ad_complain [_ acs-tcl.lt_name_contains_invalid]
+        return 0
+    }
+
+    if {[regexp {^[^\[\]\\\$]+$} $value]} {
+        return 1
+    }
+    ad_complain [_ acs-tcl.lt_name_contains_invalid]
+    return 0
+}
+
 ad_page_contract_filter printable { name value } {
 
     Checks whether the value contains only characters with a printable
