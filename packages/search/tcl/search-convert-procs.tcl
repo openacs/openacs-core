@@ -119,7 +119,7 @@ ad_proc -public search::convert::binary_to_text {
 
             ad_try {
                 #
-                # Now we extract the markup from all slides...
+                # Extract the markup...
                 #
                 set xml [exec -- [util::which unzip] -p $filename $xml_path]
                 #
