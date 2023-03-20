@@ -27,22 +27,30 @@ namespace eval membership_rel {
                     -user_id $rel_user_id
             }
 
-            switch -exact $state {
-                "approved" { db_exec_plsql approve {} }
-                "banned" { db_exec_plsql ban {} }
-                "rejected" { db_exec_plsql reject {} }
-                "deleted" {
-                    db_exec_plsql delete {}
+            set valid_states {
+                "approved"
+                "banned"
+                "rejected"
+                "deleted"
+                "needs approval"
+                "merged"
+                "expired"
+            }
 
+            if {$state in $valid_states} {
+                db_dml update_state {
+                    update membership_rels set
+                      member_state = :state
+                    where rel_id = :rel_id
+                }
+
+                if {$state eq "deleted"} {
                     # Add user to public group - see bug 1468
                     group::add_member \
                         -no_perm_check \
                         -group_id [acs_magic_object the_public] \
                         -user_id $rel_user_id
                 }
-                "needs approval" { db_exec_plsql unapprove {} }
-                "merged" { db_exec_plsql merge {} }
-                "expired" { db_exec_plsql expire {} }
             }
 
             # Record who changed the state
