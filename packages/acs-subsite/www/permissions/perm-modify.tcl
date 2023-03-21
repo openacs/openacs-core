@@ -1,7 +1,7 @@
 ad_page_contract {} {
     object_id:naturalnum,notnull
-    {perm:multiple {[list]}}
-    {privs:optional}
+    {perm:token,multiple {[list]}}
+    {privs:token,notnull}
     return_url:localurl
 }
 
