@@ -466,23 +466,22 @@ ad_proc -public lc_time_local_to_utc {
     Converts a local time to a UTC time for the specified timezone.
 
     @param time_value        Local time in the ISO datetime format, YYYY-MM-DD HH24:MI:SS
-    @param tz                Timezone that must exist in tz_data table.
+    @param tz                Valid timezone as supported by the Tcl Clock command or
+                             must exist in tz_data table.
     @return                  UTC time.
 } {
     if { $tz eq "" } {
         set tz [lang::conn::timezone]
     }
 
-    set utc_time $time_value
-    ad_try {
-        set utc_time [db_exec_plsql local_to_utc {}]
-    } on error {errorMsg} {
-        ad_log Warning "lc_time_local_to_utc: Query exploded on time conversion to UTC, probably just an invalid date, $time_value: $errorMsg"
-    }
+    set utc_time [lc_time_tz_convert -from $tz -to UTC -time_value $time_value]
 
     if {$utc_time eq ""} {
-        # If no conversion possible, log it and assume local is as given (i.e. UTC)
-        ns_log Notice "lc_time_local_to_utc: Timezone adjustment in ad_localization.tcl found no conversion to local time for $time_value $tz"
+        #
+        # An empty result normally means a broken date or timezone. We
+        # throw a warning in this case.
+        #
+        ns_log warning "lc_time_local_to_utc: Timezone adjustment in ad_localization.tcl found no conversion to local time for $time_value $tz"
     }
 
     return $utc_time
