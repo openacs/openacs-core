@@ -126,6 +126,7 @@ aa_register_case \
     } \
     -procs {
         lc_time_tz_convert
+        lc_time_local_to_utc
         lc_list_all_timezones
     } lang_test__lc_timezones {
 
@@ -232,6 +233,38 @@ aa_register_case \
 
         aa_equals "Converting from an invalid 'Bogus' timezone returns empty" \
             [lc_time_tz_convert -from Bogus -to Europe/Vienna -time_value "2021-02-18 15:04:59"] ""
+
+
+        aa_section "Convert to UTC"
+
+        set tz Europe/Vienna
+
+        set time [lc_time_local_to_utc "2021-02-18 15:04:59" $tz]
+        aa_equals "lc_time_local_to_utc from Europe/Vienna (2021-02-18 15:04:59)" $time "2021-02-18 14:04:59"
+
+        set time [lc_time_local_to_utc "0621-01-01 00:00:00" $tz]
+        aa_equals "lc_time_local_to_utc from Europe/Vienna (0621-01-01 00:00:00)" $time "0620-12-31 22:54:39"
+
+        set time [lc_time_local_to_utc "1581-01-01 00:00:00" $tz]
+        aa_equals "lc_time_local_to_utc from Europe/Vienna (1581-01-01 00:00:00)" $time "1580-12-31 22:54:39"
+
+        set time [lc_time_local_to_utc "1583-01-01 00:00:00" $tz]
+        aa_equals "lc_time_local_to_utc from Europe/Vienna (1583-01-01 00:00:00)" $time "1582-12-31 22:54:39"
+
+        set time [lc_time_local_to_utc "2000-00-00 00:00:00" $tz]
+        aa_equals "lc_time_local_to_utc from Europe/Vienna (2000-00-00 00:00:00)" $time "1999-11-29 23:00:00"
+
+        aa_equals "lc_time_local_to_utc from Europe/Vienna ('Broken!', invalid date)" \
+            [lc_time_local_to_utc "Broken!" $tz] ""
+
+        set time [lc_time_local_to_utc "1900-01-01 00:00:00" $tz]
+        aa_equals "lc_time_local_to_utc from Europe/Vienna (1900-01-01 00:00:00)" $time "1899-12-31 23:00:00"
+
+        foreach from $timezones {
+            set from [lindex $from 0]
+            aa_false "Converting valid date '2021-02-18 15:04:59' from valid timezone '$from' to 'UTC' does not return empty or 0" \
+                [expr {[lc_time_local_to_utc "2021-02-18 15:04:59" $from] eq ""}]
+        }
 
     }
 
