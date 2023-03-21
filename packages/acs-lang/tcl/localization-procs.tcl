@@ -443,17 +443,14 @@ ad_proc -public lc_time_utc_to_local {
         set tz [lang::conn::timezone]
     }
 
-    set local_time $time_value
-
-    ad_try {
-        set local_time [db_exec_plsql utc_to_local {}]
-    } on error {errorMsg} {
-       ad_log Warning "lc_time_utc_to_local: Query exploded on time conversion from UTC, probably just an invalid date, $time_value: $errorMsg"
-    }
+    set local_time [lc_time_tz_convert -from UTC -to $tz -time_value $time_value]
 
     if {$local_time eq ""} {
-        # If no conversion possible, log it and assume local is as given (i.e. UTC)
-        ns_log Notice "lc_time_utc_to_local: Timezone adjustment in ad_localization.tcl found no conversion to UTC for $time_value $tz"
+        #
+        # An empty result normally means a broken date or timezone. We
+        # throw a warning in this case.
+        #
+        ns_log warning "lc_time_utc_to_local: Timezone adjustment in ad_localization.tcl found no conversion to UTC for $time_value $tz"
     }
 
     return $local_time
