@@ -245,10 +245,15 @@ ad_proc -public template::data::validate::nomarkup {
 
     @author Guenter Ernst <guenter.ernst@wu.ac.at>
 } {
-    upvar 2 $message_ref message $value_ref value
+    upvar 2 $message_ref message $value_ref value element element
 
     if { [ad_looks_like_html_p $value] } {
-        set message "No markup allowed"
+        if {[info exists element(label)]} {
+            set name $element(label)
+        } else {
+            set name $element(name)
+        }
+        set message [_ acs-tcl.lt_Value_for_name_contai [list name '$name']]
         return 0
     } else {
         return 1
