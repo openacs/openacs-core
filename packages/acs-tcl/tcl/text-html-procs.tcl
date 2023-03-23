@@ -2854,11 +2854,7 @@ ad_proc -public ad_looks_like_html_p {
     @author Lars Pind (lars@pinds.com)
     @creation-date 19 July 2000
 } {
-    if { [regexp -nocase {<p>} $text] || [regexp -nocase {<br>} $text] || [regexp -nocase {</a} $text] } {
-        return 1
-    } else {
-        return 0
-    }
+    return [regexp -nocase {<[[:alnum:]\.\-\:]+[^>]*>} $text]
 }
 
 ad_proc util_remove_html_tags { html } {

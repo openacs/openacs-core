@@ -33,6 +33,7 @@ ad_proc -public template::data::validate { type value_ref message_ref } {
     @see template::data::validate::number
     @see template::data::validate::search
     @see template::data::validate::string
+    @see template::data::validate::nomarkup
     @see template::data::validate::text
     @see template::data::validate::textdate
     @see template::data::validate::timestamp
@@ -234,6 +235,24 @@ ad_proc -public template::data::validate::string {
     @return True (1)
 } {
     return 1
+}
+
+ad_proc -public template::data::validate::nomarkup {
+    value_ref
+    message_ref
+} {
+    Checks if supplied string contains markup.
+
+    @author Guenter Ernst <guenter.ernst@wu.ac.at>
+} {
+    upvar 2 $message_ref message $value_ref value
+
+    if { [ad_looks_like_html_p $value] } {
+        set message "No markup allowed"
+        return 0
+    } else {
+        return 1
+    }
 }
 
 ad_proc -public template::data::validate::keyword {
