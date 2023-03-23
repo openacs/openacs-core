@@ -2201,7 +2201,7 @@ ad_proc -public ad_get_tcl_call_stack {
     return $stack
 }
 
-ad_proc -public ad_ns_set_to_tcl_vars {
+ad_proc -deprecated ad_ns_set_to_tcl_vars {
     {-duplicates overwrite}
     {-level 1}
     set_id
@@ -2209,6 +2209,14 @@ ad_proc -public ad_ns_set_to_tcl_vars {
     Takes an ns_set and sets variables in the caller's environment
     correspondingly, i.e. if key is foo and value is bar, the Tcl var
     foo is set to bar.
+
+    DEPRECATED: the few remaining usages of this api in upstream code
+    were found to be easily replaceable with much saner and clearer
+    idioms.
+
+    @see upvar
+    @see for
+    @see ns_set
 
     @param duplicates This optional switch argument defines what happens if the
     Tcl var already exists, or if there are duplicate entries for the same key.
