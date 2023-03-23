@@ -57,9 +57,14 @@ ad_proc -private ad_user_class_parameters {} {
     }
 }
 
-ad_proc -private ad_user_class_description { set_id } {
+ad_proc -deprecated ad_user_class_description { set_id } {
     Takes an ns_set of key/value pairs and produces a human-readable
     description of the class of users specified.
+
+    DEPRECATED: this was a private api, used nowhere in upstream
+    code. I do not delete it for reference.
+
+    @see nothing
 } {
     set clauses [list]
     set pretty_description ""
