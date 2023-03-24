@@ -30,6 +30,8 @@ aa_register_case \
         acs_sc::msg_type::new
         acs_sc::msg_type::delete
 
+        acs_sc::msg_type::element::new
+
         acs_sc_binding_exists_p
 
         auth::local::authentication::Authenticate
