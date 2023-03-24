@@ -130,7 +130,7 @@ ad_proc -private acs_mail_lite::utils::build_date {
 
 }
 
-ad_proc acs_mail_lite::utils::build_body {
+ad_proc -private acs_mail_lite::utils::build_body {
     {-mime_type "text/plain"}
     {-charset "UTF-8"}
     body
