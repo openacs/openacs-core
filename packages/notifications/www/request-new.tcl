@@ -44,13 +44,15 @@ ad_form -name subscribe -export {
     }
 } -on_submit {
 
-    # Add the subscribe
-    notification::request::new \
-        -type_id $type_id \
-        -user_id $user_id \
-        -object_id $object_id \
-        -interval_id $interval_id \
-        -delivery_method_id $delivery_method_id
+    db_transaction {
+        # Add the subscribe
+        notification::request::new \
+            -type_id $type_id \
+            -user_id $user_id \
+            -object_id $object_id \
+            -interval_id $interval_id \
+            -delivery_method_id $delivery_method_id
+    }
 
     ad_returnredirect $return_url
     ad_script_abort
