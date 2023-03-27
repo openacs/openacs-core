@@ -3,6 +3,25 @@ ad_page_contract {} {
     {perm:token,multiple {[list]}}
     {privs:token,notnull}
     return_url:localurl
+} -validate {
+    privs_exists_p -requires {privs} {
+        foreach priv $privs {
+            if {![::xo::dc 0or1row get_priv {select 1 from acs_privileges where privilege = :priv}]} {
+                ad_complain "privilege [ns_quotehtml $priv] doesn't exist"
+            }
+        }
+    }
+    perm_is_valid -requires {perm} {
+        foreach elm $perm {
+            lassign [split $elm ","] party_id priv
+            if {![string is integer -strict $party_id] ||
+                ![::xo::dc 0or1row party_exists {select 1 from parties where party_id = :party_id}] ||
+                ($priv ne "remove" && ![::xo::dc 0or1row priv_exists {select 1 from acs_privileges where privilege = :priv}])
+            } {
+                ad_complain "perm [ns_quotehtml $elm] is not valid"
+            }
+        }
+    }
 }
 
 
