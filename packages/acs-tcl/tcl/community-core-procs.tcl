@@ -558,7 +558,6 @@ ad_proc -private acs_user::get_user_info_not_cached {
                u.priv_email,
                u.email_verified_p,
                u.email_bouncing_p,
-               u.no_alerts_until,
                u.last_visit,
                to_char(last_visit, 'YYYY-MM-DD HH24:MI:SS') as last_visit_ansi,
                u.second_to_last_visit,
