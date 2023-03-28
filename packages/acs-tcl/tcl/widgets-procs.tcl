@@ -216,12 +216,11 @@ ad_proc ad_integer_optionlist {
 ad_proc -deprecated ad_dateentrywidget {column { value 0 } } {
     Returns form pieces for a date entry widget. A null date may be selected.
 
-    DEPRECATED: many better alternatives exist for date-entry widgets,
+    DEPRECATED: better alternatives exist for date-entry widgets,
     which would also support localization.
 
     @see template::data::validate::h5date
     @see template::data::validate::h5time
-    @see dt_widget_datetime
 } {
     # if you would like the default to be null, call with value= ""
 
