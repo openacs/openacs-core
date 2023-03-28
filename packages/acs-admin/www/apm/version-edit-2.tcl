@@ -26,7 +26,7 @@ array set all_attributes [apm::package_version::attributes::get_spec]
 foreach attribute_name [array names all_attributes] {
     array set attribute $all_attributes($attribute_name)
 
-    set attribute_value [ns_set iget [rp_getform] $attribute_name]
+    set attribute_value [ns_queryget $attribute_name]
 
     if { [info exists attribute(validation_proc)] } {
         set attribute_error [$attribute(validation_proc) $attribute_value]
