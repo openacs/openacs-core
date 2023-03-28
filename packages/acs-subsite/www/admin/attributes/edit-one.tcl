@@ -71,8 +71,6 @@ if {$datatype eq "enumeration"} {
 
 if { [template::form is_valid edit_attribute] } {
 
-    set attribute_value [ns_set get [ns_getform] "attribute_value"]
-
     db_dml attribute_update \
             "update $type_table
                 set $attribute_column = :attribute_value
