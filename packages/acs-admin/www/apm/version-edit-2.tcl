@@ -35,18 +35,18 @@ foreach attribute_name [array names all_attributes] {
             ad_return_complaint 1 $attribute_error
         }
     }
-        
+
     set dynamic_attributes($attribute_name) $attribute_value
 }
 
 if {![regexp {^[0-9]+((\.[0-9]+)+((d|a|b|)[0-9]*)?)$} $version_name match]} {
     ad_return_complaint 1 "The version name has invalid characters"
     ad_script_abort
-} 
+}
 
 # Figure out if we're changing version
 db_1row old_version_info {}
-set version_changed_p [expr {$version_name ne $old_version_name }] 
+set version_changed_p [expr {$version_name ne $old_version_name }]
 
 if {$old_version_name eq $version_name} {
     # The version name didn't change, so don't attempt to upgrade
@@ -61,7 +61,7 @@ if { $version_changed_p && $version_uri eq $old_version_uri } {
 }
 
 if { $upgrade_p && [db_string apm_version_uri_unique_ck {
-    select decode(count(*), 0, 0, 1) from apm_package_versions 
+    select decode(count(*), 0, 0, 1) from apm_package_versions
     where version_uri = :version_uri
 } -default 0] } {
     ad_return_complaint 1 "A version with the URL $version_uri already exists."
