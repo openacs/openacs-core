@@ -34,12 +34,14 @@ ad_proc -public rp_internal_redirect {
     the current directory, relative links returned to the clients
     browser may be broken (since the client will have the original URL).
 
-    Use rp_form_put or rp_form_update if you want to feed query variables to the redirected page.
+    Update the ns_set obtained via ns_getform if you want to feed
+    query variables to the redirected page.
 
     @param absolute_path If set the path is an absolute path within the host filesystem
     @param path path to the file to serve
 
-    @see rp_form_put, rp_form_update
+    @see ns_getform
+    @see ns_set
 
 } {
 
@@ -78,13 +80,20 @@ ad_proc -public rp_internal_redirect {
     ad_conn -set file $saved_file
 }
 
-ad_proc rp_getform {} {
+ad_proc -deprecated rp_getform {} {
 
     This proc is a simple wrapper around AOLserver's standard ns_getform
     proc, that will create the form if it doesn't exist, so that you
     can then add values to that form. This is useful in conjunction
     with rp_internal_redirect to redirect to a different page with
     certain query variables set.
+
+    DEPRECATED: modern ns_getform from NaviServer will never return
+    the empty string, assuming that we are in a connection. When we
+    are not in a connection, it makes little sense that we set request
+    variables.
+
+    @see ns_getform
 
     @author Lars Pind (lars@pinds.com)
     @creation-date August 20, 2002
@@ -110,7 +119,7 @@ ad_proc rp_getform {} {
     }
 }
 
-ad_proc rp_form_put { name value } {
+ad_proc -deprecated rp_form_put { name value } {
 
     This proc adds a query variable to AOLserver's internal ns_getform
     form, so that it'll be picked up by ad_page_contract and other procs
@@ -123,6 +132,12 @@ ad_proc rp_form_put { name value } {
     now have two entries in the ns_set which may cause ad_page_contract to
     break.  Also, only simple variables may be added, not arrays.
 
+    DEPRECATED: this proc is a trivial wrapper over NaviServer
+    functionalities. One should use the native api directly.
+
+    @see ns_getform
+    @see ns_set
+
     @author Lars Pind (lars@pinds.com)
     @creation-date August 20, 2002
 
@@ -134,9 +149,15 @@ ad_proc rp_form_put { name value } {
     return $form
 }
 
-ad_proc rp_form_update { name value } {
+ad_proc -deprecated rp_form_update { name value } {
 
     Identical to rp_form_put, but uses ns_set update instead.
+
+    DEPRECATED: this proc is a trivial wrapper over NaviServer
+    functionalities. One should use the native api directly.
+
+    @see ns_getform
+    @see ns_set
 
     @return the form ns_set, in case you're interested. Mostly you will want to discard the result.
 

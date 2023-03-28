@@ -50,9 +50,8 @@ fragment of a page that you&#39;d like to include in other pages,
 make sure its .tcl component does not call
 <kbd>ad_page_contract</kbd>.</p><p>If you&#39;d like to include a full page (that is, one which
 calls <kbd>ad_page_contract</kbd>) then instead of passing a
-parameter through <kbd>&lt;include&gt;</kbd>, you could use
-<kbd><a href="http://openacs.org/api-doc/proc-view?proc=rp%5fform%5fput">rp_form_put</a></kbd>
-to add the variable to that page&#39;s form. For additional
+parameter through <kbd>&lt;include&gt;</kbd>, you could manipulate the ns_set obtained via
+<kbd><a href="https://naviserver.sourceforge.io/n/naviserver/files/ns_getform.html">ns_getform</a></kbd>to add the variable to that page&#39;s form. For additional
 references, see how message-chunk is used throughout the forums
 package.</p>
 </li><li>If the <kbd>src</kbd> attribute begins with a slash, the path
