@@ -36,7 +36,7 @@ if  { [info exists about_package_key] } {
           and enabled_p = 't'
           and package_key = :about_package_key
     }] } {
-        rp_form_update version_id $version_id
+        ns_set update [ns_getform] version_id $version_id
         rp_internal_redirect package-view
         ad_script_abort
     }
