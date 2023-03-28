@@ -1,5 +1,3 @@
-# /packages/mbryzek-subsite/www/admin/rel-types/roles/edit.tcl
-
 ad_page_contract {
 
     Form to edit a role
@@ -13,12 +11,11 @@ ad_page_contract {
     { return_url:localurl "" }
 } -properties {
     context:onevalue
-    
 }
 
 db_1row select_role_props {
     select r.pretty_name, r.pretty_plural
-      from acs_rel_roles r 
+      from acs_rel_roles r
      where r.role = :role
 }
 
