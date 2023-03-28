@@ -187,12 +187,6 @@ to it. The interface for this procedure is:</p><pre class="programlisting">
 procedure acs_user.delete (
   user_id       users.user_id%TYPE
 );
-</pre><p><code class="computeroutput">acs_user.receives_alerts_p</code> returns 't' if the user should
-receive email alerts and 'f' otherwise. The interface for this
-function is:</p><pre class="programlisting">
-function acs_user.receives_alerts_p (
-  user_id       users.user_id%TYPE
-) return varchar;
 </pre><p>Use the procedures <code class="computeroutput">acs_user.approve_email</code> and
 <code class="computeroutput">acs_user.unapprove_email</code> to specify whether the user's email
 address is valid. The interface for these procedures are:</p><pre class="programlisting">

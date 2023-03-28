@@ -154,7 +154,6 @@ for any case.</para>
     email_bouncing_p    char(1) default &#39;f&#39; not null
                 constraint users_email_bouncing_p_ck
                 check (email_bouncing_p in (&#39;t&#39;,&#39;f&#39;)),
-    no_alerts_until     date,
     last_visit      date,
     second_to_last_visit    date,
     n_sessions      integer default 1 not null,

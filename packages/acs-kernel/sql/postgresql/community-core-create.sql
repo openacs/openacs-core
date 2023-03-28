@@ -638,7 +638,6 @@ create table users (
         priv_email              integer default 5 not null,
         email_verified_p        boolean default 't',
         email_bouncing_p        boolean default 'f' not null,
-        no_alerts_until         timestamptz,
         last_visit              timestamptz,
         second_to_last_visit    timestamptz,
         n_sessions              integer default 1 not null,
@@ -705,10 +704,6 @@ comment on table users is '
  constraint ("email must not be null") to the parent type?
 ';
 
-comment on column users.no_alerts_until is '
- For suppressing email alerts
-';
-
 comment on column users.last_visit is '
  Set when user reappears at site
 ';
@@ -751,11 +746,6 @@ comment on column users.n_sessions is '
 --   context_id	in acs_objects.context_id%TYPE default null
 --  )
 --  return users.user_id%TYPE;
--- 
---  function receives_alerts_p (
---   user_id	in users.user_id%TYPE
---  )
---  return char;
 -- 
 --  procedure approve_email (
 --   user_id	in users.user_id%TYPE
@@ -891,32 +881,6 @@ BEGIN
 
 END;
 $$ LANGUAGE plpgsql;
-
-
--- function receives_alerts_p
-
-
--- added
-select define_function_args('acs_user__receives_alerts_p','user_id');
-
---
--- procedure acs_user__receives_alerts_p/1
---
-CREATE OR REPLACE FUNCTION acs_user__receives_alerts_p(
-   receives_alerts_p__user_id integer
-) RETURNS boolean AS $$
-DECLARE
-  found_p boolean;       
-BEGIN
-  select exists into found_p (
-        select 1 from users
-        where no_alerts_until >= now()
-        and user_id = receives_alerts_p__user_id
-  );
-
-  return found_p;
-END;
-$$ LANGUAGE plpgsql stable;
 
 
 -- procedure approve_email
