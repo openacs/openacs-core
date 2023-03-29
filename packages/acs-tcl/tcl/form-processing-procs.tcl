@@ -1361,11 +1361,7 @@ ad_proc -public ad_form_new_p {
 
     @param key the name of the key element. In the above example: <code>ad_form_new_p -key item_id</code>
 } {
-
-    set form [ns_getform]
-
-    return [expr {$form eq "" || [ns_set find $form $key] == -1 || [ns_set get $form __new_p] == 1 }]
-
+    return [expr {![ns_queryexists $key] || [ns_queryget __new_p] == 1}]
 }
 
 #
