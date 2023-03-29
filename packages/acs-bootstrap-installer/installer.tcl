@@ -99,14 +99,13 @@ ad_proc -private install_page_contract { mandatory_params optional_params } {
     array set mandatory_params_array $mandatory_params
     array set optional_params_array $optional_params
 
-    set form [ns_getform]
     set missing_params [list]
 
     # Loop over all params
     set all_param_names [concat [array names mandatory_params_array] \
                              [array names optional_params_array]]
     foreach param_name $all_param_names {
-        set param_value [ns_set iget $form $param_name]
+        set param_value [ns_queryget $param_name]
         set mandatory_p [expr {$param_name in $mandatory_params}]
 
         if { $param_value ne "" } {
