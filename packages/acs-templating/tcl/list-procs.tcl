@@ -3280,8 +3280,7 @@ ad_proc -private template::list::prepare_filter_form {
         # setup little Xs to click to clear one field
         # pass the name of the field in the clear_one variable
 
-        set __form [ns_getform]
-        set clear_one [ns_set get $__form clear_one]
+        set clear_one [ns_queryget clear_one]
 
         if {$clear_one ne ""} {
             #
