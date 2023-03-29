@@ -102,33 +102,24 @@ ad_proc -private install_page_contract { mandatory_params optional_params } {
     set form [ns_getform]
     set missing_params [list]
 
-    if { $form eq "" } {
-        # Form is empty - all mandatory params are missing
-        foreach param_name [array names mandatory_params_array] {
-            lappend missing_params $mandatory_params_array($param_name)
-        }
-    } else {
-        # Form is nonempty
+    # Loop over all params
+    set all_param_names [concat [array names mandatory_params_array] \
+                             [array names optional_params_array]]
+    foreach param_name $all_param_names {
+        set param_value [ns_set iget $form $param_name]
+        set mandatory_p [expr {$param_name in $mandatory_params}]
 
-        # Loop over all params
-        set all_param_names [concat [array names mandatory_params_array] \
-                                 [array names optional_params_array]]
-        foreach param_name $all_param_names {
-            set param_value [ns_set iget $form $param_name]
-            set mandatory_p [expr {$param_name in $mandatory_params}]
-
-            if { $param_value ne "" } {
-                # Param in form - set value in callers scope
-                uplevel [list set $param_name $param_value]
+        if { $param_value ne "" } {
+            # Param in form - set value in callers scope
+            uplevel [list set $param_name $param_value]
+        } else {
+            # Param not in form
+            if { $mandatory_p } {
+                # Mandatory param - complain
+                lappend missing_params $mandatory_params_array($param_name)
             } else {
-                # Param not in form
-                if { $mandatory_p } {
-                    # Mandatory param - complain
-                    lappend missing_params $mandatory_params_array($param_name)
-                } else {
-                    # Optional param - set default
-                    uplevel [list set $param_name $optional_params_array($param_name)]
-                }
+                # Optional param - set default
+                uplevel [list set $param_name $optional_params_array($param_name)]
             }
         }
     }
