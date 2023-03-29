@@ -231,25 +231,14 @@ ad_proc -public template::form::get_button { id } {
 
     # Otherwise, find out now
 
-    set formbutton {}
-
     # If the form isn't being submitted at all, no button was clicked
-    if { $id ne [ns_queryget form:id] } {
+    if { ![ns_conn isconnected] || $id ne [ns_queryget form:id] } {
         return {}
     }
 
     # Search the submit form for the button
-    set form [ns_getform]
-
-    if { $form ne "" } {
-        set size [ns_set size $form]
-        for { set i 0 } { $i < $size } { incr i } {
-            if { [string match "formbutton:*" [ns_set key $form $i]] } {
-                set formbutton [string range [ns_set key $form $i] [string length "formbutton:"] end]
-                break
-            }
-        }
-    }
+    set formbutton [lindex [ns_set keys [ns_getform] "formbutton:*"] 0]
+    regsub {^formbutton:} $formbutton {} formbutton
 
     return $formbutton
 }
