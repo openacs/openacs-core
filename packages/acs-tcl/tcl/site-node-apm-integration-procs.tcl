@@ -38,8 +38,17 @@ namespace eval site_node_apm_integration {
         {-package_id ""}
         {-package_key:required}
     } {
-        Get the package_id of package_key that is mounted directly under
-        package_id.
+
+        Get the package_id of package_key that is mounted directly
+        under package_id.
+
+        This may become either a private interface or be deprecated in
+        the future. In most cases, site_node::get_children is what you
+        want. One difference is, this api is not cached, so it will
+        always return the actual status from the database.
+
+        @see site_node::get_children
+
         @return empty string if not found.
     } {
         if {$package_id eq ""} {
@@ -57,8 +66,15 @@ namespace eval site_node_apm_integration {
         {-package_id ""}
         {-package_key:required}
     } {
-        Returns 1 if there exists a child package with the given package_key,
-        or 0 if not.
+        This may become either a private interface or be deprecated in
+        the future. In most cases, site_node::get_children is what you
+        want. One difference is, this api is not cached, so it will
+        always return the actual status from the database.
+
+        @see site_node::get_children
+
+        @return 1 if there exists a child package with the given
+                package_key, or 0 if not.
     } {
         set child_package_id [get_child_package_id \
             -package_id $package_id \
