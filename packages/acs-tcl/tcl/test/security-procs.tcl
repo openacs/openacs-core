@@ -7,6 +7,35 @@ ad_library {
 aa_register_case \
     -cats { api } \
     -procs {
+        ad_change_password
+        ad_check_password
+    } \
+    ad_change_check_password {
+        Test checking and changing the password.
+    } {
+        set user [acs::test::user::create]
+        set user_id  [dict get $user user_id]
+        set password [dict get $user password]
+
+        try {
+
+            aa_true "Old password is correct" [ad_check_password $user_id $password]
+
+            aa_log "Change password"
+            ad_change_password \
+                $user_id \
+                ABCD
+
+            aa_true "New password is correct" [ad_check_password $user_id ABCD]
+
+        } finally {
+            acs::test::user::delete -user_id $user_id
+        }
+    }
+
+aa_register_case \
+    -cats { api } \
+    -procs {
         ad_get_login_url
         ad_get_logout_url
         ad_return_url
