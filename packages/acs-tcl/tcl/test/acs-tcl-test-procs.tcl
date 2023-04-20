@@ -1490,6 +1490,31 @@ aa_register_case \
             }
     }
 
+aa_register_case -cats {
+    smoke production_safe
+} -procs {
+    util::which
+    apm_tar_cmd
+    apm_gzip_cmd
+    db_get_pgbin
+} acs_tcl_exec_dependencies {
+    Test external command dependencies for this package.
+} {
+    foreach cmd [list \
+                     [::util::which [apm_tar_cmd]] \
+                     [::util::which [apm_gzip_cmd]] \
+                     [parameter::get -parameter "HtmlDocBin" -default "/usr/bin/htmldoc"] \
+                     [::util::which pdfinfo] \
+                     [::util::which zip] \
+                     [::util::which diff] \
+                     [::util::which dot] \
+                     [::util::which gzip] \
+                     [::util::which curl] \
+                     [file join [db_get_pgbin] psql]
+                    ] {
+        aa_true "'$cmd' is executable" [file executable $cmd]
+    }
+}
 
 # Local variables:
 #    mode: tcl
