@@ -5,6 +5,21 @@ ad_library {
     @creation-date 26 July 2018
 }
 
+aa_register_case -error_level warning -cats {
+    smoke production_safe
+} -procs {
+    util::which
+} acs_automated_testing_exec_dependencies_optional {
+    Test optional external command dependencies for this package.
+} {
+    foreach cmd [list \
+                     [::util::which sudo] \
+                     /usr/local/bin/rebuild-server.sh \
+                    ] {
+        aa_true "'$cmd' is executable" [file executable $cmd]
+    }
+}
+
 aa_register_case \
     -cats {api web} \
     -procs {
