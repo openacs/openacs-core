@@ -4,6 +4,27 @@ ad_library {
 
 }
 
+aa_register_case -cats {
+    smoke production_safe
+} -procs {
+    util::which
+    apm_tar_cmd
+    apm_gzip_cmd
+} search_exec_dependencies {
+    Test external command dependencies for this package.
+} {
+    foreach cmd [list \
+                     [::util::which unzip] \
+                     [::util::which file] \
+                     [::util::which catdoc] \
+                     [::util::which xls2csv] \
+                     [::util::which catppt] \
+                     [::util::which pdftotext] \
+                    ] {
+        aa_true "'$cmd' is executable" [file executable $cmd]
+    }
+}
+
 aa_register_case \
     -cats {api smoke} \
     -procs {
