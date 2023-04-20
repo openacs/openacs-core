@@ -20,6 +20,7 @@ aa_register_case -cats {
                      [::util::which [apm_tar_cmd]] \
                      [::util::which [apm_gzip_cmd]] \
                      $::acs::rootdir/bin/cd-helper \
+                     [util::which uptime]
                     ] {
         aa_true "'$cmd' is executable" [file executable $cmd]
     }
