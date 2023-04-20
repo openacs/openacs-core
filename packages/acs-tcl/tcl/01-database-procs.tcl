@@ -2764,9 +2764,22 @@ ad_proc -public db_get_pgbin {{-dbn ""}} {
 
     @param dbn The database name to use.  If empty_string, uses the default database.
 } {
+    #
+    # First, we try to get the postgres folder from the conf.
+    #
     set pool [lindex [db_available_pools $dbn] 0]
     set driver [ns_config "ns/db/pool/$pool" Driver]
-    return [ns_config "ns/db/driver/$driver" pgbin]
+    set pgbin [ns_config "ns/db/driver/$driver" pgbin]
+
+    if {$pgbin eq ""} {
+        #
+        # When the pgbin conf is missing, we guess the folder from the
+        # psql location.
+        #
+        set pgbin [file dirname [util::which psql]]
+    }
+
+    return $pgbin
 }
 
 
