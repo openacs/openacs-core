@@ -6,6 +6,20 @@ ad_library {
     @cvs-id $Id$
 }
 
+aa_register_case -cats {
+    smoke production_safe
+} -procs {
+    util::which
+} acs_subsite_exec_dependencies {
+    Test external command dependencies for this package.
+} {
+    foreach cmd [list \
+                     [::util::which convert] \
+                    ] {
+        aa_true "'$cmd' is executable" [file executable $cmd]
+    }
+}
+
 aa_register_case \
     group_localization_leftovers {
         Checks that no leftover group title localizations can be

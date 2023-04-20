@@ -1352,6 +1352,20 @@ aa_register_case \
         }
     }
 
+aa_register_case -cats {
+    smoke production_safe
+} -procs {
+    util::which
+} acs_lang_exec_dependencies {
+    Test external command dependencies for this package.
+} {
+    foreach cmd [list \
+                     [::util::which find] \
+                    ] {
+        aa_true "'$cmd' is executable" [file executable $cmd]
+    }
+}
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
