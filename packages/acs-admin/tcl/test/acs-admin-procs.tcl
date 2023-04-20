@@ -7,6 +7,25 @@ ad_library {
 }
 
 aa_register_case -cats {
+    smoke production_safe
+} -procs {
+    util::which
+    apm_tar_cmd
+    apm_gzip_cmd
+} acs_admin_exec_dependencies {
+    Test external command dependencies for this package.
+} {
+    foreach cmd [list \
+                     [::util::which openssl] \
+                     [::util::which [apm_tar_cmd]] \
+                     [::util::which [apm_gzip_cmd]] \
+                     $::acs::rootdir/bin/cd-helper \
+                    ] {
+        aa_true "'$cmd' is executable" [file executable $cmd]
+    }
+}
+
+aa_register_case -cats {
     api smoke
 } -procs {
     apm_higher_version_installed_p
