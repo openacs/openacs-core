@@ -183,7 +183,7 @@ ad_proc -public image::get_info {
     }
 
     catch {
-        set identify_string [exec identify $filename]
+        set identify_string [exec [image::identify_binary] $filename]
         regexp {[ ]+([0-9]+)[x]([0-9]+)[\+]*} $identify_string x width height
         set row(width) $width
         set row(height) $height
