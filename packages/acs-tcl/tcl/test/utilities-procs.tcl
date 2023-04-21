@@ -5,6 +5,43 @@ ad_library {
 }
 
 aa_register_case \
+    -cats {api smoke} \
+    -procs {
+        util::zip
+        util::unzip
+        util::file_content_check
+        ad_mktmpdir
+        ad_opentmpfile
+    } \
+    zip_and_unzip {
+        Test zip and unzip utilities: we create a tempfile in a
+        tempfilder, we zip it, then unzip it and check that everything
+        is fine.
+    } {
+        set tmpdir [ad_mktmpdir]
+        set wfd [ad_opentmpfile tmpname]
+        puts $wfd ABCD
+        close $wfd
+        set checksum [ns_md file $tmpname]
+        file rename -- $tmpname $tmpdir
+
+        util::zip -source $tmpdir -destination $tmpdir/test.zip
+
+        aa_true "Zip '$tmpdir/test.zip' was created" \
+            [util::file_content_check \
+                 -type zip \
+                 -filename $tmpdir/test.zip]
+
+        aa_log "Unzipping the file"
+        set tmpdir2 [ad_mktmpdir]
+        util::unzip -source $tmpdir/test.zip -destination $tmpdir2
+
+        set tmpname [file tail $tmpname]
+        aa_true "File '$tmpdir2/$tmpname' was created" [file exists $tmpdir2/$tmpname]
+        aa_equals "File content is correct" [ns_md file $tmpdir2/$tmpname] $checksum
+    }
+
+aa_register_case \
     -cats {api smoke production_safe} \
     -procs {
         ad_safe_eval
