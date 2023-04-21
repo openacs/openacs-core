@@ -1500,18 +1500,26 @@ aa_register_case -cats {
 } acs_tcl_exec_dependencies {
     Test external command dependencies for this package.
 } {
-    foreach cmd [list \
-                     [::util::which [apm_tar_cmd]] \
-                     [::util::which [apm_gzip_cmd]] \
-                     [parameter::get -parameter "HtmlDocBin" -default "/usr/bin/htmldoc"] \
-                     [::util::which pdfinfo] \
-                     [::util::which zip] \
-                     [::util::which diff] \
-                     [::util::which dot] \
-                     [::util::which gzip] \
-                     [::util::which curl] \
-                     [file join [db_get_pgbin] psql]
-                    ] {
+    set commands [list \
+                      [::util::which [apm_tar_cmd]] \
+                      [::util::which [apm_gzip_cmd]] \
+                      [parameter::get -parameter "HtmlDocBin" -default "/usr/bin/htmldoc"] \
+                      [::util::which pdfinfo] \
+                      [::util::which zip] \
+                      [::util::which diff] \
+                      [::util::which dot] \
+                      [::util::which gzip] \
+                      [::util::which curl] \
+                     ]
+
+    if {[db_get_pgbin] ne ""} {
+        #
+        # On a Posgtgres-enabled installation, we also want psql.
+        #
+        lappend commands [file join [db_get_pgbin] psql]
+    }
+
+    foreach cmd $commands {
         aa_true "'$cmd' is executable" [file executable $cmd]
     }
 }
