@@ -18,6 +18,8 @@ aa_register_case \
         tempfilder, we zip it, then unzip it and check that everything
         is fine.
     } {
+        aa_section "Creating a zip file"
+
         set tmpdir [ad_mktmpdir]
         set wfd [ad_opentmpfile tmpname]
         puts $wfd ABCD
@@ -32,13 +34,48 @@ aa_register_case \
                  -type zip \
                  -filename $tmpdir/test.zip]
 
-        aa_log "Unzipping the file"
+
+        aa_section "Unzipping the file"
+
         set tmpdir2 [ad_mktmpdir]
         util::unzip -source $tmpdir/test.zip -destination $tmpdir2
 
         set tmpname [file tail $tmpname]
         aa_true "File '$tmpdir2/$tmpname' was created" [file exists $tmpdir2/$tmpname]
         aa_equals "File content is correct" [ns_md file $tmpdir2/$tmpname] $checksum
+
+
+        aa_section "Unzipping on existing content (no overwrite)"
+
+        aa_log "Write different content in '$tmpdir2/$tmpname'"
+        set wfd [open $tmpdir2/$tmpname w]
+        puts $wfd EFGH
+        close $wfd
+        set checksum2 [ns_md file $tmpdir2/$tmpname]
+
+        aa_log "Replace '$tmpdir/test.zip' with a new one with both the an existing and a non-existing file"
+        file copy $tmpdir2/$tmpname $tmpdir/second-file.txt
+        util::zip -source $tmpdir -destination $tmpdir/test.zip
+
+        aa_false "Extracting again the same stuff in the same folder will not fail" [catch {
+            util::unzip -source $tmpdir/test.zip -destination $tmpdir2
+        }]
+
+        aa_equals "File '$tmpdir2/$tmpname' was NOT overwritten" \
+            [ns_md file $tmpdir2/$tmpname] $checksum2
+        aa_equals "File '$tmpdir2/second-file.txt' was extracted correctly" \
+            [ns_md file $tmpdir2/second-file.txt] $checksum2
+
+        aa_section "Unzipping on existing content (overwrite)"
+
+        aa_false "Extracting again the same stuff in the same folder will not fail" [catch {
+            util::unzip -overwrite -source $tmpdir/test.zip -destination $tmpdir2
+        }]
+
+        aa_equals "File '$tmpdir2/$tmpname' was overwritten as expected with the file from the zip" \
+            [ns_md file $tmpdir2/$tmpname] $checksum
+        aa_equals "File '$tmpdir2/second-file.txt' was extracted correctly" \
+            [ns_md file $tmpdir2/second-file.txt] $checksum2
     }
 
 aa_register_case \
