@@ -8,6 +8,11 @@
     <para>by <ulink url="mailto:joel@aufrecht.org">Joel Aufrecht</ulink></para>
   </authorblurb>
 
+<para>This documentation refers to the setup of the OpenACS test-servers
+of 2003. This setup was active probably around 5 years, and is
+obsolete. Use regression testing of your local instance and Refer to a
+CI/CD pipeline as presented at the OpenACS conference in 2022.</para>
+  
   <para>Here's the entire chain of code used to set up auto-rebuilding servers on test.openacs.org</para>
 
   <itemizedlist>

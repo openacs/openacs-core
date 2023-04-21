@@ -13,7 +13,14 @@
 Aufrecht</a>
 </p>
 OpenACS docs are written by the named authors, and may be edited by
-OpenACS documentation staff.</div><p>Here&#39;s the entire chain of code used to set up
+OpenACS documentation staff.</div>
+
+<p>This documentation refers to the setup of the OpenACS test-servers
+of 2003. This setup was active probably around 5 years, and is
+obsolete. Use regression testing of your local instance and Refer to a
+CI/CD pipeline as presented at the OpenACS conference in 2022.</p>
+
+<p>Here&#39;s the entire chain of code used to set up
 auto-rebuilding servers on test.openacs.org</p><div class="itemizedlist"><ul type="disc">
 <li>
 <p>The master server shows the status of all other servers. For
