@@ -1497,6 +1497,7 @@ aa_register_case -cats {
     apm_tar_cmd
     apm_gzip_cmd
     db_get_pgbin
+    db_name
 } acs_tcl_exec_dependencies {
     Test external command dependencies for this package.
 } {
@@ -1512,7 +1513,7 @@ aa_register_case -cats {
                       [::util::which curl] \
                      ]
 
-    if {[db_get_pgbin] ne ""} {
+    if {[db_name] eq "PostgreSQL"} {
         #
         # On a Posgtgres-enabled installation, we also want psql.
         #
