@@ -19,9 +19,10 @@ aa_register_case -cats {
                      [::util::which openssl] \
                      [::util::which [apm_tar_cmd]] \
                      [::util::which [apm_gzip_cmd]] \
-                     $::acs::rootdir/bin/cd-helper \
+                     [file join $::acs::rootdir bin cd-helper] \
+                     [::util::which cvs] \
                      [util::which uptime]
-                    ] {
+                ] {
         aa_true "'$cmd' is executable" [file executable $cmd]
     }
 }

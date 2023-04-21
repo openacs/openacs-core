@@ -267,14 +267,14 @@ ad_proc -private apm_build_repository {
     # Configuration Settings
     #----------------------------------------------------------------------
 
-    set cd_helper              $::acs::rootdir/bin/cd-helper
+    set cd_helper              [file join $::acs::rootdir bin cd-helper]
 
     set cvs_command            cvs
     set cvs_root               :pserver:anonymous@cvs.openacs.org:/cvsroot
 
-    set work_dir               $::acs::rootdir/repository-builder/
+    set work_dir               [file join $::acs::rootdir repository-builder][file separator]
 
-    set repository_dir         $::acs::rootdir/www/repository/
+    set repository_dir         [file join $::acs::rootdir www repository][file separator]
     set repository_url         https://openacs.org/repository/
 
     set exclude_package_list {}
