@@ -5,6 +5,36 @@ ad_library {
 aa_register_case \
     -cats {api smoke} \
     -procs {
+        apm_get_package_files
+        acs_package_root_dir
+        ad_find_all_files
+    } \
+    get_package_files {
+        Test apm_get_package_files
+
+        Note: this tests assumes that for a package such as acs-tcl,
+        only "package-relevant" files are contained in the package
+        folder. This is not a rule in general in OpenACS, e.g. the
+        acs-automated-testing package may create many files during its
+        operations that do not belong to the package source tree.
+    } {
+        set package_key acs-tcl
+
+        set package_files [apm_get_package_files -all -package_key $package_key]
+
+        set package_path [acs_package_root_dir $package_key]
+        set package_length [string length $package_path]
+        foreach f [ad_find_all_files $package_path] {
+            set f [string range $f $package_length+1 end]
+            aa_true "File '$f' belongs to '$package_key' and was found by the api" {
+                $f in $package_files
+            }
+        }
+    }
+
+aa_register_case \
+    -cats {api smoke} \
+    -procs {
         ad_after_server_initialization
     } \
     ad_after_server_initialization {
