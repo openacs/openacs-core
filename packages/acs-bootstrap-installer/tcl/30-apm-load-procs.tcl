@@ -162,10 +162,11 @@ ad_proc -public apm_get_package_files {
     {-file_types {}}
 } {
     <p>
-    Returns all files, or files of a certain types, belonging to an APM
-    package. Ignores files based on proc apm_include_file_p and determines file type
-    of files with proc apm_guess_file_type. Only returns file with no db type or a
-    db type matching that of the system.
+    Returns all files, or files of a certain types, belonging to an
+    APM package. Ignores files based on proc apm_include_file_p and
+    determines file type of files with proc apm_guess_file_type. Only
+    returns file with no db type or a db type matching that of the
+    system, unless '-all' is specified.
     </p>
 
     <p>
@@ -174,10 +175,13 @@ ad_proc -public apm_get_package_files {
     </p>
 
     @param package_key    The key of the package to return file paths for
-    @param file_types     The type of files to return. If not provided files of all types
-    recognized by the APM are returned.
-    @param package_path   The full path of the root directory of the package. Defaults to
-    acs_package_root_dir.
+    @param file_types     The type of files to return. If not provided
+                          files of all types recognized by the APM are
+                          returned.
+    @param package_path   The full path of the root directory of the
+                          package. Defaults to acs_package_root_dir.
+    @param all            When specified, return all files in the package,
+                          regardless of their file or database type.
 
     @return The paths, relative to the root dir of the package, of matching files.
 
@@ -210,7 +214,7 @@ ad_proc -public apm_get_package_files {
 
         set type_match_p [expr {$file_types eq "" || $file_type in $file_types}]
 
-        if { $all_db_types_p } {
+        if { $all_p || $all_db_types_p } {
             set db_match_p 1
         } else {
             set db_match_p [expr {$file_db_type eq "" || $file_db_type eq $system_db_type}]
