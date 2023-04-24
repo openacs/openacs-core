@@ -134,7 +134,7 @@ ad_proc -public apm_extract_tarball { version_id dir } {
         where revision_id = (select content_item.get_latest_revision(item_id)
                              from apm_package_versions
                              where version_id = :version_id)
-    } $apm_file
+    } -file $apm_file
 
     file mkdir $dir
     # avoid chdir
