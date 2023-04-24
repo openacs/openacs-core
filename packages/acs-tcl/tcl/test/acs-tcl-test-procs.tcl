@@ -1506,7 +1506,6 @@ aa_register_case -cats {
                       [::util::which [apm_gzip_cmd]] \
                       [parameter::get -parameter "HtmlDocBin" -default "/usr/bin/htmldoc"] \
                       [::util::which pdfinfo] \
-                      [::util::which zip] \
                       [::util::which diff] \
                       [::util::which dot] \
                       [::util::which gzip] \
