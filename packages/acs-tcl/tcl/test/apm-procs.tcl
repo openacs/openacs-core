@@ -59,7 +59,6 @@ aa_register_case \
     -procs {
         apm_version_get
         apm_file_type_names
-        apm_file_type_keys
     } \
     apm_version_api {
         Tests for the apm version interface
@@ -69,7 +68,6 @@ aa_register_case \
         set dict [apm_file_type_names]
         foreach name {tcl_procs tcl_init content_page} {
             aa_true "File type names for '$name'" {[dict exists $dict $name]}
-            aa_true "$name in file type keys" {$name in [apm_file_type_keys]}
         }
         set package_id [apm_package_id_from_key acs-kernel]
         aa_true "Kernel package_id '$package_id' plausible " {$package_id > 0}

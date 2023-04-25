@@ -72,17 +72,20 @@ ad_proc -public apm_file_type_names {} {
     }
 }
 
-ad_proc -public apm_file_type_keys {} {
+ad_proc -deprecated apm_file_type_keys {} {
 
     Returns a list of valid file type keys.
 
+    DEPRECATED: this api in not used in upstream code and can be
+    inlined by a simple dict idiom.
+
     @see apm_file_type_names
     @see apm_pretty_name_for_file_type
+    @see dict
 
     @author Peter Marklund
 } {
-    array set file_type_names [apm_file_type_names]
-    return [array names file_type_names]
+    return [dict keys [apm_file_type_names]]
 }
 
 ad_proc -public apm_package_info_file_path {

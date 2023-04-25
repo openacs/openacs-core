@@ -741,7 +741,6 @@ ad_proc -public apm_pretty_name_for_file_type { type } {
     Returns the pretty name corresponding to a particular file type key
 
     @see apm_file_type_names
-    @see apm_file_type_keys
 
     @author Peter Marklund
 } {
