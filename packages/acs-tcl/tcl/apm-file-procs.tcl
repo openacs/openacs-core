@@ -135,6 +135,8 @@ ad_proc -public apm_extract_tarball { version_id dir } {
     package require tar
     ::tar::untar $rfd -chan -dir $dir
 
+    close $rfd
+
     file delete -- $apm_file
 }
 
