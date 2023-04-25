@@ -13,16 +13,13 @@ ad_proc -private apm_mkdir {path} {
     Creates the directory specified by path and returns it.
 
 } {
-    if { [catch {
+    if { ![file isdirectory $path] } {
+        #
+        # 'path' might exists and not be a directory, we force-reclaim
+        # it in this case.
+        #
+        file delete -force -- $path
         file mkdir $path
-    }] } {
-        # There must be a file blocking the directory creation.
-        if { [catch {
-            file delete -force -- $path
-            file mkdir $path
-        } errmsg]} {
-            error "Error creating directory $path: $errmsg"
-        }
     }
     return $path
 }
@@ -33,11 +30,7 @@ ad_proc -public apm_workspace_dir {} {
 
 } {
     set path [ad_file join $::acs::rootdir apm-workspace]
-    if { [ad_file isdirectory $path] } {
-        return $path
-    } else {
-        return [apm_mkdir $path]
-    }
+    return [apm_mkdir $path]
 }
 
 ad_proc -public apm_workspace_install_dir {} {
@@ -47,11 +40,7 @@ ad_proc -public apm_workspace_install_dir {} {
 } {
     set base_path [apm_workspace_dir]
     set install_path "$base_path/install"
-    if { [ad_file isdirectory $install_path] } {
-        return $install_path
-    } else {
-        return [apm_mkdir $install_path]
-    }
+    return [apm_mkdir $install_path]
 }
 
 ad_proc -public apm_file_type_names {} {
