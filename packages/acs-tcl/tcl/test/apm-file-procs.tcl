@@ -7,6 +7,60 @@ ad_library {
 aa_register_case \
     -cats {api smoke} \
     -procs {
+        apm_workspace_dir
+        apm_workspace_install_dir
+    } \
+    apm_workspace_directories {
+        Test requiring the workspace directories via the api.
+    } {
+        aa_section "Create the directories"
+
+        set workspace_dir [apm_workspace_dir]
+        set workspace_install_dir [apm_workspace_install_dir]
+        aa_true "'$workspace_dir' was created" [file isdirectory $workspace_dir]
+        aa_true "'$workspace_install_dir' was created" [file isdirectory $workspace_install_dir]
+
+
+        aa_section "Create the directories (they already exist and contain something)"
+
+        aa_log "Create a file in '$workspace_install_dir/test.txt'"
+        set wfd [open $workspace_install_dir/test.txt w]
+        puts $wfd ABCD
+        close $wfd
+        apm_workspace_dir
+        aa_true "'$workspace_dir' was created" [file isdirectory $workspace_dir]
+        aa_true "'$workspace_install_dir' was created" [file isdirectory $workspace_install_dir]
+        aa_true "'$workspace_install_dir/test.txt' still exists" \
+            [file exists $workspace_install_dir/test.txt]
+
+
+        aa_section "Create the directories (a file is in the way)"
+
+        aa_log "A file instead of '$workspace_dir'"
+        file delete -force -- $workspace_dir $workspace_install_dir
+        set wfd [open $workspace_dir w]
+        puts $wfd ABCD
+        close $wfd
+        apm_workspace_dir
+        apm_workspace_install_dir
+        aa_true "'$workspace_dir' was created" [file isdirectory $workspace_dir]
+        aa_true "'$workspace_install_dir' was created" [file isdirectory $workspace_install_dir]
+
+        aa_log "A file instead of '$workspace_install_dir'"
+        file delete -force -- $workspace_dir $workspace_install_dir
+        file mkdir $workspace_dir
+        set wfd [open $workspace_install_dir w]
+        puts $wfd ABCD
+        close $wfd
+        apm_workspace_dir
+        apm_workspace_install_dir
+        aa_true "'$workspace_dir' was created" [file isdirectory $workspace_dir]
+        aa_true "'$workspace_install_dir' was created" [file isdirectory $workspace_install_dir]
+    }
+
+aa_register_case \
+    -cats {api smoke} \
+    -procs {
         apm_extract_tarball
         apm_generate_tarball
         apm_get_package_files
