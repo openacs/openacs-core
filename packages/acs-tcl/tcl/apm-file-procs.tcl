@@ -117,7 +117,6 @@ ad_proc -public apm_extract_tarball { version_id dir } {
     DCW - 2001-05-03, modified to extract tarball from content repository.
 
 } {
-
     set apm_file [ad_tmpnam]
 
     db_blob_get_file distribution_tar_ball_select {
@@ -129,9 +128,12 @@ ad_proc -public apm_extract_tarball { version_id dir } {
     } -file $apm_file
 
     file mkdir $dir
-    # avoid chdir
-    #ns_log notice "exec sh -c 'cd $dir ; [apm_gzip_cmd] -d -q -c $apm_file | [apm_tar_cmd] xf - 2>/dev/null'"
-    exec [apm_gzip_cmd] -d -q -c -S .apm $apm_file | [apm_tar_cmd] -xf - -C $dir 2> [apm_dev_null]
+
+    set rfd [open $apm_file rb]
+    zlib push gunzip $rfd
+
+    package require tar
+    ::tar::untar $rfd -chan -dir $dir
 
     file delete -- $apm_file
 }
