@@ -129,13 +129,21 @@ ad_proc -public apm_extract_tarball { version_id dir } {
 
     file mkdir $dir
 
-    set rfd [open $apm_file rb]
-    zlib push gunzip $rfd
+    #
+    # This would avoid the exec and could also be used elsewhere, but
+    # there are known issues with the tar package. See
+    # e.g. https://groups.google.com/g/comp.lang.tcl/c/vDKy7x_Q0cM/m/noKeUD6UCAAJ
+    # or
+    # https://core.tcl-lang.org/tcllib/tktview/27bed812fa2ec3d5d1aa96a31f7cad2f7917ad14.
+    #
+    # set rfd [open $apm_file rb]
+    # zlib push gunzip $rfd
+    # package require tar
+    # ::tar::untar $rfd -chan -dir $dir
+    # close $rfd
+    #
 
-    package require tar
-    ::tar::untar $rfd -chan -dir $dir
-
-    close $rfd
+    exec [apm_gzip_cmd] -d -q -c -S .apm $apm_file | [apm_tar_cmd] -xf - -C $dir 2> [apm_dev_null]
 
     file delete -- $apm_file
 }
