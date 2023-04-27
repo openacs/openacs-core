@@ -75,80 +75,103 @@ ad_proc util::zip {
     ::zipfile::mkzip::mkzip $destination -directory $in_path $filename
 }
 
-#
-# util::unzip was reimplemented to use ::zipfile::decode, so this
-# should not be necessary anymore... left for reference.
-#
-# if {[info commands ns_valid_utf8] ne ""} {
-#     ad_proc -private ::util::zip_file_contains_valid_filenames {zip_fn} {
+if {[info commands ns_valid_utf8] ne ""} {
+   ad_proc -private ::util::zip_file_contains_valid_filenames {zip_fn} {
+       Check, if the provided zip file contains only filenames with
+       valid UTF-8 characters. Unfortunately, handling different
+       character sets differs between variants of unzip (also between
+       unzip between the redhat and debian families). For details
+       about file structure of zip files, consult e.g.
+       https://en.wikipedia.org/wiki/ZIP_(file_format)
 
-#         Check, if the provided zip file contains only filenames with
-#         valid UTF-8 characters. Unfortunately, handling different
-#         character sets differs between variants of unzip (also between
-#         unzip between the redhat and debian families). For details
-#         about file structure of zip files, consult e.g.
-#         https://en.wikipedia.org/wiki/ZIP_(file_format)
-
-#         @return boolean
-#     } {
-#         set F [open $zip_fn rb]; set C [read $F]; close $F
-#         set validUTF8 1
-#         while {$validUTF8 && [binary encode hex [string range $C 0 3]] eq "504b0304"} {
-#             binary scan [string range $C 26 27] s fnSize
-#             binary scan [string range $C 28 29] s extraFieldSize
-#             set validUTF8 [ns_valid_utf8 [string range $C 30 29+$fnSize]]
-#             set C [string range $C [expr {30 + $fnSize + $extraFieldSize}] end]
-#         }
-#         return $validUTF8
-#     }
-# }
+       @return boolean
+   } {
+       set F [open $zip_fn rb]; set C [read $F]; close $F
+       set validUTF8 1
+       while {$validUTF8 && [binary encode hex [string range $C 0 3]] eq "504b0304"} {
+           binary scan [string range $C 26 27] s fnSize
+           binary scan [string range $C 28 29] s extraFieldSize
+           set validUTF8 [ns_valid_utf8 [string range $C 30 29+$fnSize]]
+           set C [string range $C [expr {30 + $fnSize + $extraFieldSize}] end]
+       }
+       return $validUTF8
+   }
+}
 
 ad_proc util::unzip {
-    -source:required
-    -destination:required
-    -overwrite:boolean
+   -source:required
+   -destination:required
+   -overwrite:boolean
 } {
-    @param source must be the name of a valid zip file to be decompressed
+   @param source must be the name of a valid zip file to be decompressed
 
-    @param destination must be the name of a valid directory to contain decompressed files
+   @param destination must be the name of a valid directory to contain decompressed files
 } {
-    package require zipfile::decode
-
     #
-    # Open the archive
+    # This was an attempt to rewrite the utility without using
+    # exec. Unfortunately, zipfile::decode suffers from limitations:
+    # for instance, will not handle files > 2GB well.
     #
-    ::zipfile::decode::open $source
+    # package require zipfile::decode
 
-    try {
-        #
-        # Get the dict containing the archive information.
-        #
-        set adict [::zipfile::decode::archive]
+    # #
+    # # Open the archive
+    # #
+    # ::zipfile::decode::open $source
 
-        if {$overwrite_p} {
-            #
-            # We are fine with overwriting: unzip the entire archive.
-            #
-            ::zipfile::decode::unzip $adict $destination
-        } else {
-            #
-            # We do not want to overwrite existing files: read the
-            # archive and only extract non-existing files.
-            #
-            foreach f [::zipfile::decode::files $adict] {
-                set dest_path [file join $destination $f]
-                if {![file exists $dest_path]} {
-                    ::zipfile::decode::copyfile $adict $f $dest_path
-                }
-            }
-        }
+    # try {
+    #     #
+    #     # Get the dict containing the archive information.
+    #     #
+    #     set adict [::zipfile::decode::archive]
 
-    } finally {
-        #
-        # Close the archive
-        #
-        ::zipfile::decode::close
+    #     if {$overwrite_p} {
+    #         #
+    #         # We are fine with overwriting: unzip the entire archive.
+    #         #
+    #         ::zipfile::decode::unzip $adict $destination
+    #     } else {
+    #         #
+    #         # We do not want to overwrite existing files: read the
+    #         # archive and only extract non-existing files.
+    #         #
+    #         foreach f [::zipfile::decode::files $adict] {
+    #             set dest_path [file join $destination $f]
+    #             if {![file exists $dest_path]} {
+    #                 ::zipfile::decode::copyfile $adict $f $dest_path
+    #             }
+    #         }
+    #     }
+
+    # } finally {
+    #     #
+    #     # Close the archive
+    #     #
+    #     ::zipfile::decode::close
+    # }
+    #
+
+    set unzipCmd [util::which unzip]
+    if {$unzipCmd eq ""} {
+        error "unzip command not found on the system."
     }
+    set extra_options ""
+    #
+    # Check, if the zip file contains filenames which are invalid
+    # UTF-8 characters.
+    #
+    if {[info commands ::util::zip_file_contains_valid_filenames] ne ""
+        && $::tcl_platform(os) eq "Linux"
+        && ![::util::zip_file_contains_valid_filenames $source] } {
+        #
+        # The option "-O" works apparently only under Linux and might
+        # depend on the version of "unzip". We assume here that the
+        # broken characters are from Windows (code page 850)
+        #
+        lappend extra_options -O CP850
+    }
+    # -n means we don't overwrite existing files
+    exec $unzipCmd {*}$extra_options [expr {$overwrite_p ? "-o" : "-n"}] $source -d $destination
 }
 
 ad_proc -deprecated util_report_library_entry {
