@@ -975,7 +975,7 @@ ad_proc -private sec_generate_session_id_cookie {
             set max_age inf
         }
     }
-    
+
     ad_set_signed_cookie \
         -secure [expr {[parameter::get \
                             -boolean \
@@ -1262,14 +1262,14 @@ ad_proc security::safe_tmpfile_p {
     if {![ad_file owned $tmpfile]} {
         #
         # File does not belong to us: not safe
-        #        
+        #
         return false
     }
 
     if {![ad_file readable $tmpfile]} {
         #
         # We cannot read the file: not safe
-        #       
+        #
         return false
     }
 
@@ -3240,7 +3240,7 @@ namespace eval ::security::csp {
 }
 
 namespace eval ::security::parameter {
-    
+
     ad_proc -public signed {{-max_age ""} value} {
 
         Compute a compact single-token signed value based on the
