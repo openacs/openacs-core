@@ -31,14 +31,15 @@ namespace eval security {
 # Cookies (all are signed cookies):
 #   cookie                value                                         max-age           secure
 #   --------------------------------------------------------------------------------------------
-#   ad_session_id         session_id,user_id,login_level                SessionTimeout    yes|no
-#   ad_user_login         user_id,issue_time,auth_token,forever         LoginTimeout|inf  no
-#   ad_user_login_secure  user_id,issue_time,auth_token,random,forever  LoginTimeout|inf  yes
-#   ad_secure_token       session_id,random,peeraddr                    SessionLifetime   yes
+#   ad_session_id         session_id,user_id,login_level                  SessionTimeout    yes|no
+#   ad_user_login         user_id,issue_time,auth_token,forever,er        LoginTimeout|inf  no
+#   ad_user_login_secure  user_id,issue_time,auth_token,random,forever,er LoginTimeout|inf  yes
+#   ad_secure_token       session_id,random,peeraddr                      SessionLifetime   yes
 #
 #   "random" is used to hinder attack the secure hash.  Currently the
 #   random data is ns_time. "peeraddr" is used to avoid session
-#   hijacking.
+#   hijacking. "er" stands for external_registry and is only
+#   non-empty, when an external registry is used.
 #
 #   ad_user_login/ad_user_login_secure issue_time:
 #      [ns_time] at the time the user last authenticated
@@ -190,8 +191,8 @@ ad_proc -private sec_handler {} {
 
         if {$session_user_id > 0} {
             try {
-                set login_cookie [sec_login_read_cookie]
-                set auth_token [lindex $login_cookie 2]
+                set login_info [sec_login_read_cookie]
+                set auth_token [dict get $login_info auth_token]
 
                 #
                 # Verify currently stored user authentication token
@@ -226,7 +227,7 @@ ad_proc -private sec_handler {} {
 
             } on ok {} {
                 set login_cookie_exists_p 1
-                set persistent_login_p [lindex $login_cookie end]
+                set persistent_login_p [dict get $login_info forever_p]
             }
         }
 
@@ -379,17 +380,45 @@ ad_proc -private sec_login_read_cookie {} {
 
     @author Victor Guerra
 
-    @return List of values read from cookie "user_login_secure" or "user_login"
+    @return dict of values from cookie "user_login_secure" or "user_login"
 } {
+    #
+    # ad_user_login         user_id,issue_time,auth_token,forever,external_registry
+    # ad_user_login_secure  user_id,issue_time,auth_token,random,forever,external_registry
     #
     # If over HTTPS, we look for the *_secure cookie
     #
     if { [security::secure_conn_p] || [ad_conn behind_secure_proxy_p]} {
         set cookie_name [security::cookie_name user_login_secure]
+        set expect_elements 6
     } else {
         set cookie_name [security::cookie_name user_login]
+        set expect_elements 5
     }
-    return [split [ad_get_signed_cookie $cookie_name] ","]
+
+    set login_list [split [ad_get_signed_cookie $cookie_name] ","]
+    if {[llength $login_list] == $expect_elements} {
+        return [list \
+                    user_id    [lindex $login_list 0] \
+                    issue_time [lindex $login_list 1] \
+                    auth_token [lindex $login_list 2] \
+                    forever_p  [lindex $login_list end-1] \
+                    external_registry [lindex $login_list end] \
+                   ]
+    } else {
+        #
+        # Legacy case (no external registry is provided). This is just
+        # needed for the transition phase, while still old coocies are
+        # in use, having no "external_registry" defined.
+        #
+        return [list \
+                    user_id    [lindex $login_list 0] \
+                    issue_time [lindex $login_list 1] \
+                    auth_token [lindex $login_list 2] \
+                    forever_p  [lindex $login_list end] \
+                    external_registry "" \
+                   ]
+    }
 }
 
 
@@ -415,13 +444,7 @@ ad_proc -public sec_login_handler {} {
     # Check login cookie.
     #
     try {
-        set login_list [sec_login_read_cookie]
-        set login_info [list \
-                            user_id    [lindex $login_list 0] \
-                            issue_time [lindex $login_list 1] \
-                            auth_token [lindex $login_list 2] \
-                            forever    [lindex $login_list end] ]
-
+        set login_info [sec_login_read_cookie]
         set untrusted_user_id [dict get $login_info user_id]
         set auth_level expired
 
@@ -495,6 +518,7 @@ ad_proc -public sec_login_handler {} {
 ad_proc -public ad_user_login {
     {-account_status "ok"}
     {-cookie_domain ""}
+    {-external_registry ""}
     -forever:boolean
     user_id
 } {
@@ -528,7 +552,7 @@ ad_proc -public ad_user_login {
             -secure t \
             -domain $cookie_domain \
             [security::cookie_name user_login_secure] \
-            "$user_id,[ns_time],[sec_get_user_auth_token $user_id],[ns_time],$forever_p"
+            "$user_id,[ns_time],[sec_get_user_auth_token $user_id],[ns_time],$forever_p,$external_registry"
 
         # We're secure
         set auth_level "secure"
@@ -549,7 +573,7 @@ ad_proc -public ad_user_login {
         -domain $cookie_domain \
         -secure f \
         [security::cookie_name user_login] \
-        "$user_id,[ns_time],[sec_get_user_auth_token $user_id],$forever_p"
+        "$user_id,[ns_time],[sec_get_user_auth_token $user_id],$forever_p,$external_registry"
 
     # deal with the current session
     sec_setup_session -cookie_domain $cookie_domain $user_id $auth_level $account_status
@@ -620,6 +644,25 @@ ad_proc -public ad_user_logout {
                             -package_id $::acs::kernel_id \
                             -default 0] ? "t" : "f"}] \
         [security::cookie_name session_id]
+
+    try {
+        #
+        # When there is no cookie, sec_login_read_cookie returns an exception.
+        #
+        set external_registry [dict get [sec_login_read_cookie] external_registry]
+        if {$external_registry ne "" && [nsf::is object $external_registry]} {
+            #
+            # Logout from external registry
+            #
+            ns_log notice "logout from external registry: $external_registry"
+            $external_registry logout
+        }
+    } trap {AD_EXCEPTION NO_COOKIE} {errorMsg} {
+        #
+        # We have no login cookie.
+        ns_log notice "ad_user_logout, no login_cookie available: $errorMsg"
+    }
+
     ad_unset_cookie -domain $cookie_domain -secure f [security::cookie_name user_login]
     ad_unset_cookie -domain $cookie_domain -secure t [security::cookie_name secure_token]
     ad_unset_cookie -domain $cookie_domain -secure t [security::cookie_name user_login_secure]
@@ -834,8 +877,10 @@ ad_proc -private sec_setup_session {
     }
 
     set user_id 0
-
-    # If both auth_level and account_status are 'ok' or better, we have a solid user_id
+    #
+    # If both auth_level and account_status are 'ok' or better, we
+    # have a solid user_id.
+    #
     if { ($auth_level eq "ok" || $auth_level eq "secure") && $account_status eq "ok" } {
         set user_id $new_user_id
     }
@@ -857,8 +902,10 @@ ad_proc -private sec_setup_session {
          && ([security::secure_conn_p] || [ad_conn behind_secure_proxy_p])
          && $new_user_id != 0
      } {
-        # this is a secure session, so the browser needs
-        # a cookie marking it as such
+        #
+        # This is a secure session, so the browser needs
+        # a cookie marking it as such.
+        #
         sec_generate_secure_token_cookie
     }
 }
@@ -923,12 +970,12 @@ ad_proc -private sec_generate_session_id_cookie {
     set discard t
     set max_age [sec_session_timeout]
     catch {
-        set login_list [sec_login_read_cookie]
-        if {[lindex $login_list end] == 1} {
+        if {[dict get [sec_login_read_cookie] forever_p]} {
             set discard f
             set max_age inf
         }
     }
+    
     ad_set_signed_cookie \
         -secure [expr {[parameter::get \
                             -boolean \
