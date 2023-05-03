@@ -16,7 +16,7 @@ namespace eval acs_privacy {
         was in no way regulated.
 
         DEPRECATED: this privacy feature was only used in the context
-        of dotlrn, which also has an own set of apis fot a similar
+        of dotlrn, which also has an own set of apis for a similar
         purpose.
 
         @see dotlrn
@@ -29,7 +29,7 @@ namespace eval acs_privacy {
         set the privacy control
 
         DEPRECATED: this privacy feature was only used in the context
-        of dotlrn, which also has an own set of apis fot a similar
+        of dotlrn, which also has an own set of apis for a similar
         purpose.
 
         @see dotlrn
@@ -44,7 +44,7 @@ namespace eval acs_privacy {
         check if a user can access an object's private data
 
         DEPRECATED: this privacy feature was only used in the context
-        of dotlrn, which also has an own set of apis fot a similar
+        of dotlrn, which also has an own set of apis for a similar
         purpose.
 
         @see dotlrn
@@ -65,7 +65,7 @@ namespace eval acs_privacy {
         grant permission to access private data
 
         DEPRECATED: this privacy feature was only used in the context
-        of dotlrn, which also has an own set of apis fot a similar
+        of dotlrn, which also has an own set of apis for a similar
         purpose.
 
         @see dotlrn

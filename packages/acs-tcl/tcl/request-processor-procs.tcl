@@ -820,13 +820,13 @@ ad_proc -private rp_filter { why } {
         #
         # Provide context information for background writer.
         #
-        set requestor [expr {$::ad_conn(user_id) == 0 ? [ad_conn peeraddr] : $::ad_conn(user_id)}]
+        set requester [expr {$::ad_conn(user_id) == 0 ? [ad_conn peeraddr] : $::ad_conn(user_id)}]
         #
         # Leave for the time being the catch, since a fail of the
         # primitive function has no user-level consequences, and no
         # abort operations can happen in the called functions.
         #
-        catch {ns_conn clientdata [list $requestor [ns_conn url]]}
+        catch {ns_conn clientdata [list $requester [ns_conn url]]}
     }
 
     # Who's online
