@@ -629,12 +629,25 @@ ad_proc -public sec_change_user_auth_token {
     return $auth_token
 }
 
-
 ad_proc -public ad_user_logout {
     {-cookie_domain ""}
 } {
     Logs the user out.
 } {
+
+    set external_registry [sec_login_get_external_registry]
+    if {$external_registry ne ""} {
+        #
+        # If we were logged in via an external identity provider, try
+        # to logout from there as well. Note, that not every external
+        # identity provider supports a logout (e.g. GitHub), and maybe
+        # in some cases, the external logout is not wanted. This
+        # should be provided by the implementation of the external
+        # registry.
+        #
+        $external_registry logout
+    }
+
     if {$cookie_domain eq ""} {
         set cookie_domain [parameter::get \
                                -parameter CookieDomain \
@@ -1421,6 +1434,44 @@ ad_proc -public ad_get_logout_url {
 
     return $url
 }
+
+ad_proc -public ad_get_external_registries {
+    {-subsite_id ""}
+} {
+
+    Return for the specified subsite (or the current registry subsite)
+    the external authority interface objs. Per default, all defined
+    external registries are returned, but a subsite might restrict this.
+
+} {
+    if {$subsite_id eq ""} {
+        set subsite_id [dict get [security::get_register_subsite] subsite_id]
+    }
+    set offered_registries [parameter::get \
+                                -parameter OfferedRegistries \
+                                -package_id $subsite_id \
+                                -default *]
+    set result {}
+    foreach auth_obj [::xo::Authorize info instances -closure] {
+        #
+        # Don't list on the general available pages the external
+        # authorization objects when these are configured in debugging
+        # mode.
+        #
+        if {[$auth_obj cget -debug]} {
+            continue
+        }
+
+        if {$offered_registries eq "*"
+            || $auth_obj in $offered_registries
+        } {
+            lappend result $auth_obj
+        }
+    }
+    return $result
+}
+
+
 
 # JCD 20020915 I think this probably should not be deprecated since it is
 # far more reliable than permissioning esp for a development server
