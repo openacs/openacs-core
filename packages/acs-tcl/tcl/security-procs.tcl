@@ -1452,20 +1452,22 @@ ad_proc -public ad_get_external_registries {
                                 -package_id $subsite_id \
                                 -default *]
     set result {}
-    foreach auth_obj [::xo::Authorize info instances -closure] {
-        #
-        # Don't list on the general available pages the external
-        # authorization objects when these are configured in debugging
-        # mode.
-        #
-        if {[$auth_obj cget -debug]} {
-            continue
-        }
+    if {[nsf::is object ::xo::Authorize]} {
+        foreach auth_obj [::xo::Authorize info instances -closure] {
+            #
+            # Don't list on the general available pages the external
+            # authorization objects when these are configured in debugging
+            # mode.
+            #
+            if {[$auth_obj cget -debug]} {
+                continue
+            }
 
-        if {$offered_registries eq "*"
-            || $auth_obj in $offered_registries
-        } {
-            lappend result $auth_obj
+            if {$offered_registries eq "*"
+                || $auth_obj in $offered_registries
+            } {
+                lappend result $auth_obj
+            }
         }
     }
     return $result

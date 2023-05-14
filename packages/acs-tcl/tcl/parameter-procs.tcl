@@ -43,10 +43,10 @@ ad_proc -public parameter::set_global_value {
 
     db_exec_plsql set_parameter_value {}
 
-    # ::acs::dc call apm set_value \
-    #     -package_key $package_key \
-    #     -parameter $parameter \
-    #     -attr_value $value
+    #acs::dc call apm set_value \
+    #    -package_key $package_key \
+    #    -parameter $parameter \
+    #    -attr_value $value
 
     acs::clusterwide callback subsite::global_parameter_changed \
         -package_key $package_key \
@@ -134,7 +134,7 @@ ad_proc -public parameter::set_value {
     #
     db_exec_plsql set_parameter_value {}
 
-    #::acs::dc call apm set_value \
+    #acs::dc call apm set_value \
     #    -package_id $package_id \
     #    -parameter_name $parameter \
     #    -attr_value $value
@@ -179,6 +179,7 @@ ad_proc -public parameter::get {
     #
     if {$package_id ne ""} {
         set package_key [apm_package_key_from_id $package_id]
+        #set value [ad_parameter_from_file $parameter $package_key $default]
         set value [ad_parameter_from_file $parameter $package_key]
     }
 
@@ -188,7 +189,7 @@ ad_proc -public parameter::get {
     }
 
     # 3. use the default value
-    if {$value eq ""} {
+    if {$value eq ""} {        
         set value $default
     }
 
@@ -267,6 +268,7 @@ if {![db_table_exists apm_parameters]} {
         #    configuration file; this value has highest precedence.
         #
         set value [ad_parameter_from_file $parameter $package_key]
+        #set value [ad_parameter_from_file $parameter $package_key]
 
         #
         # 2. Try to get the value from a global package parameter.
