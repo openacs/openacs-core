@@ -25,7 +25,7 @@ db_multirow -extend {url admin_p admin_url member_state_pretty} groups groups {
     } else {
         set url ""
     }
-    set admin_url [export_vars -base /members/ {{group_id $group_id}}]
+    set admin_url [export_vars -base /members/ {group_id}]
 }
 
 # Local variables:
