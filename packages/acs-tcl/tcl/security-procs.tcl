@@ -39,7 +39,7 @@ namespace eval security {
 #   "random" is used to hinder attack the secure hash.  Currently the
 #   random data is ns_time. "peeraddr" is used to avoid session
 #   hijacking. "er" stands for external_registry and is only
-#   non-empty, when an external registry is used.
+#   nonempty, when an external registry is used.
 #
 #   ad_user_login/ad_user_login_secure issue_time:
 #      [ns_time] at the time the user last authenticated
@@ -421,6 +421,23 @@ ad_proc -private sec_login_read_cookie {} {
     }
 }
 
+ad_proc sec_login_get_external_registry {} {
+    #
+    # If the login was issued from an external_registry, use this
+    # as well for refreshing.
+    #
+    set external_registry ""
+    if {[ns_conn isconnected]} {
+        set external_registry [dict get [sec_login_read_cookie] external_registry]
+        if {$external_registry ne "" && ![nsf::is object $external_registry]} {
+            ns_log warning "external registry object '$external_registry'" \
+                "used for login of user [ad_conn untrusted_user_id]" \
+                "does not exist. Ignored."
+            set external_registry ""
+        }
+    }
+    return $external_registry
+}
 
 ad_proc -public sec_login_handler {} {
 
@@ -1290,49 +1307,86 @@ ad_proc -public ad_get_login_url {
     {-authority_id ""}
     {-username ""}
     -return:boolean
+    {-external_registry ""}
 } {
 
-    Returns a URL to the login page of the closest subsite, or the main site, if there's no current connection.
+    Returns a URL to the login page of the closest subsite, or the
+    main site, if there's no current connection.
 
-    @option return      If set, will export the current form, so when the registration is complete,
-    the user will be returned to the current location.  All variables in
-    ns_getform (both posts and gets) will be maintained.
+    @option return  If set, will export the current form, so when
+                    the registration is complete, the user will be returned
+                    to the current location.  All variables in
+                    ns_getform (both posts and gets) will be maintained.
 
     @author Lars Pind (lars@collaboraid.biz)
     @author Gustaf Neumann
 
 } {
 
+    #
+    # Get the login_url 'url' and some more parameters form the
+    # register subsite for this registry.
+    #
     set subsite_info [security::get_register_subsite]
     foreach var {url require_qualified_return_url host_node_id} {
         set $var [dict get $subsite_info $var]
     }
 
-    append url "register/"
-
-    #
-    # Don't add a return_url if you're already under /register,
-    # because that will frequently interfere with the normal login
-    # procedure.
-    #
-    if { [ns_conn isconnected] && $return_p && ![string match "register/*" [ad_conn extra_url]] } {
+    if { [ns_conn isconnected]
+         && $return_p
+     } {
         #
         # In a few cases, we do not need to add a fully qualified
         # return url. The secure cases have to be still tested.
         #
         if { !$require_qualified_return_url
-             && ([security::secure_conn_p] || [ad_conn behind_secure_proxy_p] || ![security::RestrictLoginToSSLP])
+             && ([security::secure_conn_p]
+                 || [ad_conn behind_secure_proxy_p]
+                 || ![security::RestrictLoginToSSLP]
+                 )
          } {
             set return_url [ad_return_url]
         } else {
             set return_url [ad_return_url -qualified]
         }
     }
-    if {$host_node_id == 0} {
-        unset host_node_id
-    }
-    set url [export_vars -base $url -no_empty {authority_id username return_url host_node_id}]
 
+    if {$external_registry ne ""} {
+        ns_log notice "the external registry $external_registry is used"
+        #
+        # We get here in cases of a refresh of a login, since we know
+        # that the current user_id is expired, and the user has
+        # registered via an external registry. Therefore, we use
+        # the same external registry for the refresh.
+        #
+        # In general, we have two options: (a) redirect directly to
+        # the external registry login page, or (b) redirect to an
+        # external registry enhanced classical OpenACS login page. We
+        # are here on the (a) path, since potentially, the external
+        # identity managers allows one to continue without even showing a
+        # login page (when it says, the login is still valid).
+        #
+        # The path (b) might be chosen via a future package parameter.
+        #
+        set url [$external_registry login_url -return_url $return_url]
+    } else {
+        append url "register/"
+
+        #
+        # Don't add a return_url if you're already under /register,
+        # because that will frequently interfere with the normal login
+        # procedure.
+        #
+        if { [string match "register/*" [ad_conn extra_url]] } {
+            set return_url ""
+        }
+        if {$host_node_id == 0} {
+            unset host_node_id
+        }
+        set url [export_vars -base $url -no_empty {
+            authority_id username return_url host_node_id
+        }]
+    }
     ::security::log login_url "ad_get_login_url: final login_url <$url>"
 
     return $url
@@ -1343,9 +1397,10 @@ ad_proc -public ad_get_logout_url {
     {-return_url ""}
 } {
 
-    Returns a URL to the logout page of the closest subsite, or the main site, if there's no current connection.
+    Returns a URL to the logout page of the closest subsite, or the
+    main site, if there's no current connection.
 
-    @option return      If set, will export the current form, so when the logout is complete
+    @option return  If set, will export the current form, so when the logout is complete
     the user will be returned to the current location.  All variables in
     ns_getform (both posts and gets) will be maintained.
 

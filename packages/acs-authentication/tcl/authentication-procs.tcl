@@ -38,19 +38,32 @@ ad_proc -public auth::require_login {
                      -account_status $account_status]
 
     if { $user_id != 0 } {
-        # user is in fact logged in, return user_id
+        #
+        # The user is in fact logged in, return her user_id.
+        #
         return $user_id
     }
 
-    set message {}
+    set message ""
+    
     if {[ad_conn auth_level] eq "expired"} {
+        #
+        # The login has expired. 
+        #        
         set message [_ acs-subsite.lt_Your_login_has_expire]
+        #
+        # If the login was issued from an external_registry, use this
+        # as well for refreshing.
+        #
+        set external_registry [sec_login_get_external_registry]
+    } else {
+        set external_registry ""
     }
-
+    
     #
     # The -return switch causes the URL to return to the current page.
     #
-    set return_url [ad_get_login_url -return]
+    set return_url [ad_get_login_url -return -external_registry $external_registry]
 
     # Long URLs (slightly above 4000 bytes) can kill aolserver-4.0.10, causing
     # a restart. They lead to empty Browser-windows with AOLserver 4.5 (but no
@@ -78,24 +91,31 @@ ad_proc -public auth::require_login {
 }
 
 ad_proc -public auth::refresh_login {} {
-    If there currently is a user associated with this session,
-    but the user's authentication is expired, redirect the
-    user to refresh his/her login. This allows for users to not be logged in,
-    but if the user is logged in, then we require that the authentication is not expired.
+    
+    If there currently is a user associated with this session, but the
+    user's authentication is expired, redirect the user to refresh
+    his/her login. This allows for users to not be logged in, but if
+    the user is logged in, then we require that the authentication is
+    not expired.
 
-    @return user_id of user, if the user is logged in and auth_status is not expired, or 0 if the user is not logged in.
-    If user's auth_status is expired, this proc will issue a returnredirect and abort the current page.
+    @return user_id of user, if the user is logged in and auth_status
+            is not expired, or 0 if the user is not logged in.
+            If user's auth_status is expired, this proc will issue a
+            returnredirect and abort the current page.
 
     @see ad_script_abort
 } {
     if { [ad_conn auth_level] ne "expired" } {
         return [ad_conn user_id]
     }
-
+    #
     # The -return switch causes the URL to return to the current page
-    ad_returnredirect [ad_get_login_url -return]
+    #
+    ad_returnredirect [ad_get_login_url -return \
+                           -external_registry [sec_login_get_external_registry]]
     ad_script_abort
 }
+
 
 ad_proc -public auth::self_registration {} {
     Check AllowSelfRegister parameter and set user message if
