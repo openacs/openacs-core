@@ -684,24 +684,6 @@ namespace eval ::acs {
     }
 }
 
-# if {[info commands ::acs::misc_cache] eq ""} {
-#     if {[info commands ::parameter::get_from_package_key] eq ""} {
-#         namespace eval ::parameter {}
-#         ad_proc ::parameter::get_from_package_key {
-#             -package_key
-#             -parameter:required
-#             {-default ""}
-#         } {
-#             return $default
-#         }
-#     }
-#     set cacheType [expr {[::acs::icanuse "ns_hash"] ? "HashKeyPartitionedCache" : "Cache"}]
-#     ::acs::$cacheType create ::acs::misc_cache \
-#         -package_key acs-tcl \
-#         -parameter MiscCache \
-#         -default_size 100KB
-# }
-
 
 # Local variables:
 #    mode: tcl
