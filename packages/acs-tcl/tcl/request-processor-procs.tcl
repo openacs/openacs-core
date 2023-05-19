@@ -144,7 +144,7 @@ ad_proc -deprecated rp_form_put { name value } {
     @return the form ns_set, in case you're interested. Mostly you will want to discard the result.
 
 } {
-    set form [rp_getform]
+    set form [ns_getform]
     ns_set put $form $name $value
     return $form
 }
@@ -162,7 +162,7 @@ ad_proc -deprecated rp_form_update { name value } {
     @return the form ns_set, in case you're interested. Mostly you will want to discard the result.
 
 } {
-    set form [rp_getform]
+    set form [ns_getform]
     ns_set update $form $name $value
     return $form
 }
