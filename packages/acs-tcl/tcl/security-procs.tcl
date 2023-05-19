@@ -428,12 +428,18 @@ ad_proc sec_login_get_external_registry {} {
     #
     set external_registry ""
     if {[ns_conn isconnected]} {
-        set external_registry [dict get [sec_login_read_cookie] external_registry]
-        if {$external_registry ne "" && ![nsf::is object $external_registry]} {
-            ns_log warning "external registry object '$external_registry'" \
-                "used for login of user [ad_conn untrusted_user_id]" \
-                "does not exist. Ignored."
-            set external_registry ""
+        try {
+            set external_registry [dict get [sec_login_read_cookie] external_registry]
+            if {$external_registry ne "" && ![nsf::is object $external_registry]} {
+                ns_log warning "external registry object '$external_registry'" \
+                    "used for login of user [ad_conn untrusted_user_id]" \
+                    "does not exist. Ignored."
+                set external_registry ""
+            }
+        } trap {AD_EXCEPTION NO_COOKIE} {errorMsg} {
+            #
+            # There is no such such cookie, therefore no external registry
+            #
         }
     }
     return $external_registry
