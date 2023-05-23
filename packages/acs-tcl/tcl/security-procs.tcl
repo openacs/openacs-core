@@ -190,8 +190,9 @@ ad_proc -private sec_handler {} {
         set persistent_login_p 0
 
         if {$session_user_id > 0} {
-            try {
-                set login_info [sec_login_read_cookie]
+            set login_info [sec_login_read_cookie]
+            if {[dict get $login_info status] eq "OK"} {
+
                 set auth_token [dict get $login_info auth_token]
 
                 #
@@ -199,35 +200,20 @@ ad_proc -private sec_handler {} {
                 # against the one on the login cookie.
                 #
                 if {$auth_token ne [sec_get_user_auth_token $session_user_id]} {
-                    throw {AD_EXCEPTION USER_AUTH_TOKEN_INVALID} "User authentication token is invalid."
+                    #
+                    # Invalid user auth token in the login
+                    # cookie. This happens e.g. when user changed
+                    # their password, hence all logins on different
+                    # devices must be invalidated. Make sure to log
+                    # the current user out and update session cookie
+                    # and ad_conn information.
+                    #
+                    ad_user_logout
+                    sec_login_handler
+                } else {
+                    set login_cookie_exists_p 1
+                    set persistent_login_p [dict get $login_info forever_p]
                 }
-
-            } trap {AD_EXCEPTION NO_COOKIE} {errorMsg} {
-                #
-                # No login cookie.
-                #
-                ns_log notice "=== no login_cookie"
-
-            } trap {AD_EXCEPTION INVALID_COOKIE} {errorMsg} {
-                #
-                # Invalid login cookie (might be past validity)
-                #
-                ns_log notice "=== invalid login_cookie"
-
-            } trap {AD_EXCEPTION USER_AUTH_TOKEN_INVALID} {errorMsg} {
-                #
-                # Invalid user auth token in the login cookie. This
-                # happens e.g. when user changed their password, hence
-                # all logins on different devices must be
-                # invalidated. Make sure to log the current user out
-                # and update session cookie and ad_conn information.
-                #
-                ad_user_logout
-                sec_login_handler
-
-            } on ok {} {
-                set login_cookie_exists_p 1
-                set persistent_login_p [dict get $login_info forever_p]
             }
         }
 
@@ -380,7 +366,9 @@ ad_proc -private sec_login_read_cookie {} {
 
     @author Victor Guerra
 
-    @return dict of values from cookie "user_login_secure" or "user_login"
+    @return dict of values from cookie "user_login_secure" or "user_login".
+            Additionally, the dict contains a member "status" with possible
+            values "OK", "NO_COOKIE" or "INVALID_COOKIE"
 } {
     #
     # ad_user_login         user_id,issue_time,auth_token,forever,external_registry
@@ -396,29 +384,49 @@ ad_proc -private sec_login_read_cookie {} {
         set expect_elements 5
     }
 
-    set login_list [split [ad_get_signed_cookie $cookie_name] ","]
-    if {[llength $login_list] == $expect_elements} {
-        return [list \
-                    user_id    [lindex $login_list 0] \
-                    issue_time [lindex $login_list 1] \
-                    auth_token [lindex $login_list 2] \
-                    forever_p  [lindex $login_list end-1] \
-                    external_registry [lindex $login_list end] \
-                   ]
-    } else {
-        #
-        # Legacy case (no external registry is provided). This is just
-        # needed for the transition phase, while still old coocies are
-        # in use, having no "external_registry" defined.
-        #
-        return [list \
-                    user_id    [lindex $login_list 0] \
-                    issue_time [lindex $login_list 1] \
-                    auth_token [lindex $login_list 2] \
-                    forever_p  [lindex $login_list end] \
-                    external_registry "" \
-                   ]
+    #
+    # Provide default values for the result.
+    #
+    set result {
+        user_id 0
+        issue_time 0
+        auth_token ""
+        forever_p 0
+        external_registry ""
+        status NO_COOKIE
     }
+
+    try {
+        ad_get_signed_cookie $cookie_name
+
+    } trap {AD_EXCEPTION NO_COOKIE} {errorMsg} {
+        dict set result status NO_COOKIE
+
+    } trap {AD_EXCEPTION INVALID_COOKIE} {errorMsg} {
+        dict set result status INVALID_COOKIE
+
+    } on ok {cookie_value} {
+        set login_list [split $cookie_value ","]
+        dict set result status OK
+        dict set result user_id    [lindex $login_list 0]
+        dict set result issue_time [lindex $login_list 1]
+        dict set result auth_token [lindex $login_list 2]
+
+        if {[llength $login_list] == $expect_elements} {
+            dict set result forever_p  [lindex $login_list end-1]
+            dict set result external_registry [lindex $login_list end]
+        } else {
+            #
+            # Legacy case (no external registry is provided). This is
+            # just needed for the transition phase, while still old
+            # cookies are in use, having no "external_registry"
+            # defined.
+            #
+            dict set result forever_p  [lindex $login_list end]
+            dict set result external_registry ""
+        }
+    }
+    return $result
 }
 
 ad_proc sec_login_get_external_registry {} {
@@ -428,18 +436,12 @@ ad_proc sec_login_get_external_registry {} {
     #
     set external_registry ""
     if {[ns_conn isconnected]} {
-        try {
-            set external_registry [dict get [sec_login_read_cookie] external_registry]
-            if {$external_registry ne "" && ![nsf::is object $external_registry]} {
-                ns_log warning "external registry object '$external_registry'" \
-                    "used for login of user [ad_conn untrusted_user_id]" \
-                    "does not exist. Ignored."
-                set external_registry ""
-            }
-        } trap {AD_EXCEPTION NO_COOKIE} {errorMsg} {
-            #
-            # There is no such such cookie, therefore no external registry
-            #
+        set external_registry [dict get [sec_login_read_cookie] external_registry]
+        if {$external_registry ne "" && ![nsf::is object $external_registry]} {
+            ns_log warning "external registry object '$external_registry'" \
+                "used for login of user [ad_conn untrusted_user_id]" \
+                "does not exist. Ignored."
+            set external_registry ""
         }
     }
     return $external_registry
@@ -466,8 +468,8 @@ ad_proc -public sec_login_handler {} {
     #
     # Check login cookie.
     #
-    try {
-        set login_info [sec_login_read_cookie]
+    set login_info [sec_login_read_cookie]
+    if {[dict get $login_info status] eq "OK"} {
         set untrusted_user_id [dict get $login_info user_id]
         set auth_level expired
 
@@ -522,16 +524,6 @@ ad_proc -public sec_login_handler {} {
             set auth_level none
             set account_status "closed"
         }
-    } trap {AD_EXCEPTION NO_COOKIE} {errorMsg} {
-        #
-        # There is no such such cookie, no error to report.
-        #
-    } trap {AD_EXCEPTION INVALID_COOKIE} {errorMsg} {
-        #
-        # The cookie is not valid (might be past validity)
-        #
-    } on error {errorMsg} {
-        ns_log error "sec_login_handler: $errorMsg, $::errorCode"
     }
 
     sec_setup_session $untrusted_user_id $auth_level $account_status
@@ -681,22 +673,13 @@ ad_proc -public ad_user_logout {
                             -default 0] ? "t" : "f"}] \
         [security::cookie_name session_id]
 
-    try {
+    set external_registry [dict get [sec_login_read_cookie] external_registry]
+    if {$external_registry ne "" && [nsf::is object $external_registry]} {
         #
-        # When there is no cookie, sec_login_read_cookie returns an exception.
+        # Logout from external registry
         #
-        set external_registry [dict get [sec_login_read_cookie] external_registry]
-        if {$external_registry ne "" && [nsf::is object $external_registry]} {
-            #
-            # Logout from external registry
-            #
-            ns_log notice "logout from external registry: $external_registry"
-            $external_registry logout
-        }
-    } trap {AD_EXCEPTION NO_COOKIE} {errorMsg} {
-        #
-        # We have no login cookie.
-        ns_log notice "ad_user_logout, no login_cookie available: $errorMsg"
+        ns_log notice "logout from external registry: $external_registry"
+        $external_registry logout
     }
 
     ad_unset_cookie -domain $cookie_domain -secure f [security::cookie_name user_login]
@@ -1005,11 +988,12 @@ ad_proc -private sec_generate_session_id_cookie {
 
     set discard t
     set max_age [sec_session_timeout]
-    catch {
-        if {[dict get [sec_login_read_cookie] forever_p]} {
-            set discard f
-            set max_age inf
-        }
+    set login_info [sec_login_read_cookie]
+    if {[dict get $login_info status] eq "OK"
+        && [dict get $login_info forever_p]
+    } {
+        set discard f
+        set max_age inf
     }
 
     ad_set_signed_cookie \
