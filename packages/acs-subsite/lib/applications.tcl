@@ -10,9 +10,10 @@ set admin_p [permission::permission_p \
 set actions [list]
 if { $admin_p } {
     set return_url [ad_return_url]
+    set subsite_url [subsite::get_element -element url]
     lappend actions \
         [_ acs-subsite.Add_new_app] \
-        [export_vars -base "[subsite::get_element -element url]admin/applications/application-add" {
+        [export_vars -base "${subsite_url}admin/applications/application-add" {
             return_url
         }]
 }
@@ -30,10 +31,7 @@ list::create \
     }
 
 set subsite_node_id [subsite::get_element -element node_id]
-
 set user_id [ad_conn user_id]
-ns_log notice "APPS: subsite_node_id $subsite_node_id, user_id $user_id // [array get ::ad_conn]"
-
 
 db_multirow applications select_applications {
     select p.package_id,
