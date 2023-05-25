@@ -429,11 +429,14 @@ ad_proc -private sec_login_read_cookie {} {
     return $result
 }
 
-ad_proc sec_login_get_external_registry {} {
-    #
-    # If the login was issued from an external_registry, use this
-    # as well for refreshing.
-    #
+ad_proc -public sec_login_get_external_registry {} {
+
+    If the login was issued from an external_registry, use this as
+    well for refreshing.
+
+    @return registry object or the empty string when not applicable
+
+} {
     set external_registry ""
     if {[ns_conn isconnected]} {
         set external_registry [dict get [sec_login_read_cookie] external_registry]
