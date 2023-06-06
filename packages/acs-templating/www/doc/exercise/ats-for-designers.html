@@ -150,7 +150,7 @@ found <a href="../tags/if.html">here</a>.  Also, a few more things to keep in mi
   strings with quantitative values, so 
   conditions like less than, greater than, and (not) between can also 
   be used with text to determine alphabetical order: <em>a</em> &lt; <em>b</em> &lt; ... &lt; 
-  <em>z</em>, lower-case letters are greater than upper-case, and numbers less than letters.  
+  <em>z</em>, lowercase letters are greater than uppercase, and numbers less than letters.  
   Example: "you" are greater than "me", and "I" am less than "you"</li>
 
   <li>the "between" conditions checks inclusively, so &lt;if 2 between 2 6&gt; 
@@ -201,12 +201,12 @@ demonstration and upon examining the .adp files, and add a few pointers:
   <li>the &lt;slave&gt; tag indicates where on the master page the slave 
   section is inserted</li>
   <li>slave pages indicate the source of the master file with the &lt;master&gt;
-      tag, referring by the file name only, and not including its ".adp" extension</li>
+      tag, referring by the filename only, and not including its ".adp" extension</li>
   <li>as mentioned earlier, slave sections do not require &lt;html&gt;, 
   &lt;head&gt;, and &lt;body&gt;
       tags when contained within a master tag already formatted for HTML</li>
   <li>as the demonstration points out, pages are browsed at the .acs page 
-  sharing the same file name
+  sharing the same filename
       as the slave, not master</li>
   <li>the master page can be viewed at its own .acs page, but shows nothing in
       place of the &lt;slave&gt; tag</li>

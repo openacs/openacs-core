@@ -7,9 +7,9 @@ memory</property>
 <h2>Parsing Templates in Memory</h2>
 <strong><a href="../index">Templating System</a></strong>
 <p>The templating system code is oriented towards parsing templates
-stored in the file system, in conjunction with a Tcl script that is
+stored in the filesystem, in conjunction with a Tcl script that is
 also stored as a file. However, when the template is not actually
-stored in the file system, you will need to parse it as a string in
+stored in the filesystem, you will need to parse it as a string in
 memory. Two common situations in which this occurs are:</p>
 <ul>
 <li>Templates are stored in the database.</li><li>Templates are generated dynamically, possibly based in turn on

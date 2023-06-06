@@ -42,7 +42,7 @@ includes two different forms:</p>
 a user. The administrator requests a page,
 <kbd>user-edit.acs</kbd>. The page looks for a query parameter
 named <kbd>user_id</kbd> to specify which user to edit.</p></li><li><p>Initially, <kbd>user_id</kbd> is not specified. In this case,
-the page includes a user search form.</p></li><li><p>The user enters part of a user name or screen name and submits
+the page includes a user search form.</p></li><li><p>The user enters part of a username or screen name and submits
 the form, which returns to the same URL with the query parameter
 <kbd>user_search</kbd>. If this parameter is defined, the page
 queries the database for potential matches.</p></li><li><p>If one match is found, the page sets a <kbd>user_id</kbd>
