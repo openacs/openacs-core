@@ -53,7 +53,7 @@ ad_proc -public permission::permission_p {
     {-object_id:required}
     {-privilege:required}
 } {
-    Does the provided party have the reequested privilege on the given object?
+    Does the provided party have the requested privilege on the given object?
 
     @param no_cache force loading from db even if cached (flushes cache as well)
 

@@ -2185,7 +2185,7 @@ ad_proc -deprecated ad_ns_set_to_tcl_vars {
     correspondingly, i.e. if key is foo and value is bar, the Tcl var
     foo is set to bar.
 
-    DEPRECATED: the few remaining usages of this api in upstream code
+    DEPRECATED: the few remaining usages of this API in upstream code
     were found to be easily replaceable with much saner and clearer
     idioms.
 

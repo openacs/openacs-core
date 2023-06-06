@@ -163,7 +163,7 @@ aa_register_case \
         }
 
         if {![info exists found_p]} {
-            aa_log "No parameter exposed to the api was found in the server conf."
+            aa_log "No parameter exposed to the API was found in the server conf."
         }
     }
 

@@ -76,7 +76,7 @@ ad_proc -deprecated apm_file_type_keys {} {
 
     Returns a list of valid file type keys.
 
-    DEPRECATED: this api in not used in upstream code and can be
+    DEPRECATED: this API in not used in upstream code and can be
     inlined by a simple dict idiom.
 
     @see apm_file_type_names

@@ -640,7 +640,7 @@ ad_proc -public ad_user_logout {
     if {$external_registry ne ""} {
         #
         # If we were logged in via an external identity provider, try
-        # to logout from there as well. Note, that not every external
+        # to logout from there as well. Note that not every external
         # identity provider supports a logout (e.g. GitHub), and maybe
         # in some cases, the external logout is not wanted. This
         # should be provided by the implementation of the external

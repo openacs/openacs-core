@@ -11,7 +11,7 @@ aa_register_case \
         apm_workspace_install_dir
     } \
     apm_workspace_directories {
-        Test requiring the workspace directories via the api.
+        Test requiring the workspace directories via the API.
     } {
         aa_section "Create the directories"
 

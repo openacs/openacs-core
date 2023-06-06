@@ -72,7 +72,7 @@ aa_register_case \
         Test the functional api
     } {
         #
-        # These tests cover the api where tests were not provided.
+        # These tests cover the API where tests were not provided.
         #
         aa_equals "abs returns expected" \
             [f::abs 1] 1

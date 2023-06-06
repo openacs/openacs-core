@@ -44,7 +44,7 @@ namespace eval site_node_apm_integration {
 
         This may become either a private interface or be deprecated in
         the future. In most cases, site_node::get_children is what you
-        want. One difference is, this api is not cached, so it will
+        want. One difference is, this API is not cached, so it will
         always return the actual status from the database.
 
         @see site_node::get_children
@@ -68,7 +68,7 @@ namespace eval site_node_apm_integration {
     } {
         This may become either a private interface or be deprecated in
         the future. In most cases, site_node::get_children is what you
-        want. One difference is, this api is not cached, so it will
+        want. One difference is, this API is not cached, so it will
         always return the actual status from the database.
 
         @see site_node::get_children
