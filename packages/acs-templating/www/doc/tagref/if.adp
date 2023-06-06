@@ -9,37 +9,11 @@
  : If
 <h3>Summary</h3>
 <p>The <kbd>if</kbd> tag is used to output a template section only
-when certain conditions are met.</p>
-<h3>Usage Examples</h3>
-<pre>&lt;if \@x\@ eq 5&gt;True&lt;/if&gt;
-&lt;if \@x\@ eq "Greta"&gt;True&lt;/if&gt;
+when certain conditions are met. It has the form <kbd>&lt;if <i>expression</i>&gt;</kbd>.</p>
 
-&lt;if \@x\@ ne 5&gt;True&lt;/if&gt;
-&lt;if \@x\@ ne "Greta"&gt;True&lt;/if&gt;
-
-&lt;if \@x\@ lt 5&gt;True&lt;/if&gt;
-&lt;if \@x\@ le 5&gt;True&lt;/if&gt;
-
-&lt;if \@x\@ gt 5&gt;True&lt;/if&gt;
-&lt;if \@x\@ ge 5&gt;True&lt;/if&gt;
-
-&lt;if \@x\@ odd&gt;True&lt;/if&gt;
-&lt;if \@x\@ even&gt;True&lt;/if&gt;
-
-&lt;if \@x\@ between 3 6&gt;True&lt;/if&gt;
-&lt;if \@x\@ not between 3 6&gt;True&lt;/if&gt;
-
-&lt;if \@x\@ eq 5 and \@y\@ eq 2&gt;True&lt;/if&gt;
-&lt;if \@x\@ ge 5 or \@y\@ le 2&gt;True&lt;/if&gt;
-
-&lt;if \@s\@ nil&gt;True&lt;/if&gt;
-&lt;if \@s\@ not nil&gt;True&lt;/if&gt;
-
-&lt;if \@z\@ in "Greta" "Fred" "Sam"&gt;True&lt;/if&gt;
-&lt;if \@z\@ not in "Greta" "Fred" "Sam"&gt;True&lt;/if&gt;</pre>
 <h3>Expression Syntax</h3>
 
-The condition of the &lt;if&gt; tag is built from terms of the form
+The expressions used in the <kbd>&lt;if&gt;</kbd> tag have the following form
 <blockquote>
 <var>x</var><sub>0</sub> [<code>not</code>]
 <code><strong>op</strong></code><var>x</var><sub>1</sub><var>x</var><sub>2</sub> ...</blockquote>
@@ -106,6 +80,36 @@ operands (<var>x</var>
 </ul>
 <p>Any of these operators can be prefixed with
 <code><strong>not</strong></code> to invert the outcome.</p>
+<h3>Usage Examples</h3>
+<pre>&lt;if \@x\@ eq 5&gt;True&lt;/if&gt;
+&lt;if \@x\@ eq "Greta"&gt;True&lt;/if&gt;
+
+&lt;if \@x\@ ne 5&gt;True&lt;/if&gt;
+&lt;if \@x\@ ne "Greta"&gt;True&lt;/if&gt;
+
+&lt;if \@x\@ lt 5&gt;True&lt;/if&gt;
+&lt;if \@x\@ le 5&gt;True&lt;/if&gt;
+
+&lt;if \@x\@ gt 5&gt;True&lt;/if&gt;
+&lt;if \@x\@ ge 5&gt;True&lt;/if&gt;
+
+&lt;if \@x\@ true&gt;True&lt;/if&gt;
+&lt;if \@x\@ false&gt;False&lt;/if&gt;
+
+&lt;if \@x\@ odd&gt;True&lt;/if&gt;
+&lt;if \@x\@ even&gt;True&lt;/if&gt;
+
+&lt;if \@x\@ between 3 6&gt;True&lt;/if&gt;
+&lt;if \@x\@ not between 3 6&gt;True&lt;/if&gt;
+
+&lt;if \@x\@ eq 5 and \@y\@ eq 2&gt;True&lt;/if&gt;
+&lt;if \@x\@ ge 5 or \@y\@ le 2&gt;True&lt;/if&gt;
+
+&lt;if \@s\@ nil&gt;True&lt;/if&gt;
+&lt;if \@s\@ not nil&gt;True&lt;/if&gt;
+
+&lt;if \@z\@ in "Greta" "Fred" "Sam"&gt;True&lt;/if&gt;
+&lt;if \@z\@ not in "Greta" "Fred" "Sam"&gt;True&lt;/if&gt;</pre>
 <h3>Notes</h3>
 <ul>
 <li><p>Any legal variables that may be referenced in the template may
