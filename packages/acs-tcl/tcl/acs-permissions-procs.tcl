@@ -10,15 +10,20 @@ ad_library {
 
 namespace eval permission {}
 #
-# Define cache_p to return 0 or 1 depending on the PermissionCacheP
+# Define cache_p to return boolean value depending on the PermissionCacheP
 # kernel parameter on the first call.  The namespace eval is needed to
 # make the redefinition work for ttrace.
 #
 ad_proc -private permission::cache_p {} {
-    returns 0 or 1 depending if permission_p caching is enabled or disabled.
-    by default caching is disabled.
+    Check, if permission_p caching is enabled or disabled.
+    By default caching is disabled.
+
+    @return Boolean value expressing whether permission caching is enbled
 } {
-    set cache_p [parameter::get -package_id $::acs::kernel_id -parameter PermissionCacheP -default 0]
+    set cache_p [parameter::get \
+                     -package_id $::acs::kernel_id \
+                     -parameter PermissionCacheP \
+                     -default 0]
     namespace eval ::permission [list proc cache_p {} "return $cache_p"]
     return $cache_p
 }
@@ -66,6 +71,8 @@ ad_proc -public permission::permission_p {
     @param object_id The object you want to check permissions on.
 
     @param privilege The privilege you want to check for.
+
+    @return Boolean value expressing if the user has the required privilege on the given object
 } {
     if { $party_id eq "" } {
         set party_id [ad_conn user_id]
@@ -130,7 +137,10 @@ ad_proc -public permission::permission_p {
                                         -privilege $privilege]
         if { $permission_p != $untrusted_permission_p } {
             # Bump to registration page
-            ns_log Debug "permission_p: party_id=$party_id ([acs_object_name $party_id]), object_id=$object_id ([acs_object_name $object_id]), privilege=$privilege. Result=>$permission_p. Untrusted-Result=>$untrusted_permission_p\n[ad_get_tcl_call_stack]"
+            ns_log Debug "permission_p: party_id=$party_id ([acs_object_name $party_id])," \
+                "object_id=$object_id ([acs_object_name $object_id])," \
+                "privilege=$privilege. Result=>$permission_p." \
+                "Untrusted-Result=>$untrusted_permission_p\n[ad_get_tcl_call_stack]"
             if { ![ad_login_page] } {
                 auth::require_login
             }
@@ -190,7 +200,14 @@ ad_proc -public permission::require_permission {
         if {!$party_id && ![ad_conn ajax_p]} {
             auth::require_login
         } else {
-            ns_log notice "permission::require_permission: $party_id doesn't have privilege $privilege on object $object_id"
+            set message [string cat "permission::require_permission: " \
+                             "$party_id doesn't have privilege $privilege " \
+                             "on object '$object_id'"]
+            if {$object_id eq ""} {
+                ad_log error $message
+            } else {
+                ns_log notice $message
+            }
             ad_return_forbidden \
                 "Permission Denied" \
                 "You don't have permission to $privilege on object $object_id."
@@ -203,7 +220,8 @@ ad_proc -public permission::require_permission {
 ad_proc -public permission::inherit_p {
     {-object_id:required}
 } {
-    does this object inherit permissions
+    Does this object inherit permissions?
+    @return Boolean value expression whether permussions are inherited.
 } {
     return [db_string select_inherit_p {} -default 0]
 }
@@ -251,7 +269,7 @@ ad_proc -public permission::write_permission_p {
     @param creation_user Optionally specify creation_user directly as an optimization.
                          Otherwise a query will be executed.
 
-    @return True (1) if user has permission to edit the object, 0 otherwise.
+    @return Boolean value expressing if the user has permission to edit the object
 
     @see permission::require_write_permission
 } {
