@@ -17,5 +17,5 @@
 </if>
 
 </if>
-<include src="external-logins" return_url=&return_url>
+<include src="external-logins" &return_url="return_url">
 </div>
