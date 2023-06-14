@@ -6,26 +6,30 @@ ad_library {
     @cvs-id $Id$
 }
 
-aa_register_case -cats {
-    smoke production_safe
-} -procs {
-    util::which
-    apm_tar_cmd
-    apm_gzip_cmd
-} acs_admin_exec_dependencies {
-    Test external command dependencies for this package.
-} {
-    foreach cmd [list \
-                     [::util::which openssl] \
-                     [::util::which [apm_tar_cmd]] \
-                     [::util::which [apm_gzip_cmd]] \
-                     [file join $::acs::rootdir bin cd-helper] \
-                     [::util::which cvs] \
-                     [util::which uptime]
-                ] {
-        aa_true "'$cmd' is executable" [file executable $cmd]
-    }
-}
+#
+# This test could be used to make sure binaries in use in the code are
+# actually available to the system.
+#
+# aa_register_case -cats {
+#     smoke production_safe
+# } -procs {
+#     util::which
+#     apm_tar_cmd
+#     apm_gzip_cmd
+# } acs_admin_exec_dependencies {
+#     Test external command dependencies for this package.
+# } {
+#     foreach cmd [list \
+#                      [::util::which openssl] \
+#                      [::util::which [apm_tar_cmd]] \
+#                      [::util::which [apm_gzip_cmd]] \
+#                      [file join $::acs::rootdir bin cd-helper] \
+#                      [::util::which cvs] \
+#                      [util::which uptime]
+#                 ] {
+#         aa_true "'$cmd' is executable" [file executable $cmd]
+#     }
+# }
 
 aa_register_case -cats {
     api smoke

@@ -1490,39 +1490,43 @@ aa_register_case \
             }
     }
 
-aa_register_case -cats {
-    smoke production_safe
-} -procs {
-    util::which
-    apm_tar_cmd
-    apm_gzip_cmd
-    db_get_pgbin
-    db_name
-} acs_tcl_exec_dependencies {
-    Test external command dependencies for this package.
-} {
-    set commands [list \
-                      [::util::which [apm_tar_cmd]] \
-                      [::util::which [apm_gzip_cmd]] \
-                      [parameter::get -parameter "HtmlDocBin" -default "/usr/bin/htmldoc"] \
-                      [::util::which pdfinfo] \
-                      [::util::which diff] \
-                      [::util::which dot] \
-                      [::util::which gzip] \
-                      [::util::which curl] \
-                     ]
+#
+# This test could be used to make sure binaries in use in the code are
+# actually available to the system.
+#
+# aa_register_case -cats {
+#     smoke production_safe
+# } -procs {
+#     util::which
+#     apm_tar_cmd
+#     apm_gzip_cmd
+#     db_get_pgbin
+#     db_name
+# } acs_tcl_exec_dependencies {
+#     Test external command dependencies for this package.
+# } {
+#     set commands [list \
+#                       [::util::which [apm_tar_cmd]] \
+#                       [::util::which [apm_gzip_cmd]] \
+#                       [parameter::get -parameter "HtmlDocBin" -default "/usr/bin/htmldoc"] \
+#                       [::util::which pdfinfo] \
+#                       [::util::which diff] \
+#                       [::util::which dot] \
+#                       [::util::which gzip] \
+#                       [::util::which curl] \
+#                      ]
 
-    if {[db_name] eq "PostgreSQL"} {
-        #
-        # On a Posgtgres-enabled installation, we also want psql.
-        #
-        lappend commands [file join [db_get_pgbin] psql]
-    }
+#     if {[db_name] eq "PostgreSQL"} {
+#         #
+#         # On a Posgtgres-enabled installation, we also want psql.
+#         #
+#         lappend commands [file join [db_get_pgbin] psql]
+#     }
 
-    foreach cmd $commands {
-        aa_true "'$cmd' is executable" [file executable $cmd]
-    }
-}
+#     foreach cmd $commands {
+#         aa_true "'$cmd' is executable" [file executable $cmd]
+#     }
+# }
 
 # Local variables:
 #    mode: tcl

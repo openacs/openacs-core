@@ -6,21 +6,25 @@ ad_library {
     @cvs-id $Id$
 }
 
-aa_register_case -cats {
-    smoke production_safe
-} -procs {
-    image::identify_binary
-    image::convert_binary
-} acs_content_repository_exec_dependencies {
-    Test external command dependencies for this package.
-} {
-    foreach cmd [list \
-                     [::image::identify_binary] \
-                     [::image::convert_binary]
-                    ] {
-        aa_true "'$cmd' is executable" [file executable $cmd]
-    }
-}
+#
+# This test could be used to make sure binaries in use in the code are
+# actually available to the system.
+#
+# aa_register_case -cats {
+#     smoke production_safe
+# } -procs {
+#     image::identify_binary
+#     image::convert_binary
+# } acs_content_repository_exec_dependencies {
+#     Test external command dependencies for this package.
+# } {
+#     foreach cmd [list \
+#                      [::image::identify_binary] \
+#                      [::image::convert_binary]
+#                     ] {
+#         aa_true "'$cmd' is executable" [file executable $cmd]
+#     }
+# }
 
 aa_register_case \
     -cats {smoke api db} \

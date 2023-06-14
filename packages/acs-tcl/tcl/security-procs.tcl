@@ -1444,6 +1444,7 @@ ad_proc -public ad_get_external_registries {
                                 -parameter OfferedRegistries \
                                 -package_id $subsite_id \
                                 -default *]
+
     set result {}
     if {[nsf::is object ::xo::Authorize]} {
         foreach auth_obj [::xo::Authorize info instances -closure] {
