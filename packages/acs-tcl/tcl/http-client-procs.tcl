@@ -84,7 +84,7 @@ ad_proc -public util::http::basic_auth {
     if {$headers eq ""} {
         set headers [ns_set create headers]
     }
-    set h "Basic [base64::encode ${username}:$password]"
+    set h "Basic [ns_base64encode ${username}:$password]"
     ns_set idelkey $headers "Authorization"
     ns_set put     $headers "Authorization" $h
     return $headers
@@ -903,7 +903,7 @@ ad_proc -private util::http::append_to_payload {
             close $rfd
         }
         if {$base64_p} {
-            set content [base64::encode $content]
+            set content [ns_base64encode $content]
         }
         if {$encode_p} {
             set content [encoding convertto $encoding $content]
