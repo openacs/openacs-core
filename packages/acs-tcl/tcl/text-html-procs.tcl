@@ -68,9 +68,9 @@ ad_proc -private ad_enhanced_text_escape_disallowed {text} {
     set tagDict {}
     #ns_log notice "ad_enhanced_text_escape_disallowed called on [ns_conn url]?[ns_conn query]"
     if {[::acs::icanuse "ns_parsehtml"]} {
-        if {[ns_conn isconnected]} {
-            ns_log notice "PARSE called by [ns_conn url]?[ns_conn query]"
-        }
+        #if {[ns_conn isconnected]} {
+        #    ns_log notice "PARSE called by [ns_conn url]?[ns_conn query]"
+        #}
         set parsed [ns_parsehtml -noangle -- $text]
         set allowed_tags {
             p /p
