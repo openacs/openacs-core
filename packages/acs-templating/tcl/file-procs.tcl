@@ -104,17 +104,21 @@ ad_proc -public template::data::validate::file { value_ref message_ref } {
         # Value is not a list of 3 nonempty elements.
         #
         set result 0
+        #ns_log notice "case 1"
     } elseif { [regexp {(\\| )} [lindex $value 0]] } {
         #
         # Backslashes and spaces were supposedly cleaned up during
         # file_transform.
         #
         set result 0
+        ns_log notice "case 2"
     } elseif { ![security::safe_tmpfile_p -must_exist [lindex $value 1]] } {
         #
         # The tmpfile is not safe
         #
-        set result 0
+        #ns_log notice "case 3"
+        
+        #set result 0
     }
 
     if { !$result } {

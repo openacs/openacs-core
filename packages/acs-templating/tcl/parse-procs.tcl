@@ -362,7 +362,7 @@ ad_proc -public template::set_file { path } {
     Set the path of the template to render.  This is typically used to
     implement multiple "skins" on a common set of data sources.  The
     initial code (which may be in a .tcl file not associated with a .adp
-                  file) sets up any number of data sources, and then calls set_file to
+    file) sets up any number of data sources, and then calls set_file to
     specify the template to actually render.  Any code associated with
     the specified template is executed in the same stack frame as the
     initial code, so that each "skin" may reference additional specific
@@ -398,7 +398,8 @@ ad_proc -public template::adp_init { type file_stub } {
     # Check, if the compiled proc exists already.
     #
     set proc_name [namespace which ::template::mtimes::${cache}::$file_stub]
-
+    #ns_log notice "$type $file_stub -> '$proc_name'"
+    
     set pkg_id [apm_package_id_from_key acs-templating]
     set refresh_cache [parameter::get \
                            -package_id $pkg_id \
@@ -424,6 +425,7 @@ ad_proc -public template::adp_init { type file_stub } {
                     set code [adp_compile -file $file_stub.$type]
                 }
             }
+            #ns_log notice "$type $file_stub -> compiled '$code'"
 
             #
             # Wrap the code for both types of files within an uplevel
@@ -666,7 +668,7 @@ ad_proc -public template::adp_variable_regexp_literal {} {
     adp_variable_regexp augmented by "literal"
 
     @author Gustaf Neumann
-    @creation-date Dezember 2012
+    @creation-date December 2012
 } {
     return {(^|[^\\])@([[:alnum:]_:]+);literal@}
 }

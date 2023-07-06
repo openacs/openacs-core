@@ -859,7 +859,7 @@ ad_proc -private template::element::render { form_id element_id tag_attributes }
 
     @param form_id        The identifier of the form containing the element.
     @param element_id     The unique identifier of the element within the form.
-    @param tag_attributes A name-value list of addditional HTML
+    @param tag_attributes A name-value list of additional HTML
                           attributes to include in the tag, such as
                           JavaScript handlers or special formatting
                           (i.e. ROWS and COLS for a TEXTAREA).
@@ -896,7 +896,7 @@ ad_proc -private template::element::options { form_id element_id tag_attributes 
 
     @param form_id        The identifier of the form containing the element.
     @param element_id     The unique identifier of the element within the form.
-    @param tag_attributes A name-value list of addditional HTML
+    @param tag_attributes A name-value list of additional HTML
                           attributes to include in the INPUT tags for
                           each radio button or checkbox, such as
                           JavaScript handlers or special formatting.
