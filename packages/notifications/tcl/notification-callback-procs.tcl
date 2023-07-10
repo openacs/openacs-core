@@ -118,7 +118,7 @@ ad_proc -public -callback acs_mail_lite::incoming_email -impl notifications {
             -content $email(bodies)]
         db_dml holdinsert {}
 
-        #extending email array for notification callback implementors
+        #extending email array for notification callback implementers
         set email(object_id) $object_id
         set email(type_id) $type_id
         set email(reply_id) $reply_id
