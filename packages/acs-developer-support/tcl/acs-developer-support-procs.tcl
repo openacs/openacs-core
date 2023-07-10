@@ -56,22 +56,21 @@ ad_proc -public ds_enabled_p {} {
     #
     # On busy sites, frequent calls to [ds_enabled_p] lead to huge
     # number of mutex locks for the nsv ds_properties. Therefore,
-    # cache its results in a per-thead variable.
+    # cache its results in a per-request variable.
     #
     if {[info exists ::ds_enabled_p]} {
         return $::ds_enabled_p
     }
 
     #
-    # Never cache values in background tasks. When e.g. the
-    # blueprint is refreshed in the background, this would always
-    # set the ::ds_enabled_p to 1.
+    # When not connected, always assume that developer-support is
+    # turned off.
     #
     if { [ns_conn isconnected] == 0 } {
         return 0
     }
     #
-    # Get the nsv values and cache it in the current thread.
+    # Get the nsv values and cache it in the current request.
     #
     if {
         ![nsv_exists ds_properties enabled_p]
