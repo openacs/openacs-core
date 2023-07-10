@@ -1712,7 +1712,7 @@ received over HTTPS.
           </listitem>
           <listitem>
             <para>If images on the login page are over HTTP and not HTTPS,
-browsers will warn that you&#39;re seeing unsecure items as part of a
+browsers will warn that you&#39;re seeing insecure items as part of a
 secure web page, which is annoying and unprofessional.
 </para>
           </listitem>

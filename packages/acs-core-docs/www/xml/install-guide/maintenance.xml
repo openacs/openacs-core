@@ -654,7 +654,7 @@ directory. You&#39;ll also need to edit all instances of service0 to your $OPENA
   (For help on all errors and warnings, see docs/errors.html)
 /usr/share/analog-5.32/analog: Warning R: Turning off empty Search Word Report
 [$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$</screen>
-        <para>Verify that it works by browing to <computeroutput>http://yourserver.test:8000/log/traffic.html</computeroutput></para>
+        <para>Verify that it works by browsing to <computeroutput>http://yourserver.test:8000/log/traffic.html</computeroutput></para>
       </listitem>
       <listitem>
         <para>Automate this by creating a file in

@@ -453,7 +453,7 @@ cp https.tcl /usr/local/aolserver/modules/tcl/</action></screen>
       </sect2>
       <sect2 id="install-nsopenssl-aolserver4">
         <title>Install on AOLserver4</title>
-        <para> You will need the AOLserver4 source in <computeroutput>/usr/local/src/aolserver/aolserver</computeroutput> and OpenSSL installed in <computeroutput>/usr/local/ssl</computeroutput> (or at least symlinked there). The use of <computeroutput>INST=/point/to/aolserver</computeroutput> is being replaced with <computeroutput>AOLSERVER=/point/to/aolserver</computeroutput>. We are including both here, because while this module still requires INST, if one just uses AOLSERVER, the default value would be used and could intefere with another existing installation.</para>
+        <para> You will need the AOLserver4 source in <computeroutput>/usr/local/src/aolserver/aolserver</computeroutput> and OpenSSL installed in <computeroutput>/usr/local/ssl</computeroutput> (or at least symlinked there). The use of <computeroutput>INST=/point/to/aolserver</computeroutput> is being replaced with <computeroutput>AOLSERVER=/point/to/aolserver</computeroutput>. We are including both here, because while this module still requires INST, if one just uses AOLSERVER, the default value would be used and could interfere with another existing installation.</para>
         <para>FreeBSD note: build nsopenssl with <userinput>gmake install OPENSSL=/usr/local/openssl AOLSERVER=/usr/local/aolserver4r10</userinput>
         </para>
 

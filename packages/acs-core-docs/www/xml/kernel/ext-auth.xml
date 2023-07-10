@@ -296,7 +296,7 @@ to access these settings.</para>
       <para>OpenACS will come pre-configured with one authority, which is
 the "local" authority, meaning we&#39;ll authenticate as normal using the
 local users table. This will, just like any other authority, be
-implemetned using a service contract.</para>
+implemented using a service contract.</para>
     </sect3>
 
     <sect3 id="Synchronizing_and_Linking_User"><title>Synchronizing

@@ -2110,7 +2110,7 @@ END OF TEMPLATE -->
       </sect2>
   -->
 
-  <!-- &lt;if&gt; needs to be escaped, such as in changelog enteries 
+  <!-- &lt;if&gt; needs to be escaped, such as in changelog entries 
        before processing will validate
   -->
   <!--

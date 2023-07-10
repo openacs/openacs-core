@@ -168,7 +168,7 @@ and some_table.condition_p = '$foo'</programlisting>
     </orderedlist>
 
     <para>
-      What the DB API (in conjuntion with the database drivers
+      What the DB API (in conjunction with the database drivers
       implemented for AOLserver) do is send the SQL statement to the
       server for parsing, then <emphasis>bind</emphasis> values to the
       variables and sends those values along separately as a second
