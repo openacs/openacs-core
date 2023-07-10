@@ -1800,13 +1800,12 @@ $$ LANGUAGE plpgsql;
 
 
 
--- added
-select define_function_args('apm__set_value','package_key,parameter_name,attr_value');
+select define_function_args('apm__set_global_value','package_key,parameter_name,attr_value');
 
 --
--- procedure apm__set_value/3
+-- procedure apm__set_global_value/3
 --
-CREATE OR REPLACE FUNCTION apm__set_value(
+CREATE OR REPLACE FUNCTION apm__set_global_value(
    set_value__package_key varchar,
    set_value__parameter_name varchar,
    set_value__attr_value varchar
@@ -1840,6 +1839,19 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+--
+-- legacy procedure apm__set_value/3
+-- Replaced now by apm__set_global_value
+---
+CREATE OR REPLACE FUNCTION apm__set_value(
+   set_value__package_key varchar,
+   set_value__parameter_name varchar,
+   set_value__attr_value varchar
+) RETURNS integer AS $$
+BEGIN
+    return apm__set_global_value(set_value__package_key, set_value__parameter_name, set_value__attr_value);
+END;    
+$$ LANGUAGE plpgsql;
 
 
 -- added

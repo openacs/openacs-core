@@ -1019,6 +1019,11 @@ as
     parameter_name		in apm_parameters.parameter_name%TYPE
   ) return apm_parameter_values.attr_value%TYPE;
 
+  function get_global_value (
+    package_key			in apm_packages.package_key%TYPE,
+    parameter_name		in apm_parameters.parameter_name%TYPE
+  ) return apm_parameter_values.attr_value%TYPE;
+  
   procedure set_value (
     package_id			in apm_packages.package_id%TYPE,
     parameter_name		in apm_parameters.parameter_name%TYPE,
@@ -1734,7 +1739,7 @@ as
     return value;
   end get_value;	
 
-  procedure set_value (
+  procedure set_global_value (
     package_key			in apm_packages.package_key%TYPE,
     parameter_name		in apm_parameters.parameter_name%TYPE,
     attr_value			in apm_parameter_values.attr_value%TYPE
@@ -1765,6 +1770,17 @@ as
         );
 
   end set_value;	
+
+  -- legacy function for backwards compatibility
+  procedure set_value (
+    package_key			in apm_packages.package_key%TYPE,
+    parameter_name		in apm_parameters.parameter_name%TYPE,
+    attr_value			in apm_parameter_values.attr_value%TYPE
+  ) 
+  is
+  begin
+    apm.set_global_value(package_key, parameter_name, attr_value);
+  end set_value;
 
   procedure set_value (
     package_id			in apm_packages.package_id%TYPE,
