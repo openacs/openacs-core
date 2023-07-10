@@ -1406,7 +1406,7 @@ ad_proc -private acs_mail_lite::inbound_queue_pull_one {
 
     h_arr(aml_type)         Type of email from acs_mail_lite::email_type
     h_arr(aml_received_cs)  Time received in seconds since Tcl epoch
-    h_arr(aml_datetime_cs)  Time unique_id generatd in seconds since Tcl epoch
+    h_arr(aml_datetime_cs)  Time unique_id generated in seconds since Tcl epoch
     h_arr(aml_processed_p)  processed_p
     h_arr(aml_priority)     a priority number assigned to email.
 

@@ -243,7 +243,7 @@ ad_proc -public aa_register_component {
     component_desc
     body
 } {
-    Registers a re-usable code component.  Provide a component identifier,
+    Registers a reusable code component.  Provide a component identifier,
     description and component body code.
     <p>
     This is useful for re-using code that sets up / clears down, data common
@@ -1020,7 +1020,7 @@ ad_proc -public aa_run_with_teardown {
                 error "rollback tests"
             } on_error {
                 #
-                # Exectue the rollback block and trigger error.
+                # Execute the rollback block and trigger error.
                 #
                 aa_end_rollback_block
                 set errmsg [lindex [split $::errorInfo \n] 0]

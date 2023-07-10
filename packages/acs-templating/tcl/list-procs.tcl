@@ -139,7 +139,7 @@ ad_proc -public template::list::create {
     to display at the bottom of
     the list. The format is (label1 url1 title1 label2 url2 title2 ...).
     A form will be submitted to the url, containing a list of the key values of the checked rows.
-    For example, if 'key' is 'message_id', and rows with message_id 2 4 and 9 are chcked, the
+    For example, if 'key' is 'message_id', and rows with message_id 2 4 and 9 are checked, the
     page will get variables message_id=2&message_id=4&message_id=9. The receiving page
     should declare message_id:naturalnum,multiple in its ad_page_contract. Note that the 'message_id'
     local variable will the be a Tcl list.
