@@ -1546,7 +1546,7 @@ proc dom::Serialize:document {token args} {
 #	Returned appropriately quoted external identifiers
 #
 # Arguments:
-#	id	external indentifiers
+#	id	external identifiers
 #
 # Results:
 #	text

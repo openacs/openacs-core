@@ -339,7 +339,7 @@ ad_return_complaint 1 [_ dotlrn.class_may_not_be_deleted $msg_subst_list]
 </screen>
 
       <para>
-        When you feel ready you may vist your package in the
+        When you feel ready you may visit your package in the
         <ulink url="/acs-admin/apm">package manager</ulink>
         and run the action "Replace tags with keys
         and insert into catalog" on the Tcl files that you&#39;ve edited to

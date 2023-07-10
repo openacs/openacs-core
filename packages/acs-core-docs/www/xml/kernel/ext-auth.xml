@@ -550,7 +550,7 @@ mode.</para>
       <para>Similarly, <literal>ad_conn user_id</literal> will continue
 to return 0 (not logged-in) when the user is only logged-in
 untrusted, and we&#39;ll supply another variable, <literal>ad_conn
-untrusted_user_id</literal>, which wlll be set to the user_id for
+untrusted_user_id</literal>, which will be set to the user_id for
 all login levels.</para>
       <para>This should ensure that we get full access to the new
 feature, while leaving all current code just as secure as it was
