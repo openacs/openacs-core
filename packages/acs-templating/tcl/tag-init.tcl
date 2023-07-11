@@ -38,8 +38,7 @@ template::tag property { chunk params } {
     #
 
     set name [ns_set iget $params name]
-    set adp  [ns_set iget $params adp]
-    if {$adp eq ""} {set adp 0}
+    set adp  [ns_set iget $params adp 0]
 
     # quote dollar signs, square bracket and quotes
     regsub -all -- {[\]\[\"\\$]} $chunk {\\&} quoted_chunk
@@ -200,8 +199,7 @@ ad_proc -private template::template_tag_include_helper {params} {
     Include another template in the current template
 } {
     set src [ns_set iget $params src]
-    set ds [ns_set iget $params ds]
-    if {$ds eq ""} {set ds 1}
+    set ds [ns_set iget $params ds 1]
     set ds_avail_p [expr {[namespace which ::ds_adp_start_box] ne "" }]
 
     #Start developer support frame around subordinate template.
@@ -311,11 +309,7 @@ template::tag list { chunk params } {
 
     if { ![template::util::is_nil value] } {
 
-        set name [ns_set iget $params name]
-        if { $name eq "" } {
-            set name "__ats_list_value"
-        }
-
+        set name [ns_set iget $params name "__ats_list_value"]
         template::adp_append_code [list set $name $value]
         template::adp_append_code "set $name:rowcount \[llength \$$name\]\n"
 
@@ -755,8 +749,7 @@ template::tag include-optional { chunk params } {
     # the theme package
     #
     set src [template::themed_template [ns_set iget $params src]]
-    set ds [ns_set iget $params ds]
-    if {$ds eq ""} {set ds 1}
+    set ds [ns_set iget $params ds 1]
 
     #Start developer support frame around subordinate template.
     if { $ds && [namespace which ::ds_enabled_p] ne ""
@@ -927,9 +920,7 @@ template::tag case { chunk params } {
         # processing <case value= ...> form
 
         template::adp_append_code "[list $value] {" -nobreak
-
         template::adp_compile_chunk $chunk
-
         template::adp_append_code "}"
 
     } else {
@@ -1057,19 +1048,36 @@ template::tag adp:icon { params } {
 
 template::tag adp:toggle_button { chunk params } {
     #
-    # In case we need to determine the toolit upon every call, we have
-    # to reconsider (e.g. add the toolkit to the namespace for
-    # compiled code, like template::code::adp::...)
+    # Implementation of dropdown-toggles:
+    #
+    #    <adp:toggle_button>....</adp:toggle_button>
+    #
+    # Potential attributes for this tag are:
+    #    - "tag" (default "button")
+    #    - "toggle"
+    #    - "target"
+    #    - "type" (default "button")
+    # The attribute "type" is just valid when "tag" is "button".
+    #
+    # Use <... tag="a"... > for use of tabs with Bootstrap 3.
+    #
+    # Bootstrap3 is picky and allows just "<a>" tags for the
+    # navigation buttons, whereas Bootstrap4 and 5 would also allow
+    # <button> with appropriate classes for nav-items and nav-links.
     #
     set data [expr {[template::toolkit] eq "bootstrap5" ? "data-bs" : "data"}]
-    append value \
-        "<button type='button'" \
+
+    set tag [ns_set iget $params tag button]
+    if {$tag eq "button"} {
+        set attributes " type='[ns_set iget $params type button]'"
+    }
+    append attributes \
         " class='[ns_set iget $params class]'" \
         " $data-toggle='[ns_set iget $params toggle]'" \
-        " $data-target='[ns_set iget $params target]'>"
-    template::adp_append_string $value
+        " $data-target='[ns_set iget $params target]'"
+    template::adp_append_string "<$tag $attributes>"
     template::adp_compile_chunk $chunk
-    template::adp_append_string </button>
+    template::adp_append_string "</$tag>"
 }
 
 
