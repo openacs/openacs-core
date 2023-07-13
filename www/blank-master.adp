@@ -5,7 +5,7 @@
   <if @doc.base_href@ not nil or @doc.base_target@ not nil>
     <base<if @doc.base_href@ not nil> href="@doc.base_href;literal@"</if><if @doc.base_target@ not nil> target="@doc.base_target;literal@"</if>>
   </if>
-<multiple name="meta">    <meta<if @meta.http_equiv@ not nil> http-equiv="@meta.http_equiv;literal@"</if><if @meta.name@ not nil> name="@meta.name;noquote@"</if><if @meta.scheme@ not nil> scheme="@meta.scheme;noquote@"</if><if @meta.lang@ not nil and @meta.lang;literal@ ne @doc.lang;literal@> lang="@meta.lang;literal@"</if> content="@meta.content@">
+<multiple name="meta">  <meta<if @meta.http_equiv@ not nil> http-equiv="@meta.http_equiv;literal@"</if><if @meta.name@ not nil> name="@meta.name;literal@"</if><if @meta.scheme@ not nil> scheme="@meta.scheme;literal@"</if><if @meta.lang@ not nil and @meta.lang;literal@ ne @doc.lang;literal@> lang="@meta.lang;literal@"</if> content="@meta.content@">
 </multiple>
 <multiple name="link">    <link rel="@link.rel;literal@" href="@link.href@"<if @link.lang@ not nil and @link.lang;literal@ ne @doc.lang;literal@> lang="@link.lang;literal@"</if><if @link.title@ not nil> title="@link.title@"</if><if @link.type@ not nil> type="@link.type;literal@"</if><if @link.media@ not nil> media="@link.media;literal@"</if><if @link.integrity@ not nil> integrity="@link.integrity;literal@"</if><if @link.crossorigin@ not nil> crossorigin="@link.crossorigin;literal@"</if>>
 </multiple>
@@ -14,23 +14,12 @@
 </style>
 </multiple>
 
-<comment>
-   These two variables have to be set before the XinhaCore.js is loaded. To 
-   enforce the order, it is put here.
-</comment>
-<if @::acs_blank_master__htmlareas@ defined and @::xinha_dir@ defined and @::xinha_lang@ defined>
-<script type="text/javascript"<if @::__csp_nonce@ not nil> nonce="@::__csp_nonce;literal@"</if>>
-_editor_url = "@::xinha_dir;literal@"; 
-_editor_lang = "@::xinha_lang;literal@";
-</script>
-</if>
-
 <multiple name="headscript">   <script type="@headscript.type;literal@"<if @headscript.src@ not nil> src="@headscript.src;literal@"</if><if @headscript.charset@ not nil> charset="@headscript.charset;literal@"</if><if @headscript.defer@ not nil> defer="@headscript.defer;literal@"</if><if @headscript.async@ not nil> async="@headscript.async;literal@"</if><if @headscript.integrity@ not nil> integrity="@headscript.integrity;literal@"</if><if @headscript.crossorigin@ not nil> crossorigin="@headscript.crossorigin;literal@"</if><if @::__csp_nonce@ not nil> nonce="@::__csp_nonce;literal@"</if>><if @headscript.content@ not nil>@headscript.content;noquote@</if></script>
 </multiple>
 
 <if @head@ not nil>@head;literal@</if>
 </head>
-<body<if @body.class@ not nil> class="@body.class;literal@"</if><if @body.id@ not nil> id="@body.id;literal@"</if>>
+<body<if @body.class@ not nil> class="@body.class;literal@"</if><if @body.id@ not nil> id="@body.id;literal@"</if><if @body.translate@ not nil> translate="@body.translate;literal@"</if>>
   @header;literal@
 <slave>
   @footer;literal@
