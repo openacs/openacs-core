@@ -1,11 +1,11 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {The Request Processor}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {The Request Processor}</property>
 <property name="doc(title)">The Request Processor</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="objects" leftLabel="Prev"
-			title="Chapter 11. Development
-Reference"
+			title="
+Chapter 11. Development Reference"
 			rightLink="db-api" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">

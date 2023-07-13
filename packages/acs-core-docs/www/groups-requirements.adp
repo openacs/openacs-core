@@ -1,11 +1,11 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Groups Requirements}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Groups Requirements}</property>
 <property name="doc(title)">Groups Requirements</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="permissions-design" leftLabel="Prev"
-			title="Chapter 15. Kernel
-Documentation"
+			title="
+Chapter 15. Kernel Documentation"
 			rightLink="groups-design" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">

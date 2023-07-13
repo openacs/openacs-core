@@ -1,11 +1,11 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Writing OpenACS Application Pages}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Writing OpenACS Application Pages}</property>
 <property name="doc(title)">Writing OpenACS Application Pages</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="permissions" leftLabel="Prev"
-			title="Chapter 11. Development
-Reference"
+			title="
+Chapter 11. Development Reference"
 			rightLink="parties" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">

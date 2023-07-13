@@ -1,11 +1,11 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Groups, Context, Permissions}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Groups, Context, Permissions}</property>
 <property name="doc(title)">Groups, Context, Permissions</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="templates" leftLabel="Prev"
-			title="Chapter 11. Development
-Reference"
+			title="
+Chapter 11. Development Reference"
 			rightLink="subsites" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">

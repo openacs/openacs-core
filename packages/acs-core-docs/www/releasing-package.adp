@@ -1,11 +1,11 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {How to package and release an OpenACS Package}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {How to package and release an OpenACS Package}</property>
 <property name="doc(title)">How to package and release an OpenACS Package</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="update-repository" leftLabel="Prev"
-			title="Chapter 16. Releasing
-OpenACS"
+			title="
+Chapter 16. Releasing OpenACS"
 			rightLink="update-translations" rightLabel="Next">
 		    <div class="section">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">

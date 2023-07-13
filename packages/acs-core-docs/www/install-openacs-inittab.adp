@@ -1,11 +1,11 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {AOLserver keepalive with inittab}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {AOLserver keepalive with inittab}</property>
 <property name="doc(title)">AOLserver keepalive with inittab</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="install-openacs-keepalive" leftLabel="Prev"
-			title="Chapter 6. Production
-Environments"
+			title="
+Chapter 6. Production Environments"
 			rightLink="install-next-add-server" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
@@ -36,7 +36,8 @@ Password: ***********
 [root ~]# chown root.web /usr/local/bin/restart-aolserver
 [root ~]# chmod 4750 /usr/local/bin/restart-aolserver
 [root ~]# ln -s /usr/bin/perl /usr/local/bin/perl
-[root ~]# exit</pre>
+[root ~]# exit
+</pre>
 </li><li class="listitem">
 <p>Test the <code class="computeroutput">restart-aolserver</code>
 script. We&#39;ll first kill all running servers to clean the
@@ -49,7 +50,8 @@ nsd: no process killed
 [joeuser ~]$ restart-aolserver <span class="emphasis"><em>birdnotes</em></span>
 Killing 23727 
 [joeuser ~]$ killall nsd
-nsd: no process killed</pre><p>The number 23727 indicates the process id(s) (PIDs) of the
+nsd: no process killed
+</pre><p>The number 23727 indicates the process id(s) (PIDs) of the
 processes being killed. It is important that <span class="strong"><strong>no processes are killed</strong></span> by the
 second call to <code class="computeroutput">killall</code>. If
 there are processes being killed, it means that the script is not
@@ -60,12 +62,14 @@ root and open <code class="computeroutput">/etc/inittab</code> for
 editing.</p><pre class="programlisting">
 [joeuser ~]$ su -
 Password: ************
-[root ~]# emacs -nw /etc/inittab</pre>
+[root ~]# emacs -nw /etc/inittab
+</pre>
 </li><li class="listitem">
 <p>Copy this line into the bottom of the file as a template, making
 sure that the first field <code class="computeroutput">nss1</code>
 is unique.</p><pre class="programlisting">
-nss1:345:respawn:/usr/local/aolserver/bin/nsd-postgres -i -u nobody -g web -t /home/<span class="emphasis"><em>joeuser</em></span>/var/lib/aolserver/<span class="emphasis"><em>birdnotes</em></span>/nsd.tcl</pre>
+nss1:345:respawn:/usr/local/aolserver/bin/nsd-postgres -i -u nobody -g web -t /home/<span class="emphasis"><em>joeuser</em></span>/var/lib/aolserver/<span class="emphasis"><em>birdnotes</em></span>/nsd.tcl
+</pre>
 </li><li class="listitem"><p>
 <span class="strong"><strong>Important:</strong></span> Make
 sure there is a newline at the end of the file. If there is not a
@@ -75,11 +79,13 @@ failures.</p></li><li class="listitem">
 <code class="computeroutput">/etc/inittab</code>.</p><pre class="programlisting">
 [root ~]# killall nsd    
 nsd: no process killed
-[root ~]# /sbin/init q</pre>
+[root ~]# /sbin/init q
+</pre>
 </li><li class="listitem">
 <p>See if it worked by running the <code class="computeroutput">restart-aolserver</code> script again.</p><pre class="programlisting">
 [root ~]# restart-aolserver <span class="emphasis"><em>birdnotes</em></span>
-Killing 23750</pre>
+Killing 23750
+</pre>
 </li>
 </ul></div><p>If processes were killed, congratulations, your server is now
 automated for startup and shutdown.</p>

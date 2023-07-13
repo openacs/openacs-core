@@ -1,11 +1,11 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Using nXML mode in Emacs}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Using nXML mode in Emacs}</property>
 <property name="doc(title)">Using nXML mode in Emacs</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="psgml-mode" leftLabel="Prev"
-			title="Chapter 13. Documentation
-Standards"
+			title="
+Chapter 13. Documentation Standards"
 			rightLink="filename" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">

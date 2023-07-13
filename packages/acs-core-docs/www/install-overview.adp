@@ -1,6 +1,8 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Chapter 2. Installation Overview}</property>
-<property name="doc(title)">Chapter 2. Installation Overview</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Chapter 2. Installation
+Overview}</property>
+<property name="doc(title)">Chapter 2. Installation
+Overview</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="acs-admin" leftLabel="Prev"
@@ -22,8 +24,8 @@ OpenACS docs are written by the named authors, and may be edited by
 OpenACS documentation staff.</div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-			leftLink="acs-admin" leftLabel="Prev" leftTitle="Part II. Administrator&#39;s
-Guide"
+			leftLink="acs-admin" leftLabel="Prev" leftTitle="
+Part II. Administrator&#39;s Guide"
 			rightLink="install-steps" rightLabel="Next" rightTitle="Basic Steps"
 			homeLink="index" homeLabel="Home" 
 			upLink="acs-admin" upLabel="Up"> 

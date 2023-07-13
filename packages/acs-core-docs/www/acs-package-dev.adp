@@ -1,6 +1,8 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Part III. For OpenACS Package Developers}</property>
-<property name="doc(title)">Part III. For OpenACS Package Developers</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Part III. For OpenACS Package
+Developers}</property>
+<property name="doc(title)">Part III. For OpenACS Package
+Developers</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="install-resources" leftLabel="Prev"
@@ -8,8 +10,8 @@
 			rightLink="tutorial" rightLabel="Next">
 		    <div class="part">
 <div class="titlepage"><div><div><h1 class="title">
-<a name="acs-package-dev" id="acs-package-dev"></a>Part III. For OpenACS Package
-Developers</h1></div></div></div><div class="partintro">
+<a name="acs-package-dev" id="acs-package-dev"></a>Part III. For OpenACS
+Package Developers</h1></div></div></div><div class="partintro">
 <p>Tutorials and reference material for creating new OpenACS
 packages.</p><div class="toc">
 <p><strong>Table of Contents</strong></p><dl class="toc">
@@ -86,8 +88,8 @@ with an OpenACS Site</a></span></dt>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
 			leftLink="install-resources" leftLabel="Prev" leftTitle="Resources"
-			rightLink="tutorial" rightLabel="Next" rightTitle="Chapter 9. Development
-Tutorial"
+			rightLink="tutorial" rightLabel="Next" rightTitle="
+Chapter 9. Development Tutorial"
 			homeLink="index" homeLabel="Home" 
 			upLink="index" upLabel="Up"> 
 		    

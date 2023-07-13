@@ -22,7 +22,8 @@ are the URLs which the external Authority will supply with XML
 files in IMS Enterprise 1.1 format.</p></li><li>
 <p>Configure your Authority (RADIUS server, etc) to supply XML
 files to the URLs IncrementalURL and SnapshotURL. A typical set of
-incremental file record looks like:</p><pre class="programlisting">&lt;?xml version="1.0" encoding="ISO-8859-1"?&gt;
+incremental file record looks like:</p><pre class="programlisting">
+&lt;?xml version="1.0" encoding="ISO-8859-1"?&gt;
 &lt;enterprise&gt;
   &lt;properties&gt;
     &lt;datasource&gt;FOO&lt;/datasource&gt;

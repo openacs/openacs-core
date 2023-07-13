@@ -1,11 +1,11 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Overview}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Overview}</property>
 <property name="doc(title)">Overview</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="kernel-doc" leftLabel="Prev"
-			title="Chapter 15. Kernel
-Documentation"
+			title="
+Chapter 15. Kernel Documentation"
 			rightLink="object-system-requirements" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
@@ -27,8 +27,8 @@ package. <a class="ulink" href="index" target="_top">Documentation for other pac
 </p>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-			leftLink="kernel-doc" leftLabel="Prev" leftTitle="Chapter 15. Kernel
-Documentation"
+			leftLink="kernel-doc" leftLabel="Prev" leftTitle="
+Chapter 15. Kernel Documentation"
 			rightLink="object-system-requirements" rightLabel="Next" rightTitle="Object Model Requirements"
 			homeLink="index" homeLabel="Home" 
 			upLink="kernel-doc" upLabel="Up"> 

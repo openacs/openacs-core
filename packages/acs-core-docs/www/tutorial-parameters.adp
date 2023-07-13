@@ -1,11 +1,11 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Adding in parameters for your package}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Adding in parameters for your package}</property>
 <property name="doc(title)">Adding in parameters for your package</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="tutorial-wysiwyg-editor" leftLabel="Prev"
-			title="Chapter 10. Advanced
-Topics"
+			title="
+Chapter 10. Advanced Topics"
 			rightLink="tutorial-upgrade-scripts" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">

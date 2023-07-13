@@ -105,7 +105,8 @@ instead of database objects to track its tests, it is incompatible
 with the standard category package. It uses an internal,
 single-dimension category field. Should this eventually get
 extended, a more complete list of categories to implement could
-be:</p><pre class="programlisting">Testing Mode
+be:</p><pre class="programlisting">
+Testing Mode
   Regression
   Smoke
   Stress

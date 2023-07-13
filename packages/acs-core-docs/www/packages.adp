@@ -1,11 +1,11 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {OpenACS Packages}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {OpenACS Packages}</property>
 <property name="doc(title)">OpenACS Packages</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="dev-guide" leftLabel="Prev"
-			title="Chapter 11. Development
-Reference"
+			title="
+Chapter 11. Development Reference"
 			rightLink="objects" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
@@ -25,7 +25,7 @@ and step by step instructions for creating a new package for the
 <div class="titlepage"><div><div><h3 class="title">
 <a name="server-file-layout" id="server-file-layout"></a>Server file layout</h3></div></div></div><p>Here is how an OpenACS 5 server is laid out starting from the
 Server root (ROOT):</p><div class="figure">
-<a name="idp140219191319296" id="idp140219191319296"></a><p class="title"><strong>Figure 11.1. Server file layout
+<a name="idp105548969018568" id="idp105548969018568"></a><p class="title"><strong>Figure 11.1. Server file layout
 diagram</strong></p><div class="figure-contents"><pre class="programlisting">
 ROOT/
     bin/
@@ -44,7 +44,8 @@ ROOT/
     tcl/
         bootstrap code
     www/
-        Pages not in packages (static content, customized pages)</pre></div>
+        Pages not in packages (static content, customized pages)
+</pre></div>
 </div><br class="figure-break">
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
@@ -64,7 +65,7 @@ removal. In OpenACS 5, this tool is called the <a class="link" href="packages" t
 <a class="indexterm" name="baby" id="baby"></a> To illustrate
 the general structure of a package, let&#39;s see what the package
 for the "notes" application should look like.</p><div class="figure">
-<a name="idp140219192120656" id="idp140219192120656"></a><p class="title"><strong>Figure 11.2. Package file layout
+<a name="idp105548969023688" id="idp105548969023688"></a><p class="title"><strong>Figure 11.2. Package file layout
 diagram</strong></p><div class="figure-contents"><pre class="programlisting">
 ROOT/
   +-- packages/    APM Root
@@ -122,7 +123,8 @@ ROOT/
         |     |     +-- *.adp                             UI Templates
         |     |     +-- *-oracle.xql                      Oracle-specific Queries
         |     |     +-- *-postgresql.xql                  PostgreSQL-specific Queries
-        +-- Other package directories.</pre></div>
+        +-- Other package directories.
+</pre></div>
 </div><br class="figure-break"><p>All file locations are relative to the package root, which in
 this case is <code class="computeroutput">ROOT/packages/notes</code>. The following table
 describes in detail what each of the files up in the diagram
@@ -134,7 +136,7 @@ installed or mounted. Files are returned directly, so .tcl or .adp
 files are not sourced in these directories. This makes it suitable
 for storing icons, css files, javascript, and other static content
 which can be treated this way.</p><div class="table">
-<a name="idp140219191331760" id="idp140219191331760"></a><p class="title"><strong>Table 11.1. Package
+<a name="idp105548969028424" id="idp105548969028424"></a><p class="title"><strong>Table 11.1. Package
 files</strong></p><div class="table-contents"><table class="table" summary="Package files" cellspacing="0" border="1">
 <colgroup>
 <col><col><col>
@@ -326,7 +328,8 @@ link. Define package callbacks via the "Tcl Callbacks
 this point, you should add your package files to your CVS
 repository. I&#39;ll assume that you have set up your development
 repository according to the standards described in <a class="link" href="cvs-tips" title="Add the Service to CVS - OPTIONAL">this appendix</a>. If so, then
-you just do this:</p><pre class="programlisting">% cd ROOT/packages
+you just do this:</p><pre class="programlisting">
+% cd ROOT/packages
 % cvs add notes
 % cd notes
 % cvs add notes.info
@@ -335,7 +338,8 @@ you just do this:</p><pre class="programlisting">% cd ROOT/packages
 % cvs add *.sql
 % cd ROOT/packages/notes
 % cvs commit -m "add new package for notes"
-    </pre>
+    
+</pre>
 </li><li class="listitem"><p>Now you can start developing the package. In addition to writing
 code, you should also consider the tasks outlined in the <a class="link" href="tutorial-newpackage" title="Creating an Application Package">package development
 tutorial</a>.</p></li>
@@ -403,8 +407,8 @@ tutorial</a></p></li>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-			leftLink="dev-guide" leftLabel="Prev" leftTitle="Chapter 11. Development
-Reference"
+			leftLink="dev-guide" leftLabel="Prev" leftTitle="
+Chapter 11. Development Reference"
 			rightLink="objects" rightLabel="Next" rightTitle="OpenACS Data Models and the Object
 System"
 			homeLink="index" homeLabel="Home" 

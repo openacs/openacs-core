@@ -1,11 +1,12 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Installing OpenACS packages}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Installing OpenACS packages}</property>
 <property name="doc(title)">Installing OpenACS packages</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="configuring-new-site" leftLabel="Prev"
-			title="Chapter 4. Configuring a
-new OpenACS Site"
+			title="
+Chapter 4. Configuring a new OpenACS
+Site"
 			rightLink="configuring-mounting-packages" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
@@ -15,7 +16,7 @@ new OpenACS Site"
 OpenACS docs are written by the named authors, and may be edited by
 OpenACS documentation staff.</div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140219457319888" id="idp140219457319888"></a>Installing OpenACS packages</h3></div></div></div><p>An OpenACS package extends your website and lets it do things it
+<a name="idp105548901925704" id="idp105548901925704"></a>Installing OpenACS packages</h3></div></div></div><p>An OpenACS package extends your website and lets it do things it
 was not able to do before. You can have a weblog, a forums, a
 calendar, or even do sophisticated project-management via your
 website.</p><p>After you&#39;ve installed OpenACS, you can congratulate
@@ -34,8 +35,9 @@ package, and click 'Install selected applications'. The
 system will check to make sure you have all necessary packages that
 the package you want depends on. If you&#39;re installing from
 Local Files, and you are missing any packages, you may have to add
-the packages your desired package depends on: <a class="xref" href="upgrade-openacs-files" title="Upgrading the OpenACS files">the section called “Upgrading the
-OpenACS files”</a>
+the packages your desired package depends on: <a class="xref" href="upgrade-openacs-files" title="Upgrading the OpenACS files">the section called
+&ldquo;Upgrading the OpenACS
+files&rdquo;</a>
 </p><p>If you run into any errors at all, check your
 /var/lib/aolserver/$OPENACS_SERVICE_NAME/log/error.log file, and
 post your error on the OpenACS forums</p><p>Once the package has been installed, then you will need to
@@ -43,8 +45,9 @@ post your error on the OpenACS forums</p><p>Once the package has been installed,
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-			leftLink="configuring-new-site" leftLabel="Prev" leftTitle="Chapter 4. Configuring a new
-OpenACS Site"
+			leftLink="configuring-new-site" leftLabel="Prev" leftTitle="
+Chapter 4. Configuring a new OpenACS
+Site"
 			rightLink="configuring-mounting-packages" rightLabel="Next" rightTitle="Mounting OpenACS packages"
 			homeLink="index" homeLabel="Home" 
 			upLink="configuring-new-site" upLabel="Up"> 

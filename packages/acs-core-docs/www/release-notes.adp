@@ -1,11 +1,12 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {OpenACS Release Notes}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {OpenACS Release Notes}</property>
 <property name="doc(title)">OpenACS Release Notes</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="openacs-overview" leftLabel="Prev"
-			title="Chapter 1. High level
-information: What is OpenACS?"
+			title="
+Chapter 1. High level information: What is
+OpenACS?"
 			rightLink="acs-admin" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
@@ -54,12 +55,14 @@ namespaces for OpenACS such as <code class="computeroutput">urn:ad:css:*</code> 
 </li><li class="listitem">
 <p>The registered URN can be used like classical URL after
 registration.</p><p>Example consumer:</p><pre class="programlisting">
-   template::head::add_javascript -src urn:ad:js:jquery</pre>
+   template::head::add_javascript -src urn:ad:js:jquery
+</pre>
 </li><li class="listitem">
 <p>Declare composite files: Provide an interface to define that a
 .js file or a .css file contains multiple other .js/.css files in
 order to reduce the number of requests.</p><pre class="programlisting">
-   template::head::includes -container urn:js::style.js -parts {urn:ad:js:jquery ...}</pre>
+   template::head::includes -container urn:js::style.js -parts {urn:ad:js:jquery ...}
+</pre>
 </li>
 </ul></div>
 </li><li class="listitem"><p>Improved API browser: Visualization for code dependencies (which
@@ -353,8 +356,8 @@ officially supported by Oracle (See <a class="ulink" href="http://www.oracle.com
 </li><li class="listitem">
 <p>New Packages:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: square;">
 <li class="listitem"><p>cookie-consent: alerting users about the use of cookies on a
-website</p></li><li class="listitem"><p>boomerang: performance of your website from your end user’s
-point of view</p></li><li class="listitem"><p>xooauth: OAuth implementation, including LTI (Learning Tools
+website</p></li><li class="listitem"><p>boomerang: performance of your website from your end
+user&rdquo;™s point of view</p></li><li class="listitem"><p>xooauth: OAuth implementation, including LTI (Learning Tools
 Interoperability)</p></li><li class="listitem"><p>dotlrn-bootstrap3-theme: Bootstrap 3 theme for DotLRN</p></li><li class="listitem"><p>xowf-monaco-plugin: Integration of Monaco editor with for code
 exercise types in xowf</p></li><li class="listitem"><p>proctoring-support: utilities and user interfaces to implement
 proctoring of the user session, mainly intended in the context of
@@ -373,13 +376,14 @@ implementation for xowf</p></li>
 following statistics</p><pre class="programlisting">
  3445 files changed, 215464 insertions(+), 193642 deletions(-) 
 </pre><p>contributed by 7 committers (Antonio Pisano, Gustaf Neumann,
-Günter Ernst, Hector Romojaro, Michael Aram, Stefan Sobernig,
-Thomas Renner) and additional 13 patch/bugfix providers (Felix
-Mödritscher, Florian Mosböck, Frank Bergmann, Franz Penz, Hanifa
-Hasan, Keith Paskett, Markus Moser, Maurizio Martignano, Monika
-Andergassen, Nathan Coulter, Rainer Bachleitner, Stephan
-Adelsberger, Tony Kirkham). All packages of the release were tested
-with PostgreSQL 13.* and Tcl 8.6.*.</p><p>For more details, consult the <a class="ulink" href="http://openacs.org/changelogs/ChangeLog-5.10.0" target="_top">raw
+GÃ¼nter Ernst, Hector Romojaro, Michael Aram, Stefan
+Sobernig, Thomas Renner) and additional 13 patch/bugfix providers
+(Felix MÃ¶dritscher, Florian MosbÃ¶ck,
+Frank Bergmann, Franz Penz, Hanifa Hasan, Keith Paskett, Markus
+Moser, Maurizio Martignano, Monika Andergassen, Nathan Coulter,
+Rainer Bachleitner, Stephan Adelsberger, Tony Kirkham). All
+packages of the release were tested with PostgreSQL 13.* and Tcl
+8.6.*.</p><p>For more details, consult the <a class="ulink" href="http://openacs.org/changelogs/ChangeLog-5.10.0" target="_top">raw
 ChangeLog</a>.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
@@ -790,12 +794,13 @@ message are not issued every time a user enters/exits a chat-room
 </ul></div><p>Altogether, OpenACS 5.9.1 differs from OpenACS 5.9.1 by the
 following statistics</p><pre class="programlisting">
        3548 files changed, 113292 insertions(+), 90507 deletions(-)
-    </pre><p>contributed by 5 committers (Michael Aram, Gustaf Neumann,
+    
+</pre><p>contributed by 5 committers (Michael Aram, Gustaf Neumann,
 Antonio Pisano, Hector Romojaro, Thomas Renner) and 8 patch/bugfix
-providers (Frank Bergmann, Günter Ernst, Brian Fenton, Felix
-Mödritscher, Marcus Moser, Franz Penz, Stefan Sobernig, Michael
-Steigman). All packages of the release were tested with PostgreSQL
-9.6.* and Tcl 8.5.*.</p><p>For more details, consult the <a class="ulink" href="" target="_top">raw ChangeLog</a>.</p>
+providers (Frank Bergmann, GÃ¼nter Ernst, Brian
+Fenton, Felix MÃ¶dritscher, Marcus Moser, Franz Penz,
+Stefan Sobernig, Michael Steigman). All packages of the release
+were tested with PostgreSQL 9.6.* and Tcl 8.5.*.</p><p>For more details, consult the <a class="ulink" href="" target="_top">raw ChangeLog</a>.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="release-notes-5-9-0" id="release-notes-5-9-0"></a>Release 5.9.0</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
@@ -893,12 +898,13 @@ forums, news, notifications, xowiki.</p></li></ul></div>
 </ul></div><p>Altogether, OpenACS 5.9.0 differs from OpenACS 5.8.1 by the
 following statistics</p><pre class="programlisting">
       3658 files changed, 120800 insertions(+), 97617 deletions(-)
-    </pre><p>contributed by 4 committers (Michael Aram, Victor Guerra, Gustaf
+    
+</pre><p>contributed by 4 committers (Michael Aram, Victor Guerra, Gustaf
 Neumann, Antonio Pisano) and patch/bugfix providers (Frank
-Bergmann, Andrew Helsley, Felix Mödritscher, Markus Moser, Franz
-Penz, Thomas Renner). These are significantly more changes as the
-differences in the last releases. All packages of the release were
-tested with PostgreSQL 9.4.* and Tcl 8.5.*.</p><p>For more details, consult the <a class="ulink" href="" target="_top">raw ChangeLog</a>.</p>
+Bergmann, Andrew Helsley, Felix MÃ¶dritscher, Markus
+Moser, Franz Penz, Thomas Renner). These are significantly more
+changes as the differences in the last releases. All packages of
+the release were tested with PostgreSQL 9.4.* and Tcl 8.5.*.</p><p>For more details, consult the <a class="ulink" href="" target="_top">raw ChangeLog</a>.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="release-notes-5-8-1" id="release-notes-5-8-1"></a>Release 5.8.1</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
@@ -1135,10 +1141,11 @@ automated testing, which is not comprehensive. This release
 contains work done on the translation server
 http://translate.openacs.org through 7 Nov 2003.</p><p>Please report bugs using our <a class="ulink" href="http://openacs.org/bugtracker/openacs/" target="_top">Bug
 Tracker</a> at the <a class="ulink" href="http://openacs.org/" target="_top">OpenACS website</a>.</p><p>You may want to begin by reading our installation documentation
-for <a class="xref" href="unix-installation" title="a Unix-like system">the section called “a Unix-like
-system”</a>. Note that the Windows documentation is not current for
-OpenACS 5.9.0, but an alternative is to use John Sequeira&#39;s
-<a class="ulink" href="http://www.jsequeira.com/oasis/about.html" target="_top">Oasis VM project</a>.</p><p>After installation, the full documentation set can be found by
+for <a class="xref" href="unix-installation" title="a Unix-like system">the section called &ldquo;a
+Unix-like system&rdquo;</a>. Note that the Windows
+documentation is not current for OpenACS 5.9.0, but an alternative
+is to use John Sequeira&#39;s <a class="ulink" href="http://www.jsequeira.com/oasis/about.html" target="_top">Oasis VM
+project</a>.</p><p>After installation, the full documentation set can be found by
 visiting <code class="filename">http://yourserver/doc</code>.</p><p>New features in this release:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>Internationalization support. A message catalog to store
 translated text, localization of dates, number formatting, timezone
@@ -1187,20 +1194,20 @@ styles still using these mechanisms will break.</p></li><li class="listitem"><p>
 turned off by default via the acs-kernel parameter ExcludedFiles in
 section request-processor (The variable provides a string match
 glob list of files and is defaulted to "*/CVS/* *~")</p></li>
-</ul></div><div class="cvstag">($&zwnj;Id: release-notes.xml,v 1.39.2.6 2021/09/07
-09:39:44 gustafn Exp $)</div>
+</ul></div><div class="cvstag">($&zwnj;Id: release-notes.xml,v 1.39.2.7 2023/07/10
+08:36:09 gustafn Exp $)</div>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140219188852896" id="idp140219188852896"></a>Release 4.6.3</h3></div></div></div><p><a class="ulink" href="release-notes-4-6-3" target="_top">Release Notes for 4.6.3</a></p>
+<a name="idp105548897762760" id="idp105548897762760"></a>Release 4.6.3</h3></div></div></div><p><a class="ulink" href="release-notes-4-6-3" target="_top">Release Notes for 4.6.3</a></p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140219188854304" id="idp140219188854304"></a>Release 4.6.2</h3></div></div></div><p><a class="ulink" href="release-notes-4-6-2" target="_top">Release Notes for 4.6.2</a></p>
+<a name="idp105548897764168" id="idp105548897764168"></a>Release 4.6.2</h3></div></div></div><p><a class="ulink" href="release-notes-4-6-2" target="_top">Release Notes for 4.6.2</a></p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140219188855712" id="idp140219188855712"></a>Release 4.6</h3></div></div></div><p><a class="ulink" href="release-notes-4-6" target="_top">Release Notes for 4.6</a></p>
+<a name="idp105548897765576" id="idp105548897765576"></a>Release 4.6</h3></div></div></div><p><a class="ulink" href="release-notes-4-6" target="_top">Release Notes for 4.6</a></p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140219188857120" id="idp140219188857120"></a>Release 4.5</h3></div></div></div><p><a class="ulink" href="release-notes-4-5" target="_top">Release Notes for 4.5</a></p>
+<a name="idp105548897766984" id="idp105548897766984"></a>Release 4.5</h3></div></div></div><p><a class="ulink" href="release-notes-4-5" target="_top">Release Notes for 4.5</a></p>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

@@ -1,18 +1,19 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {High Availability/High Performance Configurations}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {High Availability/High Performance Configurations}</property>
 <property name="doc(title)">High Availability/High Performance Configurations</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="install-next-add-server" leftLabel="Prev"
-			title="Chapter 6. Production
-Environments"
+			title="
+Chapter 6. Production Environments"
 			rightLink="maintenance-deploy" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="high-avail" id="high-avail"></a>High Availability/High Performance
 Configurations</h2></div></div></div><p>See also <a class="xref" href="remote-postgres" title="Running a PostgreSQL database on another server">the section
-called “Running a PostgreSQL database on another server”</a>.</p><div class="figure">
-<a name="idp140219192488736" id="idp140219192488736"></a><p class="title"><strong>Figure 6.1. Multiple-server
+called &ldquo;Running a PostgreSQL database on another
+server&rdquo;</a>.</p><div class="figure">
+<a name="idp105548899005640" id="idp105548899005640"></a><p class="title"><strong>Figure 6.1. Multiple-server
 configuration</strong></p><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/hpha.png" align="middle" alt="Multiple-server configuration"></div></div>
 </div><br class="figure-break">
 </div>

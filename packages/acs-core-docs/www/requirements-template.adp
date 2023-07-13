@@ -1,11 +1,11 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {System/Application Requirements Template}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {System/Application Requirements Template}</property>
 <property name="doc(title)">System/Application Requirements Template</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="filename" leftLabel="Prev"
-			title="Chapter 13. Documentation
-Standards"
+			title="
+Chapter 13. Documentation Standards"
 			rightLink="i18n" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">

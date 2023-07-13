@@ -1,11 +1,11 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Install PostgreSQL}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Install PostgreSQL}</property>
 <property name="doc(title)">Install PostgreSQL</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="oracle" leftLabel="Prev"
-			title="Chapter 3. Complete
-Installation"
+			title="
+Chapter 3. Complete Installation"
 			rightLink="aolserver4" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">

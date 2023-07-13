@@ -94,7 +94,8 @@ begin
   );
   -- Store v_my_content_root in a safe place
 end;
-/ </pre>
+/ 
+</pre>
 <p>The important point is that you have to pass in <kbd>0</kbd> for
 the <kbd>parent_id</kbd>. This <kbd>parent_id</kbd> is special in
 that it indicates folders with no parent.</p>

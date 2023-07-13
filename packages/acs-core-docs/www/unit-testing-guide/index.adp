@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {ACS4 Unit Tests}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {ACS4 Unit Tests}</property>
 <property name="doc(title)">ACS4 Unit Tests</property>
 <master>
 <h2>ACS4 Unit Tests</h2>
@@ -88,4 +88,5 @@ against.</p>
 <hr>
 <em>Last updated - 2000-12-19</em>
 <br>
-<a href="mailto:pmcneill\@arsdigita.com"><address>pmcneill\@arsdigita.com</address></a>
+<a href="mailto:pmcneill\@arsdigita.com"></a>
+<address>pmcneill\@arsdigita.com</address>

@@ -1,15 +1,17 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Chapter 10. Advanced Topics}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Chapter 10. Advanced Topics}</property>
 <property name="doc(title)">Chapter 10. Advanced Topics</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="tutorial-debug" leftLabel="Prev"
-			title="Part III. For OpenACS
-Package Developers"
+			title="
+Part III. For OpenACS Package
+Developers"
 			rightLink="tutorial-specs" rightLabel="Next">
 		    <div class="chapter">
 <div class="titlepage"><div><div><h2 class="title">
-<a name="tutorial-advanced" id="tutorial-advanced"></a>Chapter 10. Advanced Topics</h2></div></div></div><div class="toc">
+<a name="tutorial-advanced" id="tutorial-advanced"></a>Chapter 10. Advanced
+Topics</h2></div></div></div><div class="toc">
 <p><strong>Table of Contents</strong></p><dl class="toc">
 <dt><span class="sect1"><a href="tutorial-specs">Write the
 Requirements and Design Specs</a></span></dt><dt><span class="sect1"><a href="tutorial-cvs">Add the new

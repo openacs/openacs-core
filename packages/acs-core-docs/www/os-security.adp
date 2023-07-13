@@ -1,10 +1,11 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Security Information}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Security Information}</property>
 <property name="doc(title)">Security Information</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="os-install" leftLabel="Prev"
-			title="Appendix C. Credits"
+			title="
+Appendix C. Credits"
 			rightLink="install-resources" rightLabel="Next">
 		    <div class="section">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">

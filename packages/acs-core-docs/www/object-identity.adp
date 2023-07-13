@@ -1,11 +1,11 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Object Identity}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Object Identity}</property>
 <property name="doc(title)">Object Identity</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="permissions-tediously-explained" leftLabel="Prev"
-			title="Chapter 11. Development
-Reference"
+			title="
+Chapter 11. Development Reference"
 			rightLink="programming-with-aolserver" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">

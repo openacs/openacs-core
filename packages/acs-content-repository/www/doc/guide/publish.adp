@@ -97,8 +97,9 @@ item.</p>
 <kbd>content::get_content</kbd> in its Tcl file in order to
 automatically retrieve the current item&#39;s attributes. The
 attributes will be placed in a onerow datasource called
-<kbd>content</kbd> . The template may then loop through the content array in order to
-convert the onerow datasource to local variables.</p>
+<kbd>content</kbd> . The template may then loop thorugh the content
+array in order to convert the onerow datasource to local
+variables.</p>
 <p>In addition to the "x" view, the Content Repository
 creates an "i" view, which simplifies the creation of new
 revisions. The "i" view has the same name as the content
@@ -121,5 +122,5 @@ the initial query for any needed attributes.</p>
 <a href="mailto:karlg\@arsdigita.com">karlg\@arsdigita.com</a>
 <br>
 
-Last Modified: $&zwnj;Id: publish.html,v 1.5.2.1 2021/04/05 19:49:49
-gustafn Exp $
+Last Modified: $&zwnj;Id: publish.html,v 1.5.2.2 2022/08/29 11:00:26
+antoniop Exp $

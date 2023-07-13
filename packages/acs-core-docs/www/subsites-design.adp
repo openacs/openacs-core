@@ -1,11 +1,11 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Subsites Design Document}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Subsites Design Document}</property>
 <property name="doc(title)">Subsites Design Document</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="subsites-requirements" leftLabel="Prev"
-			title="Chapter 15. Kernel
-Documentation"
+			title="
+Chapter 15. Kernel Documentation"
 			rightLink="apm-requirements" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">

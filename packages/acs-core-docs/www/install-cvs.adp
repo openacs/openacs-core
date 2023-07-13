@@ -1,16 +1,18 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Initialize CVS (OPTIONAL)}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Initialize CVS (OPTIONAL)}</property>
 <property name="doc(title)">Initialize CVS (OPTIONAL)</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="openacs-unpack" leftLabel="Prev"
-			title="Appendix B. Install
-additional supporting software"
+			title="
+Appendix B. Install additional supporting
+software"
 			rightLink="psgml-for-emacs" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="install-cvs" id="install-cvs"></a>Initialize CVS (OPTIONAL)</h2></div></div></div><a class="indexterm" name="idp140218917508672" id="idp140218917508672"></a><p>CVS is a source control system. Create and initialize a
-directory for a local cvs repository.</p><pre class="screen">[root tmp]# <strong class="userinput"><code>mkdir /cvsroot</code></strong>
+<a name="install-cvs" id="install-cvs"></a>Initialize CVS (OPTIONAL)</h2></div></div></div><a class="indexterm" name="idp105548967266248" id="idp105548967266248"></a><p>CVS is a source control system. Create and initialize a
+directory for a local cvs repository.</p><pre class="screen">
+[root tmp]# <strong class="userinput"><code>mkdir /cvsroot</code></strong>
 [root tmp]#<strong class="userinput"><code> cvs -d /cvsroot init</code></strong>
 [root tmp]#
 <span class="action"><span class="action">mkdir /cvsroot

@@ -1,11 +1,12 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Install tclwebtest.}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Install tclwebtest.}</property>
 <property name="doc(title)">Install tclwebtest.</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="install-nsopenssl" leftLabel="Prev"
-			title="Appendix B. Install
-additional supporting software"
+			title="
+Appendix B. Install additional supporting
+software"
 			rightLink="install-php" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">

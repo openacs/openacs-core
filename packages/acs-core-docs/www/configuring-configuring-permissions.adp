@@ -1,11 +1,12 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Setting Permissions on an OpenACS package}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Setting Permissions on an OpenACS package}</property>
 <property name="doc(title)">Setting Permissions on an OpenACS package</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="configuring-configuring-packages" leftLabel="Prev"
-			title="Chapter 4. Configuring a
-new OpenACS Site"
+			title="
+Chapter 4. Configuring a new OpenACS
+Site"
 			rightLink="how-do-I" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
@@ -16,7 +17,7 @@ OpenACS package</h2></div></div></div><div class="authorblurb">
 OpenACS docs are written by the named authors, and may be edited by
 OpenACS documentation staff.</div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140219456555248" id="idp140219456555248"></a>Setting Permission on an OpenACS
+<a name="idp105548901416392" id="idp105548901416392"></a>Setting Permission on an OpenACS
 package</h3></div></div></div><p>After you&#39;ve installed and mounted your package, you can
 configure each instance to act as you would like.</p><p>This is done from the Applications page. Log in, go to the Admin
 or Control Panel, click on the subsite the application is in, and

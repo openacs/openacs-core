@@ -11,7 +11,7 @@ content_revision</p>
 <li><a href="#overview">Overview</a></li><li><a href="#related">Related Objects</a></li><li><a href="#api">API</a></li>
 </ul>
 <p> </p>
-<a name="overview" id="overview"><h3>Overview</h3></a>
+<h3><a name="overview">Overview</a></h3>
 <p>Content revisions contain the data for content items. There is a
 many to one relationship between content revisions and content
 items. There is at most one "live" revision for every
@@ -19,10 +19,11 @@ content item though. For example, there may be 5 revisions of the
 review for the movie "Terminator," yet only one of these
 may be live on the website at a given time.</p>
 <p> </p>
-<a name="related" id="related"><h3>Related Objects</h3></a>
- See also: {content_item }
+<h3><a name="related">Related Objects</a></h3>
+
+See also: {content_item }
 <p> </p>
-<a name="api" id="api"><h3>API</h3></a>
+<h3><a name="api">API</a></h3>
 <ul>
 <li>
 <font size="+1">Function:</font> content_revision.copy

@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {ACS Installation: Welcome}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {ACS Installation: Welcome}</property>
 <property name="doc(title)">ACS Installation: Welcome</property>
 <master>
 <h2>ACS Installation: Welcome</h2>
@@ -14,5 +14,5 @@ Community System running on your server.
 <p>The next step is to install the ACS kernel data model. Click the
 <em>Next</em> button to proceed.</p>
 <form action="install-data-model" method="get">
-<center><input type="submit" value="Next -&gt;"></center><hr><a href="mailto:acs\@arsdigita.com"><address>acs\@arsdigita.com</address></a>
+<center><input type="submit" value="Next -&gt;"></center><hr><a href="mailto:acs\@arsdigita.com"></a><address>acs\@arsdigita.com</address>
 </form>

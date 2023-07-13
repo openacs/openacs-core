@@ -1,18 +1,18 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {External Authentication Requirements}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {External Authentication Requirements}</property>
 <property name="doc(title)">External Authentication Requirements</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="bootstrap-acs" leftLabel="Prev"
-			title="Chapter 15. Kernel
-Documentation"
+			title="
+Chapter 15. Kernel Documentation"
 			rightLink="releasing-openacs" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="ext-auth-requirements" id="ext-auth-requirements"></a>External
 Authentication Requirements</h2></div></div></div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140218656115952" id="idp140218656115952"></a>Vision</h3></div></div></div><p>People have plenty of usernames and passwords already, we
+<a name="idp105548832526408" id="idp105548832526408"></a>Vision</h3></div></div></div><p>People have plenty of usernames and passwords already, we
 don&#39;t want them to have yet another. We want people to be able
 to log in to OpenACS with the same password they use to log in to
 any other system.</p><p>Besides, administrators have better things to do than create
@@ -74,7 +74,7 @@ Pictures</h3></div></div></div><p>Authentication:</p><p><span class="inlinemedia
 <div class="titlepage"><div><div><h3 class="title">
 <a name="Requirements" id="Requirements"></a>Requirements</h3></div></div></div><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="idp140218930777760" id="idp140218930777760"></a>New API</h4></div></div></div><div class="segmentedlist"><table border="1" cellpadding="3" cellspacing="0" width="90%">
+<a name="idp105548832540616" id="idp105548832540616"></a>New API</h4></div></div></div><div class="segmentedlist"><table border="1" cellpadding="3" cellspacing="0" width="90%">
 <tr>
 <th width="15%">Feature</th><th width="8%">Status</th><th width="77%">Description</th>
 </tr><thead><tr><th>New API</th></tr></thead><tbody>
@@ -207,7 +207,7 @@ options are available, a way to set these, and a way for the driver
 to access these settings.</p><p>OpenACS will come pre-configured with one authority, which is
 the "local" authority, meaning we&#39;ll authenticate as
 normal using the local users table. This will, just like any other
-authority, be implemetned using a service contract.</p>
+authority, be implemented using a service contract.</p>
 </div><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
 <a name="Synchronizing_and_Linking_User" id="Synchronizing_and_Linking_User"></a>Synchronizing and Linking
@@ -383,7 +383,7 @@ the user_id of a user who&#39;s only logged-in in untrusted
 mode.</p><p>Similarly, <code class="literal">ad_conn user_id</code> will
 continue to return 0 (not logged-in) when the user is only
 logged-in untrusted, and we&#39;ll supply another variable,
-<code class="literal">ad_conn untrusted_user_id</code>, which wlll
+<code class="literal">ad_conn untrusted_user_id</code>, which will
 be set to the user_id for all login levels.</p><p>This should ensure that we get full access to the new feature,
 while leaving all current code just as secure as it was before.</p>
 </div><div class="sect3">
@@ -672,8 +672,8 @@ at Collaboraid.</td><td>20 Aug 2003</td><td>Joel Aufrecht</td>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
 			leftLink="bootstrap-acs" leftLabel="Prev" leftTitle="Bootstrapping OpenACS"
-			rightLink="releasing-openacs" rightLabel="Next" rightTitle="Chapter 16. Releasing
-OpenACS"
+			rightLink="releasing-openacs" rightLabel="Next" rightTitle="
+Chapter 16. Releasing OpenACS"
 			homeLink="index" homeLabel="Home" 
 			upLink="kernel-doc" upLabel="Up"> 
 		    

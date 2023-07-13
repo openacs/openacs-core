@@ -1,11 +1,11 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Package Manager Design}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Package Manager Design}</property>
 <property name="doc(title)">Package Manager Design</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="apm-requirements" leftLabel="Prev"
-			title="Chapter 15. Kernel
-Documentation"
+			title="
+Chapter 15. Kernel Documentation"
 			rightLink="db-api-detailed" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
@@ -49,8 +49,8 @@ Examples of applications include <a class="ulink" href="/doc/forums" target="_to
 <span class="strong"><strong>OpenACS Services:</strong></span>
 the aforementioned building blocks. Examples of services include
 the <a class="ulink" href="/doc/acs-content-repository" target="_top">OpenACS Content Repository</a>, the <a class="ulink" href="/doc/acs-templating" target="_top">OpenACS Templating System</a>,
-and the <a class="link" href="kernel-doc" title="Chapter 15. Kernel Documentation">OpenACS Kernel</a>,
-which includes APM.</p></li>
+and the <a class="link" href="kernel-doc" title="Chapter 15. Kernel Documentation">OpenACS
+Kernel</a>, which includes APM.</p></li>
 </ul></div><p>An installation of the OpenACS includes the OpenACS Kernel, some
 services that extend the kernel&#39;s functionality, and some
 applications intended for end-users. Packages function as

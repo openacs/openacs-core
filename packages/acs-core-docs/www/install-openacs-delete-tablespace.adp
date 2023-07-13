@@ -1,11 +1,11 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Deleting a tablespace}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Deleting a tablespace}</property>
 <property name="doc(title)">Deleting a tablespace</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="remote-postgres" leftLabel="Prev"
-			title="Chapter 7. Database
-Management"
+			title="
+Chapter 7. Database Management"
 			rightLink="install-next-nightly-vacuum" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
@@ -16,16 +16,20 @@ tablespace</a>.</p><div class="sect2">
 tablespace</h3></div></div></div><p>Should it become necessary to rebuild a tablespace from scratch,
 you can use the <code class="computeroutput">drop user</code>
 command in SVRMGRL with the <code class="computeroutput">cascade</code> option. This command will drop the
-user and every database object the user owns.</p><pre class="programlisting">SVRMGR&gt; <strong class="userinput"><code>drop user <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span> cascade;</code></strong>
+user and every database object the user owns.</p><pre class="programlisting">
+SVRMGR&gt; <strong class="userinput"><code>drop user <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span> cascade;</code></strong>
 </pre><p>If this does not work because svrmgrl "cannot drop a user
 that is currently connected", make sure to kill the AOLserver
-using this user. If it still does not work, do:</p><pre class="programlisting">SVRMGR&gt; <strong class="userinput"><code>select username, sid, serial# from v$session where lower(username)='<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>';</code></strong>
-</pre><p>and then</p><pre class="programlisting">SVRMGR&gt; <strong class="userinput"><code>alter system kill session '<span class="replaceable"><span class="replaceable">sid, serial#</span></span>';</code></strong>
+using this user. If it still does not work, do:</p><pre class="programlisting">
+SVRMGR&gt; <strong class="userinput"><code>select username, sid, serial# from v$session where lower(username)='<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>';</code></strong>
+</pre><p>and then</p><pre class="programlisting">
+SVRMGR&gt; <strong class="userinput"><code>alter system kill session '<span class="replaceable"><span class="replaceable">sid, serial#</span></span>';</code></strong>
 </pre><p>where <span class="emphasis"><em>sid</em></span> and
 <span class="emphasis"><em>serial#</em></span> are replaced with
 the corresponding values for the open session.</p><p><span class="strong"><strong>Use with
 caution!</strong></span></p><p>If you feel the need to delete <span class="emphasis"><em>everything</em></span> related to the service, you
-can also issue the following:</p><pre class="programlisting">SVRMGR&gt; <strong class="userinput"><code>drop tablespace <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span> including contents cascade constraints;</code></strong>
+can also issue the following:</p><pre class="programlisting">
+SVRMGR&gt; <strong class="userinput"><code>drop tablespace <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span> including contents cascade constraints;</code></strong>
 </pre>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
@@ -40,7 +44,8 @@ comment out your server in <code class="computeroutput">/etc/inittab</code>, rer
 </code>.</p><p>Then, to drop the db, just do:</p><pre class="programlisting">
 [$OPENACS_SERVICE_NAME ~]$ <strong class="userinput"><code>dropdb <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
 </code></strong>
-DROP DATABASE</pre>
+DROP DATABASE
+</pre>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {How Internationalization/Localization works in
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {How Internationalization/Localization works in
 OpenACS}</property>
 <property name="doc(title)">How Internationalization/Localization works in
 OpenACS</property>
@@ -189,7 +189,7 @@ following commands to check for mistakes:</p><pre class="screen">
 
 # Review the list of Tcl files with no message lookups
 <strong class="userinput"><code>for tcl_file in $(find -iname '*.tcl'); do egrep -L '(&lt;#|\[_)' $tcl_file; done</code></strong>
-</pre><p>When you feel ready you may vist your package in the <a class="ulink" href="/acs-admin/apm" target="_top">package manager</a> and
+</pre><p>When you feel ready you may visit your package in the <a class="ulink" href="/acs-admin/apm" target="_top">package manager</a> and
 run the action "Replace tags with keys and insert into
 catalog" on the Tcl files that you&#39;ve edited to replace
 the temporary tags with calls to the message lookup procedure.</p><div class="sect4">

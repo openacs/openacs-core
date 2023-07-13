@@ -1,11 +1,11 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Security Requirements}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Security Requirements}</property>
 <property name="doc(title)">Security Requirements</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="i18n-requirements" leftLabel="Prev"
-			title="Chapter 15. Kernel
-Documentation"
+			title="
+Chapter 15. Kernel Documentation"
 			rightLink="security-design" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">

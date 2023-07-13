@@ -1,11 +1,11 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Sending HTML email from your application}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Sending HTML email from your application}</property>
 <property name="doc(title)">Sending HTML email from your application</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="tutorial-css-layout" leftLabel="Prev"
-			title="Chapter 10. Advanced
-Topics"
+			title="
+Chapter 10. Advanced Topics"
 			rightLink="tutorial-caching" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
@@ -46,7 +46,8 @@ Sending HTML email is only slightly more complicated.</p><pre class="programlist
         -subject $subject \
         -body $message \
         -extraheaders $extra_headers
-    </pre>
+    
+</pre>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
 			leftLink="tutorial-css-layout" leftLabel="Prev" leftTitle="Laying out a page with CSS instead of

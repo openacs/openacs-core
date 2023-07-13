@@ -1,11 +1,11 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Parties in OpenACS}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Parties in OpenACS}</property>
 <property name="doc(title)">Parties in OpenACS</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="subsites" leftLabel="Prev"
-			title="Chapter 11. Development
-Reference"
+			title="
+Chapter 11. Development Reference"
 			rightLink="permissions-tediously-explained" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
@@ -138,11 +138,11 @@ organizations (other groups) as members. Hence the membership
 relation between groups and <span class="emphasis"><em>parties</em></span>. However, someone is not a
 member of Greenpeace just because they are a member of a group that
 is a member of Greenpeace. Now, consider a multinational
-corporation (MC) that has a U.S. division and an Eurasian division.
+corporation (MC) that has a U.S. division and a Eurasian division.
 A member of either the U.S. or Eurasian division is automatically a
 member of the MC. In this situation the U.S. and Eurasian divisions
 are "components" of the MC, i.e., membership <span class="emphasis"><em>is</em></span> transitive with respect to
-composition. Furthermore, a member of an European (or other) office
+composition. Furthermore, a member of a European (or other) office
 of the MC is automatically a member of the MC.</p><p><span class="strong"><strong>Group
 Membership</strong></span></p><p>Group memberships can be created and manipulated using the
 membership_rel package. Only one membership object can be created
@@ -322,8 +322,8 @@ primary key in what could be thought of as a pure relation. Because
 a membership relation is an ordinary acs object with <a class="ulink" href="object-identity" target="_top">object
 identity</a>, it is as easy to extend the membership relation to
 store extra information as it is to extend the users table or the
-groups table.</p><div class="cvstag">($&zwnj;Id: parties.xml,v 1.10.2.1 2019/11/22
-16:30:46 gustafn Exp $)</div>
+groups table.</p><div class="cvstag">($&zwnj;Id: parties.xml,v 1.10.2.2 2023/03/28
+11:20:36 antoniop Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

@@ -1,11 +1,14 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Chapter 12. Engineering Standards}</property>
-<property name="doc(title)">Chapter 12. Engineering Standards</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Chapter 12. Engineering
+Standards}</property>
+<property name="doc(title)">Chapter 12. Engineering
+Standards</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="form-builder" leftLabel="Prev"
-			title="Part III. For OpenACS
-Package Developers"
+			title="
+Part III. For OpenACS Package
+Developers"
 			rightLink="style-guide" rightLabel="Next">
 		    <div class="chapter">
 <div class="titlepage"><div><div><h2 class="title">

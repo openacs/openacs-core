@@ -1,11 +1,12 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Install Daemontools (OPTIONAL)}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Install Daemontools (OPTIONAL)}</property>
 <property name="doc(title)">Install Daemontools (OPTIONAL)</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="psgml-for-emacs" leftLabel="Prev"
-			title="Appendix B. Install
-additional supporting software"
+			title="
+Appendix B. Install additional supporting
+software"
 			rightLink="install-qmail" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
@@ -15,11 +16,12 @@ installed in /package. These commands install daemontools and
 svgroup. svgroup is a script for granting permissions, to allow
 users other than root to use daemontools for specific services.</p><div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">
-<p>Install Daemontools</p><a class="indexterm" name="idp140218917524848" id="idp140218917524848"></a><p>
+<p>Install Daemontools</p><a class="indexterm" name="idp105548967278280" id="idp105548967278280"></a><p>
 <a class="link" href="individual-programs">download
 daemontools</a> and install it.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem">
-<p>Red Hat 8</p><pre class="screen">[root root]# <strong class="userinput"><code>mkdir -p /package</code></strong>
+<p>Red Hat 8</p><pre class="screen">
+[root root]# <strong class="userinput"><code>mkdir -p /package</code></strong>
 [root root]# <strong class="userinput"><code>chmod 1755 /package/</code></strong>
 [root root]# <strong class="userinput"><code>cd /package/</code></strong>
 [root package]# <strong class="userinput"><code>tar xzf /tmp/daemontools-0.76.tar.gz</code></strong>
@@ -40,7 +42,8 @@ package/install</span></span>
 </pre>
 </li><li class="listitem">
 <p>Red Hat 9, Fedora Core 1-4</p><p>Make sure you have the source tarball in <code class="computeroutput">/tmp</code>, or <a class="link" href="individual-programs">download
-it</a>.</p><pre class="screen">[root root]# <strong class="userinput"><code>mkdir -p /package</code></strong>
+it</a>.</p><pre class="screen">
+[root root]# <strong class="userinput"><code>mkdir -p /package</code></strong>
 [root root]# <strong class="userinput"><code>chmod 1755 /package/</code></strong>
 [root root]# <strong class="userinput"><code>cd /package/</code></strong>
 [root package]# <strong class="userinput"><code>tar xzf /tmp/daemontools-0.76.tar.gz</code></strong>
@@ -77,7 +80,8 @@ package/install</span></span>
 </pre>
 </li><li class="listitem">
 <p>FreeBSD (follow standard install)</p><p>Make sure you have the source tarball in <code class="computeroutput">/tmp</code>, or <a class="link" href="individual-programs">download
-it</a>.</p><pre class="screen">[root root]# <strong class="userinput"><code>mkdir -p /package</code></strong>
+it</a>.</p><pre class="screen">
+[root root]# <strong class="userinput"><code>mkdir -p /package</code></strong>
 [root root]# <strong class="userinput"><code>chmod 1755 /package/</code></strong>
 [root root]# <strong class="userinput"><code>cd /package/</code></strong>
 [root package]# <strong class="userinput"><code>tar xzf /tmp/daemontools-0.76.tar.gz</code></strong>
@@ -96,20 +100,24 @@ cd admin/daemontools-0.76
 package/install</span></span>
 </pre>
 </li><li class="listitem">
-<p>Debian</p><pre class="screen">[root ~]# <strong class="userinput"><code>apt-get install daemontools-installer</code></strong>
+<p>Debian</p><pre class="screen">
+[root ~]# <strong class="userinput"><code>apt-get install daemontools-installer</code></strong>
 [root ~]# <strong class="userinput"><code>build-daemontools</code></strong>
 </pre>
 </li>
 </ul></div>
 </li><li class="listitem">
 <p>Verify that svscan is running. If it is, you should see these
-two processes running:</p><pre class="screen">[root root]# <strong class="userinput"><code>ps -auxw | grep service</code></strong>
+two processes running:</p><pre class="screen">
+[root root]# <strong class="userinput"><code>ps -auxw | grep service</code></strong>
 root     13294  0.0  0.1  1352  272 ?        S    09:51   0:00 svscan /service
 root     13295  0.0  0.0  1304  208 ?        S    09:51   0:00 readproctitle service errors: .......................................
-[root root]#</pre>
+[root root]#
+</pre>
 </li><li class="listitem">
 <p>Install a script to grant non-root users permission to control
-daemontools services.</p><pre class="screen">[root root]# <strong class="userinput"><code>cp /tmp/openacs-5.9.0/packages/acs-core-docs/www/files/svgroup.txt /usr/local/bin/svgroup</code></strong>
+daemontools services.</p><pre class="screen">
+[root root]# <strong class="userinput"><code>cp /tmp/openacs-5.9.0/packages/acs-core-docs/www/files/svgroup.txt /usr/local/bin/svgroup</code></strong>
 [root root]# <strong class="userinput"><code>chmod 755 /usr/local/bin/svgroup</code></strong><span class="action"><span class="action">cp /tmp/openacs-5.9.0/packages/acs-core-docs/www/files/svgroup.txt /usr/local/bin/svgroup 
 chmod 755 /usr/local/bin/svgroup</span></span>
 </pre>

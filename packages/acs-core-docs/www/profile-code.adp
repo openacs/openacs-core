@@ -1,11 +1,11 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Profile your code}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Profile your code}</property>
 <property name="doc(title)">Profile your code</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="tutorial-categories" leftLabel="Prev"
-			title="Chapter 10. Advanced
-Topics"
+			title="
+Chapter 10. Advanced Topics"
 			rightLink="tutorial-distribute" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">

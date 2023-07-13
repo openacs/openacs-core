@@ -1,11 +1,11 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Notifications}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Notifications}</property>
 <property name="doc(title)">Notifications</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="tutorial-upgrades" leftLabel="Prev"
-			title="Chapter 10. Advanced
-Topics"
+			title="
+Chapter 10. Advanced Topics"
 			rightLink="tutorial-hierarchical" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
@@ -18,7 +18,7 @@ OpenACS documentation staff.</div><p>The notifications package allows you to sen
 through any defined communications medium (e.g. email, sms) upon
 some event occurring within the system.</p><p>This tutorial steps through the process of integrating the
 notifications package with your package.</p><p>First step is to create the notification types. To do this a
-script similar to the one below needs to be loaded into Postgresql.
+script similar to the one below needs to be loaded into PostgreSQL.
 I create this script in a
 package-name/sql/postgresql/package-name-notifications-init.sql
 file. I then load this file from my create SQL file. The following
@@ -86,7 +86,8 @@ lars_blogger_notif notification type (which was created above).</p><pre class="p
 
     select inline_0();
     drop function inline_0();
-    </pre><p>You also need a drop script. This is untested for compatibility
+    
+</pre><p>You also need a drop script. This is untested for compatibility
 with the above script.</p><pre class="programlisting">
       -- \@author gwong\@orchardlabs.com,ben\@openforce.biz
       -- \@creation-date 2002-05-16
@@ -176,7 +177,8 @@ $$ language plpgsql;
 
 select inline_0();
 drop function inline_0();
-    </pre><p>The next step is to setup our notification creation. A new
+    
+</pre><p>The next step is to setup our notification creation. A new
 notification must be added to the notification table for each blog
 entry added. We do this using the notification::new procedure</p><pre class="programlisting">
         notification::new \
@@ -186,7 +188,8 @@ entry added. We do this using the notification::new procedure</p><pre class="pro
             -response_id $blog(entry_id) \
             -notif_subject $blog(title) \
             -notif_text $new_content
-    </pre><p>This code is placed in the Tcl procedure that creates blog
+    
+</pre><p>This code is placed in the Tcl procedure that creates blog
 entries, right after the entry gets created in the code. The
 <code class="computeroutput">$blog(package_id)</code> is the
 OpenACS object_id of the Weblogger instance to which the entry has
@@ -208,8 +211,10 @@ proc:</p><pre class="programlisting">
         -pretty_name [lars_blog_name] \
         -url [lars_blog_public_package_url] \
     ]
-    </pre><p>which will return something like</p><pre class="programlisting">
-    You may &lt;a href="/notifications/request-new?..."&gt;request notification&lt;/a&gt; for Weblogger.</pre><p>which can be readily put on the blog index page. The
+    
+</pre><p>which will return something like</p><pre class="programlisting">
+    You may &lt;a href="/notifications/request-new?..."&gt;request notification&lt;/a&gt; for Weblogger.
+</pre><p>which can be readily put on the blog index page. The
 <code class="computeroutput">pretty_name</code> parameter is what
 appears at the end of the text returned (i.e. "... request
 notification&lt;/a&gt; for pretty_name"), The <code class="computeroutput">url</code> parameter should be set to the address

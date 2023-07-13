@@ -1,11 +1,11 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {PL/SQL Standards}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {PL/SQL Standards}</property>
 <property name="doc(title)">PL/SQL Standards</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="eng-standards-filenaming" leftLabel="Prev"
-			title="Chapter 12. Engineering
-Standards"
+			title="
+Chapter 12. Engineering Standards"
 			rightLink="variables" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
