@@ -13,10 +13,14 @@ subtemplate into the current template. Subtemplates are evaluated
 in the same fashion as any other dynamic template; the developer
 may associate data sources and other properties to them.</p>
 <h3>Usage</h3>
-<pre>&lt;include src="subtemplate" attribute="value" ...&gt;</pre>
+<pre>
+&lt;include src="subtemplate" attribute="value" ...&gt;
+</pre>
 
 or
-<pre>&lt;include src="/packages/packagename/www/lib/subtemplate" attribute="value" ...&gt;</pre>
+<pre>
+&lt;include src="/packages/packagename/www/lib/subtemplate" attribute="value" ...&gt;
+</pre>
 <h3>Notes</h3>
 <ul>
 <li>Arguments may be passed to the subtemplate by specifying
@@ -25,7 +29,9 @@ except for <kbd>src</kbd> are assumed to be arguments and are set
 as variables which the subtemplate may reference using the
 <kbd>var</kbd> tag. To pass a dynamic variable to the subtemplate,
 specify the variable name surrounded by at signs as the value:
-<pre>&lt;include src="subtemplate" source_id="\@source_id\@" ...&gt;</pre>
+<pre>
+&lt;include src="subtemplate" source_id="\@source_id\@" ...&gt;
+</pre>
 Note that passing an html string to a subtemplate via
 <code>\@var\@</code> will result in passing an html-escaped and
 internationalized string. To prevent this, use
@@ -35,7 +41,9 @@ call-by-reference) causing a variable alias to be created in the
 scope of the subtemplate. This variant is necessary for e.g.
 passing a Tcl array like a templating datasource. To pass e.g.
 <code>users</code> by reference, use this notation:
-<pre>&lt;include src="subtemplate" &amp;persons="users" ...&gt;</pre>
+<pre>
+&lt;include src="subtemplate" &amp;persons="users" ...&gt;
+</pre>
 This is particularly useful for passing onerow and multirow data
 sourced. Note that in this case, if the subtemplate modifies the
 value this will affect the includer. When the datasource in the
@@ -50,10 +58,11 @@ fragment of a page that you&#39;d like to include in other pages,
 make sure its .tcl component does not call
 <kbd>ad_page_contract</kbd>.</p><p>If you&#39;d like to include a full page (that is, one which
 calls <kbd>ad_page_contract</kbd>) then instead of passing a
-parameter through <kbd>&lt;include&gt;</kbd>, you could manipulate the ns_set obtained via
-<kbd><a href="https://naviserver.sourceforge.io/n/naviserver/files/ns_getform.html">ns_getform</a></kbd>to add the variable to that page&#39;s form. For additional
-references, see how message-chunk is used throughout the forums
-package.</p>
+parameter through <kbd>&lt;include&gt;</kbd>, you could manipulate
+the ns_set obtained via <kbd><a href="https://naviserver.sourceforge.io/n/naviserver/files/ns_getform.html">
+ns_getform</a></kbd> to add the variable to that page&#39;s form.
+For additional references, see how message-chunk is used throughout
+the forums package.</p>
 </li><li>If the <kbd>src</kbd> attribute begins with a slash, the path
 is assumed to be relative to the server root, the parent directory
 of the Tcl library. If not, the path is assumed to be relative to

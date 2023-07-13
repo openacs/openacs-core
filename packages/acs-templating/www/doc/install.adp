@@ -19,9 +19,11 @@ AOLserver-compatible RDBMS.</p>
 <h3>Obtaining the distribution</h3>
 <p>To install the templating system, download and unpack the tar
 file under your page root:</p>
-<pre>$ wget http://bob.sf.arsdigita.com:8089/ats/ats.tar.gz
+<pre>
+$ wget http://bob.sf.arsdigita.com:8089/ats/ats.tar.gz
 $ cd /web/myserver/www
-$ gunzip -c ats.tar.gz | tar xvf -</pre>
+$ gunzip -c ats.tar.gz | tar xvf -
+</pre>
 <p>The distribution consists of four subdirectories:</p>
 <ol>
 <li>
@@ -45,19 +47,23 @@ distribution to the private Tcl library of your AOLserver
 installation (as indicated by the <kbd>Library</kbd> parameter in
 the <kbd>ns/server/myserver/tcl</kbd> section of the AOLserver
 configuration file):</p>
-<pre>$ cd /web/myserver/tcl
-$ ln -s &lt;path_to_distribution&gt;/ats/tcl/ ats</pre>
+<pre>
+$ cd /web/myserver/tcl
+$ ln -s &lt;path_to_distribution&gt;/ats/tcl/ ats
+</pre>
 <h3>Configuring AOLserver</h3>
 <p>The last step is to modify your AOLserver configuration file.
 You will need to register the templating system as a Tcl-only
 module:</p>
-<pre>[ns/server/myserver/modules]
+<pre>
+[ns/server/myserver/modules]
 nssock=nssock.so
 nslog=nslog.so
 <strong>ats=Tcl</strong>
 </pre>
 <p>or if you are using the new configuration file format:</p>
-<pre>ns_section "ns/server/${server}/modules"
+<pre>
+ns_section "ns/server/${server}/modules"
 ns_param   nssock          nssock.so
 ns_param   nslog           nslog.so
 <strong>ns_param   ats          Tcl</strong>
@@ -67,12 +73,14 @@ named the directory or symlink for the templating code within your
 private Tcl library.</p>
 <p>You will also need to ensure that the "fancy" ADP
 parser is the default:</p>
-<pre>[ns/server/<em>yourserver</em>/adp]
+<pre>
+[ns/server/<em>yourserver</em>/adp]
 Map=/*.adp
 DefaultParser=fancy
 
 [ns/server/<em>yourserver</em>/adp/parsers]
-fancy=.adp</pre>
+fancy=.adp
+</pre>
 <h3>Optional Configuration</h3>
 <p>The templating system recognizes two optional parameters in the
 AOLserver configuration file in the

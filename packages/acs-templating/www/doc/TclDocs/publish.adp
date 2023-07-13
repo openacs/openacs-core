@@ -475,8 +475,8 @@ handler, in format {name value name value ...}</td>
 </table>
 <table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name="publish::html_args" id="publish::html_args"><font size="+1" weight="bold">publish::html_args</font></a></td></tr><tr><td>
-<blockquote>Concatenate a list of name-value pairs as a list of { name=value}
-pairs</blockquote><dl>
+<blockquote>Concatenate a list of name-value pairs as a list of {
+name=value} pairs</blockquote><dl>
 <dd>
 <strong>Parameters:</strong><table><tr>
 <td align="right">

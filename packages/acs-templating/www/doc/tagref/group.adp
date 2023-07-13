@@ -28,7 +28,8 @@ this <strong>only</strong> works inside the
 <kbd>group</kbd> tags nested within each other.</li>
 </ul>
 <h3>Usage</h3>
-<pre>&lt;table&gt;
+<pre>
+&lt;table&gt;
 
 &lt;multiple name="shirts"&gt;
 
@@ -59,7 +60,8 @@ this <strong>only</strong> works inside the
 
 &lt;/multiple&gt;
 
-&lt;/table&gt;</pre>
+&lt;/table&gt;
+</pre>
 <p>[Note: Carsten added this feature during the Berlin Hackaton
 2004-02-14]</p>
 <p>The <kbd>delimiter</kbd> attribute will add a string after each

@@ -41,7 +41,8 @@ the beginning and end of the section. This can be avoided by
 crowding the start and end tags like so:</p><pre>
 &lt;td&gt;&lt;if %x% eq 5&gt;&lt;img src="five.gif"&gt;&lt;/if&gt;
 &lt;else&gt;&lt;img src="notfive.gif"&gt;&lt;/else&gt;&lt;/td&gt;
-        </pre><p>Note that this should not be done unless necessary, since it
+        
+</pre><p>Note that this should not be done unless necessary, since it
 reduces the legibility of the template to others who need to edit
 the template later.</p>
 </li>

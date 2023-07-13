@@ -14,7 +14,8 @@ control, whether the content of the element should be processed by
 the ADP parser or not. Properties are most commonly used to pass
 information to a master template, such as a title or logo.</p>
 <h3>Usage</h3>
-<pre>&lt;master src="master"&gt;
+<pre>
+&lt;master src="master"&gt;
 &lt;property name="title"&gt;My Home Page&lt;/property&gt;
 &lt;p&gt;Welcome to my home page!&lt;/p&gt;x
 ...

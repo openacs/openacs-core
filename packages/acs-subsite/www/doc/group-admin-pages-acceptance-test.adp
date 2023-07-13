@@ -11,8 +11,7 @@ Acceptance test</font>
 <font>The first thing we have to test is developer defined group
 types working in conjunction with the user defined ones.</font>
 <p><font>Create the following object type in SQL*Plus.</font></p>
-<pre><font>
-begin
+<pre><font>begin
  acs_object_type.create_type (
    supertype =&gt; 'group',
    object_type =&gt; 'developer_defined_test_type',
@@ -218,8 +217,7 @@ role</font></li><li><font>Click on "Employer" then on Employment
 Relation</font></li><li><font>Delete the employment relation type.</font></li><li><font>Delete the employee, employer, and project_leader
 roles</font></li><li><font>Delete any groups you created for the developer defined
 type</font></li><li>
-<font>Drop the developer defined type (in SQL*Plus):</font><pre><font>
-exec acs_object_type.drop_type('developer_defined_test_type'); 
+<font>Drop the developer defined type (in SQL*Plus):</font><pre><font>exec acs_object_type.drop_type('developer_defined_test_type'); 
 drop table developer_defined_test_types;
 drop package developer_defined_test_type;
 </font></pre>

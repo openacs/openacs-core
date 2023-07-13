@@ -12,11 +12,14 @@ associated with a page request.</p>
 <p>This API is an alternative to <code>ad_page_contract</code>
 which should usually be preferred if you have ACS installed.</p>
 <h3>Methods</h3>
-<pre>template::request create</pre>
+<pre>
+template::request create
+</pre>
 <p>Initialize the data structure to store request parameters.
 Should be called at the start of any page that takes request
 parameters.</p>
-<pre>template::request set_param <em>name 
+<pre>
+template::request set_param <em>name 
                             -datatype datatype
                             -multiple
                             -optional
@@ -42,11 +45,13 @@ validation fails. The variables <kbd>$value</kbd> and
 <kbd>$label</kbd> may be used in the message to reference the
 parameter value and label (or name if no label is supplied).</li>
 </ul>
-<pre>template::request get_param <em>name</em>
+<pre>
+template::request get_param <em>name</em>
 </pre>
 <p>Returns the value (or values if the <kbd>multiple</kbd> is used)
 of the named parameter.</p>
-<pre>template::request is_valid <em>error_url</em>
+<pre>
+template::request is_valid <em>error_url</em>
 </pre>
 <p>Boolean procedure for determining whether any validation errors
 occurred while setting request parameters.</p>

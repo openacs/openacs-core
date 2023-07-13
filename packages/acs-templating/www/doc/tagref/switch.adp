@@ -68,7 +68,8 @@ and curly braces to be matched correctly. Failure to quote words
 with spaces correctly results in an error.</p><pre>
   &lt;case "{blue sky}"&gt;
     &lt;td bgcolor="#0000ff"&gt;
-  &lt;/case&gt;</pre>
+  &lt;/case&gt;
+</pre>
 </li>
 </ul>
 <hr>
