@@ -1056,8 +1056,8 @@ template::tag adp:toggle_button { chunk params } {
     #    - "tag" (default "button")
     #    - "toggle"
     #    - "target"
-    #    - "type" (default "button")
-    # The attribute "type" is just valid when "tag" is "button".
+    #    - "type" (default "button", just used for "button" tag)
+    #    - "href" (default "#", just used for "a" tag)
     #
     # Use <... tag="a"... > for use of tabs with Bootstrap 3.
     #
@@ -1068,8 +1068,10 @@ template::tag adp:toggle_button { chunk params } {
     set data [expr {[template::toolkit] eq "bootstrap5" ? "data-bs" : "data"}]
 
     set tag [ns_set iget $params tag button]
-    if {$tag eq "button"} {
-        set attributes " type='[ns_set iget $params type button]'"
+    switch $tag {
+        "button" {set attributes " type='[ns_set iget $params type button]'"}
+        "a"      {set attributes " type='[ns_set iget $params href #]'"}
+        default  {set attributes ""}
     }
     append attributes \
         " class='[ns_set iget $params class]'" \
