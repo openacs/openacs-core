@@ -1070,7 +1070,7 @@ template::tag adp:toggle_button { chunk params } {
     set tag [ns_set iget $params tag button]
     switch $tag {
         "button" {set attributes " type='[ns_set iget $params type button]'"}
-        "a"      {set attributes " type='[ns_set iget $params href #]'"}
+        "a"      {set attributes " href='[ns_set iget $params href #]'"}
         default  {set attributes ""}
     }
     append attributes \
