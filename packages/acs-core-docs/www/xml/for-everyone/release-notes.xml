@@ -39,6 +39,9 @@ END OF TEMPLATE -->
       entire &majorversion;.&minorversion; release sequence <xref linkend="changelog"></xref>.</para>
   -->
 
+  <xi:include href="release-notes-5-10-1.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
+  </xi:include>
+
   <xi:include href="release-notes-5-10.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
   </xi:include>
   
