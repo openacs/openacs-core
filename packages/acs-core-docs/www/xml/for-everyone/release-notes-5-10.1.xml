@@ -1,0 +1,168 @@
+<?xml version='1.0' ?>
+<!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+"http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd" [
+
+<!ENTITY % myvars SYSTEM "../variables.ent">
+%myvars;
+]>
+
+<sect2 id="release-notes-5-10-1">
+    <title>Release 5.10.1</title>
+    <itemizedlist>
+        <listitem><para>
+                The release of OpenACS 5.10.1 contains the 97 packages of the oacs-5-10
+                branch.  These packages include the OpenACS core packages, the major
+                application packages (e.g. most the ones used on OpenACS.org), and
+                DotLRN 2.10.1. 
+        </para></listitem>
+
+        <listitem><para>Improved templating
+                <itemizedlist>
+                    <listitem><para>Client-side double click prevention</para></listitem>
+                    <listitem><para>Support for generic icon names, which can be mapped differently depending on the installed packages and themes: The generic names are supported via <computeroutput>&lt;adp:icon name=&quot;NAME&quot; title=....&gt;</computeroutput>. By using this feature, one can use font-based icons (like e.g. glyphicons of Bootstrap5, bootstrap-icons, fa-icons, ...) instead of the old-style .gif and .png images. This makes the appearance more uniform, has better resizing behavior, and works more efficiently (fewer requests for embedded resources). Most of the occurrences of the old-style images in standard core and non-core packages in oacs-5-10 are already replaced.</para></listitem>
+                    <listitem><para>Support for listing registered URNs</para></listitem>
+                </itemizedlist>
+        </para></listitem>
+        <listitem><para>Security improvements
+                <itemizedlist>
+                    <listitem><para>Stronger password hashes (<computeroutput>scram-sha-256</computeroutput> hash in addition to the classical <computeroutput>salted-sha1</computeroutput>)</para></listitem>
+                    <listitem><para>Added optional CSP rules based on MIME types. This is important for user-contributed content. When users upload e.g. SVG-files to the file storage, and the content is served from there, it poses a potential security hole. One can now define an additional parameter called <computeroutput>StaticCSP</computeroutput> in the section <computeroutput>ns/server/$server/acs</computeroutput> of the OpenACS configuration file to deactivate execution of script files from static content.</para>
+                        <para><programlisting>
+                                ns_param StaticCSP {
+                                image/svg+xml "script-src 'none'"
+                                }
+                    </programlisting></para></listitem>
+                    <listitem><para>Cookie-Namespace: When multiple OpenACS instances are served from the same domain name, the same cookies (e.g. ad_session_id, ad_login, ...) are set to all servers. For sensible cases, a cookie-namespace can be used, which can be used as a replacement of the traditional <computeroutput>ad_</computeroutput> prefix. This can be as well set in the section <computeroutput>ns/server/$server/acs</computeroutput> of the OpenACS configuration file:</para>
+                        <para><programlisting>
+                                # Provide optionally a different cookie namespace
+                                # (used for prefixing OpenACS cookies)
+                                ns_param CookieNamespace "ad_"
+                    </programlisting></para></listitem>
+                </itemizedlist>
+        </para></listitem>
+
+        <listitem><para>Further reduce divergence between Oracle and Postgres SQL. Target version of Oracle could be 12.*, as Extended support ends in 2022 (see <ulink url="https://www.oracle.com/us/support/library/lifetime-support-technology-069183.pdf" target="_blank">https://www.oracle.com/us/support/library/lifetime-support-technology-069183.pdf</ulink>)
+                <itemizedlist>
+                    <listitem><para>limit / rownum -> fetch first</para></listitem>
+                    <listitem><para>use Postgres schemas for stored procedures so that they can be invoked with the same Oracle idiom</para></listitem>
+                </itemizedlist>
+        </para></listitem>
+        <listitem><para>Deprecated commands
+                <itemizedlist>
+                    <listitem><para><computeroutput>acs_message_id contract filter</computeroutput></para></listitem>
+                    <listitem><para><computeroutput>acs_privacy::*</computeroutput></para></listitem>
+                    <listitem><para><computeroutput>acs_tcl_vars_list_to_ns_set</computeroutput></para></listitem>
+                    <listitem><para><computeroutput>acs_tcl_vars_to_ns_set</computeroutput></para></listitem>
+                    <listitem><para><computeroutput>ad_apply</computeroutput></para></listitem>
+                    <listitem><para><computeroutput>ad_approval_system_inuse_p</computeroutput></para></listitem>
+                    <listitem><para><computeroutput>ad_dateentrywidget</computeroutput></para></listitem>
+                    <listitem><para><computeroutput>ad_db_select_widget</computeroutput></para></listitem>
+                    <listitem><para><computeroutput>ad_decorate_top</computeroutput></para></listitem>
+                    <listitem><para><computeroutput>ad_ns_set_to_tcl_vars</computeroutput></para></listitem>
+                    <listitem><para><computeroutput>ad_package_admin_home</computeroutput></para></listitem>
+                    <listitem><para><computeroutput>ad_parameter_all_values_as_list</computeroutput></para></listitem>
+                    <listitem><para><computeroutput>ad_user_class_description</computeroutput></para></listitem>
+                    <listitem><para><computeroutput>apm_file_type_keys</computeroutput></para></listitem>
+                    <listitem><para><computeroutput>application_group::child_application_groups</computeroutput></para></listitem>
+                    <listitem><para><computeroutput>attachments::root_folder_map_p</computeroutput></para></listitem>
+                    <listitem><para><computeroutput>bulk_mail::parameter</computeroutput></para></listitem>
+                    <listitem><para><computeroutput>bulk_mail::pretty_name</computeroutput></para></listitem>
+                    <listitem><para><computeroutput>calendar_portlet_display::get_url_stub</computeroutput></para></listitem>
+                    <listitem><para><computeroutput>calendar::adjust_date</computeroutput></para></listitem>
+                    <listitem><para><computeroutput>calendar::assign_permissions</computeroutput></para></listitem>
+                    <listitem><para><computeroutput>calendar::from_sql_datetime</computeroutput></para></listitem>
+                    <listitem><para><computeroutput>calendar::item::assign_permission</computeroutput></para></listitem>
+                    <listitem><para><computeroutput>calendar::make_datetime</computeroutput></para></listitem>
+                    <listitem><para><computeroutput>content::revision::update_attribute_index</computeroutput></para></listitem>
+                    <listitem><para><computeroutput>dotlrn_chat::add_portlet_helper</computeroutput></para></listitem>
+                    <listitem><para><computeroutput>dt_widget_*</computeroutput></para></listitem>
+                    <listitem><para><computeroutput>export_entire_form</computeroutput></para></listitem>
+                    <listitem><para><computeroutput>export_entire_form_as_url_vars</computeroutput></para></listitem>
+                    <listitem><para><computeroutput>export_ns_set_vars</computeroutput></para></listitem>
+                    <listitem><para><computeroutput>f::*</computeroutput> API that cannot be replaced by a drop-in alternative</para></listitem>
+                    <listitem><para><computeroutput>forum::new_questions_allowed_p</computeroutput></para></listitem>
+                    <listitem><para><computeroutput>forum::new_questions_allow</computeroutput></para></listitem>
+                    <listitem><para><computeroutput>forum::new_questions_deny</computeroutput></para></listitem>
+                    <listitem><para><computeroutput>fs::add_created_version</computeroutput></para></listitem>
+                    <listitem><para><computeroutput>fs::get_archive_extension</computeroutput></para></listitem>
+                    <listitem><para><computeroutput>fs::get_folder_contents</computeroutput></para></listitem>
+                    <listitem><para><computeroutput>fs::item_editable_info</computeroutput></para></listitem>
+                    <listitem><para><computeroutput>fs::torrent::get_hashsum</computeroutput></para></listitem>
+                    <listitem><para><computeroutput>notification::get_delivery_method_id</computeroutput></para></listitem>
+                    <listitem><para><computeroutput>notification::get_interval_id</computeroutput></para></listitem>
+                    <listitem><para><computeroutput>oacs_util::vars_to_ns_set</computeroutput></para></listitem>
+                    <listitem><para><computeroutput>template::adp_levels</computeroutput></para></listitem>
+                    <listitem><para><computeroutput>template::form::export</computeroutput></para></listitem>
+                    <listitem><para><computeroutput>template::util::array_to_vars</computeroutput></para></listitem>
+                    <listitem><para><computeroutput>template::util::is_true</computeroutput></para></listitem>
+                    <listitem><para><computeroutput>template::util::list_to_array</computeroutput></para></listitem>
+                    <listitem><para><computeroutput>template::util::list_opts</computeroutput></para></listitem>
+                    <listitem><para><computeroutput>template::util::nvl</computeroutput></para></listitem>
+                    <listitem><para><computeroutput>template::util::tcl_to_sql_list</computeroutput></para></listitem>
+                    <listitem><para><computeroutput>template::util::set_to_list</computeroutput></para></listitem>
+                    <listitem><para><computeroutput>template::util::set_to_vars</computeroutput></para></listitem>
+                    <listitem><para><computeroutput>template::util::vars_to_array</computeroutput></para></listitem>
+                    <listitem><para><computeroutput>twt::server_url</computeroutput></para></listitem>
+                    <listitem><para><computeroutput>twt::user::create</computeroutput></para></listitem>
+                    <listitem><para><computeroutput>twt::user::delete</computeroutput></para></listitem>
+                    <listitem><para><computeroutput>util_AnsiDatetoPrettyDate</computeroutput></para></listitem>
+                    <listitem><para><computeroutput>util_commify_number</computeroutput></para></listitem>
+                    <listitem><para><computeroutput>util_get_current_url</computeroutput></para></listitem>
+                    <listitem><para><computeroutput>util_list_to_ns_set</computeroutput></para></listitem>
+                    <listitem><para><computeroutput>util_ns_set_to_list</computeroutput></para></listitem>
+                    <listitem><para><computeroutput>util_report_successful_library_load</computeroutput></para></listitem>
+                    <listitem><para><computeroutput>util_report_library_entry</computeroutput></para></listitem>
+                    <listitem><para><computeroutput>util::string_check_urlsafe</computeroutput></para></listitem>
+                    <listitem><para>Color widget API</para></listitem>
+                    <listitem><para>...</para></listitem>
+                    <listitem><para>New proc <computeroutput>ad_log_deprecated</computeroutput>: unified interface for logging deprecated usages  The existing code used a larger variety of different messages to denote invocations of deprecated procs and other artifacts. <computeroutput>ad_log_deprecated</computeroutput> provides a unified interface, and provides a usage hint what to use instead based on the API-doc definitions in the log-file.</para></listitem>
+                    <listitem><para>Move deprecated code into separate files</para></listitem>
+                    <listitem><para>Give people the chance to use OpenACS with <computeroutput>WithDeprecatedCode</computeroutput> set to 0. When OpenACS is configured to omit loading of long deprecated code (<computeroutput>WithDeprecatedCode</computeroutput> set to 0) files like deprecated-procs.tcl are not loaded. Therefore, these files should only contain code, which was deprecated at LEAST ONE RELEASE EARLIER, such that site admins have one release time to fix calls to deprecated code. This is especially important for public procs.</para></listitem>
+                </itemizedlist>
+        </para></listitem>
+        <listitem><para>General cleanup/maintenance
+                <itemizedlist>
+                    <listitem><para>Modernization of Tcl idioms.</para></listitem>
+                    <listitem><para>Compliance of files, proc names, ... to the naming conventions.</para></listitem>
+                    <listitem><para>White space cleanup, indentation changes.</para></listitem>
+                    <listitem><para>Improvement of public API documentation</para></listitem>
+                    <listitem><para>Adjustment of proc protection levels (public, private)</para></listitem>
+                    <listitem><para>Adjustment of log severity</para></listitem>
+                    <listitem><para>Cleanup of obsolete files</para></listitem>
+                    <listitem><para>Replacement of handcrafted forms by ad_form</para></listitem>
+                    <listitem><para>Typo fixing</para></listitem>
+                    <listitem><para>Editor hints</para></listitem>
+                    <listitem><para>Replacement of deprecated calls</para></listitem>
+                    <listitem><para>Addition of missing contracts</para></listitem>
+                    <listitem><para>...</para></listitem>
+                </itemizedlist>
+        </para></listitem>
+        <listitem><para>New Packages:
+                <itemizedlist>
+                    <listitem><para>openacs-bootstrap5: Bootstrap 5 theme for OpenACS</para></listitem>
+                    <listitem><para>bootstrap-icons: Free, high-quality, open-source icon library with over 1,600 icons. Include them anyway you like—SVGs, SVG sprite, or web fonts. Use them with or without Bootstrap in any project</para></listitem>
+                    <listitem><para>fa-icons: Free, high-quality, open-source icon library with over 2,000 free icons. As of 2020, Font Awesome was used by 38% of sites that use third-party font scripts, placing Font Awesome in second place after Google Fonts</para></listitem>
+                    <listitem><para>highcharts: The Highcharts library is a JavaScript and TypeScript package for producing data visualizations (line/bar/pie charts etc.). The OpenACS package offers support to load this library either via CDN or from a local installation (via acs-admin and global administration UI)</para></listitem>
+                </itemizedlist>
+        </para></listitem>
+        <listitem><para>Migrate to bootstrap 5. Bootstrap 3 reached EOL in 2019, Bootstrap 4 had EOL 2022. See <ulink url="https://github.com/twbs/release" target="_blank">https://github.com/twbs/release</ulink></para></listitem>
+        <listitem><para>Potential incompatibility with OpenACS 5.10.0: "permission::permission_p" returns Boolean values as "t" and "f" and not "1" and "0". Avoid literal comparisons of the result and use boolean tests available in Tcl/OpenACS.</para></listitem>
+        <listitem><para>Support for fresh installations on Oracle 19c.</para></listitem>
+        <listitem><para>Require NaviServer (i.e. drop AOLserver support). AOLserver cannot be compiled with the required modules with recent Tcl versions. Trying to backport NaviServer compatibility functions seems to be an overkill for the OpenACS project.</para></listitem>
+        <listitem><para>Require Tcl 8.6, XOTcl 2.1, PostgreSQL 11 (PostgreSQL 10 EOL: <ulink url="https://www.postgresql.org/support/versioning/">November 2022</ulink>), tdom 0.9</para></listitem>
+    </itemizedlist>
+    <para> Altogether, OpenACS 5.10.1 differs from OpenACS 5.10.0 by the
+        following statistics
+        <programlisting>
+            2886 files changed, 197060 insertions(+), 182613 deletions(-)
+        </programlisting>
+        contributed by 6 committers (Antonio Pisano, Gustaf Neumann, Günter Ernst, Héctor Romojaro, Raúl Rodríguez, Thomas Renner) and additional 7 patch/bugfix providers (Felix Mödritscher, Frank Bergmann, Franz Penz, Markus Moser, Marty Israelsen, Monika Andergassen, Sebastian Scheder).
+
+        All packages of
+        the release were tested with PostgreSQL 13.* and Tcl 8.6.*.
+    </para>
+    <para>
+        For more details, consult the
+        <ulink url="http://openacs.org/changelogs/ChangeLog-5.10.1">raw ChangeLog</ulink>.
+    </para>  
+</sect2>
