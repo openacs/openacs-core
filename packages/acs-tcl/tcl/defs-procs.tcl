@@ -713,7 +713,7 @@ ad_proc -public ad_return_url {
     }
 
     if {[ns_conn isconnected]} {
-        set query_list [export_vars -url -entire_form]
+        set query_list [export_vars -entire_form]
         set base_url [ns_conn url]
     } else {
         set query_list ""

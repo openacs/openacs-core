@@ -98,7 +98,7 @@ ad_proc ad_dimensional {
             lassign $option_value group_key group_label clause
 
             set selected [expr {$option_val eq $group_key}]
-            set href $url?[export_vars -url -set $options_set [list [list $option_key $group_key]]]
+            set href [export_vars -base $url -set $options_set [list [list $option_key $group_key]]]
 
             template::multirow append dimensional $option_key $option_label $group_key $group_label $selected $href
         }

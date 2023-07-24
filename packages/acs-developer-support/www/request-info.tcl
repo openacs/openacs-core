@@ -165,7 +165,7 @@ if { [info exists property(rp)] } {
         }
     }
     if { !$rp_show_debug_p } {
-        set href [export_vars -url -base "./request-info" -entire_form {{rp_show_debug_p 1}}]
+        set href [export_vars -base "./request-info" -entire_form {{rp_show_debug_p 1}}]
         append body [subst {
             <p><a href="[ns_quotehtml $href]">show RP debugging information</a>
         }]

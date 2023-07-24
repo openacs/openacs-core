@@ -270,7 +270,7 @@ aa_register_case -cats {
         aa_true "One cannot specify URLvars and POST vars at the same time" [catch {
             util::http::post \
                 -url $url?thevars=1 \
-                -formvars [export_vars -url {{thevars 2}}] \
+                -formvars [export_vars {{thevars 2}}] \
                 -formvars_list {thevars 3 thevars 4}
         } errmsg]
 
@@ -279,14 +279,14 @@ aa_register_case -cats {
             util::http::post \
                 -url $url \
                 -files {{file /tmp/myfile.txt fieldname thevars}} \
-                -formvars [export_vars -url {{thevars 2}}] \
+                -formvars [export_vars {{thevars 2}}] \
                 -formvars_list {thevars 3 thevars 4}
         } errmsg]
 
         aa_section "Combine URLencoded and list parameters in a urlencoded POST request"
         set r [util::http::post \
                    -url $url \
-                   -formvars [export_vars -url {{vars 2} {vars_urlencoded:multiple {c d e f}}}] \
+                   -formvars [export_vars {{vars 2} {vars_urlencoded:multiple {c d e f}}}] \
                    -formvars_list {vars 3 vars 4 vars_list a vars_list b}]
         lassign [dict get $r page] files vars vars_urlencoded vars_list
         aa_equals "'files' has been sent correctly" \
@@ -313,7 +313,7 @@ aa_register_case -cats {
         set r [util::http::post \
                    -url $url \
                    -files $files \
-                   -formvars [export_vars -url {{vars 2} {vars_urlencoded:multiple {c d e f}}}] \
+                   -formvars [export_vars {{vars 2} {vars_urlencoded:multiple {c d e f}}}] \
                    -formvars_list {vars 3 vars 4 vars_list a vars_list b}]
         lassign [dict get $r page] files vars vars_urlencoded vars_list
         aa_equals "'files' has been sent correctly" \
@@ -329,7 +329,7 @@ aa_register_case -cats {
         set r [util::http::post \
                    -url $url \
                    -multipart \
-                   -formvars [export_vars -url {{vars 2} {vars_urlencoded:multiple {c d e f}}}] \
+                   -formvars [export_vars {{vars 2} {vars_urlencoded:multiple {c d e f}}}] \
                    -formvars_list {vars 3 vars 4 vars_list a vars_list b}]
         lassign [dict get $r page] files vars vars_urlencoded vars_list
         aa_equals "'files' has been sent correctly" \

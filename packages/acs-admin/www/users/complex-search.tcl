@@ -90,7 +90,7 @@ if {$combine_method eq "any"} {
 if { ![info exists passthrough] } {
     set passthrough_parameters ""
 } else {
-    set passthrough_parameters [export_vars -url -formvars $passthrough]
+    set passthrough_parameters [export_vars -formvars $passthrough]
 }
 
 
@@ -245,7 +245,7 @@ db_foreach user_search_admin $query {
 
 set user_search:rowcount $rowcount
 
-set export_authorize [export_vars -url -entire_form -exclude {only_authorized_p}]
+set export_authorize [export_vars -entire_form -exclude {only_authorized_p}]
 
 # Local variables:
 #    mode: tcl

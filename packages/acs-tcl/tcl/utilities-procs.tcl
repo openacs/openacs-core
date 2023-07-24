@@ -1028,7 +1028,7 @@ ad_proc -deprecated util_get_current_url {} {
 
     set query [ns_getform]
     if { $query ne "" } {
-        append url ?[export_vars -url -entire_form]
+        append url ?[export_vars -entire_form]
     }
 
     return $url
