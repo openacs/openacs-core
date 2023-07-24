@@ -531,7 +531,7 @@ aa_register_case \
                     # apply the usual code-analysis on it. The "call"
                     # is never executed.
                     #
-                    set stub $::acs::rootdir/packages/$package_key/[file root $path]
+                    set stub $::acs::rootdir/packages/$package_key/[file rootname $path]
                     append _ $package_key/$path \n
                     set call [template::adp_init $type $stub]
                     incr processed
