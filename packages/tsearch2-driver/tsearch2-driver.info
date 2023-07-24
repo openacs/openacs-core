@@ -9,7 +9,7 @@
     <implements-subsite-p>f</implements-subsite-p>
     <inherit-templates-p>t</inherit-templates-p>
     
-    <version name="5.10.1b1" url="http://openacs.org/repository/download/apm/tsearch2-driver-5.10.0.apm">
+    <version name="5.10.1b1" url="http://openacs.org/repository/download/apm/tsearch2-driver-5.10.1b1.apm">
         <owner url="mailto:dave@thedesignexperience.org">Dave Bauer</owner>
         <summary>Full text search support for Search via Tsearch2.</summary>
         <release-date>2021-09-16</release-date>
