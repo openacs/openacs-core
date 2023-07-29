@@ -1052,7 +1052,8 @@ template::tag adp:toggle_button { chunk params } {
     #
     #    <adp:toggle_button>....</adp:toggle_button>
     #
-    # Potential attributes for this tag are:
+    # Potential attributes for <adp:toggle_button ...> are:
+    #    - "id"
     #    - "tag" (default "button")
     #    - "toggle"
     #    - "target"
@@ -1067,11 +1068,13 @@ template::tag adp:toggle_button { chunk params } {
     #
     set data [expr {[template::toolkit] eq "bootstrap5" ? "data-bs" : "data"}]
 
+    set id [ns_set iget $params id ""]
     set tag [ns_set iget $params tag button]
+
+    set attributes [expr {$id eq "" ? "" : "id='$id'"}]
     switch $tag {
-        "button" {set attributes " type='[ns_set iget $params type button]'"}
-        "a"      {set attributes " href='[ns_set iget $params href #]'"}
-        default  {set attributes ""}
+        "button" {append attributes " type='[ns_set iget $params type button]'"}
+        "a"      {append attributes " href='[ns_set iget $params href #]'"}
     }
     append attributes \
         " class='[ns_set iget $params class]'" \
