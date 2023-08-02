@@ -1,6 +1,6 @@
 <master>
   <property name="context">{/doc/acs-templating/ {ACS Templating}} {/doc/acs-templating/gadgets {Gadgets}} Tooltip</property>
-  <property name="doc(title)">Gadgets</property>
+  <property name="doc(title)">Tooltip</property>
 
   <link rel="stylesheet" href="/resources/acs-templating/tooltip.css">
   <script src="/resources/acs-templating/tooltip.js"></script>
