@@ -1,11 +1,11 @@
 ad_include_contract {
     Include for notification chunk
 } {
-    {type:token}
-    {object_id:naturalnum}
+    type:token,notnull
+    object_id:object_type(acs_object),notnull
     {pretty_name:allhtml}
-    {url ""}
-    {user_id:naturalnum ""}
+    {url:localurl ""}
+    {user_id:object_type(user) ""}
     {show_subscribers_p:boolean true}
 }
 
