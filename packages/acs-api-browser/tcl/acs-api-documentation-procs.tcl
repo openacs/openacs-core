@@ -1232,7 +1232,7 @@ ad_proc -public api_get_body {proc_name} {
 namespace eval ::apidoc {
 
     ad_proc -private get_doc_property {proc_name property {default ""}} {
-        Return a certain doc property valie, if property exists
+        Return a certain doc property value, if property exists
     } {
         if {[nsv_get api_proc_doc $proc_name doc]} {
             if {[dict exists $doc $property]} {

@@ -23,7 +23,7 @@
 -- procedure rel_constraint__new/4
 --
 CREATE OR REPLACE FUNCTION rel_constraint__new(
-   nam varchar,
+   name varchar,
    sid1 integer,
    side varchar,
    sid2 integer
@@ -32,7 +32,7 @@ DECLARE
 BEGIN
         return rel_constraint__new(null,
                                    'rel_constraint',
-                                   nam,
+                                   name,
                                    sid1,
                                    side,
                                    sid2,
