@@ -1,5 +1,4 @@
 <if @registries:rowcount;literal@ gt 0>
-  <hr>
   <h5>#acs-subsite.external_identity_providers_title#</h5>
   <ul>
     <multiple name="registries">
