@@ -1002,12 +1002,17 @@ ad_proc -private template::register_double_click_handler {} {
                         console.log("blocked double-click");
                         return false;
                     } else {
-                        target.dataset.oacsClicked = true;
-                        target.classList.add("disabled");
-                        let timeout = target.dataset.oacsTimeout || $default_timeout;
-                        console.log('reactivate in ' + timeout);
-                        setTimeout(function() {oacs_reenable_double_click_handler(target);}, timeout);
-                        setTimeout(function() {target.disabled = true;});
+                        // Disabling the button and re-enabling after
+                        // the timeout must both be queued after all
+                        // other click handlers have completed to ensure
+                        // their correct execution order.
+                        setTimeout(function () {
+                            target.disabled = true;
+                            target.dataset.oacsClicked = true;
+                            target.classList.add("disabled");
+                            let timeout = target.dataset.oacsTimeout || $default_timeout;
+                            setTimeout(oacs_reenable_double_click_handler, timeout, target);
+                        });
                         return true;
                     }
                 }, true);
