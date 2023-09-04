@@ -32,6 +32,7 @@ set traced_cmds {}
 #set traced_cmds {::ns_setcookie ::ns_getcookie ::ns_deletecookie}
 #set traced_cmds {::ns_return ::ns_returnnotfound ::ns_returnfile ::ns_returnmoved}
 #set traced_cmds [lsort [info commands ::ns_return*]]
+#set traced_cmds {::ns_set}
 foreach cmd $traced_cmds {
     append trace "\ntrace add execution $cmd  enter {::tcltrace::before}"
 }
