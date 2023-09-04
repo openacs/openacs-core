@@ -47,7 +47,7 @@ aa_register_case \
         #
         # The following checks do not introduce anything new, but come
         # from real-world intrusion detection ... although the tests
-        # look silly to me, since PostgreSQL ignores eveything after
+        # look silly to me, since PostgreSQL ignores everything after
         # the NUL character.
         #
         set strings {
