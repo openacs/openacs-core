@@ -86,7 +86,9 @@ ad_proc -public auth::require_login {
         set return_url [ad_get_login_url]
     }
 
-    ad_returnredirect -message $message -- $return_url
+    # If the login was issued from an external_registry,
+    # we have to allow the redirect to a complete url
+    ad_returnredirect -allow_complete_url=[expr {$external_registry ne ""}] -message $message -- $return_url
     ad_script_abort
 }
 
