@@ -376,7 +376,7 @@ aa_register_case \
     -procs {
         acs_user::get
         ad_generate_random_string
-        auth::authority::local
+        auth::authority::get_id
         auth::sync::job::action
         auth::sync::job::end
         auth::sync::job::get_entry
@@ -392,7 +392,9 @@ aa_register_case \
 
             # Start noninteractive job
 
-            set job_id [auth::sync::job::start -authority_id [auth::authority::local]]
+            set test_authority_id [auth::authority::get_id -short_name "acs_testing"]
+
+            set job_id [auth::sync::job::start -authority_id $test_authority_id]
 
             aa_true "Returns a job_id" {$job_id ne ""}
 
@@ -435,7 +437,7 @@ aa_register_case \
                 aa_equals "user.first_names" [dict get $user first_names] $user_info(first_names)
                 aa_equals "user.last_name" [dict get $user last_name] $user_info(last_name)
                 aa_equals "user.email" [dict get $user email] [string tolower $email1]
-                aa_equals "user.authority_id" [dict get $user authority_id] [auth::authority::local]
+                aa_equals "user.authority_id" [dict get $user authority_id] $test_authority_id
                 aa_equals "user.username" [dict get $user username] $username1
                 aa_equals "user.url" [dict get $user url] $user_info(url)
             }
@@ -477,7 +479,7 @@ aa_register_case \
                 aa_equals "user.first_names" [dict get $user first_names] $user_info(first_names)
                 aa_equals "user.last_name" [dict get $user last_name] $user_info(last_name)
                 aa_equals "user.email" [dict get $user email] [string tolower $user_info(email)]
-                aa_equals "user.authority_id" [dict get $user authority_id] [auth::authority::local]
+                aa_equals "user.authority_id" [dict get $user authority_id] $test_authority_id
                 aa_equals "user.username" [dict get $user username] $username1
                 aa_equals "user.url" [dict get $user url] $user_info(url)
             }
@@ -490,7 +492,7 @@ aa_register_case \
             #####
 
             # We need this number to check the counts below
-            set authority_id [auth::authority::local]
+            set authority_id $test_authority_id
             set num_users_not_banned [db_string select_num {
                 select count(*)
                 from   cc_users
