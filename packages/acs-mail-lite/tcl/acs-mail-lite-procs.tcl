@@ -53,7 +53,7 @@ namespace eval acs_mail_lite {
     } {
         Extracts the email address out of a mail address
         (like Joe User &lt;joe@user.com&gt;)
-        
+
         @option email mail address to be parsed
         @return only the email address part of the mail address
     } {
@@ -436,6 +436,16 @@ namespace eval acs_mail_lite {
         }
     }
 
+    ad_proc -private encode_email_address {email} {
+        set d [lindex [::mime::parseaddress $email] 0]
+        dict with d {
+            if {$phrase ne "" && ![string is ascii -strict $phrase]} {
+                set email "[mime::word_encode utf-8 quoted-printable $phrase] <$address>"
+            }
+        }
+        return $email
+    }
+
     #---------------------------------------
     ad_proc -private send_immediately {
         {-valid_email_p "0"}
@@ -526,6 +536,9 @@ namespace eval acs_mail_lite {
         if { $fixed_sender ne "" && !$use_sender_p} {
             set from_addr $fixed_sender
         }
+
+        set from_addr [encode_email_address $from_addr]
+        set to_addr [lmap email $to_addr {encode_email_address $email}]
 
         # Set the Reply-To
         if {$reply_to eq ""} {
