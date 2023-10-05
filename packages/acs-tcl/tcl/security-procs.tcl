@@ -770,6 +770,52 @@ namespace eval ::security::hash {
         }
     }
 
+    if {[::acs::icanuse "ns_crypto::argon2"]} {
+        ad_proc -private argon2-12288-3-1 {password salt} {
+
+            Compute a "password hash" using the Argon2 hash algorithm
+            key derivation function (RFC 9106).
+
+            Parameterization recommendation from OWASP: m=12288 (12 MiB), t=3, p=1
+
+            @return hex encoded password hash (128 bytes)
+        } {
+            return [::ns_crypto::argon2 -variant argon2id \
+                        -password $password -salt $salt \
+                        -memcost 12288 -iter 3 -lanes 1 -threads 1 -outlen 64]
+        }
+
+        ad_proc -private argon2-rfc9106-high-mem {password salt} {
+
+            Compute a "password hash" using the Argon2 hash algorithm
+            key derivation function (RFC 9106).
+
+            Parameterization first recommendation from RFC 9106:
+            t=1, m=2GiB, p=4 (2 GiB = 2,097,152 KB)
+
+            @return hex encoded password hash (128 bytes)
+        } {
+            return [::ns_crypto::argon2 -variant argon2id \
+                        -password $password -salt $salt \
+                        -memcost 2097152 -iter 1 -lanes 4 -threads 4 -outlen 64]
+        }
+
+        ad_proc -private argon2-rfc9106-low-mem {password salt} {
+
+            Compute a "password hash" using the Argon2 hash algorithm
+            key derivation function (RFC 9106).
+
+            Parameterization second recommendation from RFC 9106 (low memory):
+            t=3, m=64 MiB, p=4 (64 MiB = 65,536 KB)
+
+            @return hex encoded password hash (128 bytes)
+        } {
+            return [::ns_crypto::argon2 -variant argon2id \
+                        -password $password -salt $salt \
+                        -memcost 65536 -iter 3 -lanes 4 -threads 4 -outlen 64]
+        }
+
+    }
 }
 
 ad_proc -public ad_check_password {
@@ -820,8 +866,13 @@ ad_proc -public ad_change_password {
         error "No user_id supplied"
     }
 
+    #
+    # The hash algorithms are called in standard OpenACS with a salt
+    # size of 20 bytes (in hex format), which corresponds to 160-bit.
+    #
     set salt [sec_random_token]
     set new_password [::security::hash::$password_hash_algorithm $new_password $salt]
+
     db_dml password_update {
         update users
         set    password = :new_password,
