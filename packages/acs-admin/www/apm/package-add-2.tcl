@@ -8,11 +8,11 @@ ad_page_contract {
     package_key:token
     pretty_name
     pretty_plural
-    { package_type "apm_application"}
-    { initial_install_p:boolean "f" }
-    { singleton_p:boolean "f" }
-    { implements_subsite_p:boolean f }
-    { inherit_templates_p:boolean t }
+    { package_type:notnull "apm_application"}
+    { initial_install_p:boolean,notnull "f" }
+    { singleton_p:boolean,notnull "f" }
+    { implements_subsite_p:boolean,notnull f }
+    { inherit_templates_p:boolean,notnull t }
     { auto_mount "" }
     package_uri
     version_name
@@ -26,9 +26,9 @@ ad_page_contract {
     { owner_uri:multiple}
     { vendor ""}
     { vendor_uri ""}
-    { install_p:boolean 0 }
-    {implements_subsite_p:boolean "f"}
-    {inherit_templates_p:boolean "f"}
+    { install_p:boolean,notnull 0 }
+    {implements_subsite_p:boolean,notnull "f"}
+    {inherit_templates_p:boolean,notnull "f"}
 } -validate {
     package_key_format -requires {package_key} {
         if { [regexp {[^a-z0-9-]} $package_key] } {

@@ -9,7 +9,7 @@ ad_page_contract {
 } {
     {url ""}
     {file_path ""}
-    {delete:boolean 0}
+    {delete:boolean,notnull 0}
 } -validate {
     
     url_xor_file_path {

@@ -9,8 +9,8 @@ ad_page_contract {
     {files:multiple,notnull}
     {file_action:multiple}
     {number_of_keys:integer,notnull ""}
-    {replace_p:boolean,array ""}
-    {message_keys:array ""}
+    {replace_p:boolean,array,notnull ""}
+    {message_keys:array,notnull ""}
     skip_button:optional
 }
 

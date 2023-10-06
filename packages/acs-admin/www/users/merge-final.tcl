@@ -7,7 +7,7 @@ ad_page_contract {
 } {
     to_user_id:naturalnum,notnull
     from_user_id:naturalnum,notnull
-    merge_p:boolean
+    merge_p:boolean,notnull
 } -properties {
     context:onevalue
 } -validate {

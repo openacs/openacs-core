@@ -11,7 +11,7 @@ ad_page_contract {
     {member_state:trim}
     {email_verified_p:boolean ""}
     {return_url:localurl ""}
-    {pass_through:boolean false}
+    {pass_through:boolean,notnull false}
 } -validate {
     valid_member_state -requires member_state {
         if {$member_state ni {approved banned deleted merged "needs approval" rejected}} {
@@ -40,6 +40,9 @@ set name   [dict get $user_info name]
 set email  [dict get $user_info email]
 set rel_id [dict get $user_info rel_id]
 
+if {$email_verified ne ""} {
+    set email_verified [expr {[string is true -strict] ? "t" : "f"}]
+}
 #
 # This page is used for state changes in the member_state, and as well
 # on email confirm require and approve operations.

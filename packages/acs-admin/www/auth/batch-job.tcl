@@ -6,7 +6,7 @@ ad_page_contract {
 } {
     job_id:naturalnum,notnull
     page:naturalnum,optional
-    success_p:boolean,optional
+    success_p:boolean,optional,notnull
 }
 
 auth::sync::job::get -job_id $job_id -array batch_job

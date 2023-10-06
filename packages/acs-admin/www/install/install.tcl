@@ -2,7 +2,7 @@ ad_page_contract {
     Install from local filesystem
 } {
     {package_type:token ""}
-    {upgrade_p:boolean 0}
+    {upgrade_p:boolean,notnull 0}
     {repository_url "https://openacs.org/repository/"}
     {channel:token ""}
     {maturity:naturalnum ""}

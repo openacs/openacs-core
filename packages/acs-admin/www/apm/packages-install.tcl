@@ -6,8 +6,8 @@ ad_page_contract {
     @cvs-id $Id$
 
 } {
-    {checked_by_default_p:boolean 0}
-    {operation:word all}
+    {checked_by_default_p:boolean,notnull 0}
+    {operation:word,notnull all}
 }
 
 set title "Package Installation"

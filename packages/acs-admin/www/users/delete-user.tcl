@@ -7,7 +7,7 @@ ad_page_contract {
 } {
   user_id:naturalnum,notnull
   {return_url:localurl .}
-  {permanent:boolean f}
+  {permanent:boolean,notnull f}
 }
 
 set site_wide_admin_p [acs_user::site_wide_admin_p -user_id [ad_conn user_id]]

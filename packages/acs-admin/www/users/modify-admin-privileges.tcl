@@ -7,7 +7,7 @@ ad_page_contract {
 } {
     user_id:naturalnum,notnull,verify
     action:notnull,verify
-    {confirmed_p:boolean 0}
+    {confirmed_p:boolean,notnull 0}
 }
 
 set confirmed_url [export_vars -base /acs-admin/users/modify-admin-privileges {

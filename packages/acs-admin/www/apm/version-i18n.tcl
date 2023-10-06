@@ -7,10 +7,10 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     version_id:naturalnum,notnull
-    {pre_select_files_p:boolean "1"}
-    {show_status_p:boolean "0"}
-    {only_text_p:boolean "0"}
-    {file_type adp}
+    {pre_select_files_p:boolean,notnull 1}
+    {show_status_p:boolean,notnull 0}
+    {only_text_p:boolean,notnull 0}
+    {file_type:word,notnull adp}
 }
 
 db_1row package_version_info {

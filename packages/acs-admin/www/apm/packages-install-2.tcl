@@ -7,7 +7,7 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     {package_key:token,multiple ""}
-    {force_p:boolean "f"}
+    {force_p:boolean,notnull "f"}
 }
 
 set title "Package Installation"

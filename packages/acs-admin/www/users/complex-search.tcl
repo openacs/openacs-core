@@ -37,8 +37,8 @@ ad_page_contract {
     {target ""}
     {passthrough ""}
     {limit_to_users_in_group_id:integer ""}
-    {only_authorized_p:boolean 1}
-    {only_needs_approval_p:boolean 0}
+    {only_authorized_p:boolean,notnull 1}
+    {only_needs_approval_p:boolean,notnull 0}
     {registration_before_days:integer -1}
     {registration_after_days:integer -1}
     {last_visit_before_days:integer -1}

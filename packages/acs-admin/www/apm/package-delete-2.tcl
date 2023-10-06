@@ -6,8 +6,8 @@ ad_page_contract {
     @creation-date Fri Oct 13 08:42:50 2000
     @cvs-id $Id$
 } {
-    version_id:naturalnum
-    {remove_files:boolean 0}
+    version_id:naturalnum,notnull
+    {remove_files:boolean,notnull 0}
     {sql_drop_scripts:multiple ""}
 }
 

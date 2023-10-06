@@ -6,10 +6,10 @@ ad_page_contract {
     @author Jon Salz (jsalz@arsdigita.com)
     @cvs-id $Id$
 } {
-    { orderby:token "package_key" }
-    { owned_by:word "everyone" }
-    { supertype "all" }
-    { reload_links_p:boolean 0 }
+    { orderby:token,notnull "package_key" }
+    { owned_by:word,notnull "everyone" }
+    { supertype:notnull "all" }
+    { reload_links_p:boolean,notnull 0 }
 }
 
 set page_title "Package Manager"
