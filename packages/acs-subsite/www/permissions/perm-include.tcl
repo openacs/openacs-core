@@ -9,7 +9,7 @@ ad_include_contract {
     {object_id:integer}
     {return_url:localurl ""}
     {privs { read create write delete admin }}
-    {detailed_permissions_p:boolean f}
+    {detailed_permissions_p:boolean,notnull f}
     {user_add_url:localurl ""}
 }
 

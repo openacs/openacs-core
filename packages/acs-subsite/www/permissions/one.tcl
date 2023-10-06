@@ -8,10 +8,10 @@ ad_page_contract {
     @creation-date 2000-08-20
 } {
     object_id:integer,notnull
-    {children_p:boolean "f"}
-    {detail_p:boolean "f"}
+    {children_p:boolean,notnull "f"}
+    {detail_p:boolean,notnull "f"}
     {privs:nohtml ""}
-    {inherited_permissions_p:boolean "f"}
+    {inherited_permissions_p:boolean,notnull "f"}
     {application_url ""}
 }
 

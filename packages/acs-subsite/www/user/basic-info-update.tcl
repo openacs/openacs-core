@@ -7,7 +7,7 @@ ad_page_contract {
 } {
     {return_url:localurl ""}
     {user_id:naturalnum ""}
-    {edit_p:boolean 0}
+    {edit_p:boolean,notnull 0}
     {message ""}
 }
 

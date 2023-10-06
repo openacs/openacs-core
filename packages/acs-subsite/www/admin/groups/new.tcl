@@ -8,7 +8,7 @@ ad_page_contract {
 
 } {
     group_type:notnull
-    { group_type_exact_p:boolean t }
+    { group_type_exact_p:boolean,notnull t }
     { group.group_name "" }
     { group_id:naturalnum "" }
     {add_to_group_id:integer ""}

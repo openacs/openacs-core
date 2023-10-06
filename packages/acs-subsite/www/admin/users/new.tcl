@@ -8,7 +8,7 @@ ad_page_contract {
 
 } {
     { user_type:notnull "user" }
-    { user_type_exact_p:boolean t }
+    { user_type_exact_p:boolean,notnull t }
     { user_id:naturalnum "" }
     { return_url:localurl "" }
     {add_to_group_id:naturalnum ""}

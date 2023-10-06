@@ -10,7 +10,7 @@ ad_page_contract {
 } {
     {new_package_id:naturalnum ""}
     node_id:naturalnum,notnull
-    {new_node_p:boolean f}
+    {new_node_p:boolean,notnull f}
     {node_name:trim ""}
     {instance_name ""}
     package_key:token,notnull
