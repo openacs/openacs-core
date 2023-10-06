@@ -12,7 +12,7 @@ ad_page_contract {
     package_key:token
     message_key
     show:optional
-    confirm_p:boolean,optional
+    {confirm_p:boolean,optional,notnull 0}
 }
 
 
@@ -31,9 +31,7 @@ set context [list [list [export_vars -base package-list { locale }] $locale_labe
 set form_export_vars [export_vars -form { locale package_key message_key show {confirm_p 1} }]
 
 
-if { [info exists confirm_p] && $confirm_p ne ""
-     && [string is true -strict $confirm_p]
- } {
+if { $confirm_p } {
     lang::message::undelete \
         -package_key $package_key \
         -message_key $message_key \

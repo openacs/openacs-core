@@ -5,7 +5,7 @@ ad_page_contract {
     @creation-date 2003-09-09
 } {
     job_id:naturalnum,notnull
-    page:naturalnum,optional
+    page:naturalnum,optional,notnull
     success_p:boolean,optional,notnull
 }
 

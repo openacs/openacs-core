@@ -3,8 +3,8 @@ ad_page_contract {
 } {
     testcase_id:word,notnull
     package_key:token
-    {showsource:boolean 0}
-    {quiet:boolean 1}
+    {showsource:boolean,notnull 0}
+    {quiet:boolean,notnull 1}
     {return_url:localurl ""}
 } -properties {
     context_bar:onevalue

@@ -11,7 +11,7 @@ ad_page_contract {
 } {
     version_id:naturalnum,notnull
     { public_p:boolean "" }
-    { kind:word "procs_files" }
+    { kind:word,notnull "procs_files" }
     { about_package_key:token ""}
 } -properties {
     title:onevalue

@@ -1,5 +1,3 @@
-# /packages/acs-developer-support/www/request-info.tcl
-
 ad_page_contract {
     Displays information about a page request.
 
@@ -8,8 +6,8 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     request
-    {rp_show_debug_p:boolean 0}
-    {getrow_p:boolean "f"}
+    {rp_show_debug_p:boolean,notnull 0}
+    {getrow_p:boolean,notnull "f"}
 }
 
 ds_require_permission [ad_conn package_id] "admin"

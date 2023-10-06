@@ -13,7 +13,7 @@ ad_page_contract {
     package_key:token
     message_key:token
     show:word,optional
-    {usage_p:boolean "f"}
+    {usage_p:boolean,notnull "f"}
     {return_url:localurl {}}
 }
 

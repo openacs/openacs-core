@@ -7,7 +7,7 @@ ad_page_contract {
     @creation-date 2003-08-08
 } {
     locale:word
-    enabled_p:boolean
+    enabled_p:boolean,notnull
 }
 
 lang::system::locale_set_enabled \

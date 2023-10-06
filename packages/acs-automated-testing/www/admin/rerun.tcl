@@ -5,9 +5,9 @@ ad_page_contract {
     {category:aa_test_category ""}
     {view_by:aa_test_view_by "package"}
     {testcase_id:word,notnull ""}
-    {quiet:boolean "0"}
-    {stress:boolean "0"}
-    {security_risk:boolean "0"}
+    {quiet:boolean,notnull 0}
+    {stress:boolean,notnull 0}
+    {security_risk:boolean,notnull 0}
 } -properties {
 }
 

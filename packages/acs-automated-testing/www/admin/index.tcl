@@ -1,13 +1,13 @@
 ad_page_contract {
     @cvs-id $Id$
 } {
-    {quiet:boolean 0}
+    {quiet:boolean,notnull 0}
     {by_package_key ""}
     {by_category:aa_test_category ""}
     {view_by:aa_test_view_by "package"}
-    {stress:boolean 0}
-    {security_risk:boolean 0}
-    {populator:boolean 0}
+    {stress:boolean,notnull 0}
+    {security_risk:boolean,notnull 0}
+    {populator:boolean,notnull 0}
 } -properties {
     context_bar:onevalue
     server_name:onevalue
