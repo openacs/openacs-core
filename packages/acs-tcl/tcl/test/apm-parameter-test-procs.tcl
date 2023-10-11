@@ -78,58 +78,86 @@ aa_register_case \
                 3
             apm_parameter_unregister -parameter_id $parameter_id
 
-            foreach tuple [db_list_of_lists get_param {
+            db_foreach get_params {
                 select ap.parameter_name, ap.package_key, ap.default_value, ap.parameter_id
                 from apm_parameters ap, apm_package_types apt
                 where
                 ap.package_key = apt.package_key
-                and apt.singleton_p ='t'
-                and ap.package_key <> 'acs-kernel' and ap.package_key <> 'search'
-            }] {
+                and ap.scope = 'instance'
+                and apt.singleton_p = 't'
+            } {
+                aa_section "$package_key - $parameter_name"
 
-                lassign $tuple parameter_name package_key default_value parameter_id
-                set value [util::random]
-                if {$parameter_name ne "PasswordExpirationDays" && $value > 0.7} {
-
-                    set package_id [apm_package_id_from_key $package_key]
-                    set actual_value [db_string real_value {
-                        select apm_parameter_values.attr_value
-                        from   apm_parameter_values
-                        where apm_parameter_values.package_id = :package_id
-                        and apm_parameter_values.parameter_id = :parameter_id
-                    }]
-
-                    aa_log "$package_key $parameter_name $actual_value"
-                    aa_equals "check parameter::get" \
-                        [parameter::get -package_id $package_id -parameter $parameter_name] \
-                        $actual_value
-                    aa_equals "check parameter::get_from_package_key" \
-                        [parameter::get_from_package_key -package_key $package_key -parameter $parameter_name] \
-                        $actual_value
-
-                    parameter::set_default -package_key $package_key -parameter $parameter_name -value $value
-                    set value_db [db_string get_values {
-                        select default_value from apm_parameters
-                        where package_key = :package_key and parameter_name = :parameter_name
-                    }]
-                    aa_equals "check parameter::set_default" $value $value_db
-                    set value [expr {$value + 10}]
-
-                    parameter::set_from_package_key -package_key $package_key -parameter $parameter_name -value $value
-                    aa_equals "check parameter::set_from_package_key" \
-                        [parameter::get -package_id $package_id -parameter $parameter_name] \
-                        $value
-
-                    set value [expr {$value + 10}]
-                    parameter::set_value -package_id $package_id -parameter $parameter_name -value $value
-                    aa_equals "check parameter::set_value" \
-                        [parameter::get -package_id $package_id -parameter $parameter_name] \
-                        $value
-
-                    ad_parameter_cache -delete $package_id $parameter_name
-
-                    break
+                #
+                # parameter::* API currently does not support changing
+                # the value of parameters that are defined in the
+                # server configuration file.
+                #
+                set file_value [ad_parameter_from_file $parameter_name $package_key]
+                if {$file_value ne ""} {
+                    continue
                 }
+
+                #
+                # Instance parameters have a value only when a package
+                # is mounted. This is not always true for a singleton
+                # package.
+                #
+                set package_id [apm_package_id_from_key $package_key]
+                if {$package_id == 0} {
+                    continue
+                }
+
+                set value [util::random]
+
+                set actual_value [db_string real_value {
+                    select apm_parameter_values.attr_value
+                    from   apm_parameter_values
+                    where apm_parameter_values.package_id = :package_id
+                    and apm_parameter_values.parameter_id = :parameter_id
+                }]
+
+                aa_log "$package_key $parameter_name $actual_value"
+                aa_equals "check parameter::get" \
+                    [parameter::get -package_id $package_id -parameter $parameter_name] \
+                    $actual_value
+                aa_equals "check parameter::get_from_package_key" \
+                    [parameter::get_from_package_key -package_key $package_key -parameter $parameter_name] \
+                    $actual_value
+
+                parameter::set_default -package_key $package_key -parameter $parameter_name -value $value
+                set value_db [db_string get_values {
+                    select default_value from apm_parameters
+                    where package_key = :package_key and parameter_name = :parameter_name
+                }]
+                aa_equals "check parameter::set_default" $value $value_db
+                set value [expr {$value + 10}]
+
+                parameter::set_from_package_key -package_key $package_key -parameter $parameter_name -value $value
+                aa_equals "check parameter::set_from_package_key" \
+                    [parameter::get -package_id $package_id -parameter $parameter_name] \
+                    $value
+
+                set value [expr {$value + 10}]
+                parameter::set_value -package_id $package_id -parameter $parameter_name -value $value
+                aa_equals "check parameter::set_value" \
+                    [parameter::get -package_id $package_id -parameter $parameter_name] \
+                    $value
+
+                parameter::set_from_package_key \
+                    -package_key $package_key \
+                    -parameter $parameter_name \
+                    -value $actual_value
+
+                parameter::set_value \
+                    -package_id $package_id \
+                    -parameter $parameter_name \
+                    -value $actual_value
+
+                parameter::set_default \
+                    -package_key $package_key \
+                    -parameter $parameter_name \
+                    -value $default_value
             }
         }
 }
