@@ -175,6 +175,8 @@ aa_register_case \
         aa_run_with_teardown \
             -rollback \
             -test_code {
+                set register_authority [auth::get_register_authority]
+
                 # Set all authorities as the register authority one by
                 # one and see that the proc returns the expected
                 # value.
@@ -198,6 +200,7 @@ aa_register_case \
                     }
                     aa_equals "Register authority '$short_name' should be picked correctly" \
                         $reg_authority_id [auth::get_register_authority]
+
                 }
 
                 # Finally, try a bogus one.
@@ -210,6 +213,15 @@ aa_register_case \
                     -value $not_exists
                 aa_equals "Non existent register authority '$not_exists' falls back to the local authority" \
                     [auth::authority::local] [auth::get_register_authority]
+
+                #
+                # Put the auhtority back as it was to not pollute
+                # the cache.
+                #
+                parameter::set_from_package_key \
+                    -parameter RegisterAuthority \
+                    -package_key "acs-authentication" \
+                    -value $register_authority
             }
     }
 
