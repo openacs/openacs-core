@@ -144,7 +144,7 @@ ad_proc -public parameter::set_value {
         -parameter $parameter \
         -value $value
 
-    ad_parameter_cache -delete $package_id $parameter
+    return [ad_parameter_cache -set $value $package_id $parameter]
 }
 
 ad_proc -public parameter::get {
