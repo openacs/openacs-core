@@ -53,7 +53,7 @@ ad_proc -public parameter::set_global_value {
         -parameter $parameter \
         -value $value
 
-    return [ad_parameter_cache -set $value $package_key $parameter]
+    ad_parameter_cache -delete $package_key $parameter
 }
 
 ad_proc -public parameter::get_global_value {
@@ -144,7 +144,7 @@ ad_proc -public parameter::set_value {
         -parameter $parameter \
         -value $value
 
-    return [ad_parameter_cache -set $value $package_id $parameter]
+    ad_parameter_cache -delete $package_id $parameter
 }
 
 ad_proc -public parameter::get {
