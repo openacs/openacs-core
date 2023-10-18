@@ -8,7 +8,7 @@
   <multiple name="pkgs">
     <tr>
       <td style="text-align:center;" valign="center" width="120">
-        <a href="/xowiki/@pkgs.package_key@">@pkgs.package_key@</a>
+        <a href="https://openacs.org/xowiki/@pkgs.package_key@">@pkgs.package_key@</a>
       </td>
       <td style="border-color:gray;">
         <strong>@pkgs.pretty_name@:</strong><br><em>@pkgs.summary@</em>
@@ -22,6 +22,8 @@
         </if>
 	<if @pkgs.vendor@ not nil> by @pkgs.vendor@</if>
 	<if @pkgs.maturity@ not nil><br>@pkgs.maturity@: @pkgs.maturity_text@</if>
+        <br>
+        <a href="@pkgs.download_url@">Download Package</a>
 	</small>
       </td>
    </tr>

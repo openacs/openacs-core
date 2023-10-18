@@ -401,7 +401,7 @@ ad_proc -private apm_build_repository {
             package_type summary description \
             release_date vendor_url vendor \
             maturity maturity_text \
-            license license_url
+            license license_url download_url
 
         set work_dirs [list ${work_dir}openacs-4/packages ${work_dir}openacs-4/contrib/packages ]
         foreach packages_dir $work_dirs {
@@ -451,13 +451,6 @@ ad_proc -private apm_build_repository {
                             append manifest "    <install package=\"$e\"/>\n"
                         }
 
-                        template::multirow append packages \
-                            $package_path $package_key $pkg_info(name) $pkg_info(package-name) \
-                            $pkg_info(package.type) $pkg_info(summary) $pkg_info(description) \
-                            $pkg_info(release-date) $pkg_info(vendor.url) $pkg_info(vendor) \
-                            $pkg_info(maturity) $pkg_info(maturity_text) \
-                            $pkg_info(license)  $pkg_info(license.url)
-
                         set apm_file "${channel_dir}${pkg_info(package.key)}-${pkg_info(name)}.apm"
                         ns_log Notice "Repository: Building package $package_key for channel $channel"
 
@@ -496,6 +489,13 @@ ad_proc -private apm_build_repository {
                         }
 
                         set apm_url "${repository_url}$channel/$pkg_info(package.key)-$pkg_info(name).apm"
+
+                        template::multirow append packages \
+                            $package_path $package_key $pkg_info(name) $pkg_info(package-name) \
+                            $pkg_info(package.type) $pkg_info(summary) $pkg_info(description) \
+                            $pkg_info(release-date) $pkg_info(vendor.url) $pkg_info(vendor) \
+                            $pkg_info(maturity) $pkg_info(maturity_text) \
+                            $pkg_info(license)  $pkg_info(license.url) $apm_url
 
                         append manifest "    <download-url>$apm_url</download-url>\n"
                         foreach elm $pkg_info(provides) {
@@ -584,7 +584,7 @@ ad_proc -private apm_build_repository {
                 package_type summary description \
                 release_date vendor_url vendor \
                 maturity maturity_text \
-                license license_url
+                license license_url download_url
 
             template::multirow foreach packages {
                 if {$package_key in $package_keys($category)} {
@@ -593,7 +593,7 @@ ad_proc -private apm_build_repository {
                         $package_type $summary $description \
                         $release_date $vendor_url $vendor \
                         $maturity $maturity_text \
-                        $license $license_url
+                        $license $license_url $download_url
                 }
             }
 
@@ -671,6 +671,22 @@ ad_proc -private apm_build_repository {
     return 0
 }
 
+ad_proc -private apm_git_repo_tags {
+    -path:required
+} {
+    Extracts the available tags from an OpenACS Git repo. This is
+    assumes the specific Git setup for our repo, hence it is meant for
+    internal use only.
+
+    @return list of tag names.
+} {
+    set cd_helper   [file join $::acs::rootdir bin cd-helper]
+    set git_command git
+
+    set output [exec $cd_helper $path $git_command tag]
+    return [regexp -line -inline -all {openacs-\d+-\d+(-\d+)?-(compat|final)} $output]
+}
+
 ad_proc -private apm_git_repo_branches {
     -path:required
 } {
@@ -684,21 +700,108 @@ ad_proc -private apm_git_repo_branches {
     set git_command git
 
     set output [exec $cd_helper $path $git_command branch -r]
+    return [regexp -line -inline -all {oacs-\d+-\d+} $output]
+}
 
-    set branches [list]
-    foreach line [split $output \n] {
-        if {[regexp {^\s+origin/(oacs-\d+-\d+).*$} $line _ branch]} {
-            lappend branches $branch
+ad_proc -private apm_git_repo_channels {
+    -path:required
+} {
+    Extracts the available tags and branches from an OpenACS Git
+    repo. This is assumes the specific Git setup for our repo, hence
+    it is meant for internal use only.
+
+    @return list of branch names
+} {
+    set channels [apm_git_repo_branches -path $path]
+    lappend channels {*}[apm_git_repo_tags -path $path]
+}
+
+ad_proc -private apm_git_checkout_repo {
+    -path:required
+    -branch:required
+} {
+    Checks out a repository branch or tag, making also sure that this
+    is up to date via 'git pull' (if this is a branch)
+
+    This is assumes the specific Git setup for our repo, hence it is
+    meant for internal use only.
+
+    @return list of branch names
+} {
+    set cd_helper   [file join $::acs::rootdir bin cd-helper]
+    set git_command git
+
+    try {
+        ns_log Notice "Checking out '$path'"
+        exec -ignorestderr -- $cd_helper $path $git_command checkout $branch
+    } on error {errmsg} {
+        #
+        # Checking out a branch that was already checked
+        # out will complain. As we know the branch exists
+        # for this repo, we are pretty confident this
+        # error can be ignored.
+        #
+        ns_log notice "Checking out existing branch '$branch' for '$path' complained:" $errmsg
+    }
+    #
+    # If we are on a branch, make sure repo is up to date.
+    #
+    if {$branch in [apm_git_repo_branches -path $path]} {
+        ns_log Notice "Updating '$path'"
+        exec -ignorestderr -- $cd_helper $path $git_command pull
+    }
+}
+
+ad_proc -private apm_git_fetch_repo {
+    -path:required
+    -repo:required
+} {
+    Fetches a repo from the Git mirror. Clones it first when it does
+    not exist.
+
+    This is assumes the specific Git setup for our repo, hence it is
+    meant for internal use only.
+
+    @return list of branch names
+} {
+    set git_url     https://github.com/openacs
+    set cd_helper   [file join $::acs::rootdir bin cd-helper]
+    set git_command git
+
+    set repo_dir ${path}${repo}
+    if {[file isdirectory $repo_dir]} {
+        #
+        # Folder exists. We fetch from the repo to see if new branches
+        # exist.
+        #
+        ns_log notice "Fetching new branches for '$repo_dir'"
+        exec -ignorestderr -- $cd_helper $repo_dir $git_command fetch origin
+    } else {
+        #
+        # Folder does not exist. Clone the repo from scratch.
+        #
+        ns_log notice "Cloning '${git_url}/${repo}.git' in '$repo_dir'"
+        try {
+            exec -ignorestderr -- $cd_helper $path $git_command clone ${git_url}/${repo}.git
+        } on error {errmsg} {
+            if {$repo eq "openacs-core"} {
+                error $errmsg
+            }
+            #
+            # Tolerate errors when cloning non-core packages: some
+            # legacy packages require authentication and would fail.
+            #
+            ns_log warning "Could not clone '$repo' from '${git_url}/${repo}.git':" $errmsg
         }
     }
-
-    return $branches
 }
 
 ad_proc -private apm_git_build_repository {
     {-debug:boolean 0}
     {-force_fresh:boolean false}
     {-channels *}
+    {-min_final_version 5.8.0}
+    {-min_compat_version 5.3.0}
 } {
     Rebuild the repository on the local machine.
     Only useful for the openacs.org site.
@@ -721,13 +824,10 @@ ad_proc -private apm_git_build_repository {
 
     set cd_helper              [file join $::acs::rootdir bin cd-helper]
 
-    set git_command            git
-    set git_url                https://github.com/openacs
-
     set work_dir               [file join $::acs::rootdir repository-builder]${sep}
 
     set repository_dir         [file join $::acs::rootdir www repository]${sep}
-    set repository_url         https://openacs.org/repository/
+    set repository_url         /repository/
 
     set exclude_package_list {}
 
@@ -755,38 +855,65 @@ ad_proc -private apm_git_build_repository {
     #----------------------------------------------------------------------
 
     #
-    # We first checkout the core repository. This will be the skeleton
-    # of our mirror.
+    # The core repo is considered the source of truth concerning
+    # available channels. We fetch it first.
     #
+    apm_git_fetch_repo -path $work_dir -repo openacs-core
     set core_repo_dir ${work_dir}openacs-core
-    if {[file isdirectory $core_repo_dir]} {
-        #
-        # Folder exists. We fetch from the repo to see if new branches
-        # exist.
-        #
-        ns_log notice "Fetching new branches for core repository"
-        exec -ignorestderr -- $cd_helper $core_repo_dir $git_command fetch origin
-    } else {
-        #
-        # Folder does not exist. We check out the repo from scratch.
-        #
-        ns_log notice "Cloning core repository at $git_url/openacs-core.git"
-        exec -ignorestderr -- $cd_helper $work_dir $git_command clone $git_url/openacs-core.git
+
+    #
+    # Channels that exist both from tags and from branches will be
+    # taken from tags.
+    #
+    # Among tags, the compat one will have precedence over the final
+    # one.
+    #
+    set core_channels [list]
+    foreach tag [apm_git_repo_tags -path $core_repo_dir] {
+        if {[regexp {^openacs-(.*)-(final|compat)} $tag _ channel type]} {
+            if {![dict exists $core_channels $channel] ||
+                $type eq "compat"
+            } {
+                dict set core_channels $channel $tag
+            }
+        }
+    }
+    #
+    # The latest release branch is special. It will have precedence
+    # over the corresponding tag: this way people will get a fresher
+    # version.
+    #
+    set branches [lsort -dictionary [apm_git_repo_branches -path $core_repo_dir]]
+    set latest_branch [lindex $branches end]
+    foreach branch $branches {
+        regsub {^oacs-} $branch {} channel
+        if {![dict exists $core_channels $channel] ||
+            $branch eq $latest_branch
+        } {
+            dict set core_channels $channel $branch
+        }
     }
 
     #
-    # The core repo is considered the source of truth concerning
-    # release branches. We extract them from here and we will look for
-    # them in the non-core repos.
+    # We don't want to generate a channel for ancient versions of
+    # packages. Here we remove those channels that are too old. For
+    # some old versions, we will only generate the compat packages.
     #
-    set core_channels [list]
-    foreach branch [apm_git_repo_branches -path $core_repo_dir] {
-        regsub {^oacs-} $branch {} channel
-        if {[string match $channels $channel]} {
-            lappend core_channels $channel $branch
+    foreach {channel branch} $core_channels {
+        regsub -all -- - $channel {.} channel_version
+        if {([regexp {^.*-final} $branch] &&
+             [apm_version_names_compare $channel_version $min_final_version] == -1)
+            ||
+            [apm_version_names_compare $channel_version $min_compat_version] == -1
+        } {
+            dict unset core_channels $channel
         }
     }
-    lappend core_channels main main
+
+    #
+    # The HEAD channel is always included.
+    #
+    lappend core_channels HEAD HEAD
 
     if {$debug_p} {
         #
@@ -794,6 +921,8 @@ ad_proc -private apm_git_build_repository {
         #
         set core_channels [lrange $core_channels end-1 end]
     }
+
+    ns_log notice "Repository channels:" $core_channels
 
     #
     # The core packages are those included in the openacs-core
@@ -809,7 +938,7 @@ ad_proc -private apm_git_build_repository {
     }
     ns_log notice "Core packages:" $core_packages
 
-    set non_core_packages_dir ${work_dir}openacs-non-core
+    set non_core_packages_dir ${work_dir}openacs-non-core${sep}
     file mkdir $non_core_packages_dir
 
     #
@@ -1157,26 +1286,7 @@ ad_proc -private apm_git_build_repository {
     }
 
     foreach package_key $non_core_packages {
-        set package_dir ${non_core_packages_dir}${sep}${package_key}
-        if {[file isdirectory $package_dir]} {
-            #
-            # Folder exists. We fetch from the repo to see if new branches
-            # exist.
-            #
-            ns_log notice "Fetching new branches for non-core repository '$package_key'"
-            exec -ignorestderr -- $cd_helper $package_dir $git_command fetch origin
-        } else {
-            #
-            # Folder does not exist. Clone the repo from
-            # scratch. Tolerate errors here, as some legacy packages
-            # require authentication and would fail.
-            #
-            try {
-                exec -ignorestderr -- $cd_helper $non_core_packages_dir $git_command clone ${git_url}/${package_key}.git
-            } on error {errmsg} {
-                ns_log warning "Could not clone '$package_key' from ${git_url}/${package_key}.git:" $errmsg
-            }
-        }
+        apm_git_fetch_repo -path $non_core_packages_dir -repo $package_key
     }
 
 
@@ -1192,20 +1302,14 @@ ad_proc -private apm_git_build_repository {
         #
         # Checkout the channel branch on the core repository.
         #
-        ns_log Notice "Checking out core-repository"
-        exec -ignorestderr -- $cd_helper $core_repo_dir $git_command checkout $branch
-        #
-        # Make sure the repo is up to date.
-        #
-        ns_log Notice "Updating core-repository"
-        exec -ignorestderr -- $cd_helper $core_repo_dir $git_command pull
+        apm_git_checkout_repo -path $core_repo_dir -branch $branch
 
         #
         # Try to check out the channel from the non-core packages.
         #
         set branch_packages [list]
         foreach package_key $non_core_packages {
-            set package_dir ${non_core_packages_dir}${sep}${package_key}
+            set package_dir ${non_core_packages_dir}${package_key}
             if {![file isdirectory $package_dir]} {
                 ns_log notice "Package '$package_key' was not cloned in '$package_dir', skipping."
                 continue
@@ -1215,25 +1319,8 @@ ad_proc -private apm_git_build_repository {
             # Not all packages will have a release branch. Skip the
             # package when the branch is not found.
             #
-            if {$branch in [apm_git_repo_branches -path $package_dir]} {
-                try {
-                    ns_log Notice "Checking out '$package_key'"
-                    exec -ignorestderr -- $cd_helper $package_dir $git_command checkout $branch
-                } on error {errmsg} {
-                    #
-                    # Checking out a branch that was already checked
-                    # out will complain. As we know the branch exists
-                    # for this repo, we are pretty confident this
-                    # error can be ignored.
-                    #
-                    ns_log notice "Checking out existing branch '$branch' for package '$package_key' complained:" $errmsg
-                }
-                #
-                # Make sure repo is up to date.
-                #
-                ns_log Notice "Updating '$package_key'"
-                exec -ignorestderr -- $cd_helper $package_dir $git_command pull
-
+            if {$branch in [apm_git_repo_channels -path $package_dir]} {
+                apm_git_checkout_repo -path $package_dir -branch $branch
                 lappend branch_packages $package_key
             }
         }
@@ -1275,7 +1362,7 @@ ad_proc -private apm_git_build_repository {
             package_type summary description \
             release_date vendor_url vendor \
             maturity maturity_text \
-            license license_url
+            license license_url download_url
 
         set packages [list]
 
@@ -1289,12 +1376,7 @@ ad_proc -private apm_git_build_repository {
                 continue
             }
 
-            if { [array exists pkg_info] } {
-                array unset pkg_info
-            }
-            if { [info exists pkg_info] } {
-                unset pkg_info
-            }
+            unset -nocomplain pkg_info
 
             ad_try {
                 array set pkg_info [apm_read_package_info_file $spec_file]
@@ -1323,13 +1405,6 @@ ad_proc -private apm_git_build_repository {
                     foreach e $pkg_info(install) {
                         append manifest "    <install package=\"$e\"/>\n"
                     }
-
-                    template::multirow append packages \
-                        $package_path $package_key $pkg_info(name) $pkg_info(package-name) \
-                        $pkg_info(package.type) $pkg_info(summary) $pkg_info(description) \
-                        $pkg_info(release-date) $pkg_info(vendor.url) $pkg_info(vendor) \
-                        $pkg_info(maturity) $pkg_info(maturity_text) \
-                        $pkg_info(license)  $pkg_info(license.url)
 
                     set apm_file "${channel_dir}${pkg_info(package.key)}-${pkg_info(name)}.apm"
                     ns_log Notice "Repository: Building package $package_key for channel $channel"
@@ -1369,6 +1444,13 @@ ad_proc -private apm_git_build_repository {
                     }
 
                     set apm_url "${repository_url}$channel/$pkg_info(package.key)-$pkg_info(name).apm"
+
+                    template::multirow append packages \
+                        $package_path $package_key $pkg_info(name) $pkg_info(package-name) \
+                        $pkg_info(package.type) $pkg_info(summary) $pkg_info(description) \
+                        $pkg_info(release-date) $pkg_info(vendor.url) $pkg_info(vendor) \
+                        $pkg_info(maturity) $pkg_info(maturity_text) \
+                        $pkg_info(license)  $pkg_info(license.url) $apm_url
 
                     append manifest "    <download-url>$apm_url</download-url>\n"
                     foreach elm $pkg_info(provides) {
@@ -1435,7 +1517,7 @@ ad_proc -private apm_git_build_repository {
                 package_type summary description \
                 release_date vendor_url vendor \
                 maturity maturity_text \
-                license license_url
+                license license_url download_url
 
             template::multirow foreach packages {
                 if {$package_key in $package_keys($category)} {
@@ -1444,7 +1526,7 @@ ad_proc -private apm_git_build_repository {
                         $package_type $summary $description \
                         $release_date $vendor_url $vendor \
                         $maturity $maturity_text \
-                        $license $license_url
+                        $license $license_url $download_url
                 }
             }
 
