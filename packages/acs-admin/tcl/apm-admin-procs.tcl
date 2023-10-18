@@ -674,8 +674,8 @@ ad_proc -private apm_build_repository {
 ad_proc -private apm_git_repo_tags {
     -path:required
 } {
-    Extracts the available tags from an OpenACS Git repo. This is
-    assumes the specific Git setup for our repo, hence it is meant for
+    Extracts the available tags from an OpenACS Git repo. This assumes
+    the specific Git setup for our repo, hence it is meant for
     internal use only.
 
     @return list of tag names.
@@ -690,7 +690,7 @@ ad_proc -private apm_git_repo_tags {
 ad_proc -private apm_git_repo_branches {
     -path:required
 } {
-    Extracts the available branches from an OpenACS Git repo. This is
+    Extracts the available branches from an OpenACS Git repo. This
     assumes the specific Git setup for our repo, hence it is meant for
     internal use only.
 
@@ -707,7 +707,7 @@ ad_proc -private apm_git_repo_channels {
     -path:required
 } {
     Extracts the available tags and branches from an OpenACS Git
-    repo. This is assumes the specific Git setup for our repo, hence
+    repo. This assumes the specific Git setup for our repo, hence
     it is meant for internal use only.
 
     @return list of branch names
@@ -723,7 +723,7 @@ ad_proc -private apm_git_checkout_repo {
     Checks out a repository branch or tag, making also sure that this
     is up to date via 'git pull' (if this is a branch)
 
-    This is assumes the specific Git setup for our repo, hence it is
+    This assumes the specific Git setup for our repo, hence it is
     meant for internal use only.
 
     @return list of branch names
@@ -759,7 +759,7 @@ ad_proc -private apm_git_fetch_repo {
     Fetches a repo from the Git mirror. Clones it first when it does
     not exist.
 
-    This is assumes the specific Git setup for our repo, hence it is
+    This assumes the specific Git setup for our repo, hence it is
     meant for internal use only.
 
     @return list of branch names
