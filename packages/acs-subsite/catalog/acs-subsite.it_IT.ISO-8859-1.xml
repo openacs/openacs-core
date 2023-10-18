@@ -98,6 +98,7 @@
   <msg key="Configuration">Configurazione</msg>
   <msg key="Configure">Configura</msg>
   <msg key="Confirm">Conferma Password:</msg>
+  <msg key="Confirm_Permissions">Conferma Impostazioni Permessi</msg>
   <msg key="confirmation_password_changed">Nuova password confermata.</msg>
   <msg key="Continue">Procedi</msg>
   <msg key="Continue_to_your_account">Procedi a %pvt_home_name%</msg>
@@ -182,8 +183,10 @@
   <msg key="Error_trying_to_register">Si é verificato un errore cercando di registrare il tuo account</msg>
   <msg key="Error_update_account_info">Si é verificato un errore cercando di aggiornare le tue informazioni account</msg>
   <msg key="Expires">Scade</msg>
+  <msg key="external_identity_providers_title">Provider di Identità Esterni</msg>
   <msg key="Female">Femminile</msg>
   <msg key="Filename">Nome file</msg>
+  <msg key="Filter_username_and_email">Filtra per nome utente ed email</msg>
   <msg key="First_names">Nome/i di battesimo</msg>
   <msg key="First_names_not_provided_by_authority">Il tuo nome non viene fornito dalla autority di autenticazione. Fornisci per favore il tuo nome.</msg>
   <msg key="First_select_the_supertype">Come prima cosa seleziona il supertipo per la nuova tipologia di relazione</msg>
@@ -196,6 +199,8 @@
   <msg key="go_upload_your_portrait">carica la tua immagine</msg>
   <msg key="Grant">Garantisci</msg>
   <msg key="Grant_Permission">Garantisci il permesso</msg>
+  <msg key="Grant_Permissions_to_Users">Assegna permessi agli utenti</msg>
+  <msg key="Grant_Permissions_to_Users-helptext">Seleziona utenti ai quali assegnare questi permessi</msg>
   <msg key="Group_administration">Amministrazione gruppo</msg>
   <msg key="Group_members">Membri del Gruppo: %group_name%</msg>
   <msg key="Group_type">Tipologia gruppo</msg>
@@ -215,6 +220,7 @@
   <msg key="icon_of_envelope">Icona della busta</msg>
   <msg key="If_you_were_to">Se tu dovessi </msg>
   <msg key="Information_Updated">Informazione Modificata</msg>
+  <msg key="Inherited_Permission-helptext">Questo è un permesso ereditato. Per rimuoverlo, clicca sul bottone &#34;Non ereditare...&#34; sottostante.</msg>
   <msg key="Install_locales">Installa Localizzazioni</msg>
   <msg key="Invite">Invita</msg>
   <msg key="Invite_a_user">Invita un utente</msg>
@@ -379,6 +385,7 @@
   <msg key="Permissions">Permessi</msg>
   <msg key="permissions">permessi</msg>
   <msg key="Permissions_for_name">Permessi per %name%</msg>
+  <msg key="Permissions_Updated">Permessi aggiornati.</msg>
   <msg key="Place_of_birth">Luogo di nascita</msg>
   <msg key="Place_of_residence">Luogo di residenza</msg>
   <msg key="Please_return_to_home">Devi tornare a %home_link%</msg>

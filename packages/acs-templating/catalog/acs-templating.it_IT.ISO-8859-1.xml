@@ -130,5 +130,6 @@
   <msg key="Upload_a_New_Image">Carica una Nuova Immagine</msg>
   <msg key="Year">Anno</msg>
   <msg key="year">anno</msg>
+  <msg key="Year_must_be_between_1_and_9999">L&#39;anno deve essere compreso tra 1 e 9999</msg>
   <msg key="Year_must_be_positive">L&#39;anno deve essere positivo</msg>
 </message_catalog>
