@@ -116,6 +116,7 @@ namespace eval ::acs {
 ::acs::register_icanuse "ns_parseurl -strict"       [acs::cmd_error_contains ns_parseurl -strict]
 ::acs::register_icanuse "ns_server unmap"           [acs::cmd_has_subcommand ns_server unmap]
 ::acs::register_icanuse "ns_set keys"               [acs::cmd_has_subcommand ns_set keys]
+::acs::register_icanuse "ns_set stats"              [acs::cmd_has_subcommand ns_set stats]
 ::acs::register_icanuse "ns_set values"             [acs::cmd_has_subcommand ns_set values]
 ::acs::register_icanuse "ns_setcookie -samesite"    [acs::cmd_error_contains ns_setcookie -samesite]
 ::acs::register_icanuse "ns_urlencode -part oauth1" [acs::cmd_error_contains {ns_urlencode -part xxx} oauth1]
