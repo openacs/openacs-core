@@ -600,7 +600,7 @@ aa_register_case \
         <ul>
         <li><a href="/xowiki/translation-server">Translation server</a></li>
         <!-- <li><a href="/xowiki/en/Official_test_servers">Test servers</a></li> -->
-        <li><a href="/bugtracker/openacs">Bug tracker</a></li>
+        <li><a href="https://openacs.org/bugtracker/openacs">Bug tracker</a></li>
         <li><a href="http://cvs.openacs.org">CVS browser</a></li>
         </ul>
 
@@ -638,7 +638,7 @@ aa_register_case \
         <div class="navbar navbar-default navbar-fixed-bottom" style="border-color:#ccc;">
         <div class="footer" style='margin-top:0;font-size:90%;color:#666;padding-top:5px;'>
         <p style="margin:0;">
-        This website is maintained by the OpenACS community. Any problems, email <a href="mailto:webmaster@openacs.org">webmaster</a> or <a href="/bugtracker/openacs.org/">submit</a> a bug report.
+        This website is maintained by the OpenACS community. Any problems, email <a href="mailto:webmaster@openacs.org">webmaster</a> or <a href="https://openacs.org/bugtracker/openacs.org/">submit</a> a bug report.
         <br>
         (Powered by Tcl<a href="https://www.tcl-lang.org/"><img alt="Tcl Logo" src="/resources/openacs-bootstrap3-theme/images/plume.png" width="14" height="18"></a>,
          Next Scripting <a href="https://next-scripting.org/"><img alt="NSF Logo" src="/resources/openacs-bootstrap3-theme/images/next-icon.png" width="14" height="8"></a>,
