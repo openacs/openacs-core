@@ -973,8 +973,14 @@ ad_proc -public template::widget::dateFragment {
     set value [template::util::date::get_property $fragment $value]
     set value [util::trim_leading_zeros $value]
 
+    if {$value eq ""} {
+        set att_value ""
+    } else {
+        set att_value [ad_pad -left $value $size 0]
+    }
+
     if { $mode ne "edit" } {
-        return [subst {<input type="hidden" name="$element(name).$fragment" value="[ad_pad -left $value $size 0]">$value}]
+        return [subst {<input type="hidden" name="$element(name).$fragment" value="${att_value}">$value}]
     } else {
         if { [info exists element(${fragment}_interval)] } {
             set interval $element(${fragment}_interval)
@@ -984,7 +990,7 @@ ad_proc -public template::widget::dateFragment {
                  || [regexp "year|short_year" $fragment]
              } {
                 set output "<input type=\"text\" name=\"$element(name).$fragment\" id=\"$element(name).$fragment\" size=\"$size\""
-                append output " maxlength=\"$size\" value=\"[ad_pad -left $value $size 0]\""
+                append output " maxlength=\"$size\" value=\"${att_value}\""
                 array set attributes $tag_attributes
                 foreach attribute_name [array names attributes] {
                     if {$attributes($attribute_name) eq ""} {
