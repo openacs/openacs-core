@@ -441,8 +441,8 @@ aa_register_case \
                 {[content::item::get_latest_revision \
                             -item_id $tmp_item_id] ne ""}
 
-            
-            
+
+
 
             #########################################################
             # delete first folder and everything in it to clean up
