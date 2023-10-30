@@ -466,6 +466,8 @@ aa_register_case \
         content::item::get_descendants
         content::item::get_path
         content::item::get_publish_date
+        content::item::get_publish_status
+        content::item::unpublish
     } \
     content_item_nested_structure {
         Test API on a nested folder structure.
@@ -620,6 +622,27 @@ aa_register_case \
                             $expected
                         aa_true "Empty publish date means the item is a folder (no revisions)" \
                             [expr {$expected ne "" || [content::folder::is_folder -item_id $item_id]}]
+                    }
+                }
+
+                aa_section content::item::get_publish_status
+
+                set all_items [list $root_item_id $first_item_id $first_folder_id $sub_folder_id $sub_item_id $second_folder_id]
+                foreach item_id $all_items {
+                    set expected [db_string get_publish_status {
+                        select publish_status from cr_items where item_id = :item_id
+                    }]
+                    aa_equals "content::item::get_publish_status -item_id $item_id returns expected" \
+                        [content::item::get_publish_status -item_id $item_id] \
+                        $expected
+
+                    foreach status {"production" "ready" "live" "expired"} {
+                        aa_log "Set publish statut on '$item_id' to '$status'"
+                        content::item::unpublish -item_id $item_id -publish_status $status
+
+                        aa_equals "New publish status for '$item_id' is '$status'" \
+                            [content::item::get_publish_status -item_id $item_id] \
+                            $status
                     }
                 }
             }
