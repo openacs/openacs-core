@@ -1320,15 +1320,13 @@ END;
 $$ LANGUAGE plpgsql;
 
 
--- I hard code the content_item_globals.c_root_folder_id here
-select define_function_args('content_item__get_virtual_path','item_id,root_folder_id;-100');
+select define_function_args('content_item__get_virtual_path','item_id,root_folder_id;null');
 --
 -- procedure content_item__get_virtual_path/2
 --
 CREATE OR REPLACE FUNCTION content_item__get_virtual_path(
    get_virtual_path__item_id integer,
-   get_virtual_path__root_folder_id integer -- default content_item_globals.c_root_folder_id -- default '-100'
-
+   get_virtual_path__root_folder_id integer
 ) RETURNS varchar AS $$
 DECLARE
   v_path                                  varchar;
@@ -1336,8 +1334,6 @@ DECLARE
   v_is_folder                             boolean;
   v_index                                 cr_items.item_id%TYPE;
 BEGIN
-  -- XXX possible bug: root_folder_id arg is ignored.
-
   -- first resolve the item
   v_item_id := content_symlink__resolve(get_virtual_path__item_id);
 
@@ -1346,9 +1342,9 @@ BEGIN
 
   -- if the folder has an index page
   if v_is_folder = 't' and v_index is not null then
-    v_path := content_item__get_path(content_symlink__resolve(v_index),null);
+    v_path := content_item__get_path(content_symlink__resolve(v_index), get_virtual_path__root_folder_id);
   else
-    v_path := content_item__get_path(v_item_id,null);
+    v_path := content_item__get_path(v_item_id, get_virtual_path__root_folder_id);
   end if;
 
   return v_path;
