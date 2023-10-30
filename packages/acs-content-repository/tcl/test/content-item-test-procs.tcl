@@ -468,6 +468,7 @@ aa_register_case \
         content::item::get_publish_date
         content::item::get_publish_status
         content::item::unpublish
+        content::item::get_root_folder
     } \
     content_item_nested_structure {
         Test API on a nested folder structure.
@@ -645,6 +646,31 @@ aa_register_case \
                             $status
                     }
                 }
+
+                aa_section content::item::get_root_folder
+
+                #
+                # Note: what we call "root_folder" in out test setup
+                # is the root of our test folder tree, not the cr root
+                # folder that we fetch with this api!
+                #
+                set api_root_folder_id [content::item::get_root_folder -item_id $root_folder_id]
+                set expected_root_folder_id [db_string get_root_folder {
+                    select i2.item_id
+                    from cr_items i1, cr_items i2
+                    where i2.parent_id = -4
+                    and i1.item_id = :root_folder_id
+                    and i1.tree_sortkey between i2.tree_sortkey and tree_right(i2.tree_sortkey)
+                }]
+
+                aa_equals "Root folder from api and query are the same" \
+                    $api_root_folder_id $expected_root_folder_id
+
+                foreach item_id $all_items {
+                    aa_equals "Test item '$item_id' belongs to the same root folder as the others" \
+                        $expected_root_folder_id [content::item::get_root_folder -item_id $item_id]
+                }
+
             }
     }
 
