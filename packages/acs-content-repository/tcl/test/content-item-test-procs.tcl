@@ -457,6 +457,120 @@ aa_register_case \
 
 }
 
+aa_register_case \
+    -cats {api db} \
+    -procs {
+        ad_generate_random_string
+        content::folder::new
+        content::item::new
+        content::item::get_descendants
+    } \
+    content_item_get_descendants {
+        Test content::item::get_descendants
+    } {
+
+        aa_run_with_teardown \
+            -rollback \
+            -test_code {
+
+                #########################################################
+                # create the root folder of our test structure
+                #########################################################
+                set root_folder_id [db_nextval "acs_object_id_seq"]
+                content::folder::new \
+                    -folder_id $root_folder_id \
+                    -name "test_folder_${root_folder_id}"
+
+                content::folder::register_content_type \
+                    -folder_id $root_folder_id \
+                    -content_type "content_revision"
+
+                content::folder::register_content_type \
+                    -folder_id $root_folder_id \
+                    -content_type "content_folder"
+
+                #########################################################
+                # create a cr_item in the root folder
+                #########################################################
+
+                set root_item_id [db_nextval "acs_object_id_seq"]
+                content::item::new \
+                    -name "test_item_$root_item_id" \
+                    -item_id $root_item_id \
+                    -parent_id $root_folder_id
+
+                #########################################################
+                # create a cr_folder
+                #########################################################
+                set first_folder_id [db_nextval "acs_object_id_seq"]
+                content::folder::new \
+                    -parent_id $root_folder_id \
+                    -folder_id $first_folder_id \
+                    -name "test_folder_${first_folder_id}"
+
+                #########################################################
+                # create a cr_item in the first toplevel folder
+                #########################################################
+
+                set first_item_id [db_nextval "acs_object_id_seq"]
+                content::item::new \
+                    -name "test_item_$first_item_id" \
+                    -item_id $first_item_id \
+                    -parent_id $first_folder_id
+
+                #########################################################
+                # create a subfolder
+                #########################################################
+                set sub_folder_id [db_nextval "acs_object_id_seq"]
+                content::folder::new \
+                    -parent_id $first_folder_id \
+                    -folder_id $sub_folder_id \
+                    -name "test_folder_${first_folder_id}"
+
+                #########################################################
+                # create a cr_item in the subfolder
+                #########################################################
+
+                set sub_item_id [db_nextval "acs_object_id_seq"]
+                content::item::new \
+                    -name "test_item_$sub_item_id" \
+                    -item_id $sub_item_id \
+                    -parent_id $sub_folder_id
+
+
+                #########################################################
+                # create another toplevel folder
+                #########################################################
+
+                set second_folder_id [db_nextval "acs_object_id_seq"]
+                content::folder::new \
+                    -parent_id $root_folder_id \
+                    -folder_id $second_folder_id \
+                    -name "test_folder_${second_folder_id}"
+
+                aa_equals "Test descendants of root folder '$root_folder_id'" \
+                    [lsort [content::item::get_descendants -parent_id $root_folder_id]] \
+                    [lsort [list $root_item_id $first_item_id $first_folder_id $sub_folder_id $sub_item_id $second_folder_id]]
+
+                aa_equals "Test descendants up to depth 1 of root folder '$root_folder_id'" \
+                    [lsort [content::item::get_descendants -depth 1 -parent_id $root_folder_id]] \
+                    [lsort [list $root_item_id $first_folder_id $second_folder_id]]
+
+                aa_equals "Test descendants up to depth 2 of root folder '$root_folder_id'" \
+                    [lsort [content::item::get_descendants -depth 2 -parent_id $root_folder_id]] \
+                    [lsort [list $root_item_id $first_item_id $first_folder_id $sub_folder_id $second_folder_id]]
+
+                aa_equals "Test descendants of folder '$first_folder_id'" \
+                    [lsort [content::item::get_descendants -parent_id $first_folder_id]] \
+                    [lsort [list $first_item_id $sub_folder_id $sub_item_id]]
+
+                aa_equals "Test descendants up to depth 1 of folder '$first_folder_id'" \
+                    [lsort [content::item::get_descendants -depth 1 -parent_id $first_folder_id]] \
+                    [lsort [list $first_item_id $sub_folder_id]]
+
+                aa_equals "Test descendants of folder '$second_folder_id'" "" ""
+            }
+    }
 
 
 # Local variables:
