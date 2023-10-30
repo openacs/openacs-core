@@ -464,9 +464,10 @@ aa_register_case \
         content::folder::new
         content::item::new
         content::item::get_descendants
+        content::item::get_path
     } \
-    content_item_get_descendants {
-        Test content::item::get_descendants
+    content_item_nested_structure {
+        Test API on a nested folder structure.
     } {
 
         aa_run_with_teardown \
@@ -525,7 +526,7 @@ aa_register_case \
                 content::folder::new \
                     -parent_id $first_folder_id \
                     -folder_id $sub_folder_id \
-                    -name "test_folder_${first_folder_id}"
+                    -name "test_folder_${sub_folder_id}"
 
                 #########################################################
                 # create a cr_item in the subfolder
@@ -548,6 +549,8 @@ aa_register_case \
                     -folder_id $second_folder_id \
                     -name "test_folder_${second_folder_id}"
 
+                aa_section content::item::get_descendants
+
                 aa_equals "Test descendants of root folder '$root_folder_id'" \
                     [lsort [content::item::get_descendants -parent_id $root_folder_id]] \
                     [lsort [list $root_item_id $first_item_id $first_folder_id $sub_folder_id $sub_item_id $second_folder_id]]
@@ -569,6 +572,26 @@ aa_register_case \
                     [lsort [list $first_item_id $sub_folder_id]]
 
                 aa_equals "Test descendants of folder '$second_folder_id'" "" ""
+
+
+                aa_section content::item::get_path
+
+                aa_equals "Test path of root folder '$root_folder_id'" \
+                    [content::item::get_path -item_id $root_folder_id] \
+                    /pages/test_folder_$root_folder_id
+
+                aa_equals "Test path of item '$sub_item_id'" \
+                    [content::item::get_path -item_id $sub_item_id] \
+                    /pages/test_folder_$root_folder_id/test_folder_$first_folder_id/test_folder_$sub_folder_id/test_item_$sub_item_id
+
+                aa_equals "Test path of item '$sub_item_id' starting from folder '$first_folder_id'" \
+                    [content::item::get_path -item_id $sub_item_id -root_folder_id $first_folder_id] \
+                    test_folder_$sub_folder_id/test_item_$sub_item_id
+
+                aa_equals "Test path of item '$first_item_id'" \
+                    [content::item::get_path -item_id $first_item_id] \
+                    /pages/test_folder_$root_folder_id/test_folder_$first_folder_id/test_item_$first_item_id
+
             }
     }
 
