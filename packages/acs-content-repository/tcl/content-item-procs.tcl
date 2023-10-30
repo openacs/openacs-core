@@ -1197,7 +1197,6 @@ ad_proc -public content::item::unpublish {
 
     @author Peter Marklund
 } {
-  ::content::item::set_live_revision -item_id $item_id
   ::content::item::update -item_id $item_id -attributes [list [list publish_status $publish_status]]
 }
 
