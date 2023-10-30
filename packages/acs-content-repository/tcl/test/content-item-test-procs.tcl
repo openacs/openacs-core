@@ -466,6 +466,7 @@ aa_register_case \
         content::item::new
         content::item::get_descendants
         content::item::get_path
+        content::item::get_virtual_path
         content::item::get_publish_date
         content::item::get_publish_status
         content::item::unpublish
@@ -602,6 +603,30 @@ aa_register_case \
 
                 aa_equals "Test path of item '$first_item_id'" \
                     [content::item::get_path -item_id $first_item_id] \
+                    /pages/test_folder_$root_folder_id/test_folder_$first_folder_id/test_item_$first_item_id
+
+                aa_section content::item::get_virtual_path
+
+                #
+                # Note: we are not testing symlinks so far, so
+                # content::item::get_virtual_path will behave the same
+                # as content::item::get_path.
+                #
+
+                aa_equals "Test path of root folder '$root_folder_id'" \
+                    [content::item::get_virtual_path -item_id $root_folder_id] \
+                    /pages/test_folder_$root_folder_id
+
+                aa_equals "Test path of item '$sub_item_id'" \
+                    [content::item::get_virtual_path -item_id $sub_item_id] \
+                    /pages/test_folder_$root_folder_id/test_folder_$first_folder_id/test_folder_$sub_folder_id/test_item_$sub_item_id
+
+                aa_equals "Test path of item '$sub_item_id' starting from folder '$first_folder_id'" \
+                    [content::item::get_virtual_path -item_id $sub_item_id -root_folder_id $first_folder_id] \
+                    test_folder_$sub_folder_id/test_item_$sub_item_id
+
+                aa_equals "Test path of item '$first_item_id'" \
+                    [content::item::get_virtual_path -item_id $first_item_id] \
                     /pages/test_folder_$root_folder_id/test_folder_$first_folder_id/test_item_$first_item_id
 
 
