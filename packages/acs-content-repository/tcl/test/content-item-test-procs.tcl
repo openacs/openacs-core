@@ -462,6 +462,7 @@ aa_register_case \
     -procs {
         ad_generate_random_string
         content::folder::new
+        content::folder::is_folder
         content::item::new
         content::item::get_descendants
         content::item::get_path
@@ -469,6 +470,7 @@ aa_register_case \
         content::item::get_publish_status
         content::item::unpublish
         content::item::get_root_folder
+        content::item::is_published
     } \
     content_item_nested_structure {
         Test API on a nested folder structure.
@@ -644,6 +646,17 @@ aa_register_case \
                         aa_equals "New publish status for '$item_id' is '$status'" \
                             [content::item::get_publish_status -item_id $item_id] \
                             $status
+
+                        #
+                        # To count as published, the item must have
+                        # revisions (e.g. a folder cannot be
+                        # published) and be in the 'live' status.
+                        #
+                        set is_published [expr {[content::item::is_published -item_id $item_id] ? 1 : 0}]
+                        aa_true "Check if item '$item_id' counts as published" {
+                            $is_published == ($status eq "live") ||
+                            [content::folder::is_folder -item_id $item_id]
+                        }
                     }
                 }
 
