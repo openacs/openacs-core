@@ -465,6 +465,7 @@ aa_register_case \
         content::item::new
         content::item::get_descendants
         content::item::get_path
+        content::item::get_publish_date
     } \
     content_item_nested_structure {
         Test API on a nested folder structure.
@@ -498,7 +499,9 @@ aa_register_case \
                 content::item::new \
                     -name "test_item_$root_item_id" \
                     -item_id $root_item_id \
-                    -parent_id $root_folder_id
+                    -parent_id $root_folder_id \
+                    -is_live t \
+                    -attributes [list [list title "test_item_$root_item_id"]]
 
                 #########################################################
                 # create a cr_folder
@@ -517,7 +520,9 @@ aa_register_case \
                 content::item::new \
                     -name "test_item_$first_item_id" \
                     -item_id $first_item_id \
-                    -parent_id $first_folder_id
+                    -parent_id $first_folder_id \
+                    -is_live t \
+                    -attributes [list [list title "test_item_$first_item_id"]]
 
                 #########################################################
                 # create a subfolder
@@ -536,7 +541,9 @@ aa_register_case \
                 content::item::new \
                     -name "test_item_$sub_item_id" \
                     -item_id $sub_item_id \
-                    -parent_id $sub_folder_id
+                    -parent_id $sub_folder_id \
+                    -is_live t \
+                    -attributes [list [list title "test_item_$sub_item_id"]]
 
 
                 #########################################################
@@ -592,6 +599,29 @@ aa_register_case \
                     [content::item::get_path -item_id $first_item_id] \
                     /pages/test_folder_$root_folder_id/test_folder_$first_folder_id/test_item_$first_item_id
 
+
+                aa_section content::item::get_publish_date
+
+                set all_items [list $root_item_id $first_item_id $first_folder_id $sub_folder_id $sub_item_id $second_folder_id]
+                foreach is_live {t f} {
+                    foreach item_id $all_items {
+                        set expected [db_string get_publish_date {
+                            select r.publish_date
+                              from cr_revisions r,
+                                   cr_items i
+                             where i.item_id = :item_id
+                               and i.item_id = r.item_id
+                               and ((:is_live = 't' and r.revision_id = i.live_revision) or
+                                    (:is_live = 'f' and r.revision_id = i.latest_revision)
+                                    )
+                        } -default ""]
+                        aa_equals "content::item::get_publish_date -item_id $item_id -is_live $is_live returns expected" \
+                            [content::item::get_publish_date -item_id $item_id -is_live $is_live] \
+                            $expected
+                        aa_true "Empty publish date means the item is a folder (no revisions)" \
+                            [expr {$expected ne "" || [content::folder::is_folder -item_id $item_id]}]
+                    }
+                }
             }
     }
 
