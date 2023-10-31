@@ -12,4 +12,11 @@
       (r.filename is not null and i.storage_type = 'file'))
     </querytext>
   </fullquery>
+
+  <partialquery name="item::get_revision_content.grc_get_all_content_1">
+    <querytext>
+      , content.blob_to_string(content) as text
+    </querytext>
+  </partialquery>
+
 </queryset>

@@ -12,4 +12,11 @@
       (r.lob is not null and i.storage_type = 'lob'))
     </querytext>
   </fullquery>
+
+  <partialquery name="content::item::get_revision_content.grc_get_all_content_1">
+    <querytext>
+      , content as text
+    </querytext>
+  </partialquery>
+
 </queryset>
