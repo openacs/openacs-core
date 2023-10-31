@@ -23,6 +23,8 @@ aa_register_case \
         content::revision::is_live
         content::revision::item_id
         content::revision::new
+        content::revision::copy
+        content::revision::delete
         content::revision::revision_name
         cr_write_content
     } \
@@ -114,7 +116,35 @@ aa_register_case \
             [content::revision::revision_name -revision_id $revision_id2] \
             "Revision 2 of 2 for item: rev2"
 
+        set second_item_id [content::item::new \
+                                -name "test_item_two" \
+                                -parent_id $first_folder_id \
+                                -storage_type "text"]
+        set copy_revision_id [content::revision::copy \
+                                  -revision_id $revision_id2 \
+                                  -target_item_id $second_item_id]
+        db_1row get_copy_info {
+            select content, item_id
+            from cr_revisions
+            where revision_id = :copy_revision_id
+        }
+        aa_equals "Copied revision '$copy_revision_id' has the same content as source '$revision_id2'" \
+            $content "Test Content2"
+        aa_equals "Copied revision '$copy_revision_id' was stored under '$second_item_id'" \
+            $item_id $second_item_id
+
+        aa_equals "'$second_item_id' has 1 revisions" \
+            [content::item::get_revision_count -item_id $second_item_id] \
+            1
+
+        content::revision::delete -revision_id $copy_revision_id
+
+        aa_equals "After deleting the only revision '$copy_revision_id' of item '$second_item_id', the item has 0 revisions" \
+            [content::item::get_revision_count -item_id $second_item_id] \
+            0
+
         content::item::delete -item_id $first_item_id
+        content::item::delete -item_id $second_item_id
 
         content::folder::unregister_content_type \
             -folder_id $first_folder_id \
