@@ -472,6 +472,8 @@ aa_register_case \
         content::item::unpublish
         content::item::get_root_folder
         content::item::is_published
+        content::item::get_content
+        content::item::get_revision_content
     } \
     content_item_nested_structure {
         Test API on a nested folder structure.
@@ -549,6 +551,7 @@ aa_register_case \
                     -item_id $sub_item_id \
                     -parent_id $sub_folder_id \
                     -is_live t \
+                    -mime_type text/plain \
                     -attributes [list [list title "test_item_$sub_item_id"]]
 
 
@@ -708,6 +711,12 @@ aa_register_case \
                     aa_equals "Test item '$item_id' belongs to the same root folder as the others" \
                         $expected_root_folder_id [content::item::get_root_folder -item_id $item_id]
                 }
+
+                aa_section content::item::get_content
+
+                content::item::get_content -item_id $sub_item_id -array content
+                aa_true "Item '$sub_item_id' has a text mime type and the content array should contain the 'text' variable." \
+                    [info exists content(text)]
 
             }
     }
