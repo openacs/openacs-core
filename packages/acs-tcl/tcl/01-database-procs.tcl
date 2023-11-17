@@ -1964,10 +1964,16 @@ ad_proc -public db_multirow {
 
     <p>
 
-    If the <code>-local</code> is passed, the variables defined
-    by db_multirow will be set locally (useful if you're compiling dynamic templates
-    in a function or similar situations). Use the <code>-upvar_level</code>
-    switch to specify how many levels up the variable should be set.
+    If the <code>-local</code> is passed, the variables defined by
+    db_multirow will be set locally (useful if you're compiling
+    dynamic templates in a function or similar situations). Use the
+    <code>-upvar_level</code> switch to specify how many levels up the
+    variable should be set.
+
+    The default behavior (i.e., when no "-local" is specified) depends
+    on the calling environment: when "db_multirow" is called from an
+    ADP file the variables are set in the ADP environment.  Otherwise,
+    the default behavior is "-local".
 
     <p>
 
@@ -2003,9 +2009,9 @@ ad_proc -public db_multirow {
 
     <p>
 
-    Notice the nonstandard numbering (everything
-                                      else in Tcl starts at 0); the reason is that the graphics designer, a non
-    programmer, may wish to work with row numbers.
+    Notice the nonstandard numbering (everything else in Tcl starts at
+    0); the reason is that the graphics designer, a non-programmer,
+    may wish to work with row numbers.
 
     <p>
 
@@ -2021,10 +2027,16 @@ ad_proc -public db_multirow {
     # Query Dispatcher (OpenACS - ben)
     set full_statement_name [db_qd_get_fullname $statement_name]
 
-    if { $local_p } {
+    #
+    # When this function is called outside ADP, fall back to "-local"
+    # behavior.
+    #
+    set adpLevel [template::adp_level]
+
+    if { $local_p || $adpLevel eq ""} {
         set level_up $upvar_level
     } else {
-        set level_up \#[template::adp_level]
+        set level_up \#$adpLevel
     }
 
     ad_arg_parser { bind args } $args
