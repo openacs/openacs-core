@@ -1628,15 +1628,16 @@ ad_proc -private ad_parse_html_attributes_upvar {
             dom parse -html "${lmarker}${html}${rmarker}" doc
 
         } on error {errorMsg} {
+            set severity [expr {$validate_p ? "notice" : "error"}]
             if {$fix_p} {
                 try {
                     set doc [ad_dom_fix_html -html $html -dom]
                 } on error {errorMsg} {
-                    ad_log error "Fixing of the document failed. Reported error: $errorMsg"
+                    ad_log $severity "Fixing of the document failed. Reported error: $errorMsg"
                     return [expr {$validate_p ? 0 : ""}]
                 }
             } else {
-                ad_log error "Parsing of the document failed. Reported error: $errorMsg"
+                ad_log $severity "Parsing of the document failed. Reported error: $errorMsg"
                 return [expr {$validate_p ? 0 : ""}]
             }
         }
