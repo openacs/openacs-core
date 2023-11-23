@@ -573,7 +573,8 @@ ad_proc -public template::widget::submit {
     # always ignore value for submit widget
     set element(value) $element(label)
     
-    return [input submit element [concat $tag_attributes {class prevent-double-click}]]
+    return [input submit element \
+                [dict lappend tag_attributes class prevent-double-click]]
 }
 
 ad_proc -public template::widget::attachment {
