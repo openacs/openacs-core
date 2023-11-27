@@ -638,7 +638,7 @@ namespace eval ::acs {
                 #
                 ns_log notice "Cluster join_request $peerLocation accepted from $peerLocation"
                 set dynamicClusterNodes [parameter::get -package_id $::acs::kernel_id -parameter DynamicClusterPeers]
-                set dynamicClusterNodes [lsort -unique [concat $dynamicClusterNodes $peerLocation]]
+                set dynamicClusterNodes [lsort -unique [concat $dynamicClusterNodes [:qualified_location $peerLocation]]]
                 #
                 # The parameter::set_value operation causes a
                 # clusterwide cache-flush for the parameters
