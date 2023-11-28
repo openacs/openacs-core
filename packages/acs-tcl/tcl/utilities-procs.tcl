@@ -1923,9 +1923,12 @@ ad_proc util::split_location {location protoVar hostnameVar portVar} {
     return $success
 }
 
-ad_proc util::join_location {{-proto ""} {-hostname} {-port ""}} {
+ad_proc util::join_location {{-noabbrev:boolean} {-proto ""} {-hostname} {-port ""}} {
     Join hostname and port and use IP-literal notation when necessary.
     The function is the inverse function of  util::split_location.
+
+    @param noabbrev when specified, the location is joined as requested.
+                    Otherwise, default ports are omitted from the result.
     @return location consisting of hostname and optionally port
     @author Gustaf Neumann
     @see util::split_location
@@ -1937,7 +1940,10 @@ ad_proc util::join_location {{-proto ""} {-hostname} {-port ""}} {
         # When the specified port is equal to the default port, omit
         # it from the result.
         #
-        if {$port ne "" && $port eq [dict get {http 80 https 443 udp "" smtp ""} $proto]} {
+        if {!$noabbrev_p
+            && $port ne ""
+            && $port eq [dict get {http 80 https 443 udp "" smtp ""} $proto]
+        } {
             set port ""
         }
     }

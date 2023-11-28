@@ -521,7 +521,7 @@ namespace eval ::acs {
             #
             dict set d host [ns_addrbyhost [dict get $d host]]
             dict with d {
-                set result [util::join_location -proto $proto -hostname $host -port $port]
+                set result [util::join_location -noabbrev -proto $proto -hostname $host -port $port]
             }
             return $result
         }
