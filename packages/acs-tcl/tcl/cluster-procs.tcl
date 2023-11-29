@@ -585,17 +585,18 @@ namespace eval ::acs {
                                 if {$port == 0} {
                                     continue
                                 }
-                                lappend result [util::join_location \
-                                                    -proto [dict get $protos $module_type] \
-                                                    -hostname $ip \
-                                                    -port $port]
+                                lappend result [:qualified_location \
+                                                    [util::join_location \
+                                                         -proto [dict get $protos $module_type] \
+                                                         -hostname $ip \
+                                                         -port $port]]
                             }
                         }
                     }
                 }
             }
             set result [lsort -unique $result]
-            ns_log notice "current_server_locations returns $result"
+            ns_log notice "[self] current_server_locations returns $result"
             return $result
         }
 
@@ -644,7 +645,7 @@ namespace eval ::acs {
                 # clusterwide cache-flush for the parameters
                 #
                 parameter::set_value -package_id $::acs::kernel_id -parameter DynamicClusterPeers -value $dynamicClusterNodes
-                ns_log notice "Cluster join_request leads to DynamicClusterPeers $dynamicClusterNodes"
+                ns_log notice "[self] Cluster join_request leads to DynamicClusterPeers $dynamicClusterNodes"
             }
             return $success
         }
