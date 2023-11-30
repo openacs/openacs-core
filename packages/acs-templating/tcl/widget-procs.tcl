@@ -277,8 +277,11 @@ ad_proc -public template::widget::textarea {
     upvar $element_reference element
 
     if { [info exists element(html)] } {
-        array set attributes $element(html)
+        foreach {key value} $element(html) {
+            dict lappend tag_attributes $key {*}$value
+        }
     }
+
     array set attributes $tag_attributes
 
     if { [info exists element(value)] } {
@@ -385,7 +388,9 @@ ad_proc -public template::widget::input {
     upvar $element_reference element
 
     if { [info exists element(html)] } {
-        array set attributes $element(html)
+        foreach {key value} $element(html) {
+            dict lappend tag_attributes $key {*}$value
+        }
     }
 
     array set attributes $tag_attributes
@@ -572,9 +577,10 @@ ad_proc -public template::widget::submit {
 
     # always ignore value for submit widget
     set element(value) $element(label)
-    
-    return [input submit element \
-                [dict lappend tag_attributes class prevent-double-click]]
+
+    dict lappend tag_attributes class prevent-double-click
+
+    return [input submit element $tag_attributes]
 }
 
 ad_proc -public template::widget::attachment {
@@ -759,7 +765,9 @@ ad_proc -public template::widget::select {
     upvar $element_reference element
 
     if { [info exists element(html)] } {
-        array set attributes $element(html)
+        foreach {key value} $element(html) {
+            dict lappend tag_attributes $key {*}$value
+        }
     }
 
     array set attributes $tag_attributes
@@ -783,7 +791,9 @@ ad_proc -public template::widget::multiselect {
     upvar $element_reference element
 
     if { [info exists element(html)] } {
-        array set attributes $element(html)
+        foreach {key value} $element(html) {
+            dict lappend tag_attributes $key {*}$value
+        }
     }
 
     array set attributes $tag_attributes
@@ -897,7 +907,9 @@ ad_proc -public template::widget::comment {
     upvar $element_reference element
 
     if { [info exists element(html)] } {
-        array set attributes $element(html)
+        foreach {key value} $element(html) {
+            dict lappend tag_attributes $key {*}$value
+        }
     }
 
     array set attributes $tag_attributes
@@ -939,7 +951,9 @@ ad_proc -public template::widget::block {
     upvar $element_reference element
 
     if { [info exists element(html)] } {
-        array set attributes $element(html)
+        foreach {key value} $element(html) {
+            dict lappend tag_attributes $key {*}$value
+        }
     }
 
     if { [info exists element(value)] } {
@@ -1075,8 +1089,11 @@ ad_proc -public template::widget::select_text {
 } {
 
     upvar $element_reference element
+
     if { [info exists element(html)] } {
-        array set attributes $element(html)
+        foreach {key value} $element(html) {
+            dict lappend tag_attributes $key {*}$value
+        }
     }
 
     array set attributes $tag_attributes
@@ -1188,8 +1205,11 @@ ad_proc -public template::widget::radio_text {
     @error
 } {
     upvar $element_reference element
+
     if { [info exists element(html)] } {
-        array set attributes $element(html)
+        foreach {key value} $element(html) {
+            dict lappend tag_attributes $key {*}$value
+        }
     }
 
     array set attributes $tag_attributes
@@ -1314,8 +1334,11 @@ ad_proc -public template::widget::checkbox_text {
     @error
 } {
     upvar $element_reference element
+
     if { [info exists element(html)] } {
-        array set attributes $element(html)
+        foreach {key value} $element(html) {
+            dict lappend tag_attributes $key {*}$value
+        }
     }
 
     array set attributes $tag_attributes
