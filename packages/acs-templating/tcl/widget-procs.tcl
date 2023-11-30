@@ -101,7 +101,7 @@ ad_proc -public template::widget::party_search { element_reference tag_attribute
     if { ![info exists element(options)] } {
 
         # initial submission or no data (no options): a text box
-        set output [input text element $tag_attributes
+        set output [input text element $tag_attributes]
 
     } else {
 
