@@ -25,11 +25,8 @@ ad_proc -public template::widget::tab {
 
   upvar $element_reference element
 
-  if { [info exists element(html)] } {
-    array set attributes $element(html)
-  }
-
-  array set attributes $tag_attributes
+  array set attributes \
+      [::template::widget::merge_tag_attributes element $tag_attributes]
 
   if { !$element(current) } {
 

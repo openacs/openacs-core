@@ -19,6 +19,27 @@ namespace eval template::widget {}
 namespace eval template::data {}
 namespace eval template::data::transform {}
 
+ad_proc -private template::widget::merge_tag_attributes {
+    element_reference
+    tag_attributes
+} {
+    Consolitates the logics to compute the final tag attributes by
+    merging those explicitly supplied and those in the element
+    definition.
+
+    @return dict
+} {
+    upvar $element_reference element
+
+    if { [info exists element(html)] } {
+        foreach {key value} $element(html) {
+            dict lappend tag_attributes $key {*}$value
+        }
+    }
+
+    return $tag_attributes
+}
+
 ad_proc -public template::widget {} {
     The template::widget namespace contains the code
     for the various input widgets.
@@ -80,7 +101,7 @@ ad_proc -public template::widget::party_search { element_reference tag_attribute
     if { ![info exists element(options)] } {
 
         # initial submission or no data (no options): a text box
-        set output [input text element $tag_attributes]
+        set output [input text element $tag_attributes
 
     } else {
 
@@ -276,10 +297,8 @@ ad_proc -public template::widget::textarea {
 
     upvar $element_reference element
 
-    if { [info exists element(html)] } {
-        array set attributes $element(html)
-    }
-    array set attributes $tag_attributes
+    array set attributes \
+        [::template::widget::merge_tag_attributes element $tag_attributes]
 
     if { [info exists element(value)] } {
         set value $element(value)
@@ -384,11 +403,8 @@ ad_proc -public template::widget::input {
 
     upvar $element_reference element
 
-    if { [info exists element(html)] } {
-        array set attributes $element(html)
-    }
-
-    array set attributes $tag_attributes
+    array set attributes \
+        [::template::widget::merge_tag_attributes element $tag_attributes]
 
     if { ( $type eq "checkbox" || $type eq "radio" )
          && [info exists element(value)]
@@ -484,7 +500,8 @@ ad_proc -public template::widget::file {
 
     upvar $element_reference element
 
-    array set attributes $tag_attributes
+    array set attributes \
+        [::template::widget::merge_tag_attributes element $tag_attributes]
 
     #
     # If the multiple flag is set for the element, we allow more than one file
@@ -572,9 +589,10 @@ ad_proc -public template::widget::submit {
 
     # always ignore value for submit widget
     set element(value) $element(label)
-    
-    return [input submit element \
-                [dict lappend tag_attributes class prevent-double-click]]
+
+    dict lappend tag_attributes class prevent-double-click
+
+    return [input submit element $tag_attributes]
 }
 
 ad_proc -public template::widget::attachment {
@@ -758,11 +776,8 @@ ad_proc -public template::widget::select {
 
     upvar $element_reference element
 
-    if { [info exists element(html)] } {
-        array set attributes $element(html)
-    }
-
-    array set attributes $tag_attributes
+    array set attributes \
+        [::template::widget::merge_tag_attributes element $tag_attributes]
 
     return [template::widget::menu \
                 $element(name) $element(options) $element(values) attributes $element(mode)]
@@ -782,11 +797,8 @@ ad_proc -public template::widget::multiselect {
 
     upvar $element_reference element
 
-    if { [info exists element(html)] } {
-        array set attributes $element(html)
-    }
-
-    array set attributes $tag_attributes
+    array set attributes \
+        [::template::widget::merge_tag_attributes element $tag_attributes]
 
     set attributes(multiple) {}
 
@@ -896,11 +908,8 @@ ad_proc -public template::widget::comment {
 
     upvar $element_reference element
 
-    if { [info exists element(html)] } {
-        array set attributes $element(html)
-    }
-
-    array set attributes $tag_attributes
+    array set attributes \
+        [::template::widget::merge_tag_attributes element $tag_attributes]
 
     set output {}
 
@@ -938,17 +947,14 @@ ad_proc -public template::widget::block {
 } {
     upvar $element_reference element
 
-    if { [info exists element(html)] } {
-        array set attributes $element(html)
-    }
+    array set attributes \
+        [::template::widget::merge_tag_attributes element $tag_attributes]
 
     if { [info exists element(value)] } {
         set value $element(value)
     } else {
         set value {}
     }
-
-    array set attributes $tag_attributes
 
     set output ""
     set options $element(options)
@@ -1075,11 +1081,9 @@ ad_proc -public template::widget::select_text {
 } {
 
     upvar $element_reference element
-    if { [info exists element(html)] } {
-        array set attributes $element(html)
-    }
 
-    array set attributes $tag_attributes
+    array set attributes \
+        [::template::widget::merge_tag_attributes element $tag_attributes]
 
     if { [info exists element(value)] } {
         set select [template::util::select_text::get_property select_value $element(value)]
@@ -1188,11 +1192,9 @@ ad_proc -public template::widget::radio_text {
     @error
 } {
     upvar $element_reference element
-    if { [info exists element(html)] } {
-        array set attributes $element(html)
-    }
 
-    array set attributes $tag_attributes
+    array set attributes \
+        [::template::widget::merge_tag_attributes element $tag_attributes]
 
     if { [info exists element(value)] } {
         set radio [template::util::radio_text::get_property radio_value $element(value)]
@@ -1314,11 +1316,9 @@ ad_proc -public template::widget::checkbox_text {
     @error
 } {
     upvar $element_reference element
-    if { [info exists element(html)] } {
-        array set attributes $element(html)
-    }
 
-    array set attributes $tag_attributes
+    array set attributes \
+        [::template::widget::merge_tag_attributes element $tag_attributes]
 
     if { [info exists element(values)] } {
         set checkbox [template::util::checkbox_text::get_property checkbox_value $element(values)]

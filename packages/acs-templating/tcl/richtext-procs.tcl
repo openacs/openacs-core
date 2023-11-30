@@ -430,11 +430,8 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
 
     #ns_log notice "widget::richtext: richtext-options? [info exists element(options)] HTML? [info exists element(html)]"
 
-    if { [info exists element(html)] } {
-        array set attributes $element(html)
-    }
-
-    array set attributes $tag_attributes
+    array set attributes \
+        [::template::widget::merge_tag_attributes element $tag_attributes]
 
     if { [info exists element(value)] } {
         set contents [template::util::richtext::get_property contents $element(value)]

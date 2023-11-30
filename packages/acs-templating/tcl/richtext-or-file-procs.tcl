@@ -249,11 +249,8 @@ ad_proc -public template::widget::richtext_or_file {
 } {
   upvar $element_reference element
 
-  if { [info exists element(html)] } {
-    array set attributes $element(html)
-  }
-
-  array set attributes $tag_attributes
+  array set attributes \
+      [::template::widget::merge_tag_attributes element $tag_attributes]
 
   if { [info exists element(value)] } {
       set storage_type [template::util::richtext_or_file::get_property storage_type $element(value)]

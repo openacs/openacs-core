@@ -1104,11 +1104,8 @@ ad_proc -public template::widget::date {
 
     upvar $element_reference element
 
-    if { [info exists element(html)] } {
-        array set attributes $element(html)
-    }
-
-    array set attributes $tag_attributes
+    array set attributes \
+        [::template::widget::merge_tag_attributes element $tag_attributes]
 
     set output "<!-- date $element(name) begin -->\n"
 
@@ -1651,16 +1648,8 @@ ad_proc -public template::widget::h5date {
 } {
     upvar $element_reference element
 
-    set attributes [dict create]
-
-    # attributes supplied via -html switch
-    if { [info exists element(html)] } {
-        dict set attributes {*}$element(html)
-    }
-
-    if {[llength $tag_attributes] > 0} {
-        dict set attributes {*}$tag_attributes
-    }
+    set attributes \
+        [::template::widget::merge_tag_attributes element $tag_attributes]
 
     # Add fallback pattern attribute. Note that this pattern won't
     # account for leap years or invalid days of the month. We leave
@@ -1791,16 +1780,8 @@ ad_proc -public template::widget::h5time {
 } {
     upvar $element_reference element
 
-    set attributes [dict create]
-
-    # attributes supplied via -html switch
-    if { [info exists element(html)] } {
-        dict set attributes {*}$element(html)
-    }
-
-    if {[llength $tag_attributes] > 0} {
-        dict set attributes {*}$tag_attributes
-    }
+    set attributes \
+        [::template::widget::merge_tag_attributes element $tag_attributes]
 
     # Add fallback pattern attribute (HH:MM:SS)
     dict set attributes pattern {(2[0-4]|[0-1][0-9]):[0-5][0-9]:[0-5][0-9]}

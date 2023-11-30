@@ -549,13 +549,13 @@ ad_proc -private template::form::render { id tag_attributes } {
         }
     }
 
-    # get any additional attributes developer specified to include in form tag
-    if { [info exists properties(html)] } {
-        array set attributes $properties(html)
-    }
-
-    # add on or replace with attributes specified by designer in formtemplate tag
-    array set attributes $tag_attributes
+    #
+    # Get any additional attributes developer specified to include in
+    # the form tag and merge them with attributes specified by
+    # designer in the formtemplate tag.
+    #
+    array set attributes \
+        [::template::widget::merge_tag_attributes properties $tag_attributes]
 
     # set the form to point back to itself if action is not specified
     if { ! [info exists properties(action)] } {
