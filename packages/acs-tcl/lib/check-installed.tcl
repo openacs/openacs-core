@@ -31,14 +31,14 @@ if {[dict exists $resource_info versionCheckURL]} {
 # Check, if the resources are already installed.
 #
 set is_installed [::util::resources::is_installed_locally \
-              -resource_info $resource_info \
-              -version_dir $version_dir ]
+                      -resource_info $resource_info \
+                      -version_dir $version_dir ]
 if {$is_installed} {
     #
     # Tell the users, where the resources are installed.
     #
-    set resources $resource_dir/$version
-
+    set resources $resource_dir/$version_dir
+    
 } else {
     #
     # Check, if we can install the resources locally.
