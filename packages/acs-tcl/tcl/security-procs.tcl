@@ -3509,7 +3509,7 @@ namespace eval ::security::csrf {
         set oldToken [ns_queryget $tokenname]
         if {$oldToken eq ""} {
             #
-            # There is not token in the query/form parameters, we
+            # There is no token in the query/form parameters, we
             # can't validate, since there is no token.
             #
             if {$allowempty} {
