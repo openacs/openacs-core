@@ -29,18 +29,22 @@ create table acs_sc_msg_types (
 
 
 create table acs_sc_msg_type_elements (
-    msg_type_id		     integer
+    msg_type_id		     integer NOT NULL
 			     constraint acs_sc_msg_type_el_mtype_id_fk
 			     references acs_sc_msg_types(msg_type_id)
 			     on delete cascade,
-    element_name	     varchar2(100),
-    element_msg_type_id	     integer
+    element_name	     varchar2(100) NOT NULL,
+    element_msg_type_id	     integer NOT NULL
 			     constraint acs_sc_msg_type_el_emti_id_fk
 			     references acs_sc_msg_types(msg_type_id),
     element_msg_type_isset_p char(1) constraint acs_msg_type_el_set_p_ck
 			     check (element_msg_type_isset_p in ('t', 'f')),
     element_pos		     integer
 );
+
+ALTER TABLE acs_sc_msg_type_elements ADD CONSTRAINT acs_sc_msg_type_el_un
+      UNIQUE (msg_type_id, element_name, element_msg_type_id);
+
 
 create or replace package acs_sc_msg_type
 as
