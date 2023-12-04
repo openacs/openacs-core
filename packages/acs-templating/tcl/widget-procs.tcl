@@ -19,11 +19,11 @@ namespace eval template::widget {}
 namespace eval template::data {}
 namespace eval template::data::transform {}
 
-ad_proc -private template::widget::merge_tag_attributes {
+ad_proc -public template::widget::merge_tag_attributes {
     element_reference
     tag_attributes
 } {
-    Consolitates the logics to compute the final tag attributes by
+    Consolidates the logics to compute the final tag attributes by
     merging those explicitly supplied and those in the element
     definition.
 
