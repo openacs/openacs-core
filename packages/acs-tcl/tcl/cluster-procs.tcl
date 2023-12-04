@@ -109,7 +109,12 @@ namespace eval ::acs {
         # Control verbosity
         #
         :method log {args} {
-            ns_log notice "cluster: [join $args { }]"
+            if {[parameter::get \
+                     -package_id $::acs::kernel_id \
+                     -parameter ClusterEnableLoggingP \
+                     -default t]} {
+                ns_log notice "cluster: [join $args { }]"
+            }
         }
 
         :public method setup {} {
@@ -532,7 +537,7 @@ namespace eval ::acs {
             #
             set preferred_location_regexp [parameter::get \
                                                -package_id $::acs::kernel_id \
-                                               -parameter PreferredLocationRegexp \
+                                               -parameter ClusterPreferredLocationRegexp \
                                                -default https:// ]
 
             set preferred_location ""
@@ -688,6 +693,7 @@ namespace eval ::acs {
 
                 lappend peer_nodes $qualified_location
             }
+            #:log "final peer_nodes <$peer_nodes>"
             return $peer_nodes
         }
 
@@ -750,6 +756,7 @@ namespace eval ::acs {
             #
             set cluster_peer_nodes [:peer_nodes $dynamic_peers]
             nsv_set cluster cluster_peer_nodes $cluster_peer_nodes
+            #:log "cluster_peer_nodes <$cluster_peer_nodes>"
 
             if {![:is_configured_server ${:currentServerLocations}]} {
                 #

@@ -9,7 +9,7 @@
     <implements-subsite-p>f</implements-subsite-p>
     <inherit-templates-p>t</inherit-templates-p>
 
-    <version name="5.10.1b2" url="http://openacs.org/repository/download/apm/acs-kernel-5.10.1b2.apm">
+    <version name="5.10.1b3" url="http://openacs.org/repository/download/apm/acs-kernel-5.10.1b3.apm">
         <owner url="mailto:oct@openacs.org">OpenACS Core Team</owner>
         <summary>Routines and data models providing the foundation for OpenACS-based Web services.</summary>
         <release-date>2023-07-10</release-date>
@@ -17,7 +17,7 @@
         <description format="text/html">The OpenACS kernel contains the core datamodel create and drop scripts for such things as objects, groups, parties and the supporting PL/SQL and PL/pgSQL procedures.</description>
         <maturity>3</maturity>
 
-        <provides url="acs-kernel" version="5.10.1b2"/>
+        <provides url="acs-kernel" version="5.10.1b3"/>
 
         <callbacks>
         </callbacks>
@@ -32,8 +32,9 @@
             <parameter scope="instance" datatype="number"  min_n_values="1"  max_n_values="1"  name="CSPEnabledP"  default="1" description="Enable automated generation of W3C ontent Security Policies (CSP)" section_name="security"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="CanonicalServer"  description="The canonical (primary) server, i.e. the server running the scheduled procedures etc. The provided value should be included in the list of ClusterPeerIP? If a port is not provided, we assume port 80." section_name="server-cluster"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="ClusterAuthorizedIP"  description="A space separated list of which machines can issues requests (e.g., flushing) to the cluster. Can use glob matching notation (10.0.0.*)" section_name="server-cluster"/>
+            <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="ClusterHeartbeatInterval" default="20s" description="Time duration between checks for the liveliness of cluster nodes" section_name="server-cluster"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="ClusterEnabledP"  default="0" description="is clustering enabled?" section_name="server-cluster"/>
-            <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="PreferredLocationRegexp"  default="https://" description="When servers listen on multiple endpoints (different protocols, ip addresses, IPv4/IPv6, ...) use the specified regexp to select the preferred option. When there is no match, the first optional value is used." section_name="server-cluster"/>
+            <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="ClusterPreferredLocationRegexp"  default="https://" description="When servers listen on multiple endpoints (different protocols, ip addresses, IPv4/IPv6, ...) use the specified regexp to select the preferred option. When there is no match, the first optional value is used." section_name="server-cluster"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="DynamicClusterPeers"  description="Do not edit here. Used for bookkeeping." section_name="server-cluster"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="CommunityMemberAdminURL"  default="/acs-admin/users/one" description="the URL of the admin community member page" section_name="system-information"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="CommunityMemberURL"  default="/shared/community-member" description="the URL of the public community member page" section_name="system-information"/>
@@ -42,7 +43,7 @@
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="DebugP"  default="0" description="save debugging information for developer support?" section_name="request-processor"/>
             <parameter scope="instance" datatype="number"  min_n_values="1"  max_n_values="1"  name="DefaultPersistentLoginP"  default="1" description="On the login screen, should the default be to login the user permanently (1) or not (0)." section_name="security"/>
             <parameter scope="instance" datatype="number"  min_n_values="1"  max_n_values="1"  name="EmailAccountOwnerOnPasswordChangeP"  default="1" description="Say 1 if you want us to send an email to the account owner when changing password for local accounts." section_name="Local Accounts"/>
-            <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="EnableLoggingP"  default="1" description="Should I log clustering events in the system log?" section_name="server-cluster"/>
+            <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="ClusterEnableLoggingP"  default="1" description="Should I log clustering events in the system log?" section_name="server-cluster"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="ExcludedFiles"  default="*/CVS/* *~" description="string match patterns for files which the request processor should never serve" section_name="request-processor"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="ExtensionPrecedence"  default="adp,tcl,html,jpg,gif" description="precedence for file extensions, e.g., &#39;tcl,adp,html&#39; means &#39;serve a .tcl file if available, else an .adp file if available, else an .html file if available, else the first file available in alphabetical order. Comma-separated." section_name="request-processor"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="ForceHostP"  default="0" description="if a user provides a Host header which isn&#39;t this, redirect the user to this particular host. e.g., if yourservername.com and                                     www.yourservername.com point to the same IP, set this to 1 so cookies will be properly set." section_name="request-processor"/>

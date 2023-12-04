@@ -25,11 +25,16 @@ if {[server_cluster_enabled_p]} {
     ::acs::cluster setup
 
     #
-    # Update the cluster info every 20s to detect changed cluster
-    # configurations, or cluster nodes become available or
-    # unavailable.
+    # Update the cluster info depending of the configured
+    # ClusterHeartbeatInterval to detect changed cluster
+    # configurations (maybe induced by missing reachability).
     #
-    ad_schedule_proc -all_servers t 20s ::acs::cluster update_node_info
+    ad_schedule_proc -all_servers t \
+        [parameter::get \
+             -package_id $::acs::kernel_id \
+             -parameter ClusterHeartbeatInterval \
+             -default 20s] \
+        ::acs::cluster update_node_info
 
     #
     # Setup of the listening URL

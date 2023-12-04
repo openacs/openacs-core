@@ -52,7 +52,19 @@ if {$server_cluster_enabled_p} {
     set all_cluster_hosts [server_cluster_all_hosts]
     set active_peer_nodes [lsort [nsv_get cluster cluster_peer_nodes]]
 
+    #ns_log notice "all_cluster_hosts <$all_cluster_hosts> active_peer_nodes <$active_peer_nodes>"
     set elements_list {
+        state {
+            label "State"
+            html {align center}
+            display_template {
+                <if @cluster_nodes.state@ eq "active"><adp:icon class="text-success" name="checkbox-checked" title="Reachable"></a></if>
+                <else><if @cluster_nodes.state@ eq "inactive"><adp:icon  class="text-danger" name="warn" title="Not Reachable"></a></if>
+                <else>&nbsp;</else>
+                </else>
+            }
+        }
+
         node_name {
             label "Node"
             orderby node_name
@@ -106,7 +118,7 @@ if {$server_cluster_enabled_p} {
         }
     }
 
-    multirow create cluster_nodes node_name current_p \
+    multirow create cluster_nodes state node_name current_p \
         canonical_p dynamic_p peer_p \
         last_contact pretty_last_contact \
         last_request  pretty_last_request \
@@ -131,8 +143,21 @@ if {$server_cluster_enabled_p} {
                 }
             }
         }
+        if {$last_contact eq ""} {
+            set state self
+        } else {
+            set timeunit [parameter::get \
+                              -package_id $::acs::kernel_id \
+                              -parameter ClusterHeartbeatInterval \
+                              -default 20s ]
+            set state [expr {[clock seconds]-($last_contact/1000) > [ns_baseunit -time $timeunit]
+                             ? "inactive"
+                             : "active"
+                         }]
+        }
 
-        multirow append cluster_nodes $node \
+        multirow append cluster_nodes \
+            $state $node \
             [expr {$node eq $current_node}] \
             [acs::cluster is_canonical_server $node] \
             [expr {$node in $dynamic_cluster_nodes}] \
