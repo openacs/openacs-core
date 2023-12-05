@@ -11,24 +11,13 @@ set page_title "Cluster Management"
 set context [list $page_title]
 
 set server_cluster_enabled_p [server_cluster_enabled_p]
-set dynamic_cluster_nodes [lsort [parameter::get -package_id $::acs::kernel_id -parameter DynamicClusterPeers]]
-
+set dynamic_cluster_nodes [::acs::cluster dynamic_cluster_nodes]
 
 if {$drop_node ne ""} {
     #
     # Drop the provided node from DynamicClusterPeers
     #
-    set p [lsearch $dynamic_cluster_nodes $drop_node]
-    if {$p != -1} {
-        set cluster_nodes [lreplace $dynamic_cluster_nodes $p $p]
-        parameter::set_value \
-            -package_id $::acs::kernel_id \
-            -parameter DynamicClusterPeers \
-            -value $cluster_nodes
-    } else {
-        ns_log warning "cluster: provided node '$drop_node' is not in the" \
-            "dynamic cluster configuration: $dynamic_cluster_nodes"
-    }
+    acs::cluster drop_dynamic_node $drop_node
     set done 1
 } elseif {$flush_node ne ""} {
     #

@@ -9,7 +9,7 @@
     <implements-subsite-p>f</implements-subsite-p>
     <inherit-templates-p>t</inherit-templates-p>
 
-    <version name="5.10.1b3" url="http://openacs.org/repository/download/apm/acs-kernel-5.10.1b3.apm">
+    <version name="5.10.1b4" url="http://openacs.org/repository/download/apm/acs-kernel-5.10.1b4.apm">
         <owner url="mailto:oct@openacs.org">OpenACS Core Team</owner>
         <summary>Routines and data models providing the foundation for OpenACS-based Web services.</summary>
         <release-date>2023-07-10</release-date>
@@ -17,7 +17,7 @@
         <description format="text/html">The OpenACS kernel contains the core datamodel create and drop scripts for such things as objects, groups, parties and the supporting PL/SQL and PL/pgSQL procedures.</description>
         <maturity>3</maturity>
 
-        <provides url="acs-kernel" version="5.10.1b3"/>
+        <provides url="acs-kernel" version="5.10.1b4"/>
 
         <callbacks>
         </callbacks>
@@ -33,6 +33,7 @@
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="CanonicalServer"  description="The canonical (primary) server, i.e. the server running the scheduled procedures etc. The provided value should be included in the list of ClusterPeerIP? If a port is not provided, we assume port 80." section_name="server-cluster"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="ClusterAuthorizedIP"  description="A space separated list of which machines can issues requests (e.g., flushing) to the cluster. Can use glob matching notation (10.0.0.*)" section_name="server-cluster"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="ClusterHeartbeatInterval" default="20s" description="Time duration between checks for the liveliness of cluster nodes" section_name="server-cluster"/>
+            <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="ClusterAutodeleteInterval" default="2m" description="When a peer node is inactive long than this duration, delete it automatically" section_name="server-cluster"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="ClusterEnabledP"  default="0" description="is clustering enabled?" section_name="server-cluster"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="ClusterPreferredLocationRegexp"  default="https://" description="When servers listen on multiple endpoints (different protocols, ip addresses, IPv4/IPv6, ...) use the specified regexp to select the preferred option. When there is no match, the first optional value is used." section_name="server-cluster"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="DynamicClusterPeers"  description="Do not edit here. Used for bookkeeping." section_name="server-cluster"/>

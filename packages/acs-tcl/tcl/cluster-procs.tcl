@@ -300,6 +300,58 @@ namespace eval ::acs {
             }
         }
 
+        :public method dynamic_cluster_nodes {} {
+            #
+            # Convenience function returning the list of dynamic
+            # cluster nodes.
+            #
+            return [parameter::get \
+                        -package_id $::acs::kernel_id \
+                        -parameter DynamicClusterPeers]
+        }
+        
+        :public method drop_dynamic_node {node} {
+            #
+            #  Drop the provided node from DynamicClusterPeers
+            #
+            set dynamic_cluster_nodes [:dynamic_cluster_nodes]
+            set p [lsearch $dynamic_cluster_nodes $node]
+            if {$p != -1} {
+                set cluster_nodes [lreplace $dynamic_cluster_nodes $p $p]
+                parameter::set_value \
+                    -package_id $::acs::kernel_id \
+                    -parameter DynamicClusterPeers \
+                    -value $cluster_nodes
+            } else {
+                ns_log warning "cluster: can't drop node '$node': not in the" \
+                    "dynamic cluster configuration: $dynamic_cluster_nodes"
+            }
+        }
+        
+        :public method check_state {} {
+            #
+            # Check the livelyness of the dynamic cluster nodes. This
+            # method is intended to be run on the canonical server
+            # only, since it might update the DynamicClusterPeers via
+            # acs::clusterwide.
+            #
+            set autodeleteInterval [parameter::get \
+                                        -package_id $::acs::kernel_id \
+                                        -parameter ClusterAutodeleteInterval \
+                                        -default 2m]
+            
+            foreach node [:dynamic_cluster_nodes] {
+                set last_contact [acs::cluster last_contact $node]
+                if {$last_contact ne ""} {
+                    set seconds [expr {$last_contact/1000}]
+                    if {[clock seconds]-($last_contact/1000) > [ns_baseunit -time $autodeleteInterval]} {
+                        ns_log notice "[self] drop dynamic node $node due to ClusterAutodeleteInterval"
+                        :drop_dynamic_node $node
+                    }
+                }
+            }
+        }
+
         :public method update_node_info {} {
             #
             # Update cluster configuration when the when the
@@ -310,9 +362,7 @@ namespace eval ::acs {
             # every couple of seconds when clustering is enabled.
             #
 
-            set dynamic_peers [parameter::get \
-                                   -package_id $::acs::kernel_id \
-                                   -parameter DynamicClusterPeers]
+            set dynamic_peers [:dynamic_cluster_nodes]
 
             if {!${:current_server_is_canonical_server}} {
                 #
@@ -335,7 +385,7 @@ namespace eval ::acs {
                 }
                 #
                 # Are we an dynamic peer and not listed in
-                # DynamicClusterPeers? This might happen in
+                # dynamic cluster nodes? This might happen in
                 # situations, where the canonical server was
                 # restarted (or separated for a while).
                 #
@@ -643,13 +693,16 @@ namespace eval ::acs {
                 # we know that the request is trustworthy.
                 #
                 ns_log notice "Cluster join_request $peerLocation accepted from $peerLocation"
-                set dynamicClusterNodes [parameter::get -package_id $::acs::kernel_id -parameter DynamicClusterPeers]
+                set dynamicClusterNodes [:dynamic_cluster_nodes]
                 set dynamicClusterNodes [lsort -unique [concat $dynamicClusterNodes [:qualified_location $peerLocation]]]
                 #
                 # The parameter::set_value operation causes a
                 # clusterwide cache-flush for the parameters
                 #
-                parameter::set_value -package_id $::acs::kernel_id -parameter DynamicClusterPeers -value $dynamicClusterNodes
+                parameter::set_value \
+                    -package_id $::acs::kernel_id \
+                    -parameter DynamicClusterPeers \
+                    -value $dynamicClusterNodes
                 ns_log notice "[self] Cluster join_request leads to DynamicClusterPeers $dynamicClusterNodes"
             }
             return $success
@@ -708,10 +761,10 @@ namespace eval ::acs {
             # Configure base configuration values
             #
             #
-            set dynamic_peers [parameter::get -package_id $::acs::kernel_id -parameter DynamicClusterPeers]
+            set dynamic_peers [:dynamic_cluster_nodes]
 
             # At startup, when we are running on the canonical server,
-            # check, whether the existing DynamicClusterPeers are
+            # check, whether the existing dynamic cluster nodes are
             # still reachable. When the canonical server is started
             # before the other cluster nodes, this parameter should be
             # empty. However, when the canonical server is restarted,
@@ -745,8 +798,10 @@ namespace eval ::acs {
                     # well.
                     #
                     :log "updating DynamicClusterPeers to $new_peer_locations"
-                    parameter::set_value -package_id $::acs::kernel_id -parameter DynamicClusterPeers \
-                        -value $new_peer_locations
+                    parameter::set_value \
+                        -package_id $::acs::kernel_id \
+                        -parameter DynamicClusterPeers \
+                        -value [lsort $new_peer_locations]
                     set dynamic_peers $new_peer_locations
                 }
             }

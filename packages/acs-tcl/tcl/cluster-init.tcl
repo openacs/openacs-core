@@ -28,6 +28,7 @@ if {[server_cluster_enabled_p]} {
     # Update the cluster info depending of the configured
     # ClusterHeartbeatInterval to detect changed cluster
     # configurations (maybe induced by missing reachability).
+    # This has to happen on all cluster nodes.
     #
     ad_schedule_proc -all_servers t \
         [parameter::get \
@@ -35,6 +36,15 @@ if {[server_cluster_enabled_p]} {
              -parameter ClusterHeartbeatInterval \
              -default 20s] \
         ::acs::cluster update_node_info
+
+    #
+    # Liveliness manager (running on the canonical server). It checks
+    # e.g. whether dynamic nodes should be deleted from the dynamic
+    # cluster nodes list automatically after some time of being not
+    # reachable.
+    #
+    ad_schedule_proc 5s ::acs::cluster check_state
+
 
     #
     # Setup of the listening URL
