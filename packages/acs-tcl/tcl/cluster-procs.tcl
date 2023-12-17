@@ -103,6 +103,7 @@ namespace eval ::acs {
             acs::cache_flush_all ""
             acs::cache_flush_pattern ""
             ::acs::cluster "^::acs::cluster\s+join_request"
+            ::acs::cluster "^::acs::cluster\s+disconnect_request"
         }
 
         #
@@ -309,25 +310,7 @@ namespace eval ::acs {
                         -package_id $::acs::kernel_id \
                         -parameter DynamicClusterPeers]
         }
-        
-        :public method drop_dynamic_node {node} {
-            #
-            #  Drop the provided node from DynamicClusterPeers
-            #
-            set dynamic_cluster_nodes [:dynamic_cluster_nodes]
-            set p [lsearch $dynamic_cluster_nodes $node]
-            if {$p != -1} {
-                set cluster_nodes [lreplace $dynamic_cluster_nodes $p $p]
-                parameter::set_value \
-                    -package_id $::acs::kernel_id \
-                    -parameter DynamicClusterPeers \
-                    -value $cluster_nodes
-            } else {
-                ns_log warning "cluster: can't drop node '$node': not in the" \
-                    "dynamic cluster configuration: $dynamic_cluster_nodes"
-            }
-        }
-        
+
         :public method check_state {} {
             #
             # Check the livelyness of the dynamic cluster nodes. This
@@ -339,14 +322,14 @@ namespace eval ::acs {
                                         -package_id $::acs::kernel_id \
                                         -parameter ClusterAutodeleteInterval \
                                         -default 2m]
-            
+
             foreach node [:dynamic_cluster_nodes] {
                 set last_contact [acs::cluster last_contact $node]
                 if {$last_contact ne ""} {
                     set seconds [expr {$last_contact/1000}]
                     if {[clock seconds]-($last_contact/1000) > [ns_baseunit -time $autodeleteInterval]} {
-                        ns_log notice "[self] drop dynamic node $node due to ClusterAutodeleteInterval"
-                        :drop_dynamic_node $node
+                        ns_log notice "[self] disconnect dynamic node $node due to ClusterAutodeleteInterval"
+                        :disconnect_dynamic_node $node
                     }
                 }
             }
@@ -394,7 +377,7 @@ namespace eval ::acs {
                 } {
                     ns_log warning "cluster node is not listed in dynamic peers." \
                         "Must re-join canonical server: ${:canonicalServerLocation}"
-                    :send_join_request ${:canonicalServerLocation}
+                    :send_join_request_to_canonical_server
                 }
             }
 
@@ -534,7 +517,7 @@ namespace eval ::acs {
             return $result
         }
 
-        :method current_server_is_dynamic_cluster_peer {} {
+        :public method current_server_is_dynamic_cluster_peer {} {
             #
             # We are a dynamic cluster peer, when we are not the
             # canonical server neither isted in the static server
@@ -655,13 +638,14 @@ namespace eval ::acs {
             return $result
         }
 
-        :public method send_join_request {location} {
+        :method send_dynamic_cluster_reconfigure_request {operation} {
             #
-            # Send a join request to the canonical server.
+            # Send a cluster reconfigure request to the canonical server.
             #
-            :log "send_join_request to $location"
-            set r [:send $location [self] join_request ${:currentServerLocation}]
-            #:log "... join_request returned $r"
+            set location ${:canonicalServerLocation}
+            :log "send $operation request to $location"
+            set r [:send $location [self] ${operation}_request ${:currentServerLocation}]
+            #:log "... $operation request returned $r"
 
             if {[dict exists $r body]} {
                 #
@@ -669,32 +653,69 @@ namespace eval ::acs {
                 # sync. Therefore, we have lost confidence in our
                 # caches and clear these.
                 #
-                :log "send_join_request returned [dict get $r body], flushing all my caches"
+                :log "$operation request returned [dict get $r body], flushing all my caches"
                 acs::cache_flush_all
             }
         }
 
-        :public method join_request {peerLocation} -returns boolean {
+        :public method send_join_request_to_canonical_server {} {
             #
-            # A join request was received
+            # Send a join request to the canonical server.
             #
-            ns_log notice "Cluster join_request from '$peerLocation'"
+            :send_dynamic_cluster_reconfigure_request join
+        }
+
+        :public method send_disconnect_request_to_canonical_server {} {
+            #
+            # Send a disconnect request to the canonical server.
+            #
+            :send_dynamic_cluster_reconfigure_request disconnect
+        }
+
+        :public method dynamic_cluster_reconfigure {operation qualifiedLocation} -returns boolean {
+            #
+            # Reconfigure the cluster via "join" or "disconnect" operation,
+            # when running on the canonical server. The result of the
+            # reconfiguration is a changed list of
+            # DynamicClusterPeers. The method returns a boolean value
+            # indicating success.
+            #
+            ns_log notice "Cluster reconfigure $operation from '$qualifiedLocation'"
+
             set success 1
             #
-            # Was the join request received by a canonical server?
+            # To be ultra-conservative, we could allow cluster
+            # reconfigure operations only on the canonical
+            # server. This would require also to alter the
+            # acs-admin/cluster page to show the trash icon only when
+            # the page is executed on the canonical server.
             #
-            if {![:current_server_is_canonical_server]} {
-                ns_log warning "Cluster join_request rejected," \
+            if {0 && ![:current_server_is_canonical_server]} {
+                ns_log warning "Cluster reconfigure rejected," \
                     "since it was received by a non-canonical server"
                 set success 0
             } else {
                 #
-                # We know, we are running on the canonical server, an
+                # We know, we are running on the canonical server, and
                 # we know that the request is trustworthy.
                 #
-                ns_log notice "Cluster join_request $peerLocation accepted from $peerLocation"
+                ns_log notice "Cluster reconfigure $qualifiedLocation accepted from $qualifiedLocation"
                 set dynamicClusterNodes [:dynamic_cluster_nodes]
-                set dynamicClusterNodes [lsort -unique [concat $dynamicClusterNodes [:qualified_location $peerLocation]]]
+                switch $operation {
+                    "join" {
+                        set dynamicClusterNodes \
+                            [lsort -unique [concat $dynamicClusterNodes $qualifiedLocation]]
+                    }
+                    "disconnect" {
+                        set dynamicClusterNodes \
+                            [lsearch -inline -all -not -exact $dynamicClusterNodes $qualifiedLocation]
+                    }
+                    default {
+                        ns_log warning "Cluster reconfigure rejected," \
+                            "received invalid operation '$operation'"
+                        return 0
+                    }
+                }
                 #
                 # The parameter::set_value operation causes a
                 # clusterwide cache-flush for the parameters
@@ -703,11 +724,24 @@ namespace eval ::acs {
                     -package_id $::acs::kernel_id \
                     -parameter DynamicClusterPeers \
                     -value $dynamicClusterNodes
-                ns_log notice "[self] Cluster join_request leads to DynamicClusterPeers $dynamicClusterNodes"
+                ns_log notice "[self] reconfigure $operation leads to DynamicClusterPeers $dynamicClusterNodes"
             }
             return $success
         }
 
+        :public method join_request {peerLocation} -returns boolean {
+            #
+            # Server received a request to join dynamic cluster nodes from $peerLocation.
+            #
+            return [:dynamic_cluster_reconfigure join [:qualified_location $peerLocation]]
+        }
+
+        :public method disconnect_request {peerLocation} -returns boolean {
+            #
+            #  Server received a request to disconnect $peerLocation from dynamic cluster nodes.
+            #
+            return [:dynamic_cluster_reconfigure disconnect [:qualified_location $peerLocation]]
+        }
 
         :method peer_nodes {dynamic_peers} {
             #
@@ -820,7 +854,7 @@ namespace eval ::acs {
                 ns_log notice "Current host ${:currentServerLocation} is not included in ${:configured_cluster_hosts}"
                 if {![:current_server_is_canonical_server]} {
                     ns_log notice "... must join at canonical server ${:canonicalServerLocation}"
-                    :send_join_request ${:canonicalServerLocation}
+                    :send_join_request_to_canonical_server
                 }
             } else {
                 #ns_log notice "Current host ${:currentServerLocation} is included in ${:configured_cluster_hosts}"

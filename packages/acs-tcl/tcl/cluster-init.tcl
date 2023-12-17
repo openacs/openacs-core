@@ -77,18 +77,28 @@ if {[server_cluster_enabled_p]} {
     ::acs::cluster register_nodes -startup
 
     ns_atstartup {
-        #
-        # We could add some code for testing actively keep-alive
-        # status.
-        #
-        ns_log notice "CHECK ::throttle '[::info commands ::throttle]'"
-        if {0 && [::info commands ::throttle] ne ""} {
-            ns_log notice "CHECK calling ::acs::cluster check_nodes"
-            throttle do ::acs::cluster check_nodes
+        ns_log notice "acs::cluster starting:" \
+            "running as canonical server [::acs::cluster current_server_is_canonical_server]," \
+            "cluster nodes: [nsv_get cluster cluster_peer_nodes]"
+    }
+
+    #
+    # Register callback for shutdown operations. When the shutdown is
+    # performed at a dynamic cluster node, disconnect the node from the
+    # cluster.
+    #
+    ns_atshutdown {
+        if {[::acs::cluster current_server_is_canonical_server]} {
+            ns_log notice "acs::cluster: shutdown canonical server"
+        } elseif {[::acs::cluster current_server_is_dynamic_cluster_peer]} {
+            ns_log notice "acs::cluster: shutdown dynamic cluster peer (perform disconnect operation)"
+            acs::cluster send_disconnect_request_to_canonical_server
+        } else {
+            ns_log notice "acs::cluster: shutdown static cluster peer"
         }
     }
 }
-ns_log notice "cluster-init done"
+
 #
 # Local variables:
 #    mode: tcl

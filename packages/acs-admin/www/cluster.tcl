@@ -3,7 +3,7 @@ ad_page_contract {
 
     @creation-date Feb 8, 2023
 } {
-    {drop_node:nohtml,notnull ""}
+    {disconnect_node:nohtml,notnull ""}
     {flush_node:nohtml,notnull ""}
 }
 
@@ -13,11 +13,11 @@ set context [list $page_title]
 set server_cluster_enabled_p [server_cluster_enabled_p]
 set dynamic_cluster_nodes [::acs::cluster dynamic_cluster_nodes]
 
-if {$drop_node ne ""} {
+if {$disconnect_node ne ""} {
     #
-    # Drop the provided node from DynamicClusterPeers
+    # Disconnect the provided node from DynamicClusterPeers
     #
-    acs::cluster drop_dynamic_node $drop_node
+    acs::cluster dynamic_cluster_reconfigure disconnect $disconnect_node
     set done 1
 } elseif {$flush_node ne ""} {
     #
@@ -100,7 +100,7 @@ if {$server_cluster_enabled_p} {
                 <a href="./cluster?flush_node=@cluster_nodes.node_name@"><adp:icon name="bandaid" title="Flush Cache"></a>&nbsp;
                 <if @cluster_nodes.current_p@ true><adp:icon name="trash" invisible="true"></if>
                 <else><if @cluster_nodes.canonical_p@ true><adp:icon name="trash" invisible="true"></if>
-                <else><a href="./cluster?drop_node=@cluster_nodes.node_name@"><adp:icon name="trash"
+                <else><a href="./cluster?disconnect_node=@cluster_nodes.node_name@"><adp:icon name="trash"
                       title="Disconnect Peer; trigger rejoin and flush in a few seconds when server is alive"></a></else>
                 </else>
             }
