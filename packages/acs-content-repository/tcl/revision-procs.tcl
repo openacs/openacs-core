@@ -108,12 +108,19 @@ ad_proc -private cr_write_content-file {
     -content
     -content_length
     -storage_area_key
-    -filename
 } {
-    if {![info exists filename]} {
-        set path [cr_fs_path $storage_area_key]
+    set path [cr_fs_path $storage_area_key]
+    if {[db_type] eq "oracle"} {
+        #
+        # CR datamodel for Oracle differs from the one in Postgres
+        # concerning file revisions. For Oracle, an additional column
+        # cr_revisions.filename stores the actual filename.
+        #
+        set filename [db_string write_file_content {}]
+    } else {
         set filename $path$content
     }
+
     if {$filename eq ""} {
         error "No content for the revision $revision_id.\
                             This seems to be an error which occurred during the upload of the file"
