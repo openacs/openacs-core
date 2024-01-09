@@ -1993,8 +1993,9 @@ namespace eval ::acs::test::xpath {
                 continue
             }
 
-            # Do not consider unchecked radio buttons as values
-            if {[$n getAttribute type ""] eq "radio" &&
+            # Do not consider unchecked radio buttons or checkboxes as
+            # values
+            if {[$n getAttribute type ""] in {"radio" "checkbox"} &&
                 ![$n hasAttribute checked]} {
                 continue
             }
