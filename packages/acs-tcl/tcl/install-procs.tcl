@@ -1150,6 +1150,26 @@ ad_proc -public ::install::xml::action::set-id { node } {
     set ids($name) $value
 }
 
+ad_proc -public install::xml::action::set-theme { node } {
+
+    Sets a theme for a subsite. If no subsite is specified it defaults
+    to the main subsite "/". Valid themes are e.g. "openacs_bootstrap5",
+    "openacs_bootstrap3", "default_plain", or default "tabbed".
+
+    <p>&lt;set-theme name=&quot;<em>theme</em>&quot; [ package=&quot;<em>subsite</em> ] </p>
+} {
+    variable ::install::xml::ids
+
+    set name [apm_required_attribute_value $node theme]
+    set type [apm_attribute_value -default "/" $node subsite]
+
+    #
+    # Get subsite_id from "subsite" path
+    #
+    site_node::get_object_id \
+        -node_id [site_node::get_node_id -url subsitee]
+}
+
 ad_proc -public install::xml::util::get_id { id } {
     Returns an id from the global ids variable if it exists and attempts to
     find an acs_magic_object if not.
