@@ -175,12 +175,9 @@ function acs_ListBulkActionMultiFormClick(formName, url) {
 }
 
 function acs_KeypressGoto(theUrl, event) {
-        var key;
-        if (event) {
-              if (event.which == 13) {
-                location.href = theUrl;
-              }
-        }
+    if (event && event.which == 13) {
+        window.location.href = theUrl;
+    }
 }
 
 
