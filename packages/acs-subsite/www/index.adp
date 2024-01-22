@@ -72,6 +72,10 @@
     <li>and the community based e-learning platform DotLRN. 
     </ul	    >
     <p><a href="/acs-admin/install/" title="Install Packages" class="button">Install more packages</a></p>
+    <if @have_nsstats_p;literal@ true>
+        <hr>                                                                                                           
+        <p><a href="/admin/nsstats" title="NaviServer Statistics">NaviServer Statistics</a></p>     
+    </if>                                      
     </div>
 </if>
   
