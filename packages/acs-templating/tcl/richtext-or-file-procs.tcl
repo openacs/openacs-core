@@ -287,6 +287,8 @@ ad_proc -public template::widget::richtext_or_file {
           }]
       }
 
+      ::template::head::add_javascript -src /resources/acs-templating/richtext-or-file.js
+
       if { $storage_type eq "" || $storage_type eq "text" } {
           append output [subst {<script type="text/javascript" nonce='[security::csp::nonce]'><!--}] \
               \n {acs_RichText_WriteButtons();  //--></script>} \
