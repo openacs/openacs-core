@@ -9,12 +9,11 @@ function acs_Focus(form_name, element_name) {
 } */
 
 function acs_FormRefresh(form_name) {
-    if (document.forms == null) return;
-    if (document.forms[form_name] == null) return;
-    if (document.forms[form_name].elements["__refreshing_p"] == null) return;
-
-    document.forms[form_name].elements["__refreshing_p"].value = 1;
-    document.forms[form_name].submit();
+    const refreshing = document?.forms[form_name]?.elements['__refreshing_p'];
+    if (refreshing) {
+        refreshing.value = 1;
+        refreshing.form.submit();
+    }
 }
 
 
