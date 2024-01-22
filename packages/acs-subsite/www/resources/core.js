@@ -123,7 +123,10 @@ function acs_ListBulkActionClick(formName, url) {
     //
     for (const [name, value] of searchParams) {
         for (const e of form.querySelectorAll('[name=' + name + ']')) {
-            form.removeChild(e);
+            //
+            // "e" may not be a direct child of the form
+            //
+            e.remove();
         }
     }
 
