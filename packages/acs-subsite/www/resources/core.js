@@ -72,24 +72,18 @@ function acs_ListFindInput() {
 }
 
 function acs_ListCheckAll(listName, checkP) {
-  var Obj, Type, Name, Id;
-  var Controls = acs_ListFindInput(); if (!Controls) { return; }
-  // Regexp to find name of controls
-  var re = new RegExp('^' + listName + '..+');
-
+  //
+  // Normalize to a boolean
+  //
   checkP = checkP ? true : false;
 
-  for (var i = 0; i < Controls.length; i++) {
-    Obj = Controls[i];
-    Type = Obj.type ? Obj.type : false;
-    Name = Obj.name ? Obj.name : false;
-    Id = Obj.id ? Obj.id : false;
-
-    if (!Type || !Name || !Id) { continue; }
-
-    if (Type == "checkbox" && re.exec(Id)) {
-      Obj.checked = checkP;
-    }
+  //
+  // List checkboxes have an id following the list naming convention
+  // and a name attribute.
+  //
+  const controls = document.querySelectorAll(`input[type=checkbox][id^='${listName}.'][name]`);
+  for (const control of controls) {
+    control.checked = checkP;
   }
 }
 
