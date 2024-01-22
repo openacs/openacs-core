@@ -62,15 +62,6 @@ function acs_initHtmlArea(editor_var, elementid) {
 
 /* List Builder Support */
 
-function acs_ListFindInput() {
-  if (document.getElementsByTagName) {
-    return document.getElementsByTagName('input');
-  } else if (document.all) {
-    return document.all.tags('input');
-  }
-  return false;
-}
-
 function acs_ListCheckAll(listName, checkP) {
   //
   // Normalize to a boolean
