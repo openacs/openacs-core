@@ -72,7 +72,7 @@ function acs_ListCheckAll(listName, checkP) {
 }
 
 function acs_ListBulkActionClick(formName, url) {
-    const form = document.querySelector('form[name=' + formName + ']');
+    const form = document.querySelector(`form[name='${formName}']`);
     if (!form) {
         return;
     }
@@ -100,7 +100,7 @@ function acs_ListBulkActionClick(formName, url) {
     // Cleanup pre-existing variable conflicting with the URL ones
     //
     for (const [name, value] of searchParams) {
-        for (const e of form.querySelectorAll('[name=' + name + ']')) {
+        for (const e of form.querySelectorAll(`[name='${name}']`)) {
             //
             // "e" may not be a direct child of the form
             //
