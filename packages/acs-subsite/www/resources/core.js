@@ -53,13 +53,6 @@ function acs_CopyText(text) {
     }
 }
 
-/* HTMLArea (part of Richtext Widget) Support */
-
-function acs_initHtmlArea(editor_var, elementid) {
-    editor_var.generate();
-    return false;
-}
-
 /* List Builder Support */
 
 function acs_ListCheckAll(listName, checkP) {
