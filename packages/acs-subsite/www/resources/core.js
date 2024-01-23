@@ -56,7 +56,7 @@ function acs_ListBulkActionClick(formName, url) {
     //
     // Parse the URL
     //
-    const queryString = url.split('?')[1];
+    const queryString = url.slice(url.indexOf('?') + 1);
     const searchParams = new window.URLSearchParams(queryString);
 
     //
