@@ -1478,9 +1478,10 @@ Date.prototype.getWeekNumber = function() {
 
 /** Checks dates equality (ignores time) */
 Date.prototype.equalsTo = function(date) {
-        return ((this.getFullYear() == date.getFullYear()) &&
-                (this.getMonth() == date.getMonth()) &&
-                (this.getDate() == date.getDate()));
+    return date !== null &&
+        this.getFullYear() == date.getFullYear() &&
+        this.getMonth() == date.getMonth() &&
+        this.getDate() == date.getDate();
 };
 
 /** Prints the date in a string according to the given format. */
