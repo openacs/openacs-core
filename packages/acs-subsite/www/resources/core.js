@@ -99,36 +99,26 @@ function acs_ListBulkActionClick(formName, url) {
 // same name and submits the input elements of all such forms.
 //
 function acs_ListBulkActionMultiFormClick(formName, url) {
-    var forms = document.forms;
-    if (forms == null) return;
-
-    var relevantForms = [];
-    var formData = new FormData();
-
-    for (var form of forms) {
-        if (form.name == formName) {
-            relevantForms.push(form);
-        }
-    }
-    //console.log("relevant forms " + relevantForms.length);
-    if (relevantForms.length == 0) {
-        console.log("no form named " + formName + " found");
+    const relevantForms = document.querySelectorAll(`form[name='${formName}']`);
+    if (relevantForms.length === 0) {
+        console.log(`no form named ${formName} found`);
         return;
     }
 
-    for (var form of relevantForms) {
-        var fd = new FormData(form);
-        for (var pair of fd.entries()) {
+    const formData = new FormData();
+    for (const form of relevantForms) {
+        const fd = new FormData(form);
+        for (const pair of fd.entries()) {
             //console.log(pair[0] + ': ' + pair[1]);
             formData.append(pair[0], pair[1]);
         }
     }
 
-    var xhr = new XMLHttpRequest();
-    xhr.open("POST", url, true);
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', url, true);
     xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-    xhr.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
+    xhr.onload = function() {
+        if (this.status === 200) {
             console.log('change href');
             // We need the following round-trip just to show the
             // updated page (e.g. clipboard count).
