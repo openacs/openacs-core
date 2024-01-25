@@ -133,5 +133,3 @@ function acs_KeypressGoto(theUrl, event) {
         window.location.href = theUrl;
     }
 }
-
-
