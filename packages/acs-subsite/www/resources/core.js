@@ -1,6 +1,6 @@
 /*
 
-  This file contains javascrtipt utilities that makes sense to include
+  This file contains javascript utilities that makes sense to include
   in every page.
 
   It is added to every page reply by /www/blank-master
