@@ -1424,6 +1424,9 @@ ad_proc -public template::widget::textdate {
             <input type="button" style="border-width: 0px; height: 17px; width: 19px; background-image: url('/resources/acs-templating/calendar.gif'); background-repeat: no-repeat; cursor: pointer;" id="$id-control">
         }]
 
+        ::template::head::add_javascript \
+            -src /resources/acs-templating/calendar.js
+
         template::add_event_listener \
             -id $id-control \
             -script [subst {
