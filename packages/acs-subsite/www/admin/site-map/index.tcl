@@ -63,18 +63,6 @@ set user_id [ad_conn user_id]
 set subsite_number [db_string count_subsites {
     select count(*) from apm_packages where package_key = 'acs-subsite'
 }]
-#
-# Not sure, what the intentions was to omit all(!) subsites if there
-# are more than 100. e.g. http://openacs.org/bugtracker/openacs/bug?bug_number=3174
-# Subsite-omitting is deactivated for the time being.
-#
-if {0 && $subsite_number > 100} {
-    set too_many_subsites_p 1
-    set where_limit "where p.package_key <> 'acs-subsite'"
-} else {
-    set too_many_subsites_p 0
-    set where_limit ""
-}
 
 if {[llength $expand] == 0} {
     lappend expand $root_id

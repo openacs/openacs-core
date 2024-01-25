@@ -36,7 +36,6 @@
                   where (n.object_id is null or acs_permission__permission_p(n.object_id, :user_id, 'read'))
                   and (n.node_id = path.node_id or n.parent_id in ([join $expand ", "]))) sm0) as site_map
             on site_map.object_id = p.package_id
-            $where_limit
             order by url
         </querytext>
     </fullquery>
