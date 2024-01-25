@@ -1,3 +1,11 @@
+/*
+
+  This file contains javascrtipt utilities that makes sense to include
+  in every page.
+
+  It is added to every page reply by /www/blank-master
+
+*/
 
 function acs_FormRefresh(form_name) {
     const refreshing = document?.forms[form_name]?.elements['__refreshing_p'];
