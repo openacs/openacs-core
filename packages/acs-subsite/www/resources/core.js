@@ -1,12 +1,3 @@
-/* The function acs_Focus is included in blank-master.tcl
-function acs_Focus(form_name, element_name) {
-    if (document.forms == null) return;
-    if (document.forms[form_name] == null) return;
-    if (document.forms[form_name].elements[element_name] == null) return;
-    if (document.forms[form_name].elements[element_name].type == 'hidden') return;
-
-    document.forms[form_name].elements[element_name].focus();
-} */
 
 function acs_FormRefresh(form_name) {
     const refreshing = document?.forms[form_name]?.elements['__refreshing_p'];
