@@ -24,10 +24,10 @@ function acs_ListCheckAll(listName, checkP) {
   checkP = checkP ? true : false;
 
   //
-  // List checkboxes have an id following the list naming convention
-  // and a name attribute.
+  // List checkboxes belong to the list bulk-action form and are
+  // prefixed with the list name.
   //
-  const controls = document.querySelectorAll(`input[type=checkbox][id^='${listName}.'][name]`);
+  const controls = document.querySelectorAll(`form[name='${listName}'] input[type=checkbox][id^='${listName}'][name]`);
   for (const control of controls) {
     control.checked = checkP;
   }
