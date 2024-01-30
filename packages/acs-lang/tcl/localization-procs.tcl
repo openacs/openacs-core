@@ -247,12 +247,11 @@ ad_proc -public lc_get {
     return [lang::message::lookup $locale $message_key {} {} 0 0]
 }
 
-ad_proc -public lc_time_fmt {
+ad_proc -private lc_datetime_to_clock {
     datetime
-    fmt
-    {locale ""}
 } {
-    Formats a time for the specified locale.
+    Converts a datetime in one of the supported formats to a clock
+    value.
 
     @param datetime A time string in one of the following formats as
                     from clock tcl command specifications: "%Y-%m-%d
@@ -263,6 +262,41 @@ ad_proc -public lc_time_fmt {
                     12:50:14". Note that in this case all information
                     about timezone and fractions of second will be
                     discarded.
+
+    @see https://www.tcl.tk/man/tcl/TclCmd/clock.html#M25
+
+    @return integer
+} {
+    set datetime [string range [string trim $datetime] 0 18]
+    foreach format {
+        "%Y-%m-%d %H:%M:%S"
+        "%Y-%m-%d %H:%M"
+        "%Y-%m-%d"
+    } {
+        set invalid_format_p [catch {
+            set date_clock [clock scan $datetime -format $format]
+        }]
+        if {!$invalid_format_p} {
+            break
+        }
+    }
+    if {$invalid_format_p} {
+        error "Invalid date: $datetime"
+    }
+
+    return $date_clock
+}
+
+ad_proc -public lc_time_fmt {
+    datetime
+    fmt
+    {locale ""}
+} {
+    Formats a time for the specified locale.
+
+    @param datetime A datetime in one of the supported formats. See
+                    lc_datetime_to_clock.
+
     @param fmt An ISO 14652 LC_TIME style formatting string.  The
                <b>highlighted</b> functions localize automatically
                based on the user's locale; other strings will use
@@ -325,7 +359,7 @@ ad_proc -public lc_time_fmt {
            takes care of the proper handling of Julian/Gregorian
            dates.
 
-    @see clock
+    @see lc_datetime_to_clock
     @see http://www.tondering.dk/claus/calendar.html
     @see man strftime on a UNIX shell prompt for more date format abbreviations.
 
@@ -339,22 +373,7 @@ ad_proc -public lc_time_fmt {
         set locale [ad_conn locale]
     }
 
-    set datetime [string range [string trim $datetime] 0 18]
-    foreach format {
-        "%Y-%m-%d %H:%M:%S"
-        "%Y-%m-%d %H:%M"
-        "%Y-%m-%d"
-    } {
-        set invalid_format_p [catch {
-            set date_clock [clock scan $datetime -format $format]
-        }]
-        if {!$invalid_format_p} {
-            break
-        }
-    }
-    if {$invalid_format_p} {
-        error "Invalid date: $datetime"
-    }
+    set date_clock [::lc_datetime_to_clock $datetime]
 
     set date_tokens [list]
     foreach token [clock format $date_clock -format "%Y %m %d %H %M %S %w"] {
@@ -541,13 +560,8 @@ ad_proc -public lc_time_tz_convert {
 } {
     Converts a date from one timezone to another.
 
-    @param time_value         Timestamp in the 'from' timezone, in the ISO
-                              datetime format ("%Y-%m-%d %H:%M:%S" as
-                              per Tcl clock api). Some seemingly
-                              invalid dates such as "2000-00-00
-                              00:00:00" may be accepted and normalized
-                              to a valid date, also according to he
-                              behavior of the Tcl clock api.
+    @param time_value        A datetime in one of the supported formats. See
+                             lc_datetime_to_clock.
 
     @return                  Timestamp in the 'to' timezone, also in ISO datetime
                              format, or the empty string when
@@ -556,7 +570,7 @@ ad_proc -public lc_time_tz_convert {
                              impossible to determine the right
                              conversion.
 
-    @see https://www.tcl.tk/man/tcl/TclCmd/clock.html#M25
+    @see lc_datetime_to_clock
 } {
     #
     # Here we enforce that the timestamp format is correct and
@@ -564,18 +578,11 @@ ad_proc -public lc_time_tz_convert {
     # -> 1999-11-30 00:00:00) so that the behavior is consistent
     # across DBMSs)
     #
-    # Note that we support both the "short" e.g. "14:00" and "long"
-    # e.g. "14:00:01" time formats.
-    #
     try {
-        set clock_value [clock scan $time_value -format {%Y-%m-%d %H:%M:%S}]
+        set clock_value [::lc_datetime_to_clock $time_value]
     } on error {errmsg} {
-        try {
-            set clock_value [clock scan $time_value -format {%Y-%m-%d %H:%M}]
-        } on error {errmsg} {
-            ad_log warning "lc_time_tz_convert: invalid date '$time_value'"
-            return ""
-        }
+        ad_log warning "lc_time_tz_convert: invalid date '$time_value'"
+        return ""
     }
 
     set time_value [clock format $clock_value -format {%Y-%m-%d %H:%M:%S}]
