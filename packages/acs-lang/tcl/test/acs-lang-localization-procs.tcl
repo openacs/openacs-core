@@ -104,6 +104,12 @@ aa_register_case \
     set time [lc_time_tz_convert -from Europe/Vienna -to America/New_York -time_value "2021-02-18 15:04:59"]
     aa_equals "lc_time_tz_convert from and to Europe/Vienna" $time "2021-02-18 09:04:59"
 
+    set time [lc_time_tz_convert -from Europe/Vienna -to Europe/Vienna -time_value "2021-02-18 15:04"]
+    aa_equals "lc_time_tz_convert from and to Europe/Vienna (short time format)" $time "2021-02-18 15:04:00"
+
+    set time [lc_time_tz_convert -from Europe/Vienna -to America/New_York -time_value "2021-02-18 15:04"]
+    aa_equals "lc_time_tz_convert from and to Europe/Vienna (short time format)" $time "2021-02-18 09:04:00"
+
     #
     # There is no easy way to change the conn::timezone. So set the
     # system timezone to the lang::conn::timezone to get a
