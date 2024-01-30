@@ -558,19 +558,27 @@ ad_proc -public lc_time_tz_convert {
 
     @see https://www.tcl.tk/man/tcl/TclCmd/clock.html#M25
 } {
+    #
+    # Here we enforce that the timestamp format is correct and
+    # apply Tcl clock date normalization (e.g. 2000-00-00 00:00:00
+    # -> 1999-11-30 00:00:00) so that the behavior is consistent
+    # across DBMSs)
+    #
+    # Note that we support both the "short" e.g. "14:00" and "long"
+    # e.g. "14:00:01" time formats.
+    #
     try {
-        #
-        # Here we enforce that the timestamp format is correct and
-        # apply Tcl clock date normalization (e.g. 2000-00-00 00:00:00
-        # -> 1999-11-30 00:00:00) so that the behavior is consistent
-        # across DBMSs)
-        #
         set clock_value [clock scan $time_value -format {%Y-%m-%d %H:%M:%S}]
-        set time_value [clock format $clock_value -format {%Y-%m-%d %H:%M:%S}]
     } on error {errmsg} {
-        ad_log warning "lc_time_tz_convert: invalid date '$time_value'"
-        return ""
+        try {
+            set clock_value [clock scan $time_value -format {%Y-%m-%d %H:%M}]
+        } on error {errmsg} {
+            ad_log warning "lc_time_tz_convert: invalid date '$time_value'"
+            return ""
+        }
     }
+
+    set time_value [clock format $clock_value -format {%Y-%m-%d %H:%M:%S}]
 
     try {
         #
