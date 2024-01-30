@@ -1490,6 +1490,25 @@ aa_register_case \
             }
     }
 
+aa_register_case \
+    -cats {
+        smoke
+        production_safe
+    } acs_kernel__server_startup_ok {
+
+        Checks that the server has booted without errors.
+
+        This is mostly useful as part of an automated CI pipeline, as
+        executing this test at a later time, e.g. after a run of the
+        test suite, will most likely fail: every error will be
+        counted, including expected ones coming from the tests
+        themselves.
+    } {
+        set errors [dict get [ns_logctl stats] Error]
+        aa_log "Number of errors: $errors, warnings: [dict get [ns_logctl stats] Warning]"
+        aa_equals "No errors detected during startup sequence" $errors 0
+    }
+
 #
 # This test could be used to make sure binaries in use in the code are
 # actually available to the system.
