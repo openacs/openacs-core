@@ -537,7 +537,7 @@ $$ LANGUAGE plpgsql;
 --- Functions for backwards compatibility
 ---
 select define_function_args('acs_permission__permission_p','object_id,party_id,privilege');
-DROP FUNCTION IF EXISTS acs_permission__permission_p(integer, integer, varchar);
+--DROP FUNCTION IF EXISTS acs_permission__permission_p(integer, integer, varchar);
 CREATE OR REPLACE FUNCTION acs_permission__permission_p(
        p_object_id integer,
        p_party_id  integer,
@@ -550,7 +550,7 @@ $$ LANGUAGE plpgsql stable;
 
 
 select define_function_args('acs_permission__permission_p_recursive_array','objects,party_id,privilege');
-DROP FUNCTION IF EXISTS acs_permission__permission_p_recursive_array(integer[], integer, varchar);
+--DROP FUNCTION IF EXISTS acs_permission__permission_p_recursive_array(integer[], integer, varchar);
 CREATE OR REPLACE FUNCTION acs_permission__permission_p_recursive_array(
        p_objects   integer[],
        p_party_id  integer, 
@@ -561,7 +561,7 @@ $$ LANGUAGE sql stable;
 
 
 select define_function_args('acs_permission__grant_permission','object_id,grantee_id,privilege');
-DROP FUNCTION IF EXISTS acs_permission__grant_permission(integer, integer, varchar);
+--DROP FUNCTION IF EXISTS acs_permission__grant_permission(integer, integer, varchar);
 CREATE OR REPLACE FUNCTION acs_permission__grant_permission(
    p_object_id integer,
    p_grantee_id integer,
@@ -575,7 +575,7 @@ $$ LANGUAGE plpgsql;
 
 
 select define_function_args('acs_permission__revoke_permission','object_id,grantee_id,privilege');
-DROP FUNCTION IF EXISTS acs_permission__revoke_permission(integer, integer, varchar);
+-- DROP FUNCTION IF EXISTS acs_permission__revoke_permission(integer, integer, varchar);
 CREATE OR REPLACE FUNCTION acs_permission__revoke_permission(
    p_object_id integer,
    p_grantee_id integer,

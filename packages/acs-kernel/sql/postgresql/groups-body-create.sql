@@ -423,7 +423,7 @@ CREATE OR REPLACE FUNCTION composition_rel__new(
 DECLARE
   v_rel_id               integer;
 BEGIN
-    raise NOTICE 'composition_rel__new one % two %', object_id_one, object_id_two;
+    -- raise NOTICE 'composition_rel__new one % two %', object_id_one, object_id_two;
     v_rel_id := acs_rel__new (
       new__rel_id,
       rel_type,

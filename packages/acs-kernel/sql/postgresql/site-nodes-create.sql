@@ -291,7 +291,7 @@ CREATE FUNCTION inline_0()
 RETURNS integer AS $inline_0$
 BEGIN
 
-    raise notice 'starting site-nodes doing the recursive part -- vguerra';
+    -- raise notice 'starting site-nodes doing the recursive part -- vguerra';
 
     IF cmp_pg_version('8.4') >= 0 THEN
         -- recursive site_nodes recursive - START
