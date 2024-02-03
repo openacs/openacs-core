@@ -1030,7 +1030,7 @@ ad_proc -public apm_package_installed_p {
     }
 }
 
-ad_proc -public -debug apm_package_enabled_p {
+ad_proc -public apm_package_enabled_p {
     package_key
 } {
     Returns 1 if there is an enabled package version corresponding to the package_key
