@@ -598,7 +598,7 @@ namespace eval ::acs {
             return [uplevel 1 [list $cache $operation {*}$args]]
         } else {
             if {$operation eq "eval"} {
-                nsf::parseargs {{-partition_key} {-expires:integer} key command} $args
+                nsf::parseargs {{-partition_key} {-expires:integer} {-per_request:switch} key command} $args
                 ns_log warning "no cache $cache: need direct call $key $args"
                 #ns_log warning "no cache $cache: need direct call $key [info exists partition_key] <$command>"
                 return [uplevel 1 $command]
