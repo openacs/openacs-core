@@ -9,7 +9,7 @@
     <implements-subsite-p>t</implements-subsite-p>
     <inherit-templates-p>t</inherit-templates-p>
 
-    <version name="5.10.1b3" url="http://openacs.org/repository/download/apm/acs-subsite-5.10.1b3.apm">
+    <version name="5.10.1b4" url="http://openacs.org/repository/download/apm/acs-subsite-5.10.1b4.apm">
         <owner url="http://openacs.org">OpenACS</owner>
         <summary>Subsite</summary>
         <release-date>2023-05-15</release-date>
@@ -18,7 +18,7 @@
         <license>GPL</license>
         <maturity>3</maturity>
 
-        <provides url="acs-subsite" version="5.10.1b3"/>
+        <provides url="acs-subsite" version="5.10.1b4"/>
         <requires url="acs-authentication" version="5.10.1b1"/>
         <requires url="acs-content-repository" version="5.10.1b1"/>
         <requires url="acs-kernel" version="5.10.1b1"/>
@@ -69,8 +69,12 @@ admin {
             label #acs-subsite.Site_Map#
             url admin/site-map/
         }
+        developer {
+            label {Developer Tools}
+            url /acs-admin/developer
+        }    
         advanced {
-            label #acs-subsite.Advanced#
+            label #acs-subsite.Subsite_Administration#
             folder admin
             selected_patterns {
                 site-map/*
@@ -82,10 +86,6 @@ admin {
                 object-types/*
             }
         }
-        developer {
-            label {Developer Tools}
-            url /acs-admin/developer
-        }    
         swa {
             label #acs-subsite.Site_Wide_Admin#
             url /acs-admin/

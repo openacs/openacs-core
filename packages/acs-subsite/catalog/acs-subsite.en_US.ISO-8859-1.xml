@@ -560,6 +560,7 @@ You can always change your password by doing the following:
   <msg key="subcommunities">subcommunities</msg>
   <msg key="subcommunity">subcommunity</msg>
   <msg key="subsite">subsite</msg>
+  <msg key="Subsite_Administration">Subsite Administration</msg>  
   <msg key="Subsite_Configuration">Subsite Configuration</msg>
   <msg key="Subsite_Home">%subsite_name% Home</msg>
   <msg key="Subsite_name">Subsite name</msg>
