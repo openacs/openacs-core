@@ -469,7 +469,7 @@ assign any application-specific meaning to these fields.
 <listitem><para>
 In particular, never assign any application specific semantics to the
 <computeroutput>context_id</computeroutput> attribute of an object. This field is used for
-a very specific purpose by the permissions system, and using this
+a very specific purpose by the permission system, and using this
 field in <emphasis>any other way whatsoever</emphasis> is guaranteed to make your
 application act strangely.
 </para>

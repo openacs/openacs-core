@@ -178,7 +178,7 @@ done
         The OpenACS templating system allows you to give your site a consistent look and feel. It also promotes code maintainability in the presentation layer, by allowing presentation components to be reused across multiple pages. If you need to change the layout for some reason, then you only need to make that change in one location, instead of across many files.
       </para>
       <para>
-        In this problem set you will familiarise yourself with the templating system in openacs. This will be achieved through customising an existing edit-this-page application template.
+        In this problem set you will familiarize yourself with the templating system in OpenACS. This will be achieved through customizing an existing edit-this-page application template.
       </para>
       <para>
         Before proceeding, it is strongly advised to read the templating documentation on your OpenACS installation (http://localhost:8000/doc/acs-templating). The documentation lists the special tags available for ADP files.
@@ -571,7 +571,7 @@ In
     <para><computeroutput>note-edit.tcl</computeroutput> requires a
 <computeroutput>note_id</computeroutput> to determine which record
 should be deleted.  It also looks for a confirmation variable, which
-should initially be absert.  If it is absent, we create a form to
+should initially be absent.  If it is absent, we create a form to
 allow the user to confirm the deletion.  Note that in
 <computeroutput>entry-edit.tcl</computeroutput> we used <computeroutput>ad_form</computeroutput> to access the Form Template
 commands; here, we call them directly because we don&#39;t need the extra

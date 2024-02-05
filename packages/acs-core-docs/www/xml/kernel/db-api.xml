@@ -1006,8 +1006,7 @@ several nested transactions, all of them are terminated. Use this instead of
     <para>
 
     Notice the nonstandard numbering (everything
-    else in Tcl starts at 0); the reason is that the graphics designer, a non
-    programmer, may wish to work with row numbers.
+    else in Tcl starts at 0); the reason is that the graphics designer, a non-programmer, may wish to work with row numbers.
     </para>                                                                                                                                           
 
     <para>

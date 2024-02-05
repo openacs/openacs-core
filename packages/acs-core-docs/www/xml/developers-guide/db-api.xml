@@ -155,7 +155,7 @@ and some_table.condition_p = '$foo'</programlisting>
           Another very important reason for using bind variables is
 	  performance. Oracle can cache previously parsed queries. If
 	  there are values in the where clause, that is how the query
-	  is cached. It also performs bind variable susbstitution
+	  is cached. It also performs bind variable substitution
 	  after parsing the SQL statement. This means that SQL
 	  statements that use bind variables will always match
 	  (assuming all else is the same) while SQL statements that do
@@ -521,8 +521,7 @@ db_abort_transaction
 
     <para>
     Notice the nonstandard numbering (everything
-    else in Tcl starts at 0); the reason is that the graphics designer, a non
-    programmer, may wish to work with row numbers.
+    else in Tcl starts at 0); the reason is that the graphics designer, a non-programmer, may wish to work with row numbers.
     </para>
 
     <para>

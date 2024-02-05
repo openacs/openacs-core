@@ -129,7 +129,7 @@
     <sect2 id="i18n-locale-templates">
 
       <title>Separate Templates for each Locale</title>
-      <para>If the request processor finds a filenamed <computeroutput>filename.locale.adp</computeroutput>, where locale matches the user&#39;s locale, it will process that file instead of <computeroutput>filename.adp</computeroutput>.  For example, for a user with locale <computeroutput>tl_PH</computeroutput>, the file <computeroutput>index.tl_PH.adp</computeroutput>, if found, will be used instead of <computeroutput>index.adp</computeroutput>.  The locale-specific file should thus contain text in the language appropriate for that locale.  The code in the page, however, should still be in English.  Message keys are processed normally.</para>
+      <para>If the request processor finds a file named <computeroutput>filename.locale.adp</computeroutput>, where locale matches the user&#39;s locale, it will process that file instead of <computeroutput>filename.adp</computeroutput>.  For example, for a user with locale <computeroutput>tl_PH</computeroutput>, the file <computeroutput>index.tl_PH.adp</computeroutput>, if found, will be used instead of <computeroutput>index.adp</computeroutput>.  The locale-specific file should thus contain text in the language appropriate for that locale.  The code in the page, however, should still be in English.  Message keys are processed normally.</para>
     </sect2>
     <sect2 id="i18n-message-catalog">
     <title>Message Catalogs</title>
@@ -284,7 +284,7 @@
         <listitem><para>If the text is in a Tcl file you must replace variable lookups 
             (occurrences of $var_name or ${var_name}) with %var_name%</para></listitem>
         <listitem><para>You are now ready to follow the normal procedure and mark up the text using a 
-            tempoarary message tag (&lt;#_ text_with_percentage_vars#&gt;) and run the action 
+            temporary message tag (&lt;#_ text_with_percentage_vars#&gt;) and run the action 
             replace tags with keys in the APM.</para></listitem>
       </itemizedlist>
 

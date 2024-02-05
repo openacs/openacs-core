@@ -77,7 +77,7 @@ extracts or sets up new session tokens for the user.
 <listitem><para>
 Next, the Request Processor checks if the user has appropriate access
 privileges to the requested part of the site. In OpenACS &version;, access control
-is dictated by the <ulink url="permissions">permissions system</ulink>. In
+is dictated by the <ulink url="permissions">permission system</ulink>. In
 this case, the RP checks if the user has "read" privileges on the
 object in the site map specified by the URL. This object is typically
 a package instance, but it could easily be something more granular,

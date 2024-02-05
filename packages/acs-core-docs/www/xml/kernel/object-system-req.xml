@@ -111,7 +111,7 @@ mechanism for tagging application objects with unique identifiers.</para>
 <para><emphasis role="strong">Support for Unified Access Control</emphasis></para>
 
 <para>Access control should be as transparent as possible to the application
-developer. Until the implementation of the general permissions system, every
+developer. Until the implementation of the general permission system, every
 OpenACS application had to manage access control to its data separately. Later
 on, a notion of &quot;scoping&quot; was introduced into the core data
 model.</para>
@@ -528,12 +528,12 @@ in the system, but it was awkward to use and limited in flexibility.</para>
 
 <para>The OpenACS 4 Object Model provides a generalized notion of scope that allows
 developers to represent a hierarchy of object <emphasis>contexts</emphasis>. These
-contexts are used as the basis for the permissions system. In general, if an
+contexts are used as the basis for the permission system. In general, if an
 object has no explicit permissions attached to it, then it inherits
 permissions from its context.</para>
 
 <para>The context data model also forms the basis of the <link linkend="subsites-requirements">subsites system</link>, and is
-a basic part of the <link linkend="permissions-requirements">permissions system</link>,
+a basic part of the <link linkend="permissions-requirements">permission system</link>,
 described in separate documents.</para>
 
 <para>The context data model should provide the following facilities:</para>

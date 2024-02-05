@@ -234,7 +234,7 @@ chmod 755 /usr/local/bin/svgroup</action></screen>
 [root qmail-1.03]#
 <action>rm -f /usr/bin/sendmail /usr/sbin/sendmail
 ln -s /var/qmail/bin/sendmail /usr/sbin/sendmail</action></screen>
-          <para>Configure qmail - specifically, run the config script to set up files in <computeroutput>/var/qmail/control</computeroutput> specifying the computer&#39;s identity and which addresses it should accept mail for.  This command will automatically set up qmail correctly if you have correctly set a valid host name.  If not, you&#39;ll want to read <computeroutput>/var/qmail/doc/INSTALL.ctl</computeroutput> to find out how to configure qmail.</para>
+          <para>Configure qmail - specifically, run the config script to set up files in <computeroutput>/var/qmail/control</computeroutput> specifying the computer&#39;s identity and which addresses it should accept mail for.  This command will automatically set up qmail correctly if you have correctly set a valid hostname.  If not, you&#39;ll want to read <computeroutput>/var/qmail/doc/INSTALL.ctl</computeroutput> to find out how to configure qmail.</para>
             <screen>[root qmail-1.03]# <userinput>./config-fast <replaceable>yourserver.test</replaceable></userinput>
 Your fully qualified hostname is yourserver.test.
 Putting yourserver.test into control/me...

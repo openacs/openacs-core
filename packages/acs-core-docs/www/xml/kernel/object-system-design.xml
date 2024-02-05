@@ -128,7 +128,7 @@ particular programming idioms that we wish to generalize.</para>
 
 <para><emphasis role="strong">Related Links</emphasis></para>
 
-<para>This design document should be read along with the design documents for <link linkend="groups-design">the new groups system</link>, <link linkend="subsites-design">subsites</link> and <link linkend="permissions-design">the permissions system</link></para>
+<para>This design document should be read along with the design documents for <link linkend="groups-design">the new groups system</link>, <link linkend="subsites-design">subsites</link> and <link linkend="permissions-design">the permission system</link></para>
 
 </sect2>
 
@@ -205,7 +205,7 @@ that defines this table.</para>
 <sect3 id="objects-design-obj-context" xreflabel="Object Context and Access Control">
 <title>Object Context and Access Control</title>
 
-<para>Until the implementation of the general permissions system, every OpenACS
+<para>Until the implementation of the general permission system, every OpenACS
 application had to manage access control to its data separately. Later on, a
 notion of &quot;scoping&quot; was introduced into the core data model.</para>
 
@@ -278,7 +278,7 @@ permission to perform action Y on object Z.</para>
 
 <para>The context system forms the basis for the rest of the OpenACS access control
 system, which is described in two separate documents: one for the
-<link linkend="permissions-design">permissions system</link> and another for the
+<link linkend="permissions-design">permission system</link> and another for the
 <link linkend="groups-design">party groups</link> system. The context system
 is also used to implement <link linkend="subsites-design">subsites</link>.</para>
 </sect3>

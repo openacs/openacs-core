@@ -23,7 +23,7 @@ The OpenACS &version; Permissions system allows developers and administrators to
 set access control policies at the object level, that is, any
 application or system object represented by a row in the
 <computeroutput>acs_objects</computeroutput> table can be access-controlled via a
-PL/SQL or Tcl interface. The permissions system manages a data model
+PL/SQL or Tcl interface. The permission system manages a data model
 that then allows scripts to check permissions using another API call.
 </para>
 
@@ -42,7 +42,7 @@ together into larger security domains.
 </para></listitem>
 </orderedlist>
 <para>The rest of this document discusses each of these parts, and how they fit together with the
-permissions system.
+permission system.
 </para>
 
 
@@ -136,7 +136,7 @@ linkend="groups-design"/> for more details.
 <title>Permissions</title>
 
 <para>
-  NOTE: Much more detailed information about the permissions system
+  NOTE: Much more detailed information about the permission system
   and how to use it is available in the
   <xref linkend="permissions-tediously-explained"/> document.
 </para>

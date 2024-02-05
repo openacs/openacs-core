@@ -197,7 +197,7 @@ parties and groups.
 <para>Two types of group relations are represented in the data model:
 membership relations and composite relations.
 The full range of sophisticated group structures that exist in the real
-world can be modelled in OpenACS by these two relationship types.</para>
+world can be modeled in OpenACS by these two relationship types.</para>
 <para>Membership relations represent direct membership relation between parties and groups. A party may be
 a &quot;member&quot; of a group.  Direct membership relations are
 common in administrative practices, and do not follow basic set
