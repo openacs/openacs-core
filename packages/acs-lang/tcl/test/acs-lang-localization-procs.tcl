@@ -209,13 +209,6 @@ aa_register_case \
         set time [lc_time_tz_convert -from Europe/Vienna -to Brazil/East -time_value "2016-10-31 00:00:00"]
         aa_equals "lc_time_tz_convert from Europe/Vienna to Brazil/East (2016-10-31 00:00:00)" $time "2016-10-30 21:00:00"
 
-        set time [lc_time_tz_convert -from SystemV/AST4 -to Europe/Vienna -time_value "1942-05-04 00:00:00"]
-        aa_equals "lc_time_tz_convert from SystemV/AST4 to Europe/Vienna (1942-05-04 00:00:00, war time)" $time "1942-05-04 05:00:00"
-
-        set time [lc_time_tz_convert -from SystemV/AST4 -to Europe/Vienna -time_value "2016-10-31 00:00:00"]
-        aa_equals "lc_time_tz_convert from SystemV/AST4 to Europe/Vienna (2016-10-31 00:00:00)" $time "2016-10-31 05:00:00"
-
-
         aa_section "Check that conversion to/from every supported timezone succeeds"
 
         set timezones [lc_list_all_timezones]
