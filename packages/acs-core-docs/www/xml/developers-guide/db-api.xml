@@ -441,9 +441,7 @@ PoolSequence.sec_id_seq=20
 	</term>
 
 	<listitem>
-	  <programlisting>
-db_abort_transaction
-	  </programlisting> 
+	  <programlisting>db_abort_transaction</programlisting> 
 
 	  <para>Aborts all levels of a transaction. That is if this is called within
 	    several nested transactions, all of them are terminated. Use this instead of
