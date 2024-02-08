@@ -130,6 +130,17 @@
         <th class="package-table-cell">Result</th>
         <th class="proc_coverage_cell">Test coverage</th>
     </tr>
+      <tr><td></td><th>Totals:</th>
+         <td class="package-table-cell"><strong>@::total.cases@</strong></td>
+         <td class="package-table-cell"><strong>@::total.passes@</strong></td>
+         <td class="package-table-cell"><strong>@::total.fails@</strong>
+         <td class="package-table-cell"><strong>@::total.warnings@</strong></td>
+         <td></td>
+         <td class="proc_coverage_cell @global_test_coverage_level@"
+          style="background: @global_test_coverage_color.background@; 
+                 color: @global_test_coverage_color.foreground@;">
+          <a href=proc-coverage><strong>@global_test_coverage_percent@%</a></strong></td>
+      </tr>
     </thead>
     <multiple name="packageinfo">
         <if @packageinfo.rownum@ odd>
