@@ -4,7 +4,7 @@
 
     <h2>User Account Merge</h2>
     
-    This is the user acccount merge wizard. You selected these accounts to merge:
+    This is the user account merge wizard. You selected these accounts to merge:
     <p/>
       <table align="center">
 	<tr>
@@ -31,7 +31,7 @@
 			    <strong><a href="mailto:@one_email@">@one_email@</a></strong>
 			  </li>
 			  <li>
-			    Scren name:
+			    Screen name:
 			    <strong>@one_screen_name@</strong>
 			  </li>
 			  <li>
@@ -160,7 +160,7 @@
 			    <strong><a href="mailto:@two_email@">@two_email@</a></strong>
 			  </li>
 			  <li>
-			    Scren name:
+			    Screen name:
 			    <strong>@two_screen_name@</strong>
 			  </li>
 			  <li>

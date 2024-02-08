@@ -947,7 +947,7 @@ ad_proc -private apm_git_build_repository {
     # hardcoded here. One improvement would be to fetch it from the
     # Git host directly, either via scraping or via API.
     #
-    # As long as this does not change, everytime a new package is
+    # As long as this does not change, every time a new package is
     # added to the Git mirror, one should also add the corresponding
     # package key to this list.
     #
