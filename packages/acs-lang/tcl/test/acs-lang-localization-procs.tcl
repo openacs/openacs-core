@@ -261,14 +261,6 @@ aa_register_case \
 
         foreach from $timezones {
             set from [lindex $from 0]
-            try {
-                clock scan 99999 -timezone $from
-            } on error {errorMsg} {
-                if {[string match "time zone *not found" $errorMsg]} {
-                    aa_log "warning: Tcl does not know about time zome $from"
-                    continue
-                }
-            }
             aa_false "Converting valid date '2021-02-18 15:04:59' from valid timezone '$from' to 'UTC' does not return empty or 0" \
                 [expr {[lc_time_local_to_utc "2021-02-18 15:04:59" $from] eq ""}]
         }
