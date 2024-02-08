@@ -1942,7 +1942,9 @@ ad_proc -private apm_upgrade_logic_compare {
 
     @author Lars Pind
 } {
-    return [apm_version_names_compare [lindex [split $from_to_key_1 ","] 0] [lindex [split $from_to_key_2 ","] 0]]
+    return [apm_version_names_compare \
+                [lindex [split $from_to_key_1 ","] 0] \
+                [lindex [split $from_to_key_2 ","] 0]]
 }
 
 ad_proc -public apm_upgrade_logic {
@@ -1951,9 +1953,14 @@ ad_proc -public apm_upgrade_logic {
     {-spec:required}
 } {
     Logic to help upgrade a package.
-    The spec contains a list on the form \{ from_version to_version code_chunk from_version to_version code_chunk ... \}.
-    The list is compared against the from_version_name and to_version_name parameters supplied, and the code_chunks that
-    fall within the from_version_name and to_version_name it'll get executed in the caller's namespace, ordered by the from_version.
+    The spec contains a flat list of triples of the form
+    { "from_version" "to_version" "code_chunk"
+        "from_version" "to_version" "code_chunk ..." }.
+    
+    The list is compared against the "from_version_name" and
+    "to_version_name" parameters supplied, and the code_chunks that fall
+    within the from_version_name and to_version_name it'll get
+    executed in the caller's namespace, ordered by the from_version.
 
     <p>
 
@@ -2004,6 +2011,10 @@ ad_proc -public apm_upgrade_logic {
 
         # Check that
         # from_version_name < elm_from < elm_to < to_version_name
+
+        ns_log notice "apm_upgrade_logic: 1 [list apm_version_names_compare $from_version_name $elm_from] => [apm_version_names_compare $from_version_name $elm_from] <= 0 --> [expr {[apm_version_names_compare $from_version_name $elm_from] <= 0}]"
+        ns_log notice "apm_upgrade_logic: 2 [list apm_version_names_compare $elm_from $elm_to] => [apm_version_names_compare $elm_from $elm_to]  <= 0 --> [expr {[apm_version_names_compare $elm_from $elm_to] <= 0}]"
+        ns_log notice "apm_upgrade_logic: 3 [list apm_version_names_compare $elm_to $to_version_name] => [apm_version_names_compare $elm_to $to_version_name] <= 0 --> [expr {[apm_version_names_compare $elm_to $to_version_name] <= 0}]"
 
         if { [apm_version_names_compare $from_version_name $elm_from] <= 0
              && [apm_version_names_compare $elm_from $elm_to] <= 0
@@ -2290,6 +2301,8 @@ ad_proc -public apm::process_install_xml {
         set ids(ACS_LANG) [apm_package_id_from_key acs-lang]
         set ids(MAIN_SITE) [subsite::main_site_id]
     }
+    lappend out "Processing $filename (nested $nested_p)"
+
 
     lappend ::template::parse_level [info level]
 
@@ -2350,7 +2363,7 @@ ad_proc -public apm_invoke_install_proc {
     } else {
         set result [::install::xml::${type}::${name} $node]
     }
-    return $result
+    return "install::xml::${type}::${name} $result\n"
 }
 
 ##############
