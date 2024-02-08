@@ -1,6 +1,6 @@
 ad_library {
 
-    Tests for api in tcl/acs-integration-procs.tcl
+    Tests for API in tcl/acs-integration-procs.tcl
 
 }
 
@@ -33,6 +33,7 @@ aa_register_case -cats {
         acs::test::reply_has_status_code $d 500
         aa_false "No code was executed after returning" \
             [nsv_exists __acs-templating-test-ad-return-exception-template count]
+
         acs::test::reply_contains $d "One custom error"
         acs::test::reply_contains $d "One custom message"
         ns_unregister_op GET $endpoint_name

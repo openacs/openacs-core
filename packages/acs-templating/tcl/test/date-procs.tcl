@@ -102,7 +102,7 @@ aa_register_case \
     } template_date_api {
         Test api manipulating the template date format.
 
-        Among the things this test shows, is the fact that this api
+        Among the things this test shows, is the fact that this API
         can swallow a lot of garbage without complaining. It is not
         clear if this should change.
 
