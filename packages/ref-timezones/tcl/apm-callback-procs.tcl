@@ -35,6 +35,12 @@ ad_proc -private ref_timezones::apm::after_upgrade {
                 set entries [db_string _ "select count(*) from timezones"]
                 ns_log Notice "$entries timezones loaded"
             }
+            5.10.1b2 5.10.1b3 {
+                ns_log notice "Load fresh timezone data"
+                db_load_sql_data [acs_root_dir]/packages/ref-timezones/sql/[db_driverkey ""]/upgrade/upgrade-timezones.ctl
+                set entries [db_string _ "select count(*) from timezones"]
+                ns_log Notice "$entries timezones loaded"
+            }
         }
 }
 
