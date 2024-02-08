@@ -41,7 +41,7 @@ aa_register_case -cats {
     group::add_member
     group::remove_member
 } subsite_api {
-    Test subsite-related api
+    Test subsite-related API
 } {
     aa_run_with_teardown \
         -rollback \
@@ -60,6 +60,8 @@ aa_register_case -cats {
             }
 
             set application_package_keys [::subsite::get_application_options]
+            aa_log "application_package_keys: $application_package_keys"
+            
             aa_true "Application package keys include the search package" {
                 [lsearch -index 1 -exact $application_package_keys search] >= 0
             }
@@ -75,7 +77,7 @@ aa_register_case -cats {
                                 -package_key $package_key]
             set subsite_node [::site_node::get_from_object_id -object_id $subsite_id]
 
-            aa_equals "Subsite and Site Node api return the same result" \
+            aa_equals "Subsite and Site Node API return the same result" \
                 [lsort -index 0 $subsite_node] \
                 [lsort -index 0 [::subsite::get -subsite_id $subsite_id]]
 
@@ -89,7 +91,7 @@ aa_register_case -cats {
             set child_node [::site_node::get_from_object_id -object_id $child_id]
 
 
-            aa_section {Theme api}
+            aa_section {Theme API}
 
             set subsite_theme [::subsite::get_theme -subsite_id $subsite_id]
             set theme_options [::subsite::get_theme_options]
@@ -174,10 +176,10 @@ aa_register_case -cats {
                 [db_0or1row q {select 1 from subsite_themes where key = :subsite_theme}]
 
 
-            aa_section {Subsite api}
+            aa_section {Subsite API}
 
             set subsite_url [subsite::get_url -node_id [dict get $subsite_node node_id]]
-            aa_equals "The subsite URL from api is consistent with the one from the subsite info" \
+            aa_equals "The subsite URL from API is consistent with the one from the subsite info" \
                 $subsite_url [dict get $subsite_node url]
 
             set absolute_subsite_url [subsite::get_url -node_id [dict get $subsite_node node_id] -absolute_p t]
@@ -203,7 +205,7 @@ aa_register_case -cats {
                 [lsort $app_packages] [lsort $expected_packages]
 
 
-            aa_section {Application Group api}
+            aa_section {Application Group API}
 
             set sub_application_group_id [::application_group::closest_ancestor_application_group_id \
                                               -url [dict get $subsite_node url] -include_self]
@@ -232,15 +234,15 @@ aa_register_case -cats {
                 [::application_group::package_id_from_group_id -group_id $application_group_id] $subsite_id
 
             set group_name [db_string get_name {select group_name from groups where group_id = :application_group_id}]
-            aa_equals "Group name '$group_name' by db and api is consistent" \
+            aa_equals "Group name '$group_name' by db and API is consistent" \
                 [::group::get_element -group_id $application_group_id -element group_name] $group_name
 
             set group_join_policy [db_string get_policy {
                 select join_policy from groups where group_id = :application_group_id
             }]
-            aa_equals "Group name '$group_name' by db and api is consistent" \
+            aa_equals "Group name '$group_name' by db and API is consistent" \
                 [::group::join_policy -group_id $application_group_id] $group_join_policy
-            aa_equals "Group name '$group_name' by db and api is consistent" \
+            aa_equals "Group name '$group_name' by db and API is consistent" \
                 [::group::get_element -group_id $application_group_id -element join_policy] $group_join_policy
             set join_policy_options [::group::get_join_policy_options]
             aa_true "Group join policy belongs to one of the options" {
@@ -250,15 +252,15 @@ aa_register_case -cats {
             set user_id [db_string get_user {select max(user_id) from users}]
             aa_equals "Test subsite membership is empty at first" \
                 [::group::get_members -group_id $application_group_id] ""
-            aa_false "User '$user_id' is not a member (application group api)" \
+            aa_false "User '$user_id' is not a member (application group API)" \
                 [::application_group::contains_party_p \
                      -package_id $subsite_id \
                      -party_id $user_id]
-            aa_false "User '$user_id' is not a member (group api, group)" \
+            aa_false "User '$user_id' is not a member (group API, group)" \
                 [::group::party_member_p \
                      -group_id $application_group_id \
                      -party_id $user_id]
-            aa_false "User '$user_id' is not a member (group api, group name)" \
+            aa_false "User '$user_id' is not a member (group API, group name)" \
                 [::group::party_member_p \
                      -group_name $group_name \
                      -party_id $user_id]
@@ -268,15 +270,15 @@ aa_register_case -cats {
 
             aa_equals "Test subsite membership contains our user" \
                 [::group::get_members -group_id $application_group_id] [list $user_id]
-            aa_true "User '$user_id' is a member (application group api)" \
+            aa_true "User '$user_id' is a member (application group API)" \
                 [::application_group::contains_party_p \
                      -package_id $subsite_id \
                      -party_id $user_id]
-            aa_true "User '$user_id' is a member (group api, group)" \
+            aa_true "User '$user_id' is a member (group API, group)" \
                 [::group::party_member_p \
                      -group_id $application_group_id \
                      -party_id $user_id]
-            aa_true "User '$user_id' is a member (group api, group name)" \
+            aa_true "User '$user_id' is a member (group API, group name)" \
                 [::group::party_member_p \
                      -group_name $group_name \
                      -party_id $user_id]
@@ -288,15 +290,15 @@ aa_register_case -cats {
 
             aa_equals "Test subsite membership is empty again" \
                 [::group::get_members -group_id $application_group_id] ""
-            aa_false "User '$user_id' is not a member (application group api)" \
+            aa_false "User '$user_id' is not a member (application group API)" \
                 [::application_group::contains_party_p \
                      -package_id $subsite_id \
                      -party_id $user_id]
-            aa_false "User '$user_id' is not a member (group api, group)" \
+            aa_false "User '$user_id' is not a member (group API, group)" \
                 [::group::party_member_p \
                      -group_id $application_group_id \
                      -party_id $user_id]
-            aa_false "User '$user_id' is not a member (group api, group name)" \
+            aa_false "User '$user_id' is not a member (group API, group name)" \
                 [::group::party_member_p \
                      -group_name $group_name \
                      -party_id $user_id]

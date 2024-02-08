@@ -129,7 +129,7 @@ lappend actions \
 #
 if { $context_id ne "" } {
     #
-    # The variable "parent_object_name" is used the the following
+    # The variable "parent_object_name" is used in the following
     # message keys:
     #
     #    lt_Do_not_inherit_from_p, lt_Inherit_from_parent_o,

@@ -137,7 +137,7 @@ namespace eval attribute {
         for { set i 0 } { $i < [llength $plsql] } { incr i } {
             set cmd [lindex $plsql $i]
             if { [catch $cmd err_msg] } {
-                # Rollback what we've done so far. The loop contitionals are:
+                # Rollback what we've done so far. The loop conditionals are:
                 #  start at the end of the plsql_drop list (Drop things in reverse order of creation)
                 # execute drop statements until we reach position $i+1
                 #  This position represents the operation on which we failed, and thus

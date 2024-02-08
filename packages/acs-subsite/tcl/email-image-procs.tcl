@@ -344,7 +344,7 @@ ad_proc -public email_image::get_related_item_id {
 ad_proc -public email_image::create_type_folder_rel { } {
     Creates a new folder in the content repository with the name and label Email_Images.
     Also create a new type and register this type to the created folder.
-    Makes a new relation type to asociate the item_id (email_image in the content repository)
+    Makes a new relation type to associate the item_id (email_image in the content repository)
     with the user_id.
 } {
     set type_id [content::type::new \
