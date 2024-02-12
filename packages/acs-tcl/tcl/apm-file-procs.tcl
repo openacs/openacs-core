@@ -142,8 +142,7 @@ ad_proc -public apm_extract_tarball { version_id dir } {
     # ::tar::untar $rfd -chan -dir $dir
     # close $rfd
     #
-
-    exec [apm_gzip_cmd] -d -q -c -S .apm $apm_file | [apm_tar_cmd] -xf - -C $dir 2> [apm_dev_null]
+    exec [apm_gzip_cmd] -d -q -c < $apm_file | [apm_tar_cmd] -xf - -C $dir 2> [apm_dev_null]
 
     file delete -- $apm_file
 }
