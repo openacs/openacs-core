@@ -85,7 +85,7 @@ aa_register_case \
 
             apm_generate_tarball $version_id
 
-            aa_true "Tarbal was found" [db_0or1row get_tarball {
+            aa_true "Tarball was found" [db_0or1row get_tarball {
                 select max(live_revision) as revision_id from cr_items
                 where name = 'tarball-for-package-version-' || :version_id
             }]
