@@ -1294,49 +1294,74 @@ ad_proc -public ad_page_contract {
 
     if { [ad_complaints_count] > 0 } {
 
-        #
-        # Add safety belt to prevent recursive loop
-        #
-        if {[incr ::__ad_complain_depth] < 10} {
+        set complaints [ad_complaints_get_list]
+        if {$warn_p} {
+            ad_log warning "contract in '$::ad_page_contract_context'"\
+                "was violated:\n" [join $complaints "\n "]
+        }
 
-            set complaints [ad_complaints_get_list]
-            if {$warn_p} {
-                ad_log warning "contract in '$::ad_page_contract_context'"\
-                    "was violated:\n" [join $complaints "\n "]
+        if { [info exists return_errors] } {
+            upvar 1 $return_errors error_list
+            set error_list $complaints
+        } else {
+            template::multirow create complaints text
+            foreach elm $complaints {
+                template::multirow append complaints $elm
             }
-
-            if { [info exists return_errors] } {
-                upvar 1 $return_errors error_list
-                set error_list $complaints
-            } else {
-                template::multirow create complaints text
-                foreach elm $complaints {
-                    template::multirow append complaints $elm
-                }
-                ad_try {
+            ad_try {
+                if {[incr ::__ad_complain_depth] == 1} {
+                    #
+                    # Render the error page going through templating,
+                    # theming and so on.
+                    #
+                    # This is the intended complaint behavior, where
+                    # the page will look "fancy" and consistent with
+                    # the rest of the website.
+                    #
                     set html [ad_parse_template \
                                   -params [list complaints [list context $::ad_page_contract_context] \
                                                [list prev_url [util::get_referrer -trusted]] \
                                               ] [template::themed_template "/packages/acs-tcl/lib/complain"]]
-                } on error {errorMsg} {
-                    set errorCode $::errorCode
+                } else {
                     #
-                    # Check, if we were called from "ad_script_abort" (intentional abortion)
+                    # We detected a recursion. This can happen if the
+                    # templates involved in rendering the complaint
+                    # also fail their own validation.
                     #
-                    if {[ad_exception $errorCode] eq "ad_script_abort"} {
-                        #
-                        # Yes, this was an intentional abortion
-                        #
-                        return ""
-                    }
-                    ad_log error "problem rendering complain page: $errorMsg ($errorCode) $::errorInfo"
-                    set html "Invalid input"
+                    # We fallback to a basic rendering that won't
+                    # involve any other template in order to break the
+                    # cycle.
+                    #
+                    ad_log Warning "Depth of recursive complaints exceeded. We will return a basic rendering."
+                    set html [subst {
+                        <html>
+                           <head>
+                              <title>[_ acs-tcl.lt_Problem_with_your_inp]</title>
+                           </head>
+                           <body>
+                              <ul>
+                              <li>[join $complaints </li><li>]</li>
+                              </ul>
+                           </body>
+                        </html>
+                    }]
                 }
-                ns_return 422 text/html $html
-                ad_script_abort
+            } on error {errorMsg} {
+                set errorCode $::errorCode
+                #
+                # Check, if we were called from "ad_script_abort" (intentional abortion)
+                #
+                if {[ad_exception $errorCode] eq "ad_script_abort"} {
+                    #
+                    # Yes, this was an intentional abortion
+                    #
+                    return ""
+                }
+                ad_log error "problem rendering complain page: $errorMsg ($errorCode) $::errorInfo"
+                set html "Invalid input"
             }
-        } else {
-            ns_log Warning "ad_page_contract: depth of recursive complaints exceeded, complaint ignored"
+            ns_return 422 text/html $html
+            ad_script_abort
         }
     }
 }
