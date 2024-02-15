@@ -130,7 +130,7 @@ aa_register_case \
         set i 0
         foreach proc_name $procs {
             regsub -all {:} $proc_name {_} path
-            set r [util::http::get -url [util_current_location]/$path]
+            set r [util::http::get -url [acs::test::url]/$path]
             aa_equals "Request for '$proc_name' successful" [dict get $r status] 200
             aa_equals "Request for '$proc_name' returns the expected value" \
                 [join [dict get $r page]] [join [lindex $expected_values $i]]
@@ -143,7 +143,7 @@ aa_register_case \
         foreach proc_name $procs_invoked_without_args {
             regsub -all {:} $proc_name {_} path
             append path __invoked_without_args
-            set r [util::http::get -url [util_current_location]/$path]
+            set r [util::http::get -url [acs::test::url]/$path]
             aa_equals "Request for '$proc_name' invoked without args successful" [dict get $r status] 200
             aa_equals "Request for '$proc_name' invoked without args returns the expected value" \
                 [join [dict get $r page]] [join [lindex $expected_values $i]]
