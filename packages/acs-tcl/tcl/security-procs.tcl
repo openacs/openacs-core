@@ -3059,6 +3059,43 @@ ad_proc -public security::validated_host_header {} {
     set driverInfo [util_driver_info]
     set driverHostName [dict get $driverInfo hostname]
 
+    set validationOk 0
+    #
+    # Validation is OK, when we find the host+port under virtual
+    # servers in the configuration.
+    #
+    if {[ns_info name] eq "NaviServer"} {
+        #
+        # Check against the virtual server configuration of NaviServer.
+        #
+        set s [ns_info server]
+        set driverInfo [security::configured_driver_info]
+        set drivers [lmap d $driverInfo {dict get $d driver}]
+
+        foreach driver $drivers {
+            #
+            # Check global "servers" configuration for virtual servers for the driver
+            #
+            set ns [ns_configsection ns/module/$driver/servers]
+            if {$ns ne ""} {
+                #
+                # We have a global "servers" configuration for the driver
+                #
+                set names [lmap {key value} [ns_set array $ns] {
+                    if {$key ne $s} continue
+                    set value
+                }]
+                if {$host in $names} {
+                    ns_log notice "security::validated_host_header: found $host" \
+                        "in global virtual server configuration for $driver"
+                    set validationOk 1
+                    break
+                }
+            }
+        }
+    }
+
+
     #
     # The port is currently ignored for determining the validated host
     # header field.
@@ -3067,10 +3104,10 @@ ad_proc -public security::validated_host_header {} {
     # either the same as configured hostname in the driver
     # configuration or one of its IP addresses.
     #
-    set validationOk 0
-    if {$hostName eq $driverHostName} {
+    if {$validationOk == 0 && $hostName eq $driverHostName} {
         set validationOk 1
-    } else {
+    }
+    if {$validationOk == 0} {
         try {
             ns_addrbyhost -all $driverHostName
         } on error {errorMsg} {
@@ -3102,37 +3139,6 @@ ad_proc -public security::validated_host_header {} {
     if {$validationOk == 0 && [util::split_location [ad_url] .proto systemHost systemPort]} {
         set validationOk [expr {$hostName eq $systemHost
                                 && ($hostPort eq $systemPort || $hostPort eq "") }]
-    }
-
-    if {$validationOk == 0 && [ns_info name] eq "NaviServer"} {
-        #
-        # Check against the virtual server configuration of NaviServer.
-        #
-        set s [ns_info server]
-        set driverInfo [security::configured_driver_info]
-        set drivers [lmap d $driverInfo {dict get $d driver}]
-
-        foreach driver $drivers {
-            #
-            # Check global "servers" configuration for virtual servers for the driver
-            #
-            set ns [ns_configsection ns/module/$driver/servers]
-            if {$ns ne ""} {
-                #
-                # We have a global "servers" configuration for the driver
-                #
-                set names [lmap {key value} [ns_set array $ns] {
-                    if {$key ne $s} continue
-                    set value
-                }]
-                if {$host in $names} {
-                    ns_log notice "security::validated_host_header: found $host" \
-                        "in global virtual server configuration for $driver"
-                    set validationOk 1
-                    break
-                }
-            }
-        }
     }
 
     if {$validationOk == 0} {
