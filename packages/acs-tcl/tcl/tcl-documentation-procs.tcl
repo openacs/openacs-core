@@ -1980,7 +1980,7 @@ ad_page_contract_filter dbtext { name value } {
     #
     # Reject the NUL character
     #
-    if {[regexp \u00 $value]} {
+    if {[string first \u00 $value] != -1} {
         ad_complain [_ acs-tcl.lt_name_contains_invalid]
         return 0
     }
@@ -1996,7 +1996,8 @@ ad_page_contract_filter html { name value } {
     #
     # Reject the NUL character
     #
-    if {[regexp \u00 $value]} {
+    if {[string first \u00 $value] != -1} {
+        ns_log notice "--- found NUL"
         ad_complain [_ acs-tcl.lt_name_contains_invalid]
         return 0
     }
