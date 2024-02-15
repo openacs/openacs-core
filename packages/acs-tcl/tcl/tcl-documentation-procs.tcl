@@ -1968,11 +1968,39 @@ ad_page_contract_filter nohtml { name value } {
     return 1
 }
 
+ad_page_contract_filter dbtext { name value } {
+    Ensure that the value can be used in an SQL query.
+
+    Note that this is not the same as quoting or otherwise ensuring
+    the safety of the statement itself. What we enforce here is that
+    the value will be accepted by the db interface without
+    complaining. The actual definition may change or be database
+    specific in the future.
+} {
+    #
+    # Reject the NUL character
+    #
+    if {[regexp \u00 $value]} {
+        ad_complain [_ acs-tcl.lt_name_contains_invalid]
+        return 0
+    }
+
+    return 1
+}
+
 ad_page_contract_filter html { name value } {
     Checks whether the value contains naughty HTML
     @author Lars Pind (lars@pinds.com)
     @creation-date 25 July 2000
 } {
+    #
+    # Reject the NUL character
+    #
+    if {[regexp \u00 $value]} {
+        ad_complain [_ acs-tcl.lt_name_contains_invalid]
+        return 0
+    }
+
     set naughty_prompt [ad_html_security_check $value]
     if { $naughty_prompt ne "" } {
         ad_complain $naughty_prompt

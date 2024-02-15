@@ -469,6 +469,7 @@ aa_register_case \
         ad_page_contract_filter_proc_nohtml
         ad_page_contract_filter_proc_object_id
         ad_page_contract_filter_proc_object_type
+        ad_page_contract_filter_proc_dbtext
         ad_page_contract_filter_proc_oneof
         ad_page_contract_filter_proc_path
         ad_page_contract_filter_proc_phone
@@ -509,17 +510,40 @@ aa_register_case \
 
         dict set cases word {red 1 " " 0 "hello_world" 1 {$a} 0 a1 1 <p> 0 "a.b" 0 "-flag" 0 "1,2" 0 "r: -1" 0}
         dict set cases token {red 1 " " 1 "hello_world" 1 {$a} 0 a1 1 <p> 0 "a.b" 1 "-flag" 1 "1,2" 1 "r: -1" 1}
-        dict set cases safetclchars {red 1 " " 1 "hello world" 1 {$a} 0 a1 1 <p> 1 "a.b" 1 "-flag" 1 "1,2" 1 "r: -1" 1 {a[b]c} 0 x\\y 0}
+        dict set cases safetclchars {red 1 " " 1 "hello world" 1 {$a} 0 a1 1 <p> 1 "a.b" 1 "-flag" 1 "1,2" 1 "r: -1" 1 {a[b]c} 0 x\\y 0} 
 
         dict set cases sql_identifier  {red 1 " " 0 "hello_world" 1 {$a} 0 a1 1 <p> 0 "a.b" 0 "-flag" 0 "1,2" 0 "r: -1" 0}
         dict set cases email { {philip@mit.edu} 1 {Philip Greenspun <philip@mit.edu>} 0 }
         dict set cases localurl { . 1 ./index 1 https://o-p-e-n-a-c-s.org/ 0 }
 
-        dict set cases html { "'" 1 "<p>" 1 }
-        dict set cases nohtml { "a" 1 "<p>" 0 }
-        dict set cases allhtml { "a" 1 "<p>" 1 "<script>alert('ciao');</script>" 1}
+        set nul_char \u00
+        set string_with_nul "I have '$nul_char' inside"
 
-        dict set cases printable { "a" 1 "a b" 1 "a\x00b" 0 "name\xc0\x80.jpg" 0}
+        dict set cases html [list \
+                                 "a" 1 \
+                                 "'" 1 \
+                                 "<p>" 1 \
+                                 "<script>alert('ciao');</script>" 0 \
+                                 $string_with_nul 0]
+        dict set cases nohtml [list \
+                                   "a" 1 \
+                                   "'" 1 \
+                                   "<p>" 0 \
+                                   "<script>alert('ciao');</script>" 0 \
+                                   $string_with_nul 1]
+        dict set cases allhtml [list \
+                                    "a" 1 \
+                                    "'" 1 \
+                                    "<p>" 1 \
+                                    "<script>alert('ciao');</script>" 1 \
+                                    $string_with_nul 1]
+
+        dict set cases printable [list \
+                                      "a" 1 \
+                                      "a b" 1 \
+                                      "a\x00b" 0 \
+                                      "name\xc0\x80.jpg" 0 \
+                                      $string_with_nul 0]
 
         dict set cases date {
             {day 1 month 1 year 2010} 1
@@ -578,6 +602,18 @@ aa_register_case \
             "10-10-220 800.888.8888" 0
             "abcd(800) 888-8888" 0
         }
+
+        set nul_char \u00
+        set string_with_nul "I have '$nul_char' inside"
+        dict set cases dbtext [list \
+                                9999999999999999999999 1 \
+                                "I am text" 1 \
+                                "I am <b>HTML<b>" 1 \
+                                "select min(object_id) from acs_objects where object_type = 'user'" 1 \
+                                $string_with_nul 0 \
+                                "I also have '\u00\u00'" 0 \
+                               ]
+
 
         foreach filter [dict keys $cases] {
             foreach { value result } [dict get $cases $filter] {
