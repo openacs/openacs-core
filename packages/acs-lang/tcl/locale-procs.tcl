@@ -174,19 +174,28 @@ ad_proc -public lang::system::timezone_utc_offset { } {
     return [db_string system_utc_offset {}]
 }
 
-ad_proc -public lang::system::get_locales {} {
+ad_proc -public lang::system::get_locales {
+    {-all:boolean}
+} {
 
-    Return all enabled locales in the system. This value is cached per
-    thread and needs currently a server restart, when the system
-    locales are changed.
+    Return all locales defined in the system. Per default only the
+    enabled locales are returned. When the optional flag "-all" is
+    specified, all defined locales are returend.
+    
+    This value is cached per thread and needs currently a server
+    restart, when the system locales are changed.
 
     @author Peter Marklund
 } {
-    return [acs::per_thread_cache eval -key acs-lang.system_get_locales {
-        db_list select_system_locales {
-            select locale
-            from   ad_locales
-            where  enabled_p = 't'
+    return [acs::per_thread_cache eval -key acs-lang.system_get_locales-$all_p {
+        if {$all_p} {
+            db_list select_defined_system_locales { select locale from ad_locales }
+        } else {
+            db_list select_enabled_system_locales {
+                select locale
+                from   ad_locales
+                where  enabled_p = 't'
+            }
         }
     }]
 }
