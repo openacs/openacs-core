@@ -1728,12 +1728,28 @@ ad_proc -private ad_parse_html_attributes_upvar {
                             continue
                         }
 
+                        #
+                        # Try to detect malicious attempts to
+                        # "disguise" a protocol by quoting the
+                        # colon character.
+                        #
+                        # The &colon; entity is currently not
+                        # automatically unquoted by tDOM, so we
+                        # replace it manually. This may go away at
+                        # some point.
+                        #
+                        # See
+                        # http://tdom.org/index.html/tktview/d59ea07e74a1903435a947862dd7acd74a4eb92e
+                        #
+                        set url [string map {&colon; :} $url]
+
                         set proto ""
                         try {
                             set parsed_url [ns_parseurl $url]
                             if {[dict exists $parsed_url proto]} {
                                 set proto [dict get $parsed_url proto]
                             }
+
                         } on error {errorMsg} {
                             ns_log warning "ad_dom_sanitize_html cannot parse URL '$url': $errorMsg"
                             #
