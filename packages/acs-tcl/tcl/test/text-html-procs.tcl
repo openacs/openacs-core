@@ -722,6 +722,20 @@ aa_register_case \
     aa_true "$msg with validate?" $valid_p
     aa_false $msg? [regexp {<([a-z]\w*)\s+[^>]*(href|src|content|action)="(http|https|//):.*"[^>]*>} $result]
 
+    #
+    # Replicate XSS detected by penetration tool in 2024
+    #
+    set content {<A HreF= javascript&colon;uHXK(9814)>}
+    set outcome false
+    aa_false "Injecting via quoting the colon character fails" \
+        [ad_dom_sanitize_html \
+             -allowed_tags * \
+             -allowed_attributes * \
+             -allowed_protocols * \
+             -html $content \
+             -no_js \
+             -validate]
+
 }
 
 aa_register_case \
