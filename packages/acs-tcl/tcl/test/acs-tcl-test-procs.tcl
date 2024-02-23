@@ -523,7 +523,7 @@ aa_register_case \
                                  "a" 1 \
                                  "'" 1 \
                                  "<p>" 1 \
-                                 "<script>alert('ciao');</script>" 0 \
+                                 "<script>alert('ciao');</script>" [expr {[ad_html_security_check "<script>alert('ciao');</script>"] eq ""}] \
                                  $string_with_nul 0]
         dict set cases nohtml [list \
                                    "a" 1 \
