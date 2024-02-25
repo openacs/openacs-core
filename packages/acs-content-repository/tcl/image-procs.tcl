@@ -251,10 +251,10 @@ ad_proc -public image::identify_binary {
     @author Dave Bauer (dave@solutiongrove.com)
     @creation-date 2006-08-27
 } {
-    return [parameter::get \
-                -parameter ImageMagickIdentifyBinary \
-                -package_id [apm_package_id_from_key acs-content-repository] \
-                -default "/usr/bin/identify"]
+    return [::util::which [parameter::get \
+                               -parameter ImageMagickIdentifyBinary \
+                               -package_id [apm_package_id_from_key acs-content-repository] \
+                               -default "identify"]]
 }
 
 ad_proc -public image::convert_binary {
@@ -264,10 +264,10 @@ ad_proc -public image::convert_binary {
     @author Dave Bauer (dave@solutiongrove.com)
     @creation-date 2006-08-27
 } {
-    return [parameter::get \
-                -parameter ImageMagickConvertBinary \
-                -package_id [apm_package_id_from_key acs-content-repository] \
-                -default "/usr/bin/convert"]
+    return [::util::which [parameter::get \
+                               -parameter ImageMagickConvertBinary \
+                               -package_id [apm_package_id_from_key acs-content-repository] \
+                               -default "convert"]]
 }
 
 if {[ns_info name] eq "NaviServer"} {
