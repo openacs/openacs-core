@@ -47,7 +47,7 @@ namespace eval acs_admin {
                         # Check expiration of the certificate using the
                         # "openssl" command line tool.
                         #
-                        set notAfter [exec openssl x509 -enddate -noout -in $certfile]
+                        set notAfter [exec $openssl x509 -enddate -noout -in $certfile]
                         regexp {notAfter=(.*)$} $notAfter . date
                         set days [expr {([clock scan $date] - [clock seconds])/(60*60*24.0)}]
                         set info "Certificate $certfile will expire in [format %.1f $days] days"

@@ -1554,7 +1554,7 @@ ad_proc -private util::http::curl::version_not_cached {
 } {
     Gets Curl's version number.
 } {
-    set version [lindex [exec curl --version] 1]
+    set version [lindex [exec [::util::which curl] --version] 1]
 }
 
 ad_proc -private util::http::curl::version {
@@ -1762,7 +1762,7 @@ ad_proc -private util::http::curl::request {
 
     ## Issuing of the request
 
-    set cmd [list exec curl -s]
+    set cmd [list exec [::util::which curl] -s]
 
     if {$spool_p} {
         set spool_file [ad_tmpnam]

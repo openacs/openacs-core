@@ -2295,7 +2295,7 @@ ad_proc -private aa_test::write_test_file {} {
     set report_dir [aa_test::xml_report_dir]
     if { [file isdirectory $report_dir] } {
 
-        set hostname [exec hostname]
+        set hostname [exec [::utl::which hostname]]
         set server [ns_info server]
         set file_path "$report_dir/${hostname}-${server}-testreport.xml"
 
