@@ -415,7 +415,7 @@ ad_proc -public apm_gzip_cmd {} {
     @return A valid command name for gzip.
 
 } {
-    return gzip
+    return [::util::which gzip]
 }
 
 
@@ -424,7 +424,7 @@ ad_proc -public apm_tar_cmd {} {
     @return A valid command name for tar.
 
 } {
-    return tar
+    return [::util::which tar]
 }
 
 
