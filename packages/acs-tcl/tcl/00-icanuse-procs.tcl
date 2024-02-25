@@ -94,13 +94,14 @@ namespace eval ::acs {
 #
 # Register features provided by the server, available to all packages.
 # These features can typically not easily be provided by compatibility
-# routines.
+# routines. These features can be use via [::acs::icanuse FEATURENAME].
 #
-# Note that packages can register some optional features during bootup
-# as well, but the developer has to care about the registration and
-# loading order.
+# Note that packages can register some optional features during boot
+# up as well, but the developer has to care about the registration and
+# loading order. The commands are executed very early, this means
+# that, e.g., util::which is not yet available.
 #
-
+::acs::register_icanuse "gnugrep"                   [acs::cmd_error_contains [list exec grep -V] GNU]
 ::acs::register_icanuse "ns_asynclogfile"           {[info commands ::ns_asynclogfile] ne ""}
 ::acs::register_icanuse "ns_conn contentsentlength" [acs::cmd_has_subcommand ns_conn contentsentlength]
 ::acs::register_icanuse "ns_conn partialtimes"      [acs::cmd_has_subcommand ns_conn partialtimes]
@@ -131,9 +132,9 @@ namespace eval ::acs {
 ::acs::register_icanuse "ns_deletecookie -samesite" [acs::cmd_error_contains {ns_deletecookie ""} -samesite]
 
 #
-# At the time "ns_trim -prefix was introduced, a memory leak in
-# nsv_dict was removed that could lead to a growing size of NaviServer
-# on busy sites.
+# At the time "ns_trim -prefix was introduced in NaviServer, a memory
+# leak in nsv_dict was removed that could lead to a growing size of
+# nsd on busy sites.
 #
 ::acs::register_icanuse "nsv_dict"                  [acs::cmd_error_contains {ns_trim} -prefix]
 

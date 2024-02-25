@@ -17,17 +17,42 @@ set full_key "$package_key.$message_key"
 # special regexp for them
 
 if { [string match "acs-lang.localization-*" $full_key] } {
-    set grepfor "${full_key}|lc_get \[\"\{\]?[string range $message_key [string length "localization-"] end]\[\"\}\]?"
+    set grepfor "${full_key}|lc_get \[\"\{\]?[string range $message_key [string length localization-] end]\[\"\}\]?"
 } else {
     set grepfor "\\W${full_key}\\W"
 }
 
 multirow create message_usage file code
 
+set egrepCmd [::util::which egrep]
 ad_try {
-    exec find $::acs::rootdir -type f -regex ".*\\.\\(info\\|adp\\|sql\\|tcl\\)" -follow \
-        | xargs egrep "$grepfor" 2>/dev/null
 
+    if {[::acs::icanuse gnugrep]} {
+        exec -ignorestderr $egrepCmd -r \
+            --include=*.tcl \
+            --include=*.adp \
+            --include=*.sql \
+            --include=*.info \
+            $grepfor $::acs::rootdir/packages
+        
+    } else {
+        set findCmd [::util::which find]
+        set xargsCmd [::util::which xargs]
+        exec -ignorestderr $findCmd $::acs::rootdir/packages -type f -follow \
+            | $egrepCmd .(tcl|adp|sql|info) \
+            | $xargsCmd $egrepCmd $grepfor
+    }
+
+} on ok {findResult} {
+    #
+    # Successful operation. Strip the leading root directory path fore
+    # more compact display.
+    #
+    regsub -all $::acs::rootdir/packages/ $findResult "" findResult
+    
+    multirow append message_usage \
+        "Found Occurrences of this message key:" $findResult
+    
 } on error {errorMsg} {
     foreach line [split $errorMsg "\n"] {
         if { [string first "child process exited abnormally" $line] == -1 } {
