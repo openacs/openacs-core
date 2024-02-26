@@ -444,62 +444,8 @@ ad_proc -private apm_transfer_file {
     {-url}
     {-output_file_name}
 } {
-    #
-    # The original solution using ns_httpopen + file_copy does not work
-    # reliably under windows, for unknown reasons the downloaded file is
-    # truncated.
-    #
-    # Therefore, we check first for the NaviServer built in ns_http, then
-    # if the optional xotcl-core components are available...
-    #
-
-    # 5 minutes
-    set timeout 300
-
-    set httpImpls [util::http::available]
-    if {$httpImpls ne ""} {
-        ns_log notice "we can use the http::util:: interface using the $httpImpls implementation"
-        set result [util::http::get -url $url -timeout $timeout -spool]
-        file rename [dict get $result file] $output_file_name
-    } elseif {[namespace which ::xo::HttpRequest] ne ""} {
-        #
-        # ... use xo::HttpRequest...
-        #
-        ns_log notice "Transfer $url to $output_file_name based on ::xo::HttpRequest"
-        #
-        set r [::xo::HttpRequest new -url $url]
-        set fileChan [open $output_file_name w 0640]
-        fconfigure $fileChan -translation binary -encoding binary
-        puts -nonewline $fileChan [$r set data]
-        close $fileChan
-
-    } elseif {[set wget [::util::which wget]] ne ""} {
-        #
-        # ... if we have no ns_http, no ::xo::* and we have "wget"
-        # installed, we use it.
-        #
-        ns_log notice "Transfer $url to $output_file_name based on wget"
-        catch {exec $wget -O $output_file_name $url}
-
-    } else {
-        #
-        # Everything else failed, fall back to the original solution.
-        #
-        ns_log notice "Transfer $url to $output_file_name based on ns_httpopen"
-        # Open a destination file.
-        set fileChan [open  $output_file_name w 0640]
-        # Open the channel to the server.
-        set httpChan [lindex [ns_httpopen GET $url] 0]
-        ns_log Debug "APM: Copying data from $url"
-        fconfigure $httpChan -encoding binary
-        fconfigure $fileChan -encoding binary
-        # Copy the data
-        fcopy $httpChan $fileChan
-        # Clean up.
-        ns_log Debug "APM: Done copying data."
-        close $httpChan
-        close $fileChan
-    }
+    set result [util::http::get -url $url -timeout 300 -spool]
+    file rename [dict get $result file] $output_file_name
 }
 
 ad_proc -public apm_load_apm_file {
