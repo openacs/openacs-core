@@ -38,7 +38,7 @@ ad_proc twt::do_request { page_url } {
                 {unreachable} - {refused} {
                     ::twt::log "Failed to connect to server with error \"$errmsg\" - retrying"
                     incr retry_count
-                    exec "sleep" "5"
+                    ns_sleep 5s
                     set error_p 0
                     continue
                 }
