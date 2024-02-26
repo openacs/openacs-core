@@ -25,7 +25,7 @@
         <callbacks>
         </callbacks>
         <parameters>
-            <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="HtmlDocBin"  default="/usr/bin/htmldoc" description="path to the executable of htmldoc"/>
+            <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="HtmlDocBin"  default="htmldoc" description="name of HTML converter"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="ReturnComplaint"  default="/packages/acs-tcl/lib/ad-return-complaint" description="Template to use for the complaint page."/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="ReturnError"  default="/packages/acs-tcl/lib/ad-return-error" description="Template to use for the complaint page."/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="SuppressHttpPort"  default="0" description="Set to 1 to suppress the server's configured port --useful for example, when server is behind a proxy and: connection is switching from https to http or kernel's parameter ForceHostP is set to 1."/>
