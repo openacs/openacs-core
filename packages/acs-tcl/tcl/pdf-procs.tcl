@@ -27,27 +27,11 @@ ad_proc -public text_templates::create_pdf_content {
     @param set_var_call procedure-name which sets the variables used
 
     @return the pdf-file-name
-} {
-    
+} {   
     # create html.file
     set html_content [create_html_content -template_id $template_id -set_var_call $set_var_call]
-    set fp [file tempfile tmp_html_filename [ad_tmpdir]/pdf-XXXXXX.html]
-    puts $fp $html_content
-    close $fp
 
-    # create pdf-file
-    set tmp_pdf_filename "${tmp_html_filename}.pdf"
-    set htmldoc_bin [parameter::get -parameter "HtmlDocBin" -default "/usr/bin/htmldoc"]
-    if {[catch {exec $htmldoc_bin --webpage --quiet -t pdf -f $tmp_pdf_filename $tmp_html_filename} err]} {
-        ns_log Error "Error during conversion from html to pdf: $err"
-    }
-    file delete -- $tmp_html_filename
-
-    if {[ad_file exists $tmp_pdf_filename]} {
-        return $tmp_pdf_filename
-    } else {
-        return ""
-    }
+    return [text_templates::create_pdf_from_html $html_content]
 }
 
 
@@ -59,21 +43,33 @@ ad_proc -public text_templates::create_pdf_from_html {
     @param html_content HTML Content that is transformed into PDF
     @return filename of the pdf file
 } {
-    set fp [file tempfile tmp_html_filename [ad_tmpdir]/pdf-XXXXXX.html]
-    puts $fp $html_content
-    close $fp
+    
+    set progname [parameter::get -parameter "HtmlDocBin" -default "htmldoc"]
+    set htmldoc_bin [::util::which $progname]
+    if {$htmldoc_bin eq ""} {
+        error "text_templates::create_pdf_from_html: HTML converter 'progname' not found"
+    }
 
-    # create pdf-file
-    set tmp_pdf_filename "${tmp_html_filename}.pdf"
-    set htmldoc_bin [parameter::get -parameter "HtmlDocBin" -default "/usr/bin/htmldoc"]
-    if {[catch {exec $htmldoc_bin --webpage --quiet -t pdf -f $tmp_pdf_filename $tmp_html_filename} err]} {
-        ns_log Error "Error during conversion from html to pdf: $err"
+    ad_try {
+        set fp [file tempfile tmp_html_filename [ad_tmpdir]/pdf-XXXXXX.html]
+        puts $fp $html_content
+        close $fp
+
+        # create pdf-file
+        set tmp_pdf_filename "${tmp_html_filename}.pdf"
+        exec $htmldoc_bin --webpage --quiet -t pdf -f $tmp_pdf_filename $tmp_html_filename
+
+        # return the result file command was successful
+        if {[ad_file exists $tmp_pdf_filename]} {
+            return $tmp_pdf_filename
+        }
+        
+    } on error {errorMsg} {
+        ns_log Error "Error during conversion from html to pdf: $errorMsg"
+    } finally {
+        file delete -- $tmp_html_filename
     }
-    if {[ad_file exists $tmp_pdf_filename]} {
-        return $tmp_pdf_filename
-    } else {
-        return ""
-    }
+    return ""
 }
 
 ad_proc -public text_templates::store_final_document {
