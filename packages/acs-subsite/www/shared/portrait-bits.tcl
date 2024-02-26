@@ -57,7 +57,7 @@ if { $item_id != 0} {
                 "file" {
                     set input_file [content::revision::get_cr_file_path -revision_id $itemInfo(revision_id)]
                     ad_try {
-                        exec convert $input_file -resize $size $filename
+                        exec [::util::which convert] $input_file -resize $size $filename
                     } on error {errorMsg} {
                         ad_log warning "portrait-bits: convert returned error: $errorMsg"
                         ns_returnfile 200 $default_avatar_mime $default_avatar
@@ -74,7 +74,7 @@ if { $item_id != 0} {
                         where revision_id = :revision_id
                     } -file $input_file
                     ad_try {
-                        exec convert $input_file -resize $size $filename
+                        exec [::util::which convert] $input_file -resize $size $filename
                     } on error {errorMsg} {
                         ad_log warning "portrait-bits: convert returned error: $errorMsg"
                         ns_returnfile 200 $default_avatar_mime $default_avatar

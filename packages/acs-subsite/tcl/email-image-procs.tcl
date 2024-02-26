@@ -173,19 +173,19 @@ ad_proc -public email_image::new_item {
     set bg "xc:$bgcolor"
 
     # Creating an image of the right length where the email will be
-    if {[catch {exec convert -size $size $bg $dest_path} errmsg]} {
+    if {[catch {exec [::util::which convert] -size $size $bg $dest_path} errmsg]} {
         return ""
     }
 
     # Creating the image with the email of the user on it
-    if {[catch {exec convert -font $font_type -fill blue -pointsize $font_size -draw "text 0,$ypos $email" \
+    if {[catch {exec [::util::which convert] -font $font_type -fill blue -pointsize $font_size -draw "text 0,$ypos $email" \
                     $dest_path $dest_path} errmsg]} {
         return ""
     }
 
     if { $transparent eq "" || $transparent eq "1" } {
         # Making the bg color transparent
-        if {[catch {exec convert $dest_path -transparent $bgcolor $dest_path} errmsg]} {
+        if {[catch {exec [::util::which convert] $dest_path -transparent $bgcolor $dest_path} errmsg]} {
             return ""
         }
     }
@@ -258,18 +258,18 @@ ad_proc -public email_image::edit_email_image {
     set bg "xc:$bgcolor"
 
     # Creating an image of the right length where the email will be
-    if { [catch { exec convert -size $size $bg $dest_path } ] } {
+    if { [catch { exec [::util::which convert] -size $size $bg $dest_path } ] } {
         # ImageMagick not present
         return
     }
 
     # Creating the image with the email of the user on it
-    exec convert -font $font_type -fill blue -pointsize $font_size -draw "text 0,$ypos $new_email" \
+    exec [::util::which convert] -font $font_type -fill blue -pointsize $font_size -draw "text 0,$ypos $new_email" \
         $dest_path $dest_path
 
     if { $transparent eq "" || $transparent eq "1" } {
         # Making the bg color transparent
-        exec convert $dest_path -transparent $bgcolor $dest_path
+        exec [::util::which convert] $dest_path -transparent $bgcolor $dest_path
     }
 
     set email_image_id [email_image::get_related_item_id -user_id $user_id]
