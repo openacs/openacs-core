@@ -79,7 +79,7 @@ ad_proc -private cr_scan_mime_types {} {
     }
 }
 
-ad_proc -private cr_check_orphaned_files {
+ad_proc -private -deprecated cr_check_orphaned_files {
     -delete:boolean
     {-mtime ""}
 } {
@@ -101,7 +101,7 @@ ad_proc -private cr_check_orphaned_files {
     set root_length [string length $cr_root]
     set result ""
 
-    set cmd [list exec find $cr_root/ -type f]
+    set cmd [list exec [util::which find] $cr_root/ -type f]
     if {$mtime ne ""} {lappend cmd -mtime $mtime}
     foreach f [split [{*}$cmd] \n] {
         set name [string range $f $root_length end]
