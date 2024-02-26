@@ -3239,7 +3239,7 @@ ad_proc -public util::word_diff {
     set sv 1
 
     try {
-        exec -ignorestderr diff -f $old_f $new_f
+        exec -ignorestderr [util::which diff] -f $old_f $new_f
     } on error {output} {
     } on ok {output} {
     }
@@ -3445,35 +3445,51 @@ ad_proc -public util::which {prog} {
 
     @author Gustaf Neumann
 } {
-    switch -- $::tcl_platform(platform) {
-        windows {
-            #
-            # Notice: Windows has an alternative search environment
-            #         via registry. Maybe it is necessary in the future
-            #         to locate the program via registry (sketch below)
-            #
-            # package require registry
-            # set key {HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths}
-            # set entries [registry keys $key $prog.*]
-            # if {[llength $entries]>0} {
-            #   set fullkey "$key\\[lindex $entries 0]"
-            #   return [registry get $fullkey ""]
-            # }
-            # return ""
-            #
-            set searchdirs [split $::env(PATH) \;]
-            set exts       [list .exe .dll .com .bat]
-        }
-        default {
-            set searchdirs [split $::env(PATH) :]
-            set exts       [list ""]
-        }
+    set key ::acs::which($prog)
+
+    if {[info exists $key]} {
+        return [set $key]
     }
-    foreach dir $searchdirs {
-        set fullname [ad_file join $dir $prog]
-        foreach ext $exts {
-            if {[ad_file executable $fullname$ext]} {
-                return $fullname$ext
+    if {$prog ne ""} {
+        
+        switch -- $::tcl_platform(platform) {
+            windows {
+                #
+                # Notice: Windows has an alternative search environment
+                #         via registry. Maybe it is necessary in the future
+                #         to locate the program via registry (sketch below)
+                #
+                # package require registry
+                # set key {HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths}
+                # set entries [registry keys $key $prog.*]
+                # if {[llength $entries]>0} {
+                #   set fullkey "$key\\[lindex $entries 0]"
+                #   return [registry get $fullkey ""]
+                # }
+                # return ""
+                #
+                set searchdirs [split $::env(PATH) \;]
+                set exts       [list .exe .dll .com .bat]
+            }
+            default {
+                set searchdirs [split $::env(PATH) :]
+                set exts       [list ""]
+            }
+        }       
+        set names [lmap ext $exts {set _ $prog$ext}]
+        if {[ad_file pathtype $prog] ne "relative"} {
+            set fullNames $names
+        } else {
+            set fullNames {}
+            foreach dir $searchdirs {
+                foreach name $names {
+                    lappend fullNames [ad_file join $dir $name]
+                }
+            }
+        }
+        foreach fullName $fullNames {
+            if {[ad_file executable $fullName]} {
+                return [set $key $fullName]
             }
         }
     }

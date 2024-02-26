@@ -1549,40 +1549,100 @@ aa_register_case \
 # This test could be used to make sure binaries in use in the code are
 # actually available to the system.
 #
-# aa_register_case -cats {
-#     smoke production_safe
-# } -procs {
-#     util::which
-#     apm_tar_cmd
-#     apm_gzip_cmd
-#     db_get_pgbin
-#     db_name
-# } acs_tcl_exec_dependencies {
-#     Test external command dependencies for this package.
-# } {
-#     set commands [list \
-#                       [::util::which [apm_tar_cmd]] \
-#                       [::util::which [apm_gzip_cmd]] \
-#                       [parameter::get -parameter "HtmlDocBin" -default "/usr/bin/htmldoc"] \
-#                       [::util::which pdfinfo] \
-#                       [::util::which diff] \
-#                       [::util::which dot] \
-#                       [::util::which gzip] \
-#                       [::util::which curl] \
-#                      ]
 
-#     if {[db_name] eq "PostgreSQL"} {
-#         #
-#         # On a Posgtgres-enabled installation, we also want psql.
-#         #
-#         lappend commands [file join [db_get_pgbin] psql]
-#     }
+ad_proc -private _acs_tcl__acs_tcl_external_dependencies_helper {} {
+} {
+    lappend required \
+        [apm_gzip_cmd] \
+        [apm_tar_cmd] \
+        [image::identify_binary] \
+        [image::convert_binary] \
+        convert \
+        curl \
+        egrep \
+        file \
+        gzip \
+        gzip \
+        identify \
+        tar 
+        
+    lappend optional \
+        [parameter::get -parameter "HtmlDocBin" -default "htmldoc"] \
+        aspell \
+        clamdscan \
+        date \
+        diff \
+        dot \
+        find \
+        hostname \
+        ispell \
+        openssl \
+        pdfinfo \
+        qrencode \
+        tail \
+        tesseract \
+        tidy \
+        uptime \
+        wget \
+        xargs \
+        zdump 
+    
+    if {[db_name] eq "PostgreSQL"} {
+        #
+        # On a Posgtgres-enabled installation, we also want psql.
+        #
+        lappend required [file join [db_get_pgbin] psql]
+    }
+    return [list required $required optional $optional]
+}
 
-#     foreach cmd $commands {
-#         aa_true "'$cmd' is executable" [file executable $cmd]
-#     }
-# }
+aa_register_case -cats {
+    smoke production_safe
+} -procs {
+    util::which
+    apm_tar_cmd
+    apm_gzip_cmd
+    db_get_pgbin
+    db_name
+    image::identify_binary
+    image::convert_binary
+} acs_tcl_exec_required_dependencies {
+    Test availability of required external commands.
+} {
+    set d [_acs_tcl__acs_tcl_external_dependencies_helper]
 
+    foreach cmd [dict get $d required] {
+        set fullCmd [::util::which $cmd]
+        aa_true "'$cmd' exists" {$fullCmd ne ""}
+        if {$fullCmd ne ""} {
+            aa_true "'$cmd' is executable" [file executable $fullCmd]
+        }
+    }
+}
+
+aa_register_case -cats {
+    smoke production_safe
+} -error_level warning -procs {
+    util::which
+    apm_tar_cmd
+    apm_gzip_cmd
+    db_get_pgbin
+    db_name
+    image::identify_binary
+    image::convert_binary
+} acs_tcl_exec_optional_dependencies {
+    Test availability of optional external commands.
+} {
+    set d [_acs_tcl__acs_tcl_external_dependencies_helper]
+
+    foreach cmd [dict get $d optional] {
+        set fullCmd [::util::which $cmd]
+        aa_true "'$cmd' exists" {$fullCmd ne ""}
+        if {$fullCmd ne ""} {
+            aa_true "'$cmd' is executable" [file executable $fullCmd]
+        }
+    }
+}
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
