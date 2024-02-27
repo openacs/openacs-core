@@ -1562,10 +1562,9 @@ ad_proc -private _acs_tcl__acs_tcl_external_dependencies_helper {} {
         egrep \
         file \
         gzip \
-        gzip \
         identify \
-        tar 
-        
+        tar
+
     lappend optional \
         [parameter::get -parameter "HtmlDocBin" -default "htmldoc"] \
         aspell \
@@ -1585,8 +1584,8 @@ ad_proc -private _acs_tcl__acs_tcl_external_dependencies_helper {} {
         uptime \
         wget \
         xargs \
-        zdump 
-    
+        zdump
+
     if {[db_name] eq "PostgreSQL"} {
         #
         # On a Posgtgres-enabled installation, we also want psql.
