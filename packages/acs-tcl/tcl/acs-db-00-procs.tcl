@@ -44,6 +44,7 @@ namespace eval ::acs::db {
     ::nx::Class create ::acs::db::Driver {
         :property backend
         :property driver
+        :property {dbn ""}
         #
         # Define the "abstract" API (here via protected methods)
         #
@@ -78,6 +79,10 @@ namespace eval ::acs::db {
             #
             :uplevel 2 [list subst $sql]
         }
+
+        :method map_default_dbn {dbn} {
+            return [expr {$dbn eq "" && ${:dbn} ne "" ? ${:dbn} : $dbn}]
+        }
     }
 
     #
@@ -99,7 +104,7 @@ namespace eval ::acs::db {
     ::nx::Class create ::acs::db::nsdbi-postgresql -superclasses {::acs::db::nsdbi ::acs::db::postgresql} {
         #
         # PostgreSQL backend for nsdbi driver
-        #        
+        #
     }
     #
     # Preliminary list of functions (to be extended/refined)
@@ -109,7 +114,7 @@ namespace eval ::acs::db {
         if {$sql eq ""} {
             set qn [uplevel [list [self] qn $qn]]
         }
-        return [:uplevel [list ::db_list_of_lists -dbn $dbn $qn $sql {*}$bindOpt]]
+        return [:uplevel [list ::db_list_of_lists -dbn [:map_default_dbn $dbn] $qn $sql {*}$bindOpt]]
     }
 
     ::acs::db::nsdb public method list {{-dbn ""} {-bind ""} -prepare qn sql} {
@@ -117,13 +122,14 @@ namespace eval ::acs::db {
         if {$sql eq ""} {
             set qn [uplevel [list [self] qn $qn]]
         }
-        uplevel [list ::db_list -dbn $dbn $qn $sql {*}$bindOpt]
+        uplevel [list ::db_list -dbn [:map_default_dbn $dbn] $qn $sql {*}$bindOpt]
     }
-    
+
     ::acs::db::nsdbi public method list_of_lists {{-dbn ""} {-bind ""} -prepare qn sql} {
         if {$sql eq ""} {
             set sql [:get_sql $qn]
         }
+        set dbn [:map_default_dbn $dbn]
         return [:uplevel [list ::dbi_rows \
                               {*}[expr {$dbn ne "" ? [list -db $dbn] : ""}] \
                               {*}[expr {$bind ne "" ? [list -bind $bind] : ""}] \
@@ -134,6 +140,7 @@ namespace eval ::acs::db {
         if {$sql eq ""} {
             set sql [:get_sql $qn]
         }
+        set dbn [:map_default_dbn $dbn]
         set flat [:uplevel [list ::dbi_rows -columns __columns \
                                 {*}[expr {$dbn ne "" ? [list -db $dbn] : ""}] \
                                 {*}[expr {$bind ne "" ? [list -bind $bind] : ""}] \
@@ -183,7 +190,7 @@ namespace eval ::acs::db {
                 set driver nsdbi
             }
         }
-        
+
         return [::acs::db::$driver-$backend create $name \
                     -backend $backend \
                     -driver $driver]
