@@ -355,6 +355,7 @@ insert into cr_extension_mime_type_map (extension, mime_type) values ( 'mid','au
 insert into cr_extension_mime_type_map (extension, mime_type) values ( 'midi','audio/midi' );
 insert into cr_extension_mime_type_map (extension, mime_type) values ( 'mif','application/vnd.mif' );
 insert into cr_extension_mime_type_map (extension, mime_type) values ( 'mime','message/rfc822' );
+insert into cr_extension_mime_type_map (extension, mime_type) values ( 'mjs','application/javascript' );
 insert into cr_extension_mime_type_map (extension, mime_type) values ( 'movie','video/x-sgi-movie' );
 insert into cr_extension_mime_type_map (extension, mime_type) values ( 'mov','video/quicktime' );
 insert into cr_extension_mime_type_map (extension, mime_type) values ( 'mp2','audio/x-mpeg2' );
