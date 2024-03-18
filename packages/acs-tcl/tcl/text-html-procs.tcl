@@ -1730,18 +1730,25 @@ ad_proc -private ad_parse_html_attributes_upvar {
 
                         #
                         # Try to detect malicious attempts to
-                        # "disguise" a protocol by quoting the
-                        # colon character.
+                        # "disguise" a protocol by replacing
+                        # characters with HTML entities.
                         #
-                        # The &colon; entity is currently not
-                        # automatically unquoted by tDOM, so we
-                        # replace it manually. This may go away at
-                        # some point.
+                        # Tools that target earlier versions of the
+                        # HTML specification may not be able to
+                        # properly recognize the latest entitities.
                         #
-                        # See
-                        # http://tdom.org/index.html/tktview/d59ea07e74a1903435a947862dd7acd74a4eb92e
+                        # Currently, tDOM targets HTML standard 4.01,
+                        # hence will not automatically unquote
+                        # entities such as "&colon;" and others, that
+                        # were introduced later. (See
+                        # http://tdom.org/index.html/tktview/d59ea07e74a1903435a947862dd7acd74a4eb92e)
                         #
-                        set url [string map {&colon; :} $url]
+                        # To overcome this limitation, we pass the URL
+                        # through ns_unquotehtml, which on NaviServer
+                        # > 4.99.30 will recognize and properly
+                        # unescape many of these new entities.
+                        #
+                        set url [ns_unquotehtml $url]
 
                         set proto ""
                         try {
