@@ -8,8 +8,8 @@ ad_page_contract {
     @creation-date 2000-09-30
     @cvs-id $Id$
 } {
-    object_id:naturalnum,notnull
-    {application_url ""}
+    object_id:object_id,notnull
+    {application_url:localurl ""}
     {return_url:localurl {[export_vars -base "one" {application_url object_id}]}}
 }
 

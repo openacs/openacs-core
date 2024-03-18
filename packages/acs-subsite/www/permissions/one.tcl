@@ -7,12 +7,12 @@ ad_page_contract {
     @author rhs@mit.edu
     @creation-date 2000-08-20
 } {
-    object_id:integer,notnull
+    object_id:object_id,notnull
     {children_p:boolean,notnull "f"}
     {detail_p:boolean,notnull "f"}
     {privs:nohtml ""}
     {inherited_permissions_p:boolean,notnull "f"}
-    {application_url ""}
+    {application_url:localurl ""}
 }
 
 set user_id [auth::require_login]
