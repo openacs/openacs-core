@@ -739,6 +739,16 @@ aa_register_case \
         {<A HreF= j&#x61;v&#x41;sc&#x52;ipt&#x3A;Nzcp(9278)>} \
         false
 
+    lappend cases \
+        {Disguising the word "javascript" by prepending some protocol (feed)} \
+        {<a hREF=feed:javascript&colon;whaQ(9877)>} \
+        false
+
+    lappend cases \
+        {Disguising the word "javascript" by prepending some protocol (data)} \
+        {<a hREF=data:javascript&colon;whaQ(9877)>} \
+        false
+
     foreach {description content outcome} $cases {
         aa_${outcome} $description \
             [ad_dom_sanitize_html \
