@@ -1750,6 +1750,32 @@ ad_proc -private ad_parse_html_attributes_upvar {
                         #
                         set url [ns_unquotehtml $url]
 
+                        #
+                        # Another trick seen by e.g. penetration tools
+                        # is to try and sneak in URLs sporting
+                        # multiple protocols. We reject those
+                        # altogether.
+                        #
+                        if {![regexp -nocase {^([a-z]+:){2,}} $url]} {
+                            #
+                            # A normal "0 or 1 protocols" URL
+                            #
+                        } elseif {$validate_p} {
+                            #
+                            # Multi-protocol URL and we are
+                            # validating. This HTML is invalid.
+                            #
+                            return 0
+                        } else {
+                            #
+                            # Multi-protocol URL and we are
+                            # sanitizing. Remove it from the
+                            # result.
+                            #
+                            $node removeAttribute $att
+                            continue
+                        }
+
                         set proto ""
                         try {
                             set parsed_url [ns_parseurl $url]
