@@ -1795,28 +1795,35 @@ ad_proc -private ad_parse_html_attributes_upvar {
                             }
                             continue
                         }
-                        if {$proto ne ""} {
-                            if {$no_outer_urls_p} {
-                                # no external URLs allowed: we still
-                                # want to allow fully specified URLs
-                                # that refer to this server, but we'll
-                                # transform them in a local absolute
-                                # reference. For all others, attribute
-                                # will be just removed.
-                                # - This is ok, points to our system...
-                                if {[regsub ^($our_locations) $url {} url]} {
-                                    set url /[string trimleft $url "/"]
-                                    $node setAttribute $att $url
-                                    # ...this is not, points elsewhere!
-                                } else {
-                                    # invalid attribute!
-                                    if {$validate_p} {
-                                        return 0
-                                    } else {
-                                        $node removeAttribute $att
-                                    }
-                                    continue
-                                }
+
+                        if {$proto ne "" && $no_outer_urls_p} {
+                            #
+                            # No external URLs allowed: we still want
+                            # to allow fully specified URLs that refer
+                            # to this server, but we'll transform them
+                            # in a local absolute reference. For all
+                            # others, attribute will be just removed.
+                            #
+                            if {[regsub ^($our_locations) $url {} url]} {
+                                #
+                                # This is ok, points to our system.
+                                #
+                                set url /[string trimleft $url "/"]
+                                $node setAttribute $att $url
+                            } elseif {$validate_p} {
+                                #
+                                # External URL and we are
+                                # validating. This HTML is invalid.
+                                #
+                                return 0
+                            } else {
+                                #
+                                # External URL and we are
+                                # sanitizing. Remove it from the
+                                # result.
+                                #
+                                $node removeAttribute $att
+                                continue
                             }
                         }
 
