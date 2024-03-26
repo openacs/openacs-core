@@ -155,6 +155,208 @@ aa_register_case \
 
     }
 }
+
+aa_register_case \
+    -cats {api smoke} \
+    -procs {
+        permission::inherit_p
+        permission::set_inherit
+        permission::set_not_inherit
+        permission::toggle_inherit
+        permission::get_parties_with_permission
+        permission::permission_p
+        permission::grant
+        site_node::instantiate_and_mount
+        application_group::group_id_from_package_id
+        group::add_member
+    } ad_proc_permission_inheritance_and_groups {
+
+        Test "advanced" permission use cases: inheritance via
+        permission context and group permissions.
+
+        @author Antonio Pisano <antonio@elettrotecnica.it>
+
+    } {
+        #
+        # Create a couple of test users
+        #
+        for {set i 1} {$i <= 4} {incr i} {
+            set user_$i [dict get [acs::test::user::create] user_id]
+        }
+
+        aa_run_with_teardown -rollback -test_code {
+            #
+            # To test permissions on some object, we create 2
+            # subsites. The second subsite inherits the permission
+            # context from the first.
+            #
+            set test_subsite_1 [site_node::instantiate_and_mount \
+                                    -node_name test-subsite-[db_nextval acs_object_id_seq] \
+                                    -package_key acs-subsite]
+            set test_subsite_2 [site_node::instantiate_and_mount \
+                                    -node_name test-subsite-[db_nextval acs_object_id_seq] \
+                                    -package_key acs-subsite \
+                                    -context_id $test_subsite_1]
+
+            #
+            # One advantage of using subsites to test is that they
+            # come with their own application group for free.
+            #
+            set test_group_1 [application_group::group_id_from_package_id \
+                                  -package_id $test_subsite_1]
+            set test_group_2 [application_group::group_id_from_package_id \
+                                  -package_id $test_subsite_2]
+
+            #
+            # Split the test users in the two application groups.
+            #
+            group::add_member \
+                -no_perm_check \
+                -group_id $test_group_1 \
+                -user_id $user_1
+            group::add_member \
+                -no_perm_check \
+                -group_id $test_group_1 \
+                -user_id $user_2
+
+            group::add_member \
+                -no_perm_check \
+                -group_id $test_group_2 \
+                -user_id $user_3
+            group::add_member \
+                -no_perm_check \
+                -group_id $test_group_2 \
+                -user_id $user_4
+
+            #
+            # Grant admin privilege for users of group 1 in the first subsite.
+            #
+            permission::grant -party_id $test_group_1 -object_id $test_subsite_1 -privilege "admin"
+
+            #
+            # Grant admin privilege for user_4 in the second subsite.
+            #
+            permission::grant -party_id $user_4 -object_id $test_subsite_2 -privilege "admin"
+
+            #
+            # Do a roundtrip on the inheritance settings api
+            #
+            aa_section "Check inheritance API"
+
+            aa_true "Default inherit status is true" \
+                [permission::inherit_p -object_id $test_subsite_2]
+
+            permission::toggle_inherit -object_id $test_subsite_2
+            aa_false "Inheritance off" \
+                [permission::inherit_p -object_id $test_subsite_2]
+
+            permission::toggle_inherit -object_id $test_subsite_2
+            aa_true "Inheritance on" \
+                [permission::inherit_p -object_id $test_subsite_2]
+
+            #
+            # We do this twice to check for consistency
+            #
+            permission::set_not_inherit -object_id $test_subsite_2
+            aa_false "Inheritance off" \
+                [permission::inherit_p -object_id $test_subsite_2]
+            permission::set_not_inherit -object_id $test_subsite_2
+            aa_false "Inheritance off" \
+                [permission::inherit_p -object_id $test_subsite_2]
+
+            #
+            # We do this twice to check for consistency
+            #
+            permission::set_inherit -object_id $test_subsite_2
+            aa_true "Inheritance on" \
+                [permission::inherit_p -object_id $test_subsite_2]
+            permission::set_inherit -object_id $test_subsite_2
+            aa_true "Inheritance on" \
+                [permission::inherit_p -object_id $test_subsite_2]
+
+            #
+            # Now verify permissions in various inheritance settings
+            #
+
+            aa_section "Inheritance ON"
+
+            for {set i 1} {$i <= 2} {incr i} {
+                set user_id [set user_$i]
+                aa_true "User '$user_id' from group 1, is an admin of subsite 2" \
+                    [permission::permission_p -party_id $user_id -object_id $test_subsite_2 -privilege "admin"]
+            }
+            for {set i 3} {$i <= 4} {incr i} {
+                set user_id [set user_$i]
+                aa_false "User '$user_id' from group 2, is NOT an admin of subsite 1" \
+                    [permission::permission_p -party_id $user_id -object_id $test_subsite_1 -privilege "admin"]
+            }
+            aa_true "User 4 has admin privilege on subsite 2" \
+                [permission::permission_p -party_id $user_4 -object_id $test_subsite_2 -privilege "admin"]
+            aa_true "Group 1 has admin privilege on subsite 2" \
+                [permission::permission_p -party_id $test_group_1 -object_id $test_subsite_2 -privilege "admin"]
+
+            set parties_with_permissions [list]
+            foreach entry [permission::get_parties_with_permission \
+                               -object_id $test_subsite_2 \
+                               -privilege admin] {
+                lassign $entry party_name party_id
+                lappend parties_with_permissions $party_id
+            }
+            foreach party_id [list $test_group_1 $user_1 $user_2 $user_4] {
+                aa_true "'$party_id' belongs to the parties with admin privileges '$parties_with_permissions'" \
+                    {$party_id in $parties_with_permissions}
+            }
+            foreach party_id [list $test_group_2 $user_3] {
+                aa_true "'$party_id' does NOT belong to the parties with admin privileges '$parties_with_permissions'" \
+                    {$party_id ni $parties_with_permissions}
+            }
+
+            aa_section "Inheritance OFF"
+
+            permission::toggle_inherit -object_id $test_subsite_2
+
+            for {set i 1} {$i <= 2} {incr i} {
+                set user_id [set user_$i]
+                aa_false "User '$user_id' from group 1, is NOT an admin of subsite 2" \
+                    [permission::permission_p -party_id $user_id -object_id $test_subsite_2 -privilege "admin"]
+            }
+            for {set i 3} {$i <= 4} {incr i} {
+                set user_id [set user_$i]
+                aa_false "User '$user_id' from group 2, is NOT an admin of subsite 1" \
+                    [permission::permission_p -party_id $user_id -object_id $test_subsite_1 -privilege "admin"]
+            }
+            aa_true "User 4 has admin privilege on subsite 2" \
+                [permission::permission_p -party_id $user_4 -object_id $test_subsite_2 -privilege "admin"]
+            aa_false "Group 1 has NO admin privilege on subsite 2" \
+                [permission::permission_p -party_id $test_group_1 -object_id $test_subsite_2 -privilege "admin"]
+
+            set parties_with_permissions [list]
+            foreach entry [permission::get_parties_with_permission \
+                               -object_id $test_subsite_2 \
+                               -privilege admin] {
+                lassign $entry party_name party_id
+                lappend parties_with_permissions $party_id
+            }
+            foreach party_id [list $user_4] {
+                aa_true "'$party_id' belongs to the parties with admin privileges '$parties_with_permissions'" \
+                    {$party_id in $parties_with_permissions}
+            }
+            foreach party_id [list $test_group_1 $test_group_2 $user_1 $user_2 $user_3] {
+                aa_true "'$party_id' does NOT belong to the parties with admin privileges '$parties_with_permissions'" \
+                    {$party_id ni $parties_with_permissions}
+            }
+
+
+        } -teardown_code {
+            for {set i 1} {$i <= 4} {incr i} {
+                set user_id [set user_$i]
+                acs::test::user::delete \
+                    -user_id $user_id \
+                    -delete_created_acs_objects
+            }
+        }
+    }
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
