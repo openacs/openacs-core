@@ -3228,7 +3228,7 @@ namespace eval ::security::csp {
                 #
                 set session_id [ad_conn peeraddr]
             }
-            set secret [ns_config "ns/server/[ns_info server]/acs" parametersecret ""]
+            set secret [ns_config "ns/server/[ns_info server]/acs" parameterSecret ""]
 
             if {[namespace which ::crypto::hmac] ne ""} {
                 set token  [::crypto::hmac string $secret $session_id-[clock clicks -microseconds]]
@@ -3403,12 +3403,12 @@ namespace eval ::security::parameter {
     ad_proc -public signed {{-max_age ""} value} {
 
         Compute a compact single-token signed value based on the
-        parametersecret.
+        parameterSecret.
 
         @see ::security::parameter::validated
     } {
         set token_id [sec_get_random_cached_token_id]
-        set secret [ns_config "ns/server/[ns_info server]/acs" parametersecret ""]
+        set secret [ns_config "ns/server/[ns_info server]/acs" parameterSecret ""]
         set signature [ad_sign -max_age $max_age -secret $secret -token_id $token_id $value]
         return [ns_base64urlencode [list $value $signature]]
     }
@@ -3425,7 +3425,7 @@ namespace eval ::security::parameter {
         set pair [ns_base64urldecode $input]
         if {[string is list -strict $pair] && [llength $pair] == 2} {
             lassign $pair value signature
-            set secret [ns_config "ns/server/[ns_info server]/acs" parametersecret ""]
+            set secret [ns_config "ns/server/[ns_info server]/acs" parameterSecret ""]
             set success [ad_verify_signature -secret $secret $value $signature]
         }
         if {$success} {
@@ -3579,7 +3579,7 @@ namespace eval ::security::csrf {
         if {[info exists $globalTokenName] && [set $globalTokenName] ne ""} {
             set token [set $globalTokenName]
         } else {
-            set secret [ns_config "ns/server/[ns_info server]/acs" parametersecret ""]
+            set secret [ns_config "ns/server/[ns_info server]/acs" parameterSecret ""]
             if {[namespace which ::crypto::hmac] ne ""} {
                 set token [::crypto::hmac string $secret [session_id]]
             } else {

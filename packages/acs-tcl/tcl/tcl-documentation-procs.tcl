@@ -1138,7 +1138,7 @@ ad_proc -public ad_page_contract {
                     # This is not an array, verify the scalar variable
                     if { ![info exists apc_signatures($formal_name)]
                          || ![ad_verify_signature \
-                                  -secret [ns_config "ns/server/[ns_info server]/acs" parametersecret ""] \
+                                  -secret [ns_config "ns/server/[ns_info server]/acs" parameterSecret ""] \
                                   $var $apc_signatures($formal_name)]
                      } {
                         ad_complain -key $formal_name:verify [_ acs-tcl.lt_The_signature_for_the]
@@ -1148,7 +1148,7 @@ ad_proc -public ad_page_contract {
                     # This is an array: verify the [array get] form of the array
                     if { ![info exists apc_signatures($formal_name)]
                          || ![ad_verify_signature \
-                                  -secret [ns_config "ns/server/[ns_info server]/acs" parametersecret ""] \
+                                  -secret [ns_config "ns/server/[ns_info server]/acs" parameterSecret ""] \
                                   [lsort [array get var]] $apc_signatures($formal_name)]
                      } {
                         ad_complain -key $formal_name:verify [_ acs-tcl.lt_The_signature_for_the]
