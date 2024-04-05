@@ -1,6 +1,7 @@
 <ul>
   <li><a href="@acs_admin_url@users">Users</a>
   <li><a href="subsites">Subsites</a> (@nr_subsites@)</li>
+  <if @cluster_enabled_p@ true><li><a href="cluster">Cluster Nodes</li></if>
   <li>OpenACS Packages
     <ul>
     <li><a href="@acs_admin_url@apm">Package Manager</a>
