@@ -26,7 +26,7 @@ aa_register_case \
         set package_length [string length $package_path]
         foreach f [ad_find_all_files $package_path] {
             set f [string range $f $package_length+1 end]
-            aa_true "File '$f' belongs to '$package_key' and was found by the api" {
+            aa_true "File '$f' belongs to '$package_key' and was found by the API" {
                 $f in $package_files
             }
         }
