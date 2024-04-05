@@ -992,12 +992,23 @@ ad_proc -public callback {
     if {$callback eq ""} {
         error "callback: no callback name given"
     }
-    # see that the contract exists and call the contract for
+    #
+    # Check, if the contract exists and call the contract for
     # arg validation -- ::callback::${callback}::contract is an
     # empty function that only runs the ad_proc generated arg parser.
 
     if {[namespace which ::callback::${callback}::contract] eq ""} {
-        error "Undefined callback $callback"
+        if {[ns_ictl epoch] == 0} {
+            #
+            # During initial startup, a callback implementation might
+            # not be loaded yet. Ignore the callback invocation, but
+            # inform the admin in the system log about it.
+            #            
+            ns_log notice "callback invocation $callback during startup ignored. " \
+                "The callback implementation might not be loaded yet."
+        } else {
+            error "Undefined callback $callback"
+        }
     }
     ::callback::${callback}::contract {*}$args
 
