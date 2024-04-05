@@ -439,7 +439,7 @@ ad_proc -public db_qd_get_fullname {local_name {added_stack_num 1}} {
     # db_qd_log QDDebug "generated fullname of $full_name"
 
     #
-    # The following block is apparently just for debugging
+    # The following block is apparently just for debugging.
     #
     # if {[llength $proc_name] > 1} {
     #     set proc_name_with_parameters "[lindex $proc_name 0] "
