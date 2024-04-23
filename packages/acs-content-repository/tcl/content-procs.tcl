@@ -68,6 +68,16 @@ ad_proc -public cr_create_content_file {
 
     if the -move flag is given the file is renamed instead
 } {
+    #
+    # A malicious user may try to sneak a symlink in the content
+    # repository, for instance, via a zip file upload. We want to
+    # prevent this.
+    #
+    file lstat $client_filename file_info
+    if {$file_info(type) eq "link"} {
+        error "Attempt to store a symlink in the content repository!"
+    }
+
     set content_file [cr_create_content_file_path $item_id $revision_id]
     set dir [cr_fs_path]
 
