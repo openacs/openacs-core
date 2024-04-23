@@ -2,14 +2,6 @@
 <queryset>
    <rdbms><type>postgresql</type><version>7.1</version></rdbms>
 
-<fullquery name="cr_write_content-file.write_file_content">
-      <querytext>
-          select :path || content
-          from cr_revisions
-          where revision_id = :revision_id
-      </querytext>
-</fullquery>
-
 <fullquery name="cr_write_content-lob.write_lob_content">
       <querytext>
           select lob as content, 'lob' as storage_type
