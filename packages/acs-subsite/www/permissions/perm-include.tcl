@@ -71,7 +71,7 @@ foreach priv $privs {
         [list \
              html { align center } \
              label [string totitle [string map {_ { }} [_ acs-subsite.$priv]]] \
-             display_template [subst {
+             display_template [subst -nocommands {
                <if @permissions.grantee_id@ eq -1 and $mainsite_p eq 1>
                  <if @permissions.${priv}_p@ eq 1>
                    <adp:icon name="checkbox-checked" title="#acs-subsite.perm_cannot_be_removed#">
