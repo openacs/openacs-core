@@ -11,6 +11,23 @@ ad_include_contract {
     {privs { read create write delete admin }}
     {detailed_permissions_p:boolean,notnull f}
     {user_add_url:localurl ""}
+} -validate {
+    valid_privs -requires {privs} {
+        #
+        # Ensure users can only specify valid privileges.
+        #
+        set n_privs [llength $privs]
+        if {$n_privs == 0} {
+            return
+        }
+        set n_valid_privs [db_string get_valid_permissions "
+            select count(*) from acs_privileges
+             where privilege in ([ns_dbquotelist $privs])"]
+        if {$n_privs != $n_valid_privs} {
+            ad_complain [_ acs-tcl.lt_name_contains_invalid \
+                             [list name privs]]
+        }
+    }
 }
 
 set user_id [ad_conn user_id]
