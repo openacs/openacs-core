@@ -166,6 +166,7 @@ aa_register_case \
         permission::get_parties_with_permission
         permission::permission_p
         permission::grant
+        permission::cache_flush
         site_node::instantiate_and_mount
         application_group::group_id_from_package_id
         group::add_member
@@ -183,11 +184,16 @@ aa_register_case \
         #
         # Create a couple of test users
         #
+        set all_parties [list]
+
         for {set i 1} {$i <= 4} {incr i} {
-            set user_$i [dict get [acs::test::user::create] user_id]
+            set user_id [dict get [acs::test::user::create] user_id]
+            set user_$i $user_id
+            lappend all_parties $user_id
         }
 
         set admin_user [dict get [acs::test::user::create -admin] user_id]
+        lappend all_parties $admin_user
 
         aa_run_with_teardown -rollback -test_code {
             #
@@ -211,6 +217,8 @@ aa_register_case \
                                   -package_id $test_subsite_1]
             set test_group_2 [application_group::group_id_from_package_id \
                                   -package_id $test_subsite_2]
+            lappend all_parties $test_group_1
+            lappend all_parties $test_group_2
 
             #
             # Split the test users in the two application groups.
@@ -285,6 +293,15 @@ aa_register_case \
 
             aa_section "Standard permission - Inheritance ON"
 
+            #
+            # System parameters affect how permissions are cached, so
+            # to have a consistent behavior on different
+            # installations, we flush manually.
+            #
+            foreach party_id $all_parties {
+                permission::cache_flush -party_id $party_id
+            }
+
             for {set i 1} {$i <= 2} {incr i} {
                 set user_id [set user_$i]
                 aa_true "User '$user_id' from group 1, is an admin of subsite 2" \
@@ -321,6 +338,10 @@ aa_register_case \
             aa_section "Standard permission - Inheritance OFF"
 
             permission::toggle_inherit -object_id $test_subsite_2
+
+            foreach party_id $all_parties {
+                permission::cache_flush -party_id $party_id
+            }
 
             for {set i 1} {$i <= 2} {incr i} {
                 set user_id [set user_$i]
@@ -373,6 +394,10 @@ aa_register_case \
 
             permission::set_inherit -object_id $test_subsite_2
 
+            foreach party_id $all_parties {
+                permission::cache_flush -party_id $party_id
+            }
+
             for {set i 1} {$i <= 2} {incr i} {
                 set user_id [set user_$i]
                 aa_true "User '$user_id' from group 1, is has '$privilege' of subsite 2" \
@@ -418,6 +443,10 @@ aa_register_case \
             aa_section "Custom non-child permission - Inheritance OFF"
 
             permission::set_not_inherit -object_id $test_subsite_2
+
+            foreach party_id $all_parties {
+                permission::cache_flush -party_id $party_id
+            }
 
             for {set i 1} {$i <= 2} {incr i} {
                 set user_id [set user_$i]
@@ -465,6 +494,10 @@ aa_register_case \
                 -privilege read -child_privilege $privilege
 
             permission::set_inherit -object_id $test_subsite_2
+
+            foreach party_id $all_parties {
+                permission::cache_flush -party_id $party_id
+            }
 
             #
             # As the new privilege is a child of the read privilege,
@@ -515,6 +548,10 @@ aa_register_case \
             aa_section "Custom permission child of a standard permission - Inheritance OFF"
 
             permission::set_not_inherit -object_id $test_subsite_2
+
+            foreach party_id $all_parties {
+                permission::cache_flush -party_id $party_id
+            }
 
             #
             # Group 1 does not inherit this permission now.
