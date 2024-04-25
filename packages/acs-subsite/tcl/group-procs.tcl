@@ -379,10 +379,6 @@ ad_proc -private group::flush_members_cache {
     @creation-date 2005-07-26
 } {
     ::acs::group_cache flush_pattern -partition_key $group_id *-$group_id-*
-    #util_memoize_flush [list group::get_members_not_cached -group_id $group_id -type party]
-    #util_memoize_flush [list group::get_members_not_cached -group_id $group_id -type user]
-    #util_memoize_flush [list group::get_members_not_cached -group_id $group_id -type person]
-    #util_memoize_flush_regexp [list group::member_p_not_cached -group_id $group_id (.*)]
 }
 
 ad_proc -deprecated -public group::permission_p {
