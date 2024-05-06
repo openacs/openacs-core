@@ -216,6 +216,27 @@ ad_proc -public template::util::richtext::initialize_widget {
         return {success 0}
     }
 
+    #
+    # The actual richtext-editor implementation may provide some
+    # use-case based presets. Examples may be a "minimal", "standard"
+    # and "advanced" configuration that are reused in various forms.
+    #
+    # Here, we check and eventually return such conf, which will be
+    # applied to the loading formfield.
+    #
+    # The purpose of this feature is to have a set of logical
+    # configurations that do not depend on the specific editor and
+    # can be extended downstream.
+    #
+    if {[dict exists $options preset]} {
+        set preset [dict get $options preset]
+        if {[info commands ::richtext::${editor}::preset::${preset}] ne ""} {
+            set options [dict merge \
+                             [::richtext::${editor}::preset::${preset}] \
+                             $options]
+        }
+    }
+
     set result {success 1}
     lappend result {*}[::richtext::${editor}::initialize_widget \
                            -form_id $form_id \
