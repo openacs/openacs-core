@@ -196,7 +196,7 @@ ad_proc -public template::util::richtext::get_property { what richtext_list } {
 ad_proc -public template::util::richtext::initialize_widget {
     -form_id
     -text_id
-    -editor
+    {-editor ""}
     {-options {}}
 } {
 
@@ -206,12 +206,22 @@ ad_proc -public template::util::richtext::initialize_widget {
 
     @param form_id   ID of the form containing the textarea
     @param text_id   ID of the textarea
-    @param editor    Editor, which should be used
+    @param editor    Editor, which should be used. Will default to that
+                     specified in acs-templating RichTextEditor
+                     parameter when not specified.
     @param options   Options passed in from the widget spec
 
     @return          On success, this function returns a dict with success 1
 
 } {
+    if {$editor eq ""} {
+        set package_id_templating [::apm_package_id_from_key "acs-templating"]
+        set editor [::parameter::get \
+                        -package_id $package_id_templating \
+                        -parameter "RichTextEditor" \
+                        -default "xinha"]
+    }
+
     if {![require_editor -editor $editor]} {
         return {success 0}
     }
@@ -506,10 +516,7 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
         if { $htmlarea_p } {
             # figure out, which rich text editor to use
             set richtextEditor [expr {[info exists options(editor)] ?
-                                      $options(editor) : [parameter::get \
-                                                              -package_id $package_id_templating \
-                                                              -parameter "RichTextEditor" \
-                                                              -default "xinha"]}]
+                                      $options(editor) : ""}]
             #
             # Tell the blank-master to include the special stuff
             # for the richtext widget in the page header
