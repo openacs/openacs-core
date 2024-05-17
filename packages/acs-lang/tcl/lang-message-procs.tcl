@@ -281,7 +281,7 @@ ad_proc -public lang::message::register {
     }
 
     # Update the message catalog cache
-    nsv_set lang_message_$locale $key $message
+    acs::clusterwide nsv_set lang_message_$locale $key $message
 }
 
 ad_proc -public lang::message::delete {
@@ -305,7 +305,7 @@ ad_proc -public lang::message::delete {
 
     # Cleanup the nsv caching the message
     set key "${package_key}.${message_key}"
-    nsv_unset -nocomplain -- lang_message_$locale $key
+    acs::clusterwide nsv_unset -nocomplain -- lang_message_$locale $key
 }
 
 ad_proc -private lang::message::undelete {
@@ -611,7 +611,7 @@ ad_proc -private lang::message::remove_from_cache {
         set nsv_array lang_message_$locale
         set nsv_key "${package_key}.${message_key}"
         if { [nsv_exists $nsv_array $nsv_key] } {
-            nsv_unset $nsv_array $nsv_key
+            acs::clusterwide nsv_unset $nsv_array $nsv_key
         }
     }
 }
@@ -982,7 +982,7 @@ ad_proc -public lang::message::lookup {
     return $message
 }
 
-ad_proc -public lang::message::cache {} {
+ad_proc -public lang::message::cache {{-force:boolean}} {
     Loads the entire message catalog from the database into the cache.
 } {
     #
@@ -990,7 +990,7 @@ ad_proc -public lang::message::cache {} {
     # we segregate instead by package keys. Check mutex contention
     # nsstats (with ns_info locks).
     #
-    if {[nsv_incr lang_message_cache executed_p] == 1} {
+    if {[nsv_incr lang_message_cache executed_p] == 1 || $force_p} {
 
         set i 0
         db_foreach select_locale_keys {
@@ -1001,8 +1001,6 @@ ad_proc -public lang::message::cache {} {
             nsv_set lang_message_$locale "${package_key}.${message_key}" $message
             incr i
         }
-
-        db_release_unused_handles
 
         ns_log Notice "lang::message::cache - Initialized message cache with $i rows from database"
     }

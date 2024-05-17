@@ -93,6 +93,7 @@ ad_proc -public util_memoize_seed {script value {max_age ""}} {
 
     @param max_age Not used.
 } {
+    util_memoize_flush $script
     ns_cache_eval -force util_memoize $script [list set _ $value]
 }
 
