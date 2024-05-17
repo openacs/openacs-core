@@ -102,6 +102,7 @@ namespace eval ::acs {
             ns_urlspace ""
             acs::cache_flush_all ""
             acs::cache_flush_pattern ""
+            lang::message::cache ""
             ::acs::cluster "^::acs::cluster\s+join_request"
             ::acs::cluster "^::acs::cluster\s+disconnect_request"
         }
