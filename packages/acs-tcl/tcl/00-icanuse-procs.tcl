@@ -139,11 +139,16 @@ namespace eval ::acs {
 ::acs::register_icanuse "nsv_dict"                  [acs::cmd_error_contains {ns_trim} -prefix]
 
 #
+# At the time "ns_ip" was introduced in NaviServer, the member
+# "proxied" was added to the result of "ns_conn details".
+
+::acs::register_icanuse "ns_conn proxied" {[info commands ::ns_ip] ne ""}
+
+#
 # When "nsf::parseargs -asdict" was introduced, the object aliasing
 # was also introduced in nsf. .... But this feature is not ready yet.
 #
 #::acs::register_icanuse "nx::alias object"          [acs::cmd_error_contains {nsf::parseargs} -asdict]
-
 
 #
 # The following commands check indirectly the availability, since the

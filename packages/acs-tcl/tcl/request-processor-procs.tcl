@@ -1715,6 +1715,9 @@ ad_proc -public ad_conn {args} {
                                     return [ns_set value $headers $i]
                                 }
                             }
+                            #
+                            # Default for newer versions of NaviServer
+                            #
                             return [set ad_conn(peeraddr) [ns_conn peeraddr]]
                         }
 
@@ -1768,16 +1771,30 @@ ad_proc -public ad_conn {args} {
                         }
 
                         behind_proxy_p {
-                            #
-                            # Check, if we are running behind a proxy:
-                            # a) the parameter "ReverseProxyMode" has to be set
-                            # b) the header-field X-Forwarded-For must be present
-                            #
-                            set ad_conn(behind_proxy_p) 0
+                            set ad_conn(ajax_p) 0
                             if {[ns_conn isconnected]} {
-                                if { [ns_config "ns/parameters" ReverseProxyMode false]
-                                     && [ns_set ifind [ns_conn headers] X-Forwarded-For] > -1} {
-                                    set ad_conn(behind_proxy_p) 1
+
+                                if {[acs::icanuse "ns_conn proxied"]} {
+                                    #
+                                    # Newer versions of NaviServer
+                                    # provide feedback, whteher the
+                                    # peer was connected via a
+                                    # reqverse proxy or direct.
+                                    #
+                                    set ad_conn(behind_proxy_p) [dict get [ns_conn details] proxied]
+                                } else {
+                                    #
+                                    # Check, if we are running behind a proxy:
+                                    # a) the parameter "ReverseProxyMode" has to be set
+                                    # b) the header-field X-Forwarded-For must be present
+                                    #
+
+                                    if {[ns_conn isconnected]} {
+                                        if { [ns_config "ns/parameters" ReverseProxyMode false]
+                                             && [ns_set ifind [ns_conn headers] X-Forwarded-For] > -1} {
+                                            set ad_conn(behind_proxy_p) 1
+                                        }
+                                    }
                                 }
                             }
                             return $ad_conn(behind_proxy_p)
