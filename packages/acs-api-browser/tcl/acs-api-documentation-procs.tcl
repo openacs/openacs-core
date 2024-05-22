@@ -753,8 +753,8 @@ ad_proc api_proc_pretty_name {
             append out $label
         }
         set debug_html [expr {$include_debug_controls_p
-                        && [namespace which ::xo::api] ne ""
-                          ? [::xo::api debug_widget $proc] : ""}]
+                              && [namespace which ::xo::api] ne ""
+                              ? [::xo::api debug_widget $proc] : ""}]
     }
     if {[nsv_exists api_proc_doc $proc]} {
         set doc_elements [nsv_get api_proc_doc $proc]
@@ -807,8 +807,8 @@ ad_proc -public api_add_to_proc_doc {
 
     @author Gustaf Neumann
     @param proc_name name is fully qualified name without leading colons proc procs,
-        XOTcl methods are a triple with the fully qualified class name,
-        then proc|instproc and then the method name.
+           XOTcl methods are a triple with the fully qualified class name,
+           then proc|instproc and then the method name.
     @param property name of property such as "main" "testcase" "calledby" "deprecated_p" "script" "protection"
     @param value    value of the property
 
@@ -1523,9 +1523,9 @@ namespace eval ::apidoc {
         return [tclcode_to_html -scope $scope -proc_namespace $proc_namespace [api_get_body $proc_name]]
         #package req nx::pp
         #append result \
-        #    [tclcode_to_html -scope $scope -proc_namespace $proc_namespace [api_get_body $proc_name]] \
-        #    <br> \
-        #    [nx::pp render [api_get_body $proc_name]]
+            #    [tclcode_to_html -scope $scope -proc_namespace $proc_namespace [api_get_body $proc_name]] \
+            #    <br> \
+            #    [nx::pp render [api_get_body $proc_name]]
     }
 
     ad_proc -private length_var {data} {
@@ -1558,7 +1558,7 @@ namespace eval ::apidoc {
 
     ad_proc -private length_braces {data} {
         @return length of subexpression, from open to close brace inclusive.
-         Doesn't deal with unescaped braces in substrings.
+                Doesn't deal with unescaped braces in substrings.
     } {
         set i 1
         for {set count 1} {1} {incr i} {
@@ -1615,7 +1615,7 @@ namespace eval ::apidoc {
             set expr_length [length_exp [string range $data $i end]]
             if {$expr_length == 0} {
                 break
-            }            
+            }
             incr i $expr_length
             set curchar [string index $data $i]
         }
@@ -1899,8 +1899,8 @@ namespace eval ::apidoc {
                             append html $proc_name
 
                         } elseif {$proc_name in $::apidoc::KEYWORDS ||
-                            ([regexp {^::(.*)} $proc_name match had_colons]
-                             && $had_colons in $::apidoc::KEYWORDS)} {
+                                  ([regexp {^::(.*)} $proc_name match had_colons]
+                                   && $had_colons in $::apidoc::KEYWORDS)} {
 
                             set url "/api-doc/proc-view?proc=[string trimleft $proc_name :]"
                             append html "<a href='[ns_quotehtml $url]' title='Tcl command'>" \
@@ -2023,8 +2023,8 @@ namespace eval ::apidoc {
             regsub {(-oracle|-postgresql)$} $file_rootname {} file_rootname
 
             lappend files {*}[glob -nocomplain \
-                                 -directory $file_dirname \
-                                 "${file_rootname}{,-}{,oracle,postgresql}.{adp,tcl,xql}" ]
+                                  -directory $file_dirname \
+                                  "${file_rootname}{,-}{,oracle,postgresql}.{adp,tcl,xql}" ]
         }
 
         foreach file [lsort -decreasing $files] {
