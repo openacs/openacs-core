@@ -1771,7 +1771,7 @@ ad_proc -public ad_conn {args} {
                         }
 
                         behind_proxy_p {
-                            set ad_conn(ajax_p) 0
+                            set ad_conn(behind_proxy_p) 0
                             if {[ns_conn isconnected]} {
 
                                 if {[acs::icanuse "ns_conn proxied"]} {
