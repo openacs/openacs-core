@@ -1612,7 +1612,11 @@ namespace eval ::apidoc {
                 incr i [length_exp [string range $data $i end]] ;# spaces
                 incr i [length_exp [string range $data $i end]] ;# expression - it could be a var
             }
-            incr i [length_exp [string range $data $i end]]
+            set expr_length [length_exp [string range $data $i end]]
+            if {$expr_length == 0} {
+                break
+            }            
+            incr i $expr_length
             set curchar [string index $data $i]
         }
         return [expr {$i - 1}]
