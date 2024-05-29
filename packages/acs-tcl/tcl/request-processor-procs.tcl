@@ -1809,7 +1809,10 @@ ad_proc -public ad_conn {args} {
                             set ad_conn(behind_secure_proxy_p) 0
                             if {[ad_conn behind_proxy_p]} {
                                 set ad_conn(behind_secure_proxy_p) \
-                                    [expr {[ns_set iget [ns_conn headers] X-SSL-Request] == 1}]
+                                    [expr {
+                                           [ns_set iget [ns_conn headers] X-SSL-Request] == 1
+                                           || [ns_set iget [ns_conn headers] X-Forwarded-Proto] eq "https"
+                                       }]
                             }
                             return $ad_conn(behind_secure_proxy_p)
                         }
