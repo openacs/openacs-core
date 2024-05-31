@@ -1405,7 +1405,7 @@ proc sgml::firstpos {cs firstpos nullable} {
 # Arguments:
 #	cs		node type, choice or sequence
 #	lastpos		lastpos functions for the subtree
-#	nullable	nullable functions forthe subtree
+#	nullable	nullable functions for the subtree
 #
 # Results:
 #	lastpos function for this node is returned.
