@@ -129,7 +129,7 @@ ad_proc -public parameter::set_value {
     # differently typed arguments.  Polyphorism is not supported
     # yet. We should define set_value/4, or mirror the names we have
     # here (set_value vs. set_global_value). For the time being, we
-    # keep the xql files for "db_exec_plsql" around, maybe some other
+    # keep the .xql-files for "db_exec_plsql" around, maybe some other
     # use cases hint a different approach.
     #
     db_exec_plsql set_parameter_value {}
@@ -139,11 +139,24 @@ ad_proc -public parameter::set_value {
     #    -parameter_name $parameter \
     #    -attr_value $value
 
-    acs::clusterwide callback subsite::parameter_changed \
-        -package_id $package_id \
-        -parameter $parameter \
-        -value $value
-
+    try {
+        acs::clusterwide callback subsite::parameter_changed \
+            -package_id $package_id \
+            -parameter $parameter \
+            -value $value
+    } on error {errorMsg} {
+        #
+        # Check if error happened during startup. The callbacks might
+        # not be loaded yet.
+        #
+        if {[ns_ictl epoch] == 0} {
+            ns_log notice "callback subsite::parameter_changed failed during startup: $errorMsg"
+        } else {
+            # The error did not happen during startup, so rethrow the
+            # error.
+            error $errorMsg $::errorInfo
+        }
+    }
     ad_parameter_cache -delete $package_id $parameter
 }
 
