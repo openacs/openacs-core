@@ -1735,7 +1735,7 @@ ad_proc -private ad_parse_html_attributes_upvar {
                         #
                         # Tools that target earlier versions of the
                         # HTML specification may not be able to
-                        # properly recognize the latest entitities.
+                        # properly recognize the latest entities.
                         #
                         # Currently, tDOM targets HTML standard 4.01,
                         # hence will not automatically unquote

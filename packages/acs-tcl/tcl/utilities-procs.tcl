@@ -3451,7 +3451,7 @@ ad_proc -public util::which {prog} {
         return [set $key]
     }
     if {$prog ne ""} {
-        
+
         switch -- $::tcl_platform(platform) {
             windows {
                 #
@@ -3475,7 +3475,7 @@ ad_proc -public util::which {prog} {
                 set searchdirs [split $::env(PATH) :]
                 set exts       [list ""]
             }
-        }       
+        }
         set names [lmap ext $exts {set _ $prog$ext}]
         if {[ad_file pathtype $prog] ne "relative"} {
             set fullNames $names
@@ -4150,7 +4150,7 @@ namespace eval util::resources {
         {-version_dir ""}
     } {
 
-        Obtain the version_dir either form the provided string or from
+        Obtain the version_dir either from the provided string or from
         the resource_info dict.
 
     } {

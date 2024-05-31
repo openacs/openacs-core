@@ -18,7 +18,7 @@ ad_proc -private permission::cache_p {} {
     Check, if permission_p caching is enabled or disabled.
     By default caching is disabled.
 
-    @return Boolean value expressing whether permission caching is enbled
+    @return Boolean value expressing whether permission caching is enabled
 } {
     set cache_p [parameter::get \
                      -package_id $::acs::kernel_id \

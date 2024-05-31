@@ -655,7 +655,7 @@ ad_proc -private rp_filter { why } {
     # should be after the canonical check to avoid multiple redirects.
     # The W3C spec (https://www.w3.org/TR/upgrade-insecure-requests/)
     # requires explicitly the value of "1". By testing this, we
-    # mitigate atttacks against this header field without losing
+    # mitigate attacks against this header field without losing
     # performance.
     #
     set upgrade_insecure_requests_p [ns_set iget [ns_conn headers] Upgrade-Insecure-Requests]

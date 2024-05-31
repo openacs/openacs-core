@@ -3327,7 +3327,7 @@ ad_proc -private template::list::prepare_filter_form {
         ad_set_client_property acs-templating $__list_filter_form_client_property_key $__client_property_filters
     }
 
-    # create the form the holds the actual filter values
+    # Create the form that holds the actual filter values
     ad_form -name $filters_form_name -has_submit 1 -form {
         {name:text(hidden) {value $name}}
     }
