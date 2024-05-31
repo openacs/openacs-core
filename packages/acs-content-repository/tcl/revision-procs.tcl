@@ -121,6 +121,17 @@ ad_proc -private cr_write_content-file {
         set filename $path$content
     }
 
+    #
+    ## Note
+    #
+    # in many cases, filename will equal the following idiom:
+    #
+    # set filename ${path}[::cr_create_content_file_path $item_id $revision_id]
+    #
+    # but not in the case of copies. Copies will point to the
+    # filesystem file of the original item.
+    #
+
     if {$filename eq ""} {
         error "No content for the revision $revision_id.\
                             This seems to be an error which occurred during the upload of the file"
