@@ -110,17 +110,22 @@ ad_proc -private cr_write_content-file {
     -storage_area_key
 } {
     set path [cr_fs_path $storage_area_key]
+    if {[db_type] eq "oracle"} {
+        #
+        # CR datamodel for Oracle differs from the one in Postgres
+        # concerning file revisions. For Oracle, an additional column
+        # cr_revisions.filename stores the actual filename.
+        #
+        set filename [db_string write_file_content {}]
+    } else {
+        set filename $path$content
+    }
 
-    #
-    # For content items of type "file", the content is in fact the
-    # relative path to the file. However, we prefer a zero-trust
-    # approach here and we recompute the filename from item and
-    # revision id. This should work the same for Oracle and Postgres
-    # and avoids going to the db.
-    #
-    set filename ${path}[::cr_create_content_file_path $item_id $revision_id]
+    if {$filename eq ""} {
+        error "No content for the revision $revision_id.\
+                            This seems to be an error which occurred during the upload of the file"
 
-    if {![file readable $filename]} {
+    } elseif {![file readable $filename]} {
         ns_log Error "Could not read file $filename. Maybe the content repository is (partially) missing?"
         ns_return 404 text/plain {}
 

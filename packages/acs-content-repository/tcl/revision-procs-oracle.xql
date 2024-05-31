@@ -2,6 +2,14 @@
 <queryset>
    <rdbms><type>oracle</type><version>8.1.6</version></rdbms>
 
+<fullquery name="cr_write_content-file.write_file_content">
+      <querytext>
+          select :path || filename
+          from cr_revisions
+          where revision_id = :revision_id
+      </querytext>
+</fullquery>
+
 <fullquery name="cr_write_content-lob.write_lob_content">
       <querytext>
           select content
