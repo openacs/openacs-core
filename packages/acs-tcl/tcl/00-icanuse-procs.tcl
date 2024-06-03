@@ -141,8 +141,22 @@ namespace eval ::acs {
 #
 # At the time "ns_ip" was introduced in NaviServer, the member
 # "proxied" was added to the result of "ns_conn details".
+#
+# The support for relative redirects was added to NaviServer shortly
+# after this. Previous NaviServer version turned automatically
+# relative URL references into absolute URL by prefixing it with the
+# location as required by RFC 2614.  In 2014, RFC 7231 changed this
+# requirement by supporting also relative redirects, ... which are
+# also supported by newer NaviServer versions. Computing the proper
+# location can be tricky and error-prone, especially when running
+# behind a reverse proxy server and/or in containers, where it is hard
+# to obtain validated host header information. Without proper
+# validation, the "host" header field can be used to hijack
+# connections to other sites.
+#
 
 ::acs::register_icanuse "ns_conn proxied" {[info commands ::ns_ip] ne ""}
+::acs::register_icanuse "relative redirects" {[info commands ::ns_ip] ne ""}
 
 #
 # When "nsf::parseargs -asdict" was introduced, the object aliasing

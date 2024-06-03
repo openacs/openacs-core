@@ -1710,11 +1710,17 @@ ad_proc -public ad_returnredirect {
         }
         set url $target_url
     } elseif { [util_absolute_path_p $target_url] } {
-        # /foo/bar.tcl style - prepend the current location:
-        set url [util_current_location]$target_url
+        #
+        # The URL is an absolute path such as: /foo/bar.tcl
+        #
+        set url [expr {[::acs::icanuse "relative redirects"] ? "" : [util_current_location]}]
+        append url $target_url
     } else {
+        #
         # URL is relative to current directory.
-        set url [util_current_location][ad_urlencode_folder_path [util_current_directory]]
+        #
+        set url [expr {[::acs::icanuse "relative redirects"] ? "" : [util_current_location]}]
+        append url [ad_urlencode_folder_path [util_current_directory]]
         if {$target_url ne "."} {
             append url $target_url
         }
