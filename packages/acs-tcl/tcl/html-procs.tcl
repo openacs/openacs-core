@@ -1,6 +1,6 @@
 ad_library {
     Procs to read and manipulate HTML structures
-    
+
     @author Antonio Pisano
     @creation-date 2015-09-26
 }
@@ -11,9 +11,9 @@ ad_proc -public util::get_node_attributes {
     -node:required
 } {
     Extract attributes names and values from a tDOM node
-    
+
     @param node tDOM node
-    
+
     @return List in array get form of attribute names and values for node
 } {
     foreach attribute [$node attributes] {
@@ -29,9 +29,9 @@ ad_proc -public util::html::get_forms {
     -html:required
 } {
     Extract every form's specification from HTML supplied
-    
+
     @param html HTML text
-    
+
     @return Form specification as a nested list of lists in array get form
 } {
     # Parse document
@@ -66,7 +66,7 @@ ad_proc -public util::html::get_forms {
         lappend form "fields" $fields
         lappend forms $form
     }
-    
+
     return $forms
 }
 
@@ -74,20 +74,20 @@ ad_proc -public util::html::get_form {
     -forms:required
     {-id ""}
 } {
-    Extract form with the specified id from a structure as that 
+    Extract form with the specified id from a structure as that
     coming from <code>util::html::get_forms</code> proc.
-    
+
     @param forms   Form structure
     @param id      HTML id of the form to be read. If structure contains only
                    one form, this parameter can be omitted, otherwise
                    the proc will throw an error.
-    
+
     @return form structure
-} {    
+} {
     if {[llength $forms] == 1} {
         return [lindex $forms 0]
-    }   
-    
+    }
+
     if {$id ne ""} {
         # We have more than one form, check for supplied id
         foreach form $forms {
@@ -96,7 +96,7 @@ ad_proc -public util::html::get_form {
             }
         }
     }
-    
+
     error "Form was not found in supplied HTML"
 }
 
@@ -105,9 +105,9 @@ ad_proc -public util::html::get_form_vars {
 } {
     Read vars from a form structure as that coming out from
     <code>util::html::get_form</code>.
-    
+
     @param form Form structure
-    
+
     @return var specification in a form suitable for the <code>vars</code>
             argument of proc <code>export_vars</code>.
 } {
@@ -145,15 +145,15 @@ ad_proc -public util::html::get_form_vars {
             }
         }
     }
-    
+
     # Now varDict must be translated in export_vars form
     set vars [list]
     foreach {name value} $varDict {
-      # Multiple values must be specified 
+      # Multiple values must be specified
       # with the :multiple modifier
       if {[llength $value] > 1} {
           set name ${name}:multiple
-      # Single values must be extracted 
+      # Single values must be extracted
       # from the list
       } else {
           set value [lindex $value 0]
@@ -163,7 +163,7 @@ ad_proc -public util::html::get_form_vars {
       regsub -all -- {:} $name {\:} name
       lappend vars [list $name $value]
     }
-    
+
     return $vars
 }
 
