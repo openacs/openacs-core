@@ -89,11 +89,9 @@ ad_proc -public util::html::get_form {
     }   
     
     if {$id ne ""} {
-        # We have more than one, check for supplied id
+        # We have more than one form, check for supplied id
         foreach form $forms {
-            array set fo $form
-            array set a $fo(attributes)
-            if {$a(id) eq $id} {
+            if {[dict get $form attributes id] eq $id} {
                 return $form
             }
         }
