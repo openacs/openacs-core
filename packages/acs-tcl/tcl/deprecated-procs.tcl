@@ -27,6 +27,23 @@ if {![ad_with_deprecated_code_p]} {
 ns_log notice "deprecated-procs: load deprecated code"
 
 
+ad_proc -deprecated ad_approval_system_inuse_p {} {
+    Returns 1 if the system is configured to use and approval system.
+
+    DEPRECATED: this proc's utility was probably transitional and is
+    as of 2022-09-07 not used anywhere in the codebase. One can always
+    query the parameters directly in case.
+
+    @see parameter::get
+} {
+    if {[parameter::get -parameter RegistrationRequiresEmailVerification] &&
+        [parameter::get -parameter RegistrationRequiresApprovalP] } {
+        return 1
+    } else {
+        return 0
+    }
+}
+
 ad_proc -public -deprecated ad_set_typed_form_variable_filter {
     url_pattern
     args
