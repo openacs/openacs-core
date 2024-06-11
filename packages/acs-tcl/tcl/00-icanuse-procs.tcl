@@ -103,6 +103,7 @@ namespace eval ::acs {
 #
 ::acs::register_icanuse "gnugrep"                   [acs::cmd_error_contains [list exec grep -V] GNU]
 ::acs::register_icanuse "ns_asynclogfile"           {[info commands ::ns_asynclogfile] ne ""}
+::acs::register_icanuse "ns_baseunit"               {[info commands ::ns_baseunit] ne ""}
 ::acs::register_icanuse "ns_conn contentsentlength" [acs::cmd_has_subcommand ns_conn contentsentlength]
 ::acs::register_icanuse "ns_conn partialtimes"      [acs::cmd_has_subcommand ns_conn partialtimes]
 ::acs::register_icanuse "ns_conn pool"              [acs::cmd_has_subcommand ns_conn pool]
@@ -111,25 +112,27 @@ namespace eval ::acs {
 ::acs::register_icanuse "ns_crypto::randombytes"    {[info commands ::ns_crypto::randombytes] ne ""}
 ::acs::register_icanuse "ns_crypto::scrypt"         {[info commands ::ns_crypto::scrypt] ne ""}
 ::acs::register_icanuse "ns_db currenthandles"      [acs::cmd_has_subcommand ns_db currenthandles]
+::acs::register_icanuse "ns_deletecookie -samesite" [acs::cmd_error_contains {ns_deletecookie ""} -samesite]
 ::acs::register_icanuse "ns_hash"                   {[info commands ::ns_hash] ne ""}
 ::acs::register_icanuse "ns_ictl trace idle"        [acs::cmd_error_contains {ns_ictl trace foo} idle]
+::acs::register_icanuse "ns_ip"                     {[info commands ::ns_ip] ne ""}
 ::acs::register_icanuse "ns_parsehtml"              {[info commands ::ns_parsehtml] ne ""}
+::acs::register_icanuse "ns_parsequery -charset"    [acs::cmd_error_contains {ns_parsequery} -charset]
 ::acs::register_icanuse "ns_parseurl -strict"       [acs::cmd_error_contains ns_parseurl -strict]
+::acs::register_icanuse "ns_pg pid"                 [acs::cmd_has_subcommand ns_pg pid]
+::acs::register_icanuse "ns_reflow_text -offset"    [acs::cmd_error_contains {ns_reflow_text} -offset]
+::acs::register_icanuse "ns_server hosts"           [acs::cmd_has_subcommand ns_server hosts]
 ::acs::register_icanuse "ns_server unmap"           [acs::cmd_has_subcommand ns_server unmap]
 ::acs::register_icanuse "ns_set keys"               [acs::cmd_has_subcommand ns_set keys]
 ::acs::register_icanuse "ns_set stats"              [acs::cmd_has_subcommand ns_set stats]
 ::acs::register_icanuse "ns_set values"             [acs::cmd_has_subcommand ns_set values]
 ::acs::register_icanuse "ns_setcookie -samesite"    [acs::cmd_error_contains ns_setcookie -samesite]
+::acs::register_icanuse "ns_strcoll"                {[info commands ::ns_strcoll] ne ""}
+::acs::register_icanuse "ns_subnetmatch"            {[info commands ::ns_subnetmatch] ne ""}
 ::acs::register_icanuse "ns_urlencode -part oauth1" [acs::cmd_error_contains {ns_urlencode -part xxx} oauth1]
 ::acs::register_icanuse "ns_writer"                 {[info commands ::ns_writer] ne ""}
-::acs::register_icanuse "ns_baseunit"               {[info commands ::ns_baseunit] ne ""}
-::acs::register_icanuse "ns_pg pid"                 [acs::cmd_has_subcommand ns_pg pid]
-::acs::register_icanuse "nsf::parseargs -asdict"    [acs::cmd_error_contains {nsf::parseargs} -asdict]
-::acs::register_icanuse "ns_parsequery -charset"    [acs::cmd_error_contains {ns_parsequery} -charset]
-::acs::register_icanuse "ns_reflow_text -offset"    [acs::cmd_error_contains {ns_reflow_text} -offset]
 ::acs::register_icanuse "nsf::config profile"       [expr {[info exists ::nsf::config(profile)] ? $::nsf::config(profile) : 0}]
-::acs::register_icanuse "ns_strcoll"                {[info commands ::ns_strcoll] ne ""}
-::acs::register_icanuse "ns_deletecookie -samesite" [acs::cmd_error_contains {ns_deletecookie ""} -samesite]
+::acs::register_icanuse "nsf::parseargs -asdict"    [acs::cmd_error_contains {nsf::parseargs} -asdict]
 
 #
 # At the time "ns_trim -prefix was introduced in NaviServer, a memory
