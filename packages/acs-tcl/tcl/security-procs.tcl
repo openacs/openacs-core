@@ -3063,7 +3063,7 @@ ad_proc security::secure_hostname_p {host} {
         # $hostName and checks the properties of the first IP address
         # returned.
         #
-        set validationOk [expr {![ns_ip public [ns_addrbyhost $hostName]]}]
+        set validationOk [expr {![ns_ip public [ns_addrbyhost $host]]}]
 
     } elseif {[acs::icanuse "ns_subnetmatch"]} {
         #
