@@ -2812,7 +2812,8 @@ ad_proc -private security::configured_locations {
     foreach d $driver_info {
         #
         # port == 0 means that the driver is just used for sending,
-        # but not for receiving.
+        # but not for receiving. In this case, this entry is not
+        # regarded as a valid location.
         #
         if {[dict get $d port] != 0} {
             #
@@ -2832,16 +2833,28 @@ ad_proc -private security::configured_locations {
                     lappend hosts {*}[ns_set values $virtualservers]
                 }
             }
-            foreach host $hosts {
+            foreach entry $hosts {
+                #
+                # The value of the "DRIVER/servers" section might
+                # contain also a port.
+                #
+                set d1 [dict merge $d [ns_parsehostport $entry]]
                 set proto [dict get $d proto]
-                set port [dict get $d port]
+                set host [dict get $d1 host]
+                set port [dict get $d1 port]
+                if {$host in {0.0.0.0 ::}} {
+                    #
+                    # Don't add INADDR_ANY to locations
+                    #
+                    continue
+                }
                 #
                 # Add always a variant with the omitted default port.
                 #
                 if {($proto eq "https" && $port eq "443")
                     || ($proto eq "http" && $port eq "80")
                 } {
-                    set location ${proto}://$host
+                    set location [util::join_location -proto $proto -hostname $host]
                     if {$location ni $locations} {
                         lappend locations $location
                     }
@@ -2850,7 +2863,7 @@ ad_proc -private security::configured_locations {
                 # Add a variant with the omitted port to
                 # portless_locations.
                 #
-                set location ${proto}://$host
+                set location [util::join_location -proto $proto -hostname $host]
                 if {$location ni $portless_locations
                     && $location ni $locations
                 } {
@@ -2859,7 +2872,7 @@ ad_proc -private security::configured_locations {
                 #
                 # Add always a variant with the port to locations.
                 #
-                append location :$port
+                set location [util::join_location -proto $proto -hostname $host -port $port]
                 if {$location ni $locations} {
                     lappend locations $location
                 }
@@ -2941,8 +2954,26 @@ ad_proc -public security::locations {} {
     # Get Information from configured servers
     #
     set locations [acs::misc_cache eval security-configure-locations-$suppress_http_port_p-$secure_conn_p {
-        security::configured_locations -suppress_http_port=$suppress_http_port_p -secure_conn=$secure_conn_p
+        set locations [security::configured_locations -suppress_http_port=$suppress_http_port_p -secure_conn=$secure_conn_p]
+        #
+        # The configured values values do not change at runtime. Set
+        # it also once in the nsv array when setting the cache value.
+        #
+        foreach location $locations {
+            nsv_set validated_location $location 1
+        }
+        set locations
     }]
+
+    #
+    # Add the previously validated locations
+    #
+    foreach location [nsv_array names validated_location] {
+        if {$location ni $locations} {
+            lappend locations $location
+        }
+    }
+
 
     #
     # When we are connected, add the current location if is not there
@@ -2958,6 +2989,7 @@ ad_proc -public security::locations {} {
         if {$current_location ni $locations} {
             ns_log notice "security::locations add connected location <$current_location>"
             lappend locations $current_location
+            nsv_set validated_location $current_location 1
         }
 
         #
@@ -2971,6 +3003,7 @@ ad_proc -public security::locations {} {
             if {$secure_current_location ni $locations} {
                 ns_log notice "security::locations add connected secure location <$secure_current_location>"
                 lappend locations $secure_current_location
+                nsv_set validated_location $secure_current_location 1
             }
         }
     }
@@ -3005,6 +3038,58 @@ ad_proc -private security::provided_host_valid {host} {
     }]
 }
 
+ad_proc security::secure_hostname_p {host} {
+
+    Check, if the content of host is a "secure" value, which means, it
+    is either white-listed or belongs to a non-public IP adddress,
+    such it cannot harm in redirect operations.
+
+    @return boolean value
+} {
+    #
+    # If the host has an non-public IP address (such as
+    # e.g. "localhost") it is regarded as "secure". The first test is
+    # the most simple case, working for all versions of NaviServer or
+    # AOLserver.
+    #
+    if {$host in {localhost 127.0.0.1 ::1}} {
+        return 1
+    }
+
+    set validationOk 0
+    if {[acs::icanuse "ns_ip"]} {
+        #
+        # Check, if the address is not public. It resolves the
+        # $hostName and checks the properties of the first IP address
+        # returned.
+        #
+        set validationOk [expr {![ns_ip public [ns_addrbyhost $hostName]]}]
+
+    } elseif {[acs::icanuse "ns_subnetmatch"]} {
+        #
+        # Test for older versions of NaviServer testing if value is an
+        # IP address belonging to a "private network".
+        #
+        try {
+            ns_subnetmatch 0.0.0.0/0 $host
+        } on error {errorMsg} {
+            set ip_address_p 0
+        } on ok {ip_address_p} {
+        }
+        if {$ip_address_p} {
+            if {[ns_subnetmatch 10.0.0.0/8 $host]
+                || [ns_subnetmatch 172.16.0.0/12 $host]
+                || [ns_subnetmatch 192.168.0.0/16 $host]
+                || [ns_subnetmatch fd00::/8 $host]
+            } {
+                return 1
+            }
+        }
+    }
+
+    return 0
+}
+
 ad_proc -public security::validated_host_header {} {
     @return validated host header field or empty
     @author Gustaf Neumann
@@ -3013,60 +3098,66 @@ ad_proc -public security::validated_host_header {} {
     attacks can lead to web-cache poisoning and password reset attacks
     (for more details, see e.g.
      http://www.skeletonscribe.net/2013/05/practical-http-host-header-attacks.html)
+    or to unintended redirects to different sites.
+
+    The validated host header most be syntactically correct, and it
+    must be either configured/white-listed or it must be from a
+    non-routable IP address. White-listed hosts are taken from the
+    alternate host names specified in the "ns/module/DRIVER/servers"
+    section, or via the configuration variable "hostname" (e.g.,
+    "openacs.org www.openacs.org") which is added the the "/server"
+    section during startup.
+
 } {
     #
     # Check, if we have a host header field
     #
-    set host [ns_set iget [ns_conn headers] Host]
-    if {$host eq ""} {
+    set hostHeaderValue [ns_set iget [ns_conn headers] Host]
+    if {$hostHeaderValue eq ""} {
         return ""
     }
     #
     # Domain names are case insensitive. So convert it to lower to
     # avoid surprises.
     #
-    set host [string tolower $host]
+    set hostHeaderValue [string tolower $hostHeaderValue]
 
     #
     # Check, if we have validated it before, or it belongs to the
     # predefined accepted host header fields.
     #
-    set key ::acs::validated($host)
+    set key ::acs::validated_host_header($hostHeaderValue)
     if {[info exists $key]} {
-        return $host
+        return $hostHeaderValue
     }
 
-    if {![string match *//* $host]} {
-        set splithost [ns_conn protocol]://$host
-    } else {
-        set splithost $host
-    }
-    if {![util::split_location $splithost .proto hostName hostPort]} {
-        return ""
-    }
-
+    set hostHeaderDict [ns_parsehostport $hostHeaderValue]
     #
     # Remove trailing dot, as this is allowed in fully qualified DNS
     # names (see e.g. §3.2.2 of RFC 3976).
     #
-    set hostName [string trimright $hostName .]
+    set hostName [string trimright [dict get $hostHeaderDict host] .]
+    set hostPort [expr {[dict exists $hostHeaderDict port] ? [dict get $hostHeaderDict port] : ""}]
 
-    #
-    # Check, if the provided host is the same as the configured host
-    # name for the current driver or one of its IP addresses. Should
-    # be true in most cases.
-    #
-    set driverInfo [util_driver_info]
-    set driverHostName [dict get $driverInfo hostname]
-
+    set normalizedHostHeaderValue [util::join_location -host $hostName -port $hostPort]
     set validationOk 0
+
     #
-    # Validation is OK, when we find the host+port under virtual
-    # servers in the configuration.
+    # Check if the value in "hostName" can be regarded as safe.
     #
-    if {[ns_info name] eq "NaviServer"} {
+    # The host header value is one of the names registered for
+    # this server.
+    #
+    if {[acs::icanuse "ns_server hosts"]} {
+        if {$normalizedHostHeaderValue in [ns_server hosts]} {
+            #
+            #
+            set validationOk 1
+        }
+    } elseif {[ns_info name] eq "NaviServer"} {
         #
-        # Check against the virtual server configuration of NaviServer.
+        # As a replacement for "ns_server hosts" check against the
+        # virtual server configuration of NaviServer.
         #
         set s [ns_info server]
         set driverInfo [security::configured_driver_info]
@@ -3088,26 +3179,62 @@ ad_proc -public security::validated_host_header {} {
                 if {$host in $names} {
                     ns_log notice "security::validated_host_header: found $host" \
                         "in global virtual server configuration for $driver"
-                    set validationOk 1
-                    break
+                    return 1
                 }
             }
         }
     }
 
-
-    #
-    # The port is currently ignored for determining the validated host
-    # header field.
-    #
-    # Validation is OK, when the provided host-header content is
-    # either the same as configured hostname in the driver
-    # configuration or one of its IP addresses.
-    #
-    if {$validationOk == 0 && $hostName eq $driverHostName} {
-        set validationOk 1
-    }
     if {$validationOk == 0} {
+        set validationOk [security::secure_hostname_p $hostName]
+    }
+
+    if {$validationOk == 0} {
+        #
+        # Check against the white-listed hosts from
+        #
+        #     ns_section ns/server/$server/acs {
+        #         ns_param whitelistedHosts {...}
+        #     }
+        #
+        # of the configuration file.
+        #
+        if {$hostHeaderValue in [ns_config "ns/server/[ns_info server]/acs" whitelistedHosts {}]} {
+            set validationOk 1
+        }
+    }
+
+    if {$validationOk == 0} {
+        #
+        # Check against host node map. Here we need as well protection
+        # against invalid utf-8 characters.
+        #
+        if {![security::provided_host_valid $hostName]} {
+            return ""
+        }
+
+        set validationOk [db_0or1row host_header_field_mapped {
+            select 1 from host_node_map where host = :hostName
+        }]
+    }
+
+    if {$validationOk == 0} {
+        #
+        # Validation is OK, when the hostName is either the same as
+        # configured hostname. This is a legacy branch for very old
+        # versions of NaviServer or AOLserver.
+        #
+        set driverInfo [util_driver_info]
+        set driverHostName [dict get $driverInfo hostname]
+        if {$hostName eq $driverHostName} {
+            set validationOk 1
+        }
+    }
+    if {$validationOk == 0 && [info exists driverHostName]} {
+        #
+        # Validation is OK, when the hostName is one of the IP
+        # addresses of the configured host name.
+        #
         try {
             ns_addrbyhost -all $driverHostName
         } on error {errorMsg} {
@@ -3126,40 +3253,22 @@ ad_proc -public security::validated_host_header {} {
     #
     # Check, if the provided host is the same in [ns_conn location]
     # (will be used as default, but we do not want a warning in such
-    # cases).
+    # cases). This is also a legacy case.
     #
-    if {$validationOk == 0 && [util::split_location [ns_conn location] proto locationHost locationPort]} {
+    if {$validationOk == 0
+        && [util::split_location [ns_conn location] proto locationHost locationPort]} {
         set validationOk [expr {$hostName eq $locationHost}]
     }
 
     #
     # Check, if the provided host is the same as in the configured
-    # SystemURL.
+    # SystemURL. Legacy case.
     #
     if {$validationOk == 0 && [util::split_location [ad_url] .proto systemHost systemPort]} {
         set validationOk [expr {$hostName eq $systemHost
                                 && ($hostPort eq $systemPort || $hostPort eq "") }]
     }
 
-    if {$validationOk == 0} {
-        #
-        # Check against host node map. Here we need as well protection
-        # against invalid utf-8 characters.
-        #
-        if {![security::provided_host_valid $hostName]} {
-            return ""
-        }
-
-        set validationOk [db_0or1row host_header_field_mapped {select 1 from host_node_map where host = :hostName}]
-    }
-
-    if {$validationOk == 0} {
-        #
-        # This is not an attempt, where someone tries to lure us to a
-        # different host via redirect. "localhost" is always safe.
-        #
-        set validationOk [expr {$hostName eq "localhost"}]
-    }
 
     #
     # When any of the validation attempts above were successful, we
@@ -3169,22 +3278,16 @@ ad_proc -public security::validated_host_header {} {
     #
     if {$validationOk} {
         set $key 1
-        return $host
+        return $hostHeaderValue
     }
 
-    #
-    # We could/should check as well against a white-list of additional
-    # hostnames (maybe via ::acs::validated, or via config file, or
-    # via additional package parameter). Probably the best way is to
-    # get alternate (alias) names from the driver section of the
-    # current driver [ns_conn driver] (maybe check global and local).
-    #
-    #ns_set array [ns_configsection ns/module/nssock/servers]
 
     #
     # Now we give up
     #
-    ns_log warning "ignore untrusted host header field: '$host'"
+    ns_log warning "ignore untrusted host header field: '$hostHeaderValue'." \
+        "Consider adding this value to 'whitelistedHosts' in the" \
+        "section 'ns/server/$server/acs' of your configuration file"
 
     return ""
 }
@@ -3610,6 +3713,7 @@ namespace eval ::security::csrf {
     }
 }
 
+nsv_set validated_location http://localhost 1
 #
 # Local variables:
 #    mode: tcl
