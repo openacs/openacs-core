@@ -234,17 +234,25 @@ ad_proc -public template::util::richtext::initialize_widget {
     # Here, we check and eventually return such conf, which will be
     # applied to the loading formfield.
     #
+    # When no preset was specified, we will try to look for the
+    # "standard" preset. This provides a hook for site-wide
+    # customization via a tcl proc, which enables to inject
+    # e.g. information coming from the connection context or other tcl
+    # commands, not possible via parameter alone.
+    #
     # The purpose of this feature is to have a set of logical
     # configurations that do not depend on the specific editor and
     # can be extended downstream.
     #
     if {[dict exists $options preset]} {
         set preset [dict get $options preset]
-        if {[info commands ::richtext::${editor}::preset::${preset}] ne ""} {
-            set options [dict merge \
-                             [::richtext::${editor}::preset::${preset}] \
-                             $options]
-        }
+    } else {
+        set preset "standard"
+    }
+    if {[info commands ::richtext::${editor}::preset::${preset}] ne ""} {
+        set options [dict merge \
+                         [::richtext::${editor}::preset::${preset}] \
+                         $options]
     }
 
     set result {success 1}
