@@ -3,6 +3,9 @@ ad_library {
     Tcl API for email_image store and manipulation
 
     @author Miguel Marin (miguelmarin@viaro.net) Viaro Networks (www.viaro.net)
+
+    @see https://openacs.org/forums/message-view?message_id=244725
+
 }
 
 namespace eval email_image {}
