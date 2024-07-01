@@ -199,16 +199,22 @@ ad_proc -public email_image::new_item {
         set mime_type [cr_filename_to_mime_type -create $dest_path]
         set creation_ip [ad_conn peeraddr]
 
-        set item_id [content::item::new -name $image_name -parent_id $folder_id -content_type "email_image" \
-                         -storage_type "lob" -creation_ip $creation_ip]
+        set item_id [content::item::new \
+                         -name $image_name \
+                         -parent_id $folder_id \
+                         -content_type "email_image" \
+                         -creation_ip $creation_ip]
 
-        set revision_id [content::revision::new -item_id $item_id -title $image_name -mime_type $mime_type  \
-                             -description "User email image"  -creation_ip $creation_ip ]
+        set revision_id [content::revision::new \
+                             -item_id $item_id \
+                             -title $image_name \
+                             -mime_type $mime_type  \
+                             -description "User email image" \
+                             -creation_ip $creation_ip \
+                             -tmp_filename $dest_path \
+                             -is_live t]
 
         email_image::add_relation -user_id $user_id -item_id $item_id
-        content::item::set_live_revision -revision_id $revision_id
-        db_dml new_lob_content {} -blob_files [list ${dest_path}]
-        db_dml lob_size {}
     }
 
     # Delete the temporary file created by ImageMagick
@@ -282,33 +288,34 @@ ad_proc -public email_image::edit_email_image {
     if { $email_image_id != "-1" } {
         db_transaction {
             set item_id $email_image_id
-            set revision_id [content::revision::new -item_id $item_id -title $image_name \
+            set revision_id [content::revision::new \
+                                 -item_id $item_id \
+                                 -title $image_name \
                                  -mime_type $mime_type  \
-                                 -description "User email image" -creation_ip $creation_ip ]
-            content::item::set_live_revision -revision_id $revision_id
-            db_dml lob_content {} -blob_files [list ${dest_path}]
-            db_dml lob_size {}
+                                 -description "User email image" \
+                                 -creation_ip $creation_ip \
+                                 -is_live t \
+                                 -tmp_filename $dest_path]
         }
     } else {
         db_transaction {
 
             set item_id [content::item::new \
-                             -name $image_name -parent_id $folder_id -content_type "email_image" \
-                             -storage_type "lob" -creation_ip $creation_ip]
+                             -name $image_name \
+                             -parent_id $folder_id \
+                             -content_type "email_image" \
+                             -creation_ip $creation_ip]
 
             set revision_id [content::revision::new \
-                                 -item_id $item_id -title $image_name -mime_type $mime_type  \
-                                 -description "User email image"  -creation_ip $creation_ip ]
+                                 -item_id $item_id \
+                                 -title $image_name \
+                                 -mime_type $mime_type  \
+                                 -description "User email image" \
+                                 -creation_ip $creation_ip \
+                                 -is_live t \
+                                 -tmp_filename $dest_path]
 
             email_image::add_relation -user_id $user_id -item_id $item_id
-
-            db_dml update_cr_items {
-                update cr_items
-                set live_revision  = :revision_id
-                where item_id = :item_id                
-            }
-            db_dml lob_content {} -blob_files [list ${dest_path}]
-            db_dml lob_size {}
         }
     }
     # Delete the temporary file created by ImageMagick
