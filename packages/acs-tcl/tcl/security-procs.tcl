@@ -3177,7 +3177,7 @@ ad_proc -public security::validated_host_header {} {
                     set value
                 }]
                 if {$normalizedHostHeaderValue in $names} {
-                    ns_log notice "security::validated_host_header: found $host" \
+                    ns_log notice "security::validated_host_header: found $normalizedHostHeaderValue" \
                         "in global virtual server configuration for $driver"
                     return 1
                 }
