@@ -3287,7 +3287,7 @@ ad_proc -public security::validated_host_header {} {
     #
     ns_log warning "ignore untrusted host header field: '$hostHeaderValue'." \
         "Consider adding this value to 'whitelistedHosts' in the" \
-        "section 'ns/server/$server/acs' of your configuration file"
+        "section 'ns/server/\$server/acs' of your configuration file"
 
     return ""
 }
