@@ -627,7 +627,7 @@ aa_register_case -cats {
         #
         # Go to the API-doc and check status code
         #
-        set d [acs::test::http -depth 3 -user_info $user_info /api-doc]
+        set d [acs::test::http -depth 3 -user_info $user_info /api-doc/]
         acs::test::reply_has_status_code $d 200
         #
         # Get the form data
