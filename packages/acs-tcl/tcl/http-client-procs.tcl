@@ -1128,6 +1128,15 @@ ad_proc -private util::http::follow_redirects {
         set location ${location}?${urlvars}
     }
 
+    #
+    # According to
+    # https://www.rfc-editor.org/rfc/rfc7231#section-7.1.2, the
+    # location header may return a relative URL as well.
+    #
+    set location [util::complete_location \
+                      -location $location \
+                      -complete_url $url]
+
     if {$method eq "GET"} {
         return [$this_proc \
                     -method          GET \
@@ -1493,7 +1502,6 @@ ad_proc -private util::http::native::request {
     # Move in a list to be returned to the caller
     set r_headers [ns_set array $resp_headers]
     ns_set free $resp_headers
-
 
     # Redirection handling
     if {$depth < $max_depth} {

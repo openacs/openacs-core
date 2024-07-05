@@ -440,6 +440,106 @@ aa_register_case -cats {
     api
     production_safe
 } -procs {
+    util::complete_location
+} util__complete_url {
+    Test util::complete_location
+} {
+    aa_equals "Basic case" \
+        [string trimright [util::complete_location -location ""] /] \
+        [util_current_location]
+
+    aa_equals "Complete with current location" \
+        [string trimright [util::complete_location -location "/a/b/c"] /] \
+        [util_current_location]/a/b/c \
+
+    aa_equals "Complete an already complete location (normie case)" \
+        [util::complete_location -location "https://example.com/a/b/c"] \
+        "https://example.com/a/b/c" \
+
+    aa_equals "Complete an already complete location (protocol relative)" \
+        [util::complete_location -location "//a/b/c"] \
+        //a/b/c \
+
+    aa_true "Complete an invalid location (relative) - Should fail" \
+        [catch {
+            util::complete_location -location "/file\[/\].html"
+        }]
+
+    aa_true "Complete an invalid location (absolute) - Should fail" \
+        [catch {
+            util::complete_location -location "http://example.com/file\[/\].html"
+        }]
+
+    aa_equals "Basic case with external location" \
+        [string trimright [util::complete_location \
+                               -complete_url "http://example.com" \
+                               -location ""] /] \
+        http://example.com
+
+    aa_equals "Basic case with external location (complete_url has a path)" \
+        [string trimright [util::complete_location \
+                               -complete_url "http://example.com/a/b/c" \
+                               -location ""] /] \
+        http://example.com
+
+    aa_equals "Complete with external location (complete_url just the host)" \
+        [string trimright [util::complete_location \
+                               -complete_url "http://example.com" \
+                               -location "/a/b/c"] /] \
+        http://example.com/a/b/c \
+
+    aa_equals "Complete with external location (complete_url with a path)" \
+        [string trimright [util::complete_location \
+                               -complete_url "http://example.com/d/e/f" \
+                               -location "/a/b/c"] /] \
+        http://example.com/a/b/c \
+
+    aa_equals "Complete an already complete location (normie case)" \
+        [util::complete_location \
+             -complete_url "http://anotherexample.com/d/e/f" \
+             -location "https://example.com/a/b/c"] \
+        "https://example.com/a/b/c" \
+
+    aa_equals "Complete an already complete location (protocol relative)" \
+        [util::complete_location \
+             -complete_url "http://anotherexample.com/d/e/f" \
+             -location "//a/b/c"] \
+        //a/b/c \
+
+    aa_true "Complete an invalid location (relative) - Should fail" \
+        [catch {
+            util::complete_location \
+                -complete_url "http://example.com/d/e/f" \
+                -location "/file\[/\].html"
+        }]
+
+    aa_true "Complete an invalid location (absolute) - Should fail" \
+        [catch {
+            util::complete_location \
+                -complete_url "http://example.com/d/e/f" \
+                -location "http://example.com/file\[/\].html"
+        }]
+
+    aa_true "Complete with an invalid complete_url - Should fail" \
+        [catch {
+            util::complete_location \
+                -complete_url "http://example.com/file\[/\].html" \
+                -location "/file/a/b"
+        }]
+
+    aa_true "Complete with a relative complete_url - Should fail" \
+        [catch {
+            util::complete_location \
+                -complete_url "/c/d/e" \
+                -location "/file/a/b"
+        }]
+}
+
+
+aa_register_case -cats {
+    api
+    production_safe
+} -procs {
     util::file_content_check
 } util__file_content_check {
     Test util::file_content_check.

@@ -1964,6 +1964,51 @@ ad_proc util::join_location {{-noabbrev:boolean} {-proto ""} {-hostname} {-port 
     return $result
 }
 
+ad_proc util::complete_location {
+    -location:required
+    -complete_url
+} {
+    Completes specified relative URL. When no complete URL is
+    specified for reference, it will assume the current host as the
+    server.
+
+    The purpose of this utility is to be used by HTTP clients to
+    complete URLs coming from the Location response header in case of
+    a redirect, which according to RFC 7231 may also be relative.
+
+    @param location a supposedly relative URL to complete. When the
+                    URL is already complete, it will be returned
+                    as-is.
+    @param complete_url URL of the redirected request. A complete URL
+                        from which we want to read the host. When
+                        missing, the URL will be completed using the
+                        result of util_current_location.
+
+    @return a complete absolute URL
+
+    @see https://www.rfc-editor.org/rfc/rfc7231#section-7.1.2
+} {
+    if {![info exists complete_url]} {
+        set complete_url [util_current_location]
+    } elseif {![dict exists [ns_parseurl -strict $complete_url] host]} {
+        error "util::complete_location: '$complete_url' is not a valid complete URL"
+    }
+
+    set parsed_location [ns_parseurl -strict $location]
+    if {[dict exists $parsed_location host]} {
+        return $location
+    }
+
+    util::split_location $complete_url proto hostname port
+
+    set host_url [util::join_location \
+                      -proto $proto \
+                      -hostname $hostname \
+                      -port $port]
+
+    return [ns_absoluteurl $location $host_url]
+}
+
 ad_proc -public util::configured_location {{-suppress_port:boolean}} {
 
     Return the configured location as configured for the current
