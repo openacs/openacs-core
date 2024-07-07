@@ -377,7 +377,7 @@ ad_proc -private util::json::gen_inner {value} {
                 regsub -all -- {\n} $value "\\n" value
                 return $value
             }
-         }
+        }
     }
 }
 
