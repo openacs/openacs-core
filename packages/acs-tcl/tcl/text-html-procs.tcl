@@ -2415,50 +2415,50 @@ ad_proc -private ad_parse_html_attributes_upvar {
         for { set i [string first & $html] } { $i != -1 } { set i [string first & $html $i] } {
 
             set match_p 0
-            switch -regexp -- [string index $html $i+1]] {
-                # {
-                switch -regexp -- [string index $html $i+2] {
-                    [xX] {
-                        regexp -indices -start [expr {$i+3}] {[0-9a-fA-F]*} $html hex_idx
-                        set hex [string range $html [lindex $hex_idx 0] [lindex $hex_idx 1]]
-                        set html [string replace $html $i [lindex $hex_idx 1] \
-                                      [subst -nocommands -novariables "\\x$hex"]]
-                        set match_p 1
+            switch -regexp -- [string index $html $i+1] {
+                "#" {
+                    switch -regexp -- [string index $html $i+2] {
+                        [xX] {
+                            regexp -indices -start [expr {$i+3}] {[0-9a-fA-F]*} $html hex_idx
+                            set hex [string range $html [lindex $hex_idx 0] [lindex $hex_idx 1]]
+                            set html [string replace $html $i [lindex $hex_idx 1] \
+                                          [subst -nocommands -novariables "\\x$hex"]]
+                            set match_p 1
+                        }
+                        [0-9] {
+                            regexp -indices -start [expr {$i+2}] {[0-9]*} $html dec_idx
+                            set dec [string range $html [lindex $dec_idx 0] [lindex $dec_idx 1]]
+                            # $dec might contain leading 0s. Since format evaluates $dec as expr
+                            # leading 0s cause octal interpretation and therefore errors on e.g. &#0038;
+                            set dec [string trimleft $dec 0]
+                            if {$dec eq ""} {set dec 0}
+                            set html [string replace $html $i [lindex $dec_idx 1] \
+                                          [format "%c" $dec]]
+                            set match_p 1
+                        }
                     }
-                    [0-9] {
-                        regexp -indices -start [expr {$i+2}] {[0-9]*} $html dec_idx
-                        set dec [string range $html [lindex $dec_idx 0] [lindex $dec_idx 1]]
-                        # $dec might contain leading 0s. Since format evaluates $dec as expr
-                        # leading 0s cause octal interpretation and therefore errors on e.g. &#0038;
-                        set dec [string trimleft $dec 0]
-                        if {$dec eq ""} {set dec 0}
-                        set html [string replace $html $i [lindex $dec_idx 1] \
-                                      [format "%c" $dec]]
+                }
+                [a-zA-Z] {
+                    if { [regexp -indices -start $i {\A&([^\s;]+)} $html match entity_idx] } {
+                        set entity [string tolower [string range $html [lindex $entity_idx 0] [lindex $entity_idx 1]]]
+                        if { [info exists entities($entity)] } {
+                            set html [string replace $html $i [lindex $match 1] $entities($entity)]
+                        }
                         set match_p 1
                     }
                 }
             }
-        [a-zA-Z] {
-            if { [regexp -indices -start $i {\A&([^\s;]+)} $html match entity_idx] } {
-                set entity [string tolower [string range $html [lindex $entity_idx 0] [lindex $entity_idx 1]]]
-                if { [info exists entities($entity)] } {
-                    set html [string replace $html $i [lindex $match 1] $entities($entity)]
-                }
-                set match_p 1
+        }
+        incr i
+        if { $match_p } {
+            # remove trailing semicolon
+            if {[string index $html $i] eq ";"} {
+                set html [string replace $html $i $i]
             }
         }
     }
-    incr i
-    if { $match_p } {
-        # remove trailing semicolon
-        if {[string index $html $i] eq ";"} {
-            set html [string replace $html $i $i]
-        }
-    }
+    return $html
 }
-return $html
-}
-
 
 
 ####################
