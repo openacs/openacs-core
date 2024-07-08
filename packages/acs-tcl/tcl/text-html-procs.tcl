@@ -1024,7 +1024,8 @@ ad_proc -private ad_parse_html_attributes_upvar {
     set count 0
     while { $i < [string length $html] && [string index $html $i] ne ">" } {
         if { [incr count] > 3000 } {
-            error "There appears to be a programming bug in ad_parse_html_attributes_upvar: We've entered an infinite loop. We are here: \noffset $i: [string range $html $i $i+60]"
+            error "There appears to be a programming bug in ad_parse_html_attributes_upvar: \
+                   We've entered an infinite loop. We are here: \noffset $i: [string range $html $i $i+60]"
         }
         if { [string range $html $i $i+1] eq "/>" } {
             # This is an XML-style tag ending: <... />
@@ -1059,1402 +1060,1400 @@ ad_proc -private ad_parse_html_attributes_upvar {
 
                 # is there a single or double quote sign as the first character?
                 switch -- [string index $html $i] {
-                    {"} { set exp {\A"([^"]*)"\s*} }
-                        {'} { set exp {\A'([^']*)'\s*} }
-                        default { set exp {\A([^\s>]*)\s*} }
-                    }
-                    if { ![regexp -indices -start $i $exp $html match attr_value_idx] } {
-                        # No end quote.
-                        set attr_value [string range $html $i+1 end]
-                        set i [string length $html]
-                    } else {
-                        set attr_value [string range $html [lindex $attr_value_idx 0] [lindex $attr_value_idx 1]]
-                        set i [expr { [lindex $match 1] + 1}]
-                    }
-
-                    set attr_value [util_expand_entities_ie_style $attr_value]
-
-                    lappend attributes [list $attr_name $attr_value]
-                    if { [info exists attribute_array] } {
-                        set attribute_array_var($attr_name) $attr_value
-                    }
+                    \" { set exp {\A\"([^\"]*)\"\s*} }
+                    '  { set exp {\A'([^']*)'\s*} }
+                    default { set exp {\A([^\s>]*)\s*} }
+                }
+                if { ![regexp -indices -start $i $exp $html match attr_value_idx] } {
+                    # No end quote.
+                    set attr_value [string range $html $i+1 end]
+                    set i [string length $html]
+                } else {
+                    set attr_value [string range $html [lindex $attr_value_idx 0] [lindex $attr_value_idx 1]]
+                    set i [expr { [lindex $match 1] + 1}]
+                }
+                
+                set attr_value [util_expand_entities_ie_style $attr_value]
+                
+                lappend attributes [list $attr_name $attr_value]
+                if { [info exists attribute_array] } {
+                    set attribute_array_var($attr_name) $attr_value
                 }
             }
         }
-        return $attributes
+    }
+    return $attributes
+}
+
+ad_proc ad_html_security_check {
+    -allowed_tags
+    -allowed_attributes
+    -allowed_protocols
+    html
+} {
+
+    Returns a human-readable explanation if the user has used any
+    HTML tag other than the allowed ones.
+
+    It uses for checking the provided values. If these values are
+    not provided the function takes the union of the per-package
+    instance value and the values from the "antispam" section of
+    the kernel parameters.
+
+    @param allowed_tags
+    @param allowed_attributes
+    @param allowed_protocols
+    @param html The HTML text being validated.
+
+    @return a human-readable, plaintext explanation of what's
+    wrong with the user's input.  If everything is ok,
+    return an empty string.
+
+    @author Lars Pind (lars@pinds.com)
+    @creation-date 20 July 2000
+
+} {
+    #
+    # Allow in certain situations additional attributes (e.g. for
+    # the "form" in an xowiki::Form" the <form> tag).  There
+    # should be better ways developed to handle such cases...
+    #
+    if {[info exists ::__extra_allowed_tags]} {
+        set extra_tags $::__extra_allowed_tags
+    } else {
+        set extra_tags ""
+    }
+    #ns_log notice "extra_tags <$extra_tags>"
+
+    if { [string first <% $html] > -1 } {
+        return "For security reasons, you're not allowed to have the less-than-percent combination in your input."
     }
 
+    if {![info exists allowed_tags]} {
+        set allowed_tags [parameter::get -package_id $::acs::kernel_id -parameter AllowedTag]
+    }
+    lappend allowed_tags {*}$extra_tags
 
+    if {![info exists allowed_attributes]} {
+        set allowed_attributes [parameter::get -package_id $::acs::kernel_id -parameter AllowedAttribute]
+    }
 
+    if {![info exists allowed_protocols]} {
+        set allowed_protocols [parameter::get -package_id $::acs::kernel_id -parameter AllowedProtocol]
+    }
 
-    ad_proc ad_html_security_check {
-        -allowed_tags
-        -allowed_attributes
-        -allowed_protocols
+    foreach var {attributes tags protocols} {
+        set allowed_$var [string tolower [set allowed_$var]]
+        set allow_all_$var [expr {"*" in [set allowed_$var]}]
+    }
+
+    foreach var {attributes tags protocols} {
+        if {[set allow_all_$var]} {
+            set allowed_$var *
+        }
+    }
+
+    return [ad_html_security_check_helper \
+                -allowed_tags $allowed_tags \
+                -allowed_attributes $allowed_attributes \
+                -allowed_protocols $allowed_protocols \
+                $html]
+}
+
+ad_proc -private ad_html_security_check_protocol {
+    -attr_name
+    -attr_value
+    -allowed_protocols
+} {
+    Check for allowed protocol in attribute value
+} {
+    if { [regexp {^\s*(([^\s:]+):\/\/|(data|javascript|blob):)} $attr_value match . p1 p2] } {
+        set protocol [string tolower [expr {$p1 ne "" ? $p1 : $p2}]]
+        if { $protocol ni $allowed_protocols } {
+            return [subst {The allowed URLs can only use these protocols:
+                [join $allowed_protocols ", "].
+                You have a '$protocol' protocol in attribute '$attr_name' there.}]
+        }
+    }
+    return ""
+}
+
+if {[::acs::icanuse "ns_parsehtml"]} {
+    ad_proc -private ad_html_security_check_helper {
+        -allowed_tags:required
+        -allowed_attributes:required
+        -allowed_protocols:required
         html
     } {
-
-        Returns a human-readable explanation if the user has used any
-        HTML tag other than the allowed ones.
-
-        It uses for checking the provided values. If these values are
-        not provided the function takes the union of the per-package
-        instance value and the values from the "antispam" section of
-        the kernel parameters.
-
-        @param allowed_tags
-        @param allowed_attributes
-        @param allowed_protocols
-        @param html The HTML text being validated.
-
-        @return a human-readable, plaintext explanation of what's
-        wrong with the user's input.  If everything is ok,
-        return an empty string.
-
-        @author Lars Pind (lars@pinds.com)
-        @creation-date 20 July 2000
-
+        Helper proc for ad_html_security_check doing the hard work
+        @see ad_html_security_check
     } {
-        #
-        # Allow in certain situations additional attributes (e.g. for
-        # the "form" in an xowiki::Form" the <form> tag).  There
-        # should be better ways developed to handle such cases...
-        #
-        if {[info exists ::__extra_allowed_tags]} {
-            set extra_tags $::__extra_allowed_tags
-        } else {
-            set extra_tags ""
-        }
-        #ns_log notice "extra_tags <$extra_tags>"
+        # loop over all tags
+        set parseListElements [ns_parsehtml -onlytags -- $html]
+        foreach parseListElement $parseListElements {
+            lassign [string tolower $parseListElement] tag dict
 
-        if { [string first <% $html] > -1 } {
-            return "For security reasons, you're not allowed to have the less-than-percent combination in your input."
-        }
-
-        if {![info exists allowed_tags]} {
-            set allowed_tags [parameter::get -package_id $::acs::kernel_id -parameter AllowedTag]
-        }
-        lappend allowed_tags {*}$extra_tags
-
-        if {![info exists allowed_attributes]} {
-            set allowed_attributes [parameter::get -package_id $::acs::kernel_id -parameter AllowedAttribute]
-        }
-
-        if {![info exists allowed_protocols]} {
-            set allowed_protocols [parameter::get -package_id $::acs::kernel_id -parameter AllowedProtocol]
-        }
-
-        foreach var {attributes tags protocols} {
-            set allowed_$var [string tolower [set allowed_$var]]
-            set allow_all_$var [expr {"*" in [set allowed_$var]}]
-        }
-
-        foreach var {attributes tags protocols} {
-            if {[set allow_all_$var]} {
-                set allowed_$var *
+            if {[string range $tag 0 0] eq "/"} {
+                #
+                # Ignore closing tags
+                #
+                continue
             }
-        }
-
-        return [ad_html_security_check_helper \
-                    -allowed_tags $allowed_tags \
-                    -allowed_attributes $allowed_attributes \
-                    -allowed_protocols $allowed_protocols \
-                    $html]
-    }
-
-    ad_proc -private ad_html_security_check_protocol {
-        -attr_name
-        -attr_value
-        -allowed_protocols
-    } {
-        Check for allowed protocol in attribute value
-    } {
-        if { [regexp {^\s*(([^\s:]+):\/\/|(data|javascript|blob):)} $attr_value match . p1 p2] } {
-            set protocol [string tolower [expr {$p1 ne "" ? $p1 : $p2}]]
-            if { $protocol ni $allowed_protocols } {
-                return [subst {The allowed URLs can only use these protocols:
-                    [join $allowed_protocols ", "].
-                    You have a '$protocol' protocol in attribute '$attr_name' there.}]
+            if {$allowed_tags ne "*" && $tag ni $allowed_tags} {
+                #
+                # This tag is not allowed.
+                #
+                return [subst {For security reasons we only accept the submission of HTML
+                    containing the following tags: [join $allowed_tags " "].
+                    You have a '[string toupper $tag]' tag in there.
+                }]
+            } else {
+                #
+                # Valid and allowed tag. Check attributes.
+                #
+                if { $allowed_attributes ne "*"} {
+                    foreach attr_name [dict keys $dict] {
+                        if {$attr_name ni $allowed_attributes} {
+                            return "The attribute '$attr_name' is not allowed for $tag tags"
+                        }
+                        #
+                        # Attribute is allowed. Check now protocols
+                        #
+                        if { $allowed_protocols ne "*" && $attr_name ne "style" } {
+                            set r [ad_html_security_check_protocol \
+                                       -attr_name $attr_name \
+                                       -attr_value [dict get $dict $attr_name] \
+                                       -allowed_protocols $allowed_protocols]
+                            if {$r ne ""} {
+                                return $r
+                            }
+                        }
+                    }
+                }
             }
         }
         return ""
     }
+} else {
+    ad_proc -private ad_html_security_check_helper {
+        -allowed_tags:required
+        -allowed_attributes:required
+        -allowed_protocols:required
+        html
+    } {
+        Helper proc for ad_html_security_check doing the hard work
+        @see ad_html_security_check
+    } {
+        # loop over all tags
 
-    if {[::acs::icanuse "ns_parsehtml"]} {
-        ad_proc -private ad_html_security_check_helper {
-            -allowed_tags:required
-            -allowed_attributes:required
-            -allowed_protocols:required
-            html
-        } {
-            Helper proc for ad_html_security_check doing the hard work
-            @see ad_html_security_check
-        } {
-            # loop over all tags
-            set parseListElements [ns_parsehtml -onlytags -- $html]
-            foreach parseListElement $parseListElements {
-                lassign [string tolower $parseListElement] tag dict
+        for { set i [string first < $html] } { $i != -1 } { set i [string first < $html $i] } {
+            # move past the tag-opening <
+            incr i
 
-                if {[string range $tag 0 0] eq "/"} {
-                    #
-                    # Ignore closing tags
-                    #
-                    continue
-                }
-                if {$allowed_tags ne "*" && $tag ni $allowed_tags} {
+            if { ![regexp -indices -start $i {\A/?([-_a-zA-Z0-9:]+)\s*} $html match name_idx] } {
+                # The tag-opener isn't followed by USASCII letters (with or without optional initial slash)
+                # Not considered a tag. Shouldn't do any harm in browsers.
+                # (Tested with digits, with &#65; syntax, with whitespace)
+            } else {
+                #
+                # The tag is potentially ok ... now let's see if it's
+                # on the allowed list.
+                #
+                set tagname [string tolower [string range $html [lindex $name_idx 0] [lindex $name_idx 1]]]
+
+                if {$allowed_tags ne "*" && $tagname ni $allowed_tags } {
                     #
                     # This tag is not allowed.
                     #
                     return [subst {For security reasons we only accept the submission of HTML
                         containing the following tags: [join $allowed_tags " "].
-                        You have a '[string toupper $tag]' tag in there.
+                        You have a '[string toupper $tagname]' tag in there.
                     }]
                 } else {
                     #
-                    # Valid and allowed tag. Check attributes.
+                    # Valid and allowed tag. Make i point to the first
+                    # character inside the tag, after the tag name and
+                    # any whitespace.
                     #
-                    if { $allowed_attributes ne "*"} {
-                        foreach attr_name [dict keys $dict] {
-                            if {$attr_name ni $allowed_attributes} {
-                                return "The attribute '$attr_name' is not allowed for $tag tags"
-                            }
-                            #
-                            # Attribute is allowed. Check now protocols
-                            #
-                            if { $allowed_protocols ne "*" && $attr_name ne "style" } {
-                                set r [ad_html_security_check_protocol \
-                                           -attr_name $attr_name \
-                                           -attr_value [dict get $dict $attr_name] \
-                                           -allowed_protocols $allowed_protocols]
-                                if {$r ne ""} {
-                                    return $r
-                                }
+                    set i [expr { [lindex $match 1] + 1}]
+
+                    set attr_list [ad_parse_html_attributes_upvar html i]
+
+                    foreach attribute $attr_list {
+                        #
+                        # All attribute names in $attr_list are
+                        # already lowercase.
+                        #
+                        lassign $attribute attr_name attr_value
+
+                        if { $allowed_attributes ne "*"
+                             && $attr_name ni $allowed_attributes
+                         } {
+                            return "The attribute '$attr_name' is not allowed for $tagname tags"
+                        }
+
+                        if { $allowed_protocols ne "*" && $attr_name ne "style" } {
+                            set r [ad_html_security_check_protocol \
+                                       -attr_name $attr_name \
+                                       -attr_value $attr_value \
+                                       -allowed_protocols $allowed_protocols]
+                            if {$r ne ""} {
+                                return $r
                             }
                         }
                     }
                 }
             }
-            return ""
         }
+        return ""
+    }
+}
+# This was created in order to pre-process some content to be fed
+# to tDOM in ad_sanitize_html. In fact, even with its least picky
+# behavior, tDOM cannot swallow whatever markup you give it. This
+# proc might also be used in order to improve some OpenACS
+# routines, like util_close_html_tags. As it has some limitations,
+# this is left to future considerations.
+ad_proc -private ad_dom_fix_html {
+    -html:required
+    {-marker "root"}
+    -dom:boolean
+} {
+
+    Similar in spirit to the famous Tidy command line utility,
+    this proc takes a piece of possibly invalid markup and returns
+    a 'fixed' version where unopened tags have been closed and
+    attribute specifications have been normalized by transforming them
+    in the form <code>attribute-name="attribute value"</code>. All
+    attributes with an invalid (non-alphanumeric) name will be
+    stripped.<br>
+    <br>
+    Be aware that every comment and also the possibly present
+    DOCTYPE declaration will be stripped from the markup. Also,
+    most of tag's internal whitespace will be trimmed. This
+    behavior comes from the htmlparse library used in this
+    implementation.
+
+    @param html Markup to process
+
+    @param marker Root element use to enforce a single root of the
+    DOM tree.
+
+    @param dom When this flag is set, instead of returning markup,
+    the proc will return the tDOM object built during the
+    operation. Useful when the result should be used by tDOM
+    anyway, so we can avoid superfluous parsing.
+
+    @return markup or a tDOM document object if the -dom flag is
+    specified
+
+    @author Antonio Pisano
+
+} {
+    if {[catch {package require struct}]} {
+        error "Package struct non found on the system"
+    }
+    if {[catch {package require htmlparse}]} {
+        error "Package htmlparse non found on the system"
+    }
+
+    set tree [::struct::tree]
+
+
+    catch {::htmlparse::tags destroy}
+
+    ::struct::stack ::htmlparse::tags
+    ::htmlparse::tags push root
+    $tree set root type root
+
+    ::htmlparse::parse \
+        -cmd [list ::htmlparse::2treeCallback $tree] \
+        -incvar errs $html
+
+    $tree walk root -order post n {
+        ::htmlparse::Reorder $tree $n
+    }
+
+    ::htmlparse::tags destroy
+
+
+    set lmarker "<$marker>"
+    set rmarker "</$marker>"
+    if {[package vsatisfies [package require tdom] 0.9.3]} {
+        # tDOM 0.9.3 expects HTML DOM trees to be wrapped by an
+        # HTML element, if they are to be serialized properly.
+        set doc [dom createDocument html]
+        set root [[$doc documentElement] appendChild \
+                      [$doc createElement $marker]]
     } else {
-        ad_proc -private ad_html_security_check_helper {
-            -allowed_tags:required
-            -allowed_attributes:required
-            -allowed_protocols:required
-            html
-        } {
-            Helper proc for ad_html_security_check doing the hard work
-            @see ad_html_security_check
-        } {
-            # loop over all tags
-
-            for { set i [string first < $html] } { $i != -1 } { set i [string first < $html $i] } {
-                # move past the tag-opening <
-                incr i
-
-                if { ![regexp -indices -start $i {\A/?([-_a-zA-Z0-9:]+)\s*} $html match name_idx] } {
-                    # The tag-opener isn't followed by USASCII letters (with or without optional initial slash)
-                    # Not considered a tag. Shouldn't do any harm in browsers.
-                    # (Tested with digits, with &#65; syntax, with whitespace)
-                } else {
-                    #
-                    # The tag is potentially ok ... now let's see if it's
-                    # on the allowed list.
-                    #
-                    set tagname [string tolower [string range $html [lindex $name_idx 0] [lindex $name_idx 1]]]
-
-                    if {$allowed_tags ne "*" && $tagname ni $allowed_tags } {
-                        #
-                        # This tag is not allowed.
-                        #
-                        return [subst {For security reasons we only accept the submission of HTML
-                            containing the following tags: [join $allowed_tags " "].
-                            You have a '[string toupper $tagname]' tag in there.
-                        }]
-                    } else {
-                        #
-                        # Valid and allowed tag. Make i point to the first
-                        # character inside the tag, after the tag name and
-                        # any whitespace.
-                        #
-                        set i [expr { [lindex $match 1] + 1}]
-
-                        set attr_list [ad_parse_html_attributes_upvar html i]
-
-                        foreach attribute $attr_list {
-                            #
-                            # All attribute names in $attr_list are
-                            # already lowercase.
-                            #
-                            lassign $attribute attr_name attr_value
-
-                            if { $allowed_attributes ne "*"
-                                 && $attr_name ni $allowed_attributes
-                             } {
-                                return "The attribute '$attr_name' is not allowed for $tagname tags"
-                            }
-
-                            if { $allowed_protocols ne "*" && $attr_name ne "style" } {
-                                set r [ad_html_security_check_protocol \
-                                           -attr_name $attr_name \
-                                           -attr_value $attr_value \
-                                           -allowed_protocols $allowed_protocols]
-                                if {$r ne ""} {
-                                    return $r
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            return ""
-        }
-    }
-    # This was created in order to pre-process some content to be fed
-    # to tDOM in ad_sanitize_html. In fact, even with its least picky
-    # behavior, tDOM cannot swallow whatever markup you give it. This
-    # proc might also be used in order to improve some OpenACS
-    # routines, like util_close_html_tags. As it has some limitations,
-    # this is left to future considerations.
-    ad_proc -private ad_dom_fix_html {
-        -html:required
-        {-marker "root"}
-        -dom:boolean
-    } {
-
-        Similar in spirit to the famous Tidy command line utility,
-        this proc takes a piece of possibly invalid markup and returns
-        a 'fixed' version where unopened tags have been closed and
-        attribute specifications have been normalized by transforming them
-        in the form <code>attribute-name="attribute value"</code>. All
-        attributes with an invalid (non-alphanumeric) name will be
-        stripped.<br>
-        <br>
-        Be aware that every comment and also the possibly present
-        DOCTYPE declaration will be stripped from the markup. Also,
-        most of tag's internal whitespace will be trimmed. This
-        behavior comes from the htmlparse library used in this
-        implementation.
-
-        @param html Markup to process
-
-        @param marker Root element use to enforce a single root of the
-        DOM tree.
-
-        @param dom When this flag is set, instead of returning markup,
-        the proc will return the tDOM object built during the
-        operation. Useful when the result should be used by tDOM
-        anyway, so we can avoid superfluous parsing.
-
-        @return markup or a tDOM document object if the -dom flag is
-        specified
-
-        @author Antonio Pisano
-
-    } {
-        if {[catch {package require struct}]} {
-            error "Package struct non found on the system"
-        }
-        if {[catch {package require htmlparse}]} {
-            error "Package htmlparse non found on the system"
-        }
-
-        set tree [::struct::tree]
-
-
-        catch {::htmlparse::tags destroy}
-
-        ::struct::stack ::htmlparse::tags
-        ::htmlparse::tags push root
-        $tree set root type root
-
-        ::htmlparse::parse \
-            -cmd [list ::htmlparse::2treeCallback $tree] \
-            -incvar errs $html
-
-        $tree walk root -order post n {
-            ::htmlparse::Reorder $tree $n
-        }
-
-        ::htmlparse::tags destroy
-
-
-        set lmarker "<$marker>"
-        set rmarker "</$marker>"
-        if {[package vsatisfies [package require tdom] 0.9.3]} {
-            # tDOM 0.9.3 expects HTML DOM trees to be wrapped by an
-            # HTML element, if they are to be serialized properly.
-            set doc [dom createDocument html]
-            set root [[$doc documentElement] appendChild \
-                          [$doc createElement $marker]]
-        } else {
-            set doc [dom createDocument $marker]
-            set root [$doc documentElement]
-        }
-
-        set queue {}
-        lappend queue [list $root [$tree children [$tree children root]]]
-        while {$queue ne {}} {
-            lassign [lindex $queue 0] domparent treechildren
-            set queue [lrange $queue 1 end]
-
-            foreach child $treechildren {
-                set type [$tree get $child type]
-                set data [$tree get $child data]
-                if {$type eq "PCDATA"} {
-                    set el [$doc createTextNode $data]
-                } else {
-                    set el [$doc createElement $type]
-
-                    # parse element attributes
-                    while {$data ne ""} {
-                        set data [string trim $data]
-                        # attribute with a value, optionally surrounded by double or single quotes
-                        if {[regexp "^(\[^= \]+)=(\"\[^\"\]*\"|'\[^'\].*'|\[^ \]*)" $data m attname attvalue]} {
-                            if {[string match "\"*\"" $attvalue] ||
-                                [string match "'*'" $attvalue]} {
-                                set attvalue [string range $attvalue 1 end-1]
-                            }
-                            # attribute with no value
-                        } elseif {[regexp {^([^\s]+)} $data m attname]} {
-                            set attvalue ""
-                        } else {
-                            error "Unrecoverable attribute spec in supplied markup"
-                        }
-
-                        # skip bogus attribute names
-                        if {[string is alnum -strict $attname]} {
-                            $el setAttribute $attname $attvalue
-                        }
-
-                        set data [string range $data [string length $m] end]
-                    }
-                }
-
-                $domparent appendChild $el
-
-                set elchildren [$tree children $child]
-                if {$elchildren ne {}} {
-                    lappend queue [list $el $elchildren]
-                }
-            }
-        }
-
-        $tree destroy
-
-        if {$dom_p} {
-            return $doc
-        } else {
-            set html [$doc asHTML]
-            $doc delete
-            set html [string range $html [string length $lmarker] end-[string length $rmarker]]
-        }
-
-        return [string trim $html]
+        set doc [dom createDocument $marker]
+        set root [$doc documentElement]
     }
 
-    # Original purpose of this proc was to introduce a better way to
-    # enforce some HTML policies on the content submitted by the uses
-    # (e.g. forbid some tag/attribute like <script> etc). It has some
-    # limitations that make non-trivial its introduction, therefore, is
-    # currently not used around.
-    ad_proc -public ad_dom_sanitize_html {
-        -html:required
-        -allowed_tags
-        -allowed_attributes
-        -allowed_protocols
-        -unallowed_tags
-        -unallowed_attributes
-        -unallowed_protocols
-        -no_js:boolean
-        -no_outer_urls:boolean
-        -validate:boolean
-        -fix:boolean
-    } {
+    set queue {}
+    lappend queue [list $root [$tree children [$tree children root]]]
+    while {$queue ne {}} {
+        lassign [lindex $queue 0] domparent treechildren
+        set queue [lrange $queue 1 end]
 
-        Sanitizes HTML by specified criteria, basically removing
-        unallowed tags and attributes, JavaScript or outer references
-        into page URLs. When desired, this proc can act also as just a
-        validator in order to enforce some markup policies.
-
-        @param html the markup to be checked.
-
-        @param allowed_tags list of tags we allow in the markup.
-
-        @param allowed_attributes list of attributes we allow in the
-        markup.
-
-        @param allowed_protocols list of attributes we allow into
-        links
-
-        @param unallowed_tags list of tags we don't allow in the
-        markup.
-
-        @param unallowed_attributes list of attributes we don't allow
-        in the markup.
-
-        @param unallowed_protocols list of protocols we don't allow in
-        the markup. Protocol-relative URLs are allowed, but only if
-        proc is called from a connection thread, as we need to
-        determine our current connection protocol.
-
-        @param no_js this flag decides whether every script tag,
-        inline event handlers and the javascript: pseudo-protocol
-        should be stripped from the markup.
-
-        @param no_outer_urls this flag tells the proc to remove every
-        reference to external addresses. Proc will try to distinguish
-        between external URLs and fine fully specified internal
-        ones. Acceptable URLs will be transformed in absolute local
-        references, others will be just stripped together with the
-        attribute. Absolute URLs referring to our host are allowed,
-        but require the proc being called from a connection thread in
-        order to determine the proper current url.
-
-        @param validate This flag will avoid the creation of the
-        stripped markup and just report whether the original one
-        respects all the specified requirements.
-
-        @param fix When parsing fails on markup as it is, try to fix
-        it by, for example, closing unclosed tags or normalizing
-        attribute specification. This operation will remove most of
-        plain whitespace into text content of original HTML, together
-        with every comment and the eventually present DOCTYPE
-        declaration.
-
-        @return sanitized markup or a (0/1) truth value when the
-        -validate flag is specified
-
-        @author Antonio Pisano
-
-    } {
-        ## Allowed/Unallowed tags come from the user or default to
-        ## those specified in the parameters
-
-        array set allowed_tag {}
-        if {![info exists allowed_tags]} {
-            set allowed_tags [parameter::get -package_id $::acs::kernel_id -parameter AllowedTag]
-        }
-
-        array set allowed_attribute {}
-        if {![info exists allowed_attributes]} {
-            set allowed_attributes [parameter::get -package_id $::acs::kernel_id -parameter AllowedAttribute]
-        }
-
-        array set allowed_protocol {}
-        if {![info exists allowed_protocols]} {
-            set allowed_protocols [parameter::get -package_id $::acs::kernel_id -parameter AllowedProtocol]
-        }
-
-        if {"*" in $allowed_tags} {
-            set allowed_tags "*"
-        }
-        foreach tag $allowed_tags {
-            set allowed_tag([string tolower $tag]) 1
-        }
-
-        if {"*" in $allowed_attributes} {
-            set allowed_attributes "*"
-        }
-        foreach attribute $allowed_attributes {
-            set allowed_attribute([string tolower $attribute]) 1
-        }
-
-        if {"*" in $allowed_protocols} {
-            set allowed_protocols "*"
-        }
-        foreach protocol $allowed_protocols {
-            set allowed_protocol([string tolower $protocol]) 1
-        }
-
-        array set unallowed_tag {}
-        if {![info exists unallowed_tags]} {
-            set unallowed_tags {}
-        }
-
-        array set unallowed_attribute {}
-        if {![info exists unallowed_attributes]} {
-            set unallowed_attributes {}
-        }
-
-        array set unallowed_protocol {}
-        if {![info exists unallowed_protocols]} {
-            set unallowed_protocols {}
-        }
-
-        # TODO: consider default unallowed stuff to come from a parameter
-
-        if {$no_js_p} {
-            lappend unallowed_tags "script"
-            lappend unallowed_attributes {*}{
-                onafterprint onbeforeprint onbeforeunload onerror
-                onhashchange onload onmessage onoffline ononline
-                onpagehide onpageshow onpopstate onresize onstorage
-                onunload onblur onchange oncontextmenu onfocus oninput
-                oninvalid onreset onsearch onselect onsubmit onkeydown
-                onkeypress onkeyup onclick ondblclick onmousedown
-                onmousemove onmouseout onmouseover onmouseup
-                onmousewheel onwheel ondrag ondragend ondragenter
-                ondragleave ondragover ondragstart ondrop onscroll
-                oncopy oncut onpaste onabort oncanplay
-                oncanplaythrough oncuechange ondurationchange
-                onemptied onended onerror onloadeddata
-                onloadedmetadata onloadstart onpause onplay onplaying
-                onprogress onratechange onseeked onseeking onstalled
-                onsuspend ontimeupdate onvolumechange onwaiting onshow
-                ontoggle
-            }
-            lappend unallowed_protocols "javascript"
-        }
-
-        foreach tag $unallowed_tags {
-            set unallowed_tag([string tolower $tag]) 1
-        }
-
-        foreach attribute $unallowed_attributes {
-            set unallowed_attribute([string tolower $attribute]) 1
-        }
-        foreach protocol $unallowed_protocols {
-            set unallowed_protocol([string tolower $protocol]) 1
-        }
-
-        ##
-        # root of the document must be unique, this will enforce it by
-        # wrapping html in an auxiliary root element
-        set lmarker "<root>"
-        set rmarker "</root>"
-
-        try {
-            dom parse -html "${lmarker}${html}${rmarker}" doc
-
-        } on error {errorMsg} {
-            set severity [expr {$validate_p ? "notice" : "error"}]
-            if {$fix_p} {
-                try {
-                    set doc [ad_dom_fix_html -html $html -dom]
-                } on error {errorMsg} {
-                    ad_log $severity "Fixing of the document failed. Reported error: $errorMsg"
-                    return [expr {$validate_p ? 0 : ""}]
-                }
+        foreach child $treechildren {
+            set type [$tree get $child type]
+            set data [$tree get $child data]
+            if {$type eq "PCDATA"} {
+                set el [$doc createTextNode $data]
             } else {
-                ad_log $severity "Parsing of the document failed. Reported error: $errorMsg"
+                set el [$doc createElement $type]
+
+                # parse element attributes
+                while {$data ne ""} {
+                    set data [string trim $data]
+                    # attribute with a value, optionally surrounded by double or single quotes
+                    if {[regexp "^(\[^= \]+)=(\"\[^\"\]*\"|'\[^'\].*'|\[^ \]*)" $data m attname attvalue]} {
+                        if {[string match "\"*\"" $attvalue] ||
+                            [string match "'*'" $attvalue]} {
+                            set attvalue [string range $attvalue 1 end-1]
+                        }
+                        # attribute with no value
+                    } elseif {[regexp {^([^\s]+)} $data m attname]} {
+                        set attvalue ""
+                    } else {
+                        error "Unrecoverable attribute spec in supplied markup"
+                    }
+
+                    # skip bogus attribute names
+                    if {[string is alnum -strict $attname]} {
+                        $el setAttribute $attname $attvalue
+                    }
+
+                    set data [string range $data [string length $m] end]
+                }
+            }
+
+            $domparent appendChild $el
+
+            set elchildren [$tree children $child]
+            if {$elchildren ne {}} {
+                lappend queue [list $el $elchildren]
+            }
+        }
+    }
+
+    $tree destroy
+
+    if {$dom_p} {
+        return $doc
+    } else {
+        set html [$doc asHTML]
+        $doc delete
+        set html [string range $html [string length $lmarker] end-[string length $rmarker]]
+    }
+
+    return [string trim $html]
+}
+
+# Original purpose of this proc was to introduce a better way to
+# enforce some HTML policies on the content submitted by the uses
+# (e.g. forbid some tag/attribute like <script> etc). It has some
+# limitations that make non-trivial its introduction, therefore, is
+# currently not used around.
+ad_proc -public ad_dom_sanitize_html {
+    -html:required
+    -allowed_tags
+    -allowed_attributes
+    -allowed_protocols
+    -unallowed_tags
+    -unallowed_attributes
+    -unallowed_protocols
+    -no_js:boolean
+    -no_outer_urls:boolean
+    -validate:boolean
+    -fix:boolean
+} {
+
+    Sanitizes HTML by specified criteria, basically removing
+    unallowed tags and attributes, JavaScript or outer references
+    into page URLs. When desired, this proc can act also as just a
+    validator in order to enforce some markup policies.
+
+    @param html the markup to be checked.
+
+    @param allowed_tags list of tags we allow in the markup.
+
+    @param allowed_attributes list of attributes we allow in the
+    markup.
+
+    @param allowed_protocols list of attributes we allow into
+    links
+
+    @param unallowed_tags list of tags we don't allow in the
+    markup.
+
+    @param unallowed_attributes list of attributes we don't allow
+    in the markup.
+
+    @param unallowed_protocols list of protocols we don't allow in
+    the markup. Protocol-relative URLs are allowed, but only if
+    proc is called from a connection thread, as we need to
+    determine our current connection protocol.
+
+    @param no_js this flag decides whether every script tag,
+    inline event handlers and the javascript: pseudo-protocol
+    should be stripped from the markup.
+
+    @param no_outer_urls this flag tells the proc to remove every
+    reference to external addresses. Proc will try to distinguish
+    between external URLs and fine fully specified internal
+    ones. Acceptable URLs will be transformed in absolute local
+    references, others will be just stripped together with the
+    attribute. Absolute URLs referring to our host are allowed,
+    but require the proc being called from a connection thread in
+    order to determine the proper current url.
+
+    @param validate This flag will avoid the creation of the
+    stripped markup and just report whether the original one
+    respects all the specified requirements.
+
+    @param fix When parsing fails on markup as it is, try to fix
+    it by, for example, closing unclosed tags or normalizing
+    attribute specification. This operation will remove most of
+    plain whitespace into text content of original HTML, together
+    with every comment and the eventually present DOCTYPE
+    declaration.
+
+    @return sanitized markup or a (0/1) truth value when the
+    -validate flag is specified
+
+    @author Antonio Pisano
+
+} {
+    ## Allowed/Unallowed tags come from the user or default to
+    ## those specified in the parameters
+
+    array set allowed_tag {}
+    if {![info exists allowed_tags]} {
+        set allowed_tags [parameter::get -package_id $::acs::kernel_id -parameter AllowedTag]
+    }
+
+    array set allowed_attribute {}
+    if {![info exists allowed_attributes]} {
+        set allowed_attributes [parameter::get -package_id $::acs::kernel_id -parameter AllowedAttribute]
+    }
+
+    array set allowed_protocol {}
+    if {![info exists allowed_protocols]} {
+        set allowed_protocols [parameter::get -package_id $::acs::kernel_id -parameter AllowedProtocol]
+    }
+
+    if {"*" in $allowed_tags} {
+        set allowed_tags "*"
+    }
+    foreach tag $allowed_tags {
+        set allowed_tag([string tolower $tag]) 1
+    }
+
+    if {"*" in $allowed_attributes} {
+        set allowed_attributes "*"
+    }
+    foreach attribute $allowed_attributes {
+        set allowed_attribute([string tolower $attribute]) 1
+    }
+
+    if {"*" in $allowed_protocols} {
+        set allowed_protocols "*"
+    }
+    foreach protocol $allowed_protocols {
+        set allowed_protocol([string tolower $protocol]) 1
+    }
+
+    array set unallowed_tag {}
+    if {![info exists unallowed_tags]} {
+        set unallowed_tags {}
+    }
+
+    array set unallowed_attribute {}
+    if {![info exists unallowed_attributes]} {
+        set unallowed_attributes {}
+    }
+
+    array set unallowed_protocol {}
+    if {![info exists unallowed_protocols]} {
+        set unallowed_protocols {}
+    }
+
+    # TODO: consider default unallowed stuff to come from a parameter
+
+    if {$no_js_p} {
+        lappend unallowed_tags "script"
+        lappend unallowed_attributes {*}{
+            onafterprint onbeforeprint onbeforeunload onerror
+            onhashchange onload onmessage onoffline ononline
+            onpagehide onpageshow onpopstate onresize onstorage
+            onunload onblur onchange oncontextmenu onfocus oninput
+            oninvalid onreset onsearch onselect onsubmit onkeydown
+            onkeypress onkeyup onclick ondblclick onmousedown
+            onmousemove onmouseout onmouseover onmouseup
+            onmousewheel onwheel ondrag ondragend ondragenter
+            ondragleave ondragover ondragstart ondrop onscroll
+            oncopy oncut onpaste onabort oncanplay
+            oncanplaythrough oncuechange ondurationchange
+            onemptied onended onerror onloadeddata
+            onloadedmetadata onloadstart onpause onplay onplaying
+            onprogress onratechange onseeked onseeking onstalled
+            onsuspend ontimeupdate onvolumechange onwaiting onshow
+            ontoggle
+        }
+        lappend unallowed_protocols "javascript"
+    }
+
+    foreach tag $unallowed_tags {
+        set unallowed_tag([string tolower $tag]) 1
+    }
+
+    foreach attribute $unallowed_attributes {
+        set unallowed_attribute([string tolower $attribute]) 1
+    }
+    foreach protocol $unallowed_protocols {
+        set unallowed_protocol([string tolower $protocol]) 1
+    }
+
+    ##
+    # root of the document must be unique, this will enforce it by
+    # wrapping html in an auxiliary root element
+    set lmarker "<root>"
+    set rmarker "</root>"
+
+    try {
+        dom parse -html "${lmarker}${html}${rmarker}" doc
+
+    } on error {errorMsg} {
+        set severity [expr {$validate_p ? "notice" : "error"}]
+        if {$fix_p} {
+            try {
+                set doc [ad_dom_fix_html -html $html -dom]
+            } on error {errorMsg} {
+                ad_log $severity "Fixing of the document failed. Reported error: $errorMsg"
                 return [expr {$validate_p ? 0 : ""}]
             }
-        }
-
-        $doc documentElement root
-
-        # Some sanitizing requires information that is available only
-        # from a connection thread such as our local address and
-        # current protocol.
-        if {[ns_conn isconnected]} {
-            set driver_info [util_driver_info]
-            set driver_prot [dict get $driver_info proto]
-            set driver_host [dict get $driver_info hostname]
-            set driver_port [dict get $driver_info port]
-
-            ## create a regex clause of possible addresses referring to
-            ## this system
-            set our_locations [list]
-
-            # location from conf files
-            set configured_location [util::join_location \
-                                         -proto    $driver_prot \
-                                         -hostname $driver_host \
-                                         -port     $driver_port]
-            lappend our_locations $configured_location
-            regsub {^\w+://} $configured_location {//} no_proto_location
-            lappend our_locations $no_proto_location
-
-            # location from connection
-            set conn_location [ad_conn location]
-            lappend our_locations $conn_location
-            regsub {^\w+://} $conn_location {//} no_proto_location
-            lappend our_locations $no_proto_location
-
-            set our_locations [join $our_locations |]
-            ##
         } else {
-            set our_locations ""
-            set driver_prot ""
+            ad_log $severity "Parsing of the document failed. Reported error: $errorMsg"
+            return [expr {$validate_p ? 0 : ""}]
+        }
+    }
+
+    $doc documentElement root
+
+    # Some sanitizing requires information that is available only
+    # from a connection thread such as our local address and
+    # current protocol.
+    if {[ns_conn isconnected]} {
+        set driver_info [util_driver_info]
+        set driver_prot [dict get $driver_info proto]
+        set driver_host [dict get $driver_info hostname]
+        set driver_port [dict get $driver_info port]
+
+        ## create a regex clause of possible addresses referring to
+        ## this system
+        set our_locations [list]
+
+        # location from conf files
+        set configured_location [util::join_location \
+                                     -proto    $driver_prot \
+                                     -hostname $driver_host \
+                                     -port     $driver_port]
+        lappend our_locations $configured_location
+        regsub {^\w+://} $configured_location {//} no_proto_location
+        lappend our_locations $no_proto_location
+
+        # location from connection
+        set conn_location [ad_conn location]
+        lappend our_locations $conn_location
+        regsub {^\w+://} $conn_location {//} no_proto_location
+        lappend our_locations $no_proto_location
+
+        set our_locations [join $our_locations |]
+        ##
+    } else {
+        set our_locations ""
+        set driver_prot ""
+    }
+
+    set queue [$root childNodes]
+    while {$queue ne {}} {
+        set node [lindex $queue 0]
+        set queue [lrange $queue 1 end]
+
+        # skip all non-element nodes
+        if {$node eq "" || [$node nodeType] ne "ELEMENT_NODE"} {
+            continue
         }
 
-        set queue [$root childNodes]
-        while {$queue ne {}} {
-            set node [lindex $queue 0]
-            set queue [lrange $queue 1 end]
-
-            # skip all non-element nodes
-            if {$node eq "" || [$node nodeType] ne "ELEMENT_NODE"} {
-                continue
+        # 1: check tag is allowed
+        set node_name [string tolower [$node nodeName]]
+        if {[info exists unallowed_tag($node_name)] ||
+            ($allowed_tags ne "*" && ![info exists allowed_tag($node_name)])} {
+            # invalid tag!
+            if {$validate_p} {
+                return 0
+            } else {
+                $node delete
             }
+            continue
+        }
 
-            # 1: check tag is allowed
-            set node_name [string tolower [$node nodeName]]
-            if {[info exists unallowed_tag($node_name)] ||
-                ($allowed_tags ne "*" && ![info exists allowed_tag($node_name)])} {
-                # invalid tag!
+        # tag itself is allowed, we can inspect its children
+        lappend queue {*}[$node childNodes]
+
+        # 2: check tag contains only allowed attributes
+        foreach att [$node attributes] {
+            set att [string tolower $att]
+            if {[info exists unallowed_attribute($att)] ||
+                ($allowed_attributes ne "*" && ![info exists allowed_attribute($att)])} {
+                # invalid attribute!
                 if {$validate_p} {
                     return 0
                 } else {
-                    $node delete
+                    $node removeAttribute $att
                 }
                 continue
             }
 
-            # tag itself is allowed, we can inspect its children
-            lappend queue {*}[$node childNodes]
+            # 3: check for any attribute that could contain a URL
+            # whether this is acceptable
+            switch -- $att {
+                "href" - "src" - "content" - "action" {
+                    set url [string trim [$node getAttribute $att ""]]
+                    if {$url eq ""} {
+                        continue
+                    }
 
-            # 2: check tag contains only allowed attributes
-            foreach att [$node attributes] {
-                set att [string tolower $att]
-                if {[info exists unallowed_attribute($att)] ||
-                    ($allowed_attributes ne "*" && ![info exists allowed_attribute($att)])} {
-                    # invalid attribute!
-                    if {$validate_p} {
+                    #
+                    # Try to detect malicious attempts to
+                    # "disguise" a protocol by replacing
+                    # characters with HTML entities.
+                    #
+                    # Tools that target earlier versions of the
+                    # HTML specification may not be able to
+                    # properly recognize the latest entities.
+                    #
+                    # Currently, tDOM targets HTML standard 4.01,
+                    # hence will not automatically unquote
+                    # entities such as "&colon;" and others, that
+                    # were introduced later. (See
+                    # http://tdom.org/index.html/tktview/d59ea07e74a1903435a947862dd7acd74a4eb92e)
+                    #
+                    # To overcome this limitation, we pass the URL
+                    # through ns_unquotehtml, which on NaviServer
+                    # > 4.99.30 will recognize and properly
+                    # unescape many of these new entities.
+                    #
+                    set url [ns_unquotehtml $url]
+
+                    #
+                    # Another trick seen by e.g. penetration tools
+                    # is to try and sneak in URLs sporting
+                    # multiple protocols. We reject those
+                    # altogether.
+                    #
+                    if {![regexp -nocase {^([a-z]+:){2,}} $url]} {
+                        #
+                        # A normal "0 or 1 protocols" URL
+                        #
+                    } elseif {$validate_p} {
+                        #
+                        # Multi-protocol URL and we are
+                        # validating. This HTML is invalid.
+                        #
                         return 0
                     } else {
+                        #
+                        # Multi-protocol URL and we are
+                        # sanitizing. Remove it from the
+                        # result.
+                        #
                         $node removeAttribute $att
+                        continue
                     }
-                    continue
-                }
 
-                # 3: check for any attribute that could contain a URL
-                # whether this is acceptable
-                switch -- $att {
-                    "href" - "src" - "content" - "action" {
-                        set url [string trim [$node getAttribute $att ""]]
-                        if {$url eq ""} {
-                            continue
+                    set proto ""
+                    try {
+                        set parsed_url [ns_parseurl $url]
+                        if {[dict exists $parsed_url proto]} {
+                            set proto [dict get $parsed_url proto]
                         }
 
+                    } on error {errorMsg} {
+                        ns_log warning "ad_dom_sanitize_html cannot parse URL '$url': $errorMsg"
                         #
-                        # Try to detect malicious attempts to
-                        # "disguise" a protocol by replacing
-                        # characters with HTML entities.
+                        # The attribute is invalid. Report it or remove it.
                         #
-                        # Tools that target earlier versions of the
-                        # HTML specification may not be able to
-                        # properly recognize the latest entities.
-                        #
-                        # Currently, tDOM targets HTML standard 4.01,
-                        # hence will not automatically unquote
-                        # entities such as "&colon;" and others, that
-                        # were introduced later. (See
-                        # http://tdom.org/index.html/tktview/d59ea07e74a1903435a947862dd7acd74a4eb92e)
-                        #
-                        # To overcome this limitation, we pass the URL
-                        # through ns_unquotehtml, which on NaviServer
-                        # > 4.99.30 will recognize and properly
-                        # unescape many of these new entities.
-                        #
-                        set url [ns_unquotehtml $url]
+                        if {$validate_p} {
+                            return 0
+                        } else {
+                            $node removeAttribute $att
+                        }
+                        continue
+                    }
 
+                    if {$proto ne "" && $no_outer_urls_p} {
                         #
-                        # Another trick seen by e.g. penetration tools
-                        # is to try and sneak in URLs sporting
-                        # multiple protocols. We reject those
-                        # altogether.
+                        # No external URLs allowed: we still want
+                        # to allow fully specified URLs that refer
+                        # to this server, but we'll transform them
+                        # in a local absolute reference. For all
+                        # others, attribute will be just removed.
                         #
-                        if {![regexp -nocase {^([a-z]+:){2,}} $url]} {
+                        if {[regsub ^($our_locations) $url {} url]} {
                             #
-                            # A normal "0 or 1 protocols" URL
+                            # This is ok, points to our system.
                             #
+                            set url /[string trimleft $url "/"]
+                            $node setAttribute $att $url
                         } elseif {$validate_p} {
                             #
-                            # Multi-protocol URL and we are
+                            # External URL and we are
                             # validating. This HTML is invalid.
                             #
                             return 0
                         } else {
                             #
-                            # Multi-protocol URL and we are
+                            # External URL and we are
                             # sanitizing. Remove it from the
                             # result.
                             #
                             $node removeAttribute $att
                             continue
                         }
+                    }
 
-                        set proto ""
-                        try {
-                            set parsed_url [ns_parseurl $url]
-                            if {[dict exists $parsed_url proto]} {
-                                set proto [dict get $parsed_url proto]
-                            }
+                    # to check for allowed protocols we need to
+                    # treat URLs without one (e.g. relative or
+                    # protocol-relative URLs) as using our same
+                    # protocol
+                    if {$proto eq ""} {
+                        set proto $driver_prot
+                    }
 
-                        } on error {errorMsg} {
-                            ns_log warning "ad_dom_sanitize_html cannot parse URL '$url': $errorMsg"
-                            #
-                            # The attribute is invalid. Report it or remove it.
-                            #
-                            if {$validate_p} {
-                                return 0
+                    # check if protocol is allowed
+                    if {[info exists unallowed_protocol($proto)] ||
+                        ($allowed_protocols ne "*" && ![info exists allowed_protocol($proto)])} {
+                        # invalid attribute!
+                        if {$validate_p} {
+                            return 0
+                        } else {
+                            $node removeAttribute $att
+                        }
+                        continue
+                    }
+                }
+            }
+        }
+    }
+
+    if {$validate_p} {
+        $doc delete
+        return 1
+    } else {
+        if {[package vsatisfies [package require tdom] 0.9.3]} {
+            # tDOM 0.9.3 will return the tree including the
+            # parent.  To keep the previous behavior, one should
+            # specify the -onlyContents flag, that previous
+            # versions do not support.
+            set html [$root asHTML -onlyContents]
+        } else {
+            set html [$root asHTML]
+        }
+        $doc delete
+        # remove auxiliary root element from output
+        set html [string range $html [string length $lmarker] end-[string length $rmarker]]
+        set html [string trim $html]
+        return $html
+    }
+}
+
+ad_proc -public ad_js_escape {
+    string
+} {
+    Return supplied string with invalid javascript characters
+    property escaped. This makes possible to use the string safely
+    inside javascript code.
+
+    @author Antonio Pisano
+} {
+    string map [list \n \\n \b \\b \f \\f \r \\r \t \\t \v \\v \" {\"} ' {\'}] $string
+
+    # Escape quotes and backslashes (non greedy)
+    #regsub -all -- {.??([^\\])?('|\"|\\)} $string {\1\\\2} string
+    # Escape characters are replaced with their escape sequence
+    #regsub -all -- {\b} $string {\\b} string
+    #regsub -all -- {\f} $string {\\f} string
+    #regsub -all -- {\n} $string {\\n} string
+    #regsub -all -- {\r} $string {\\r} string
+    #regsub -all -- {\t} $string {\\t} string
+    #regsub -all -- {\v} $string {\\v} string
+
+    #return $string
+}
+
+####################
+#
+# HTML -> Text
+#
+####################
+
+ad_proc -public ad_html_to_text {
+    {-maxlen 70}
+    {-showtags:boolean}
+    {-no_format:boolean}
+    html
+} {
+    Returns a best-guess plain text version of an HTML fragment.
+    Parses the HTML and does some simple formatting. The parser and
+    formatting is pretty stupid, but it's better than nothing.
+
+    @param maxlen the line length you want your output wrapped to.
+    @param showtags causes any unknown (and uninterpreted) tags to get shown in the output.
+    @param no_format causes hyperlink tags not to get listed at the end of the output.
+
+    @author Lars Pind (lars@pinds.com)
+    @author Aaron Swartz (aaron@swartzfam.com)
+    @creation-date 19 July 2000
+} {
+    set output(text) {}
+    set output(linelen) 0
+    set output(maxlen) $maxlen
+    set output(pre) 0
+    set output(p) 0
+    set output(br) 0
+    set output(space) 0
+    set output(blockquote) 0
+
+    set length [string length $html]
+    set last_tag_end 0
+
+    # For showing the URL of links.
+    set href_urls [list]
+    set href_stack [list]
+
+    for { set i [string first < $html] } { $i != -1 } { set i [string first < $html $i] } {
+        # append everything up to and not including the tag-opening <
+        ad_html_to_text_put_text output [string range $html $last_tag_end $i-1]
+
+        # Check that:
+        #  - we're not past the end of the string
+        #  - and that the tag starts with either
+        #     - alpha or
+        #     - a slash, and then alpha
+        # Otherwise, it's probably just a lone < character
+        if { $i >= $length - 1 ||
+             (![string is alpha [string index $html $i+1]]
+              && [string index $html $i+1] ne "!"
+              && ("/" ne [string index $html $i+1] ||
+                  ![string is alpha [string index $html $i+2]]))
+         } {
+            # Output the < and continue with next character
+            ad_html_to_text_put_text output "<"
+            set last_tag_end [incr i]
+            continue
+        } elseif {[string match "!--*" [string range $html $i+1 end]]} {
+            # Handle HTML comments, I can't believe no one noticed
+            # this before.  This code maybe not be elegant but it
+            # works.
+
+            # find the closing comment tag.
+            set comment_idx [string first "-->" $html $i]
+            if {$comment_idx == -1} {
+                # no comment close, escape
+                set last_tag_end $i
+                set i $comment_idx
+                break
+            }
+            set i [expr {$comment_idx + 3}]
+            set last_tag_end $i
+
+            continue
+        }
+        # we're inside a tag now. Find the end of it
+
+        # make i point to the char after the <
+        incr i
+        set tag_start $i
+
+        set count 0
+        while 1 {
+            if {[incr count] > 3000 } {
+                # JCD: the programming bug is that an unmatched <
+                # in the input runs off forever looking for its
+                # closing > and in some long text like program
+                # listings you can have lots of quotes before you
+                # find that >
+                error "There appears to be a programming bug in ad_html_to_text: We've entered an infinite loop."
+            }
+            # Find the positions of the first quote, apostrophe and greater-than sign.
+            set quote_idx [string first \" $html $i]
+            set apostrophe_idx [string first ' $html $i]
+            set gt_idx [string first > $html $i]
+
+            # If there is no greater-than sign, then the tag isn't closed.
+            if { $gt_idx == -1 } {
+                set i $length
+                break
+            }
+
+            # Find the first of the quote and the apostrophe
+            if { $apostrophe_idx == -1 } {
+                set string_delimiter_idx $quote_idx
+            } else {
+                if { $quote_idx == -1 } {
+                    set string_delimiter_idx $apostrophe_idx
+                } else {
+                    if { $apostrophe_idx < $quote_idx } {
+                        set string_delimiter_idx $apostrophe_idx
+                    } else {
+                        set string_delimiter_idx $quote_idx
+                    }
+                }
+            }
+            set string_delimiter [string index $html $string_delimiter_idx]
+
+            # If the greater than sign appears before any of the
+            # string delimiters, we've found the tag end.
+            if { $gt_idx < $string_delimiter_idx || $string_delimiter_idx == -1 } {
+                # we found the tag end
+                set i $gt_idx
+                break
+            }
+
+            # Otherwise, we'll have to skip past the ending string delimiter
+            set i [string first $string_delimiter $html [incr string_delimiter_idx]]
+            if { $i == -1 } {
+                # Missing string end delimiter
+                set i $length
+                break
+            }
+            incr i
+        }
+
+        set full_tag [string range $html $tag_start $i-1]
+
+        if { ![regexp {^(/?)([^\s]+)[\s]*(\s.*)?$} $full_tag match slash tagname attributes] } {
+            # A malformed tag -- just delete it
+        } else {
+
+            # Reset/create attribute array
+            array unset attribute_array
+
+            # Parse the attributes
+            ad_parse_html_attributes -attribute_array attribute_array $attributes
+
+            switch -- [string tolower $tagname] {
+                p - ul - ol - table {
+                    set output(p) 1
+                }
+                br {
+                    ad_html_to_text_put_newline output
+                }
+                tr - td - th {
+                    set output(br) 1
+                }
+                h1 - h2 - h3 - h4 - h5 - h6 {
+                    set output(p) 1
+                    if { $slash eq "" } {
+                        ad_html_to_text_put_text output [string repeat "*" [string index $tagname 1]]
+                    }
+                }
+                li {
+                    set output(br) 1
+                    if { $slash eq "" } {
+                        ad_html_to_text_put_text output "- "
+                    }
+                }
+                strong - b {
+                    ad_html_to_text_put_text output "*"
+                }
+                em - i - cite - u {
+                    ad_html_to_text_put_text output "_"
+                }
+                a {
+                    if { !$no_format_p } {
+                        if { $slash eq ""} {
+                            if { [info exists attribute_array(href)]
+                                 && [string index $attribute_array(href) 0] ni {"#" ""}
+                             } {
+                                if { [info exists attribute_array(title)] } {
+                                    set title ": '$attribute_array(title)'"
+                                } else {
+                                    set title ""
+                                }
+                                set href_no [expr {[llength $href_urls] + 1}]
+                                lappend href_urls "\[$href_no\] $attribute_array(href) "
+                                lappend href_stack "\[$href_no$title\]"
+                            } elseif { [info exists attribute_array(title)] } {
+                                lappend href_stack "\[$attribute_array(title)\]"
                             } else {
-                                $node removeAttribute $att
+                                lappend href_stack {}
                             }
-                            continue
+                        } else {
+                            if { [llength $href_stack] > 0 } {
+                                if { [lindex $href_stack end] ne "" } {
+                                    ad_html_to_text_put_text output " [lindex $href_stack end]"
+                                }
+                                set href_stack [lreplace $href_stack end end]
+                            }
                         }
-
-                        if {$proto ne "" && $no_outer_urls_p} {
-                            #
-                            # No external URLs allowed: we still want
-                            # to allow fully specified URLs that refer
-                            # to this server, but we'll transform them
-                            # in a local absolute reference. For all
-                            # others, attribute will be just removed.
-                            #
-                            if {[regsub ^($our_locations) $url {} url]} {
-                                #
-                                # This is ok, points to our system.
-                                #
-                                set url /[string trimleft $url "/"]
-                                $node setAttribute $att $url
-                            } elseif {$validate_p} {
-                                #
-                                # External URL and we are
-                                # validating. This HTML is invalid.
-                                #
-                                return 0
+                    }
+                }
+                pre {
+                    set output(p) 1
+                    if { $slash eq "" } {
+                        incr output(pre)
+                    } else {
+                        incr output(pre) -1
+                    }
+                }
+                blockquote {
+                    set output(p) 1
+                    if { $slash eq "" } {
+                        incr output(blockquote)
+                        incr output(maxlen) -4
+                    } else {
+                        incr output(blockquote) -1
+                        incr output(maxlen) 4
+                    }
+                }
+                hr {
+                    set output(p) 1
+                    ad_html_to_text_put_text output [string repeat "-" $output(maxlen)]
+                    set output(p) 1
+                }
+                q {
+                    ad_html_to_text_put_text output \"
+                }
+                img {
+                    if { $slash eq "" && !$no_format_p } {
+                        set img_info {}
+                        if { [info exists attribute_array(alt)] } {
+                            lappend img_info "'$attribute_array(alt)'"
+                        }
+                        if { [info exists attribute_array(src)] } {
+                            if {[string match "data:*" $attribute_array(src)]} {
+                                lappend img_info "data:..."
                             } else {
-                                #
-                                # External URL and we are
-                                # sanitizing. Remove it from the
-                                # result.
-                                #
-                                $node removeAttribute $att
-                                continue
+                                lappend img_info $attribute_array(src)
                             }
                         }
-
-                        # to check for allowed protocols we need to
-                        # treat URLs without one (e.g. relative or
-                        # protocol-relative URLs) as using our same
-                        # protocol
-                        if {$proto eq ""} {
-                            set proto $driver_prot
+                        if { [llength $img_info] == 0 } {
+                            ad_html_to_text_put_text output {[IMAGE]}
+                        } else {
+                            ad_html_to_text_put_text output "\[IMAGE: [join $img_info " "]\]"
                         }
-
-                        # check if protocol is allowed
-                        if {[info exists unallowed_protocol($proto)] ||
-                            ($allowed_protocols ne "*" && ![info exists allowed_protocol($proto)])} {
-                            # invalid attribute!
-                            if {$validate_p} {
-                                return 0
-                            } else {
-                                $node removeAttribute $att
-                            }
-                            continue
-                        }
+                    }
+                }
+                default {
+                    # Other tag
+                    if { $showtags_p } {
+                        ad_html_to_text_put_text output "&lt;$slash$tagname$attributes&gt;"
                     }
                 }
             }
         }
 
-        if {$validate_p} {
-            $doc delete
-            return 1
-        } else {
-            if {[package vsatisfies [package require tdom] 0.9.3]} {
-                # tDOM 0.9.3 will return the tree including the
-                # parent.  To keep the previous behavior, one should
-                # specify the -onlyContents flag, that previous
-                # versions do not support.
-                set html [$root asHTML -onlyContents]
-            } else {
-                set html [$root asHTML]
-            }
-            $doc delete
-            # remove auxiliary root element from output
-            set html [string range $html [string length $lmarker] end-[string length $rmarker]]
-            set html [string trim $html]
-            return $html
+        # set end of last tag to the character following the >
+        set last_tag_end [incr i]
+    }
+    # append everything after the last tag
+    ad_html_to_text_put_text output [string range $html $last_tag_end end]
+
+    # Close any unclosed tags
+    set output(pre) 0
+    while { $output(blockquote) > 0 } {
+        incr output(blockquote) -1
+        incr output(maxlen) 4
+    }
+
+    # write out URLs, if necessary:
+    if { [llength $href_urls] > 0 } {
+        append output(text) "\n\n[join $href_urls "\n"]"
+    }
+
+    #---
+    # conversion like in ad_text_to_html
+    # 2006/09/12
+    set  myChars  {
+        ª º À Á Â Ã Ä Å Æ Ç
+        È É Ê Ë Ì Í Î Ï Ð Ñ
+        Ò Ó Ô Õ Ö Ø Ù Ú Û Ü
+        Ý Þ ß à á â ã ä å æ
+        ç è é ê ë ì í î ï ð
+        ñ ò ó ô õ ö ø ù ú û
+        ü ý þ ÿ ¿
+    }
+
+    set  myHTML  {
+        &ordf; &ordm; &Agrave; &Aacute; &Acirc; &Atilde; &Auml; &Aring; &Aelig; &Ccedil;
+        &Egrave; &Eacute; &Ecirc; &Euml; &Igrave; &Iacute; &Icirc; &Iuml; &ETH; &Ntilde;
+        &Ograve; &Oacute; &Ocirc; &Otilde; &Ouml; &Oslash; &Ugrave; &Uacute; &Ucirc; &Uuml;
+        &Yacute; &THORN; &szlig; &agrave; &aacute; &acirc; &atilde; &auml; &aring; &aelig;
+        &ccedil; &egrave; &eacute; &ecirc; &euml; &igrave; &iacute; &icirc; &iuml; &eth;
+        &ntilde; &ograve; &oacute; &ocirc; &otilde; &ouml; &oslash; &ugrave; &uacute; &ucirc;
+        &uuml; &yacute; &thorn; &yuml; &iquest;
+    }
+
+    set map {}
+    foreach ch $myChars entity $myHTML {
+        lappend map $entity $ch
+    }
+
+    return [string map $map $output(text)]
+}
+
+ad_proc -private ad_html_to_text_put_newline { output_var } {
+    Helper proc for ad_html_to_text
+
+    @author Lars Pind (lars@pinds.com)
+    @author Aaron Swartz (aaron@swartzfam.com)
+    @creation-date 22 September 2000
+} {
+    upvar $output_var output
+
+    append output(text) \n
+    set output(linelen) 0
+    append output(text) [string repeat {    } $output(blockquote)]
+}
+
+ad_proc -private ad_html_to_text_put_text { output_var text } {
+    Helper proc for ad_html_to_text
+
+    @author Lars Pind (lars@pinds.com)
+    @author Aaron Swartz (aaron@swartzfam.com)
+    @creation-date 19 July 2000
+} {
+    upvar $output_var output
+
+    # Expand entities before outputting
+    set text [util_expand_entities $text]
+
+    #
+    # If we're not inside an HTML "<PRE>" element.
+    #
+    if { $output(pre) <= 0 } {
+        # collapse all whitespace
+        regsub -all -- {\s+} $text { } text
+
+        # if there's only spaces in the string, wait until later
+        if {$text eq " "} {
+            set output(space) 1
+            return
         }
+
+        # if it's nothing, do nothing
+        if { $text eq "" } {
+            return
+        }
+
+        # if the first character is a space, set the space bit
+        if {[string index $text 0] eq " "} {
+            set output(space) 1
+            set text [string trimleft $text]
+        }
+    } else {
+        #
+        # We're inside an HTML <PRE> element: clean line breaks
+        # and tabs.
+        #
+        regsub -all -- {\r\n} $text "\n" text
+        regsub -all -- {\r} $text "\n" text
+        # tabs become four spaces
+        regsub -all -- {[\v\t]} $text {    } text
     }
 
-    ad_proc -public ad_js_escape {
-        string
-    } {
-        Return supplied string with invalid javascript characters
-        property escaped. This makes possible to use the string safely
-        inside javascript code.
-
-        @author Antonio Pisano
-    } {
-        string map [list \n \\n \b \\b \f \\f \r \\r \t \\t \v \\v \" {\"} ' {\'}] $string
-
-        # Escape quotes and backslashes (non greedy)
-        #regsub -all -- {.??([^\\])?('|\"|\\)} $string {\1\\\2} string
-        # Escape characters are replaced with their escape sequence
-        #regsub -all -- {\b} $string {\\b} string
-        #regsub -all -- {\f} $string {\\f} string
-        #regsub -all -- {\n} $string {\\n} string
-        #regsub -all -- {\r} $string {\\r} string
-        #regsub -all -- {\t} $string {\\t} string
-        #regsub -all -- {\v} $string {\\v} string
-
-        #return $string
-    }
-
-    ####################
-    #
-    # HTML -> Text
-    #
-    ####################
-
-    ad_proc -public ad_html_to_text {
-        {-maxlen 70}
-        {-showtags:boolean}
-        {-no_format:boolean}
-        html
-    } {
-        Returns a best-guess plain text version of an HTML fragment.
-        Parses the HTML and does some simple formatting. The parser and
-        formatting is pretty stupid, but it's better than nothing.
-
-        @param maxlen the line length you want your output wrapped to.
-        @param showtags causes any unknown (and uninterpreted) tags to get shown in the output.
-        @param no_format causes hyperlink tags not to get listed at the end of the output.
-
-        @author Lars Pind (lars@pinds.com)
-        @author Aaron Swartz (aaron@swartzfam.com)
-        @creation-date 19 July 2000
-    } {
-        set output(text) {}
-        set output(linelen) 0
-        set output(maxlen) $maxlen
-        set output(pre) 0
+    # output any pending paragraph breaks, line breaks or spaces.
+    # as long as we're not at the beginning of the document
+    if { $output(p) || $output(br) || $output(space) } {
+        if { $output(text) ne "" } {
+            if { $output(p) } {
+                ad_html_to_text_put_newline output
+                ad_html_to_text_put_newline output
+            } elseif { $output(br) } {
+                ad_html_to_text_put_newline output
+            } else {
+                # Don't add the space if we're at the beginning of a line,
+                # unless we're in a PRE
+                if { $output(pre) > 0 || $output(linelen) != 0 } {
+                    append output(text) " "
+                    incr output(linelen)
+                }
+            }
+        }
         set output(p) 0
         set output(br) 0
         set output(space) 0
-        set output(blockquote) 0
+    }
 
-        set length [string length $html]
-        set last_tag_end 0
+    # if the last character is a space, save it until the next time
+    if { [regexp {^(.*) $} $text match text] } {
+        set output(space) 1
+    }
 
-        # For showing the URL of links.
-        set href_urls [list]
-        set href_stack [list]
 
-        for { set i [string first < $html] } { $i != -1 } { set i [string first < $html $i] } {
-            # append everything up to and not including the tag-opening <
-            ad_html_to_text_put_text output [string range $html $last_tag_end $i-1]
+    if {[::acs::icanuse "ns_reflow_text -offset"]} {
+        #
+        # Reflow based on "ns_reflow_text -offset". This is
+        # substantially faster, especially on longer text strings.
+        #
+        set plain [ns_reflow_text \
+                       -offset $output(linelen) \
+                       -width $output(maxlen) \
+                       -- $text]
+        #ns_log notice "XXXX -> <$plain>"
+        set lastNewLine [string last \n $plain]
+        if {$lastNewLine == -1} {
+            incr output(linelen) [string length $plain]
+        } else {
+            set output(linelen) [expr {[string length $plain] - $lastNewLine}]
+        }
+        set plain [join [split $plain \n] \n[string repeat {    } $output(blockquote)]]
+        #ns_log notice "plain\n$plain"
+        #ns_log notice "blockquote $output(blockquote) linelen $output(linelen) maxlen $output(maxlen)"
+        append output(text) $plain
 
-            # Check that:
-            #  - we're not past the end of the string
-            #  - and that the tag starts with either
-            #     - alpha or
-            #     - a slash, and then alpha
-            # Otherwise, it's probably just a lone < character
-            if { $i >= $length - 1 ||
-                 (![string is alpha [string index $html $i+1]]
-                  && [string index $html $i+1] ne "!"
-                  && ("/" ne [string index $html $i+1] ||
-                      ![string is alpha [string index $html $i+2]]))
-             } {
-                # Output the < and continue with next character
-                ad_html_to_text_put_text output "<"
-                set last_tag_end [incr i]
-                continue
-            } elseif {[string match "!--*" [string range $html $i+1 end]]} {
-                # Handle HTML comments, I can't believe no one noticed
-                # this before.  This code maybe not be elegant but it
-                # works.
+    } else {
+        #
+        # If there's a blockquote in the beginning of the text, we
+        # wouldn't have caught it before.
+        #
+        if { $output(text) eq "" } {
+            append output(text) [string repeat {    } $output(blockquote)]
+        }
 
-                # find the closing comment tag.
-                set comment_idx [string first "-->" $html $i]
-                if {$comment_idx == -1} {
-                    # no comment close, escape
-                    set last_tag_end $i
-                    set i $comment_idx
-                    break
+        # Now output the text.
+        while { [regexp {^( +|\s|\S+)(.*)$} $text match word text] } {
+
+            # convert &nbsp;'s
+            # We do this now, so that they're displayed, but not treated, whitespace.
+            regsub -all -- {&nbsp;} $word { } word
+
+            set wordlen [string length $word]
+            switch -glob -- $word {
+                " *" {
+                    append output(text) "$word"
+                    incr output(linelen) $wordlen
                 }
-                set i [expr {$comment_idx + 3}]
-                set last_tag_end $i
-
-                continue
-            }
-            # we're inside a tag now. Find the end of it
-
-            # make i point to the char after the <
-            incr i
-            set tag_start $i
-
-            set count 0
-            while 1 {
-                if {[incr count] > 3000 } {
-                    # JCD: the programming bug is that an unmatched <
-                    # in the input runs off forever looking for its
-                    # closing > and in some long text like program
-                    # listings you can have lots of quotes before you
-                    # find that >
-                    error "There appears to be a programming bug in ad_html_to_text: We've entered an infinite loop."
-                }
-                # Find the positions of the first quote, apostrophe and greater-than sign.
-                set quote_idx [string first \" $html $i]
-                set apostrophe_idx [string first ' $html $i]
-                set gt_idx [string first > $html $i]
-
-                # If there is no greater-than sign, then the tag isn't closed.
-                if { $gt_idx == -1 } {
-                    set i $length
-                    break
-                }
-
-                # Find the first of the quote and the apostrophe
-                if { $apostrophe_idx == -1 } {
-                    set string_delimiter_idx $quote_idx
-                } else {
-                    if { $quote_idx == -1 } {
-                        set string_delimiter_idx $apostrophe_idx
-                    } else {
-                        if { $apostrophe_idx < $quote_idx } {
-                            set string_delimiter_idx $apostrophe_idx
-                        } else {
-                            set string_delimiter_idx $quote_idx
-                        }
-                    }
-                }
-                set string_delimiter [string index $html $string_delimiter_idx]
-
-                # If the greater than sign appears before any of the
-                # string delimiters, we've found the tag end.
-                if { $gt_idx < $string_delimiter_idx || $string_delimiter_idx == -1 } {
-                    # we found the tag end
-                    set i $gt_idx
-                    break
-                }
-
-                # Otherwise, we'll have to skip past the ending string delimiter
-                set i [string first $string_delimiter $html [incr string_delimiter_idx]]
-                if { $i == -1 } {
-                    # Missing string end delimiter
-                    set i $length
-                    break
-                }
-                incr i
-            }
-
-            set full_tag [string range $html $tag_start $i-1]
-
-            if { ![regexp {^(/?)([^\s]+)[\s]*(\s.*)?$} $full_tag match slash tagname attributes] } {
-                # A malformed tag -- just delete it
-            } else {
-
-                # Reset/create attribute array
-                array unset attribute_array
-
-                # Parse the attributes
-                ad_parse_html_attributes -attribute_array attribute_array $attributes
-
-                switch -- [string tolower $tagname] {
-                    p - ul - ol - table {
-                        set output(p) 1
-                    }
-                    br {
+                "\n" {
+                    if { $output(text) ne "" } {
                         ad_html_to_text_put_newline output
                     }
-                    tr - td - th {
-                        set output(br) 1
-                    }
-                    h1 - h2 - h3 - h4 - h5 - h6 {
-                        set output(p) 1
-                        if { $slash eq "" } {
-                            ad_html_to_text_put_text output [string repeat "*" [string index $tagname 1]]
-                        }
-                    }
-                    li {
-                        set output(br) 1
-                        if { $slash eq "" } {
-                            ad_html_to_text_put_text output "- "
-                        }
-                    }
-                    strong - b {
-                        ad_html_to_text_put_text output "*"
-                    }
-                    em - i - cite - u {
-                        ad_html_to_text_put_text output "_"
-                    }
-                    a {
-                        if { !$no_format_p } {
-                            if { $slash eq ""} {
-                                if { [info exists attribute_array(href)]
-                                     && [string index $attribute_array(href) 0] ni {"#" ""}
-                                 } {
-                                    if { [info exists attribute_array(title)] } {
-                                        set title ": '$attribute_array(title)'"
-                                    } else {
-                                        set title ""
-                                    }
-                                    set href_no [expr {[llength $href_urls] + 1}]
-                                    lappend href_urls "\[$href_no\] $attribute_array(href) "
-                                    lappend href_stack "\[$href_no$title\]"
-                                } elseif { [info exists attribute_array(title)] } {
-                                    lappend href_stack "\[$attribute_array(title)\]"
-                                } else {
-                                    lappend href_stack {}
-                                }
-                            } else {
-                                if { [llength $href_stack] > 0 } {
-                                    if { [lindex $href_stack end] ne "" } {
-                                        ad_html_to_text_put_text output " [lindex $href_stack end]"
-                                    }
-                                    set href_stack [lreplace $href_stack end end]
-                                }
-                            }
-                        }
-                    }
-                    pre {
-                        set output(p) 1
-                        if { $slash eq "" } {
-                            incr output(pre)
-                        } else {
-                            incr output(pre) -1
-                        }
-                    }
-                    blockquote {
-                        set output(p) 1
-                        if { $slash eq "" } {
-                            incr output(blockquote)
-                            incr output(maxlen) -4
-                        } else {
-                            incr output(blockquote) -1
-                            incr output(maxlen) 4
-                        }
-                    }
-                    hr {
-                        set output(p) 1
-                        ad_html_to_text_put_text output [string repeat "-" $output(maxlen)]
-                        set output(p) 1
-                    }
-                    q {
-                        ad_html_to_text_put_text output \"
-                    }
-                    img {
-                        if { $slash eq "" && !$no_format_p } {
-                            set img_info {}
-                            if { [info exists attribute_array(alt)] } {
-                                lappend img_info "'$attribute_array(alt)'"
-                            }
-                            if { [info exists attribute_array(src)] } {
-                                if {[string match "data:*" $attribute_array(src)]} {
-                                    lappend img_info "data:..."
-                                } else {
-                                    lappend img_info $attribute_array(src)
-                                }
-                            }
-                            if { [llength $img_info] == 0 } {
-                                ad_html_to_text_put_text output {[IMAGE]}
-                            } else {
-                                ad_html_to_text_put_text output "\[IMAGE: [join $img_info " "]\]"
-                            }
-                        }
-                    }
-                    default {
-                        # Other tag
-                        if { $showtags_p } {
-                            ad_html_to_text_put_text output "&lt;$slash$tagname$attributes&gt;"
-                        }
-                    }
                 }
-            }
-
-            # set end of last tag to the character following the >
-            set last_tag_end [incr i]
-        }
-        # append everything after the last tag
-        ad_html_to_text_put_text output [string range $html $last_tag_end end]
-
-        # Close any unclosed tags
-        set output(pre) 0
-        while { $output(blockquote) > 0 } {
-            incr output(blockquote) -1
-            incr output(maxlen) 4
-        }
-
-        # write out URLs, if necessary:
-        if { [llength $href_urls] > 0 } {
-            append output(text) "\n\n[join $href_urls "\n"]"
-        }
-
-        #---
-        # conversion like in ad_text_to_html
-        # 2006/09/12
-        set  myChars  {
-            ª º À Á Â Ã Ä Å Æ Ç
-            È É Ê Ë Ì Í Î Ï Ð Ñ
-            Ò Ó Ô Õ Ö Ø Ù Ú Û Ü
-            Ý Þ ß à á â ã ä å æ
-            ç è é ê ë ì í î ï ð
-            ñ ò ó ô õ ö ø ù ú û
-            ü ý þ ÿ ¿
-        }
-
-        set  myHTML  {
-            &ordf; &ordm; &Agrave; &Aacute; &Acirc; &Atilde; &Auml; &Aring; &Aelig; &Ccedil;
-            &Egrave; &Eacute; &Ecirc; &Euml; &Igrave; &Iacute; &Icirc; &Iuml; &ETH; &Ntilde;
-            &Ograve; &Oacute; &Ocirc; &Otilde; &Ouml; &Oslash; &Ugrave; &Uacute; &Ucirc; &Uuml;
-            &Yacute; &THORN; &szlig; &agrave; &aacute; &acirc; &atilde; &auml; &aring; &aelig;
-            &ccedil; &egrave; &eacute; &ecirc; &euml; &igrave; &iacute; &icirc; &iuml; &eth;
-            &ntilde; &ograve; &oacute; &ocirc; &otilde; &ouml; &oslash; &ugrave; &uacute; &ucirc;
-            &uuml; &yacute; &thorn; &yuml; &iquest;
-        }
-
-        set map {}
-        foreach ch $myChars entity $myHTML {
-            lappend map $entity $ch
-        }
-
-        return [string map $map $output(text)]
-    }
-
-    ad_proc -private ad_html_to_text_put_newline { output_var } {
-        Helper proc for ad_html_to_text
-
-        @author Lars Pind (lars@pinds.com)
-        @author Aaron Swartz (aaron@swartzfam.com)
-        @creation-date 22 September 2000
-    } {
-        upvar $output_var output
-
-        append output(text) \n
-        set output(linelen) 0
-        append output(text) [string repeat {    } $output(blockquote)]
-    }
-
-    ad_proc -private ad_html_to_text_put_text { output_var text } {
-        Helper proc for ad_html_to_text
-
-        @author Lars Pind (lars@pinds.com)
-        @author Aaron Swartz (aaron@swartzfam.com)
-        @creation-date 19 July 2000
-    } {
-        upvar $output_var output
-
-        # Expand entities before outputting
-        set text [util_expand_entities $text]
-
-        #
-        # If we're not inside an HTML "<PRE>" element.
-        #
-        if { $output(pre) <= 0 } {
-            # collapse all whitespace
-            regsub -all -- {\s+} $text { } text
-
-            # if there's only spaces in the string, wait until later
-            if {$text eq " "} {
-                set output(space) 1
-                return
-            }
-
-            # if it's nothing, do nothing
-            if { $text eq "" } {
-                return
-            }
-
-            # if the first character is a space, set the space bit
-            if {[string index $text 0] eq " "} {
-                set output(space) 1
-                set text [string trimleft $text]
-            }
-        } else {
-            #
-            # We're inside an HTML <PRE> element: clean line breaks
-            # and tabs.
-            #
-            regsub -all -- {\r\n} $text "\n" text
-            regsub -all -- {\r} $text "\n" text
-            # tabs become four spaces
-            regsub -all -- {[\v\t]} $text {    } text
-        }
-
-        # output any pending paragraph breaks, line breaks or spaces.
-        # as long as we're not at the beginning of the document
-        if { $output(p) || $output(br) || $output(space) } {
-            if { $output(text) ne "" } {
-                if { $output(p) } {
-                    ad_html_to_text_put_newline output
-                    ad_html_to_text_put_newline output
-                } elseif { $output(br) } {
-                    ad_html_to_text_put_newline output
-                } else {
-                    # Don't add the space if we're at the beginning of a line,
-                    # unless we're in a PRE
-                    if { $output(pre) > 0 || $output(linelen) != 0 } {
-                        append output(text) " "
-                        incr output(linelen)
+                default {
+                    if { $output(linelen) + $wordlen > $output(maxlen) && $output(maxlen) != 0 } {
+                        ad_html_to_text_put_newline output
                     }
-                }
-            }
-            set output(p) 0
-            set output(br) 0
-            set output(space) 0
-        }
-
-        # if the last character is a space, save it until the next time
-        if { [regexp {^(.*) $} $text match text] } {
-            set output(space) 1
-        }
-
-
-        if {[::acs::icanuse "ns_reflow_text -offset"]} {
-            #
-            # Reflow based on "ns_reflow_text -offset". This is
-            # substantially faster, especially on longer text strings.
-            #
-            set plain [ns_reflow_text \
-                           -offset $output(linelen) \
-                           -width $output(maxlen) \
-                           -- $text]
-            #ns_log notice "XXXX -> <$plain>"
-            set lastNewLine [string last \n $plain]
-            if {$lastNewLine == -1} {
-                incr output(linelen) [string length $plain]
-            } else {
-                set output(linelen) [expr {[string length $plain] - $lastNewLine}]
-            }
-            set plain [join [split $plain \n] \n[string repeat {    } $output(blockquote)]]
-            #ns_log notice "plain\n$plain"
-            #ns_log notice "blockquote $output(blockquote) linelen $output(linelen) maxlen $output(maxlen)"
-            append output(text) $plain
-
-        } else {
-            #
-            # If there's a blockquote in the beginning of the text, we
-            # wouldn't have caught it before.
-            #
-            if { $output(text) eq "" } {
-                append output(text) [string repeat {    } $output(blockquote)]
-            }
-
-            # Now output the text.
-            while { [regexp {^( +|\s|\S+)(.*)$} $text match word text] } {
-
-                # convert &nbsp;'s
-                # We do this now, so that they're displayed, but not treated, whitespace.
-                regsub -all -- {&nbsp;} $word { } word
-
-                set wordlen [string length $word]
-                switch -glob -- $word {
-                    " *" {
-                        append output(text) "$word"
-                        incr output(linelen) $wordlen
-                    }
-                    "\n" {
-                        if { $output(text) ne "" } {
-                            ad_html_to_text_put_newline output
-                        }
-                    }
-                    default {
-                        if { $output(linelen) + $wordlen > $output(maxlen) && $output(maxlen) != 0 } {
-                            ad_html_to_text_put_newline output
-                        }
-                        append output(text) "$word"
-                        incr output(linelen) $wordlen
-                    }
+                    append output(text) "$word"
+                    incr output(linelen) $wordlen
                 }
             }
         }
     }
+}
 
-    ad_proc util_expand_entities { html } {
+ad_proc util_expand_entities { html } {
 
-        Replaces all occurrences of common HTML entities with their plaintext equivalents
-        in a way that's appropriate for pretty-printing.
+    Replaces all occurrences of common HTML entities with their plaintext equivalents
+    in a way that's appropriate for pretty-printing.
 
-        <p>
+    <p>
 
-        Currently, the following entities are converted:
-        &amp;lt;, &amp;gt;, &apm;quot;,  &amp;amp;, &amp;mdash; and &amp;#151;.
+    Currently, the following entities are converted:
+    &amp;lt;, &amp;gt;, &apm;quot;,  &amp;amp;, &amp;mdash; and &amp;#151;.
 
-        <p>
+    <p>
 
-        This proc is more suitable for pretty-printing that its
-        sister-proc, <a href="/api-doc/proc-view?proc=util_expand_entities_ie_style"><code>util_expand_entities_ie_style</code></a>.
-        The two differences are that this one is more strict: it requires
-        proper entities i.e., both opening ampersand and closing semicolon,
-        and it doesn't do numeric entities, because they're generally not safe to send to browsers.
-        If we want to do numeric entities in general, we should also
-        consider how they interact with character encodings.
+    This proc is more suitable for pretty-printing that its
+    sister-proc, <a href="/api-doc/proc-view?proc=util_expand_entities_ie_style"><code>util_expand_entities_ie_style</code></a>.
+    The two differences are that this one is more strict: it requires
+    proper entities i.e., both opening ampersand and closing semicolon,
+    and it doesn't do numeric entities, because they're generally not safe to send to browsers.
+    If we want to do numeric entities in general, we should also
+    consider how they interact with character encodings.
 
-    } {
-        regsub -all -- {&lt;} $html {<} html
-        regsub -all -- {&gt;} $html {>} html
-        regsub -all -- {&quot;} $html "\"" html
-        regsub -all -- {&mdash;} $html {--} html
-        regsub -all -- {&#151;} $html {--} html
-        # Need to do the &amp; last, because otherwise it could interfere with the other expansions,
-        # e.g., if the text said &amp;lt;, that would be translated into <, instead of &lt;
-        regsub -all -- {&amp;} $html {\&} html
-        return $html
-    }
+} {
+    regsub -all -- {&lt;} $html {<} html
+    regsub -all -- {&gt;} $html {>} html
+    regsub -all -- {&quot;} $html "\"" html
+    regsub -all -- {&mdash;} $html {--} html
+    regsub -all -- {&#151;} $html {--} html
+    # Need to do the &amp; last, because otherwise it could interfere with the other expansions,
+    # e.g., if the text said &amp;lt;, that would be translated into <, instead of &lt;
+    regsub -all -- {&amp;} $html {\&} html
+    return $html
+}
 
-    ad_proc util_expand_entities_ie_style { html } {
-        Replaces all occurrences of &amp;#111; and &amp;x0f; type HTML character entities
-        to their ASCII equivalents. It also handles lt, gt, quot, ob, cb and amp.
+ad_proc util_expand_entities_ie_style { html } {
+    Replaces all occurrences of &amp;#111; and &amp;x0f; type HTML character entities
+    to their ASCII equivalents. It also handles lt, gt, quot, ob, cb and amp.
 
-        <p>
+    <p>
 
-        This proc does the expansion in the style of IE and Netscape, which is to say that it
-        doesn't require the trailing semicolon on the entity to replace it with something else.
-        The reason we do that is that this proc was designed for checking HTML for security-issues,
-        and since entities can be used for hiding malicious code, we'd better simulate the
-        liberal interpretation that browsers does, even though it complicates matters.
+    This proc does the expansion in the style of IE and Netscape, which is to say that it
+    doesn't require the trailing semicolon on the entity to replace it with something else.
+    The reason we do that is that this proc was designed for checking HTML for security-issues,
+    and since entities can be used for hiding malicious code, we'd better simulate the
+    liberal interpretation that browsers does, even though it complicates matters.
 
-        <p>
+    <p>
 
-        Unlike its sister proc, <a href="/api-doc/proc-view?proc=util_expand_entities"><code>util_expand_entities</code></a>,
-        it also expands numeric entities (#999 or #xff style).
+    Unlike its sister proc, <a href="/api-doc/proc-view?proc=util_expand_entities"><code>util_expand_entities</code></a>,
+    it also expands numeric entities (#999 or #xff style).
 
-        @author Lars Pind (lars@pinds.com)
-        @creation-date October 17, 2000
-    } {
-        array set entities { lt < gt > quot \" ob \{ cb \} amp & }
+    @author Lars Pind (lars@pinds.com)
+    @creation-date October 17, 2000
+} {
+    array set entities { lt < gt > quot \" ob \{ cb \} amp & }
 
-        # Expand HTML entities on the value
-        for { set i [string first & $html] } { $i != -1 } { set i [string first & $html $i] } {
+    # Expand HTML entities on the value
+    for { set i [string first & $html] } { $i != -1 } { set i [string first & $html $i] } {
 
-            set match_p 0
-            switch -regexp -- [string index $html $i+1] {
-                "#" {
-                    switch -regexp -- [string index $html $i+2] {
-                        [xX] {
-                            regexp -indices -start [expr {$i+3}] {[0-9a-fA-F]*} $html hex_idx
-                            set hex [string range $html [lindex $hex_idx 0] [lindex $hex_idx 1]]
-                            set html [string replace $html $i [lindex $hex_idx 1] \
-                                          [subst -nocommands -novariables "\\x$hex"]]
-                            set match_p 1
-                        }
-                        [0-9] {
-                            regexp -indices -start [expr {$i+2}] {[0-9]*} $html dec_idx
-                            set dec [string range $html [lindex $dec_idx 0] [lindex $dec_idx 1]]
-                            # $dec might contain leading 0s. Since format evaluates $dec as expr
-                            # leading 0s cause octal interpretation and therefore errors on e.g. &#0038;
-                            set dec [string trimleft $dec 0]
-                            if {$dec eq ""} {set dec 0}
-                            set html [string replace $html $i [lindex $dec_idx 1] \
-                                          [format "%c" $dec]]
-                            set match_p 1
-                        }
+        set match_p 0
+        switch -regexp -- [string index $html $i+1] {
+            \# {
+                switch -regexp -- [string index $html $i+2] {
+                    [xX] {
+                        regexp -indices -start [expr {$i+3}] {[0-9a-fA-F]*} $html hex_idx
+                        set hex [string range $html [lindex $hex_idx 0] [lindex $hex_idx 1]]
+                        set html [string replace $html $i [lindex $hex_idx 1] \
+                                      [subst -nocommands -novariables "\\x$hex"]]
+                        set match_p 1
                     }
-                }
-                [a-zA-Z] {
-                    if { [regexp -indices -start $i {\A&([^\s;]+)} $html match entity_idx] } {
-                        set entity [string tolower [string range $html [lindex $entity_idx 0] [lindex $entity_idx 1]]]
-                        if { [info exists entities($entity)] } {
-                            set html [string replace $html $i [lindex $match 1] $entities($entity)]
+                    [0-9] {
+                        regexp -indices -start [expr {$i+2}] {[0-9]*} $html dec_idx
+                        set dec [string range $html [lindex $dec_idx 0] [lindex $dec_idx 1]]
+                        # $dec might contain leading 0s. Since format evaluates $dec as expr
+                        # leading 0s cause octal interpretation and therefore errors on e.g. &#0038;
+                        set dec [string trimleft $dec 0]
+                        if {$dec eq ""} {
+                            set dec 0
                         }
+                        set html [string replace $html $i [lindex $dec_idx 1] \
+                                      [format "%c" $dec]]
                         set match_p 1
                     }
                 }
             }
-        }
-        incr i
-        if { $match_p } {
-            # remove trailing semicolon
-            if {[string index $html $i] eq ";"} {
-                set html [string replace $html $i $i]
+            [a-zA-Z] {
+                if { [regexp -indices -start $i {\A&([^\s;]+)} $html match entity_idx] } {
+                    set entity [string tolower [string range $html [lindex $entity_idx 0] [lindex $entity_idx 1]]]
+                    if { [info exists entities($entity)] } {
+                        set html [string replace $html $i [lindex $match 1] $entities($entity)]
+                    }
+                    set match_p 1
+                }
             }
+        }
+    }
+    incr i
+    if { $match_p } {
+        # remove trailing semicolon
+        if {[string index $html $i] eq ";"} {
+            set html [string replace $html $i $i]
         }
     }
     return $html
