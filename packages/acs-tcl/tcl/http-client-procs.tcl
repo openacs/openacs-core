@@ -1133,9 +1133,7 @@ ad_proc -private util::http::follow_redirects {
     # https://www.rfc-editor.org/rfc/rfc7231#section-7.1.2, the
     # location header may return a relative URL as well.
     #
-    set location [util::absolute_url \
-                      -url $location \
-                      -base_url $url]
+    set location [ns_absoluteurl $location $url]
 
     if {$method eq "GET"} {
         return [$this_proc \

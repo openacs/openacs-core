@@ -1964,51 +1964,6 @@ ad_proc util::join_location {{-noabbrev:boolean} {-proto ""} {-hostname} {-port 
     return $result
 }
 
-ad_proc util::absolute_url {
-    -url:required
-    -base_url
-} {
-
-    Value added version of "ns_absoluteurl" with the following differences
-
-    - keep protocol relative URLs unchanged (no scheme is completed)
-    - use [util_current_location] as default "base_url"
-    - allow variable "url" to be empty (replaced by /)
-
-    Completes specified URL when necessary. When no base URL is
-    specified, it will default to the current location (scheme and host).
-
-    The purpose of this utility is to be used by HTTP clients to
-    complete URLs coming from the Location response header in case of
-    a redirect, which according to RFC 7231 may also be relative.
-
-    @param url a supposedly relative URL to complete. When the
-               URL is already complete, it will be returned
-               as-is.
-    @param base_url URL of the redirected request. A complete URL
-                        from which we want to read the host. When
-                        missing, the URL will be completed using the
-                        result of util_current_location.
-
-    @return a complete absolute URL
-
-    @see https://www.rfc-editor.org/rfc/rfc7231#section-7.1.2
-    @see https://naviserver.sourceforge.io/n/naviserver/files/ns_absoluteurl.html
-} {
-    if {![info exists base_url]} {
-        set base_url [util_current_location]
-    }
-    if {[dict exists [ns_parseurl -strict $url] host]} {
-        return $url
-    }
-    if {$url eq ""} {
-        set url /
-    }
-    #ns_log notice "================ XXX [list ns_absoluteurl $url $base_url] -> <[ns_absoluteurl $url $base_url]>"
-    return [ns_absoluteurl $url $base_url]
-}
-
-
 ad_proc -public util::configured_location {{-suppress_port:boolean}} {
 
     Return the configured location as configured for the current

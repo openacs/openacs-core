@@ -1411,10 +1411,7 @@ namespace eval acs::test {
                 # the location header may return a relative URL as
                 # well.
                 #
-                set location [util::complete_location \
-                                  -location $location \
-                                  -complete_url $test_url]
-
+                ns_absoluteurl $location $test_url
             }
         } finally {
             #
