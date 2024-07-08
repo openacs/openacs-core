@@ -2409,54 +2409,39 @@ ad_proc util_expand_entities_ie_style { html } {
 } {
     array set entities { lt < gt > quot \" ob \{ cb \} amp & }
 
-    # Expand HTML entities on the value
-    for { set i [string first & $html] } { $i != -1 } { set i [string first & $html $i] } {
+    set mappings [list]
 
-        set match_p 0
-        switch -regexp -- [string index $html $i+1] {
-            \# {
-                switch -regexp -- [string index $html $i+2] {
-                    [xX] {
-                        regexp -indices -start [expr {$i+3}] {[0-9a-fA-F]*} $html hex_idx
-                        set hex [string range $html [lindex $hex_idx 0] [lindex $hex_idx 1]]
-                        set html [string replace $html $i [lindex $hex_idx 1] \
-                                      [subst -nocommands -novariables "\\x$hex"]]
-                        set match_p 1
-                    }
-                    [0-9] {
-                        regexp -indices -start [expr {$i+2}] {[0-9]*} $html dec_idx
-                        set dec [string range $html [lindex $dec_idx 0] [lindex $dec_idx 1]]
-                        # $dec might contain leading 0s. Since format evaluates $dec as expr
-                        # leading 0s cause octal interpretation and therefore errors on e.g. &#0038;
-                        set dec [string trimleft $dec 0]
-                        if {$dec eq ""} {
-                            set dec 0
-                        }
-                        set html [string replace $html $i [lindex $dec_idx 1] \
-                                      [format "%c" $dec]]
-                        set match_p 1
-                    }
+    #
+    # Extract all entities from the text. The semicolon is optional.
+    #
+    set parsed_entities [regexp -all -inline {&([a-zA-Z]+|#[0-9]+|#x[a-zA-Z0-9]+);?} $html]
+
+    foreach {match entity} $parsed_entities {
+        if {[string index $entity 0] eq "#"} {
+            if {[string index $entity 1] eq "x"} {
+                #
+                # Entity as hexadecimal
+                #
+                set code [scan [string range $entity 2 end] %x]
+            } else {
+                #
+                # Entity as decimal character code
+                #
+                set code [string trimleft [string range $entity 1 end] 0]
+                if {$code eq ""} {
+                    set code 0
                 }
             }
-            [a-zA-Z] {
-                if { [regexp -indices -start $i {\A&([^\s;]+)} $html match entity_idx] } {
-                    set entity [string tolower [string range $html [lindex $entity_idx 0] [lindex $entity_idx 1]]]
-                    if { [info exists entities($entity)] } {
-                        set html [string replace $html $i [lindex $match 1] $entities($entity)]
-                    }
-                    set match_p 1
-                }
-            }
+            lappend mappings $match [format "%c" $code]
+        } elseif {[info exists entities($entity)]} {
+            #
+            # Entity by name. Only some are supported.
+            #
+            lappend mappings $match $entities($entity)
         }
     }
-    incr i
-    if { $match_p } {
-        # remove trailing semicolon
-        if {[string index $html $i] eq ";"} {
-            set html [string replace $html $i $i]
-        }
-    }
-    return $html
+
+    return [string map $mappings $html]
 }
 
 
