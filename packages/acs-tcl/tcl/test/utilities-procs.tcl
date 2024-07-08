@@ -440,98 +440,102 @@ aa_register_case -cats {
     api
     production_safe
 } -procs {
-    util::complete_location
-} util__complete_url {
-    Test util::complete_location
+    util::absolute_url
+} util__absolute_url {
+    Test util::absolute_url
 } {
     aa_equals "Basic case" \
-        [string trimright [util::complete_location -location ""] /] \
+        [string trimright [util::absolute_url -url ""] /] \
         [util_current_location]
 
-    aa_equals "Complete with current location" \
-        [string trimright [util::complete_location -location "/a/b/c"] /] \
+    aa_equals "Complete URL with current location" \
+        [string trimright [util::absolute_url -url "/a/b/c"] /] \
         [util_current_location]/a/b/c \
 
-    aa_equals "Complete an already complete location (normie case)" \
-        [util::complete_location -location "https://example.com/a/b/c"] \
+    aa_equals "Complete an already complete URL (normie case)" \
+        [util::absolute_url -url "https://example.com/a/b/c"] \
         "https://example.com/a/b/c" \
 
-    aa_equals "Complete an already complete location (protocol relative)" \
-        [util::complete_location -location "//a/b/c"] \
-        //a/b/c \
+    aa_equals "Complete an already complete URL (protocol relative)" \
+        [util::absolute_url -url "//host.org/b/c"] \
+        //host.org/b/c \
 
-    aa_true "Complete an invalid location (relative) - Should fail" \
+    aa_true "Complete an invalid URL (relative) - Should fail" \
         [catch {
-            util::complete_location -location "/file\[/\].html"
+            util::absolute_url -url "/file\[/\].html"
         }]
 
-    aa_true "Complete an invalid location (absolute) - Should fail" \
+    aa_true "Complete an invalid URL (absolute) - Should fail" \
         [catch {
-            util::complete_location -location "http://example.com/file\[/\].html"
+            util::absolute_url -url "http://example.com/file\[/\].html"
         }]
 
-    aa_equals "Basic case with external location" \
-        [string trimright [util::complete_location \
-                               -complete_url "http://example.com" \
-                               -location ""] /] \
+    aa_equals "Basic case with external base URL" \
+        [string trimright [util::absolute_url \
+                               -url "" \
+                               -base_url "http://example.com"] \
+             /] \
         http://example.com
 
-    aa_equals "Basic case with external location (complete_url has a path)" \
-        [string trimright [util::complete_location \
-                               -complete_url "http://example.com/a/b/c" \
-                               -location ""] /] \
+    aa_equals "Basic case with external base URL (complete_url has a path)" \
+        [string trimright [util::absolute_url \
+                               -url "" \
+                               -base_url "http://example.com/a/b/c"] \
+             /] \
         http://example.com
 
-    aa_equals "Complete with external location (complete_url just the host)" \
-        [string trimright [util::complete_location \
-                               -complete_url "http://example.com" \
-                               -location "/a/b/c"] /] \
-        http://example.com/a/b/c \
+    aa_equals "Complete with external base URL (complete_url just the host)" \
+        [string trimright [util::absolute_url \
+                               -url "/a/b/c" \
+                               -base_url "http://example.com"] \
+             /] \
+        http://example.com/a/b/c
 
-    aa_equals "Complete with external location (complete_url with a path)" \
-        [string trimright [util::complete_location \
-                               -complete_url "http://example.com/d/e/f" \
-                               -location "/a/b/c"] /] \
-        http://example.com/a/b/c \
+    aa_equals "Complete with external base URL (complete_url with a path)" \
+        [string trimright [util::absolute_url \
+                               -url "/a/b/c" \
+                               -base_url "http://example.com/d/e/f"] \
+             /] \
+        http://example.com/a/b/c
 
-    aa_equals "Complete an already complete location (normie case)" \
-        [util::complete_location \
-             -complete_url "http://anotherexample.com/d/e/f" \
-             -location "https://example.com/a/b/c"] \
-        "https://example.com/a/b/c" \
+    aa_equals "Complete an already complete URL (normie case)" \
+        [util::absolute_url \
+             -url "https://example.com/a/b/c" \
+             -base_url "http://anotherexample.com/d/e/f"] \
+        https://example.com/a/b/c
 
-    aa_equals "Complete an already complete location (protocol relative)" \
-        [util::complete_location \
-             -complete_url "http://anotherexample.com/d/e/f" \
-             -location "//a/b/c"] \
-        //a/b/c \
+    aa_equals "Complete an already complete URL (protocol relative)" \
+        [util::absolute_url \
+             -url "//host.org/b/c" \
+             -base_url "http://anotherexample.com/d/e/f"] \
+        //host.org/b/c
 
-    aa_true "Complete an invalid location (relative) - Should fail" \
+    aa_true "Complete an invalid URL (relative) - Should fail" \
         [catch {
-            util::complete_location \
-                -complete_url "http://example.com/d/e/f" \
-                -location "/file\[/\].html"
+            util::absolute_url \
+                -url "/file\[/\].html" \
+                -base_url "http://example.com/d/e/f"
         }]
 
-    aa_true "Complete an invalid location (absolute) - Should fail" \
+    aa_true "Complete an invalid URL (absolute) - Should fail" \
         [catch {
-            util::complete_location \
-                -complete_url "http://example.com/d/e/f" \
-                -location "http://example.com/file\[/\].html"
+            util::absolute_url \
+                -url "http://example.com/file\[/\].html" \
+                -base_url "http://example.com/d/e/f"
         }]
 
-    aa_true "Complete with an invalid complete_url - Should fail" \
+    aa_true "Complete with an invalid base URL - Should fail" \
         [catch {
-            util::complete_location \
-                -complete_url "http://example.com/file\[/\].html" \
-                -location "/file/a/b"
+            util::absolute_url \
+                -url "/file/a/b" \
+                -base_url "://example.com/file.html"
         }]
 
-    aa_true "Complete with a relative complete_url - Should fail" \
+    aa_true "Complete with a relative base URL - Should fail" \
         [catch {
-            util::complete_location \
-                -complete_url "/c/d/e" \
-                -location "/file/a/b"
+            util::absolute_url \
+                -url "/file/a/b" \
+                -base_url "/c/d/e"
         }]
 }
 
