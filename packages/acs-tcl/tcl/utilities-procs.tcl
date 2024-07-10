@@ -1798,15 +1798,11 @@ ad_proc -public util_get_user_messages {
 }
 
 ad_proc -public util_complete_url_p {string} {
-    Determine whether string is a complete URL, i.e.
-    whether it begins with protocol: where protocol
-    consists of letters only.
+    Determine whether string is a complete URL, i.e.  it begins with a
+    protocol and a colon, or is a protocol relative URL starting with
+    2 slashes.
 } {
-    if {[regexp -nocase {^[a-z]+:} $string]} {
-        return 1
-    } else {
-        return 0
-    }
+    return [regexp -nocase {^([a-z]+:|//)} $string]
 }
 
 ad_proc -public util_absolute_path_p {path} {
