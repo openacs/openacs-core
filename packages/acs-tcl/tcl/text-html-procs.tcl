@@ -1072,9 +1072,9 @@ ad_proc -private ad_parse_html_attributes_upvar {
                     set attr_value [string range $html [lindex $attr_value_idx 0] [lindex $attr_value_idx 1]]
                     set i [expr { [lindex $match 1] + 1}]
                 }
-                
-                set attr_value [util_expand_entities_ie_style $attr_value]
-                
+
+                set attr_value [ns_unquotehtml $attr_value]
+
                 lappend attributes [list $attr_name $attr_value]
                 if { [info exists attribute_array] } {
                     set attribute_array_var($attr_name) $attr_value
@@ -2230,7 +2230,7 @@ ad_proc -private ad_html_to_text_put_text { output_var text } {
     upvar $output_var output
 
     # Expand entities before outputting
-    set text [util_expand_entities $text]
+    set text [ns_unquotehtml $text]
 
     #
     # If we're not inside an HTML "<PRE>" element.
@@ -2355,7 +2355,7 @@ ad_proc -private ad_html_to_text_put_text { output_var text } {
     }
 }
 
-ad_proc util_expand_entities { html } {
+ad_proc -deprecated util_expand_entities { html } {
 
     Replaces all occurrences of common HTML entities with their plaintext equivalents
     in a way that's appropriate for pretty-printing.
@@ -2375,6 +2375,7 @@ ad_proc util_expand_entities { html } {
     If we want to do numeric entities in general, we should also
     consider how they interact with character encodings.
 
+    @see ns_unquotehtml
 } {
     regsub -all -- {&lt;} $html {<} html
     regsub -all -- {&gt;} $html {>} html
@@ -2387,7 +2388,7 @@ ad_proc util_expand_entities { html } {
     return $html
 }
 
-ad_proc util_expand_entities_ie_style { html } {
+ad_proc -deprecated util_expand_entities_ie_style { html } {
     Replaces all occurrences of &amp;#111; and &amp;x0f; type HTML character entities
     to their ASCII equivalents. It also handles lt, gt, quot, ob, cb and amp.
 
@@ -2406,6 +2407,8 @@ ad_proc util_expand_entities_ie_style { html } {
 
     @author Lars Pind (lars@pinds.com)
     @creation-date October 17, 2000
+
+    @see ns_unquotehtml
 } {
     array set entities { lt < gt > quot \" ob \{ cb \} amp & }
 
