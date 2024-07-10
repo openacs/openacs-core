@@ -1001,6 +1001,7 @@ aa_register_case \
     foreach url {
         "http://test"
         "ftp://test"
+        "//bxss.me"
     } {
         aa_true $url [util_complete_url_p $url]
     }
