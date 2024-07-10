@@ -1797,12 +1797,18 @@ ad_proc -public util_get_user_messages {
     }
 }
 
-ad_proc -public util_complete_url_p {string} {
-    Determine whether string is a complete URL, i.e.  it begins with a
-    protocol and a colon, or is a protocol relative URL starting with
-    2 slashes.
+ad_proc -public util_complete_url_p {url} {
+    Determine whether the provided argument is a complete URL,
+    i.e., it contains a scheme, and a host
+
+    @return boolean value
 } {
-    return [regexp -nocase {^([a-z]+:|//)} $string]
+    try {
+        set parsed [ns_parseurl -strict $url]
+        return [expr {[dict exists $parsed proto] && [dict exists $parsed host]}]
+    } on error {errorMsg} {
+        return 0
+    }
 }
 
 ad_proc -public util_absolute_path_p {path} {
@@ -3592,12 +3598,13 @@ ad_proc util::external_url_p { url } {
     HTTP or HTTPS port number added or removed from current hostname
     or another hostname that the host responds to (from host_node_map)
 } {
-    set external_url_p [util_complete_url_p $url]
+    set complete_url_p [util_complete_url_p $url]
     #
     # Only if the URL is syntactical a URL with a protocol, it might
     # be external.
     #
-    if {$external_url_p} {
+    if {$complete_url_p} {
+        set external_url_p $complete_url_p
         #
         # If it has a protocol, we have to be able to find it in security::locations
         #
@@ -3614,6 +3621,12 @@ ad_proc util::external_url_p { url } {
                 set external_url_p 0
                 break
             }
+        }
+    } else {
+        try {
+            set external_url_p [dict exists [ns_parseurl -strict $url] host]
+        } on error {errorMsg} {
+            set external_url_p 0
         }
     }
     return $external_url_p

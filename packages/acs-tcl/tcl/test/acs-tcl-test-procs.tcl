@@ -995,17 +995,39 @@ aa_register_case \
         ""
         "/test"
         ":/test"
+        "//bxss.me"
     } {
         aa_false $url [util_complete_url_p $url]
     }
     foreach url {
         "http://test"
         "ftp://test"
-        "//bxss.me"
     } {
         aa_true $url [util_complete_url_p $url]
     }
 }
+
+aa_register_case \
+    -cats {api smoke production_safe} \
+    -procs util_external_url_p \
+    util__external_url_p {
+
+        Test util_complete_url_p
+
+        @creation-date 2018-09-17
+        @author Héctor Romojaro <hector.romojaro@gmail.com>
+} {
+    foreach {url expected} {
+        "/test" 0
+        ":/test" 0
+        "//bss.me" 1
+        "http://test" 1
+        "ftp://test" 1
+    } {
+      aa_equals $url [util::external_url_p $url] $expected
+    }
+}
+
 
 aa_register_case \
     -cats {api smoke production_safe} \
