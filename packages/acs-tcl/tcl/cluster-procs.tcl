@@ -67,7 +67,7 @@ namespace eval ::acs {
 
     nx::Class create Cluster {
         :property {url /acs-cluster-do}
-        :property {currentServerLocation ""}
+        :property {myLocation ""}
 
         # set cls [nx::Class create ::acs::ClusterMethodMixin {
         #     :method "object method" args {
@@ -104,7 +104,7 @@ namespace eval ::acs {
             acs::cache_flush_pattern ""
             lang::message::cache ""
             ::acs::cluster "^::acs::cluster\s+join_request"
-            ::acs::cluster "^::acs::cluster\s+disconnect_request"
+            ::acs::cluster "^::acs::cluster\s+disconnect_request"            
         }
 
         #
@@ -124,8 +124,14 @@ namespace eval ::acs {
             # Setup object specific variables. Make sure to call this
             # method, when the called procs are available.
             #
-            set :currentServerLocations [:current_server_locations]
-            set :currentServerLocation [:preferred_location ${:currentServerLocations}]
+            # Make sure the container support is initialized
+            #
+            ::acs::Container create ::acs::container
+            #
+            # Set the variables controlling the behavior
+            #
+            set :myLocations [:current_server_locations]
+            set :myLocation [:preferred_location ${:myLocations}]
 
             set :canonicalServer [parameter::get -package_id $::acs::kernel_id -parameter CanonicalServer]
             set :canonicalServerLocation [:preferred_location [:qualified_location ${:canonicalServer}]]
@@ -135,6 +141,16 @@ namespace eval ::acs {
                 [lmap entry [parameter::get -package_id $::acs::kernel_id -parameter ClusterPeerIP] {
                     :preferred_location [:qualified_location $entry]
                 }]
+
+            ns_log notice "[self]: cluster configured to"
+            set :myLocations [:current_server_locations]
+            set :myLocation [:preferred_location ${:myLocations}]
+            ns_log notice "... myLocations                        ${:myLocations}"
+            ns_log notice "... myLocation                         ${:myLocation}"
+            ns_log notice "... canonicalServer                    ${:canonicalServer}"
+            ns_log notice "... canonicalServerLocation            ${:canonicalServerLocation}"
+            ns_log notice "... current_server_is_canonical_server ${:current_server_is_canonical_server}"
+            ns_log notice "... staticServerLocations              '${:staticServerLocations}'"
         }
 
         :method init {} {
@@ -201,6 +217,7 @@ namespace eval ::acs {
             # We received an incoming request from a cluster peer.
             #
             catch {::throttle do incr ::count(cluster:received)}
+            #ns_log notice "==== [self] incoming_request [ns_conn query]"
 
             ad_try {
                 #ns_logctl severity Debug(connchan) on
@@ -241,6 +258,27 @@ namespace eval ::acs {
                 if {$peer ni [nsv_get cluster cluster_peer_nodes]} {
                     ns_log notice ":execute: {$peer ni [nsv_get cluster cluster_peer_nodes]} // cmd $cmd"
                     set ok [dict exists ${:allowed_host} $peeraddr]
+                    if {!$ok} {
+                        set authorizedIP [parameter::get \
+                                              -package_id $::acs::kernel_id \
+                                              -parameter ClusterAuthorizedIP]
+                        set ok [expr {$peer in $authorizedIP}]
+                        if {!$ok} {
+                            foreach ip $authorizedIP {
+                                #
+                                # Check every single element, if it is
+                                # in CIDR notation or it contains a
+                                # wild card.
+                                #
+                                if {([string first / $ip] != -1 && [ns_subnetmatch $ip $peer])
+                                    || ([string first * $ip] != -1 && [string match $ip $peer])
+                                } {
+                                    set ok 1
+                                    break
+                                }
+                            }                            
+                        }
+                    }
                 } else {
                     set ok 1
                 }
@@ -330,7 +368,7 @@ namespace eval ::acs {
                     set seconds [expr {$last_contact/1000}]
                     if {[clock seconds]-($last_contact/1000) > [ns_baseunit -time $autodeleteInterval]} {
                         ns_log notice "[self] disconnect dynamic node $node due to ClusterAutodeleteInterval"
-                        :disconnect_dynamic_node $node
+                        :disconnect_request $node
                     }
                 }
             }
@@ -374,10 +412,12 @@ namespace eval ::acs {
                 # restarted (or separated for a while).
                 #
                 if {[:current_server_is_dynamic_cluster_peer]
-                    && ${:currentServerLocation} ni $dynamic_peers
+                    && ${:myLocation} ni $dynamic_peers
                 } {
                     ns_log warning "cluster node is not listed in dynamic peers." \
                         "Must re-join canonical server: ${:canonicalServerLocation}"
+                    ns_log notice "... myLocation: ${:myLocation}"
+                    ns_log notice "... dynamic_peers: $dynamic_peers"
                     :send_join_request_to_canonical_server
                 }
             }
@@ -463,7 +503,7 @@ namespace eval ::acs {
             # Check, if the provided location is the current server.
             # We expect the that the method "setup" was already called.
             #
-            set result [expr {$location in ${:currentServerLocations}}]
+            set result [expr {$location in ${:myLocations}}]
             #ns_log notice "is_current_server called with proto -> $location -> $result"
             return $result
         }
@@ -492,9 +532,8 @@ namespace eval ::acs {
                     "Please ensure that you have the CanonicalServer parameter set correctly."
                 return 1
             }
-
+            set location [:qualified_location $location]
             set result [expr {$location in ${:canonicalServerLocation}}]
-            #ns_log notice "is_canonical_server $location -> $result"
             return $result
         }
 
@@ -507,13 +546,14 @@ namespace eval ::acs {
                     "Please ensure that you have the CanonicalServer parameter set correctly."
                 return 1
             }
-            set result 0
-            foreach location ${:currentServerLocations} {
-                if {[:is_canonical_server $location]} {
-                    set result 1
-                    break
-                }
-            }
+            set result [:is_canonical_server ${:myLocation}]
+            # set result 0
+            # foreach location ${:myLocations} {
+            #     if {[:is_canonical_server $location]} {
+            #         set result 1
+            #         break
+            #     }
+            # }
             #:log "current_server_is_canonical_server $result"
             return $result
         }
@@ -527,21 +567,48 @@ namespace eval ::acs {
             if {${:current_server_is_canonical_server}} {
                 return 0
             }
-            return [expr {${:currentServerLocation} ni ${:staticServerLocations}}]
+            return [expr {${:myLocation} ni ${:staticServerLocations}}]
         }
 
-        :method qualified_location {location} {
+        :method external_location {qualified_location} {
+            #
+            # For addresses communicated to container-external
+            # entities, we have to map container-internal IP addresses
+            # to external accessible addresses.
+            #
+            ns_log notice "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX NO USED !!!!!!!!!!!!!!!"
+            set containerMapping [::acs::container mapping]
+            if {$containerMapping ne ""} {
+                set d [ns_parseurl $qualified_location]
+                dict with d {
+                    #
+                    #
+                    # TODO must be host from containerMapping
+                    #
+                    set internal [ns_addrbyhost host.docker.internal]
+                    if {$host in [list $internal host.docker.internal 127.0.0.1]} {
+                        set qualified_location [util::join_location \
+                                                    -noabbrev \
+                                                    -proto $proto \
+                                                    -hostname 127.0.0.1 \
+                                                    -port $port]
+                    }
+                }
+            }
+            return $qualified_location
+        }
+
+        :public method qualified_location {location} {
             #
             # Return a canonical representation of the provided
             # location, where the DNS name is resolved and the
             # protocol and port is always included. When there is no
-            # protocol provided, HTTP is assumed. There is no default
-            # provided for non-HTTP* locations.
+            # protocol provided, HTTP is assumed. Provide defaults,
+            # when no port is included in the passed-in
+            # location.
             #
-            # In theory, an input location might map to multiple
-            # values, when e.g., a provided DNS name refers to
-            # multiple IP addresses. For now, we just return always a
-            # single value.
+            # Note, that there is no default provided for non-HTTP*
+            # locations, so these must contain the port.
             #
             set d {port 80 proto http}
             if {[regexp {^([^:]+)://} $location . proto]} {
@@ -554,15 +621,60 @@ namespace eval ::acs {
             } else {
                 set d [dict merge $d [ns_parsehostport $location]]
             }
-            #
-            # To return all IP addresses, we could use "ns_addrbyhost
-            # -all ..." instead.
-            #
-            dict set d host [ns_addrbyhost [dict get $d host]]
+            set label [dict get $d port]/tcp
+            set containerMapping [acs::container mapping]
+            # catch {
+            #     ns_log notice "check container mapping for $label: $d"
+            #     ns_log notice "... internal?[expr {[dict get $d host] eq {host.docker.internal}}]"
+            #     ns_log notice "... mapping? [expr {$containerMapping ne {}}]"
+            #     ns_log notice "... label?   [dict exists $containerMapping $label]"
+            #     ns_log notice "... port=    [dict get $containerMapping $label port]"
+            # }
+            if {$containerMapping ne ""
+                && [dict get $d host] eq "host.docker.internal"
+                && [dict exists $containerMapping $label]
+                && [dict get $containerMapping $label port] < 32768
+            } {
+                # Ephemeral ports on Linux are typically 32768-60999
+                # https://en.wikipedia.org/wiki/Ephemeral_port
+                #ns_log notice "... there is a container mapping for $d -> [dict get $containerMapping $label]"
+                set d [dict get $containerMapping $label]
+            } else {
+                #
+                # In theory, an input location might map to multiple
+                # values, when e.g., a provided DNS name refers to
+                # multiple IP addresses. For now, we just return always a
+                # single value.
+                #
+                # To return all IP addresses, we could use "ns_addrbyhost
+                # -all ..." instead.
+                #
+                dict set d host [ns_addrbyhost [dict get $d host]]
+            }
+            
+            set d [:map_inaddr_any -dict $d]
             dict with d {
                 set result [util::join_location -noabbrev -proto $proto -hostname $host -port $port]
             }
             return $result
+        }
+
+        :method map_inaddr_any {-dict:switch location} {
+            #
+            # When the preferred location match returns INADDR_ANY,
+            # map it to "localhost" (which is certainly a valid member
+            # in this range, valid for IPv4 and IPv6).
+            #
+            set d [expr {$dict ? $location : [ns_parseurl $location]}]
+
+            if {[dict get $d host] in {0.0.0.0 ::}} {
+                set location [expr {$dict ? $d
+                                    : [util::join_location -noabbrev \
+                                           -proto [dict get $d proto] \
+                                           -hostname [ns_addrbyhost localhost] \
+                                           -port [dict get $d port]] }]
+            }
+            return $location
         }
 
         :method preferred_location {locations:1..n} {
@@ -584,7 +696,8 @@ namespace eval ::acs {
             if {$preferred_location eq ""} {
                 set preferred_location [lindex $locations 0]
             }
-            return $preferred_location
+
+            return [:map_inaddr_any $preferred_location]
         }
 
         :method current_server_locations {
@@ -603,32 +716,53 @@ namespace eval ::acs {
             set protos {nssock http nsssl https nsudp udp nscoap coap}
             set module_file_regexp [join [dict keys $protos] |]
 
-            foreach module_section [list ns/server/[ns_info server]/modules ns/modules] {
-                set modules [ns_configsection $module_section]
-                if {$modules ne ""} {
-                    foreach {module file} [ns_set array $modules] {
-                        #
-                        # To obtain idependence of the driver name, we
-                        # check whether the name of the binary (*.so
-                        # or *.dylib) is one of the supported driver
-                        # modules.
-                        #
-                        if {![regexp ($module_file_regexp) $file . module_type]} {
-                            continue
-                        }
+            set containerMapping [::acs::container mapping]
+            if {$containerMapping ne ""} {
+                #
+                # We have a container mapping. Return locations from
+                # this mappings as externally callable locations.
+                #
+                foreach {label mapping} $containerMapping {
+                    dict with mapping {
+                        lappend result [util::join_location \
+                                            -proto $proto \
+                                            -hostname $host \
+                                            -port $port]
+                    }
+                }
+            } else {
+                #
+                # Standard setup, no docker involved. We determine the
+                # network configuration of the current node from the
+                # configuration settings.
+                #
+                foreach module_section [list ns/server/[ns_info server]/modules ns/modules] {
+                    set modules [ns_configsection $module_section]
+                    if {$modules ne ""} {
+                        foreach {module file} [ns_set array $modules] {
+                            #
+                            # To obtain independence of the driver name, we
+                            # check whether the name of the binary (*.so
+                            # or *.dylib) is one of the supported driver
+                            # modules.
+                            #
+                            if {![regexp ($module_file_regexp) $file . module_type]} {
+                                continue
+                            }
 
-                        #ns_log notice "current_server_locations: use module <$module> $file"
-                        set driver_section [ns_driversection -driver $module]
-                        foreach ip [ns_config $driver_section address] {
-                            foreach port [ns_config -int $driver_section port] {
-                                if {$port == 0} {
-                                    continue
+                            #ns_log notice "current_server_locations: use module <$module> $file"
+                            set driver_section [ns_driversection -driver $module]
+                            foreach ip [ns_config $driver_section address] {
+                                foreach port [ns_config -int $driver_section port] {
+                                    if {$port == 0} {
+                                        continue
+                                    }
+                                    lappend result [:qualified_location \
+                                                        [util::join_location \
+                                                             -proto [dict get $protos $module_type] \
+                                                             -hostname $ip \
+                                                             -port $port]]
                                 }
-                                lappend result [:qualified_location \
-                                                    [util::join_location \
-                                                         -proto [dict get $protos $module_type] \
-                                                         -hostname $ip \
-                                                         -port $port]]
                             }
                         }
                     }
@@ -644,8 +778,9 @@ namespace eval ::acs {
             # Send a cluster reconfigure request to the canonical server.
             #
             set location ${:canonicalServerLocation}
-            :log "send $operation request to $location"
-            set r [:send $location [self] ${operation}_request ${:currentServerLocation}]
+            set returnLocation [:external_location ${:myLocation}]
+            :log "send $operation request to $location providing return location $returnLocation"
+            set r [:send $location [self] ${operation}_request $returnLocation]
             #:log "... $operation request returned $r"
 
             if {[dict exists $r body]} {
@@ -734,6 +869,12 @@ namespace eval ::acs {
             #
             # Server received a request to join dynamic cluster nodes from $peerLocation.
             #
+            #ns_log notice "Server received a join request"
+            #ns_log notice "... ns_conn host <[ns_conn host]> peer <[ns_conn peeraddr]>"
+            #ns_log notice "... ns_conn port <[ns_conn port]> peerport <[ns_conn peerport]>"
+            #ns_log notice "... peerLocation <$peerLocation> qualified [:qualified_location $peerLocation]"
+            #set headers [join [lmap {key value} [ns_set array [ns_conn headers]] {set _ "$key: $value\n... "}]]
+            #ns_log notice "... headers $headers"
             return [:dynamic_cluster_reconfigure join [:qualified_location $peerLocation]]
         }
 
@@ -832,7 +973,7 @@ namespace eval ::acs {
                     # such that the other nodes will pick it up as
                     # well.
                     #
-                    :log "updating DynamicClusterPeers to $new_peer_locations"
+                    :log "updating DynamicClusterPeers to '$new_peer_locations' epoch [ns_ictl epoch]"
                     parameter::set_value \
                         -package_id $::acs::kernel_id \
                         -parameter DynamicClusterPeers \
@@ -848,17 +989,17 @@ namespace eval ::acs {
             nsv_set cluster cluster_peer_nodes $cluster_peer_nodes
             #:log "cluster_peer_nodes <$cluster_peer_nodes>"
 
-            if {![:is_configured_server ${:currentServerLocations}]} {
+            if {![:is_configured_server ${:myLocations}]} {
                 #
                 # Current node is not pre-registered.
                 #
-                ns_log notice "Current host ${:currentServerLocation} is not included in ${:configured_cluster_hosts}"
+                ns_log notice "Current host ${:myLocation} is not included in ${:configured_cluster_hosts}"
                 if {![:current_server_is_canonical_server]} {
                     ns_log notice "... must join at canonical server ${:canonicalServerLocation}"
                     :send_join_request_to_canonical_server
                 }
             } else {
-                #ns_log notice "Current host ${:currentServerLocation} is included in ${:configured_cluster_hosts}"
+                #ns_log notice "Current host ${:myLocation} is included in ${:configured_cluster_hosts}"
             }
         }
 
@@ -905,7 +1046,7 @@ namespace eval ::acs {
             set timestamp [clock clicks -milliseconds]
             append result \
                 cmd=[ns_urlencode $cmd] \
-                &f=[ns_urlencode ${:currentServerLocation}] \
+                &f=[ns_urlencode ${:myLocation}] \
                 &t=$timestamp \
                 &s=[:message sign [list $cmd $timestamp]]
         }

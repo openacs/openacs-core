@@ -1,7 +1,7 @@
 #
 # Check if cluster is enabled, and if, set up the custer objects
 #
-ns_log notice "server_cluster_enabled_p: [server_cluster_enabled_p]"
+ns_log notice "cluster-init: server_cluster_enabled_p: [server_cluster_enabled_p]"
 if {[server_cluster_enabled_p]} {
 
     #
@@ -9,8 +9,8 @@ if {[server_cluster_enabled_p]} {
     # properly defined. If not, then do not activate cluster mode.
     #
     if {![::acs::cluster secret_configured]} {
-        ns_log error "cluster setup aborted:" \
-            "the cluster secret is not properly defined." \
+        ns_log error "cluster-init: cluster setup aborted:" \
+            "the cluster secret is missing." \
             "Deactivated cluster mode."
 
         proc server_cluster_enabled_p {} { return 0 }
@@ -21,8 +21,9 @@ if {[server_cluster_enabled_p]} {
     # Perform setup only once (not in every object creation in new
     # threads).
     #
-    ns_log notice "performing cluster setup"
+    ns_log notice "cluster-init: performing cluster setup"
     ::acs::cluster setup
+    ns_log notice "cluster-init: performing cluster setup DONE"
 
     #
     # Update the cluster info depending of the configured

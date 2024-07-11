@@ -32,8 +32,11 @@ ad_proc server_cluster_all_hosts {} {
     # have a canonical server, which is not a worker node, so it would
     # not need to receive all the cache-flush operations.
     #
+    set canonicalServer [acs::cluster eval {
+        :preferred_location [:qualified_location  [parameter::get -package_id $::acs::kernel_id -parameter CanonicalServer]]
+    }]
     set nodes [lsort -unique [concat \
-                                  [parameter::get -package_id $::acs::kernel_id -parameter CanonicalServer] \
+                                  $canonicalServer \
                                   [parameter::get -package_id $::acs::kernel_id -parameter ClusterPeerIP] \
                                   [parameter::get -package_id $::acs::kernel_id -parameter DynamicClusterPeers] ]]
 
@@ -51,8 +54,11 @@ ad_proc -private ad_canonical_server_p {} {
 
     @return boolean value
 } {
-
-    return [::acs::cluster current_server_is_canonical_server]
+    if {[server_cluster_enabled_p]} {
+        return [::acs::cluster current_server_is_canonical_server]
+    } else {
+        error "ad_canonical_server_p is called, but the cluster is not enabled"
+    }
 }
 
 # Local variables:
