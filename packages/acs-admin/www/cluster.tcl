@@ -37,10 +37,13 @@ if {$server_cluster_enabled_p} {
     set nsstats_location $::acs::rootdir/packages/acs-subsite/www/admin/nsstats.tcl
     set nsstats_available_p [file readable $nsstats_location]
 
-    set current_node [acs::cluster cget -currentServerLocation]
+    set current_node [acs::cluster cget -myLocation]
     set all_cluster_hosts [server_cluster_all_hosts]
     set active_peer_nodes [lsort [nsv_get cluster cluster_peer_nodes]]
-
+    
+    append page_title \
+        [expr {[acs::cluster is_canonical_server $current_node] ? " (Canonical Server)" : " (Peer Node)"}]
+    
     #ns_log notice "all_cluster_hosts <$all_cluster_hosts> active_peer_nodes <$active_peer_nodes>"
     set elements_list {
         state {
@@ -93,15 +96,15 @@ if {$server_cluster_enabled_p} {
             label "Actions"
             html {style {white-space:nowrap;}}
             display_template {
-                <a href="@cluster_nodes.node_name@/acs-admin"><adp:icon name="admin" title="#acs-admin.Administration#"></a>&nbsp;
+                <a href="@cluster_nodes.node_name@/acs-admin"><adp:icon name="admin" title="Node #acs-admin.Administration#"></a>&nbsp;
                 <if @cluster_nodes.nsstats_available_p@ true>
-                <a href="@cluster_nodes.node_name@/admin/nsstats.tcl?@page=process"><adp:icon name="graph-up" title="Statistics"></a>&nbsp;
+                <a href="@cluster_nodes.node_name@/admin/nsstats.tcl?@page=process"><adp:icon name="graph-up" title="Node Statistics"></a>&nbsp;
                 </if>
-                <a href="./cluster?flush_node=@cluster_nodes.node_name@"><adp:icon name="bandaid" title="Flush Cache"></a>&nbsp;
+                <a href="./cluster?flush_node=@cluster_nodes.node_name@"><adp:icon name="bandaid" title="Flush Cache info about Node"></a>&nbsp;
                 <if @cluster_nodes.current_p@ true><adp:icon name="trash" invisible="true"></if>
                 <else><if @cluster_nodes.canonical_p@ true><adp:icon name="trash" invisible="true"></if>
                 <else><a href="./cluster?disconnect_node=@cluster_nodes.node_name@"><adp:icon name="trash"
-                      title="Disconnect Peer; trigger rejoin and flush in a few seconds when server is alive"></a></else>
+                      title="Disconnect Peer Node; trigger rejoin and flush in a few seconds when server is alive"></a></else>
                 </else>
             }
         }
