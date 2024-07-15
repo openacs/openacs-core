@@ -575,7 +575,13 @@ aa_register_case -cats {
     Test ad_schedule_proc
 } {
     set cluster_p [server_cluster_enabled_p]
-    set canonical_server_p [ad_canonical_server_p]
+
+    try {
+        set canonical_server_p [ad_canonical_server_p]
+    } on error {errmsg} {
+        aa_false "Cluster not enabled, retrieving the canonical server will fail" $cluster_p
+        set canonical_server_p false
+    }
 
     foreach all_servers_p {t f} {
         #
