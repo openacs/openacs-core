@@ -797,7 +797,7 @@ if {[ns_info name] eq "NaviServer"} {
             lang::message::cache
         }
         #
-        # Check vor existence and return value if required.
+        # Check for existence and return value if required.
         #
         set exists [nsv_exists lang_message_$locale $key]
         if {$exists && [info exists varname]} {

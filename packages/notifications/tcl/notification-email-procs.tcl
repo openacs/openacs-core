@@ -194,7 +194,7 @@ namespace eval notification::email {
         {-message_headers:required}
         {-reason ""}
     } {
-        This sends a bounce message indicating a failuring in sending
+        This sends a bounce message indicating a failure while sending
         a message to the system.
 
         @author mkovach@alal.com

@@ -246,7 +246,7 @@ ad_proc -public aa_register_component {
     Registers a reusable code component.  Provide a component identifier,
     description and component body code.
     <p>
-    This is useful for re-using code that sets up / clears down, data common
+    This is useful for reusing code that sets up / clears down, data common
     to many testcases.
     @author Peter Harper
     @creation-date 28 October 2001

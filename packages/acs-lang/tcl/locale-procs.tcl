@@ -180,7 +180,7 @@ ad_proc -public lang::system::get_locales {
 
     Return all locales defined in the system. Per default only the
     enabled locales are returned. When the optional flag "-all" is
-    specified, all defined locales are returend.
+    specified, all defined locales are returned.
     
     This value is cached per thread and needs currently a server
     restart, when the system locales are changed.

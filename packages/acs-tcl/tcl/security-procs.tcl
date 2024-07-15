@@ -3041,7 +3041,7 @@ ad_proc -private security::provided_host_valid {host} {
 ad_proc security::secure_hostname_p {host} {
 
     Check, if the content of host is a "secure" value, which means, it
-    is either white-listed or belongs to a non-public IP adddress,
+    is either white-listed or belongs to a non-public IP address,
     such it cannot harm in redirect operations.
 
     @return boolean value

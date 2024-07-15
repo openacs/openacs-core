@@ -431,7 +431,7 @@ ad_proc -public auth::sync::job::action {
                 }
             } on error {errorMsg} {
                 # Get errorInfo and log it
-                ad_log Error "Error during batch syncrhonization job: $errorMsg"
+                ad_log Error "Error during batch synchronization job: $errorMsg"
                 set success_p 0
                 set result(message) $::errorInfo
             }

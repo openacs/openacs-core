@@ -41,7 +41,7 @@ if { [string match "*aspell*" $bin] } {
             set default_lang [string range $default_lang 0 1]
         }
     } on error {errorMsg} {
-        ns_log Warning "Gettings dicts and default_lang for aspell failed with error message: \"$errorMsg\""
+        ns_log Warning "Getting dicts and default_lang for aspell failed with error message: \"$errorMsg\""
 	ns_log Notice "You might want to upgrade to a more recent version of Aspell ... http://aspell.sourceforge.net/"
     }
 } elseif { [string match "*ispell*" $bin] } {
