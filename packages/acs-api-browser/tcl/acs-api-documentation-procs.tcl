@@ -11,6 +11,14 @@ ad_library {
 
 namespace eval ::apidoc {
 
+    variable ns_api_host
+    variable ns_api_index
+    variable ns_api_root
+    variable ns_api_html_index
+    variable tcl_api_html_index
+    variable style
+    variable KEYWORDS
+
     if {[ns_info name] eq "NaviServer"} {
         #
         # NaviServer at sourceforge
