@@ -99,7 +99,7 @@ ad_proc -private ad_enhanced_text_escape_disallowed {text} {
         # "tt" is deprecated (actually "not supported", but it
         #    continues to work, since it is in wide use).
         #    Alternatives: "samp", "kbd", "code", "var"
-        
+
         set delimiter {{< <samp>&lt;} {> &gt;</samp>}}
         set out ""
         foreach token $parsed {
@@ -1825,17 +1825,23 @@ ad_proc -public ad_dom_sanitize_html {
                         }
                     }
 
-                    # to check for allowed protocols we need to
+                    # To check for allowed protocols we need to
                     # treat URLs without one (e.g. relative or
                     # protocol-relative URLs) as using our same
                     # protocol
                     if {$proto eq ""} {
                         set proto $driver_prot
                     }
-
-                    # check if protocol is allowed
-                    if {[info exists unallowed_protocol($proto)] ||
-                        ($allowed_protocols ne "*" && ![info exists allowed_protocol($proto)])} {
+                    #
+                    # Check if the determined protocol is
+                    # allowed. Since comparison values (e.g., in
+                    # unallowed_protocol) are lower-case, lowercase
+                    # the determined protocol as well.
+                    #
+                    set proto [string tolower $proto]
+                    if {[info exists unallowed_protocol($proto)]
+                        || ($allowed_protocols ne "*" && ![info exists allowed_protocol($proto)])
+                    } {
                         # invalid attribute!
                         if {$validate_p} {
                             return 0
