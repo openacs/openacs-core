@@ -59,7 +59,7 @@ aa_register_case \
 
         set user_id [db_nextval acs_object_id_seq]
         set username "[ad_generate_random_string]"
-        set email "${username}@test.test"
+        set email "${username}@mail.test"
         set password [ad_generate_random_string]
         set first_names [ad_generate_random_string]
         set last_name [ad_generate_random_string]
