@@ -357,7 +357,7 @@ aa_register_case \
                         } else {
                             set within_limits_p 0
                         }
-                        aa_true "r276: prioirty for case '${j}' '0' < \
+                        aa_true "r276: priority for case '${j}' '0' < \
   '$p_arr(${j})' < '${p_min}' is within limits." $within_limits_p
                     }
 

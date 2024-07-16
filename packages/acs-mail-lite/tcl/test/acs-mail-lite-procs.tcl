@@ -58,34 +58,46 @@ aa_register_case \
             set subject {Test immediate subject}
             set body {Test immediate body}
 
-
             aa_section "Immediate sending"
+            #
+            # We have currently no good way to check, whether the
+            # outgoing email server is configured properly. Therefore,
+            # we perform this test only, when the nssmptd module is
+            # loaded. In this case, we assume, it is configured.  When
+            # mail is not configured, the test might fail in
+            # unpredictable ways, which are not necessarily related to
+            # the code.
+            #
+            if {[info commands ns_smtpd] ne ""} {
 
-            acs_mail_lite::send \
-                -to_addr $to_addr \
-                -from_addr $from_addr \
-                -subject $subject \
-                -body $body \
-                -object_id $any_object_id \
-                -send_immediately
+                acs_mail_lite::send \
+                    -to_addr $to_addr \
+                    -from_addr $from_addr \
+                    -subject $subject \
+                    -body $body \
+                    -object_id $any_object_id \
+                    -send_immediately
 
-            set recipient_id [dict get $recipient_info user_id]
+                set recipient_id [dict get $recipient_info user_id]
 
-            aa_false "Mail was NOT scheduled for sending" [db_0or1row check_scheduled {
-                select 1 from acs_mail_lite_queue
-                where object_id = :any_object_id
-                and to_addr = :to_addr
-                and from_addr = :from_addr
-                and subject = :subject
-                and body = :body
-            }]
+                aa_false "Mail was NOT scheduled for sending" [db_0or1row check_scheduled {
+                    select 1 from acs_mail_lite_queue
+                    where object_id = :any_object_id
+                    and to_addr = :to_addr
+                    and from_addr = :from_addr
+                    and subject = :subject
+                    and body = :body
+                }]
 
-            aa_true "A unique id was assigned to the message" [db_0or1row check_id {
-                select 1 from acs_mail_lite_send_msg_id_map
-                where object_id = :any_object_id
-                and package_id = :package_id
-                and party_id = :recipient_id
-            }]
+                aa_true "A unique id was assigned to the message" [db_0or1row check_id {
+                    select 1 from acs_mail_lite_send_msg_id_map
+                    where object_id = :any_object_id
+                    and package_id = :package_id
+                    and party_id = :recipient_id
+                }]
+            } else {
+                aa_log "Test skipped, since 'ns_smtpd' is not configured"
+            }
 
         } -teardown_code {
             parameter::set_value \

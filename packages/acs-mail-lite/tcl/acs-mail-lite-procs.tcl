@@ -184,7 +184,9 @@ namespace eval acs_mail_lite {
         # if FixedSenderEmail is not empty,
         # so as to be consistent for all cases calling this proc.
 
+        ns_log notice "SMTP call sendmessage <$originator>"
         set cmd [list smtp::sendmessage $multi_token -originator $originator]
+        ns_log notice "SMTP call sendmessage <$originator> DONE"
         foreach header $headers {
             lappend cmd -header $header
         }
@@ -205,9 +207,10 @@ namespace eval acs_mail_lite {
             ns_log warning "acs-mail-lite::smtp: invalid parameter combination;\
                 when SMTPUser is specified, SMTPPassword has to be provided as well and vice versa"
         }
+        ns_log notice "SMTP call <$cmd>"
 
         ns_log Debug "send cmd: $cmd"
-        if {[catch $cmd errorMsg]} {
+        if {[catch $cmd errorMsg]} {            
             ns_log Error "acs-mail-lite::smtp: error $errorMsg while executing\n$cmd"
             error $errorMsg
         }
@@ -631,6 +634,7 @@ namespace eval acs_mail_lite {
             }
         }
 
+        ns_log notice "ORIGINATOR <$originator>"
         # Set the date
         set message_date [acs_mail_lite::utils::build_date]
 
@@ -1005,7 +1009,7 @@ namespace eval acs_mail_lite {
                 # If there is no domain configured, use the configured
                 # hostname as domain name
                 #
-                foreach driver {nsssl nssock_v4 nssock_v6 nssock} {
+                foreach driver [lmap d [ns_driver info] {dict get $d module}] {
                     set section [ns_driversection -driver $driver]
                     set configured_hostname [ns_config $section hostname]
                     if {$configured_hostname ne ""} {
