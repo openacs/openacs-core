@@ -1451,11 +1451,6 @@ ad_proc -private ad_dom_fix_html {
     return [string trim $html]
 }
 
-# Original purpose of this proc was to introduce a better way to
-# enforce some HTML policies on the content submitted by the uses
-# (e.g. forbid some tag/attribute like <script> etc). It has some
-# limitations that make non-trivial its introduction, therefore, is
-# currently not used around.
 ad_proc -public ad_dom_sanitize_html {
     -html:required
     -allowed_tags
@@ -1470,10 +1465,10 @@ ad_proc -public ad_dom_sanitize_html {
     -fix:boolean
 } {
 
-    Sanitizes HTML by specified criteria, basically removing
-    unallowed tags and attributes, JavaScript or outer references
-    into page URLs. When desired, this proc can act also as just a
-    validator in order to enforce some markup policies.
+    Sanitizes HTML by specified criteria, basically removing unallowed
+    tags and attributes, JavaScript or outer references into page
+    URLs. When desired, this proc can act also as just a validator in
+    order to enforce some markup policies on user-submitted content.
 
     @param html the markup to be checked.
 
@@ -1642,40 +1637,10 @@ ad_proc -public ad_dom_sanitize_html {
 
     $doc documentElement root
 
-    # Some sanitizing requires information that is available only
-    # from a connection thread such as our local address and
-    # current protocol.
-    if {[ns_conn isconnected]} {
-        set driver_info [util_driver_info]
-        set driver_prot [dict get $driver_info proto]
-        set driver_host [dict get $driver_info hostname]
-        set driver_port [dict get $driver_info port]
-
-        ## create a regex clause of possible addresses referring to
-        ## this system
-        set our_locations [list]
-
-        # location from conf files
-        set configured_location [util::join_location \
-                                     -proto    $driver_prot \
-                                     -hostname $driver_host \
-                                     -port     $driver_port]
-        lappend our_locations $configured_location
-        regsub {^\w+://} $configured_location {//} no_proto_location
-        lappend our_locations $no_proto_location
-
-        # location from connection
-        set conn_location [ad_conn location]
-        lappend our_locations $conn_location
-        regsub {^\w+://} $conn_location {//} no_proto_location
-        lappend our_locations $no_proto_location
-
-        set our_locations [join $our_locations |]
-        ##
-    } else {
-        set our_locations ""
-        set driver_prot ""
-    }
+    #
+    # We use the current location to validate URLs without a protocol.
+    #
+    set current_location [util_current_location]
 
     set queue [$root childNodes]
     while {$queue ne {}} {
@@ -1774,41 +1739,8 @@ ad_proc -public ad_dom_sanitize_html {
                         continue
                     }
 
-                    set proto ""
-                    try {
-                        set parsed_url [ns_parseurl $url]
-                        if {[dict exists $parsed_url proto]} {
-                            set proto [dict get $parsed_url proto]
-                        }
-
-                    } on error {errorMsg} {
-                        ns_log warning "ad_dom_sanitize_html cannot parse URL '$url': $errorMsg"
-                        #
-                        # The attribute is invalid. Report it or remove it.
-                        #
+                    if {$no_outer_urls_p && [util::external_url_p $url]} {
                         if {$validate_p} {
-                            return 0
-                        } else {
-                            $node removeAttribute $att
-                        }
-                        continue
-                    }
-
-                    if {$proto ne "" && $no_outer_urls_p} {
-                        #
-                        # No external URLs allowed: we still want
-                        # to allow fully specified URLs that refer
-                        # to this server, but we'll transform them
-                        # in a local absolute reference. For all
-                        # others, attribute will be just removed.
-                        #
-                        if {[regsub ^($our_locations) $url {} url]} {
-                            #
-                            # This is ok, points to our system.
-                            #
-                            set url /[string trimleft $url "/"]
-                            $node setAttribute $att $url
-                        } elseif {$validate_p} {
                             #
                             # External URL and we are
                             # validating. This HTML is invalid.
@@ -1825,13 +1757,38 @@ ad_proc -public ad_dom_sanitize_html {
                         }
                     }
 
-                    # To check for allowed protocols we need to
-                    # treat URLs without one (e.g. relative or
-                    # protocol-relative URLs) as using our same
-                    # protocol
-                    if {$proto eq ""} {
-                        set proto $driver_prot
+                    #
+                    # Parse the URL
+                    #
+                    try {
+                        #
+                        # We extract the URL protocol. When missing
+                        # from the original relative or
+                        # protocol-relative URL, ns_absoluteurl will
+                        # ensure that we will get it from the current
+                        # location.
+                        #
+                        ns_parseurl [ns_absoluteurl $url $current_location]
+                    } on ok {parsed_url} {
+                        set proto [dict get $parsed_url proto]
+                    } on error {errorMsg} {
+                        ns_log warning "ad_dom_sanitize_html cannot parse URL '$url': $errorMsg"
+                        if {$validate_p} {
+                            #
+                            # Cannot parse URL and we are
+                            # validating. This HTML is invalid.
+                            #
+                            return 0
+                        } else {
+                            #
+                            # Cannot parse URL and we are
+                            # sanitizing. Remove it from the result.
+                            #
+                            $node removeAttribute $att
+                            continue
+                        }
                     }
+
                     #
                     # Check if the determined protocol is
                     # allowed. Since comparison values (e.g., in
