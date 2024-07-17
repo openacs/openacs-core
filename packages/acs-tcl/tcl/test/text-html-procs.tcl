@@ -735,6 +735,11 @@ aa_register_case \
         false
 
     lappend cases \
+        {Disguising the colon ":" character (mixed case)} \
+        {<a href="javAscRipt:Nzcp(9278)"></a>} \
+        false
+
+    lappend cases \
         {Disguising the word "javascript" by replacing letters with entities} \
         {<A HreF= j&#x61;v&#x41;sc&#x52;ipt&#x3A;Nzcp(9278)>} \
         false
