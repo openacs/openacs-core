@@ -560,11 +560,18 @@ aa_register_case  \
     aa_run_with_teardown \
         -rollback \
         -test_code {
+            aa_log [list auth::password::recover_password \
+                                           -authority_id $test_vars(authority_id) \
+                                           -username $test_vars(username)]
             array set password_result [auth::password::recover_password \
                                            -authority_id $test_vars(authority_id) \
                                            -username $test_vars(username)]
-
-            aa_equals "status ok" $password_result(password_status) "ok"
+            if {[::acs_mail_lite::configured_p]} {
+                aa_equals "status ok" $password_result(password_status) "ok"
+            } else {
+                aa_equals "SMTP host not configured" $password_result(password_status) "failed_to_connect"                
+            }
+            
             aa_true "nonempty message" {$password_result(password_message) ne ""}
         }
 }
@@ -612,8 +619,12 @@ aa_register_case  \
     array set result [auth::password::retrieve \
                           -authority_id $test_vars(authority_id) \
                           -username $test_vars(username)]
+    if {[::acs_mail_lite::configured_p]} {
+        aa_equals "retrieve pwd from local auth" $result(password_status) "ok"
+    } else {
+        aa_equals "SMTP host not configured" $result(password_status) "failed_to_connect"                
+    }
 
-    aa_equals "retrieve pwd from local auth" $result(password_status) "ok"
     aa_true "must have message on failure" {$result(password_message) ne ""}
 }
 

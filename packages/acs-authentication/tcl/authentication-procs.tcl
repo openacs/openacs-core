@@ -45,11 +45,11 @@ ad_proc -public auth::require_login {
     }
 
     set message ""
-    
+
     if {[ad_conn auth_level] eq "expired"} {
         #
-        # The login has expired. 
-        #        
+        # The login has expired.
+        #
         set message [_ acs-subsite.lt_Your_login_has_expire]
         #
         # If the login was issued from an external_registry, use this
@@ -59,7 +59,7 @@ ad_proc -public auth::require_login {
     } else {
         set external_registry ""
     }
-    
+
     #
     # The -return switch causes the URL to return to the current page.
     #
@@ -93,7 +93,7 @@ ad_proc -public auth::require_login {
 }
 
 ad_proc -public auth::refresh_login {} {
-    
+
     If there currently is a user associated with this session, but the
     user's authentication is expired, redirect the user to refresh
     his/her login. This allows for users to not be logged in, but if
