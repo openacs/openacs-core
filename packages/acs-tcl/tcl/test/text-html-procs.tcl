@@ -827,6 +827,58 @@ aa_register_case \
                  -validate]
     }
 
+    #
+    # Test the behavior when excluding certain protocols
+    #
+
+    set current_location [util_current_location]
+    regexp {^([a-zA-Z]+):.*$} $current_location _ current_protocol
+    set another_protocol [expr {$current_protocol eq "http" ? "https" : "http"}]
+
+    set cases [list]
+
+    lappend cases \
+        {An external link on our protocol} \
+        "<a href=\"${current_protocol}://www.evilcorpspectre.fishy\">Click HERE</a>" \
+        true
+
+    lappend cases \
+        {An external link on another protocol} \
+        "<a href=\"${another_protocol}://www.evilcorpspectre.fishy\">Click HERE</a>" \
+        false
+
+    lappend cases \
+        {A relative link} \
+        "<a href=\"/a/page\">Click HERE</a>" \
+        true
+
+    lappend cases \
+        {A protocol-relative link} \
+        "<a href=\"//mypage.com/a/page\">Click HERE</a>" \
+        true
+
+    foreach {description content outcome} $cases {
+        aa_${outcome} $description \
+            [ad_dom_sanitize_html \
+                 -allowed_tags * \
+                 -allowed_attributes * \
+                 -allowed_protocols $current_protocol \
+                 -unallowed_protocols $another_protocol \
+                 -html $content \
+                 -validate]
+
+        #
+        # Flip allowed/unallowed, the result should be the opposite.
+        #
+        aa_[expr {$outcome ? "false" : "true"}] "$description (flipped)" \
+            [ad_dom_sanitize_html \
+                 -allowed_tags * \
+                 -allowed_attributes * \
+                 -allowed_protocols $another_protocol \
+                 -unallowed_protocols $current_protocol \
+                 -html $content \
+                 -validate]
+    }
 }
 
 aa_register_case \
