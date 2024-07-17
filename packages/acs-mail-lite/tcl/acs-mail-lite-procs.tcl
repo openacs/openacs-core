@@ -210,7 +210,7 @@ namespace eval acs_mail_lite {
         ns_log notice "SMTP call <$cmd>"
 
         ns_log Debug "send cmd: $cmd"
-        if {[catch $cmd errorMsg]} {            
+        if {[catch $cmd errorMsg]} {
             ns_log Error "acs-mail-lite::smtp: error $errorMsg while executing\n$cmd"
             error $errorMsg
         }
@@ -1020,6 +1020,35 @@ namespace eval acs_mail_lite {
             }
         }
         return $domain
+    }
+
+    ad_proc configured_p {} {
+
+        Determine, whether the outgoing SMTPHost is configured and
+        reachable.
+
+    } {
+        #
+        # We have currently no good way to check, whether the outgoing
+        # email server is fully configured and accepts our
+        # emails. Here we check only, whether we can connect to the
+        # configured server.
+        #
+        set success 0
+        set params [get_delivery_parameters]
+
+        try {
+            lassign [ns_sockopen -timeout 100ms [dict get $params SMTPHost] [dict get $params SMTPPort]] rid wid
+            set readCheck [ns_sockcheck $rid]
+            set writeCheck [ns_sockcheck $wid]
+            set success [expr {$readCheck && $writeCheck}]
+        } on error {errorMsg} {
+        } finally {
+            catch {close $rid}
+            catch {close $wid}
+        }
+
+        return $success
     }
 }
 

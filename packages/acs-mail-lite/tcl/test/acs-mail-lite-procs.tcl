@@ -60,15 +60,10 @@ aa_register_case \
 
             aa_section "Immediate sending"
             #
-            # We have currently no good way to check, whether the
-            # outgoing email server is configured properly. Therefore,
-            # we perform this test only, when the nssmptd module is
-            # loaded. In this case, we assume, it is configured.  When
-            # mail is not configured, the test might fail in
-            # unpredictable ways, which are not necessarily related to
-            # the code.
+            # We can only test an immediate send operation, when the
+            # SMTP server is configured and available.
             #
-            if {[info commands ns_smtpd] ne ""} {
+            if {[::acs_mail_lite::configured_p]} {
 
                 acs_mail_lite::send \
                     -to_addr $to_addr \
@@ -96,7 +91,7 @@ aa_register_case \
                     and party_id = :recipient_id
                 }]
             } else {
-                aa_log "Test skipped, since 'ns_smtpd' is not configured"
+                aa_log "Test skipped, since the SMTP host is apparently not configured"
             }
 
         } -teardown_code {
