@@ -1739,6 +1739,13 @@ ad_proc -public ad_dom_sanitize_html {
                         continue
                     }
 
+                    #
+                    # Ensure the URL is complete. Relative or protocol
+                    # relative URLs will be completed using the
+                    # information from our current location.
+                    #
+                    set url [ns_absoluteurl $url $current_location]
+
                     if {$no_outer_urls_p && [util::external_url_p $url]} {
                         if {$validate_p} {
                             #
@@ -1762,13 +1769,10 @@ ad_proc -public ad_dom_sanitize_html {
                     #
                     try {
                         #
-                        # We extract the URL protocol. When missing
-                        # from the original relative or
-                        # protocol-relative URL, ns_absoluteurl will
-                        # ensure that we will get it from the current
-                        # location.
+                        # We extract the URL protocol. The URL is
+                        # guaranteed to have one at this point.
                         #
-                        ns_parseurl [ns_absoluteurl $url $current_location]
+                        ns_parseurl $url
                     } on ok {parsed_url} {
                         set proto [dict get $parsed_url proto]
                     } on error {errorMsg} {
