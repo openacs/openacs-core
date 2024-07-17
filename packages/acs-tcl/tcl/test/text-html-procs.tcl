@@ -764,6 +764,69 @@ aa_register_case \
                  -no_js \
                  -validate]
     }
+
+
+    #
+    # Testing external URL validation
+    #
+
+    set cases [list]
+
+    lappend cases \
+        {An external link} \
+        {<a href="https://www.evilcorpspectre.fishy">Click HERE</a>} \
+        false
+
+    lappend cases \
+        {An external link with a path} \
+        {<a href="https://www.evilcorpspectre.fishy/how/to/be/evil">Click HERE</a>} \
+        false
+
+    lappend cases \
+        {An external link (protocol relative)} \
+        {<a href="//www.evilcorpspectre.fishy">Click HERE</a>} \
+        false
+
+    lappend cases \
+        {An external link with a path (protocol relative)} \
+        {<a href="//www.evilcorpspectre.fishy/how/to/be/evil">Click HERE</a>} \
+        false
+
+    set secure_location [lindex [security::locations] 0]
+
+    regsub {^[a-zA-Z]+:} $secure_location {} secure_location_protocol_relative
+
+    lappend cases \
+        {An internal absolute link} \
+        "<a href=\"${secure_location}\">Click HERE</a>" \
+        true
+
+    lappend cases \
+        {An internal absolute link with a path} \
+        "<a href=\"${secure_location}/a/page\">Click HERE</a>" \
+        true
+
+    lappend cases \
+        {An internal absolute link (protocol relative)} \
+        "<a href=\"${secure_location_protocol_relative}\">Click HERE</a>" \
+        true
+
+    lappend cases \
+        "An internal absolute link with a path (protocol relative) ${secure_location_protocol_relative}" \
+        "<a href=\"${secure_location_protocol_relative}/a/page\">Click HERE</a>" \
+        true
+
+    foreach {description content outcome} $cases {
+        aa_${outcome} $description \
+            [ad_dom_sanitize_html \
+                 -allowed_tags * \
+                 -allowed_attributes * \
+                 -allowed_protocols * \
+                 -html $content \
+                 -no_outer_urls \
+                 -validate]
+    }
+
 }
 
 aa_register_case \
