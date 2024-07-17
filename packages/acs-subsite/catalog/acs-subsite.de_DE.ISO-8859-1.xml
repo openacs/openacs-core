@@ -322,7 +322,7 @@ Bitte ändern Sie Ihr Passwort unter folgendem Link:
   <msg key="lt_This_is_the_image_that">Folgendes Bild wird anderen Benutzern von %system_name% angezeigt</msg>
   <msg key="lt_This_user_doesnt_have">Dieser Benutzer hat noch kein Bild hochgeladen. Sie können</msg>
   <msg key="lt_This_user_is_deleted">Das Benutzerkonto dieses Benutzers wurde gelöscht.</msg>
-  <msg key="lt_To_confirm_your_regis">Zur Bestätigung Ihrer Registrierung klicken Sie bitte auf %confirmation_url%.</msg>
+  <msg key="lt_To_confirm_your_regis">Zur Bestätigung Ihrer Registrierung klicken Sie bitte auf: %confirmation_url%</msg>
   <msg key="lt_Upload_your_favorite">Die Datei muss im JPEG oder GIF-Format vorliegen und sich auf Ihrem PC befinden. Eine Verlinkung mit einem Bild im Internet ist nicht möglich.</msg>
   <msg key="lt_Uploaded_pretty_date">Hochgeladen am: %pretty_date%</msg>
   <msg key="lt_Uploaded_publish_date">Hochgeladen am:</msg>
