@@ -1048,7 +1048,7 @@ aa_register_case \
     sync_http_get_document {
     Test the HTTPGet implementation of GetDocument service contract.
 } {
-    set url [ad_url]
+    set url [::acs::test::url]
     # When the server is configured with wildcard IPv4 address 0.0.0.0
     # and the hostname "localhost", and localhost is mapped on the
     # host to the IPv6 address "::1", then ns_http to
