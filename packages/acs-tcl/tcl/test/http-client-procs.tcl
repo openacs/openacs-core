@@ -19,7 +19,7 @@ aa_register_case \
         Test that JSON is encoded as expected
     } {
         set endpoint_name /acs-tcl-test-http-client-procs-util-http-json-encoding
-        set url [ad_url]
+        set url [::acs::test::url]
         #
         # Fallback to util_current_location if ad_url returns an empty string,
         # such in cases when the SystemUrl is not set.
@@ -45,6 +45,7 @@ aa_register_case \
                         ns_return 200 application/json {$response}
                     }]
                     aa_log "Request with correct application/json mime_type"
+                    aa_log "... [list util::http::[string tolower $m] -preference $impl -url $url]"
                     set r [util::http::[string tolower $m] -preference $impl -url $url]
                     set headers [dict get $r headers]
                     set content_type [expr {[dict exists $headers content-type] ?
@@ -58,7 +59,8 @@ aa_register_case \
                     if {$m eq "GET"} {
                         set F_json [ad_opentmpfile tmpfile_app_json]
                         if {$impl eq "curl"} {
-                            puts $F_json [exec -ignorestderr [::util::which curl] $url -o -]
+                            aa_log "... running [::util::which curl] $url -k -o -"
+                            puts $F_json [exec -ignorestderr [::util::which curl] $url -k -o -]
                         } else {
                             ns_http run -method GET -spoolsize 0 -outputchan $F_json $url
                         }
@@ -69,6 +71,7 @@ aa_register_case \
                         ns_return 200 "application/json;charset=UTF-8" {$response}
                     }]
                     aa_log "Request with correct application/json;charset=UTF-8 mime_type"
+                    aa_log "... running [list util::http::[string tolower $m] -preference $impl -url $url]"
                     set r [util::http::[string tolower $m] -preference $impl -url $url]
                     set headers [dict get $r headers]
                     set content_type [expr {[dict exists $headers content-type] ?
@@ -105,9 +108,9 @@ aa_register_case \
                     # encoding of the response to iso8859-2
                     if {$m eq "GET"} {
                         set F_iso8859_2 [ad_opentmpfile tmpfile_iso8859_2]
-                        
+
                         if {$impl eq "curl"} {
-                            puts $F_iso8859_2 [exec -ignorestderr [::util::which curl] $url -o -]
+                            puts $F_iso8859_2 [exec -ignorestderr [::util::which curl] $url -k -o -]
                         } else {
                             ns_http run -method GET -spoolsize 0 -outputchan $F_iso8859_2 $url
                         }

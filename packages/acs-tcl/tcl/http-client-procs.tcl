@@ -924,7 +924,7 @@ ad_proc -private util::http::append_to_payload {
         # create the spool file
         set wfd [ad_opentmpfile spool_file]
         fconfigure $wfd -translation binary
-        
+
         # flush currently collected payload
         puts -nonewline $wfd $payload
         # set required encoding for next content
@@ -1768,7 +1768,7 @@ ad_proc -private util::http::curl::request {
 
     ## Issuing of the request
 
-    set cmd [list exec [::util::which curl] -s]
+    set cmd [list exec [::util::which curl] -s -k]
 
     if {$spool_p} {
         set spool_file [ad_tmpnam]
@@ -1781,14 +1781,14 @@ ad_proc -private util::http::curl::request {
         lappend cmd --connect-timeout [timeout $timeout]
     }
 
-# Antonio Pisano 2015-09-28: curl can follow redirects
-# out of the box, but its behavior is to throw an error
-# when maximum depth has been reached. I want it to
-# return even a 3** page without complaining.
-#     # Set redirection up to max_depth
-#     if {$max_depth ne ""} {
-#         lappend cmd -L --max-redirs $max_depth
-#     }
+    # Antonio Pisano 2015-09-28: curl can follow redirects
+    # out of the box, but its behavior is to throw an error
+    # when maximum depth has been reached. I want it to
+    # return even a 3** page without complaining.
+    #     # Set redirection up to max_depth
+    #     if {$max_depth ne ""} {
+    #         lappend cmd -L --max-redirs $max_depth
+    #     }
 
     if {$method eq "GET"} {
         lappend cmd -G
@@ -1848,6 +1848,7 @@ ad_proc -private util::http::curl::request {
     lappend cmd -D $resp_headers_tmpfile
     lappend cmd $url
 
+    #ns_log notice "running CURL cmd\n$cmd"
     set start_time [ns_time get]
     set response [{*}$cmd]
     set end_time [ns_time get]
