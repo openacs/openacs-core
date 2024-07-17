@@ -736,7 +736,7 @@ aa_register_case \
 
     lappend cases \
         {Disguising the colon ":" character (mixed case)} \
-        {<a href="javAscRipt:Nzcp(9278)"></a>} \
+        {<A HreF= javAscRipt&colon;uHXK(9814)>} \
         false
 
     lappend cases \
