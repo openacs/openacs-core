@@ -9,9 +9,6 @@
 ad_library {
     Procs to support the acs-automated-testing package.
 
-    NOTE: There's a hack in packages/acs-bootstrap-installer/bootstrap.tcl to load
-    this file on server startup before the *-procs.tcl files of other packages.
-
     @author Peter Harper (peter.harper@open-msg.com)
     @creation-date 21 June 2001
 
@@ -667,9 +664,9 @@ ad_proc -private aa_runseries {
     # Run each testcase
     #
     foreach testcase_id $testcase_ids {
-        ns_log notice "========================================= start $testcase_id"
+        ns_log notice "========================================= start $testcase_id (Errors: [dict get [ns_logctl stats] Error])"
         aa_run_testcase $testcase_id
-        ns_log notice "========================================= end $testcase_id"
+        ns_log notice "========================================= end $testcase_id (Errors: [dict get [ns_logctl stats] Error])"
     }
 
     #
@@ -850,6 +847,32 @@ ad_proc -public aa_section {
 } {
     aa_log_result "sect" $log_notes
     ns_log notice "--------- aa_section" $log_notes
+}
+
+ad_proc -public aa_test_running_p {} {
+
+    Check, if the regression test is currently running.
+
+    @return boolean value indicating state
+} {
+    return [info exists ::__aa_testing_mode]
+}
+
+ad_proc -public aa_test_start {} {
+
+    Set the start flag of the regression test case.
+} {
+    return [set ::__aa_testing_mode 1]
+}
+
+ad_proc -public aa_test_end {} {
+
+    Clear the flag indicating that a regressoin test is running.  It
+     is not always necessary to call this procedurfe explicitly, since
+     the server cleanup clears this flag automatically.
+
+} {
+    unset -nocomplain ::__aa_testing_mode 1
 }
 
 ad_proc -public aa_log { args } {
@@ -1595,7 +1618,7 @@ namespace eval acs::test {
 
         set d [::acs::test::form_reply -user_id 0 -form $form]
         acs::test::reply_has_status_code $d 302
-        set ::__aa_testing_mode 1
+        aa_test_start
 
         return $d
     }
@@ -1609,7 +1632,7 @@ namespace eval acs::test {
     } {
         set d [acs::test::http -last_request $last_request /register/logout]
         acs::test::reply_has_status_code $d 302
-        unset -nocomplain ::__aa_testing_mode 1
+        aa_test_end
 
         return $d
     }

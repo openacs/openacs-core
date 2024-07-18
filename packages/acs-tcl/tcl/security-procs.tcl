@@ -146,10 +146,10 @@ ad_proc -private sec_handler {} {
                 #ad_conn -set session_id [sec_allocate_session]
                 set auth_level ok
                 set untrusted_user_id $user_id
-                set ::__aa_testing_mode 1
+                aa_test_start
             }
         }
-        if {![info exists ::__aa_testing_mode]} {
+        if {![aa_test_running_p]} {
             sec_login_handler
         }
 
