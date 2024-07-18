@@ -27,6 +27,9 @@ aa_register_case \
 
         aa_register_case
         aa_runseries
+        aa_test_start
+        aa_test_running_p
+        aa_test_end
     } \
     webtest_example {
 
