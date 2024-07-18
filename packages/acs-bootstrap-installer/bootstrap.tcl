@@ -16,7 +16,12 @@ if {![info exists ::acs::rootdir]} {
 # point later). This is used in /www/admin/monitoring/startup-log.tcl to show
 # the segment of the error log corresponding to server initialization (between
 # "AOLserver/xxx starting" and "AOLserver/xxx running").
-catch { nsv_set acs_properties initial_error_log_length [file size [ns_info log]] }
+#
+# GN: not used anymore, but could be reactivated in the future. Note, that
+#     the system log might be spooled to stderr or the like.
+#catch { nsv_set acs_properties initial_error_log_length [file size [ns_info log]] }
+
+catch { nsv_set acs_properties logstats [ns_logctl stats] }
 
 # Initialize proc_doc NSV arrays.
 nsv_set proc_source_file . ""

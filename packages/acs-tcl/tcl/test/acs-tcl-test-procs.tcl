@@ -1563,7 +1563,7 @@ aa_register_case \
         counted, including expected ones coming from the tests
         themselves.
     } {
-        set errors [dict get [ns_logctl stats] Error]
+        set errors [nsv_dict get acs_properties logstats Error]
         aa_log "Number of errors: $errors, warnings: [dict get [ns_logctl stats] Warning]"
         aa_equals "No errors detected during startup sequence" $errors 0
     }
