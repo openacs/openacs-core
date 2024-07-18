@@ -417,7 +417,7 @@ ad_proc -public cr_import_content {
             }
         }
 
-        ns_log notice "TESTIONG ::content::revision::update_content -storage_type $storage_type"
+        #ns_log notice "TESTING ::content::revision::update_content -storage_type $storage_type"
         # insert the content into the database
         ::content::revision::update_content \
             -storage_type $storage_type \
