@@ -8,7 +8,11 @@ ad_library {
 
 aa_register_case \
     -cats {web api smoke production_safe} \
-    -procs {ad_dom_sanitize_html} \
+    -procs {
+        ad_dom_sanitize_html
+        security::locations
+        util_current_location
+    } \
     ad_dom_sanitize_html {
 
     Test if it HTML sanitization works as expected
