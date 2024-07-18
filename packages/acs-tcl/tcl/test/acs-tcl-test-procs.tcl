@@ -91,7 +91,7 @@ aa_register_case \
         db_dml set_test_mount {update apm_package_versions
                                set auto_mount = :auto_mount
                                where version_id = :version_id}
-        }
+    }
 
     set error_p [catch {
         # Add a few test callbacks
@@ -101,10 +101,10 @@ aa_register_case \
                                 values (:version_id, :type, :proc)}
         }
 
-        # Get the xml string
+        # Get the XML string
         set spec [apm_generate_package_spec $version_id]
 
-        # Write xml to file
+        # Write XML to file
         set spec_file_id [open $spec_path w]
         puts $spec_file_id $spec
         close $spec_file_id
