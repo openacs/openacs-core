@@ -17,14 +17,28 @@ aa_register_case \
     } {
         set key __acs_tcl_test_disk_cache
         set id 1234
+        set have_disk_cache_parameter [acs::dc call apm parameter_p -package_key acs_tcl -parameter_name DiskCache]
+
+        if {!$have_disk_cache_parameter} {
+            #
+            # If the optional parameter "DiskCache" is not defined, we
+            # cannot set it. Therefore, there will be errors in the
+            # log file causing the test
+            # "acs_kernel__server_startup_ok" to fail.  Therefore, we
+            # give up in this case.
+            #
+            aa_log "Optional parameter DiskCache is NOT defined"
+            return
+        }
 
         aa_log "Flush everything first"
         acs::disk_cache_flush -key $key -id $id
 
         set cache_p [::parameter::get_from_package_key \
-                       -package_key acs-tcl \
-                       -parameter DiskCache \
-                       -default 1]
+                         -package_key acs-tcl \
+                         -parameter DiskCache \
+                         -default 1]
+        ns_log notice "cache_p $cache_p have_disk_cache_parameter $have_disk_cache_parameter"
 
         try {
             if {!$cache_p} {
