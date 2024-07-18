@@ -27,9 +27,11 @@ aa_register_case \
 
         aa_register_case
         aa_runseries
-        aa_test_start
-        aa_test_running_p
         aa_test_end
+        aa_test_running_p
+        aa_test_start
+        ad_get_external_registries
+        ad_context_node_list
     } \
     webtest_example {
 
