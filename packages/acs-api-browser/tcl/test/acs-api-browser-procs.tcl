@@ -638,7 +638,7 @@ aa_register_case -cats {
         #
         set proc_to_search "ad_proc"
         set param_weight 3
-        ns_log notice "HHHHHHHHHHHHH form_data $form_data"
+        #ns_log notice "HHHHHHHHHHHHH form_data $form_data"
         set d [::acs::test::form_reply \
                     -last_request $d \
                     -url [dict get $form_data @action] \
@@ -648,7 +648,7 @@ aa_register_case -cats {
                     }] \
                     [dict get $form_data fields]]
         set reply [dict get $d body]
-        ns_log notice "HHHHHHHHHHHHH d $d"
+        #ns_log notice "HHHHHHHHHHHHH d $d"
         #
         # Check, if the form was correctly validated.
         #

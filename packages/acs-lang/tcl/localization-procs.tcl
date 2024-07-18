@@ -600,9 +600,9 @@ ad_proc -public lc_time_tz_convert {
         set clock_gmt [clock scan $clock_local -format %s -gmt 1]
         set date_to [clock format $clock_gmt -format {%Y-%m-%d %H:%M:%S} -timezone $to]
     } on error {errmsg} {
-        ad_log notice \
+        ns_log notice \
             "lc_time_tz_convert: '$time_value' from '$from' to '$to' via Tcl returned:" \
-            $errmsg
+            $errmsg "- use DB-based conversion"
 
         #
         # DB-based conversion

@@ -425,7 +425,7 @@ ad_proc -public api_proc_documentation {
         ad_log warning "api_proc_documentation: received invalid proc_name <$proc_name>, try to sanitize"
         regsub -all -- {::::} $proc_name :: proc_name
     }
-    if {[info exists format]} {
+    if {[info exists format] && ![aa_test_running_p]} {
         ad_log warning "-format flag is deprecated and has no effect"
     }
     array set doc_elements {
