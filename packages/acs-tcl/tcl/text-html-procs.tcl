@@ -1621,16 +1621,21 @@ ad_proc -public ad_dom_sanitize_html {
         dom parse -html "${lmarker}${html}${rmarker}" doc
 
     } on error {errorMsg} {
-        set severity [expr {$validate_p ? "notice" : "error"}]
+        set severity [expr {$validate_p ? "notice" : "warning"}]
         if {$fix_p} {
             try {
                 set doc [ad_dom_fix_html -html $html -dom]
             } on error {errorMsg} {
-                ad_log $severity "Fixing of the document failed. Reported error: $errorMsg"
+                if {![aa_test_running_p]} {
+                    ad_log $severity "Fixing of the document failed. Reported error: $errorMsg"
+                }
                 return [expr {$validate_p ? 0 : ""}]
             }
         } else {
-            ad_log $severity "Parsing of the document failed. Reported error: $errorMsg"
+            #ns_log notice "PARSING of\n${lmarker}${html}${rmarker}\n FAILED"
+            if {![aa_test_running_p]} {
+                ad_log $severity "Parsing of the document failed. Reported error: $errorMsg"
+            }
             return [expr {$validate_p ? 0 : ""}]
         }
     }
@@ -1745,7 +1750,6 @@ ad_proc -public ad_dom_sanitize_html {
                     # information from our current location.
                     #
                     set url [ns_absoluteurl $url $current_location]
-
                     if {$no_outer_urls_p && [util::external_url_p $url]} {
                         if {$validate_p} {
                             #

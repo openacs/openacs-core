@@ -1003,7 +1003,7 @@ ad_proc -public callback {
             # During initial startup, a callback implementation might
             # not be loaded yet. Ignore the callback invocation, but
             # inform the admin in the system log about it.
-            #            
+            #
             ns_log notice "callback invocation $callback during startup ignored. " \
                 "The callback implementation might not be loaded yet."
         } else {
@@ -1025,7 +1025,14 @@ ad_proc -public callback {
             }
             1 { # code error - either rethrow the current error or log
                 if {$catch_p} {
-                    ns_log Error "callback $callback error invoking $procname: $ret\n[ad_print_stack_trace]\n"
+                    set msg "callback $callback error invoking $procname: $ret"
+                    if {[aa_test_running_p]} {
+                        set severity warning
+                    } else {
+                        set severity error
+                        append msg \n[ad_print_stack_trace]
+                    }
+                    ns_log $severity $msg
                 } else {
                     return -code $c -errorcode $::errorCode -errorinfo $::errorInfo $ret
                 }
@@ -1056,7 +1063,7 @@ ad_proc -public callback {
 
 
 ad_proc ad_log_deprecated {what oldCmd {newCmd ""}} {
-    
+
     Provide a standardized interface for reporting deprecated ad_procs
     or other artifacts. In some situations, the flag "-deprecated" in
     the proc is not sufficient. When "newCmd" is not specified, this
@@ -1066,7 +1073,7 @@ ad_proc ad_log_deprecated {what oldCmd {newCmd ""}} {
     @param what type of artifact being used (e.g. "proc" or "class")
     @param oldCmd the name of the deprecated command
     @param newCmd replacement command, when specified
-    
+
 } {
     set msg "*** $what $oldCmd is deprecated."
     if {$newCmd eq "" && $what eq "proc"} {
@@ -1085,7 +1092,7 @@ ad_proc ad_log_deprecated {what oldCmd {newCmd ""}} {
     }
     if {$newCmd ne ""} {
         append msg " Use '$newCmd' instead."
-    }      
+    }
     ns_log warning "$msg\n[uplevel ad_get_tcl_call_stack]"
 }
 

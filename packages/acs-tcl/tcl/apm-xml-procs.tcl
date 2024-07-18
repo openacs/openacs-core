@@ -363,10 +363,15 @@ ad_proc -public apm_read_package_info_file { path } {
             }
 
             if {$type ni [apm_supported_callback_types]} {
-                # The callback type is not supported
-                ns_log Error "package info file $path contains an unsupported\
-                    callback type $type - ignoring. Valid values are\
-                    [apm_supported_callback_types]"
+                #
+                # The callback type is not supported.  Report an error
+                # unelss when this happens in the regression test,
+                # where the error condition is tested.
+                #
+                set severity [expr {[aa_test_running_p] ? "warning" : "error"}]
+                ns_log $severity "package info file $path contains an unsupported" \
+                    "callback type '$type' - ignoring. Valid values are" \
+                    [apm_supported_callback_types]
                 continue
             }
 

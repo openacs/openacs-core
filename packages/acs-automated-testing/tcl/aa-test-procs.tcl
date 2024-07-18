@@ -665,7 +665,9 @@ ad_proc -private aa_runseries {
     #
     foreach testcase_id $testcase_ids {
         ns_log notice "========================================= start $testcase_id (Errors: [dict get [ns_logctl stats] Error])"
+        aa_test_start
         aa_run_testcase $testcase_id
+        aa_test_end
         ns_log notice "========================================= end $testcase_id (Errors: [dict get [ns_logctl stats] Error])"
     }
 
