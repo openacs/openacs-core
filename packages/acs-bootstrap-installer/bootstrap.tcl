@@ -21,15 +21,13 @@ if {![info exists ::acs::rootdir]} {
 #     the system log might be spooled to stderr or the like.
 #catch { nsv_set acs_properties initial_error_log_length [file size [ns_info log]] }
 
-catch { nsv_set acs_properties logstats [ns_logctl stats] }
-
 # Initialize proc_doc NSV arrays.
 nsv_set proc_source_file . ""
 
 # Initialize ad_after_server_initialization.
 nsv_set ad_after_server_initialization . ""
 
-ns_log Notice "bootstrap begin encoding [encoding system]"
+ns_log Notice "OpenACS bootstrap begin encoding [encoding system]"
 
 ###
 #

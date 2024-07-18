@@ -19,10 +19,10 @@ foreach init_item [nsv_get ad_after_server_initialization .] {
 
     ns_log "Notice" "Executing initialization code block $init(name) in $init(script)"
     if { [llength $init(args)] == 1 } {
-	set init(args) [lindex $init(args) 0]
+        set init(args) [lindex $init(args) 0]
     }
     if { [catch $init(args) error] } {
-	ns_log "Error" "Error executing initialization code block $init(name) in $init(script): $::errorInfo"
+        ns_log "Error" "Error executing initialization code block $init(name) in $init(script): $::errorInfo"
     }
 }
 
@@ -30,10 +30,10 @@ foreach init_item [nsv_get ad_after_server_initialization .] {
 # The __is_xql helper function is used to filter out just the xql files.
 #
 # It should return true for directories it should descend as well
-# If you had a large static tree with no .xql files you could return 0 on 
+# If you had a large static tree with no .xql files you could return 0 on
 # the subdirectory and it would not be searched.
 
-proc __is_xql {arg} { 
+proc __is_xql {arg} {
     return [expr {[file isdirectory $arg] || [file extension $arg] eq ".xql"}]
 }
 
@@ -47,11 +47,20 @@ foreach dir {www tcl} {
     ns_log Notice "QD=Postload files to load from $dir: $files"
 
     foreach file $files {
-	db_qd_load_query_file $file
+        db_qd_load_query_file $file
     }
 }
 
 nsv_unset ad_after_server_initialization .
+ns_log notice "QD=Postload initialize logstats from startup: [ns_logctl stats]"
+if {[catch { nsv_set acs_properties logstats [ns_logctl stats] }]} {
+    #
+    # Must be a very old version of NaviServer running (before 4.99.7, Feb 2015)
+    #
+    ns_log warning "Running apparently a very old version of NaviServer." \
+        "Please upgrade for better function coverage!"
+    nsv_set acs_properties logstats {Error 0}
+}
 
 # Local variables:
 #    mode: tcl
