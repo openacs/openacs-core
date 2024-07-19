@@ -25,6 +25,7 @@ ad_proc -private ::install::xml::action::enable-locale { node } {
 } {
     set locale [apm_required_attribute_value $node locale]
     lang::system::locale_set_enabled -locale $locale -enabled_p t
+    lang::catalog::import -locales $locale
 }
 
 ad_proc -private ::install::xml::action::disable-locale { node } {
