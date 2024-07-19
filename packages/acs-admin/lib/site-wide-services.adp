@@ -1,12 +1,12 @@
 <ul>
   <li><a href="@acs_admin_url@users">Users</a>
   <li><a href="subsites">Subsites</a> (@nr_subsites@)</li>
+  <li><a href="@acs_lang_admin_url@">Internationalization/Localization</a>
   <if @cluster_enabled_p@ true><li><a href="cluster">Cluster Nodes</li></if>
   <li>OpenACS Packages
     <ul>
     <li><a href="@acs_admin_url@apm">Package Manager</a>
     <li><a href="@acs_admin_url@install/">Install or Upgrade Packages</a>
-    <li><a href="@acs_lang_admin_url@">Internationalization/Localization</a>
     </ul>
   <li><a href="developer">Developer Tools</a>
   <if @acs_lang_admin_url@ not nil>
