@@ -946,9 +946,9 @@ namespace eval ::acs {
             # Cache the result of the upstream implementation of
             # get_package_url in the acs::site_nodes_cache.
             #
-            # Note: The cache value from the following method is
-            # currently not flushed, but just used for package
-            # keys, not instances, so it should be safe.
+            # Note: the cache value from the following method must
+            # currently be explicitly flushed. We do that, for
+            # instance, when we mount a new package.
             #
             ::acs::site_nodes_cache eval -partition_key 0 package_url-$package_key { next }
         }
@@ -1223,6 +1223,13 @@ ad_proc -public site_node::mount {
         get_children-$parent_node_id-*
     ::acs::site_nodes_children_cache flush \
         -partition_key $parent_node_id has_children-$parent_node_id
+    #
+    # This may be the first instance of this particular package.
+    #
+    ::acs::site_nodes_cache flush \
+        -partition_key 0 \
+        package_url-[apm_package_key_from_id $object_id]
+
 
     #
     # DAVEB: update context_id if it is passed in some code relies
