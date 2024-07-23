@@ -4080,14 +4080,12 @@ namespace eval util::resources {
         @author Gustaf Neumann
     } {
         set installed 1
-        set version_dir [version_dir \
-                             -version_dir $version_dir \
-                             -resource_info $resource_info]
         set resource_dir [dict get $resource_info resourceDir]
+        #ns_log notice "check downloadURLs <[dict exists $resource_info downloadURLs]> // [lsort [dict keys $resource_info]]"
+
         set downloadFiles {}
-        ns_log notice "check downloadURLs <[dict exists $resource_info downloadURLs]> // [lsort [dict keys $resource_info]]"
         if {[dict exists $resource_info downloadURLs]} {
-            ns_log notice "we have downloadURLs <[dict get $resource_info downloadURLs]>"
+           # ns_log notice "we have downloadURLs <[dict get $resource_info downloadURLs]>"
             foreach url [dict get $resource_info downloadURLs] {
                 lappend downloadFiles [ad_file tail $url]
             }
@@ -4098,14 +4096,16 @@ namespace eval util::resources {
                        [dict get $resource_info extraFiles] \
                        $downloadFiles \
                       ]
-        ns_log notice "check files <$files>"
+        #ns_log notice "check files <$files>"
+
         foreach file $files {
             if {$version_dir eq ""} {
                 set path $resource_dir/$file
             } else {
                 set path $resource_dir/$version_dir/$file
             }
-            if {![ad_file readable $path/]} {
+            #ns_log notice "... check $path -> [ad_file readable $path]"
+            if {![ad_file readable $path]} {
                 set installed 0
                 break
             }
@@ -4175,7 +4175,7 @@ namespace eval util::resources {
         return $version_dir
     }
 
-    ad_proc -private ::util::resources::download_helper {
+    ad_proc ::util::resources::download_helper {
         -url
     } {
         Helper for ::util::resources::download, since some download
@@ -4183,7 +4183,6 @@ namespace eval util::resources {
 
         @result dict as returned by ns_http.
     } {
-        #set result [util::http::get -url $url -spool]
         set host [dict get [ns_parseurl $url] host]
         set result [ns_http run -hostname $host -spoolsize 1 $url]
         set fn ""
@@ -4317,6 +4316,31 @@ namespace eval util::resources {
                 file rename -force -- $fn $local_path/$file
             }
         }
+    }
+
+    ad_proc -public ::util::resources::version_dir {
+        -resource_info
+        -version
+    } {
+        Return the partial directory, where a certain version is/will be installed.
+    } {
+        return [expr {
+                      [dict exists $resource_info versionDir]
+                      ? [dict get $resource_info versionDir]
+                      : $version
+                  }]
+    }
+
+    ad_proc -public ::util::resources::cdnjs_version_API {
+        {-library:required}
+        {-count:int 1}
+    } {
+
+        Return a link to the version API of cdnjs. The "-library" is
+        the name under which the package is available from cdnjs.
+
+    } {
+        return https://api.cdnjs.com/libraries?search=$library&search_fields=name&fields=filename,description,version&limit=$count
     }
 }
 
