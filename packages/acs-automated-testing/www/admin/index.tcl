@@ -20,8 +20,8 @@ ad_page_contract {
     quiet:onevalue
     global_test_coverage_color
 }
-set doc(title) "System test cases"
-set context ""
+set doc(title) "Test cases"
+set context "Packages"
 
 set return_url [ad_return_url]
 set coverage_url [export_vars -base proc-coverage {{package_key $by_package_key}}]
