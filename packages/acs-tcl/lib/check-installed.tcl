@@ -17,12 +17,10 @@ ad_include_contract {
 set resource_dir  [dict get $resource_info resourceDir]
 set cdn           [dict get $resource_info cdn]
 set resource_name [dict get $resource_info resourceName]
+set version_dir [::util::resources::version_dir \
+                     -resource_info $resource_info \
+                     -version $version]
 
-set version_dir [expr {
-                       [dict exists $resource_info versionDir]
-                       ? [dict get $resource_info versionDir]
-                       : $version
-                   }]
 if {[dict exists $resource_info versionCheckURL]} {
     set versionCheckURL [dict get $resource_info versionCheckURL]
 }
