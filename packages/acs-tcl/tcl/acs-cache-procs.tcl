@@ -74,7 +74,7 @@ namespace eval ::acs {
             #
             # NaviServer variant
             #
-            :public method eval {{-partition_key} {-expires:integer} {-timeout:integer} {-per_request:switch} key command} {
+            :public method eval {{-partition_key} {-expires} {-timeout} {-per_request:switch} key command} {
                 #
                 # Evaluate the command unless it is cached.
                 #
@@ -160,7 +160,7 @@ namespace eval ::acs {
             #
             # AOLserver variant
             #
-            :public method eval {{-partition_key} {-expires:integer}  {-timeout:integer} {-per_request:switch} key command} {
+            :public method eval {{-partition_key} {-expires}  {-timeout} {-per_request:switch} key command} {
                 #
                 # ignore "-expires", since not supported by AOLserver
                 # ignore "-timeout", since not supported by AOLserver
@@ -598,7 +598,7 @@ namespace eval ::acs {
             return [uplevel 1 [list $cache $operation {*}$args]]
         } else {
             if {$operation eq "eval"} {
-                nsf::parseargs {{-partition_key} {-expires:integer} {-per_request:switch} key command} $args
+                nsf::parseargs {{-partition_key} {-expires} {-per_request:switch} key command} $args
                 ns_log warning "no cache $cache: need direct call $key $args"
                 #ns_log warning "no cache $cache: need direct call $key [info exists partition_key] <$command>"
                 return [uplevel 1 $command]
