@@ -7,8 +7,8 @@ ad_library {
 aa_register_case \
     -cats {api smoke} \
     -procs {
-        acs::disk_cache_eval
-        acs::disk_cache_flush
+        util::json2dict
+        util::tdomNodes2dict
     } \
     json_to_dict {
 
