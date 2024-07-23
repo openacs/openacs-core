@@ -627,12 +627,12 @@ namespace eval ::acs {
         -id:required
     } {
         Flushes the filesystem cache.
-        
+
         @param key the key used to name the directory where the disk cache
                is stored.
         @param id the id used to name the file where the disk cache is
                stored.
-        
+
         @see acs::disk_cache_eval
     } {
         set dir [ad_tmpdir]/oacs-cache/$key
