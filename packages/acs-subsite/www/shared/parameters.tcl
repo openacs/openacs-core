@@ -10,6 +10,14 @@ ad_page_contract {
     {scope "instance"}
     {return_url:localurl,optional "[ad_conn url]?[ad_conn query]"}
     {section ""}
+    {scroll_to:word ""}
+}
+
+if {$scroll_to ne ""} {
+    add_body_handler -event load -script [subst -nocommands {        
+        const scrollTarget = document.querySelectorAll('#$scroll_to')[0];
+        window.scrollTo(0, scrollTarget.offsetTop - 90);
+    }]
 }
 
 if { $scope eq "global" } {
