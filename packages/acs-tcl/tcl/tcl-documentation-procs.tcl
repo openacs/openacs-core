@@ -235,10 +235,10 @@ ad_proc -private ad_page_contract_parse_argspec {arg_spec} {
                        however, because parenthesys ")" and "(" and
                        pipe "|" are separators in the argspec syntax,
                        they need to be escaped via the character backslash (\)
-    </ul>                                                      
+    </ul>
 
     Examples of valid argspecs:
-                                                                            
+
 <pre>
     - my_page_parameter
     - my_page_parameter:integer
@@ -2435,7 +2435,7 @@ ad_page_contract_filter token { name value } {
 }
 
 ad_page_contract_filter safetclchars { name value } {
-    
+
     Checks whether the value contains just characters, which can be
     used safely in a Tcl eval or subst command. This means, that the characters
     '$', '[', ']' and '\' disallowed,.
@@ -2503,6 +2503,10 @@ ad_page_contract_filter localurl { name value } {
 
     if { $value eq "" || [util::external_url_p $value]} {
         ad_complain [_ acs-tcl.lt_name_is_not_valid]
+        return 0
+    }
+    set d [ns_parseurl $url]
+    if {[dict exists $d proto] && [dict get $d proto] ni {http https}} {
         return 0
     }
     return 1
