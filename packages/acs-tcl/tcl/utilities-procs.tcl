@@ -4127,10 +4127,6 @@ namespace eval util::resources {
         @author Gustaf Neumann
     } {
         set can_install 1
-        set version_dir [version_dir \
-                             -version_dir $version_dir \
-                             -resource_info $resource_info]
-
         set resource_dir [dict get $resource_info resourceDir]
 
         if {![ad_file isdirectory $resource_dir]} {
@@ -4225,11 +4221,17 @@ namespace eval util::resources {
 
         @author Gustaf Neumann
     } {
-        set resource_dir [dict get $resource_info resourceDir]
-        set version_dir [version_dir \
-                             -version_dir $version_dir \
-                             -resource_info $resource_info]
+        #
+        #   "resourceDir" is the absolute path in the filesystem
+        #   "resourceUrl" is the URL path provided to the request processor
+        #   "versionDir" is the version-specific element both in the
+        #                URL and in the filesystem.
 
+        if {$version_dir eq ""} {
+            set version_dir [dict get $resource_info versionDir]
+        }
+
+        set resource_dir [dict get $resource_info resourceDir]
         set can_install [::util::resources::can_install_locally \
                              -resource_info $resource_info \
                              -version_dir $version_dir]
@@ -4319,8 +4321,8 @@ namespace eval util::resources {
     }
 
     ad_proc -public ::util::resources::version_dir {
-        -resource_info
-        -version
+        -resource_info:required
+        -version:required
     } {
         Return the partial directory, where a certain version is/will be installed.
     } {
@@ -4330,6 +4332,47 @@ namespace eval util::resources {
                       : $version
                   }]
     }
+
+    ad_proc -public ::util::resources::cdnjs_get_newest_version {
+        {-resource_info:required}
+    } {
+
+        Return the newest version for the library denoted by
+        'resource_info' from cdnjs.
+
+    } {
+        set version unknown
+
+        if {![dict exists $resource_info versionCheckAPI]} {
+            return $version
+        }
+        set versionCheckAPI [dict get $resource_info versionCheckAPI]
+        dict with resource_info {
+            set library [dict get $versionCheckAPI library]
+            #ns_log notice ... versionCheckAPI $versionCheckAPI installedVersion $installedVersion
+            if {[dict get $versionCheckAPI cdn] eq "cdnjs"} {
+                set jsonDict [::acs::misc_cache eval -expires 3600 acs-tcl.version_from_cdnjs-$library {
+                    set apiURL [::util::resources::cdnjs_version_API \
+                                    -library $library \
+                                    -count [dict get $versionCheckAPI count]]
+                    ns_log notice "... $library get [dict get $versionCheckAPI count] entries from $apiURL"
+                    set d [ns_http run $apiURL]
+                    set jsonDict [util::json2dict [dict get $d body]]
+                }]
+                #ns_log notice "=== jsonDict $library: $jsonDict"
+                foreach entry [dict get $jsonDict results] {
+                    #ns_log notice "... $library compare with '[dict get $entry name]' -> [expr {[dict get $entry name] eq $library}]"
+                    if {[dict get $entry name] eq $library} {
+                        set version [dict get $entry version]
+                        break
+                    }
+                }
+            }
+        }
+        return $version
+    }
+
+
 
     ad_proc -public ::util::resources::cdnjs_version_API {
         {-library:required}

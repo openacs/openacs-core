@@ -11,18 +11,26 @@ ad_include_contract {
 } {
     {resource_info}
     {version ""}
-    {download_url "download"}
+    {download_url ""}
 }
 
 set resource_dir  [dict get $resource_info resourceDir]
 set cdn           [dict get $resource_info cdn]
 set resource_name [dict get $resource_info resourceName]
+if {$download_url eq ""} {
+    set download_url [ad_conn url]/download
+}
+
 set version_dir [::util::resources::version_dir \
                      -resource_info $resource_info \
                      -version $version]
 
-if {[dict exists $resource_info versionCheckURL]} {
-    set versionCheckURL [dict get $resource_info versionCheckURL]
+set newest_version [::util::resources::cdnjs_get_newest_version -resource_info $resource_info]
+
+foreach url {versionCheckURL vulnerabilityCheckURL} {
+    if {[dict exists $resource_info $url]} {
+        set $url [dict get $resource_info $url]
+    }
 }
 
 #
@@ -42,8 +50,9 @@ if {$is_installed} {
     # Check, if we can install the resources locally.
     #
     set writable [util::resources::can_install_locally \
-              -resource_info $resource_info \
-              -version_dir $version_dir]
+                      -resource_info $resource_info \
+                      -version_dir $version_dir]
+    
     if {!$writable} {
         #
         # If we cannot install locally, tell the user were we want to
