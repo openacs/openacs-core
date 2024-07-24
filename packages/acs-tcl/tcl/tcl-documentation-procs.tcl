@@ -2505,7 +2505,7 @@ ad_page_contract_filter localurl { name value } {
         ad_complain [_ acs-tcl.lt_name_is_not_valid]
         return 0
     }
-    set d [ns_parseurl $url]
+    set d [ns_parseurl $value]
     if {[dict exists $d proto] && [dict get $d proto] ni {http https}} {
         return 0
     }
