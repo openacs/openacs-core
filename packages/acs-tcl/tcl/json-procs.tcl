@@ -681,9 +681,15 @@ ad_proc -private util::tdomNodes2dict { nodes } {
                     lappend result $childrendValue
                 }
             }
-            NONE -
-            ARRAY {
+            NONE {
                 lappend result [$n nodeName] $childrendValue
+            }
+            ARRAY {
+                if {[$n nodeName] ne "arraycontainer"} {
+                    lappend result [$n nodeName] $childrendValue
+                } else {
+                    lappend result $childrendValue
+                }
             }
             default {
                 set op [expr {[llength $nodes] > 1 ? "lappend" : "set"} ]

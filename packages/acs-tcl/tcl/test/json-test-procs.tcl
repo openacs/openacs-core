@@ -29,6 +29,13 @@ aa_register_case \
             "Schlagworte": ["Wirtschaftsinformatik", "Einführung"]
         }}
         set jsonDict [util::json2dict $json]
-        aa_equals cdnjs-API $jsonDict {Verlag {De Gruyter} Auflage {nr 1 jahr 2020} Autor {{Vorname {Hans Robert} Familienname Hansen} {Vorname {Jan } Familienname Mendling} {Vorname Gustaf Familienname Neumann}} Schlagworte {Wirtschaftsinformatik Einführung}}
+        aa_equals with-object-container $jsonDict {Verlag {De Gruyter} Auflage {nr 1 jahr 2020} Autor {{Vorname {Hans Robert} Familienname Hansen} {Vorname {Jan } Familienname Mendling} {Vorname Gustaf Familienname Neumann}} Schlagworte {Wirtschaftsinformatik Einführung}}
 
+
+        set json {{
+            "Titel": "Wirtschaftsinformatik",
+            "Schlagworte": [["hello","world"], "Einführung"]
+        }}
+        set jsonDict [util::json2dict $json]
+        aa_equals with-array-container $jsonDict {Titel Wirtschaftsinformatik Schlagworte {{hello world} Einführung}}
     }
