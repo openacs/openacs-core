@@ -2644,7 +2644,7 @@ if {[namespace which ns_driver] ne ""} {
         @see util_driver_info
 
     } {
-        set protos {http 80 https 433}
+        set protos {http 80 https 443}
         set result {}
         foreach i [ns_driver info] {
             set type     [dict get $i type]
