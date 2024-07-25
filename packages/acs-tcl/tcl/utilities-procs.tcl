@@ -4333,6 +4333,44 @@ namespace eval util::resources {
                   }]
     }
 
+    ad_proc -private ::util::resources::http_get_with_default {
+        -url:required
+        -key:required
+        {-expires 5m}
+        {-default {}}
+    } {
+
+        Run an HTTP request, which might not be always possible (e.g.,
+        when the site has no Internet connection). Therefore, the call
+        will return a default value. This function is to be called for
+        non-essential calls, like e.g. obtaining the newest version of
+        library, etc. The result is cached by defailt for 5 minutes.
+
+        @param url URL for the GET request
+        @param key cache key
+        @param expires time how long the entry is to be cached
+        @param default
+        @return body of the request
+    } {
+        try {
+            ::acs::misc_cache eval -expires $expires acs-tcl.get_with_default-$key {
+                set d [ns_http run $url]
+                if {[dict get $d status] ne 200} {
+                    ns_log warning "request to $url led to unexpected status code: [dict get $d status]"
+                    set result $default
+                    break
+                } else {
+                    set result [dict get $d body]
+                }
+            }
+        } on ok {result} {
+        } on error {errorMsg} {
+            ns_log warning "request to $url led to: $errorMsg"
+            set result $default
+        }
+        return $result
+    }
+
     ad_proc -public ::util::resources::cdnjs_get_newest_version {
         {-resource_info:required}
     } {
@@ -4351,14 +4389,14 @@ namespace eval util::resources {
             set library [dict get $versionCheckAPI library]
             #ns_log notice ... versionCheckAPI $versionCheckAPI installedVersion $installedVersion
             if {[dict get $versionCheckAPI cdn] eq "cdnjs"} {
-                set jsonDict [::acs::misc_cache eval -expires 3600 acs-tcl.version_from_cdnjs-$library {
-                    set apiURL [::util::resources::cdnjs_version_API \
-                                    -library $library \
-                                    -count [dict get $versionCheckAPI count]]
-                    ns_log notice "... $library get [dict get $versionCheckAPI count] entries from $apiURL"
-                    set d [ns_http run $apiURL]
-                    set jsonDict [util::json2dict [dict get $d body]]
-                }]
+                set url [::util::resources::cdnjs_version_API \
+                             -library $library \
+                             -count [dict get $versionCheckAPI count]]
+                set json [http_get_with_default \
+                              -url $url \
+                              -key versionCheck-$library \
+                              -default {{"results": ""}}]
+                set jsonDict [util::json2dict $json]
                 #ns_log notice "=== jsonDict $library: $jsonDict"
                 foreach entry [dict get $jsonDict results] {
                     #ns_log notice "... $library compare with '[dict get $entry name]' -> [expr {[dict get $entry name] eq $library}]"
@@ -4371,8 +4409,6 @@ namespace eval util::resources {
         }
         return $version
     }
-
-
 
     ad_proc -public ::util::resources::cdnjs_version_API {
         {-library:required}

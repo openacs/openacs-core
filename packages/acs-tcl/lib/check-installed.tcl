@@ -27,7 +27,45 @@ set version_dir [::util::resources::version_dir \
 
 set newest_version [::util::resources::cdnjs_get_newest_version -resource_info $resource_info]
 
-foreach url {versionCheckURL vulnerabilityCheckURL} {
+#
+# In case, we have an explicit versionCheckURL, use this.
+# Otherwise, try to derive it from the versionCheckAPI
+#
+if {[dict exists $resource_info versionCheckURL]} {
+    set versionCheckURL [dict get $resource_info versionCheckURL]
+} elseif {[dict exists $resource_info versionCheckAPI]} {
+    set versionCheckAPI [dict get $resource_info versionCheckAPI]
+    dict with versionCheckAPI {
+        if {$cdn eq "cdnjs"} {
+            set versionCheckURL https://cdnjs.com/libraries/$library
+        }
+    }
+}
+
+ns_log notice "vulnerabilityCheck: [dict exists $resource_info vulnerabilityCheck]"
+if {[dict exists $resource_info vulnerabilityCheck]} {
+    set vulnerabilityCheck [dict get $resource_info vulnerabilityCheck]
+    dict with vulnerabilityCheck {
+        switch $service {
+            snyk {
+                set vulnerabilityCheckURL https://snyk.io/advisor/npm-package/$library
+                set vulnerabilityCheckVersionURL https://security.snyk.io/package/npm/$library/$version
+                set page [::util::resources::http_get_with_default \
+                              -url $vulnerabilityCheckVersionURL \
+                              -key snyk-$library/$version]
+                if {$page eq ""} {
+                    unset vulnerabilityCheckVersionURL
+                    ns_log notice "vulnerabilityCheck: request failed $vulnerabilityCheckVersionURL"
+                } else {
+                    ns_log notice "vulnerabilityCheck: keep vulnerabilityCheckVersionURL $vulnerabilityCheckVersionURL"
+                }
+            }
+            default "vulnerabilityCheck: unknown service '$service'"
+        }
+    }
+}
+
+foreach url {versionCheckURL vulnerabilityCheck} {
     if {[dict exists $resource_info $url]} {
         set $url [dict get $resource_info $url]
     }

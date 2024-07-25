@@ -1,7 +1,12 @@
 <p>
 The configured version of @resource_name@ is @version@ (newest on cdnjs: @newest_version@).<br>
 <if @versionCheckURL@ not nil>You might check for various versions <a href="@versionCheckURL@">available upstream</a>. </if>
-<if @vulnerabilityCheckURL@ not nil>For this package Snyk provides a <a href="@vulnerabilityCheckURL@">vulnerability check</a>. </if>
+<if @vulnerabilityCheckURL@ not nil><br>Snyk provides
+  <if @vulnerabilityCheckVersionURL@ not nil>a
+  vulnerability check for version <a href="@vulnerabilityCheckVersionURL@">@version@</a> and
+</if>
+  checks for <a href="@vulnerabilityCheckURL@">all released versions</a> of @resource_name@. 
+</if>
 
 <if @resources@ not nil><p>The configured version of @resource_name@ is installed locally
 under <strong>@resources@</strong>.</if>
