@@ -258,11 +258,11 @@ ad_proc -public permission::write_permission_p {
     {-party_id ""}
     {-creation_user ""}
 } {
-    Returns whether a user is allowed to edit an object.
-    The logic is that you must have either write permission,
-    or you must be the one who created the object.
+    Returns whether a party is allowed to edit an object.
+    The logic is that this party must have either write permission,
+    or it must be the one who created the object.
 
-    @param object_id     The object you want to check write permissions for
+    @param object_id     The object you want to check write permissions for.
 
     @param party_id      The party to have or not have write permission.
 
@@ -273,10 +273,13 @@ ad_proc -public permission::write_permission_p {
 
     @see permission::require_write_permission
 } {
+    if { $party_id eq "" } {
+        set party_id [ad_conn user_id]
+    }
     if { $creation_user eq "" } {
         set creation_user [acs_object::get_element -object_id $object_id -element creation_user]
     }
-    if { [ad_conn user_id] == $creation_user } {
+    if { $party_id == $creation_user } {
         return 1
     }
     if { [permission::permission_p -privilege write -object_id $object_id -party_id $party_id] } {
