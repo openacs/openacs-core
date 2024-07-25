@@ -500,6 +500,7 @@ ad_proc -private package_object_view_helper {
     for { set i 0 } { $i < [llength $primary_keys] - 1 } { incr i } {
         lappend pk_formatted "[lindex $primary_keys $i] = [lindex $primary_keys $i+1]"
     }
+    set where_clause ""
     if {[llength $pk_formatted] > 0} {
         set where_clause [join [string tolower $pk_formatted] "\n   AND "]
         set where_clause " WHERE $where_clause"
