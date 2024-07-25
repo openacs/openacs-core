@@ -653,16 +653,25 @@ ad_proc util::json::indent {
     return [join $output \n]
 }
 
+ad_proc util::tdomDoc2dict {doc} {
+    
+    Helper proc for util::json2dict, which outputsreturns the provided
+    tDOM document in the form of a Tcl dict.
+    
+} {
+    return [util::tdomNodes2dict [$doc childNodes] [$doc jsonType]]
+}
 
-ad_proc -private util::tdomNodes2dict { nodes } {
 
-    Helper proc for util::json2dict, which outputs the tDOM structure
+ad_proc -private util::tdomNodes2dict { nodes parentType } {
+
+    Helper proc for util::json2dict, which returns the tDOM structure
     in the form of a Tcl dict.
 
     Use this proc only on dom structures created with "porse -json",
     since it depends on the internal node structure of tDOM. It would
     be certainly better to have this function built-in in tDOM (call
-    like "asDict", similar to "asXML")
+                                                                like "asDict", similar to "asXML")
 
     @return dict
     @author Gustaf Neumann
@@ -670,16 +679,15 @@ ad_proc -private util::tdomNodes2dict { nodes } {
     set result ""
     foreach n $nodes {
         set children [$n childNodes]
-        #puts "tdomNodes2dict $n [$n jsonType] [$n nodeName] <[$n nodeValue]> #children [llength $children]"
-        set childrendValue [tdomNodes2dict $children]
+        set jsonType [$n jsonType]
+        set childrendValue [util::tdomNodes2dict $children $jsonType]
 
-        switch [$n jsonType] {
+        switch $jsonType {
             OBJECT {
-                if {[$n nodeName] ne "objectcontainer"} {
-                    lappend result [$n nodeName] $childrendValue
-                } else {
-                    lappend result $childrendValue
+                if {[$n nodeName] ne "objectcontainer" || $parentType eq "OBJECT"} {
+                    lappend result [$n nodeName]
                 }
+                lappend result $childrendValue
             }
             NONE {
                 lappend result [$n nodeName] $childrendValue
@@ -697,7 +705,6 @@ ad_proc -private util::tdomNodes2dict { nodes } {
             }
         }
     }
-    #puts "tdomNodes2dict returns <$result>"
     return $result
 }
 
@@ -715,7 +722,7 @@ ad_proc util::json2dict { jsonText } {
     @author Gustaf Neumann
 } {
     #ns_log notice "PARSE\n$jsonText"
-    return [util::tdomNodes2dict [[dom parse -json $jsonText] childNodes]]
+    return [util::tdomDoc2dict [dom parse -json $jsonText]]
 }
 
 # Local variables:

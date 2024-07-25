@@ -38,4 +38,12 @@ aa_register_case \
         }}
         set jsonDict [util::json2dict $json]
         aa_equals with-array-container $jsonDict {Titel Wirtschaftsinformatik Schlagworte {{hello world} Einführung}}
+
+        set json {{
+            "Titel": "Wirtschaftsinformatik",
+            "nested": {"a":1, "b":{"o1":1,"o2":2}, "objectcontainer": {"o3":3,"o4":4}},
+            "objectcontainer": {"a":"b","c":"d"}
+        }}
+        set jsonDict [util::json2dict $json]
+        aa_equals literal-objectcontainer $jsonDict {Titel Wirtschaftsinformatik nested {a 1 b {o1 1 o2 2} objectcontainer {o3 3 o4 4}} objectcontainer {a b c d}}
     }
