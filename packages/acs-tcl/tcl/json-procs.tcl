@@ -693,11 +693,10 @@ ad_proc -private util::tdomNodes2dict { nodes parentType } {
                 lappend result [$n nodeName] $childrendValue
             }
             ARRAY {
-                if {[$n nodeName] ne "arraycontainer"} {
-                    lappend result [$n nodeName] $childrendValue
-                } else {
-                    lappend result $childrendValue
-                }
+               if {[$n nodeName] ne "arraycontainer" || $parentType eq "OBJECT"} {
+                   lappend result [$n nodeName]
+               }
+                lappend result $childrendValue
             }
             default {
                 set op [expr {[llength $nodes] > 1 ? "lappend" : "set"} ]
