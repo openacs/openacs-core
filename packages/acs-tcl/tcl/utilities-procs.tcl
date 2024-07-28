@@ -4214,7 +4214,6 @@ namespace eval util::resources {
         # Keys in resource_info:
         #
         #   "resourceDir" is the absolute path in the filesystem
-        #   "resourceUrl" is the URL path provided to the request processor
         #   "versionSegment" is the optional version-specific element both in the
         #                URL and in the filesystem.
         #
