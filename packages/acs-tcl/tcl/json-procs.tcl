@@ -721,7 +721,7 @@ ad_proc util::json2dict { jsonText } {
     @author Gustaf Neumann
 } {
     #ns_log notice "PARSE\n$jsonText"
-    return [util::tdomDoc2dict [dom parse -json $jsonText]]
+    return [util::tdomDoc2dict [dom parse -json -- $jsonText]]
 }
 
 # Local variables:
