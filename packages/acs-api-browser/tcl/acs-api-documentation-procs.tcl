@@ -1258,7 +1258,7 @@ namespace eval ::apidoc {
         # make parsable XML, replace "partialquery" by "fullquery"
         set prepared_content [db_qd_prepare_queryfile_content $content]
 
-        dom parse -simple $prepared_content doc
+        dom parse -simple -- $prepared_content doc
         $doc documentElement root
         set result ""
         foreach q [$root selectNodes //fullquery] {

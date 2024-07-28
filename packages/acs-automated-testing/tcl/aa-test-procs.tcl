@@ -1701,7 +1701,7 @@ namespace eval acs::test {
     } {
         upvar $var root
         try {
-            dom parse -html $html doc
+            dom parse -html -- $html doc
         } on error {errorMsg} {
             ns_log error "Failed to parse the following HTML text with message: $errorMsg\n$html"
         }

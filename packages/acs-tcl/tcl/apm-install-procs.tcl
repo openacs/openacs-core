@@ -2214,7 +2214,7 @@ ad_proc -public apm_get_repository_channels { {repository_url https://openacs.or
     }
     set repositories ""
 
-    dom parse -html -simple [dict get $result page] doc
+    dom parse -html -simple -- [dict get $result page] doc
     $doc documentElement root
     foreach node [$root selectNodes {//ul/li/a}] {
         set href [$node getAttribute href]

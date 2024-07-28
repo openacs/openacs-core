@@ -1223,7 +1223,7 @@ aa_register_case \
             set rfd [open $f r]
             set xml [read $rfd]
             close $rfd
-            aa_false "Catalog file '$f' apears to be valid XML" [catch {dom parse $xml doc}]
+            aa_false "Catalog file '$f' apears to be valid XML" [catch {dom parse -- $xml doc}]
         }
     }
 

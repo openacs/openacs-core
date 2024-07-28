@@ -46,9 +46,9 @@ ad_proc -public xml_parse {
     @return parsed document object handle
 } {
     if {$persist_p} {
-        return [dom parse -simple $xml]
+        return [dom parse -simple -- $xml]
     } else {
-        dom parse -simple $xml doc
+        dom parse -simple -- $xml doc
         return $doc
     }
 }

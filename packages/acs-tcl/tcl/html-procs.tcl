@@ -35,7 +35,7 @@ ad_proc -public util::html::get_forms {
     @return Form specification as a nested list of lists in array get form
 } {
     # Parse document
-    dom parse -html -keepEmpties $html doc
+    dom parse -html -keepEmpties -- $html doc
     set root [$doc documentElement]
 
     set forms [list]

@@ -192,7 +192,7 @@ aa_register_case \
 
                 aa_log "Server responded with: $json_response"
 
-                set root [dom parse -json $json_response]
+                set root [dom parse -json -- $json_response]
                 set resp_key ""
                 set resp_value ""
                 foreach node [$root childNodes] {
@@ -221,7 +221,7 @@ aa_register_case \
 
                 aa_log "Server responded with: $json_response"
 
-                set root [dom parse -json $json_response]
+                set root [dom parse -json -- $json_response]
                 set resp_key ""
                 set resp_value ""
                 foreach node [$root childNodes] {

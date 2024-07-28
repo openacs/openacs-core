@@ -1618,7 +1618,7 @@ ad_proc -public ad_dom_sanitize_html {
     set rmarker "</root>"
 
     try {
-        dom parse -html "${lmarker}${html}${rmarker}" doc
+        dom parse -html -- "${lmarker}${html}${rmarker}" doc
 
     } on error {errorMsg} {
         set severity [expr {$validate_p ? "notice" : "warning"}]
