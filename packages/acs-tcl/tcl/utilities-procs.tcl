@@ -4067,20 +4067,20 @@ namespace eval util::resources {
 
     ad_proc -public ::util::resources::is_installed_locally {
         -resource_info:required
-        {-version_dir ""}
+        {-version_segment ""}
     } {
 
         Check, if the required resource files are installed locally.
-        When there should not be a version_dir segment used, provide
+        When there should not be a version_segment segment used, provide
         an empty one via resource_info.
 
         @param resource_info a dict containing resourceDir, cssFiles, jsFiles, and extraFiles
-        @param version_dir an optional directory, under the resource directory
+        @param version_segment an optional directory, under the resource directory
 
         @author Gustaf Neumann
     } {
-        if {$version_dir eq ""} {
-            set version_dir [::util::resources::version_dir -resource_info $resource_info]
+        if {$version_segment eq ""} {
+            set version_segment [::util::resources::version_segment -resource_info $resource_info]
         }
         
         set installed 1
@@ -4103,10 +4103,10 @@ namespace eval util::resources {
         #ns_log notice "check files <$files>"
 
         foreach file $files {
-            if {$version_dir eq ""} {
+            if {$version_segment eq ""} {
                 set path $resource_dir/$file
             } else {
-                set path $resource_dir/$version_dir/$file
+                set path $resource_dir/$version_segment/$file
             }
             #ns_log notice "... check $path -> [ad_file readable $path]"
             if {![ad_file readable $path]} {
@@ -4119,14 +4119,14 @@ namespace eval util::resources {
 
     ad_proc -public ::util::resources::can_install_locally {
         {-resource_info:required}
-        {-version_dir ""}
+        {-version_segment ""}
     } {
 
         Check, whether the operating system's permissions allow us to
         install in the configured directories.
 
         @param resource_info a dict containing at least resourceDir
-        @param version_dir an optional directory, under the resource directory
+        @param version_segment an optional directory, under the resource directory
 
         @author Gustaf Neumann
     } {
@@ -4140,8 +4140,8 @@ namespace eval util::resources {
                 set can_install 0
             }
         }
-        if {$can_install && $version_dir ne ""} {
-            set path $resource_dir/$version_dir
+        if {$can_install && $version_segment ne ""} {
+            set path $resource_dir/$version_segment
             if {![ad_file isdirectory $path]} {
                 try {
                     file mkdir $path
@@ -4199,13 +4199,13 @@ namespace eval util::resources {
 
     ad_proc -public ::util::resources::download {
         {-resource_info:required}
-        {-version_dir ""}
+        {-version_segment ""}
     } {
 
         Download resources typically from a CDN and install it for local usage.
         The installed files are as well gzipped for faster delivery, when gzip is available.-
 
-        @param version_dir an optional directory, under the resource directory
+        @param version_segment an optional directory, under the resource directory
         @param resource_info a dict containing resourceDir, cdn, cssFiles, jsFiles, and extraFiles
 
         @author Gustaf Neumann
@@ -4215,21 +4215,21 @@ namespace eval util::resources {
         #
         #   "resourceDir" is the absolute path in the filesystem
         #   "resourceUrl" is the URL path provided to the request processor
-        #   "versionDir" is the optional version-specific element both in the
+        #   "versionSegment" is the optional version-specific element both in the
         #                URL and in the filesystem.
         #
         set version [dict get $resource_info installedVersion]
         set resource_dir [dict get $resource_info resourceDir]
 
-        if {$version_dir eq "" && [dict exists $resource_info versionDir]} {
-            set version_dir [dict get $resource_info versionDir]
-        } elseif {$version_dir eq ""} {
-            set version_dir $version
+        if {$version_segment eq "" && [dict exists $resource_info versionSegment]} {
+            set version_segment [dict get $resource_info versionSegment]
+        } elseif {$version_segment eq ""} {
+            set version_segment $version
         }
-        ns_log notice "::util::resources::download" version $version resource_dir $resource_dir version_dir $version_dir
+        ns_log notice "::util::resources::download" version $version resource_dir $resource_dir version_segment $version_segment
         set can_install [::util::resources::can_install_locally \
                              -resource_info $resource_info \
-                             -version_dir $version_dir]
+                             -version_segment $version_segment]
         if {!$can_install} {
             error "Cannot download resources to $resource_dir due to permissions"
         }
@@ -4241,9 +4241,9 @@ namespace eval util::resources {
         set download_prefix https:[dict get $resource_info cdn]
         set local_path $resource_dir
 
-        if {$version_dir ne ""} {
-            append local_path /$version_dir
-            append download_prefix /$version_dir
+        if {$version_segment ne ""} {
+            append local_path /$version_segment
+            append download_prefix /$version_segment
         }
         if {![ad_file writable $local_path]} {
             file mkdir $local_path
@@ -4315,14 +4315,14 @@ namespace eval util::resources {
         }
     }
 
-    ad_proc -public ::util::resources::version_dir {
+    ad_proc -public ::util::resources::version_segment {
         -resource_info:required
     } {
         Return the partial directory, where a certain version is/will be installed.
     } {        
         return [expr {
-                      [dict exists $resource_info versionDir]
-                      ? [dict get $resource_info versionDir]
+                      [dict exists $resource_info versionSegment]
+                      ? [dict get $resource_info versionSegment]
                       : [dict get $resource_info installedVersion]
                   }]
     }

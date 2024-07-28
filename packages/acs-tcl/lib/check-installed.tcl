@@ -21,7 +21,7 @@ if {$download_url eq ""} {
     set download_url [ad_conn url]/download
 }
 
-set version_dir [::util::resources::version_dir -resource_info $resource_info]
+set version_segment [::util::resources::version_segment -resource_info $resource_info]
 set newest_version [::util::resources::cdnjs_get_newest_version -resource_info $resource_info]
 
 #
@@ -73,12 +73,12 @@ foreach url {versionCheckURL vulnerabilityCheck} {
 #
 set is_installed [::util::resources::is_installed_locally \
                       -resource_info $resource_info \
-                      -version_dir $version_dir ]
+                      -version_segment $version_segment ]
 if {$is_installed} {
     #
     # Tell the users, where the resources are installed.
     #
-    set resources $resource_dir/$version_dir
+    set resources $resource_dir/$version_segment
     
 } else {
     #
@@ -86,7 +86,7 @@ if {$is_installed} {
     #
     set writable [util::resources::can_install_locally \
                       -resource_info $resource_info \
-                      -version_dir $version_dir]
+                      -version_segment $version_segment]
     
     if {!$writable} {
         #
