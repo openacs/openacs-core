@@ -4071,14 +4071,18 @@ namespace eval util::resources {
     } {
 
         Check, if the required resource files are installed locally.
-        When the version_dir is specified, it is possible to have
-        different versions locally installed.
+        When there should not be a version_dir segment used, provide
+        an empty one via resource_info.
 
         @param resource_info a dict containing resourceDir, cssFiles, jsFiles, and extraFiles
         @param version_dir an optional directory, under the resource directory
 
         @author Gustaf Neumann
     } {
+        if {$version_dir eq ""} {
+            set version_dir [::util::resources::version_dir -resource_info $resource_info]
+        }
+        
         set installed 1
         set resource_dir [dict get $resource_info resourceDir]
         #ns_log notice "check downloadURLs <[dict exists $resource_info downloadURLs]> // [lsort [dict keys $resource_info]]"
@@ -4156,21 +4160,6 @@ namespace eval util::resources {
         return $can_install
     }
 
-    ad_proc -public ::util::resources::version_dir {
-        {-resource_info:required}
-        {-version_dir ""}
-    } {
-
-        Obtain the version_dir either from the provided string or from
-        the resource_info dict.
-
-    } {
-        if {$version_dir eq "" && [dict exists $resource_info versionDir]} {
-            set version_dir [dict get $resource_info versionDir]
-        }
-        return $version_dir
-    }
-
     ad_proc ::util::resources::download_helper {
         -url
     } {
@@ -4222,16 +4211,22 @@ namespace eval util::resources {
         @author Gustaf Neumann
     } {
         #
+        # Keys in resource_info:
+        #
         #   "resourceDir" is the absolute path in the filesystem
         #   "resourceUrl" is the URL path provided to the request processor
-        #   "versionDir" is the version-specific element both in the
+        #   "versionDir" is the optional version-specific element both in the
         #                URL and in the filesystem.
-
-        if {$version_dir eq ""} {
-            set version_dir [dict get $resource_info versionDir]
-        }
-
+        #
+        set version [dict get $resource_info installedVersion]
         set resource_dir [dict get $resource_info resourceDir]
+
+        if {$version_dir eq "" && [dict exists $resource_info versionDir]} {
+            set version_dir [dict get $resource_info versionDir]
+        } elseif {$version_dir eq ""} {
+            set version_dir $version
+        }
+        ns_log notice "::util::resources::download" version $version resource_dir $resource_dir version_dir $version_dir
         set can_install [::util::resources::can_install_locally \
                              -resource_info $resource_info \
                              -version_dir $version_dir]
@@ -4322,14 +4317,13 @@ namespace eval util::resources {
 
     ad_proc -public ::util::resources::version_dir {
         -resource_info:required
-        -version:required
     } {
         Return the partial directory, where a certain version is/will be installed.
-    } {
+    } {        
         return [expr {
                       [dict exists $resource_info versionDir]
                       ? [dict get $resource_info versionDir]
-                      : $version
+                      : [dict get $resource_info installedVersion]
                   }]
     }
 

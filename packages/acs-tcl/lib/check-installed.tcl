@@ -21,10 +21,7 @@ if {$download_url eq ""} {
     set download_url [ad_conn url]/download
 }
 
-set version_dir [::util::resources::version_dir \
-                     -resource_info $resource_info \
-                     -version $version]
-
+set version_dir [::util::resources::version_dir -resource_info $resource_info]
 set newest_version [::util::resources::cdnjs_get_newest_version -resource_info $resource_info]
 
 #
