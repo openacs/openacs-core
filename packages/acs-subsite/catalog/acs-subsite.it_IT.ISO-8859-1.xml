@@ -274,7 +274,7 @@
   <msg key="lt_Inherited_Permissions">Eredita i pemessi</msg>
   <msg key="lt_It_would_be_a_very_ba">Se stai usando un computer pubblico, per esempio presso una libreria o una scuola, questa è una &lt;b&gt;pessima&lt;/b&gt;scelta. Chiunque subentrasse alla tua postazione potrebbe utilizzare la tua identità su questo sito. </msg>
   <msg key="lt_New_registration_at_s">Nuova registrazione su %system_url%</msg>
-  <msg key="lt_Note_text_in_red_below">Attenzione: la presenza ti testo in rosso sotto i campi dei parametri indica che il valore di qeusto parametro è sovrascritto da un parametro nel file dei parametri di OpenAcs. L&#39;uso del file dei parametri è sconsigliato, anche se alcuni siti potrebbero necessitarne per avere valori specifici per istanza per parametri indipendetemente dalle tabelle apm_parameter*</msg>
+  <msg key="lt_Note_text_in_red_below">Attenzione: la presenza ti testo in rosso sotto i campi dei parametri indica che il valore di qeusto parametro è sovrascritto da un parametro nel file dei parametri di NaviServer. L&#39;uso del file dei parametri è sconsigliato, anche se alcuni siti potrebbero necessitarne per avere valori specifici per istanza per parametri indipendetemente dalle tabelle apm_parameter*</msg>
   <msg key="lt_Note_that_you_can_era">Nota che puoi cancellare il tuo indirizzo mail e la password registrate, scegliendo &amp;quot;log out&amp;quot; dal menu.</msg>
   <msg key="lt_num_children_Children">%num_children% Figli Nascosti</msg>
   <msg key="lt_On_portrait_publish_d">Il %portrait_publish_date%, hai caricato &lt;a href=&#34;/user/portrait/&#34;&gt;%portrait_title%&lt;/a&gt; </msg>
