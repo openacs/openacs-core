@@ -4211,13 +4211,14 @@ namespace eval util::resources {
         @author Gustaf Neumann
     } {
         #
-        # Keys in resource_info:
+        # Relevant keys in resource_info:
         #
-        #   "resourceDir" is the absolute path in the filesystem
-        #   "versionSegment" is the optional version-specific element both in the
-        #                URL and in the filesystem.
+        #   "configuredVersion" the version we care about
+        #   "resourceDir"       is the absolute path in the filesystem
+        #   "versionSegment"    is the optional version-specific element both in the
+        #                       URL and in the filesystem.
         #
-        set version [dict get $resource_info installedVersion]
+        set version [dict get $resource_info configuredVersion]
         set resource_dir [dict get $resource_info resourceDir]
 
         if {$version_segment eq "" && [dict exists $resource_info versionSegment]} {
@@ -4226,10 +4227,9 @@ namespace eval util::resources {
             set version_segment $version
         }
         ns_log notice "::util::resources::download" version $version resource_dir $resource_dir version_segment $version_segment
-        set can_install [::util::resources::can_install_locally \
-                             -resource_info $resource_info \
-                             -version_segment $version_segment]
-        if {!$can_install} {
+        if {![::util::resources::can_install_locally \
+                  -resource_info $resource_info \
+                  -version_segment $version_segment]} {
             error "Cannot download resources to $resource_dir due to permissions"
         }
 
@@ -4262,8 +4262,7 @@ namespace eval util::resources {
                           [dict get $resource_info jsFiles] \
                           [dict get $resource_info extraFiles] \
                          ] {
-
-            ns_log notice "::util::resources::download $download_prefix/$file"
+            ns_log notice "... downloading single file: $download_prefix/$file"
             set result [download_helper -url $download_prefix/$file]
             #ns_log notice "... returned status code [dict get $result status]"
             set fn [dict get $result file]
@@ -4306,6 +4305,7 @@ namespace eval util::resources {
             # downloaders, which might call this function.
             #
             foreach url [dict get $resource_info downloadURLs] {
+                ns_log notice "... downloading from URL: $url"
                 set result [download_helper -url $url]
                 set fn [dict get $result file]
                 set file [ad_file tail $url]
@@ -4322,7 +4322,7 @@ namespace eval util::resources {
         return [expr {
                       [dict exists $resource_info versionSegment]
                       ? [dict get $resource_info versionSegment]
-                      : [dict get $resource_info installedVersion]
+                      : [dict get $resource_info configuredVersion]
                   }]
     }
 
@@ -4380,7 +4380,7 @@ namespace eval util::resources {
         set versionCheckAPI [dict get $resource_info versionCheckAPI]
         dict with resource_info {
             set library [dict get $versionCheckAPI library]
-            #ns_log notice ... versionCheckAPI $versionCheckAPI installedVersion $installedVersion
+            #ns_log notice ... versionCheckAPI $versionCheckAPI configuredVersion $configuredVersion
             if {[dict get $versionCheckAPI cdn] eq "cdnjs"} {
                 set url [::util::resources::cdnjs_version_API \
                              -library $library \
