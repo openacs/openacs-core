@@ -134,7 +134,7 @@
   <msg key="lt_Inherited_Permissions">Autorisations héritées</msg>
   <msg key="lt_It_would_be_a_very_ba">Ce serait une très mauvaise idée de choisir cette option si vous êtes plusieurs à utiliser le même ordinateur. Les prochains utilisateurs de cet ordinateur pourraient utiliser votre identité sur notre site.</msg>
   <msg key="lt_New_registration_at_s">Nouvelle inscription à %system_url%</msg>
-  <msg key="lt_Note_text_in_red_below">Noter le texte dans rouge au dessous des champs d'entrée de paramètre, indique que la valeur de ce paramètre est annulée par une entrée dans le dossier de paramètre de OpenACS. L'usage du dossier de paramètre est découragé mais quelques sites ont besoin de lui fournir des valeurs exemple-spécifiques pour paramètres indépendant du apm_parameter tables. </msg>
+  <msg key="lt_Note_text_in_red_below">Noter le texte dans rouge au dessous des champs d'entrée de paramètre, indique que la valeur de ce paramètre est annulée par une entrée dans le dossier de paramètre de NaviServer. L'usage du dossier de paramètre est découragé mais quelques sites ont besoin de lui fournir des valeurs exemple-spécifiques pour paramètres indépendant du apm_parameter tables. </msg>
   <msg key="lt_Note_that_you_can_era">L'option &quot;déconnecter&quot; de votre espace de travail, permet d'effacer toute trace de votre adresse email et mot de passe.</msg>
   <msg key="lt_num_children_Children">%num_children% fils cachés</msg>
   <msg key="lt_On_portrait_publish_d">Vous avez envoyé &lt;a href=&quot;%subsite_url%user/portrait/?return_url=%pvt_home_url%&quot;&gt;%portrait_title%&lt;/a&gt; le %portrait_publish_date%</msg>

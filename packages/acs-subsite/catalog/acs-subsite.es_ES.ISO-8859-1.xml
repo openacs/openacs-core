@@ -280,7 +280,9 @@ Para cambiar su contraseña, visite %reset_password_url%</msg>
   <msg key="lt_Inherited_Permissions">Permisos heredados</msg>
   <msg key="lt_It_would_be_a_very_ba">Puede ser una mala idea escoger esta opción si está usando un ordenador compartido (de una biblioteca o colegio por ejemplo). Cualquier usuario que utilice este ordenador podría hacerse pasar por usted en nuestra plataforma.</msg>
   <msg key="lt_New_registration_at_s">Nuevo registro en %system_url%</msg>
-  <msg key="lt_Note_text_in_red_below">La nota en rojo debajo de los campos de entrada de cada parámetro indica que el valor del mismo está sobreescrito por una entrada en el archivo de parámetros de OpenACS. Se aconseja el uso de dicho archivo, pero algunos sitios lo necesitan para asignar valores específicos a los parámetros, independientes de las tablas apm_parameter.</msg>
+  <msg key="lt_Note_text_in_red_below">La nota en rojo debajo de los
+  campos de entrada de cada parámetro indica que el valor del mismo
+  está sobreescrito por una entrada en el archivo de parámetros de NaviServer. Se aconseja el uso de dicho archivo, pero algunos sitios lo necesitan para asignar valores específicos a los parámetros, independientes de las tablas apm_parameter.</msg>
   <msg key="lt_Note_that_you_can_era">Tenga en cuenta que puede eliminar su dirección de correo y contraseña de la memoria de su ordenador, pulsando la opción &#34;Salir&#34; de su portal.</msg>
   <msg key="lt_num_children_Children">%num_children% Hijos ocultos</msg>
   <msg key="lt_On_portrait_publish_d">El día %portrait_publish_date%, ha subido &lt;a href=&#34;%subsite_url%user/portrait/?return_url=%pvt_home_url%&#34;&#34;&gt;%portrait_title%&lt;/a&gt;</msg>

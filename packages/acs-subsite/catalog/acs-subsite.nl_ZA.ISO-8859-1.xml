@@ -190,7 +190,9 @@ Besoek assublief die volgende skakel en verander die wagwoord: %reset_password_u
   <msg key="lt_Inherited_Permissions">Geërfde regte</msg>
   <msg key="lt_It_would_be_a_very_ba">Dit is 'n baie slegte idee om hierdie opsie te gebruik indien hierdie rekenaar wordt gedeel met andere; soos in 'n biblioteek of skool. Elke volgende gebruiker van hierdie rekenaar kan hom dan immers toegang tot uw registrasiegegewens verskaf.</msg>
   <msg key="lt_New_registration_at_s">Nuwe inskrywing op %system_url%</msg>
-  <msg key="lt_Note_text_in_red_below">Rooi teks onder die invoervelde van parameters geef aan dat die waarde van hierdie parameter oorskryf word deur 'n waarde in die parameterlêer van OpenACS. Die gebruik van die parameterlêer wordt afgeraai maar sommige werve het dit nodig vir die instelling van instansiespesifieke parameterwaardes, wat onafhanklik is van waardes in die apm_parameter-tabelle.</msg>
+  <msg key="lt_Note_text_in_red_below">Rooi teks onder die invoervelde
+  van parameters geef aan dat die waarde van hierdie parameter
+  oorskryf word deur 'n waarde in die parameterlêer van NaviServer. Die gebruik van die parameterlêer wordt afgeraai maar sommige werve het dit nodig vir die instelling van instansiespesifieke parameterwaardes, wat onafhanklik is van waardes in die apm_parameter-tabelle.</msg>
   <msg key="lt_Note_that_you_can_era">Het opgeslagen e-posadres en het wagwoord kan worden gewist door op &quot;afmelden&quot; te klikken.</msg>
   <msg key="lt_num_children_Children">%num_children% verborgen onderliggende elementen</msg>
   <msg key="lt_On_portrait_publish_d">&lt;a href=&quot;%subsite_url%user/portrait/?return_url=%pvt_home_url%&quot;&gt;%portrait_title%&lt;/a&gt; is op %portrait_publish_date% in die database opgenomen.</msg>

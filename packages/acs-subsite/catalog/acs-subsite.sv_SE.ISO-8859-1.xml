@@ -133,7 +133,7 @@
   <msg key="lt_Inherited_Permissions">Ärvda behörigheter</msg>
   <msg key="lt_It_would_be_a_very_ba">Det vore en mycket dålig idé att välja denna funktion om du använder en delad dator i ett bibliotek eller i en skola. Alla efterkommande användare av den datorn kan då låtsas vara dig på denna tjänst.</msg>
   <msg key="lt_New_registration_at_s">Ny registrering på %system_url%</msg>
-  <msg key="lt_Note_text_in_red_below">Röd text under parameterns textfält indikerar att denna parameters värde är åsidosatt av ett värde i OpenACS' parameterfil. Användandet av parameterfilen är avrått, men vissa sajter behöver den för att erbjuda instansspecifika parametervärden oberoende av tabellerna i apm_parameter.</msg>
+  <msg key="lt_Note_text_in_red_below">Röd text under parameterns textfält indikerar att denna parameters värde är åsidosatt av ett värde i NaviServer' parameterfil. Användandet av parameterfilen är avrått, men vissa sajter behöver den för att erbjuda instansspecifika parametervärden oberoende av tabellerna i apm_parameter.</msg>
   <msg key="lt_Note_that_you_can_era">Notera att du kan ta bort din sparade e-postadress och lösenord genom att välja &quot;logga ut&quot; från ditt rum.</msg>
   <msg key="lt_num_children_Children">%num_children% barn gömda</msg>
   <msg key="lt_On_portrait_publish_d">%portrait_publish_date% laddade du upp &lt;a href=&quot;%subsite_url%user/portrait/?return_url=%pvt_home_url%&quot;&gt;%portrait_title%&lt;/a&gt; </msg>

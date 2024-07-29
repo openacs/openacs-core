@@ -136,7 +136,7 @@
   <msg key="lt_Inherited_Permissions">Arvede rettigheter</msg>
   <msg key="lt_It_would_be_a_very_ba">Det ville være svært lite klokt å velge dette dersom du bruker en felles datamaskin i et biblotek eller fellesareal. Alle brukere som kommer etter deg vil kunne opptre som deg på tjenesten vår.</msg>
   <msg key="lt_New_registration_at_s">Ny registrering på %system_url%</msg>
-  <msg key="lt_Note_text_in_red_below">Legg merke til at tekst i rødt under feltet for innlegging av parameter betyr at verdien til denne parameteren er overstyrt av et innleg i Open ACS parameterfil. Bruk av parameterfilen er ikke anbefalt, men noen steder må man bruke dem for å gi spesifkke verdier til parametre uavhengig av apm_parametertabeller.</msg>
+  <msg key="lt_Note_text_in_red_below">Legg merke til at tekst i rødt under feltet for innlegging av parameter betyr at verdien til denne parameteren er overstyrt av et innleg i NaviServer parameterfil. Bruk av parameterfilen er ikke anbefalt, men noen steder må man bruke dem for å gi spesifkke verdier til parametre uavhengig av apm_parametertabeller.</msg>
   <msg key="lt_Note_that_you_can_era">Legg merke til at du kan slette e-postadressen og passordet du har lagret ved å velge &quot;logg ut&quot; fra arbeidsområdet ditt.</msg>
   <msg key="lt_num_children_Children">%num_children% Barn gjemt </msg>
   <msg key="lt_On_portrait_publish_d">Den %portrait_publish_date%, lastet du opp &lt;a href=&quot;%subsite_url%user/portrait/?return_url=%pvt_home_url%&quot;&gt;%portrait_title%&lt;/a&gt; </msg>

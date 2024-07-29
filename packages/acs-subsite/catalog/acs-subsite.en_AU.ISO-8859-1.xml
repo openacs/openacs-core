@@ -179,7 +179,7 @@ shared computer in a library or school.  Any subsequent user of this
 machine would be able to masquerade as you on our service.</msg>
   <msg key="lt_New_registration_at_s">New registration at %system_url%</msg>
   <msg key="lt_Note_text_in_red_below">Note text in red below the parameter entry fields indicates the value of this
-    parameter is being overridden by an entry in the OpenACS parameter file.  The
+    parameter is being overridden by an entry in the NaviServer configuration file.  The
     use of the parameter file is discouraged but some sites need it to provide
     instance-specific values for parameters independent of the apm_parameter
     tables.</msg>

@@ -26,7 +26,7 @@ if { $scope eq "global" } {
         -privilege admin
     db_1row select_pretty_name {}
 
-    set page_title "$instance_name Global Parameters"
+    set page_title "Global Parameters of: $instance_name"
     set package_url [site_node::get_url_from_object_id -object_id $package_id]
 
     if { $package_url eq [subsite::get_element -element url] } {
@@ -41,7 +41,7 @@ if { $scope eq "global" } {
     permission::require_permission -object_id $package_id -privilege admin
     db_1row select_instance_name {}
 
-    set page_title "$instance_name Instance Parameters"
+    set page_title "Instance Parameters of: $instance_name"
     set package_url [site_node::get_url_from_object_id -object_id $package_id]
 }
 
@@ -118,7 +118,7 @@ db_foreach select_params {} {
                  {help_text {$description}} \
                  [list html $html]]
 
-    set file_val [ad_parameter_from_file $parameter_name $package_key]
+    set file_val [ad_parameter_from_configuration_file $parameter_name $package_key]
     if { $file_val ne "" } {
         set display_warning_p 1
         lappend elm [list after_html [subst {

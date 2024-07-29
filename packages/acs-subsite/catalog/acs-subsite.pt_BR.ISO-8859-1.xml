@@ -180,7 +180,7 @@
   <msg key="lt_Inherited_Permissions">Permissões Herdadas</msg>
   <msg key="lt_It_would_be_a_very_ba">Seria uma má idéia escolher este opção se você está usando um computador compartilhado numa biblioteca ou escola. O próximo usuário desta máquina poderia usar seu login em nosso serviço.</msg>
   <msg key="lt_New_registration_at_s">Novo registro em %system_url%</msg>
-  <msg key="lt_Note_text_in_red_below">Obs.: um texto em vermelho sob os campos de entrada de parâmetros indica que o valor desse parâmetro está sendo substituído por uma entrada no arquivo de parâmetros do OpenACS. Não indicamos o uso do arquivo de parâmetros, mas alguns sites precisam de valores específicos para cada parâmetro, independente das tabelas apm_parameter .</msg>
+  <msg key="lt_Note_text_in_red_below">Obs.: um texto em vermelho sob os campos de entrada de parâmetros indica que o valor desse parâmetro está sendo substituído por uma entrada no arquivo de parâmetros do NaviServer. Não indicamos o uso do arquivo de parâmetros, mas alguns sites precisam de valores específicos para cada parâmetro, independente das tabelas apm_parameter .</msg>
   <msg key="lt_Note_that_you_can_era">Note que você pode apagar seu endereço de email e sua senha salva ao escolher a opção de &quot;logout&quot; do seu espaço de trabalho.</msg>
   <msg key="lt_num_children_Children">%num_children% Filhos Ocultos</msg>
   <msg key="lt_On_portrait_publish_d">Em %portrait_publish_date%, você fez o upload de &lt;a href=&quot;/user/portrait/&quot;&gt;%portrait_title%&lt;/a&gt;</msg>
