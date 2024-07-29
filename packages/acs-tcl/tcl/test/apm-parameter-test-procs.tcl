@@ -93,7 +93,7 @@ aa_register_case \
                 # the value of parameters that are defined in the
                 # server configuration file.
                 #
-                set file_value [ad_parameter_from_file $parameter_name $package_key]
+                set file_value [ad_parameter_from_configuration_file $parameter_name $package_key]
                 if {$file_value ne ""} {
                     continue
                 }

@@ -403,19 +403,33 @@ ad_proc -private ad_requested_object_id {} {
     return $package_id
 }
 
-ad_proc -public ad_parameter_from_file {
+ad_proc -public ad_parameter_from_configuration_file {
     name
     {package_key ""}
 } {
-    This proc returns the value of a parameter that has been set in the
-    parameters/ad.ini file.
+    Return the value of a parameter that has been set in the
+    configuration file. It is possible to set
 
-    Note: <strong>The use of the parameters/ad.ini file is
-    discouraged.</strong> Some sites need it to provide
-    instance-specific parameter values that are independent of the
-    contents of the apm_parameter tables.
+    Example snippets of the configuration file:
+    <pre>
+       ns_section ns/server/$server/acs {
+           ns_param CSPEnabledP 1
+           ns_param PasswordHashAlgorithm "argon2-12288-3-1 scram-sha-256  salted-sha1"
+       }
+       ns_section ns/server/$server/acs/acs-templating {
+           ns_param UseHtmlAreaForRichtextP 2
+       }
+       ns_section ns/server/$server/acs/xowiki {
+           ns_param MenuBar 1
+       }
+    </pre>
+    Note that kernel parameters have no package key included in the
+    section name of the configuration file (see above).
 
     @param name The name of the parameter.
+    @param package_key package key of the package from
+           which the parameter value is to be retrieved. When the
+           package_key is omitted, the kernel parameters are assumed
     @return The parameter of the object or if it doesn't exist, the default.
 } {
 
@@ -428,6 +442,19 @@ ad_proc -public ad_parameter_from_file {
 
     return [ns_config "ns/server/[ns_info server]/acs/$package_key" $name]
 }
+
+ad_proc -public -deprecated ad_parameter_from_file {
+    name
+    {package_key ""}
+} {
+    Old version of ad_parameter_from_configuration_file
+
+    @see ad_parameter_from_configuration_file
+} {
+    return [ad_parameter_from_configuration_file $name $package_key]
+}
+
+
 
 #
 # There are three implementation of "ad_parameter_cache":

@@ -80,7 +80,7 @@ ad_proc -public parameter::get_global_value {
     # parameters.
 
     # 1. use the parameter file
-    set value [ad_parameter_from_file $parameter $package_key]
+    set value [ad_parameter_from_configuration_file $parameter $package_key]
 
     # 2. check the parameter cache
     if {$value eq ""} {
@@ -187,12 +187,12 @@ ad_proc -public parameter::get {
 
     # 1. check whether there is a parameter by this name specified for
     # the package in the parameter file.  The name
-    # ad_parameter_from_file is a misnomer, since it checks
+    # ad_parameter_from_configuration_file is a misnomer, since it checks
     # ns_config values
     #
     if {$package_id ne ""} {
         set package_key [apm_package_key_from_id $package_id]
-        set value [ad_parameter_from_file $parameter $package_key]
+        set value [ad_parameter_from_configuration_file $parameter $package_key]
     }
 
     # 2. check the parameter cache
@@ -279,7 +279,7 @@ if {![db_table_exists apm_parameters]} {
         # 1. Check to see if this parameter is being set in the server's
         #    configuration file; this value has highest precedence.
         #
-        set value [ad_parameter_from_file $parameter $package_key]
+        set value [ad_parameter_from_configuration_file $parameter $package_key]
 
         #
         # 2. Try to get the value from a global package parameter.
