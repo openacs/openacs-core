@@ -39,7 +39,7 @@ if {[dict exists $resource_info versionCheckURL]} {
     }
 }
 
-ns_log notice "vulnerabilityCheck: [dict exists $resource_info vulnerabilityCheck]"
+#ns_log notice "vulnerabilityCheck configured: [dict exists $resource_info vulnerabilityCheck]"
 if {[dict exists $resource_info vulnerabilityCheck]} {
     set vulnerabilityCheck [dict get $resource_info vulnerabilityCheck]
     dict with vulnerabilityCheck {
