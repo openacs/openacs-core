@@ -1407,7 +1407,10 @@ ad_proc -private util::http::native::request {
 } {
     set this_proc [lindex [info level 0] 0]
 
-    if {![regexp "^(https|http)://*" $url]} {
+    set parsed_url [ns_parseurl $url]
+
+    if {![dict exists $parsed_url proto] ||
+        [dict get $parsed_url proto] ni {"http" "https"}} {
         return -code error "${this_proc}:  Invalid url:  $url"
     }
 
@@ -1465,10 +1468,9 @@ ad_proc -private util::http::native::request {
     set cmd [list ns_http run \
                  -timeout $timeout \
                  -method $method \
-                 -headers $headers]
-    if {[regexp {https://([^/]+)/} $url . hostname]} {
-        lappend cmd -hostname $hostname
-    }
+                 -headers $headers \
+                 -hostname [dict get $parsed_url host]]
+
     if {$body_file ne ""} {
         lappend cmd -body_file $body_file
     } elseif {$body ne ""} {
