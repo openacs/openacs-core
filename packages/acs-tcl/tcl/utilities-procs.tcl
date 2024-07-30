@@ -4082,7 +4082,7 @@ namespace eval util::resources {
         if {$version_segment eq ""} {
             set version_segment [::util::resources::version_segment -resource_info $resource_info]
         }
-        
+
         set installed 1
         set resource_dir [dict get $resource_info resourceDir]
         #ns_log notice "check downloadURLs <[dict exists $resource_info downloadURLs]> // [lsort [dict keys $resource_info]]"
@@ -4110,6 +4110,7 @@ namespace eval util::resources {
             }
             #ns_log notice "... check $path -> [ad_file readable $path]"
             if {![ad_file readable $path]} {
+                ns_log notice "... check $path -> [ad_file readable $path]"
                 set installed 0
                 break
             }
@@ -4318,7 +4319,7 @@ namespace eval util::resources {
         -resource_info:required
     } {
         Return the partial directory, where a certain version is/will be installed.
-    } {        
+    } {
         return [expr {
                       [dict exists $resource_info versionSegment]
                       ? [dict get $resource_info versionSegment]

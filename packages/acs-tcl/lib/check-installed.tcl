@@ -21,6 +21,42 @@ if {$download_url eq ""} {
     set download_url [ad_conn url]/download
 }
 
+if {[dict exists $resource_info parameterInfo]} {
+    set parameterInfo [dict get $resource_info parameterInfo]
+
+} else {
+    dict set parameterInfo parameter_name Version
+    regexp {/packages/([^/]+)/} $resource_dir . package_key
+    dict set parameterInfo package_key $package_key
+    dict set parameterInfo default_value ?
+}
+
+dict with parameterInfo {
+    set parameter_id [::acs::dc list get {
+        select parameter_id from apm_parameters
+        where package_key = :package_key
+        and parameter_name = :parameter_name
+    }]
+    if {$parameter_id ne ""} {
+        set configured_via "package parameter $parameter_name"
+        set actions modify_or_delete_package_parameter
+        set modifyURL [string cat /shared/parameters?package_key=$package_key \
+                           &scope=global \
+                           &return_url=[ad_conn url]\
+                           &scroll_to=$parameter_name]
+    } else {
+        set parameter_value [ns_config ns_section ns/server/[ns_info server]/acs/$package_key $parameter_name]
+        if {$parameter_value eq ""} {
+            set configured_via "configuration file"
+        } else {
+            set configured_via "default value"
+        }
+        set actions create_package_parameter
+    }
+    #set default_version $default_value
+}
+
+
 set version_segment [::util::resources::version_segment -resource_info $resource_info]
 set newest_version [::util::resources::cdnjs_get_newest_version -resource_info $resource_info]
 
@@ -79,7 +115,7 @@ if {$is_installed} {
     # Tell the users, where the resources are installed.
     #
     set resources $resource_dir/$version_segment
-    
+
 } else {
     #
     # Check, if we can install the resources locally.
@@ -87,13 +123,13 @@ if {$is_installed} {
     set writable [util::resources::can_install_locally \
                       -resource_info $resource_info \
                       -version_segment $version_segment]
-    
+
     if {!$writable} {
         #
         # If we cannot install locally, tell the user were we want to
         # install.
         #
-        set path $resource_dir/$version
+        set path $resource_dir/$version_segment
     }
 }
 

@@ -1,15 +1,23 @@
 <p>
-The configured version of @resource_name@ is @version@ (newest on cdnjs: @newest_version@).<br>
-<if @versionCheckURL@ not nil>You might check for various versions <a href="@versionCheckURL@">available upstream</a>. </if>
-<if @vulnerabilityCheckURL@ not nil><br>Snyk provides
-  <if @vulnerabilityCheckVersionURL@ not nil>a
-  vulnerability check for version <a href="@vulnerabilityCheckVersionURL@">@version@</a> and
+The configured version of @resource_name@ is
+<strong>@version@</strong><small> <adp:icon title="Configured via @configured_via@" name="form-info-sign"></small>
+(newest version on cdnjs: @newest_version@).
+<ul class="action-links ms-3">
+<if @actions@ eq modify_or_delete_package_parameter>
+<li>You might <a href="@modifyURL@">modify</a> or delete the package parameter "<i>@parameter_name@</i>".</li>
 </if>
-  checks for <a href="@vulnerabilityCheckURL@">all released versions</a> of @resource_name@. 
+<if @versionCheckURL@ not nil><li>You might check available versions <a href="@versionCheckURL@">available upstream</a>.</li> </if>
+<if @vulnerabilityCheckURL@ not nil>
+  <li>You might check on Synk the
+    <if @vulnerabilityCheckVersionURL@ not nil>a
+    vulnerability status for version <a href="@vulnerabilityCheckVersionURL@">@version@</a> and
+    </if>
+    for <a href="@vulnerabilityCheckURL@">all released versions</a> of @resource_name@. 
+  </li>
 </if>
-
+</ul>
 <if @resources@ not nil><p>The configured version of @resource_name@ is installed locally
-under <strong>@resources@</strong>.</if>
+under <i>@resources@</i>.</if>
 <else><p>In the current installation the @resource_name@ is used via CDN <strong>@cdn@</strong>.
   <if @writable@ true>
   <p>Do you want to <a href="@download_url@" class="button">download</a>
