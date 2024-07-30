@@ -10,6 +10,8 @@ ad_page_contract {
     {orderby:token "parameter_name"}
     {version_id:naturalnum,notnull}
     {section_name ""}
+    {return_url:localurl ""}
+    {return_label "Back"}   
 }
 
 db_1row apm_package_by_version_id {

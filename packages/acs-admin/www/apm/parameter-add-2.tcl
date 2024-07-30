@@ -16,6 +16,7 @@ ad_page_contract {
     {default_value ""}
     {min_n_values:integer 1}
     {max_n_values:integer 1}
+    {return_url:localurl ""}
 } -validate {
     datatype_type_ck {
         if {$datatype ne "number" && $datatype ne "string" && $datatype ne "text"} {
@@ -36,6 +37,7 @@ ad_page_contract {
     datatype_type_ck {The datatype must be either a number or a string or text.}
 }
 
+
 db_transaction {
     apm_parameter_register -parameter_id $parameter_id -scope $scope $parameter_name $description $package_key \
         $default_value $datatype $section_name $min_n_values $max_n_values
@@ -50,7 +52,10 @@ db_transaction {
     }
 }
 
-ad_returnredirect [export_vars -base "version-parameters" { version_id section_name }]
+if {$return_url eq ""} {
+    set return_url [export_vars -base "version-parameters" { version_id section_name }]
+}
+ad_returnredirect $return_url
 ad_script_abort
 
 # Local variables:
