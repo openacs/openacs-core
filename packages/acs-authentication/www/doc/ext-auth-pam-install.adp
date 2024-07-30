@@ -125,7 +125,7 @@ authentication authorities. The OpenACS server itself is the
 </code>. Create and name an
 authority (in the sitewide admin UI)</p></li><li><p>Set Authentication to PAM.</p></li><li><p>If the PAM domain defines a <code class="computeroutput">password</code> command, you can set Password
 Management to PAM. If not, the PAM module cannot change the
-user&#39;s password and you should leave this option Disabled.</p></li><li><p>Leave Account Registration disabed.</p></li><li><p><a href="configure-batch-sync" title="Configure Batch Synchronization">Configure Batch
+user&#39;s password and you should leave this option Disabled.</p></li><li><p>Leave Account Registration disabled.</p></li><li><p><a href="configure-batch-sync" title="Configure Batch Synchronization">Configure Batch
 Synchronization</a></p></li>
 </ol></div>
 </li>

@@ -75,7 +75,7 @@
   </p>
   <p>
     And yet, predicting the duration of the future process is difficult.
-    What if the email is 10MB and needs parsed, whereas all prior emails were less then 10kb?
+    What if the email is 10MB and needs parsed, whereas all prior emails were less than 10kb?
     What if one of the callbacks converts a pdf into a png and annotates it for a web view and takes a few minutes?
     What if the next 5 emails have callbacks that take 5 to 15 minutes to process each waiting on an external service?
   </p>
@@ -119,7 +119,7 @@ set equation = int( $midpoint + ($time_priority + size_priority) / 2)
   
   <h3>Prioritized stack processing cycle</h3>
   <p>
-    If next cylce starts and current cycle is still running,
+    If next cycle starts and current cycle is still running,
     set <code>scan_in_est_dur_per_cycle_s_override</code> to actual wait time the current cycle has to wait including any prior cycle wait time --if the delays exceed one cycle (<code>accumulative_delay_cycles</code>.
   </p>
   <pre>From acs-tcl/tcl/test/ad-proc-test-procs.tcl

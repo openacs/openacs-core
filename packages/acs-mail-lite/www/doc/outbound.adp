@@ -76,7 +76,7 @@ bounced mail then his bounce-record gets deleted since it can
 be assumed that his email account is working again and no longer
 refusing emails. This value can be changed with the parameter
 "MaxDaysToBounce".</li>
-<li>If more then Y emails were returned by a particular user then
+<li>If more than Y emails were returned by a particular user then
 his email account gets disabled from receiving any more mails
 from the system by setting the email_bouncing_p flag to t. This
 value can be changed with the parameter "MaxBounceCount".</li>
