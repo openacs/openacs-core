@@ -4348,6 +4348,13 @@ namespace eval util::resources {
     } {
         try {
             ::acs::misc_cache eval -expires $expires acs-tcl.get_with_default-$key {
+                #
+                # Newer versions (NaviServer 5 or 4.99.31 or newer)
+                # have auto_sni, so plain "ns_http" can be used. For
+                # backwards compatibility, use ::util::http::get,
+                # which contains a logic to add manually the SNI
+                # hostname for HTTPS requests.
+                #
                 set d [::util::http::get -url $url]
                 if {[dict get $d status] ne 200} {
                     ns_log warning "request to $url led to unexpected status code: [dict get $d status]"
