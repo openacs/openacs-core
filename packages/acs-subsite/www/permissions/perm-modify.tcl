@@ -1,5 +1,9 @@
-ad_page_contract {} {
-    object_id:naturalnum,notnull
+ad_page_contract {
+
+    Modify permissions on an object.
+
+} {
+    object_id:object_id,notnull
     {perm:token,multiple {[list]}}
     {privs:token,notnull}
     return_url:localurl
