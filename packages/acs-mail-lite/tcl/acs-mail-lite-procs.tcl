@@ -101,7 +101,7 @@ namespace eval acs_mail_lite {
         GN: not sure, why both is checked.
 
         @param signature signature to be checked
-        @param message-id message ID that the signature should be checked against
+        @param message_id message ID that the signature should be checked against
         @return boolean 0 or 1
     } {
         if {![regexp "(<\[\-0-9\]+\\.\[0-9\]+\\.oacs@[address_domain]>)" $message_id match id]
