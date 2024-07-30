@@ -41,6 +41,9 @@ dict with parameterInfo {
     }]
     if {$parameter_id ne ""} {
         set configured_via "package parameter $parameter_name"
+        #
+        # Presence of modifyPackageParameterURL controls action item
+        #
         set modifyPackageParameterURL [export_vars -base "/shared/parameters" {
             package_key
             {scope global}
@@ -63,6 +66,9 @@ dict with parameterInfo {
         if {$parameter_value eq ""} {
             set configured_via "configuration file"
         } else {
+            #
+            # Presence of addPackageParameterURL controls action item
+            #
             set configured_via "default value of the package"
             set version_id [apm_version_id_from_package_key $package_key]
             set description "Version number of [dict get $resource_info resourceName]"
