@@ -4348,13 +4348,13 @@ namespace eval util::resources {
     } {
         try {
             ::acs::misc_cache eval -expires $expires acs-tcl.get_with_default-$key {
-                set d [ns_http run $url]
+                set d [::util::http::get -url $url]
                 if {[dict get $d status] ne 200} {
                     ns_log warning "request to $url led to unexpected status code: [dict get $d status]"
                     set result $default
                     break
                 } else {
-                    set result [dict get $d body]
+                    set result [dict get $d page]
                 }
             }
         } on ok {result} {
