@@ -31,6 +31,8 @@ if {[dict exists $resource_info parameterInfo]} {
     dict set parameterInfo default_value ?
 }
 
+set return_url [ad_conn url]
+
 dict with parameterInfo {
     set parameter_id [::acs::dc list get {
         select parameter_id from apm_parameters
@@ -39,21 +41,43 @@ dict with parameterInfo {
     }]
     if {$parameter_id ne ""} {
         set configured_via "package parameter $parameter_name"
-        set actions modify_or_delete_package_parameter
-        set modifyURL [string cat /shared/parameters?package_key=$package_key \
-                           &scope=global \
-                           &return_url=[ad_conn url]\
-                           &scroll_to=$parameter_name]
+        set modifyPackageParameterURL [export_vars -base "/shared/parameters" {
+            package_key
+            {scope global}
+            return_url
+            {scroll_to $parameter_name}
+        }]
+        set version_id [apm_version_id_from_package_key $package_key]
+        set return_label "Back to Site-wide Admin Page"
+        set deletePackageParameterURL [export_vars -base "/acs-admin/apm/version-parameters" {
+            version_id
+            {section_name all}
+            {scope global}
+            return_url
+            return_label
+            {scroll_to $parameter_name}
+        }]
+        # missing for deletePackageParameterURL: filtering, scroll_to
     } else {
         set parameter_value [ns_config ns_section ns/server/[ns_info server]/acs/$package_key $parameter_name]
         if {$parameter_value eq ""} {
             set configured_via "configuration file"
         } else {
-            set configured_via "default value"
+            set configured_via "default value of the package"
+            set version_id [apm_version_id_from_package_key $package_key]
+            set description "Version number of [dict get $resource_info resourceName]"
+            set addPackageParameterURL [export_vars -base "/acs-admin/apm/parameter-add" {
+                version_id
+                {section_name all}
+                {scope global}
+                parameter_name
+                default_value
+                description
+                return_url
+                return_label
+            }]
         }
-        set actions create_package_parameter
     }
-    #set default_version $default_value
 }
 
 

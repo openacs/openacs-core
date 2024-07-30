@@ -4338,7 +4338,7 @@ namespace eval util::resources {
         when the site has no Internet connection). Therefore, the call
         will return a default value. This function is to be called for
         non-essential calls, like e.g. obtaining the newest version of
-        library, etc. The result is cached by defailt for 5 minutes.
+        library, etc. The result is cached by default for 5 minutes.
 
         @param url URL for the GET request
         @param key cache key

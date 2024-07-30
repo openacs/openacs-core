@@ -3,8 +3,13 @@ The configured version of @resource_name@ is
 <strong>@version@</strong><small> <adp:icon title="Configured via @configured_via@" name="form-info-sign"></small>
 (newest version on cdnjs: @newest_version@).
 <ul class="action-links ms-3">
-<if @actions@ eq modify_or_delete_package_parameter>
-<li>You might <a href="@modifyURL@">modify</a> or delete the package parameter "<i>@parameter_name@</i>".</li>
+<if @modifyPackageParameterURL@ not nil>
+<li>You might <a href="@modifyPackageParameterURL@">modify the parameter value</a> or
+   <a href="@deletePackageParameterURL@">delete the package parameter</a> "<i>@parameter_name@</i>".</li>
+</if>
+<if @addPackageParameterURL@ not nil>
+<li>You might <a href="@addPackageParameterURL@">add the global package parameter</a> 
+    "<i>@parameter_name@</i>" to pin the version number to the current value for this instance.</li>
 </if>
 <if @versionCheckURL@ not nil><li>You might check available versions <a href="@versionCheckURL@">available upstream</a>.</li> </if>
 <if @vulnerabilityCheckURL@ not nil>

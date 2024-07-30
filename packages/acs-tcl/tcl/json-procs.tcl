@@ -712,7 +712,7 @@ ad_proc util::json2dict { jsonText } {
     Parse JSON text into a Tcl dict.
 
     This function is NOT based on the functions from the
-    "util::json::" namepsace, and is built on top of tDOM.  It is a
+    "util::json::" namespace, and is built on top of tDOM.  It is a
     replacement for the "json::json2dict" in the tcllib package
     "json", but is on sample documents several times faster.
 
