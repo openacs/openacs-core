@@ -32,7 +32,7 @@ to support a diverse group of messaging applications through a
 single centralized facility.</p>
 <h3>III. System/Application Overview</h3>
 <p>The ACS Messaging package defines a data model and API for the
-storage and retrieval of messages. While the package standarizes
+storage and retrieval of messages. While the package standardizes
 how messages are stored, applications may use any data model they
 want for higher level organization of messages into threads,
 forums, and so on. ACS Messaging places no organizational

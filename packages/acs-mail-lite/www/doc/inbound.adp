@@ -12,7 +12,7 @@
  <a href="/api-doc/proc-view?proc=acs_mail_lite::maildir_check_incoming&amp;source_p=1">acs_mail_lite::maildir_check_incoming</a> 
    for MailDir.
 </p><p>
-    Both schedules procs can be run simultaneously without intefering with
+    Both schedules procs can be run simultaneously without interfering with
     each other.
     In both cases, email is added to the same queue for processing via callbacks.
   </p>

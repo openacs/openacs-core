@@ -1375,7 +1375,7 @@ password management: 8 hours.
       <title>EXT
 AUTH #14: Create authentication driver for LDAP
 </title>
-      <sect3 id="statu">
+      <sect3 id="status">
         <title>Status
 </title>
         <para>ON HOLD awaiting info from clients on whether we can use PAM
@@ -1407,7 +1407,7 @@ LDAP, the LDAP authentication driver will be invoked.
       <sect3>
         <title>Internal Design
 </title>
-        <para>We&#39;d look at the extisting ns_ldap module, or we&#39;d find
+        <para>We&#39;d look at the existing ns_ldap module, or we&#39;d find
 someone to implement a new thread-safe ns_ldap AOLserver module in
 C, which will provide a Tcl interface to the parts of LDAP which we
 need.

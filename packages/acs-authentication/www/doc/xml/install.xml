@@ -168,7 +168,7 @@ cp pam_radius_auth.so /lib/security/pam_radius_auth.so</action></screen>
               <para>If the PAM domain defines a <computeroutput>password</computeroutput> command, you can set Password Management to PAM.  If not, the PAM module cannot change the user's password and you should leave this option Disabled.</para>
             </listitem>
             <listitem>
-              <para>Leave Account Registration disabed.</para>
+              <para>Leave Account Registration disabled.</para>
             </listitem>
             <listitem>
               <para><link linkend="configure-batch-sync">Configure Batch Synchronization</link>

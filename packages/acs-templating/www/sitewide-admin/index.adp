@@ -36,4 +36,4 @@ under the bootstrap3 theme.  The current default icon set is
 </blockquote>
 
 
-<include src="/packages/acs-templating/lib/registered-urns" match="*">
+<include src="/packages/acs-templating/lib/registered-URNs" match="*">

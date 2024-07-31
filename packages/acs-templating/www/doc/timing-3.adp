@@ -12,7 +12,7 @@ more entries, these lack from templated pages, and hence I
 suppressed them. The log message that marks the beginning of each
 phase is written in the lower right of the graphs. Each curve curve
 plots 288 page requests. As I didn&#39;t back port of the
-configurable cache refreshing stragegy ('never' or
+configurable cache refreshing strategy ('never' or
 'always'), I show all graphs in the 'normal'
 colors. The label is 'do', though.</p>
 <h4>Individual Stages</h4>
