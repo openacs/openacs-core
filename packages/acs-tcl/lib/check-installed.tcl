@@ -81,6 +81,7 @@ dict with parameterInfo {
                 description
                 return_url
                 return_label
+                {update_info_file false}
             }]
         }
     }

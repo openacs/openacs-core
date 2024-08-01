@@ -4,14 +4,18 @@ The configured version of @resource_name@ is
 (newest version on cdnjs: @newest_version@).
 <ul class="action-links ms-3">
 <if @modifyPackageParameterURL@ not nil>
-<li>You might <a href="@modifyPackageParameterURL@">modify the parameter value</a> or
-   <a href="@deletePackageParameterURL@">delete the package parameter</a> "<i>@parameter_name@</i>".</li>
+<li>You might <a title="Change the value of the package parameter @parameter_name@" href="@modifyPackageParameterURL@">modify the parameter value</a> or
+   <a title="Delete the package parameter @parameter_name@ and its value. The version number might be provided via NaviServer configuration value or from the default settings." href="@deletePackageParameterURL@">delete the package parameter</a> "<i>@parameter_name@</i>".</li>
 </if>
 <if @addPackageParameterURL@ not nil>
-<li>You might <a href="@addPackageParameterURL@">add the global package parameter</a> 
+<li>You might
+   <a title="Add the package parameter @parameter_name@ to the package @package_key@ with the default @version@"
+      href="@addPackageParameterURL@">add the global package parameter</a>
     "<i>@parameter_name@</i>" to pin the version number to the current value for this instance.</li>
 </if>
-<if @versionCheckURL@ not nil><li>You might check available versions <a href="@versionCheckURL@">available upstream</a>.</li> </if>
+<if @versionCheckURL@ not nil><li>You might check available versions
+  <a href="@versionCheckURL@" title="Check is performed at @versionCheckURL@">available upstream</a>.</li>
+</if>
 <if @vulnerabilityCheckURL@ not nil>
   <li>You might check on Synk the
     <if @vulnerabilityCheckVersionURL@ not nil>a
