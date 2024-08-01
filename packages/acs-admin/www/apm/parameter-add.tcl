@@ -11,6 +11,7 @@ ad_page_contract {
     {default_value ""}
     {scope ""}
     {return_url ""}
+    {update_info_file:boolean true}
 }
 
 set user_id [ad_conn user_id]
@@ -45,7 +46,7 @@ append body [subst {
 <form action="parameter-add-2" method="post">
 <blockquote>
 <table>
-[export_vars -form {package_key parameter_id version_id return_url}]
+[export_vars -form {package_key parameter_id version_id return_url update_info_file}]
 
 <tr>
   <td></td>
