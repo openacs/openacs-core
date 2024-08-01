@@ -38,10 +38,10 @@ correct the problem. <a class="link" href="install-resources" title="Resources">
 <a name="install-first-step" id="install-first-step"></a>Unplug
 the network cable from your computer. We don&#39;t want to connect
 to the network until we&#39;re sure the computer is secure.
-<a class="indexterm" name="idp105548898825160" id="idp105548898825160"></a> (Wherever you see the word secure, you
-should always read it as, "secure enough for our purposes,
-given the amount of work we&#39;re willing to exert and the
-estimated risk and consequences.")</p></li><li class="listitem"><p>Insert Red Hat 8.0 or 9.0 Disk 1 into the CD-ROM and reboot the
+<a class="indexterm" name="id6765" id="id6765"></a> (Wherever you
+see the word secure, you should always read it as, "secure
+enough for our purposes, given the amount of work we&#39;re willing
+to exert and the estimated risk and consequences.")</p></li><li class="listitem"><p>Insert Red Hat 8.0 or 9.0 Disk 1 into the CD-ROM and reboot the
 computer</p></li><li class="listitem"><p>At the <code class="computeroutput"><span class="guilabel"><span class="guilabel">boot:</span></span></code>
 prompt, press Enter for a graphical install. The text install is
 fairly different, so if you need to do that instead proceed with
@@ -76,11 +76,10 @@ HARD DRIVE.</p></li><li class="listitem"><p>Click <code class="computeroutput"><
 screen</p></li>
 </ol></div>
 </li><li class="listitem">
-<p>Configure Networking. <a class="indexterm" name="idp105548899306056" id="idp105548899306056"></a> Again, if you
-know what you&#39;re doing, do this step yourself, being sure to
-note the firewall holes. Otherwise, follow the instructions in this
-step to set up a computer directly connected to the internet with a
-dedicated IP address.</p><div class="orderedlist"><ol class="orderedlist" type="a">
+<p>Configure Networking. <a class="indexterm" name="id6833" id="id6833"></a> Again, if you know what you&#39;re doing, do this
+step yourself, being sure to note the firewall holes. Otherwise,
+follow the instructions in this step to set up a computer directly
+connected to the internet with a dedicated IP address.</p><div class="orderedlist"><ol class="orderedlist" type="a">
 <li class="listitem"><p>DHCP is a system by which a computer that joins a network (such
 as on boot) can request a temporary IP address and other network
 information. Assuming the machine has a dedicated IP address (if it
@@ -105,8 +104,9 @@ Click <code class="computeroutput"><span class="guibutton"><span class="guibutto
 development server we&#39;ll be setting up.</p></li>
 </ol></div>
 </li><li class="listitem"><p>
-<a class="indexterm" name="idp105548899287624" id="idp105548899287624"></a>Select any additional languages you want
-the computer to support and then click <code class="computeroutput"><span class="guibutton"><span class="guibutton">
+<a class="indexterm" name="id6872" id="id6872"></a>Select any
+additional languages you want the computer to support and then
+click <code class="computeroutput"><span class="guibutton"><span class="guibutton">
 <u><span class="accel">N</span></u>ext</span></span></code>
 </p></li><li class="listitem"><p>Choose your timezone and click <code class="computeroutput"><span class="guibutton"><span class="guibutton">
 <u><span class="accel">N</span></u>ext</span></span></code>.</p></li><li class="listitem"><p>Type in a root password, twice.</p></li><li class="listitem">
@@ -121,12 +121,11 @@ firewall, or a resource hog. Just don&#39;t install a database or
 web server, because that would conflict with the database and web
 server we&#39;ll install later.</p><table border="0" summary="Simple list" class="simplelist">
 <tr><td>check <code class="computeroutput"><span class="guilabel"><span class="guilabel">Editors</span></span></code>
-(this installs emacs<a class="indexterm" name="idp105548899293896" id="idp105548899293896"></a>),</td></tr><tr><td>click <code class="computeroutput"><span class="guilabel"><span class="guilabel">Details</span></span></code> next
+(this installs emacs<a class="indexterm" name="id6891" id="id6891"></a>),</td></tr><tr><td>click <code class="computeroutput"><span class="guilabel"><span class="guilabel">Details</span></span></code> next
 to <code class="computeroutput"><span class="guilabel"><span class="guilabel">Text-based Internet</span></span></code>, check
 <code class="computeroutput"><span class="guilabel"><span class="guilabel">lynx</span></span></code>, and click <code class="computeroutput"><span class="guibutton"><span class="guibutton">
 <u><span class="accel">O</span></u>K</span></span></code>;</td></tr><tr><td>check <code class="computeroutput"><span class="guilabel"><span class="guilabel">Authoring and
-Publishing</span></span></code> (<a class="indexterm" name="idp105548899299656" id="idp105548899299656"></a>this installs
-docbook),</td></tr><tr><td>uncheck <code class="computeroutput"><span class="guilabel"><span class="guilabel">Server Configuration
+Publishing</span></span></code> (<a class="indexterm" name="id6907" id="id6907"></a>this installs docbook),</td></tr><tr><td>uncheck <code class="computeroutput"><span class="guilabel"><span class="guilabel">Server Configuration
 Tools</span></span></code>,</td></tr><tr><td>uncheck <code class="computeroutput"><span class="guilabel"><span class="guilabel">Web
 Server</span></span></code>,</td></tr><tr><td>uncheck <code class="computeroutput"><span class="guilabel"><span class="guilabel">Windows File
 Server</span></span></code>,</td></tr><tr><td>check <code class="computeroutput"><span class="guilabel"><span class="guilabel">SQL Database
@@ -150,7 +149,7 @@ View</span></span></code> and wait. In a minute, a list of packages
 will appear.</p><table border="0" summary="Simple list" class="simplelist">
 <tr><td>uncheck <code class="computeroutput"><span class="guilabel"><span class="guilabel">apmd</span></span></code>
 (monitors power, not very useful for servers),</td></tr><tr><td>check <code class="computeroutput"><span class="guilabel"><span class="guilabel">ImageMagick</span></span></code>
-(required for the <a class="indexterm" name="idp105548899282632" id="idp105548899282632"></a>photo-album packages,</td></tr><tr><td>uncheck<code class="computeroutput"><span class="guilabel"><span class="guilabel">isdn4k-utils</span></span></code>
+(required for the <a class="indexterm" name="id6950" id="id6950"></a>photo-album packages,</td></tr><tr><td>uncheck<code class="computeroutput"><span class="guilabel"><span class="guilabel">isdn4k-utils</span></span></code>
 (unless you are using isdn, this installs a useless daemon),</td></tr><tr><td>check <code class="computeroutput"><span class="guilabel"><span class="guilabel">mutt</span></span></code> (a mail
 program that reads Maildir),</td></tr><tr><td>uncheck <code class="computeroutput"><span class="guilabel"><span class="guilabel">nfs-utils</span></span></code>
 (nfs is a major security risk),</td></tr><tr><td>uncheck <code class="computeroutput"><span class="guilabel"><span class="guilabel">pam-devel</span></span></code> (I
@@ -197,12 +196,12 @@ step.</p></li><li class="listitem">
 <p>Lock down SSH</p><div class="orderedlist"><ol class="orderedlist" type="a">
 <li class="listitem">
 <p>
-<a class="indexterm" name="idp105548899247944" id="idp105548899247944"></a> SSH is the protocol we use to connect
-securely to the computer (replacing telnet, which is insecure).
-sshd is the daemon that listens for incoming ssh connections. As a
-security precaution, we are now going to tell ssh not to allow
-anyone to connect directly to this computer as root. Type this into
-the shell:</p><pre class="screen"><strong class="userinput"><code>emacs /etc/ssh/sshd_config</code></strong></pre>
+<a class="indexterm" name="id7035" id="id7035"></a> SSH is the
+protocol we use to connect securely to the computer (replacing
+telnet, which is insecure). sshd is the daemon that listens for
+incoming ssh connections. As a security precaution, we are now
+going to tell ssh not to allow anyone to connect directly to this
+computer as root. Type this into the shell:</p><pre class="screen"><strong class="userinput"><code>emacs /etc/ssh/sshd_config</code></strong></pre>
 </li><li class="listitem"><p>Search for the word "root" by typing <strong class="userinput"><code>C-s</code></strong> (that&#39;s emacs-speak for
 control-s) and then <strong class="userinput"><code>root</code></strong>.</p></li><li class="listitem">
 <p>Make the following changes:</p><table border="0" summary="Simple list" class="simplelist">

@@ -57,7 +57,7 @@ access control based simply on coded rules regarding who can act on
 a given database row based on the information in that row.</p><p>Problems resulting from this piecemeal approach to permissions
 and access control were many, the two major ones being
 inconsistency, and repeated/redundant code. Thus the drive in
-OpenACS 4 to provide a unified, consistent permissions system that
+OpenACS 4 to provide a unified, consistent permission system that
 both programmers and administrators can readily use.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
@@ -130,7 +130,7 @@ inherit" flag is set)</p></li>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="permissions-design-transactions" id="permissions-design-transactions"></a>Legal Transactions</h3></div></div></div><p>There are three essential areas in which all transactions in the
-permissions system fall:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
+permission system fall:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>Modification of methods and privileges</p></li><li class="listitem"><p>Modification of permissions</p></li><li class="listitem"><p>Queries on permissions</p></li>
 </ul></div><p>
 <span class="strong"><strong>"Modification of methods and
@@ -173,7 +173,7 @@ page needs to know all permissions directly granted on that object.
 This is done by querying against <code class="computeroutput">acs_permissions</code>.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="permissions-design-api" id="permissions-design-api"></a>API</h3></div></div></div><p>The API to the permissions system consists of a few well-known
+<a name="permissions-design-api" id="permissions-design-api"></a>API</h3></div></div></div><p>The API to the permission system consists of a few well-known
 tables, plus a pair of PL/SQL procedures and a pair of Tcl
 functions.</p><p><span class="strong"><strong>Tables</strong></span></p><p>
 <code class="computeroutput">acs_methods</code>, <code class="computeroutput">acs_privileges</code>, and <code class="computeroutput">acs_privilege_method_rules</code> manage the set
@@ -217,7 +217,7 @@ permission::require_permission -object_id $object_id -privilege $method
 </pre><p>These procedures are defined in <code class="computeroutput">acs-permissions-procs.tcl</code>.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="permissions-design-ui" id="permissions-design-ui"></a>User Interface</h3></div></div></div><p>All users of the permissions system are the same at the
+<a name="permissions-design-ui" id="permissions-design-ui"></a>User Interface</h3></div></div></div><p>All users of the permission system are the same at the
 user-interface level. If you have the <code class="computeroutput">administer_privileges</code> method permission on
 an object, then you may edit privileges for that object with the
 UI.</p><p>The UI currently provides a list of all granted permissions on
@@ -235,7 +235,7 @@ from the object&#39;s context.</p><p>There are a number of potential future enha
 permissions UI, outlined below.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="permissions-design-configure" id="permissions-design-configure"></a>Configuration/Parameters</h3></div></div></div><p>There are no configuration options for the permissions
+<a name="permissions-design-configure" id="permissions-design-configure"></a>Configuration/Parameters</h3></div></div></div><p>There are no configuration options for the permission
 system.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">

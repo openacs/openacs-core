@@ -14,13 +14,13 @@ Explained</h2></div></div></div><p>by Vadim Nasardinov. Modified and converted t
 Roberto Mello</p><p>The code has been modified since this document was written so it
 is now out of date. See <a class="ulink" href="http://openacs.org/forums/message-view?message_id=121807" target="_top">this forum thread</a>.</p><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="permissions-tedious-overview" id="permissions-tedious-overview"></a>Permissions Overview</h3></div></div></div><p><span class="strong"><strong>Who (<code class="computeroutput">grantee_id</code>) can do what (<code class="computeroutput">privilege</code>) on which object (<code class="computeroutput">object_id</code>).</strong></span></p><p>The general permissions system has a flexible (and relatively
+<a name="permissions-tedious-overview" id="permissions-tedious-overview"></a>Permissions Overview</h3></div></div></div><p><span class="strong"><strong>Who (<code class="computeroutput">grantee_id</code>) can do what (<code class="computeroutput">privilege</code>) on which object (<code class="computeroutput">object_id</code>).</strong></span></p><p>The general permission system has a flexible (and relatively
 complex) data model in OpenACS. Developers who have not had the
 time to learn the internals of the data model may end up writing
 seemingly correct code that crashes their system in weird ways.
 This writeup is the result of my running into such a piece of code
 and trying to understand exactly what went wrong. It is geared
-towards developers who understand the general permissions system to
+towards developers who understand the general permission system to
 the extent that is described in the <a class="ulink" href="permissions" target="_top">Groups, Context, Permissions
 documentation</a>, but who have not had the opportunity to take a
 long, careful look at the system internals.</p><p>In OpenACS, most of the interesting tables are expected to
@@ -55,7 +55,7 @@ create table <span class="bold"><strong>acs_objects</strong></span> (
 OpenACS object system needs to have an entry in the <code class="computeroutput">acs_objects</code>. This allows developers to
 define relationships between any two entities <span class="emphasis"><em>A</em></span> and <span class="emphasis"><em>B</em></span> by defining a relationship between
 their corresponding entries in the <code class="computeroutput">acs_objects</code> table. One of the applications
-of this powerful capability is the general permissions system.</p><p>At the heart of the permission system are two tables:
+of this powerful capability is the general permission system.</p><p>At the heart of the permission system are two tables:
 <code class="computeroutput">acs_privileges</code> and <code class="computeroutput">acs_permissions</code>.</p><a name="acs_privileges" id="acs_privileges"></a><pre class="programlisting">
   create table <span class="bold"><strong>acs_privileges</strong></span> (
       privilege           varchar2(100) not null
@@ -115,7 +115,7 @@ would need to store 100,000,000 entries of the form:</p><div class="informaltabl
 </tbody>
 </table></div><p>Although quite feasible, this approach fails to take advantage
 of the fact that objects in the system are commonly organized
-hierarchally, and permissions usually follow the hierarchical
+hierarchically, and permissions usually follow the hierarchical
 structure, so that if user <span class="emphasis"><em>X</em></span>
 has the <span class="emphasis"><em>read</em></span> privilege on
 object <span class="emphasis"><em>A</em></span>, she typically also
@@ -130,7 +130,7 @@ are discussed in the following sections.</p>
 <a name="permissions-tedious-context-hierarchy" id="permissions-tedious-context-hierarchy"></a>Context
 Hierarchy</h3></div></div></div><p>Suppose objects <span class="emphasis"><em>A</em></span>,
 <span class="emphasis"><em>B</em></span>, ..., and <span class="emphasis"><em>F</em></span> form the following hierarchy.</p><div class="table">
-<a name="idp105548965398856" id="idp105548965398856"></a><p class="title"><strong>Table 11.2. Context Hierarchy
+<a name="id1420" id="id1420"></a><p class="title"><strong>Table 11.2. Context Hierarchy
 Example</strong></p><div class="table-contents"><table class="table" summary="Context Hierarchy Example" cellspacing="0" border="1">
 <colgroup>
 <col align="center" class="c1"><col align="center" class="c2"><col align="center" class="c3">
@@ -156,7 +156,7 @@ Example</strong></p><div class="table-contents"><table class="table" summary="Co
 </table></div>
 </div><br class="table-break"><p>This can be represented in the <a class="xref" href="permissions-tediously-explained">acs_objects</a>
 table by the following entries:</p><div class="table">
-<a name="idp105548965382600" id="idp105548965382600"></a><p class="title"><strong>Table 11.3. acs_objects example
+<a name="id1421" id="id1421"></a><p class="title"><strong>Table 11.3. acs_objects example
 data</strong></p><div class="table-contents"><table class="table" summary="acs_objects example data" cellspacing="0" border="1">
 <colgroup>
 <col align="center" class="c1"><col align="center" class="c2">
@@ -393,7 +393,7 @@ specially maintained table like it is done in the case of the
 context hierarchy.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="permissions-tedious-party-hierarchy" id="permissions-tedious-party-hierarchy"></a>Party Hierarchy</h3></div></div></div><p>Now for the third hierarchy playing a promiment role in the
+<a name="permissions-tedious-party-hierarchy" id="permissions-tedious-party-hierarchy"></a>Party Hierarchy</h3></div></div></div><p>Now for the third hierarchy playing a prominent role in the
 permission system. The party data model is set up as follows.</p><div class="informaltable"><table class="informaltable" cellspacing="0" border="1">
 <colgroup>
 <col align="center" class="c1"><col align="center" class="c2">

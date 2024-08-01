@@ -8,23 +8,21 @@
 			rightLink="" rightLabel="">
 		    <div class="index">
 <div class="titlepage"><div><div><h1 class="title">
-<a name="idp105548832240328" id="idp105548832240328"></a>Index</h1></div></div></div><div xmlns:xlink="http://www.w3.org/1999/xlink" class="index">
+<a name="id19699" id="id19699"></a>Index</h1></div></div></div><div xmlns:xlink="http://www.w3.org/1999/xlink" class="index">
 <div class="indexdiv">
-<h3>Symbols</h3><dl><dt id="ientry-idp105548900776648">$OPENACS_SERVICE_NAME, <a class="indexterm" href="install-steps">Paths and
-Users</a>
+<h3>Symbols</h3><dl><dt id="ientry-id3274">$OPENACS_SERVICE_NAME, <a class="indexterm" href="install-steps">Paths and Users</a>
 </dt></dl>
 </div><div class="indexdiv">
 <h3>A</h3><dl>
-<dt id="ientry-idp105548897859784">AOLserver</dt><dd><dl><dt>configuration, <a class="indexterm" href="openacs">Installation Option 2: Install
+<dt id="ientry-id4967">AOLserver</dt><dd><dl><dt>configuration, <a class="indexterm" href="openacs">Installation Option 2: Install
 from tarball</a>
-</dt></dl></dd><dt id="ientry-idp105548968557768">Automated tests, <a class="indexterm" href="tutorial-debug">Write
-automated tests</a>
+</dt></dl></dd><dt id="ientry-id8098">Automated tests, <a class="indexterm" href="tutorial-debug">Write automated tests</a>
 </dt>
 </dl>
 </div><div class="indexdiv">
 <h3>C</h3><dl>
-<dt id="ientry-idp105548966412616">computeroutput</dt><dd><dl><dt>code, <a class="indexterm" href="docbook-primer">Code</a>
-</dt></dl></dd><dt id="ientry-idp105548967266248">cvs</dt><dd><dl>
+<dt id="ientry-id12373">computeroutput</dt><dd><dl><dt>code, <a class="indexterm" href="docbook-primer">Code</a>
+</dt></dl></dd><dt id="ientry-id7115">cvs</dt><dd><dl>
 <dt>initializing, <a class="indexterm" href="install-cvs">Initialize CVS (OPTIONAL)</a>
 </dt><dt>setup, <a class="indexterm" href="cvs-tips">Using CVS with
 an OpenACS Site</a>
@@ -33,98 +31,97 @@ an OpenACS Site</a>
 </dl>
 </div><div class="indexdiv">
 <h3>D</h3><dl>
-<dt id="ientry-idp105548967278280">daemontools</dt><dd><dl><dt>installation, <a class="indexterm" href="install-daemontools">Install Daemontools (OPTIONAL)</a>
-</dt></dl></dd><dt id="ientry-idp105548899299656">docbook</dt><dd><dl><dt>installation, <a class="indexterm" href="install-redhat">Install Red Hat 8/9</a>
-</dt></dl></dd><dt id="ientry-idp105548967270856">DocBook</dt><dd><dl>
+<dt id="ientry-id7143">daemontools</dt><dd><dl><dt>installation, <a class="indexterm" href="install-daemontools">Install Daemontools (OPTIONAL)</a>
+</dt></dl></dd><dt id="ientry-id6907">docbook</dt><dd><dl><dt>installation, <a class="indexterm" href="install-redhat">Install Red Hat 8/9</a>
+</dt></dl></dd><dt id="ientry-id7126">DocBook</dt><dd><dl>
 <dt>DTD, <a class="indexterm" href="docbook-primer">OpenACS Documentation Strategy:
 Why DocBook?</a>
 </dt><dt>emacs configuration for, <a class="indexterm" href="psgml-for-emacs">Add PSGML commands to emacs init file
 (OPTIONAL)</a>
 </dt>
-</dl></dd><dt id="ientry-idp105548965926856">Document structure, <a class="indexterm" href="docbook-primer">Document
+</dl></dd><dt id="ientry-id12311">Document structure, <a class="indexterm" href="docbook-primer">Document
 Structure</a>
 </dt>
 </dl>
 </div><div class="indexdiv">
 <h3>E</h3><dl>
-<dt id="ientry-idp105548899293896">emacs</dt><dd><dl><dt>installation, <a class="indexterm" href="install-redhat">Install Red Hat 8/9</a>
-</dt></dl></dd><dt id="ientry-idp105548966378184">emphasis</dt><dd><dl><dt>bold, italics, <a class="indexterm" href="docbook-primer">Emphasis</a>
+<dt id="ientry-id6891">emacs</dt><dd><dl><dt>installation, <a class="indexterm" href="install-redhat">Install Red Hat 8/9</a>
+</dt></dl></dd><dt id="ientry-id12536">emphasis</dt><dd><dl><dt>bold, italics, <a class="indexterm" href="docbook-primer">Emphasis</a>
 </dt></dl></dd>
 </dl>
 </div><div class="indexdiv">
 <h3>F</h3><dl>
-<dt id="ientry-idp105548967354568">full text search</dt><dd><dl><dt>installation, <a class="indexterm" href="install-full-text-search-tsearch2">Install
+<dt id="ientry-id7309">full text search</dt><dd><dl><dt>installation, <a class="indexterm" href="install-full-text-search-tsearch2">Install
 Tsearch2 module</a>
 </dt></dl></dd>
 </dl>
 </div><div class="indexdiv">
 <h3>G</h3><dl>
-<dt id="ientry-idp105548966410696">Graphics</dt><dd><dl><dt>Images, <a class="indexterm" href="docbook-primer">Graphics</a>
+<dt id="ientry-id12451">Graphics</dt><dd><dl><dt>Images, <a class="indexterm" href="docbook-primer">Graphics</a>
 </dt></dl></dd>
 </dl>
 </div><div class="indexdiv">
 <h3>I</h3><dl>
-<dt id="ientry-idp105548966367176">informaltable</dt><dd><dl><dt>table, <a class="indexterm" href="docbook-primer">Tables</a>
+<dt id="ientry-id12508">informaltable</dt><dd><dl><dt>table, <a class="indexterm" href="docbook-primer">Tables</a>
 </dt></dl></dd>
 </dl>
 </div><div class="indexdiv">
 <h3>L</h3><dl>
-<dt id="ientry-idp105548899287624">language</dt><dd><dl><dt>installation, <a class="indexterm" href="install-redhat">Install Red Hat 8/9</a>
-</dt></dl></dd><dt id="ientry-idp105548966420552">Linking, <a class="indexterm" href="docbook-primer">Links</a>
-</dt><dt id="ientry-idp105548966384200">lists, <a class="indexterm" href="docbook-primer">Lists</a>
+<dt id="ientry-id6872">language</dt><dd><dl><dt>installation, <a class="indexterm" href="install-redhat">Install Red Hat 8/9</a>
+</dt></dl></dd><dt id="ientry-id12394">Linking, <a class="indexterm" href="docbook-primer">Links</a>
+</dt><dt id="ientry-id12467">lists, <a class="indexterm" href="docbook-primer">Lists</a>
 </dt>
 </dl>
 </div><div class="indexdiv">
-<h3>O</h3><dl><dt id="ientry-idp105548969022792">OpenACS Package, <a class="indexterm" href="packages">What a Package
-Looks Like</a>
+<h3>O</h3><dl><dt id="ientry-id8771">OpenACS Package, <a class="indexterm" href="packages">What a Package Looks Like</a>
 </dt></dl>
 </div><div class="indexdiv">
 <h3>P</h3><dl>
-<dt id="ientry-idp105548899282632">photo-album</dt><dd><dl><dt>installation (see ImageMagick)</dt></dl></dd><dt id="ientry-idp105548897848392">Postgres</dt><dd><dl><dt>Vacuuming, <a class="indexterm" href="openacs">Installation Option 2: Install
+<dt id="ientry-id6950">photo-album</dt><dd><dl><dt>installation (see ImageMagick)</dt></dl></dd><dt id="ientry-id4941">Postgres</dt><dd><dl><dt>Vacuuming, <a class="indexterm" href="openacs">Installation Option 2: Install
 from tarball</a>
 </dt></dl></dd>
 </dl>
 </div><div class="indexdiv">
 <h3>Q</h3><dl>
-<dt id="ientry-idp105548967322184">qmail</dt><dd><dl><dt>Maildir, <a class="indexterm" href="install-qmail">Install
+<dt id="ientry-id7240">qmail</dt><dd><dl><dt>Maildir, <a class="indexterm" href="install-qmail">Install
 qmail (OPTIONAL)</a>
 </dt></dl></dd>
 </dl>
 </div><div class="indexdiv">
 <h3>S</h3><dl>
-<dt id="ientry-idp105548965906504">sect1, <a class="indexterm" href="docbook-primer">Headlines,
+<dt id="ientry-id12340">sect1, <a class="indexterm" href="docbook-primer">Headlines,
 Sections</a>
-</dt><dt id="ientry-idp105548965913928">sect2, <a class="indexterm" href="docbook-primer">Headlines,
+</dt><dt id="ientry-id12357">sect2, <a class="indexterm" href="docbook-primer">Headlines,
 Sections</a>
-</dt><dt id="ientry-idp105548965903432">Sections</dt><dd><dl><dt>Headlines, <a class="indexterm" href="docbook-primer">Headlines,
+</dt><dt id="ientry-id12332">Sections</dt><dd><dl><dt>Headlines, <a class="indexterm" href="docbook-primer">Headlines,
 Sections</a>
-</dt></dl></dd><dt id="ientry-idp105548898825160">security</dt><dd><dl>
+</dt></dl></dd><dt id="ientry-id6765">security</dt><dd><dl>
 <dt>definition, <a class="indexterm" href="install-redhat">Install Red Hat 8/9</a>
 </dt><dt>firewall, <a class="indexterm" href="install-redhat">Install Red Hat 8/9</a>
 </dt>
-</dl></dd><dt id="ientry-idp105548967311816">sendmail</dt><dd><dl><dt>removing, <a class="indexterm" href="install-qmail">Install qmail (OPTIONAL)</a>
-</dt></dl></dd><dt id="ientry-idp105548899247944">ssh, <a class="indexterm" href="install-redhat">Install Red Hat 8/9</a>
+</dl></dd><dt id="ientry-id7217">sendmail</dt><dd><dl><dt>removing, <a class="indexterm" href="install-qmail">Install qmail (OPTIONAL)</a>
+</dt></dl></dd><dt id="ientry-id7035">ssh, <a class="indexterm" href="install-redhat">Install Red Hat 8/9</a>
 </dt>
 </dl>
 </div><div class="indexdiv">
-<h3>T</h3><dl><dt id="ientry-idp105548965046472">The publish point for new
-packages should be fixed., <a class="indexterm" href="tutorial-distribute">Prepare the package for
+<h3>T</h3><dl><dt id="ientry-id8475">The publish point for new packages should be
+fixed., <a class="indexterm" href="tutorial-distribute">Prepare the package for
 distribution.</a>
 </dt></dl>
 </div><div class="indexdiv">
 <h3>U</h3><dl>
-<dt id="ientry-idp105548966403784">ulink, <a class="indexterm" href="docbook-primer">Links</a>
-</dt><dt id="ientry-idp105548898317000">upgrade</dt><dd><dl>
+<dt id="ientry-id12435">ulink, <a class="indexterm" href="docbook-primer">Links</a>
+</dt><dt id="ientry-id5407">upgrade</dt><dd><dl>
 <dt>OpenACS 4.5 to 4.6.x</dt><dd><dl><dt>Linux/Unix, <a class="indexterm" href="upgrade-4.5-to-4.6">Upgrading 4.5 or higher to 4.6.3</a>
 </dt></dl></dd>
 </dl></dd>
 </dl>
 </div><div class="indexdiv">
 <h3>X</h3><dl>
-<dt id="ientry-idp105548965943240">XML guidelines, <a class="indexterm" href="docbook-primer">OpenACS
-Documentation Strategy: Why DocBook?</a>
-</dt><dt id="ientry-idp105548966423752">xref</dt><dd><dl><dt>linkend, <a class="indexterm" href="docbook-primer">Links</a>
-</dt></dl></dd><dt id="ientry-idp105548965910472">xreflabel, <a class="indexterm" href="docbook-primer">Headlines,
+<dt id="ientry-id12272">XML guidelines, <a class="indexterm" href="docbook-primer">OpenACS Documentation Strategy:
+Why DocBook?</a>
+</dt><dt id="ientry-id12404">xref</dt><dd><dl><dt>linkend, <a class="indexterm" href="docbook-primer">Links</a>
+</dt></dl></dd><dt id="ientry-id12349">xreflabel, <a class="indexterm" href="docbook-primer">Headlines,
 Sections</a>
 </dt>
 </dl>

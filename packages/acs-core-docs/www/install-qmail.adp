@@ -20,7 +20,7 @@ as standard Debian/Ubuntu package, rpms for Fedora/Redhat/CenTOS
 are available from <a class="ulink" href="https://en.wikipedia.org/wiki/Qmail" target="_top">QMail wiki
 page</a>
 </p></li><li class="listitem">
-<p>Replace sendmail with qmail&#39;s wrapper.</p><a class="indexterm" name="idp105548967311816" id="idp105548967311816"></a><pre class="screen">
+<p>Replace sendmail with qmail&#39;s wrapper.</p><a class="indexterm" name="id7217" id="id7217"></a><pre class="screen">
 [root qmail-1.03]# <strong class="userinput"><code>rm -f /usr/bin/sendmail /usr/sbin/sendmail</code></strong>
 [root qmail-1.03]# <strong class="userinput"><code>ln -s /var/qmail/bin/sendmail /usr/sbin/sendmail</code></strong>
 [root qmail-1.03]#
@@ -30,8 +30,8 @@ ln -s /var/qmail/bin/sendmail /usr/sbin/sendmail</span></span>
 files in <code class="computeroutput">/var/qmail/control</code>
 specifying the computer&#39;s identity and which addresses it
 should accept mail for. This command will automatically set up
-qmail correctly if you have correctly set a valid host name. If
-not, you&#39;ll want to read <code class="computeroutput">/var/qmail/doc/INSTALL.ctl</code> to find out how
+qmail correctly if you have correctly set a valid hostname. If not,
+you&#39;ll want to read <code class="computeroutput">/var/qmail/doc/INSTALL.ctl</code> to find out how
 to configure qmail.</p><pre class="screen">
 [root qmail-1.03]# <strong class="userinput"><code>./config-fast <span class="replaceable"><span class="replaceable">yourserver.test</span></span>
 </code></strong>
@@ -59,7 +59,7 @@ receive mail.</p><pre class="screen">
 chmod 644 ~alias/.qmail* 
 /var/qmail/bin/maildirmake ~alias/Maildir/ 
 chown -R alias.nofiles /var/qmail/alias/Maildir</span></span>
-</pre><a class="indexterm" name="idp105548967322184" id="idp105548967322184"></a><p>Configure qmail to use the Maildir delivery format (instead of
+</pre><a class="indexterm" name="id7240" id="id7240"></a><p>Configure qmail to use the Maildir delivery format (instead of
 mbox), and install a version of the qmail startup script modified
 to use Maildir.</p><pre class="screen">
 [root alias]# <strong class="userinput"><code>echo "./Maildir" &gt; /var/qmail/bin/.qmail</code></strong>

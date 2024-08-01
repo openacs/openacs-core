@@ -9,7 +9,8 @@
 		    <div class="book">
 <div class="titlepage">
 <div><div><h1 class="title">
-<a name="idp105548832314952" id="idp105548832314952"></a>OpenACS Core Documentation</h1></div></div><hr>
+<a name="id1337" id="id1337"></a>OpenACS Core
+Documentation</h1></div></div><hr>
 </div><div class="toc">
 <p><strong>Table of Contents</strong></p><dl class="toc">
 <dt><span class="part"><a href="for-everyone">I. OpenACS For
@@ -205,77 +206,74 @@ Update the translations</a></span></dt>
 </dl>
 </div><div class="list-of-figures">
 <p><strong>List of Figures</strong></p><dl>
-<dt>4.1. <a href="how-do-I">Site
-Templates</a>
+<dt>4.1. <a href="how-do-I">Site Templates</a>
 </dt><dt>4.2. <a href="how-do-I">Granting
 Permissions</a>
-</dt><dt>4.3. <a href="how-do-I">Granting
-Permissions in 5.0</a>
+</dt><dt>4.3. <a href="how-do-I">Granting Permissions in
+5.0</a>
 </dt><dt>5.1. <a href="upgrade-overview">Upgrading with the
 APM</a>
-</dt><dt>5.2. <a href="upgrade-openacs-files">Upgrading a local
-CVS repository</a>
+</dt><dt>5.2. <a href="upgrade-openacs-files">Upgrading a
+local CVS repository</a>
 </dt><dt>6.1. <a href="high-avail">Multiple-server
 configuration</a>
-</dt><dt>6.2. <a href="maintenance-deploy">Simple A/B Deployment
-- Step 1</a>
-</dt><dt>6.3. <a href="maintenance-deploy">Simple A/B Deployment
-- Step 2</a>
-</dt><dt>6.4. <a href="maintenance-deploy">Simple A/B Deployment
-- Step 3</a>
-</dt><dt>6.5. <a href="maintenance-deploy">Complex A/B Deployment
-- Step 1</a>
-</dt><dt>6.6. <a href="maintenance-deploy">Complex A/B Deployment
-- Step 2</a>
-</dt><dt>6.7. <a href="maintenance-deploy">Complex A/B Deployment
-- Step 3</a>
-</dt><dt>6.8. <a href="maint-performance">Query
-Analysis example</a>
-</dt><dt>8.1. <a href="backup-recovery">Backup
-and Recovery Strategy</a>
-</dt><dt>9.1. <a href="tutorial-newpackage">Assumptions in this
-section</a>
+</dt><dt>6.2. <a href="maintenance-deploy">Simple A/B
+Deployment - Step 1</a>
+</dt><dt>6.3. <a href="maintenance-deploy">Simple A/B
+Deployment - Step 2</a>
+</dt><dt>6.4. <a href="maintenance-deploy">Simple A/B
+Deployment - Step 3</a>
+</dt><dt>6.5. <a href="maintenance-deploy">Complex A/B
+Deployment - Step 1</a>
+</dt><dt>6.6. <a href="maintenance-deploy">Complex A/B
+Deployment - Step 2</a>
+</dt><dt>6.7. <a href="maintenance-deploy">Complex A/B
+Deployment - Step 3</a>
+</dt><dt>6.8. <a href="maint-performance">Query Analysis
+example</a>
+</dt><dt>8.1. <a href="backup-recovery">Backup and Recovery
+Strategy</a>
+</dt><dt>9.1. <a href="tutorial-newpackage">Assumptions in
+this section</a>
 </dt><dt>9.2. <a href="tutorial-database">Tutorial Data
 Model</a>
-</dt><dt>9.3. <a href="tutorial-database">The
-Database Creation Script</a>
+</dt><dt>9.3. <a href="tutorial-database">The Database
+Creation Script</a>
 </dt><dt>9.4. <a href="tutorial-database">Database Deletion
 Script</a>
-</dt><dt>9.5. <a href="tutorial-pages">Page
-Map</a>
-</dt><dt>10.1. <a href="tutorial-cvs">Upgrading
-a local CVS repository</a>
-</dt><dt>11.1. <a href="packages">Server file
-layout diagram</a>
-</dt><dt>11.2. <a href="packages">Package file
-layout diagram</a>
+</dt><dt>9.5. <a href="tutorial-pages">Page Map</a>
+</dt><dt>10.1. <a href="tutorial-cvs">Upgrading a local CVS
+repository</a>
+</dt><dt>11.1. <a href="packages">Server file layout
+diagram</a>
+</dt><dt>11.2. <a href="packages">Package file layout
+diagram</a>
 </dt>
 </dl>
 </div><div class="list-of-tables">
 <p><strong>List of Tables</strong></p><dl>
-<dt>2.1. <a href="install-steps">Default
-directories for a standard install</a>
+<dt>2.1. <a href="install-steps">Default directories
+for a standard install</a>
 </dt><dt>2.2. <a href="individual-programs">Version
 Compatibility Matrix</a>
 </dt><dt>5.1. <a href="upgrade-overview">Assumptions in this
 section</a>
 </dt><dt>6.1. <a href="install-openacs-keepalive">How it
 Works</a>
-</dt><dt>10.1. <a href="tutorial-etp-templates">table showing ETP
-layout</a>
-</dt><dt>11.1. <a href="packages">Package
-files</a>
-</dt><dt>11.2. <a href="permissions-tediously-explained">Context
-Hierarchy Example</a>
-</dt><dt>11.3. <a href="permissions-tediously-explained">acs_objects
-example data</a>
+</dt><dt>10.1. <a href="tutorial-etp-templates">table
+showing ETP layout</a>
+</dt><dt>11.1. <a href="packages">Package files</a>
+</dt><dt>11.2. <a href="permissions-tediously-explained">Context Hierarchy
+Example</a>
+</dt><dt>11.3. <a href="permissions-tediously-explained">acs_objects example
+data</a>
 </dt><dt>14.1. <a href="i18n-overview">Internationalization and
 Localization Overview</a>
 </dt>
 </dl>
 </div><div class="list-of-examples">
-<p><strong>List of Examples</strong></p><dl><dt>12.1. <a href="variables">Getting
-datetime from the database ANSI-style</a>
+<p><strong>List of Examples</strong></p><dl><dt>12.1. <a href="variables">Getting datetime from the
+database ANSI-style</a>
 </dt></dl>
 </div>
 </div>

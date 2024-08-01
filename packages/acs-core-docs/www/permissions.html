@@ -7,7 +7,7 @@ The OpenACS 5.9.0 Permissions system allows developers and administrators to
 set access control policies at the object level, that is, any
 application or system object represented by a row in the
 <code class="computeroutput">acs_objects</code> table can be access-controlled via a
-PL/SQL or Tcl interface. The permissions system manages a data model
+PL/SQL or Tcl interface. The permission system manages a data model
 that then allows scripts to check permissions using another API call.
 </p><p>
 Although object level permissions seems appropriate, no developer or
@@ -19,7 +19,7 @@ in flexible ways.</p></li><li class="listitem"><p>the object model defines a not
 <span class="emphasis"><em>object context</em></span>, which allows applications to group objects
 together into larger security domains.
 </p></li></ol></div><p>The rest of this document discusses each of these parts, and how they fit together with the
-permissions system.
+permission system.
 </p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="permissions-groups"></a>Groups</h3></div></div></div><p>
 OpenACS 5.9.0 has an abstraction called a <span class="emphasis"><em>party</em></span>. Parties have a recursive
 definition. We can illustrate how it works with the following
@@ -72,7 +72,7 @@ groups.
 The full details of the groups data model is beyond the scope of this
 tutorial. See <a class="xref" href="parties.html" title="Parties in OpenACS">Parties in OpenACS</a> or <a class="xref" href="groups-design.html" title="Groups Design">OpenACS 4 Groups Design</a> for more details.
 </p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="permissions-permissions"></a>Permissions</h3></div></div></div><p>
-  NOTE: Much more detailed information about the permissions system
+  NOTE: Much more detailed information about the permission system
   and how to use it is available in the
   <a class="xref" href="permissions-tediously-explained.html" title="OpenACS Permissions Tediously Explained">OpenACS Permissions Tediously Explained</a> document.
 </p><p>

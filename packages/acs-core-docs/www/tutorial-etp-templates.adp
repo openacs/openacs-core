@@ -25,9 +25,9 @@ consistent look and feel. It also promotes code maintainability in
 the presentation layer, by allowing presentation components to be
 reused across multiple pages. If you need to change the layout for
 some reason, then you only need to make that change in one
-location, instead of across many files.</p><p>In this problem set you will familiarise yourself with the
-templating system in openacs. This will be achieved through
-customising an existing edit-this-page application template.</p><p>Before proceeding, it is strongly advised to read the templating
+location, instead of across many files.</p><p>In this problem set you will familiarize yourself with the
+templating system in OpenACS. This will be achieved through
+customizing an existing edit-this-page application template.</p><p>Before proceeding, it is strongly advised to read the templating
 documentation on your OpenACS installation
 (http://localhost:8000/doc/acs-templating). The documentation lists
 the special tags available for ADP files.</p>
@@ -86,7 +86,7 @@ cp article-content.adp col2-content.adp
 </li><li class="listitem">
 <p>The template should provide us with the following ETP
 layout:</p><div class="table">
-<a name="idp105548968790088"></a><p class="title"><strong>TableÂ 10.1.Â table
+<a name="id1418"></a><p class="title"><strong>TableÂ 10.1.Â table
 showing ETP layout</strong></p><div class="table-contents"><table class="table" summary="table showing ETP layout" cellspacing="0" border="1" width="250">
 <colgroup>
 <col align="left" class="c1"><col width="2" align="left" class="c2">
@@ -133,8 +133,8 @@ view your ETP application using the col2 template.</p></li>
 <a name="end"></a>Who Wrote This and When</h3></div></div></div><p>This problem set was originally written by Nick Carroll in
 August 2004 for the <a class="ulink" href="http://www.usyd.edu.au" target="_top">University of Sydney</a> Course EBUS5002.</p><p>This material is copyright 2004 by Nick Carroll. It may be
 copied, reused, and modified, provided credit is given to the
-original author.</p><div class="cvstag">($&zwnj;Id: tutorial-advanced.xml,v 1.60.2.11
-2022/04/27 12:22:29 gustafn Exp $)</div>
+original author.</p><div class="cvstag">($&zwnj;Id: tutorial-advanced.xml,v 1.60.2.12
+2024/02/05 15:35:07 gustafn Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

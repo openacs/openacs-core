@@ -74,7 +74,7 @@ application-independent services difficult. Therefore, the OpenACS
 for tagging application objects with unique identifiers.</p><p><span class="strong"><strong>Support for Unified Access
 Control</strong></span></p><p>Access control should be as transparent as possible to the
 application developer. Until the implementation of the general
-permissions system, every OpenACS application had to manage access
+permission system, every OpenACS application had to manage access
 control to its data separately. Later on, a notion of
 "scoping" was introduced into the core data model.</p><p>"Scope" is a term best explained by example. Consider
 some hypothetical rows in the <code class="computeroutput">address_book</code> table:</p><div class="informaltable"><table class="informaltable" cellspacing="0" border="1">
@@ -325,10 +325,10 @@ associate objects with particular scopes in the system, but it was
 awkward to use and limited in flexibility.</p><p>The OpenACS 4 Object Model provides a generalized notion of
 scope that allows developers to represent a hierarchy of object
 <span class="emphasis"><em>contexts</em></span>. These contexts are
-used as the basis for the permissions system. In general, if an
+used as the basis for the permission system. In general, if an
 object has no explicit permissions attached to it, then it inherits
 permissions from its context.</p><p>The context data model also forms the basis of the <a class="link" href="subsites-requirements" title="Subsites Requirements">subsites system</a>, and is a basic part of
-the <a class="link" href="permissions-requirements" title="Permissions Requirements">permissions system</a>, described in
+the <a class="link" href="permissions-requirements" title="Permissions Requirements">permission system</a>, described in
 separate documents.</p><p>The context data model should provide the following
 facilities:</p><p><span class="strong"><strong>50.10 Unique ID</strong></span></p><p>Every context should have a unique ID in the system.</p><p><span class="strong"><strong>50.20 Tree
 Structure</strong></span></p><p>The data model should support a tree structured organization of

@@ -80,7 +80,7 @@ damaging - entire tables can be exposed or have their contents
 deleted, for example.</p><p>Another very important reason for using bind variables is
 performance. Oracle can cache previously parsed queries. If there
 are values in the where clause, that is how the query is cached. It
-also performs bind variable susbstitution after parsing the SQL
+also performs bind variable substitution after parsing the SQL
 statement. This means that SQL statements that use bind variables
 will always match (assuming all else is the same) while SQL
 statements that do not use bind variables will not match unless the
@@ -262,7 +262,6 @@ done as a hint to release the database handle.</p><div class="variablelist"><dl 
 <a name="devguide.dbapi_db_abort_transaction" id="devguide.dbapi_db_abort_transaction"></a>db_abort_transaction</code></span></dt><dd>
 <pre class="programlisting">
 db_abort_transaction
-          
 </pre><p>Aborts all levels of a transaction. That is if this is called
 within several nested transactions, all of them are terminated. Use
 this instead of <code class="computeroutput">db_dml
@@ -306,7 +305,7 @@ as is the normal behavior. The columns must match the columns in
 the original multirow, or an error will be thrown.</p><p>Your code block may call <code class="computeroutput">continue</code> in order to skip a row and not
 include it in the multirow. Or you can call <code class="computeroutput">break</code> to skip this row and quit
 looping.</p><p>Notice the nonstandard numbering (everything else in Tcl starts
-at 0); the reason is that the graphics designer, a non programmer,
+at 0); the reason is that the graphics designer, a non-programmer,
 may wish to work with row numbers.</p><p>Example:</p><pre class="programlisting">
 db_multirow -extend { user_url } users users_query {
     select user_id first_names, last_name, email from cc_users
@@ -552,7 +551,7 @@ db_with_handle db {
           
 </pre>
 </dd>
-</dl></div><div class="cvstag">($&zwnj;Id: db-api.xml,v 1.17.2.4 2023/07/10 08:36:09
+</dl></div><div class="cvstag">($&zwnj;Id: db-api.xml,v 1.17.2.6 2024/02/08 18:45:01
 gustafn Exp $)</div>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">

@@ -91,7 +91,7 @@ and some_table.condition_p = '$foo'</pre><p>
           Another very important reason for using bind variables is
 	  performance. Oracle can cache previously parsed queries. If
 	  there are values in the where clause, that is how the query
-	  is cached. It also performs bind variable susbstitution
+	  is cached. It also performs bind variable substitution
 	  after parsing the SQL statement. This means that SQL
 	  statements that use bind variables will always match
 	  (assuming all else is the same) while SQL statements that do
@@ -283,9 +283,7 @@ PoolSequence.sec_id_seq=20
 	    <code class="computeroutput">
 	      <a name="devguide.dbapi_db_abort_transaction"></a>db_abort_transaction
 	    </code>
-	</span></dt><dd><pre class="programlisting">
-db_abort_transaction
-	  </pre><p>Aborts all levels of a transaction. That is if this is called within
+	</span></dt><dd><pre class="programlisting">db_abort_transaction</pre><p>Aborts all levels of a transaction. That is if this is called within
 	    several nested transactions, all of them are terminated. Use this instead of
 	    <code class="computeroutput">db_dml "abort" "abort transaction"</code>. 
 	    
@@ -337,8 +335,7 @@ db_abort_transaction
     to skip this row and quit looping.
     </p><p>
     Notice the nonstandard numbering (everything
-    else in Tcl starts at 0); the reason is that the graphics designer, a non
-    programmer, may wish to work with row numbers.
+    else in Tcl starts at 0); the reason is that the graphics designer, a non-programmer, may wish to work with row numbers.
     </p><p>
        Example:
     </p><pre class="programlisting">

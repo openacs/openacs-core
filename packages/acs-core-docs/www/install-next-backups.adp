@@ -34,5 +34,6 @@ then you can apply standard file-based backup strategies to
 			leftLink="backup-recovery" leftLabel="Prev" leftTitle="
 Chapter 8. Backup and Recovery"
 			rightLink="snapshot-backup" rightLabel="Next" rightTitle="Manual backup and recovery"
-			homeLink="index" homeLabel="Home"
-			upLink="backup-recovery" upLabel="Up">
+			homeLink="index" homeLabel="Home" 
+			upLink="backup-recovery" upLabel="Up"> 
+		    

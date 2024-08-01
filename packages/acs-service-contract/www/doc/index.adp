@@ -57,8 +57,8 @@ contract</p>
 <h2>FAQ</h2>
 <h3>Why Does an implementation reference an interface?</h3>
 <p>This might seem a little strange since a binding is the official
-reference between an implementation and an interface. However, it is
-quite possible that an implementation for interface might exist
+reference between an implementation and an interface. However, it
+is quite possible that an implementation for interface might exist
 prior to the interface being defined, ie the interface defining
 package is not installed. By retaining this information the
 interface defining package can be installed and the implementations

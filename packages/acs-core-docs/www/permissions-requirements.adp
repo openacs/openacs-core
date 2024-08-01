@@ -44,7 +44,7 @@ access control based simply on coded rules regarding who can act on
 a given database row based on the information in that row.</p><p>Problems resulting from this piecemeal approach to permissions
 and access control were many, the two major ones being
 inconsistency, and repeated/redundant code. Thus the drive in
-OpenACS 4 to provide a unified, consistent permissions system that
+OpenACS 4 to provide a unified, consistent permission system that
 both programmers and administrators can readily use.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">

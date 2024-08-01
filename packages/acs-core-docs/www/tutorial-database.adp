@@ -15,7 +15,8 @@ Chapter 9. Development Tutorial"
 OpenACS docs are written by the named authors, and may be edited by
 OpenACS documentation staff.</div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp105548968749256" id="idp105548968749256"></a>Code the data model</h3></div></div></div><p>We create all database objects with scripts in the <code class="computeroutput">myfirstpackage/sql/</code> directory. All database
+<a name="id1366" id="id1366"></a>Code the data
+model</h3></div></div></div><p>We create all database objects with scripts in the <code class="computeroutput">myfirstpackage/sql/</code> directory. All database
 scripts are database-specific and are thus in either the
 <code class="computeroutput">myfirstpackage/sql/oracle</code> or
 <code class="computeroutput">myfirstpackage/sql/postgresql</code>
@@ -28,7 +29,7 @@ should create all tables and views.</p><p>Our package is going to store all of i
 table. It takes more than just a <code class="computeroutput">CREATE TABLE</code> command, however, because we
 want to integrate our table with the OpenACS system. By making each
 record in our table an OpenACS object, we gain access to the
-permissions system and to services that integrate with OpenACS
+permission system and to services that integrate with OpenACS
 objects, such as <code class="computeroutput">general-comments</code> and <code class="computeroutput">notification</code>. The cost is that our table
 creation code must include several functions, stored procedures,
 and is complicated (even for simple tables).</p><p>There are many kinds of OpenACS objects in the system. (You can
@@ -42,7 +43,7 @@ objects, we can also use some content repository functions to
 simplify our database creation. (<a class="ulink" href="objects" target="_top">More information about ACS
 Objects</a>. <a class="ulink" href="/doc/acs-content-repository" target="_top">More information about the Content
 Repository</a>.)</p><div class="figure">
-<a name="idp105548968758856" id="idp105548968758856"></a><p class="title"><strong>Figure 9.2. Tutorial Data
+<a name="id1408" id="id1408"></a><p class="title"><strong>Figure 9.2. Tutorial Data
 Model</strong></p><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/tutorial-data-model.png" align="middle" alt="Tutorial Data Model"></div></div>
 </div><br class="figure-break"><p>The top of each SQL file has some standard comments, including
 doc tags such as <code class="computeroutput">\@author</code> which
@@ -51,7 +52,7 @@ the file is checked in to cvs.</p><pre class="screen">
 [$OPENACS_SERVICE_NAME ~]$ <strong class="userinput"><code>cd /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/packages/myfirstpackage/sql/postgresql</code></strong>
 [$OPENACS_SERVICE_NAME postgresql]$ <strong class="userinput"><code>emacs myfirstpackage-create.sql</code></strong>
 </pre><p>Paste the text below into the file, save, and close.</p><div class="figure">
-<a name="idp105548968763976" id="idp105548968763976"></a><p class="title"><strong>Figure 9.3. The
+<a name="id1409" id="id1409"></a><p class="title"><strong>Figure 9.3. The
 Database Creation Script</strong></p><div class="figure-contents"><pre class="programlisting">
 -- creation script
 --
@@ -81,7 +82,7 @@ conflict with objects from other packages.</p><p>Create a database file to drop 
 uninstalled.</p><pre class="screen">
 [$OPENACS_SERVICE_NAME postgresql]$ <strong class="userinput"><code>emacs myfirstpackage-drop.sql</code></strong>
 </pre><div class="figure">
-<a name="idp105548968767432" id="idp105548968767432"></a><p class="title"><strong>Figure 9.4. Database Deletion
+<a name="id1410" id="id1410"></a><p class="title"><strong>Figure 9.4. Database Deletion
 Script</strong></p><div class="figure-contents"><pre class="programlisting">
 -- drop script
 --

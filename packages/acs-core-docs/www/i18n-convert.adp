@@ -154,7 +154,8 @@ its checks primarily on en_US XML catalog files.</p>
 </li>
 </ol></div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp105548900997576" id="idp105548900997576"></a>Avoiding common i18n mistakes</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
+<a name="id1390" id="id1390"></a>Avoiding common
+i18n mistakes</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem">
 <p>
 <strong>Replace complicated keys with longer, simpler

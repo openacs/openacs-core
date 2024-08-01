@@ -605,7 +605,7 @@ as is the normal behavior. The columns must match the columns in
 the original multirow, or an error will be thrown.</p><p>Your code block may call <code class="computeroutput">continue</code> in order to skip a row and not
 include it in the multirow. Or you can call <code class="computeroutput">break</code> to skip this row and quit
 looping.</p><p>Notice the nonstandard numbering (everything else in Tcl starts
-at 0); the reason is that the graphics designer, a non programmer,
+at 0); the reason is that the graphics designer, a non-programmer,
 may wish to work with row numbers.</p><p>Example:</p><pre class="programlisting">
 db_multirow -extend { user_url } users users_query {
     select user_id first_names, last_name, email from cc_users
@@ -693,7 +693,7 @@ the user.</p><p>The nsv containing the list is initialized by the bootstrap
 script and should never be referenced directly by user code.
 Returns the current rdbms type and version.</p>
 </dd>
-</dl></div><div class="cvstag">($&zwnj;Id: db-api.xml,v 1.12.2.4 2021/05/02 20:18:15
+</dl></div><div class="cvstag">($&zwnj;Id: db-api.xml,v 1.12.2.5 2024/02/05 15:35:07
 gustafn Exp $)</div>
 </div>
 </div>

@@ -73,8 +73,8 @@ of one object type (e.g. users) to instances of another object type
 </li>
 </ul></div><p>The next section will explore these facilities in the context of
 the particular programming idioms that we wish to generalize.</p><p><span class="strong"><strong>Related Links</strong></span></p><p>This design document should be read along with the design
-documents for <a class="link" href="groups-design" title="Groups Design">the new groups system</a>, <a class="link" href="subsites-design" title="Subsites Design Document">subsites</a> and <a class="link" href="permissions-design" title="Permissions Design">the
-permissions system</a>
+documents for <a class="link" href="groups-design" title="Groups Design">the new groups system</a>, <a class="link" href="subsites-design" title="Subsites Design Document">subsites</a> and <a class="link" href="permissions-design" title="Permissions Design">the permission
+system</a>
 </p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
@@ -140,8 +140,8 @@ code that defines this table.</p>
 </div><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
 <a name="objects-design-obj-context" id="objects-design-obj-context"></a>Object Context and Access
-Control</h4></div></div></div><p>Until the implementation of the general permissions system,
-every OpenACS application had to manage access control to its data
+Control</h4></div></div></div><p>Until the implementation of the general permission system, every
+OpenACS application had to manage access control to its data
 separately. Later on, a notion of "scoping" was
 introduced into the core data model.</p><p>"Scope" is a term best explained by example. Consider
 some hypothetical rows in the <code class="computeroutput">address_book</code> table:</p><div class="informaltable"><table class="informaltable" cellspacing="0" border="1">
@@ -179,7 +179,7 @@ OpenACS security model will defer to an object&#39;s context if
 there is no information about user X&#39;s permission to perform
 action Y on object Z.</p><p>The context system forms the basis for the rest of the OpenACS
 access control system, which is described in two separate
-documents: one for the <a class="link" href="permissions-design" title="Permissions Design">permissions
+documents: one for the <a class="link" href="permissions-design" title="Permissions Design">permission
 system</a> and another for the <a class="link" href="groups-design" title="Groups Design">party groups</a> system.
 The context system is also used to implement <a class="link" href="subsites-design" title="Subsites Design Document">subsites</a>.</p>
 </div><div class="sect3">

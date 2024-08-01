@@ -19,9 +19,8 @@ an OpenACS Site</h2></div></div></div><div class="authorblurb">
 OpenACS docs are written by the named authors, and may be edited by
 OpenACS documentation staff.</div><p>
 <a name="cvs-service-import" id="cvs-service-import"></a><strong>Add the Service to CVS -
-OPTIONAL. </strong><a class="indexterm" name="idp105548899821128" id="idp105548899821128"></a>These steps take
-an existing OpenACS directory and add it to a <a class="link" href="install-cvs" title="Initialize CVS (OPTIONAL)">CVS
-repository</a>.</p><div class="orderedlist"><ol class="orderedlist" type="1">
+OPTIONAL. </strong><a class="indexterm" name="id13502" id="id13502"></a>These steps take an existing OpenACS directory and
+add it to a <a class="link" href="install-cvs" title="Initialize CVS (OPTIONAL)">CVS repository</a>.</p><div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">
 <p>Create and set permissions on a subdirectory in the local cvs
 repository.</p><pre class="screen">

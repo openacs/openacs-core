@@ -87,7 +87,7 @@ object yourself.</p><p>
 <code class="computeroutput">note-edit.tcl</code> requires a
 <code class="computeroutput">note_id</code> to determine which
 record should be deleted. It also looks for a confirmation
-variable, which should initially be absert. If it is absent, we
+variable, which should initially be absent. If it is absent, we
 create a form to allow the user to confirm the deletion. Note that
 in <code class="computeroutput">entry-edit.tcl</code> we used
 <code class="computeroutput">ad_form</code> to access the Form

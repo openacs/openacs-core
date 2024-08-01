@@ -18,7 +18,7 @@ OpenACS documentation staff.</div><div class="sect2">
 administrators to set access control policies at the object level,
 that is, any application or system object represented by a row in
 the <code class="computeroutput">acs_objects</code> table can be
-access-controlled via a PL/SQL or Tcl interface. The permissions
+access-controlled via a PL/SQL or Tcl interface. The permission
 system manages a data model that then allows scripts to check
 permissions using another API call.</p><p>Although object level permissions seems appropriate, no
 developer or administrator wants to <span class="emphasis"><em>explicitly</em></span> set access control rights for
@@ -29,7 +29,7 @@ flexible ways.</p></li><li class="listitem"><p>the object model defines a notion
 applications to group objects together into larger security
 domains.</p></li>
 </ol></div><p>The rest of this document discusses each of these parts, and how
-they fit together with the permissions system.</p>
+they fit together with the permission system.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="permissions-groups" id="permissions-groups"></a>Groups</h3></div></div></div><p>OpenACS 5.9.0 has an abstraction called a <span class="emphasis"><em>party</em></span>. Parties have a recursive
@@ -71,8 +71,8 @@ this tutorial. See <a class="xref" href="parties" title="Parties in OpenACS">Par
 Design</a> for more details.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="permissions-permissions" id="permissions-permissions"></a>Permissions</h3></div></div></div><p>NOTE: Much more detailed information about the permissions
-system and how to use it is available in the <a class="xref" href="permissions-tediously-explained" title="OpenACS Permissions Tediously Explained">OpenACS Permissions
+<a name="permissions-permissions" id="permissions-permissions"></a>Permissions</h3></div></div></div><p>NOTE: Much more detailed information about the permission system
+and how to use it is available in the <a class="xref" href="permissions-tediously-explained" title="OpenACS Permissions Tediously Explained">OpenACS Permissions
 Tediously Explained</a> document.</p><p>The permissions data model is a mapping between <span class="emphasis"><em>privileges</em></span>, parties and objects. Parties
 and objects have already been discussed. Now we focus on
 privileges.</p><p>In OpenACS, a privilege describes the right to perform some
@@ -196,8 +196,8 @@ organizations of users and groups of users.</p></li><li class="listitem"><p>The 
 user rights.</p></li><li class="listitem"><p>The Context hierarchy allows you to define organize default
 permissions in a hierarchical fashion.</p></li>
 </ol></div><p>A PL/SQL or Tcl API is then used to check permissions in
-application pages.</p><div class="cvstag">($&zwnj;Id: permissions.xml,v 1.18.2.3 2021/01/05
-17:33:40 gustafn Exp $)</div>
+application pages.</p><div class="cvstag">($&zwnj;Id: permissions.xml,v 1.18.2.4 2024/02/05
+15:35:07 gustafn Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

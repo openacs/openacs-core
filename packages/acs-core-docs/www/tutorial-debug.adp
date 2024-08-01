@@ -15,7 +15,7 @@ Chapter 9. Development Tutorial"
 OpenACS docs are written by the named authors, and may be edited by
 OpenACS documentation staff.</div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp105548968602312" id="idp105548968602312"></a>Debugging</h3></div></div></div><p>
+<a name="id1370" id="id1370"></a>Debugging</h3></div></div></div><p>
 <strong>Developer Support. </strong>The Developer
 Support package adds several goodies: debug information for every
 page; the ability to log comments to the page instead of the error
@@ -45,7 +45,8 @@ G goes to the end.<br>
           </p></div>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp105548968577480" id="idp105548968577480"></a>Manual testing</h3></div></div></div><p>Make a list of basic tests to make sure it works</p><div class="segmentedlist"><table border="0">
+<a name="id1371" id="id1371"></a>Manual
+testing</h3></div></div></div><p>Make a list of basic tests to make sure it works</p><div class="segmentedlist"><table border="0">
 <thead><tr class="segtitle">
 <th>Test Num</th><th>Action</th><th>Expected Result</th>
 </tr></thead><tbody>
@@ -73,15 +74,16 @@ mfp::note::delete.</td><td class="seg">Proc should return 0 for success.</td>
 to delete your own note. Edit your own note. Search for a note.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp105548968588488" id="idp105548968588488"></a>Write automated tests</h3></div></div></div><div class="authorblurb">
+<a name="id1374" id="id1374"></a>Write automated
+tests</h3></div></div></div><div class="authorblurb">
 <p>by <a class="ulink" href="mailto:simon\@collaboraid.net" target="_top">Simon Carstensen</a> and Joel Aufrecht</p>
 OpenACS docs are written by the named authors, and may be edited by
 OpenACS documentation staff.</div><p>
-<a class="indexterm" name="idp105548968557768" id="idp105548968557768"></a> It seems to me that a lot of people have
-been asking for some guidelines on how to write automated tests.
-I&#39;ve done several tests by now and have found the process to be
-extremely easy and useful. It&#39;s a joy to work with automated
-testing once you get the hang of it.</p><p>Create the directory that will contain the test script and edit
+<a class="indexterm" name="id8098" id="id8098"></a> It seems to
+me that a lot of people have been asking for some guidelines on how
+to write automated tests. I&#39;ve done several tests by now and
+have found the process to be extremely easy and useful. It&#39;s a
+joy to work with automated testing once you get the hang of it.</p><p>Create the directory that will contain the test script and edit
 the script file. The directory location and filename are standards
 which are recognized by the automated testing package:</p><pre class="screen">
 [$OPENACS_SERVICE_NAME www]$<strong class="userinput"><code> mkdir /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/packages/myfirstpackage/tcl/test</code></strong>
@@ -148,7 +150,8 @@ any test. (<a class="ulink" href="http://www.nedbatchelder.com/blog/20030408T062
 myfirstpackage. You should see your test case. Run it and examine
 the results.</p><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="idp105548968572104" id="idp105548968572104"></a>TCLWebtest tests</h4></div></div></div><p>API testing can only test part of our package - it doesn&#39;t
+<a name="id1372" id="id1372"></a>TCLWebtest
+tests</h4></div></div></div><p>API testing can only test part of our package - it doesn&#39;t
 test the code in our adp/tcl pairs. For this, we can use
 TCLwebtest. TCLwebtest must be <a class="link" href="install-tclwebtest" title="Install tclwebtest.">installed</a>
 for this test to work. This provides a <a class="ulink" href="http://tclwebtest.sourceforge.net/doc/api_public.html" target="_top">library of functions</a> that make it easy to call a page
@@ -158,7 +161,7 @@ acs-automated-testing; see the example provided for one approach on
 integrating them.</p>
 </div><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="idp105548968541512" id="idp105548968541512"></a>Example</h4></div></div></div><p>Now we can add the rest of the API tests, including a test with
+<a name="id1373" id="id1373"></a>Example</h4></div></div></div><p>Now we can add the rest of the API tests, including a test with
 deliberately bad data. The complete test looks like:</p><pre class="programlisting">
 ad_library {
     Test cases for my first package.

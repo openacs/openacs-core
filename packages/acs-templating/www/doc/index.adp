@@ -34,8 +34,6 @@ Guide</a></td><td>Writing a Template, the ADP part of a page</td>
 </tr><tr>
 <td colspan="2"><a href="demo/">Demonstration</a></td><td>Samples of the various mechanisms, with both Tcl and ADP
 parts.</td>
-</tr><tr>
-<td colspan="2"><a href="gadgets/">Gadgets</a></td><td>Eye candies and other general-purpose features.</td>
 </tr>
 </table>
 <h2>Release Notes</h2>

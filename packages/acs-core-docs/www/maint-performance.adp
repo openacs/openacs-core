@@ -32,7 +32,7 @@ Information" at the bottom of the page.</p></li><li class="listitem">
 <p>This should return a list of database queries on the page,
 including the exact query (so it can be cut-paste into psql or
 oracle) and the time each query took.</p><div class="figure">
-<a name="idp105548898895560" id="idp105548898895560"></a><p class="title"><strong>Figure 6.8. Query
+<a name="id1405" id="id1405"></a><p class="title"><strong>Figure 6.8. Query
 Analysis example</strong></p><div class="figure-contents"><div class="mediaobject"><img src="images/query-duration.png" alt="Query Analysis example"></div></div>
 </div><br class="figure-break">
 </li>
@@ -123,8 +123,8 @@ about 1% per Oracle Support information.</p><p>To be able to get a overview of h
 query, install "autotrace". I usually follow the
 instructions here <a class="ulink" href="http://asktom.oracle.com/~tkyte/article1/autotrace.html" target="_top">http://asktom.oracle.com/~tkyte/article1/autotrace.html</a>.</p><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="idp105548898880584" id="idp105548898880584"></a>Make sure that the Oracle CBO works with
-adequate statistics</h4></div></div></div><p>The Oracle Cost Based optimizer is a piece of software that
+<a name="id1360" id="id1360"></a>Make sure that
+the Oracle CBO works with adequate statistics</h4></div></div></div><p>The Oracle Cost Based optimizer is a piece of software that
 tries to find the "optimal" execution plan for a given
 SQL statement. For that it estimates the costs of running a SQL
 query in a particular way (by default up to 80.000 permutations are

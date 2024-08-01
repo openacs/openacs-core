@@ -16,7 +16,8 @@ Site"
 OpenACS docs are written by the named authors, and may be edited by
 OpenACS documentation staff.</div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp105548901925704" id="idp105548901925704"></a>Installing OpenACS packages</h3></div></div></div><p>An OpenACS package extends your website and lets it do things it
+<a name="id1343" id="id1343"></a>Installing
+OpenACS packages</h3></div></div></div><p>An OpenACS package extends your website and lets it do things it
 was not able to do before. You can have a weblog, a forums, a
 calendar, or even do sophisticated project-management via your
 website.</p><p>After you&#39;ve installed OpenACS, you can congratulate

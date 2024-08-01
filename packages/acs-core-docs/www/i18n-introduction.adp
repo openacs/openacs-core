@@ -48,7 +48,7 @@ refers only to internationalizing the text in the package user
 interface.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="i18n-locale-templates" id="i18n-locale-templates"></a>Separate Templates for each Locale</h3></div></div></div><p>If the request processor finds a filenamed <code class="computeroutput">filename.locale.adp</code>, where locale matches
+<a name="i18n-locale-templates" id="i18n-locale-templates"></a>Separate Templates for each Locale</h3></div></div></div><p>If the request processor finds a file named <code class="computeroutput">filename.locale.adp</code>, where locale matches
 the user&#39;s locale, it will process that file instead of
 <code class="computeroutput">filename.adp</code>. For example, for
 a user with locale <code class="computeroutput">tl_PH</code>, the
@@ -158,7 +158,7 @@ replace the procedure call with a variable lookup on the syntax
 %var_name%. Remember to initialize a Tcl variable with the same
 name on some line above the text.</p></li><li class="listitem"><p>If the text is in a Tcl file you must replace variable lookups
 (occurrences of $var_name or ${var_name}) with %var_name%</p></li><li class="listitem"><p>You are now ready to follow the normal procedure and mark up the
-text using a tempoarary message tag (&lt;#_
+text using a temporary message tag (&lt;#_
 text_with_percentage_vars#&gt;) and run the action replace tags
 with keys in the APM.</p></li>
 </ul></div><p>The variable values in the message are usually fetched with

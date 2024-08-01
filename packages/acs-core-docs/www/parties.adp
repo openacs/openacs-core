@@ -122,7 +122,7 @@ parties table) is the name of the group:</p><pre class="programlisting"><code cl
 relations between parties and groups.</p><p><span class="strong"><strong>Group Relations</strong></span></p><p>Two types of group relations are represented in the data model:
 membership relations and composite relations. The full range of
 sophisticated group structures that exist in the real world can be
-modelled in OpenACS by these two relationship types.</p><p>Membership relations represent direct membership relation
+modeled in OpenACS by these two relationship types.</p><p>Membership relations represent direct membership relation
 between parties and groups. A party may be a "member" of
 a group. Direct membership relations are common in administrative
 practices, and do not follow basic set theory rules. If A is a
@@ -322,8 +322,8 @@ primary key in what could be thought of as a pure relation. Because
 a membership relation is an ordinary acs object with <a class="ulink" href="object-identity" target="_top">object
 identity</a>, it is as easy to extend the membership relation to
 store extra information as it is to extend the users table or the
-groups table.</p><div class="cvstag">($&zwnj;Id: parties.xml,v 1.10.2.2 2023/03/28
-11:20:36 antoniop Exp $)</div>
+groups table.</p><div class="cvstag">($&zwnj;Id: parties.xml,v 1.10.2.3 2024/02/05
+15:35:07 gustafn Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

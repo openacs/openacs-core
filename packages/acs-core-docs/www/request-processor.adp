@@ -45,7 +45,7 @@ information. Session information is generally sent from the client
 detail in its own document. It examines the client request and
 either extracts or sets up new session tokens for the user.</p></dd><dt><span class="term">Stage 3: Authorization</span></dt><dd><p>Next, the Request Processor checks if the user has appropriate
 access privileges to the requested part of the site. In OpenACS
-5.9.0, access control is dictated by the <a class="ulink" href="permissions" target="_top">permissions system</a>. In this case,
+5.9.0, access control is dictated by the <a class="ulink" href="permissions" target="_top">permission system</a>. In this case,
 the RP checks if the user has "read" privileges on the
 object in the site map specified by the URL. This object is
 typically a package instance, but it could easily be something more
@@ -106,7 +106,7 @@ package_key]</code></span></dt><dd><p>If the URL refers to a package instance, t
 name of the package.</p></dd><dt><span class="term"><code class="computeroutput">[ad_conn
 path_info]</code></span></dt><dd><p>In a .vuh file, path_info is the trailing part of the URL not
 matched by the .vuh file.</p></dd>
-</dl></div><div class="cvstag">($&zwnj;Id: rp.xml,v 1.13.2.2 2019/08/09 20:04:23
+</dl></div><div class="cvstag">($&zwnj;Id: rp.xml,v 1.13.2.3 2024/02/05 15:35:07
 gustafn Exp $)</div>
 </div>
 </div>

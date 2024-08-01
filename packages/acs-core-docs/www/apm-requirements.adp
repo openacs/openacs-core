@@ -34,7 +34,7 @@ document.</p>
 <a name="apm-requirements-vision" id="apm-requirements-vision"></a>Vision Statement</h3></div></div></div><p>A typical website will tend to offer its users a number of
 web-based services or applications, e.g. a bulletin board,
 calendaring, classified ads, etc. A website may also have
-underlying subsystems, such as a permissions system, content
+underlying subsystems, such as a permission system, content
 management system, etc. For such applications and subsystem
 components, modularity - or the degree to which a component can be
 encapsulated and decoupled from the rest of the system - is of
