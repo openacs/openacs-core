@@ -15,6 +15,7 @@ ad_page_contract {
     {default_value ""}
     {min_n_values:integer 1}
     {max_n_values:integer 1}
+    {update_info_file:boolean,notnull true}
 } -validate {
     datatype_type_ck {
         if {$datatype ne "number" && $datatype ne "string" && $datatype ne "text"} {
@@ -31,7 +32,10 @@ db_transaction {
 
     apm_parameter_update $parameter_id $package_key $parameter_name $description \
         $default_value $datatype $section_name $min_n_values $max_n_values
-    apm_package_install_spec $version_id
+
+    if {$update_info_file} {
+        apm_package_install_spec $version_id
+    }
 } on_error {
     ad_return_error "Database Error" "The parameter could not be updated.
 The database returned the following error:<p>

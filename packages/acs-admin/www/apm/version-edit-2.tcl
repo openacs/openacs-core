@@ -11,13 +11,14 @@ ad_page_contract {
     summary
     description:html
     {description_format ""}
-    { owner_name:multiple}
-    { owner_uri:multiple}
+    {owner_name:multiple}
+    {owner_uri:multiple}
     vendor
     vendor_uri
     {auto_mount ""}
     {release_date ""}
-    { upgrade_p:boolean,notnull 0 }
+    {upgrade_p:boolean,notnull 0}
+    {update_info_file:boolean,notnull true}
 }
 
 # Validate dynamic package version attributes
@@ -72,7 +73,10 @@ db_transaction {
     set version_id [apm_version_update -array dynamic_attributes $version_id $version_name $version_uri \
 	    $summary $description $description_format $vendor $vendor_uri $auto_mount $release_date]
     apm_package_install_owners [apm_package_install_owners_prepare $owner_name $owner_uri] $version_id
-    apm_package_install_spec $version_id
+
+    if {$update_info_file} {
+        apm_package_install_spec $version_id
+    }
     if {$upgrade_p} {
 	apm_version_upgrade $version_id
 

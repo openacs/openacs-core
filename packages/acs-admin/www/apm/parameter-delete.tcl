@@ -7,6 +7,7 @@ ad_page_contract {
     parameter_id:naturalnum,notnull
     section_name:notnull
     version_id:naturalnum,notnull
+    {update_info_file:boolean 1}
 }
 
 db_1row apm_package_by_version_id {

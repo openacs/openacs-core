@@ -17,9 +17,10 @@ ad_page_contract {
     {min_n_values:integer 1}
     {max_n_values:integer 1}
     {return_url:localurl ""}
+    {update_info_file:boolean true}
 } -validate {
     datatype_type_ck {
-        if {$datatype ne "number" && $datatype ne "string" && $datatype ne "text"} {
+        if {$datatype ni {number string text}} {
             ad_complain
         }
     }
@@ -41,7 +42,9 @@ ad_page_contract {
 db_transaction {
     apm_parameter_register -parameter_id $parameter_id -scope $scope $parameter_name $description $package_key \
         $default_value $datatype $section_name $min_n_values $max_n_values
-    apm_package_install_spec $version_id
+    if {$update_info_file} {
+        apm_package_install_spec $version_id
+    }
 } on_error {
     if {![db_string apm_parameter_register_doubleclick_p {
         select 1 from apm_parameters where parameter_id = :parameter_id
