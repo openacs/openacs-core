@@ -4422,6 +4422,45 @@ namespace eval util::resources {
     } {
         return https://api.cdnjs.com/libraries?search=$library&search_fields=name&fields=filename,description,version&limit=$count
     }
+
+
+    ad_proc -public ::util::resources::check_vulnerability {
+        {-service:required}
+        {-library:required}
+        {-version:required}
+    } {
+
+        Return a dict containing vulnerability info with the keys
+        "hasVulnerability", "libraryURL" and "versionURL"
+
+        @param service name of the vulnerability checking service (currently only synk)
+        @param library name of the library as named by the vulnerability service
+        @param version version of the library to be checked
+
+    } {
+        set hasVulnerability ?
+        switch $service {
+            snyk {
+                set vulnerabilityCheckURL https://security.snyk.io/package/npm/$library
+                set vulnerabilityCheckVersionURL https://security.snyk.io/package/npm/$library/$version
+                set page [::util::resources::http_get_with_default \
+                              -url $vulnerabilityCheckVersionURL \
+                              -key snyk-$library/$version]
+                if {$page eq ""} {
+                    unset vulnerabilityCheckVersionURL
+                    ns_log notice "check_vulnerability: request failed $vulnerabilityCheckVersionURL"
+                } else {
+                    set hasVulnerability [string match "*PackageVulnerabilitiesTable*" $page]
+                    #ns_log notice RESULT=$page
+                }
+            }
+            default {
+                error "check_vulnerability: unknown service '$service'"
+            }
+        }
+        ns_log notice "=== check_vulnerability for $library @$version -> $hasVulnerability"
+        return [list hasVulnerability $hasVulnerability libraryURL $vulnerabilityCheckURL versionURL $vulnerabilityCheckVersionURL]
+    }
 }
 
 ad_proc -deprecated ad_tcl_vars_to_ns_set {

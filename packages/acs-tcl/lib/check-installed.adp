@@ -1,7 +1,7 @@
 <p>
 The configured version of @resource_name@ is
-<strong>@version@</strong><small> <adp:icon title="Configured via @configured_via@" name="form-info-sign"></small>
-(newest version on cdnjs: @newest_version@).
+<i>@version@</i><small> <adp:icon title="Configured via @configured_via@" name="form-info-sign"></small>
+(newest version on cdnjs: <i>@newest_version@</i>).
 <ul class="action-links ms-3">
 <if @modifyPackageParameterURL@ not nil>
 <li>You might <a title="Change the value of the package parameter @parameter_name@" href="@modifyPackageParameterURL@">modify the parameter value</a> or
@@ -18,8 +18,12 @@ The configured version of @resource_name@ is
 </if>
 <if @vulnerabilityCheckURL@ not nil>
   <li>You might check on Synk the
-    <if @vulnerabilityCheckVersionURL@ not nil>a
-    vulnerability status for version <a href="@vulnerabilityCheckVersionURL@">@version@</a> and
+    <if @vulnerabilityCheckVersionURL@ not nil>a vulnerability status for version
+    <a href="@vulnerabilityCheckVersionURL@" title="Check includes only direct vulnerabilities">@version@<sup>
+    <if @vulnerabilityCheckResult@ true><span class="text-danger"><adp:icon name="warn"></span></if>
+    <else><span class="text-success"><adp:icon name="radio-checked"></span></else>
+    </sup>
+    </a> and
     </if>
     for <a href="@vulnerabilityCheckURL@">all released versions</a> of @resource_name@. 
   </li>
