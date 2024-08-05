@@ -965,7 +965,7 @@ ad_proc -private apm_git_build_repository {
         acs-mail
         acs-notification
         acs-object-management
-        acs-object-managment
+        acs-object-management
         acs-outdated
         acs-person
         address-book
