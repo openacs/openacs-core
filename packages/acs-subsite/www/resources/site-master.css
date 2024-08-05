@@ -420,7 +420,7 @@ a.admin:hover {
   background-color: #ffc; 
 }
 
-ul.action-links li {
+ul.action-links > li {
   list-style: circle url(/resources/acs-subsite/action-link-marker.png);
   margin: 8px;
   margin-left: -16px;
