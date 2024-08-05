@@ -1,4 +1,3 @@
-# packages-core-ui/www/acs_object/permissions/index.tcl
 ad_page_contract {
     Display permissions and children for the given object_id
 

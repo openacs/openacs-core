@@ -1,4 +1,3 @@
-# packages/acs-core-ui/www/permissions/index.tcl
 ad_page_contract {
     Display all objects that the user has admin on.
     

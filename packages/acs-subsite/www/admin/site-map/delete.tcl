@@ -1,5 +1,3 @@
-# packages/acs-core-ui/www/admin/site-nodes/delete.tcl
-
 ad_page_contract {
 
     @author rhs@mit.edu

@@ -1,5 +1,3 @@
-# packages/acs-core-ui/www/acs_object/permissions/revoke-2.tcl
-
 ad_page_contract {
 
   @author rhs@mit.edu

@@ -1,5 +1,4 @@
--- Uninstall file for the data model created by 'acs-core-ui-create.sql'
--- (This file created automatically by create-sql-uninst.pl.)
+-- Uninstall the subsite data model
 --
 -- @author Bryan Quinn
 -- @creation-date  (Sat Aug 26 17:56:07 2000)

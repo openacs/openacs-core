@@ -1,5 +1,3 @@
-# packages/acs-core-ui/www/acs_object/permissions/grant.tcl
-
 ad_page_contract {
 
     @author rhs@mit.edu

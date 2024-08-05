@@ -1,5 +1,3 @@
-# packages/acs-core-ui/www/admin/site-nodes/unmount.tcl
-
 ad_page_contract {
 
     @author rhs@mit.edu
