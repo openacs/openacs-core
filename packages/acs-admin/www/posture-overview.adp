@@ -76,7 +76,7 @@ firewall protection of the site.
 <tr>
   <td><a title="View Page" href='@link_check.url@'><adp:icon name="arrow-right-square"> @link_check.url@</a></td>
   <td>@link_check.status@</td>
-  <td><a title="See Detailed Permissions" href='/permissions/one?object_id=@package_id@'>
+  <td><a title="See Detailed Permissions" href='/permissions/one?object_id=@link_check.package_id@'>
   <if @link_check.permission_info@ not nil><adp:icon name='permissions'> </if>
   @link_check.permission_info@</a></td>
   <td class='px-2'>@link_check.diagnosis@</td>
