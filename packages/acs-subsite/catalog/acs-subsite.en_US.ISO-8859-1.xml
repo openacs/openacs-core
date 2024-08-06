@@ -549,7 +549,7 @@ You can always change your password by doing the following:
   <msg key="Site_Map">Site Map</msg>
   <msg key="Site_Map_Instructions">Site Map Instructions</msg>
   <msg key="Site_node_you_would_like_to_map_hostname_to">Site node you would like to map hostname to</msg>
-  <msg key="Site_Wide_Admin">Site Wide Administration</msg>
+  <msg key="Site_Wide_Admin">Site-Wide Administration</msg>
   <msg key="Site_wide_administration">Site-wide administration</msg>
   <msg key="sorry_forgotten_pwd">Sorry, we can&#39;t help you with your forgotten password.</msg>
   <msg key="Status">Status</msg>

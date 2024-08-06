@@ -364,7 +364,7 @@ priority:</para>
 </listitem>
 
 <listitem>
-<para>get locale from site wide default</para>
+<para>get locale from site-wide default</para>
 
 <para><emphasis>20.20</emphasis> An API will be provided for
 getting the current request locale from the

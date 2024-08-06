@@ -656,10 +656,10 @@ ad_proc -public template::add_header {
     {-html ""}
 } {
     Add a header include to the beginning of the document body.  This function
-    is used by site wide services to add functionality to the beginning of a
+    is used by site-wide services to add functionality to the beginning of a
     page.  Examples include the developer support toolbar, acs-lang translation
     interface and the acs-templating WYSIWYG editor textarea place holder.  If
-    you are not implementing a site wide service, you should not be using this
+    you are not implementing a site-wide service, you should not be using this
     function to add content to your page.  You must supply either src or html.
 
     @param direction whether the header should be added as the outer most
@@ -701,10 +701,10 @@ ad_proc -public template::add_footer {
     {-html ""}
 } {
     Add a footer include to the end of the document body.  This function
-    is used by site wide services to add functionality to the end of a
+    is used by site-wide services to add functionality to the end of a
     page.  Examples include the developer support toolbar, acs-lang translation
     interface and the acs-templating WYSIWYG editor textarea place holder.  If
-    you are not implementing a site wide service, you should not be using this
+    you are not implementing a site-wide service, you should not be using this
     function to add content to your page.  You must supply either src or html.
 
     @param direction whether the footer should be added as the outer most

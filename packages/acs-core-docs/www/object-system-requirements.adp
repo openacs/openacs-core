@@ -19,7 +19,7 @@ core services of the system into a coherent common data model and
 API. In the past, these services were provided to applications in
 an ad-hoc and irregular fashion. Examples of such services
 include:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
-<li class="listitem"><p>General Comments</p></li><li class="listitem"><p>User/groups</p></li><li class="listitem"><p>Attribute storage in user/groups</p></li><li class="listitem"><p>General Permissions</p></li><li class="listitem"><p>Site wide search</p></li><li class="listitem"><p>General Auditing</p></li>
+<li class="listitem"><p>General Comments</p></li><li class="listitem"><p>User/groups</p></li><li class="listitem"><p>Attribute storage in user/groups</p></li><li class="listitem"><p>General Permissions</p></li><li class="listitem"><p>Site-wide search</p></li><li class="listitem"><p>General Auditing</p></li>
 </ul></div><p>All of these services involve relating extra information and
 services to application data objects, examples of which
 include:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
@@ -220,7 +220,7 @@ relations.</p></li><li class="listitem"><p>General Comments: Comments are attach
 some kind of document.</p></li><li class="listitem"><p>General Permissions: Stores access control information on
 application data.</p></li><li class="listitem"><p>User Profiling: Maps users to pieces of content that they have
 looked at; content identifiers must be managed in a uniform
-way.</p></li><li class="listitem"><p>Site Wide Search: Stores all content in a single flat table,
+way.</p></li><li class="listitem"><p>Site-Wide Search: Stores all content in a single flat table,
 with object identifiers pointing to the object containing the
 content in the first place. This way, we can search the contents of
 many different types of objects in a uniform way.</p></li>

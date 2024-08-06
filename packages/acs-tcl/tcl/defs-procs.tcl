@@ -443,7 +443,7 @@ ad_proc -public ad_parameter_from_configuration_file {
     return [ns_config "ns/server/[ns_info server]/acs/$package_key" $name]
 }
 
-ad_proc -public -deprecated ad_parameter_from_file {
+ad_proc -public -deprecated ad_parameter_from_configuration_file {
     name
     {package_key ""}
 } {

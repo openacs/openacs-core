@@ -79,7 +79,7 @@ function:</p>
 </pre>
 
 It has not yet been decided how the user&#39;s preferred locale
-will be initialized. For now, there is a site wide default package
+will be initialized. For now, there is a site-wide default package
 parameter <kbd>[parameter::get -parameter DefaultLocale -default
 "en_US"]</kbd>
 , and an API for setting the locale with

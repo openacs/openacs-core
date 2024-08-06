@@ -160,7 +160,7 @@ locale-specific formatting functions.
 <strong>20.10</strong> The locale for a request should be
 computed by the following method, in descending order of
 priority:</p><ul class="noindent">
-<li>get locale associated with subsite or package id</li><li>get locale from user preference</li><li>get locale from site wide default
+<li>get locale associated with subsite or package id</li><li>get locale from user preference</li><li>get locale from site-wide default
 <p>
 <strong>20.20</strong> An API will be provided for getting the
 current request locale from the <code>ad_conn</code> structure.</p>

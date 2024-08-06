@@ -469,7 +469,7 @@ Bitte ändern Sie Ihr Passwort unter folgendem Link:
   <msg key="Site_Map">Sitemap</msg>
   <msg key="Site_Map_Instructions">Anleitung Sitemap</msg>
   <msg key="Site_node_you_would_like_to_map_hostname_to">Site node you would like to map hostname to</msg>
-  <msg key="Site_Wide_Admin">System Administration</msg>
+  <msg key="Site_Wide_Admin">Site-wide Administration</msg>
   <msg key="Site_wide_administration">Systemadministration</msg>
   <msg key="sorry_forgotten_pwd">Das Passwort kann nicht zurückgesetzt werden.</msg>
   <msg key="Status">Status</msg>

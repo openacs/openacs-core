@@ -180,7 +180,7 @@ formatting functions.</p><div class="blockquote"><blockquote class="blockquote">
 request should be computed by the following method, in descending
 order of priority:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>get locale associated with subsite or package id</p></li><li class="listitem"><p>get locale from user preference</p></li><li class="listitem">
-<p>get locale from site wide default</p><p>
+<p>get locale from site-wide default</p><p>
 <span class="emphasis"><em>20.20</em></span> An API will be
 provided for getting the current request locale from the
 <code class="literal">ad_conn</code> structure.</p>

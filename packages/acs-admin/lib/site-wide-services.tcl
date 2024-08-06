@@ -1,5 +1,5 @@
 ad_include_contract {
-    Include for listing site wide services
+    Include for listing site-wide services
 } {
     {nr_subsites:integer 0}
 }

@@ -1303,7 +1303,7 @@ ad_proc -public acs_user::promote_person_to_user {
            Defaults to a randomly generated password.
     @param authority_id the authority that will be used for the user.
     @param locale locale to be used in user preferences.
-           Defaults to the site wide locale is taken.
+           Defaults to the site-wide locale is taken.
 
     @return The user_id of the person promoted to user
 

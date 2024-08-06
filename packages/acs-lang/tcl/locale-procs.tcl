@@ -32,7 +32,7 @@ ad_proc -public lang::system::use_package_level_locales_p {} {
 
 ad_proc -public lang::system::site_wide_locale {
 } {
-    Get the site wide system locale setting.
+    Get the site-wide system locale setting.
 } {
     set parameter_locale [parameter::get \
                 -package_id [apm_package_id_from_key "acs-lang"] \
@@ -278,7 +278,7 @@ ad_proc -public lang::user::package_level_locale {
 ad_proc -public lang::user::site_wide_locale {
     {-user_id ""}
 } {
-    Get the user's preferred site wide locale.
+    Get the user's preferred site-wide locale.
 } {
     # default to current user
     if { $user_id eq "" } {
@@ -297,7 +297,7 @@ ad_proc -public lang::user::site_wide_locale {
 ad_proc -private lang::user::site_wide_locale_not_cached {
     user_id
 } {
-    Get the user's preferred site wide locale.
+    Get the user's preferred site-wide locale.
 } {
     set system_locale [lang::system::site_wide_locale]
 
@@ -545,7 +545,7 @@ ad_proc -private lang::conn::locale_not_cached {
         set locale [lang::system::package_level_locale $package_id]
     }
 
-    # if that does not exist use user's site wide locale
+    # if that does not exist use user's site-wide locale
 
     if { $locale eq "" } {
         set locale [lang::user::site_wide_locale -user_id $user_id]
@@ -557,7 +557,7 @@ ad_proc -private lang::conn::locale_not_cached {
         set locale [lang::conn::browser_locale]
     }
 
-    # if that does not exist use system's site wide locale
+    # if that does not exist use system's site-wide locale
 
     if { $locale eq "" } {
         set locale [lang::system::site_wide_locale]

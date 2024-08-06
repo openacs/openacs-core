@@ -226,7 +226,7 @@ aa_register_case -cats {
             set subsite_id [dict get $node_info object_id]
 
             aa_true "Site-wide subsite is where expected" {$subsite_id == $sws}
-            aa_true "Site wide package was mounted properly" [db_0or1row check_swa_package {
+            aa_true "Site-wide package was mounted properly" [db_0or1row check_swa_package {
                 select 1 from site_nodes n, apm_packages p
                 where n.parent_id = :node_id
                 and p.package_id = n.object_id

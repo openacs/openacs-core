@@ -40,7 +40,7 @@ constraints on client applications.</p>
 <p>The package consists of the following components:</p>
 <ul>
 <li>A data model for representing and storing messages.</li><li>A data model for representing and storing attachments to
-messages.</li><li>A mechanism for sending messages as e-mail.</li><li>A mechanism for integrating the message store into site wide
+messages.</li><li>A mechanism for sending messages as e-mail.</li><li>A mechanism for integrating the message store into site-wide
 search.</li>
 </ul>
 <h3>IV. Use-cases and User Scenarios</h3>
@@ -103,9 +103,9 @@ messages that are replies to each other. If message M is a reply to
 some other message N, then M should be able to refer to N in a
 straightforward way.</p>
 <p><strong>70.0 Search</strong></p>
-<p>Messages should be searchable as part of a site wide search.
+<p>Messages should be searchable as part of a site-wide search.
 Therefore, the data model must integrate with the data model for
-site wide search.</p>
+site-wide search.</p>
 <h3>VI.B Requirements: API</h3>
 <p><strong>80.0 Messages</strong></p>
 <p>The system should provide the following interfaces for

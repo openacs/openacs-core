@@ -923,7 +923,7 @@ information available from the <computeroutput>apm_package_types</computeroutput
 
 
 <para>The <ulink url="/acs-admin/apm">APM&#39;s user interface</ulink> is part of the
-<ulink url="/acs-admin">OpenACS Administration Service</ulink>. The UI is the primary
+<ulink url="/acs-admin">ACS Site-Wide Administration</ulink>. The UI is the primary
 point of contact with APM by developers and administrators. It is part of OpenACS
 Administration, because only the site-wide administrator should be able to
 access it. Thus in order to develop a package, the developer must be granted

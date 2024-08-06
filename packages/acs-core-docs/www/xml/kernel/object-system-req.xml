@@ -31,7 +31,7 @@ Examples of such services include:</para>
 
 <listitem><para>General Permissions</para></listitem>
 
-<listitem><para>Site wide search</para></listitem>
+<listitem><para>Site-wide search</para></listitem>
 
 <listitem><para>General Auditing</para></listitem>
 </itemizedlist>
@@ -342,7 +342,7 @@ data.</para></listitem>
 <listitem><para>User Profiling: Maps users to pieces of content that they have looked at;
 content identifiers must be managed in a uniform way.</para></listitem>
 
-<listitem><para>Site Wide Search: Stores all content in a single flat table, with object
+<listitem><para>Site-Wide Search: Stores all content in a single flat table, with object
 identifiers pointing to the object containing the content in the first place.
 This way, we can search the contents of many different types of objects in a
 uniform way.</para></listitem>
