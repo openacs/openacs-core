@@ -18,7 +18,9 @@ set packages [apm_enabled_packages]
 set number_of_packages [llength $packages]
 set version_numbers_on_result_pages [ns_config ns/server/[ns_info server] noticedetail]
 
-set current_location [ns_conn location]
+if {$current_location eq ""} {
+    set current_location [ns_conn location]
+}
 set behind_reverse_proxy_p [ad_conn behind_proxy_p]
 set behind_secure_reverse_proxy_p [ad_conn behind_secure_proxy_p]
 
@@ -233,9 +235,7 @@ foreach {type url} [subst {
 
 template::multirow create hdr_check \
     field value
-foreach url {
-    https://localhost:8443/
-} {
+foreach url $current_location {
     set result [ns_http run $url]
     set hdrs [dict get $result headers]
     #set location [ns_set iget [dict get $result headers] location]

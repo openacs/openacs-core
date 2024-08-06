@@ -25,7 +25,7 @@ if {$package_key eq ""} {
         # should be sufficiently fast.
         #
         set doc(title) "Publicly Accessible Packages"
-        set context [list [list system-overview "Posture Overview"] $doc(title)]
+        set context [list [list posture-overview "Posture Overview"] $doc(title)]
 
         #
         # Counting # of instances per package_key which are publicly readable
@@ -80,7 +80,7 @@ if {$package_key eq ""} {
         # installed and mounted packages.
         #
         set doc(title) "Installed Packages"
-        set context [list [list system-overview "Posture Overview"] $doc(title)]
+        set context [list [list posture-overview "Posture Overview"] $doc(title)]
 
         #
         # Counting # of instances per package_key which are publicly readable
@@ -127,7 +127,7 @@ if {$package_key eq ""} {
 } else {
     set mode per_package_key
     set doc(title) "Publicly Accessible Packages of type $package_key"
-    set context [list [list system-overview "Posture Overview"] $doc(title)]
+    set context [list [list posture-overview "Posture Overview"] $doc(title)]
 
     set overviewLink [export_vars -base ./widely-accessible-packages {
         numPublicReadableSiteNodes numSiteNodesEntries sitenodeModel
