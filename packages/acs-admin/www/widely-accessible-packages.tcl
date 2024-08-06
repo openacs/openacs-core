@@ -39,7 +39,7 @@ if {$package_key eq ""} {
                 ), -1, 'read') a, apm_packages ap
                 where ap.package_id = orig_object_id
                 group by 2 order by 1 desc, 2 asc
-            )
+            ) as tuples
         }]
 
         template::multirow create per_package_key count package_key link url package_id
@@ -90,7 +90,7 @@ if {$package_key eq ""} {
             select count || ' ' || package_key from (
                 select count(s.object_id), ap.package_key from apm_packages ap, site_nodes s
                 where s.object_id = ap.package_id group by 2 order by 1 desc, 2 asc
-            )
+            ) as tuples
         }]
 
         template::multirow create per_package_key count package_key link url package_id
