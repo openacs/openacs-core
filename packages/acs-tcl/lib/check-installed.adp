@@ -8,10 +8,20 @@ The configured version of @resource_name@ is
    <a title="Delete the package parameter @parameter_name@ and its value. The version number might be provided via NaviServer configuration value or from the default settings." href="@deletePackageParameterURL@">delete the package parameter</a> "<i>@parameter_name@</i>".</li>
 </if>
 <if @addPackageParameterURL@ not nil>
-<li>You might
-   <a title="Add the package parameter @parameter_name@ to the package @package_key@ with the default @version@"
-      href="@addPackageParameterURL@">add the global package parameter</a>
-    "<i>@parameter_name@</i>" to pin the version number to the current value for this instance.</li>
+<li>You might pin the version number by
+   <ul><li>
+   <a title="Add the global package parameter @parameter_name@ for the package @package_key@ with the default @version@"
+      href="@addPackageParameterURL@">adding the global package parameter</a>
+     <i>@parameter_name@</i> for this instance, or</li>
+    <li>by configuring the version number by adding a section of the following
+    form to your NaviServer configuration file:<p>
+
+<pre class="bg-light ms-3 px-3 py-1 border w-75">
+ns_section ns/server/${server}/acs/@package_key@ {
+    ns_param @parameter_name@ @version@
+}</pre></li>
+    </ul>
+    </li>
 </if>
 <if @versionCheckURL@ not nil><li>You might check available versions
   <a href="@versionCheckURL@" title="Check is performed at @versionCheckURL@">available upstream</a>.</li>
@@ -42,3 +52,7 @@ under <i>@resources@</i>.</if>
   please change the permissions so that OpenACS can write to it.</p>
   </else>
 </else>
+
+<p>For <a href="https://openacs.org/xowiki/external-javascript-packages">background
+and OpenACS policies</a> concerning the management of external
+packages on OpenACS.org.</p>
