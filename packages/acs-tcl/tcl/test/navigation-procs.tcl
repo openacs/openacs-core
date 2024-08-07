@@ -21,18 +21,18 @@ ad_proc -private navigation::test::context_bar_multirow_filter {} {
 
         # Create and mount new node. We also need a subsite underneath
         # or the context bar won't display them.
-        set package_id [site_node::instantiate_and_mount \
+        set package_id1 [site_node::instantiate_and_mount \
                             -parent_node_id $root_node_id \
                             -node_name [lindex $testnode_1 1] \
                             -package_name [lindex $testnode_1 2]  \
                             -package_key "acs-subsite"]
-        set idr_1 [dict get [site_node::get_from_object_id -object_id $package_id] node_id]
-        set package_id [site_node::instantiate_and_mount \
+        set idr_1 [dict get [site_node::get_from_object_id -object_id $package_id1] node_id]
+        set package_id2 [site_node::instantiate_and_mount \
                             -parent_node_id $idr_1 \
                             -node_name [lindex $testnode_2 1] \
                             -package_name [lindex $testnode_2 2] \
                             -package_key "acs-subsite"]
-        set idr_2 [dict get [site_node::get_from_object_id -object_id $package_id] node_id]
+        set idr_2 [dict get [site_node::get_from_object_id -object_id $package_id2] node_id]
 
         set node_id $idr_2
         set context "last"
@@ -46,7 +46,9 @@ ad_proc -private navigation::test::context_bar_multirow_filter {} {
 
     } -teardown_code {
         site_node::delete -node_id $idr_2
+        apm_package_instance_delete $package_id2
         site_node::delete -node_id $idr_1
+        apm_package_instance_delete $package_id1
     }
     ns_return 200 text/html $page
 
