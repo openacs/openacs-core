@@ -188,49 +188,19 @@ foreach {type url} [subst {
     personal /shared/portrait?user_id=[ad_conn user_id]
     personal /shared/whos-online
 }] {
-    #append report "Result for $url:\n"
-    try {
-        set node_id [site_node::get_node_id -url $url]
-        set package_id [site_node::get_object_id -node_id $node_id]
-        set parties [permission::get_parties_with_permission -object_id $package_id]
-        set direct_permissions [::acs::dc list get {select grantee_id || ' ' || privilege from acs_permissions where object_id = :package_id}]
-        #ns_log notice "direct_permissions $direct_permissions"
-        set direct_permissions [lmap p $direct_permissions {
-            #ns_log notice "XXX [lindex $p 0] [ad_decode [lindex $p 0] -1 public -2 registered-users]"
-            list [ad_decode [lindex $p 0] -1 public -2 "registered-users" [lindex $p 0]] [lindex $p 1]
-        }]
-        ns_http run -timeout 300ms $current_location$url
-    } on ok {result} {
-        set status [dict get $result status]
-        set diagnosis ""
-        switch $status {
-            200 {set diagnosis "publicly accessible"}
-            302 {
-                set location [ns_set iget [dict get $result headers] location]
-                if {[string match *register* $location]} {
-                    set diagnosis "requires login"
-                } else {
-                    set diagnosis "redirect to $location"
-                }
-                #set diagnose "publicly accessible"
-            }
-            422 {set diagnosis "Potentially success with other parameters"}
-            404 {set diagnosis "not installed"}
-        }
-        #append diagnosis " $node_id $package_id ($parties) // [llength $parties] // $direct_permissions"
-        #append report "status $status $diagnose\n<br>"
-    } on error {errorMsg} {
-        set diagnosis $errorMsg
-        set status 0
-    }
 
-    template::multirow append link_check \
-        $type \
-        $url \
-        $status \
-        $package_id \
-        [expr {$status == 404 ? "" : "$direct_permissions [llength $parties] parties"} ] \
-        $diagnosis
+    set posture [::acs_admin::posture_status \
+                     -current_location $current_location \
+                     -url $url]
+    dict with posture {
+        template::multirow append link_check \
+            $type \
+            $url \
+            $status \
+            $package_id \
+            [expr {$status == 404 ? "" : "$direct_permissions [llength $parties] parties"} ] \
+            $diagnosis
+    }
 
 }
 
@@ -270,7 +240,7 @@ foreach url {
         set status 0
     }
 
-    template::multirow append machine_readable $url $status $diagnosis $detailURL $detailLabel 
+    template::multirow append machine_readable $url $status $diagnosis $detailURL $detailLabel
 }
 
 

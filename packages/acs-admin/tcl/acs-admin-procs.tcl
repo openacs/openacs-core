@@ -8,6 +8,57 @@ ad_library {
 
 namespace eval acs_admin {
 
+    ad_proc -private ::acs_admin::posture_status {
+        {-current_location:required}
+        {-url:required}
+    } {
+
+        return information about the posture status of the provided
+        URL.
+
+        @return dict containing status, diagnosis, and package_id
+    } {
+        try {
+            set node_id [site_node::get_node_id -url $url]
+            set package_id [site_node::get_object_id -node_id $node_id]
+            set parties [permission::get_parties_with_permission -object_id $package_id]
+            set direct_permissions [::acs::dc list get {select grantee_id || ' ' || privilege from acs_permissions where object_id = :package_id}]
+            #ns_log notice "direct_permissions $direct_permissions"
+            set direct_permissions [lmap p $direct_permissions {
+                #ns_log notice "XXX [lindex $p 0] [ad_decode [lindex $p 0] -1 public -2 registered-users]"
+                list [ad_decode [lindex $p 0] -1 public -2 "registered-users" [lindex $p 0]] [lindex $p 1]
+            }]
+            ns_http run -timeout 300ms $current_location$url
+        } on ok {result} {
+            set status [dict get $result status]
+            set diagnosis ""
+            switch $status {
+                200 {set diagnosis "publicly accessible"}
+                302 {
+                    set location [ns_set iget [dict get $result headers] location]
+                    if {[string match *register* $location]} {
+                        set diagnosis "requires login"
+                    } else {
+                        set diagnosis "redirect to $location"
+                    }
+                    #set diagnose "publicly accessible"
+                }
+                422 {set diagnosis "Potentially success with other parameters"}
+                404 {set diagnosis "not installed"}
+            }
+            #append diagnosis " $node_id $package_id ($parties) // [llength $parties] // $direct_permissions"
+            #append report "status $status $diagnose\n<br>"
+        } on error {errorMsg} {
+            set diagnosis $errorMsg
+            set status 0
+            set direct_permissions ""
+            set parties ""
+            set package_id 0
+        }
+        return [list status $status diagnosis $diagnosis package_id $package_id direct_permissions $direct_permissions parties $parties]
+    }
+
+
     ad_proc -private ::acs_admin::check_expired_certificates {
         {-api production}
         {-key_type ecdsa}

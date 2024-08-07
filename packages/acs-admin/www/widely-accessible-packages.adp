@@ -19,19 +19,27 @@
     <th class="text-end">Count</th>
     <th>Type</th>
     <th>URL</th>
+    <th>Status</th>
+    <th>Permission Info</th>
+    <th>Diagnosis</th>
   </tr>
   <multiple name="per_package_key">
   <tr>
     <td class="text-end">@per_package_key.count@</td>
     <if @per_package_key.count@ eq 1>
         <td>@per_package_key.package_key@</td>
-        <td><a title="See detailed permissions of this package"
-               href="/permissions/one?object_id=@per_package_key.package_id@"><adp:icon name='permissions'> </a>
-               <a title="Visit page" href="@per_package_key.url@"><adp:icon name='eye-open'> @per_package_key.url@</a>
+        <td><a title="Visit page" href="@per_package_key.url@">@per_package_key.url@</a>
+        </td>
+        <td>@per_package_key.status@</td>
+        <td><a title="See Detailed Permissions" href='/permissions/one?object_id=@per_package_key.package_id@'>
+           <if @per_package_key.permission_info@ not nil><adp:icon name='permissions'> </if>
+           @per_package_key.permission_info@</a>
          </td>
+         <td>@per_package_key.diagnosis@</td>
     </if><else>
-    <td><a title="See URLs and detailed permissions of publicly accessible instances this type" href="@per_package_key.link@"> <adp:icon name='arrow-right'> @per_package_key.package_key@</a></td>
-        <td></td>
+    <td><a title="See URLs and detailed permissions of publicly accessible instances this type" href="@per_package_key.link@">
+        <adp:icon name='arrow-right'> @per_package_key.package_key@</a>
+    </td>
     </else>
   </tr>
   </multiple>

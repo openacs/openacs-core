@@ -15,6 +15,8 @@ ad_page_contract {
     {count:integer ""}
 }
 
+set current_location  [ns_conn location]
+
 if {$package_key eq ""} {
     set mode overview
 
@@ -42,7 +44,8 @@ if {$package_key eq ""} {
             ) as tuples
         }]
 
-        template::multirow create per_package_key count package_key link url package_id
+        template::multirow create per_package_key \
+            count package_key link url package_id status permission_info diagnosis
 
         foreach tuple $publicPerPackageKey {
             lassign $tuple count package_key
@@ -59,6 +62,9 @@ if {$package_key eq ""} {
                 lassign [lindex $package_id_and_url 0] package_id url
                 ns_log notice "URL <$url>"
                 set link ""
+                set posture [::acs_admin::posture_status \
+                                 -current_location $current_location \
+                                 -url $url]
             } else {
                 #
                 # Count > 1, provide links per package key
@@ -68,9 +74,13 @@ if {$package_key eq ""} {
                 set link [export_vars -base ./widely-accessible-packages {
                     package_key count numPublicReadableSiteNodes numSiteNodesEntries sitenodeModel
                 }]
-
+                set posture {status "" diagnosis "" parties "" direct_permissions ""}
             }
-            template::multirow append per_package_key $count $package_key $link $url $package_id
+            dict with posture {
+                set permission_info [expr {$status == 404 ? "" : "$direct_permissions [llength $parties] parties"} ]
+                template::multirow append per_package_key \
+                    $count $package_key $link $url $package_id $status $permission_info $diagnosis
+            }
         }
     } else {
         #
@@ -93,7 +103,8 @@ if {$package_key eq ""} {
             ) as tuples
         }]
 
-        template::multirow create per_package_key count package_key link url package_id
+        template::multirow create per_package_key \
+            count package_key link url package_id status permission_info diagnosis
 
         foreach tuple $publicPerPackageKey {
             lassign $tuple count package_key
@@ -110,6 +121,9 @@ if {$package_key eq ""} {
                 lassign [lindex $package_id_and_url 0] package_id url
                 if {$url eq ""} continue
                 set link ""
+                set posture [::acs_admin::posture_status \
+                                 -current_location $current_location \
+                                 -url $url]
             } else {
                 #
                 # Count > 1, provide links per package key
@@ -119,9 +133,13 @@ if {$package_key eq ""} {
                 set link [export_vars -base ./widely-accessible-packages {
                     package_key count numPublicReadableSiteNodes numSiteNodesEntries sitenodeModel
                 }]
-
+                set posture {status "" diagnosis "" parties "" direct_permissions ""}
             }
-            template::multirow append per_package_key $count $package_key $link $url $package_id
+            dict with posture {
+                set permission_info [expr {$status == 404 ? "" : "$direct_permissions [llength $parties] parties"} ]
+                template::multirow append per_package_key \
+                    $count $package_key $link $url $package_id $status $permission_info $diagnosis
+            }
         }
     }
 } else {
