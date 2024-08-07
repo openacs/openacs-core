@@ -129,14 +129,20 @@ ad_proc -public ad_context_bar_multirow {
 
     foreach elm [ad_context_node_list -from_node $from_node $node_id] {
         lassign $elm elm_0 elm_1
-        if { $node_id_url_end > 0 && [string match -nocase $node_id_url [string range $elm_0 0 ${node_id_url_end}-1] ] } {
+        if { $node_id_url_end > 0
+             && [string match -nocase $node_id_url [string range $elm_0 0 $node_id_url_end-1] ]
+         } {
             set elm_0 [string range $elm_0 $node_id_url_end end]
         }
         template::multirow append $multirow $elm_0 $elm_1
     }
 
     if { [string match "admin/*" [ad_conn extra_url]] } {
-        template::multirow append $multirow "[ad_conn package_url]admin/" "[_ acs-tcl.Administration]"
+        template::multirow append $multirow \
+            "[ad_conn package_url]admin/" \
+            [expr {[ad_conn package_key] ne "acs-subsite"
+                   ? [_ acs-tcl.Administration]
+                   : [_ acs-subsite.Administration]}]
     }
 
     if { [llength $context] == 0 } {
@@ -156,9 +162,10 @@ ad_proc -public ad_context_bar {
     -separator
     args
 } {
-    Returns a Yahoo-style hierarchical navbar. Includes "Administration"
-    if applicable, and the subsite if not global. 'args' can be either
-    one or more lists, or a simple string.
+    Returns a Yahoo-style hierarchical navbar. Includes
+    "Administration" or "Subsite Administration" if applicable, and
+    the subsite if not global. 'args' can be either one or more lists,
+    or a simple string.
 
     @param node_id If provided work up from this node, otherwise the current node
     @param from_node If provided do not generate links to the given node and above.
@@ -183,7 +190,9 @@ ad_proc -public ad_context_bar {
 
     if { [string match "admin/*" [ad_conn extra_url]] } {
         lappend context [list "[ad_conn package_url]admin/" \
-                             [_ acs-tcl.Administration]]
+                             [expr {[ad_conn package_key] ne "acs-subsite"
+                                    ? [_ acs-tcl.Administration]
+                                    : [_ acs-subsite.Administration]}]]
     }
 
     if {[llength $args] == 0} {

@@ -77,7 +77,7 @@ if {$subsite_number > 500} {
                 html {style {white-space:nowrap;}}
                 display_template {
                     <if @subsites.admin_url@ not nil><a href="@subsites.admin_url@"><adp:icon name="admin"
-                          title="#acs-admin.Administration#"></a></if>
+                          title="#acs-subsite.Administration#"></a></if>
                     <else><adp:icon name="admin" invisible="true"></else>&nbsp;
                     <a href="@subsites.parameter_url@"><adp:icon name="cog" title="#acs-admin.Parameters#"></a>&nbsp;
                     <a href="@subsites.sitemap_url@"><adp:icon name="sitemap" title="Manage sitemap"></a>

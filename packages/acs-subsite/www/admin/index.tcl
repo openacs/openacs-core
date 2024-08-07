@@ -13,15 +13,16 @@ ad_page_contract {
     acs_lang_admin_url:onevalue
 }
 
-array set this_node [site_node::get -url [ad_conn url]]
-set title "Subsite [_ acs-subsite.Administration]: $this_node(instance_name)"
+set title "[_ acs-subsite.Administration]: [ad_conn instance_name]"
+#set context [_ acs-subsite.Administration]
+#set context [list [list "." "[_ acs-subsite.Administration]"] "Admin"]
 
 set acs_admin_url [apm_package_url_from_key "acs-admin"]
-array set acs_admin_node [site_node::get -url $acs_admin_url]
-set acs_admin_name $acs_admin_node(instance_name)
+set acs_admin_node_info [site_node::get -url $acs_admin_url]
+set acs_admin_name [dict get $acs_admin_node_info instance_name]
 set sw_admin_p [permission::permission_p \
                     -party_id [ad_conn user_id] \
-                    -object_id $acs_admin_node(object_id) \
+                    -object_id [dict get $acs_admin_node_info object_id] \
                     -privilege admin]
 
 #

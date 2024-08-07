@@ -38,7 +38,7 @@
   <msg key="Admin">Verwalten</msg>
   <msg key="admin">Admin</msg>
   <msg key="Administer_subsite">%subsite_name% verwalten</msg>
-  <msg key="Administration">Administration</msg>
+  <msg key="Administration">Subsite Administration</msg>
   <msg key="Administrative_options">Verwaltungsoptionen für diesen Benutzer</msg>
   <msg key="Advanced">Fortgeschritten</msg>
   <msg key="Advanced_Features">Fortgeschrittene Funktionen</msg>

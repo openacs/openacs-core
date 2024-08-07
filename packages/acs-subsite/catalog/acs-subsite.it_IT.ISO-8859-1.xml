@@ -45,7 +45,7 @@
   <msg key="Admin">Pannello di Controllo</msg>
   <msg key="admin">Admin</msg>
   <msg key="Administer_subsite">Amministra %subsite_name%</msg>
-  <msg key="Administration">Amministrazione</msg>
+  <msg key="Administration">Subsite Amministrazione</msg>
   <msg key="Administrative_options">Opzioni amministrative per questo utente</msg>
   <msg key="Advanced">Avanzate</msg>
   <msg key="Advanced_Features">Funzionalità Avanzate</msg>
