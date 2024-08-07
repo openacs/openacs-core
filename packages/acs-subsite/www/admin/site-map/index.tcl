@@ -342,7 +342,10 @@ set services ""
 db_foreach services_select {} {
     if {$parameter_count > 0} {
         set href [export_vars -base /shared/parameters { package_id { return_url {[ad_return_url]} } }]
-        append services "<li><a href=\"[ns_quotehtml $href]\">[ns_quotehtml $instance_name]</a>"
+        append services [subst {
+            <li><a href="[ns_quotehtml $href]" title="Manage [_ acs-subsite.parameters] of this service">
+            <adp:icon name="cog"> [ns_quotehtml $instance_name]</a>
+        }]
     }
 } if_no_rows {
     append services "  <li>(none)\n"
