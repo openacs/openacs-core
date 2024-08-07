@@ -182,6 +182,7 @@ foreach {type url} [subst {
     internal /shared/parameters
     internal /test/
     internal /xotcl/
+    internal /xotcl/version-numbers
     personal /members/
     personal /shared/community-member?user_id=[ad_conn user_id]
     personal /shared/portrait?user_id=[ad_conn user_id]
