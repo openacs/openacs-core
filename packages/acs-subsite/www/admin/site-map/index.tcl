@@ -167,7 +167,7 @@ template::list::create \
                 </if>
                 <else><adp:icon name='add-new-item' invisible='true'></else>
                 <if @nodes.mount_url@ ne "">
-                  <a href="@nodes.mount_url@"><adp:icon name='search' title='[_ acs-subsite.mount]'></a>
+                  <a href="@nodes.mount_url@"><adp:icon name='add-new-item' title='[_ acs-subsite.mount]'></a>
                 </if>
                 <else><adp:icon name='search' invisible='true'></else>
                 <if @nodes.extra_form_part@ ne "">
@@ -299,7 +299,7 @@ db_foreach nodes_select {} {
     }
     set delete_id delete-$node_id
 
-    ns_log notice "append name <$name> name_url <$name_url> expand_mode $expand_mode"
+    #ns_log notice "append name <$name> name_url <$name_url> expand_mode $expand_mode"
     multirow append nodes \
         $node_id $expand_mode $expand_url $indent $name $name_url $object_name $url $package_pretty_name \
         $action_type $action_form_part $add_folder_url $new_app_url $unmount_url $mount_url \
