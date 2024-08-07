@@ -198,7 +198,7 @@ foreach {type url} [subst {
             #ns_log notice "XXX [lindex $p 0] [ad_decode [lindex $p 0] -1 public -2 registered-users]"
             list [ad_decode [lindex $p 0] -1 public -2 "registered-users" [lindex $p 0]] [lindex $p 1]
         }]
-        ns_http run -timeout 200ms $current_location$url
+        ns_http run -timeout 300ms $current_location$url
     } on ok {result} {
         set status [dict get $result status]
         set diagnosis ""
