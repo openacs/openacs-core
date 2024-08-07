@@ -102,6 +102,26 @@ permitted under <i>PostgreSQL</i>.</if>
 </else>
 </p>
 
+<h2>Machine Readable Infomation for External Parties</h2>
+
+<table class="table table-sm">
+<tr>
+  <th>URL</th>
+  <th>Status</th>
+  <th class='px-2'>Diagnosis</th>
+</tr>
+<multiple name="machine_readable">
+<tr>
+  <td><a title="View Page" href='@machine_readable.url@'><adp:icon name="arrow-right-square"> @machine_readable.url@</a></td>
+  <td>@machine_readable.status@</td>
+  <td class='px-2'>@machine_readable.diagnosis@
+  <if @machine_readable.detailURL@ not nil> (Details: <a href="@machine_readable.detailURL@">@machine_readable.detailLabel@</a>)</if>
+  </td>
+</tr>
+</multiple>
+</table>
+
+
 <h2>Response Header Check</h2>
 
 <p>The following subset of security-related response header fields will be returned when the home page of this server is requested:</p>

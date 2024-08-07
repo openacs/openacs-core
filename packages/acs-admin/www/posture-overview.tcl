@@ -169,8 +169,8 @@ if {$public_ip_addr_p == 1 && $secure_connection_p} {
     set ssllabs_url https://www.ssllabs.com/ssltest/analyze.html?viaform=on&d=https://$host_header&hideResults=on
 }
 
-template::multirow create link_check type \
-    url status package_id permission_info diagnosis
+template::multirow create link_check \
+    type url status package_id permission_info diagnosis
 
 foreach {type url} [subst {
     internal /acs-service-contract/
@@ -193,7 +193,7 @@ foreach {type url} [subst {
         set package_id [site_node::get_object_id -node_id $node_id]
         set parties [permission::get_parties_with_permission -object_id $package_id]
         set direct_permissions [::acs::dc list get {select grantee_id || ' ' || privilege from acs_permissions where object_id = :package_id}]
-        ns_log notice "direct_permissions $direct_permissions"
+        #ns_log notice "direct_permissions $direct_permissions"
         set direct_permissions [lmap p $direct_permissions {
             #ns_log notice "XXX [lindex $p 0] [ad_decode [lindex $p 0] -1 public -2 registered-users]"
             list [ad_decode [lindex $p 0] -1 public -2 "registered-users" [lindex $p 0]] [lindex $p 1]
@@ -232,6 +232,46 @@ foreach {type url} [subst {
         $diagnosis
 
 }
+
+template::multirow create machine_readable url status diagnosis detailURL detailLabel
+
+foreach url {
+    /robots.txt
+    /security.txt
+} {
+    try {
+        ns_http run -timeout 300ms $current_location$url
+    } on ok {result} {
+        set status [dict get $result status]
+        set diagnosis ""
+        set detailURL ""
+        set detailLabel ""
+        switch $status {
+            200 {set diagnosis "publicly accessible"}
+            404 {
+                set diagnosis "not provided"
+                switch $url {
+                    /robots.txt   {
+                        set detailLabel "RFC 9309"
+                        set detailURL https://datatracker.ietf.org/doc/html/rfc9309
+                    }
+                    /security.txt {
+                        set detailLabel "RFC 9116"
+                        set detailURL https://www.rfc-editor.org/rfc/rfc9116
+                    }
+                }
+            }
+        }
+        #append diagnosis " $node_id $package_id ($parties) // [llength $parties] // $direct_permissions"
+        #append report "status $status $diagnose\n<br>"
+    } on error {errorMsg} {
+        set diagnosis $errorMsg
+        set status 0
+    }
+
+    template::multirow append machine_readable $url $status $diagnosis $detailURL $detailLabel 
+}
+
 
 template::multirow create hdr_check \
     field value
