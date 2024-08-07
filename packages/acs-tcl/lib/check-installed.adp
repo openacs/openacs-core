@@ -41,13 +41,13 @@ ns_section ns/server/${server}/acs/@package_key@ {
 </ul>
 <if @resources@ not nil><p>The configured version of @resource_name@ is installed locally
 under <i>@resources@</i>.</if>
-<else><p>In the current installation the @resource_name@ is used via CDN <strong>@cdn@</strong>.
+<else><p>In the current installation the @resource_name@ is used via CDN <i>@cdn@</i>.
   <if @writable@ true>
   <p>Do you want to <a href="@download_url@" class="button">download</a>
   version @version@ of @resource_name@ to your filesystem?</p>
   </if>
   <else>
-  <p>The directory <strong>@path@</strong> is NOT writable for the server. In
+  <p>The directory <i>@path@</i> is NOT writable for the server. In
   order to be able to download the @resource_name@ via this web interface,
   please change the permissions so that OpenACS can write to it.</p>
   </else>
