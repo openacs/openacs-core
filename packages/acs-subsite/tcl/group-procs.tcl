@@ -431,7 +431,7 @@ ad_proc -public group::update {
 } {
 
     Updates a group.The updated values can be either specified as dict or as array.
-    Valid columns are group_name, join_policy.
+    Valid columns are group_name, join_policy and description.
     Valid join_policy values are 'open', 'closed', 'needs approval'.
 
     @param group_id The ID of the group to update.
