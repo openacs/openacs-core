@@ -167,7 +167,7 @@ template::list::create \
                 </if>
                 <else><adp:icon name='add-new-item' invisible='true'></else>
                 <if @nodes.mount_url@ ne "">
-                  <a href="@nodes.mount_url@"><adp:icon name='add-new-item' title='[_ acs-subsite.mount]'></a>
+                  <a href="@nodes.mount_url@"><adp:icon name='mount' title='[_ acs-subsite.mount]'></a>
                 </if>
                 <else><adp:icon name='search' invisible='true'></else>
                 <if @nodes.extra_form_part@ ne "">
