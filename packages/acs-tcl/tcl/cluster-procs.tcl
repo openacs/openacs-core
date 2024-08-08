@@ -103,8 +103,9 @@ namespace eval ::acs {
             acs::cache_flush_all ""
             acs::cache_flush_pattern ""
             lang::message::cache ""
+            ad_parameter_cache_flush_dict ""
             ::acs::cluster "^::acs::cluster\s+join_request"
-            ::acs::cluster "^::acs::cluster\s+disconnect_request"            
+            ::acs::cluster "^::acs::cluster\s+disconnect_request"
         }
 
         #
@@ -276,7 +277,7 @@ namespace eval ::acs {
                                     set ok 1
                                     break
                                 }
-                            }                            
+                            }
                         }
                     }
                 } else {
@@ -576,7 +577,7 @@ namespace eval ::acs {
             # entities, we have to map container-internal IP addresses
             # to external accessible addresses.
             #
-            ns_log notice "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX NO USED !!!!!!!!!!!!!!!"
+            ns_log notice "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX NOT USED !!!!!!!!!!!!!!!"
             set containerMapping [::acs::container mapping]
             if {$containerMapping ne ""} {
                 set d [ns_parseurl $qualified_location]
@@ -651,7 +652,7 @@ namespace eval ::acs {
                 #
                 dict set d host [ns_addrbyhost [dict get $d host]]
             }
-            
+
             set d [:map_inaddr_any -dict $d]
             dict with d {
                 set result [util::join_location -noabbrev -proto $proto -hostname $host -port $port]

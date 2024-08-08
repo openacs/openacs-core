@@ -523,6 +523,33 @@ if {[ns_config "ns/parameters" cachingmode "per-node"] eq "none"} {
         nsv_set ad_param . .
     }
 
+    ad_proc -private ad_parameter_cache_flush_dict {
+        key
+        parmeter_name
+    } {
+        Flush a single value from the nsv cache.
+
+        This proc is necessary in cases, where a node writes a new
+        parameter value before it has read the old one.
+
+        Since a plain "nsv_dict unset ad_param $key $parameter_name"
+        raises an exception, when the pair does not exist, and we do
+        not want to allow in cluster requests arbitrary "catch"
+        commands, we allow "ad_parameter_cache_flush_dict" instead.
+        Probably, the best solution is to add support for
+
+            nsv_dict unset -nocomplain -- ad_param $key $parameter_nam
+
+        The existing nsv_dict was built after Tcl's "dict unset",
+        which does not have the "-nocomplain" option either. However,
+        an atomic operation would certainly be preferable over an exists/unset
+        pair, which is no acceptable solution.
+
+    } {
+        catch {nsv_dict unset ad_param $key $parameter_name}
+    }
+
+
     ad_proc -public ad_parameter_cache {
         -set
         -delete:boolean
@@ -542,9 +569,7 @@ if {[ns_config "ns/parameters" cachingmode "per-node"] eq "none"} {
 
     } {
         if {$delete_p} {
-            if {[nsv_dict exists ad_param $key $parameter_name]} {
-                ::acs::clusterwide nsv_dict unset ad_param $key $parameter_name
-            }
+            acs::clusterwide ad_parameter_cache_flush_dict $key $parameter_name
             acs::per_request_cache flush -pattern acs-tcl.ad_param-$key
             return
         }
