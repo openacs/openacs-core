@@ -9,7 +9,7 @@
     <implements-subsite-p>f</implements-subsite-p>
     <inherit-templates-p>t</inherit-templates-p>
 
-    <version name="5.10.1b2" url="http://openacs.org/repository/download/apm/acs-lang-5.10.1b2.apm">
+    <version name="5.10.1b3" url="http://openacs.org/repository/download/apm/acs-lang-5.10.1b3.apm">
         <owner url="mailto:peter@collaboraid.biz">Peter Marklund</owner>
         <summary>OpenACS Internationalization Support.</summary>
         <release-date>2023-05-09</release-date>
@@ -20,7 +20,7 @@ locale-specific formatting functions for localizing dates, times, monetary amoun
         <license>GPL</license>
         <maturity>3</maturity>
 
-        <provides url="acs-lang" version="5.10.1b2"/>
+        <provides url="acs-lang" version="5.10.1b3"/>
         <requires url="acs-kernel" version="5.10.1b1"/>
         <requires url="acs-tcl" version="5.10.1b1"/>
         <requires url="acs-translations" version="5.10.1b1"/>
@@ -31,7 +31,9 @@ locale-specific formatting functions for localizing dates, times, monetary amoun
         <callbacks>
             <callback type="after-install"  proc="lang::apm::after_install"/>
             <callback type="after-upgrade"  proc="lang::apm::after_upgrade"/>
+            <callback type="after-mount"    proc="lang::apm::after_mount"/>            
         </callbacks>
+
         <parameters>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="SiteWideLocale"  default="en_US" description="The site-wide default locale"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="SystemTimezone"  default="UTC" description="The timezone that Oracle is set to use. Use a name from the acs-reference package, e.g., America/Los_Angeles or Asia/Tokyo"/>

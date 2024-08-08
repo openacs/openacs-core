@@ -1223,7 +1223,7 @@ aa_register_case \
             set rfd [open $f r]
             set xml [read $rfd]
             close $rfd
-            aa_false "Catalog file '$f' apears to be valid XML" [catch {dom parse -- $xml doc}]
+            aa_false "Catalog file '$f' appears to be valid XML" [catch {dom parse -- $xml doc}]
         }
     }
 
@@ -1286,7 +1286,7 @@ aa_register_case \
                 if {[info exists installed($pk)]} {
                     #
                     # Dependencies derived by packages that are
-                    # istalled by one of my dependencies.
+                    # installed by one of my dependencies.
                     #
                     lappend dependencies($package_key) {*}$installed($pk)
                 }
@@ -1338,9 +1338,9 @@ aa_register_case \
                     ns_log warning "$f: '${message_package_key}.${message_key}' is not a message key."
                     continue
                 }
-                # ..leave the core out of this: its message keys can alway be used...
+                # ..leave the core out of this: its message keys can always be used...
                 if {[string match acs-* $message_package_key]} {
-                    aa_log "'${message_package_key}.${message_key}' belongs to the core and can alway be used."
+                    aa_log "'${message_package_key}.${message_key}' belongs to the core and can always be used."
                     continue
                 }
                 # ...and check that the package it belongs to is one

@@ -52,7 +52,7 @@ aa_register_case \
         set widget [template::widget::select_locales element $tag_attributes]
 
         foreach value {en_US de_DE it_IT} {
-            aa_false "Output contains hideen field for '$value'" {
+            aa_false "Output contains hidden field for '$value'" {
                 [string first "input type=\"hidden\" value=\"$value\"" $widget] >= 0
             }
         }
