@@ -180,6 +180,7 @@ ad_proc -private ::template::icon {
 }
 
 namespace eval ::template::icon {
+
     set ::template::icon::map {
         bootstrap-icons {
             add-new-item         plus-circle
@@ -196,6 +197,7 @@ namespace eval ::template::icon {
             folder-add           folder-plus
             form-info-sign       info-square
             list-alt             card-heading
+            mount                arrow-up-circle
             next                 chevron-right
             permissions          lock
             previous             chevron-left
@@ -233,6 +235,7 @@ namespace eval ::template::icon {
             link                 "fa-solid fa-link"
             list                 "fa-solid fa-list"
             list-alt             "fa-regular fa-rectangle-list"
+            mount                "fa-regular fa-circle-up"         
             next                 "fa-solid fa-chevron-right"
             paperclip            "fa-light fa-paperclip"
             permissions          "fa-solid fa-lock"
@@ -266,6 +269,7 @@ namespace eval ::template::icon {
             form-info-sign       info-sign
             link                 link
             list-alt             list-alt
+            mount                collapse-up
             next                 menu-right
             paperclip            paperclip
             permissions          lock
@@ -302,6 +306,7 @@ namespace eval ::template::icon {
             folder-add           "+"
             form-info-sign       /shared/images/info.gif
             link                 /resources/acs-subsite/url-button.gif
+            mount                /resources/acs-subsite/up.gif
             list                 /shared/images/list16.png
             list-alt             /resources/acs-subsite/Preferences16.gif
             next                 "&raquo;"
@@ -315,7 +320,7 @@ namespace eval ::template::icon {
             search               /resources/acs-subsite/Zoom16.gif
             sitemap              /resources/acs-subsite/sitemap.svg
             trash                /shared/images/Delete16.gif
-            unmount              ""
+            unmount              /resources/acs-subsite/down.gif
             user                 /resources/acs-subsite/profile-16.png
             warn                 /shared/images/diamond.gif
             watch                /shared/images/eye16.png
