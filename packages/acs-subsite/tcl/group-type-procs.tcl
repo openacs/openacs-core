@@ -161,6 +161,7 @@ namespace eval group_type {
                             constraint $constraint(pk) primary key
                             constraint $constraint(fk)
                             references $references_table ($references_column)
+                            on delete cascade
                  )}]} errmsg] } {
 
             # Roll back our work so far
