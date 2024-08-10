@@ -11,6 +11,17 @@ set page_title "Cluster Management"
 set context [list $page_title]
 
 set server_cluster_enabled_p [server_cluster_enabled_p]
+
+if {$server_cluster_enabled_p && [info commands acs::container] eq ""} {
+    #
+    # Probably, someone has just activated cluster mode without a
+    # restart. We can still give a reasonable output by doing an
+    # ad-hoch initialization.
+    #
+    nsv_set cluster cluster_peer_nodes ""
+    ::acs::cluster setup
+}
+
 set dynamic_cluster_nodes [::acs::cluster dynamic_cluster_nodes]
 
 if {$disconnect_node ne ""} {
