@@ -60,7 +60,6 @@ if {$package_key eq ""} {
                     ), -1, 'read') a, apm_packages ap, site_nodes s
                     where s.object_id = orig_object_id and ap.package_id = orig_object_id}]
                 lassign [lindex $package_id_and_url 0] package_id url
-                ns_log notice "URL <$url>"
                 set link ""
                 set posture [::acs_admin::posture_status \
                                  -current_location $current_location \
