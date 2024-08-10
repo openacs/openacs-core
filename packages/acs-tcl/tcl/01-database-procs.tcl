@@ -1453,9 +1453,21 @@ ad_proc -public db_list_of_ns_sets {
 } {
     set full_statement_name [db_qd_get_fullname $statement_name]
 
+    #
+    # For large queries, "db_list_of_ns_sets" might be suboptimal,
+    # since it requires to held the results twice, needing more memory
+    # compared to other variants. Often, this can be replaced easily,
+    # sometimes replacing it might require some refactoring.
+    #
+    # This is e.g. the case for "select_notifications"; don't
+    # complain about it for now.
+    #
+    if {$statement_name ne "select_notifications"} {
+        ns_log notice "consider replacing: db_list_of_ns_sets $full_statement_name $sql"
+    }
+
     db_with_handle -dbn $dbn db {
         set result [list]
-        ns_log notice "db_list_of_ns_sets $full_statement_name $sql"
         set selection [db_exec -subst $subst select $db $full_statement_name $sql]
 
         while { [db_getrow $db $selection] } {
