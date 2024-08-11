@@ -4118,6 +4118,30 @@ namespace eval util::resources {
         return $installed
     }
 
+    ad_proc -public ::util::resources::register_urns {
+        -namespace:required
+    } {
+
+        Conveniance function to register URNs based on the information provided by the resource_info dict.
+        The dict members "urnMap", "prefix", and optionally "csp_lists" are used.
+
+        @param resource_info a dict containing urnMap, prefix, and optionally csp_lists.
+    } {
+        foreach resource_info_proc [nsv_array names api_proc_doc $namespace*resource_info] {
+            set resource_info [$resource_info_proc]
+            if {[dict exists $resource_info urnMap]} {
+                foreach URN [dict keys [dict get $resource_info urnMap]] {
+                    template::register_urn \
+                        -urn $URN \
+                        -resource [dict get $resource_info prefix]/[dict get $resource_info urnMap $URN] \
+                        -csp_list [expr {[dict exists $resource_info csp_lists $URN]
+                                         ? [dict set $resource_info csp_lists $URN]
+                                         : ""}]
+                }
+            }
+        }
+    }
+
     ad_proc -public ::util::resources::can_install_locally {
         {-resource_info:required}
         {-version_segment ""}

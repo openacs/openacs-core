@@ -17,6 +17,9 @@ ad_include_contract {
 set resource_dir  [dict get $resource_info resourceDir]
 set cdn           [dict get $resource_info cdn]
 set resource_name [dict get $resource_info resourceName]
+if {$version eq ""} {
+    set version [dict get $resource_info configuredVersion]
+}
 if {$download_url eq ""} {
     set download_url [ad_conn url]/download
 }
