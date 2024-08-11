@@ -270,7 +270,7 @@ template::multirow create library_check \
     configured_version vulnerability vulnerabilityCheckURL \
     installed_locally available diagnosis
 
-foreach proc_name [nsv_array names api_proc_doc *resource_info] {
+foreach proc_name [lsort [nsv_array names api_proc_doc *resource_info]] {
     set ns [namespace qualifiers ::$proc_name]
     set resource_info [::$proc_name]
     set libraryName [dict get $resource_info resourceName]
