@@ -162,7 +162,7 @@ perform drop_package('${package_name}');
 perform define_function_args('${package_name}__new','[plpgsql_utility::define_function_args $attribute_list]');
 
 CREATE FUNCTION ${package_name}__new([plpgsql_utility::generate_function_signature $attribute_list])
-RETURNS [plpgsql_utility::table_column_type ${table_name} ${id_column}] AS $$
+RETURNS [db_column_type -complain $table_name $id_column] AS $$
 DECLARE
     [plpgsql_utility::generate_attribute_parameters $attribute_list];
     v_$id_column ${table_name}.${id_column}%TYPE;
@@ -186,7 +186,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 CREATE FUNCTION ${package_name}__delete (
-    p_${id_column} [plpgsql_utility::table_column_type ${table_name} ${id_column}]
+    p_${id_column} [db_column_type -complain $table_name $id_column]
 ) RETURNS integer AS $$
 DECLARE
 BEGIN
