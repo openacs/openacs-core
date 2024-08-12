@@ -119,6 +119,7 @@ if {[dict exists $resource_info vulnerabilityCheck]} {
         if {[dict get $result hasVulnerability] ne "?"} {
             set vulnerabilityCheckURL [dict get $result libraryURL]
             set vulnerabilityCheckVersionURL [dict get $result versionURL]
+            set vulnerabilityAdvisorURL [dict get $result advisorURL]
             set vulnerabilityCheckResult [dict get $result hasVulnerability]
         }
     }

@@ -35,7 +35,8 @@ ns_section ns/server/${server}/acs/@package_key@ {
     </sup>
     </a> and
     </if>
-    for <a href="@vulnerabilityCheckURL@">all released versions</a> of @resource_name@. 
+    for <a href="@vulnerabilityCheckURL@">all released versions</a> of @resource_name@
+    (See also: <a href="@vulnerabilityAdvisorURL@">Snyk Advisor</a>). 
   </li>
 </if>
 </ul>

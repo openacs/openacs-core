@@ -4467,6 +4467,7 @@ namespace eval util::resources {
             snyk {
                 set vulnerabilityCheckURL https://security.snyk.io/package/npm/$library
                 set vulnerabilityCheckVersionURL https://security.snyk.io/package/npm/$library/$version
+                set vulnerabilityAdvisorURL https://snyk.io/advisor/npm-package/$library
                 set page [::util::resources::http_get_with_default \
                               -url $vulnerabilityCheckVersionURL \
                               -key snyk-$library/$version]
@@ -4483,7 +4484,10 @@ namespace eval util::resources {
             }
         }
         ns_log notice "=== check_vulnerability for $library @$version -> $hasVulnerability"
-        return [list hasVulnerability $hasVulnerability libraryURL $vulnerabilityCheckURL versionURL $vulnerabilityCheckVersionURL]
+        return [list hasVulnerability $hasVulnerability \
+                    libraryURL $vulnerabilityCheckURL \
+                    versionURL $vulnerabilityCheckVersionURL \
+                    advisorURL $vulnerabilityAdvisorURL]
     }
 }
 
