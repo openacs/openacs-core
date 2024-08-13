@@ -4126,8 +4126,8 @@ namespace eval util::resources {
         The dict members "urnMap", "prefix", and optionally "csp_lists" are used.
 
         @param resource_info a dict containing urnMap, prefix, and optionally csp_lists.
-    } {
-        foreach resource_info_proc [nsv_array names api_proc_doc $namespace*resource_info] {
+    } {        
+        foreach resource_info_proc [resource_info_procs -prefix $namespace] {
             set resource_info [$resource_info_proc]
             if {[dict exists $resource_info urnMap]} {
                 foreach URN [dict keys [dict get $resource_info urnMap]] {
@@ -4339,6 +4339,46 @@ namespace eval util::resources {
         }
     }
 
+    ad_proc -public ::util::resources::resource_info_procs {
+        {-prefix ""}
+    } {
+        
+        Returns a list of "resource_info" procs, potentially prefixed
+        by some namespace.
+        
+    } {
+        return [lmap proc_name [lsort [nsv_array names api_proc_doc ${prefix}*::resource_info]] {
+            set d [nsv_get api_proc_doc $proc_name]
+            dict with d {
+                if {$varargs_p != 0
+                    || "version" ni $switches0 
+                    || $switches1 ne ""
+                    || $positionals ne ""
+                } {
+                    ns_log notice "=== ::util::resources::resource_info_procs proc $proc_name has non-matching signature\n" \
+                        varargs_p $varargs_p switches0 $switches0 switches1 $switches1
+                    continue
+                }
+                #
+                # Check, if the proc body looks potentially correct
+                #
+                set body [api_get_body $proc_name]
+                if {![string match *resourceDir* $body]
+                    || ![string match *resourceName* $body]
+                    || ![string match *cssFiles* $body]
+                    || ![string match *jsFiles* $body]
+                    || ![string match *cdnHost* $body]                    
+                } {
+                    ns_log notice "=== ::util::resources::resource_info_procs proc $proc_name does not return a proper dict \n" \
+                        $body
+                    continue
+                }
+            }
+            set proc_name
+        }]
+    }
+
+    
     ad_proc -public ::util::resources::version_segment {
         -resource_info:required
     } {
