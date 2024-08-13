@@ -298,12 +298,14 @@ namespace eval ::acs::db {
                 # aim always for the definition with the most
                 # arguments.
                 #
+                #ns_log notice "key $key has argument_types [llength $argument_types] but this is less than nr_defined_args $nr_defined_args"
                 continue
             } elseif {[llength $argument_types] < $nr_defined_args} {
-                ns_log warning "generate_stubs: $key has lessf arguments in " \
+                ns_log warning "generate_stubs: $key has less arguments in " \
                     "function_definitions ($nr_defined_args) than in DB [llength $argument_types]"
                 continue
             }
+            # ns_log notice "adding $key /$nr_defined_args, package_name: '$package_name'"
             dict set db_definitions $key result_type $result_type
             dict set db_definitions $key types $argument_types
             dict set db_definitions $key package_name $package_name
@@ -311,6 +313,10 @@ namespace eval ::acs::db {
         }
         return [lmap {key entry} $db_definitions {
             if {![dict exists $entry package_name]} {
+                #
+                # When we have an entry in acs_function_args, but no
+                # such function in the database, complain.
+                #
                 ns_log warning "missing DB for $key: <$entry>"
                 continue
             }
