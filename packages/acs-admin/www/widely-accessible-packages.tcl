@@ -52,10 +52,10 @@ if {$package_key eq ""} {
 
             if {$count == 1} {
                 #
-                # Count is 1, list URL and Permission link
+                # There is a single package of this type -> list URL and Permission link
                 #
-                set package_id_and_url [xo::dc list -prepare text get_public_packages_package_key {
-                    select orig_object_id || ' ' || site_node__url(s.node_id) from acs_permission.permission_p_recursive_array(array(
+                set package_id_and_url [xo::dc list_of_lists -prepare text get_public_packages_package_key {
+                    select orig_object_id, site_node__url(s.node_id) from acs_permission.permission_p_recursive_array(array(
                         select s.object_id from apm_packages ap, site_nodes s where s.object_id = ap.package_id and package_key = :package_key
                     ), -1, 'read') a, apm_packages ap, site_nodes s
                     where s.object_id = orig_object_id and ap.package_id = orig_object_id}]
@@ -95,13 +95,13 @@ if {$package_key eq ""} {
         # Counting # of instances per package_key which are publicly readable
         # (openacs: 8ms, learn: 22s)
         #
-        set publicPerPackageKey [xo::dc list count_public_packages_per_package_key {
-            select count || ' ' || package_key from (
+        set publicPerPackageKey [xo::dc list_of_lists count_public_packages_per_package_key {
+            select count, package_key from (
                 select count(s.object_id), ap.package_key from apm_packages ap, site_nodes s
                 where s.object_id = ap.package_id group by 2 order by 1 desc, 2 asc
             ) as tuples
         }]
-
+        ns_log notice "HUGE publicPerPackageKey $publicPerPackageKey"
         template::multirow create per_package_key \
             count package_key link url package_id status permission_info diagnosis
 
@@ -110,10 +110,10 @@ if {$package_key eq ""} {
 
             if {$count == 1} {
                 #
-                # Count is 1, list URL and Permission link
+                # There is a single package of this type -> list URL and Permission link
                 #
-                set package_id_and_url [xo::dc list -prepare text get_public_packages_package_key {
-                    select orig_object_id || ' ' || site_node__url(s.node_id) from acs_permission.permission_p_recursive_array(array(
+                set package_id_and_url [xo::dc list_of_lists -prepare text get_public_packages_package_key {
+                    select orig_object_id, site_node__url(s.node_id) from acs_permission.permission_p_recursive_array(array(
                         select s.object_id from apm_packages ap, site_nodes s where s.object_id = ap.package_id and package_key = :package_key
                     ), -1, 'read') a, apm_packages ap, site_nodes s
                     where s.object_id = orig_object_id and ap.package_id = orig_object_id}]
@@ -151,8 +151,8 @@ if {$package_key eq ""} {
     }]
 
 
-    set package_ids_and_urls [xo::dc list -prepare text get_public_packages_package_key {
-        select orig_object_id || ' ' || site_node__url(s.node_id) from acs_permission.permission_p_recursive_array(array(
+    set package_ids_and_urls [xo::dc list_of_lists -prepare text get_public_packages_package_key {
+        select orig_object_id, site_node__url(s.node_id) from acs_permission.permission_p_recursive_array(array(
             select s.object_id from apm_packages ap, site_nodes s where s.object_id = ap.package_id and package_key = :package_key
         ), -1, 'read') a, apm_packages ap, site_nodes s
         where s.object_id = orig_object_id and ap.package_id = orig_object_id}]
@@ -169,8 +169,8 @@ if {0} {
     # Get all public publicly readable instances with package_key and URL
     # (openacs: 10ms, learn probably minutes)
     #
-    set publicPackages [xo::dc list get_public_packages {
-        select ap.package_key || ' ' || site_node__url(s.node_id) || ' ' || package_id
+    set publicPackages [xo::dc list_of_lists get_public_packages {
+        select ap.package_key, site_node__url(s.node_id), package_id
         from acs_permission.permission_p_recursive_array(array(
            select s.object_id from apm_packages ap, site_nodes s where s.object_id = ap.package_id
         ), -1, 'read') a, apm_packages ap, site_nodes s
