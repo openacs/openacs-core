@@ -101,7 +101,7 @@ if {$package_key eq ""} {
                 where s.object_id = ap.package_id group by 2 order by 1 desc, 2 asc
             ) as tuples
         }]
-        ns_log notice "HUGE publicPerPackageKey $publicPerPackageKey"
+        #ns_log notice "HUGE publicPerPackageKey $publicPerPackageKey"
         template::multirow create per_package_key \
             count package_key link url package_id status permission_info diagnosis
 
