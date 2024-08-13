@@ -764,14 +764,8 @@ comment on column users.n_sessions is '
 -- show errors
 
 -- create or replace package body acs_user
--- function new
-select define_function_args('user__new','user_id,object_type;user,creation_date;now(),creation_user,creation_ip,authority_id,username,email,url,first_names,last_name,password,salt,screen_name,email_verified_p;t,context_id');
 
-
-
-
--- added
-select define_function_args('acs_user__new','user_id;null,object_type;user,creation_date;now(),creation_user;null,creation_ip;null,authority_id,username,email,url;null,first_names,last_name,password,salt,screen_name;null,email_verified_p;t,context_id;null');
+select define_function_args('acs_user__new','user_id;null,object_type;user,creation_date;now(),creation_user;null,creation_ip;null,authority_id;null,username,email,url;null,first_names,last_name,password,salt,screen_name;null,email_verified_p;t,context_id;null');
 
 --
 -- procedure acs_user__new/16
