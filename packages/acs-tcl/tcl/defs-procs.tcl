@@ -525,7 +525,7 @@ if {[ns_config "ns/parameters" cachingmode "per-node"] eq "none"} {
 
     ad_proc -private ad_parameter_cache_flush_dict {
         key
-        parmeter_name
+        parameter_name
     } {
         Flush a single value from the nsv cache.
 
