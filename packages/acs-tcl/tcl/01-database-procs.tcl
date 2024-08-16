@@ -2189,7 +2189,7 @@ ad_proc -public db_multirow_group_last_row_p {
     # Otherwise, it's the last row in the group if the next row has a
     # different value than this row
     set next_value [lindex $next_row $pos]
-    return [expr {$next_value eq $column_value}]
+    return [expr {$next_value ne $column_value}]
 }
 
 
