@@ -46,9 +46,9 @@ ad_proc -private navigation::test::context_bar_multirow_filter {} {
 
     } -teardown_code {
         site_node::delete -node_id $idr_2
-        apm_package_instance_delete $package_id2
+        #apm_package_instance_delete $package_id2
         site_node::delete -node_id $idr_1
-        apm_package_instance_delete $package_id1
+        #apm_package_instance_delete $package_id1
     }
     ns_return 200 text/html $page
 
