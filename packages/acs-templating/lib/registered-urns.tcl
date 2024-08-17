@@ -9,7 +9,7 @@ ad_include_contract {
 }
 
 template::multirow create urns urn url
-foreach pattern $match {
+foreach pattern [lsort $match] {
     foreach urn [lsort [array names ::template::head::urn $pattern]] {
         template::multirow append urns $urn [template::head::resolve_urn $urn]
     }
