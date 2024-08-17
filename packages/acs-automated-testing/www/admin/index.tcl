@@ -97,7 +97,7 @@ db_foreach acs-automated-testing.results_queryx {
                 # No category specified, add results.
                 set categories  [lindex $results($testcase_id,$package_key) 2]
 
-                ns_log notice "$testcase_id,$package_key categories /$categories/"
+                #ns_log notice "$testcase_id,$package_key categories /[join $categories { }]/"
                 if {"stress" in $categories && !$stress} {
                     continue
                 }
