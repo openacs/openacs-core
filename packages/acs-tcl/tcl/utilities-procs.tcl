@@ -4126,7 +4126,7 @@ namespace eval util::resources {
         The dict members "urnMap", "prefix", and optionally "csp_lists" are used.
 
         @param resource_info a dict containing urnMap, prefix, and optionally csp_lists.
-    } {        
+    } {
         foreach resource_info_proc [resource_info_procs -prefix $namespace] {
             set resource_info [$resource_info_proc]
             if {[dict exists $resource_info urnMap]} {
@@ -4134,9 +4134,9 @@ namespace eval util::resources {
                     template::register_urn \
                         -urn $URN \
                         -resource [dict get $resource_info prefix]/[dict get $resource_info urnMap $URN] \
-                        -csp_list [expr {[dict exists $resource_info csp_lists $URN]
-                                         ? [dict set $resource_info csp_lists $URN]
-                                         : ""}]
+                        -csp_list [expr {[dict exists $resource_info cspMap $URN]
+                                         ? [dict get $resource_info cspMap $URN]
+                                         : {}}]
                 }
             }
         }
@@ -4342,16 +4342,16 @@ namespace eval util::resources {
     ad_proc -public ::util::resources::resource_info_procs {
         {-prefix ""}
     } {
-        
+
         Returns a list of "resource_info" procs, potentially prefixed
         by some namespace.
-        
+
     } {
         return [lmap proc_name [lsort [nsv_array names api_proc_doc ${prefix}*::resource_info]] {
             set d [nsv_get api_proc_doc $proc_name]
             dict with d {
                 if {$varargs_p != 0
-                    || "version" ni $switches0 
+                    || "version" ni $switches0
                     || $switches1 ne ""
                     || $positionals ne ""
                 } {
@@ -4367,7 +4367,7 @@ namespace eval util::resources {
                     || ![string match *resourceName* $body]
                     || ![string match *cssFiles* $body]
                     || ![string match *jsFiles* $body]
-                    || ![string match *cdnHost* $body]                    
+                    || ![string match *cdnHost* $body]
                 } {
                     ns_log notice "=== ::util::resources::resource_info_procs proc $proc_name does not return a proper dict \n" \
                         $body
@@ -4378,7 +4378,7 @@ namespace eval util::resources {
         }]
     }
 
-    
+
     ad_proc -public ::util::resources::version_segment {
         -resource_info:required
     } {
