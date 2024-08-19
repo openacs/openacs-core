@@ -112,7 +112,7 @@ namespace eval ::acs {
 ::acs::register_icanuse "ns_crypto::randombytes"    {[info commands ::ns_crypto::randombytes] ne ""}
 ::acs::register_icanuse "ns_crypto::scrypt"         {[info commands ::ns_crypto::scrypt] ne ""}
 ::acs::register_icanuse "ns_db currenthandles"      [acs::cmd_has_subcommand ns_db currenthandles]
-::acs::register_icanuse "ns_deletecookie -samesite" [acs::cmd_error_contains {ns_deletecookie ""} -samesite]
+::acs::register_icanuse "ns_deletecookie -samesite" [acs::cmd_error_contains {ns_deletecookie} -samesite]
 ::acs::register_icanuse "ns_hash"                   {[info commands ::ns_hash] ne ""}
 ::acs::register_icanuse "ns_ictl trace idle"        [acs::cmd_error_contains {ns_ictl trace foo} idle]
 ::acs::register_icanuse "ns_ip"                     {[info commands ::ns_ip] ne ""}
