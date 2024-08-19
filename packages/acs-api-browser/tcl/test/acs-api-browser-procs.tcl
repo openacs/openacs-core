@@ -383,21 +383,22 @@ aa_register_case \
             aa_log "Adding a few XOTcl classes"
             lappend commands {*}[lrange [::xotcl::Object info instances] 0 100]
         }
-        foreach script $commands {
-            set output [apidoc::tclcode_to_html $script]
-            aa_true "Valid input '$script' returns some HTML" \
+        foreach command $commands {
+            set output [apidoc::tclcode_to_html $command]
+            #ns_log notice ".... $command output $output"
+            aa_true "Valid input '$command' returns some HTML" \
                 [ad_looks_like_html_p $output]
-            aa_true "Valid input '$script' contains itself" \
-                {[string first $script $output] > -1}
-            aa_true "Valid input '$script' contains some sort of URL of itself" \
-                {[string first [ns_quotehtml [ad_urldecode_query $script]] $output] > -1}
+            aa_true "Valid input '$command' contains itself" \
+                {[string first $command $output] > -1}
+            aa_true "Valid input '$command' contains some sort of URL of itself" \
+                {[string first [ns_quotehtml [ad_urldecode_query $command]] $output] > -1}
         }
 
-        foreach script $commands {
-            set output [apidoc::tcl_to_html $script]
-            aa_true "Proc '$script' returns some HTML" \
+        foreach command $commands {
+            set output [apidoc::tcl_to_html $command]
+            aa_true "Proc '$command' returns some HTML" \
                 [ad_looks_like_html_p $output]
-            aa_true "Proc '$script' contains links to commands documentation" \
+            aa_true "Proc '$command' contains links to commands documentation" \
                 {
                     [string first /api-doc/proc-view $output] > -1 ||
                     [string first /api-doc/tcl-proc $output] > -1 ||
