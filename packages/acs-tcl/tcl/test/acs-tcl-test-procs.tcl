@@ -74,7 +74,7 @@ aa_register_case \
 
         @creation-date 22 January 2003
         @author Peter Marklund
-} {
+    } {
     set test_dir "[acs_package_root_dir acs-tcl]/tcl/test"
     set spec_path "${test_dir}/tmp-test-info-file.xml"
     set allowed_type [lindex [apm_supported_callback_types] 0]
@@ -137,7 +137,7 @@ aa_register_case \
                              where version_id = :version_id}
 
 
-    if { $error_p } {
+        if { $error_p } {
         error "$error - $::errorInfo"
     }
 }
@@ -249,49 +249,49 @@ aa_register_case \
     } \
     xml_get_child_node_content_by_path {
         Test xml_get_child_node_content_by_path
-} {
-    set tree [xml_parse -persist {
-<enterprise>
-  <properties>
-    <datasource>Dunelm Services Limited</datasource>
-    <target>Telecommunications LMS</target>
-    <type>DATABASE UPDATE</type>
-    <datetime>2001-08-08</datetime>
-  </properties>
-  <person recstatus = "1">
-    <comments>Add a new Person record.</comments>
-    <sourcedid>
-      <source>Dunelm Services Limited</source>
-      <id>CK1</id>
-    </sourcedid>
-    <name>
-      <fn>Clark Kent</fn>
-      <sort>Kent, C</sort>
-      <nickname>Superman</nickname>
-    </name>
-    <demographics>
-      <gender>2</gender>
-    </demographics>
-    <adr>
-      <extadd>The Daily Planet</extadd>
-      <locality>Metropolis</locality>
-      <country>USA</country>
-    </adr>
-  </person>
-</enterprise>
-    }]
+    } {       
+        set tree [xml_parse -persist {
+            <enterprise>
+            <properties>
+            <datasource>Dunelm Services Limited</datasource>
+            <target>Telecommunications LMS</target>
+            <type>DATABASE UPDATE</type>
+            <datetime>2001-08-08</datetime>
+            </properties>
+            <person recstatus = "1">
+            <comments>Add a new Person record.</comments>
+            <sourcedid>
+            <source>Dunelm Services Limited</source>
+            <id>CK1</id>
+            </sourcedid>
+            <name>
+            <fn>Clark Kent</fn>
+            <sort>Kent, C</sort>
+            <nickname>Superman</nickname>
+            </name>
+            <demographics>
+            <gender>2</gender>
+            </demographics>
+            <adr>
+            <extadd>The Daily Planet</extadd>
+            <locality>Metropolis</locality>
+            <country>USA</country>
+            </adr>
+            </person>
+            </enterprise>
+        }]
 
-    set root_node [xml_doc_get_first_node $tree]
+        set root_node [xml_doc_get_first_node $tree]
 
-    aa_equals "person -> name -> nickname is Superman" \
-        [xml_get_child_node_content_by_path $root_node { { person name nickname } }] "Superman"
+        aa_equals "person -> name -> nickname is Superman" \
+         [xml_get_child_node_content_by_path $root_node { { person name nickname } }] "Superman"
 
-    aa_equals "Same, but after trying a couple of non-existent paths or empty notes" \
-        [xml_get_child_node_content_by_path $root_node { { does not exist } { properties } { person name nickname } { person sourcedid id } }] "Superman"
-    aa_equals "properties -> datetime" \
-        [xml_get_child_node_content_by_path $root_node { { person comments foo } { person name first_names } { properties datetime } }] "2001-08-08"
-
-
+        aa_equals "Same, but after trying a couple of non-existent paths or empty notes" \
+         [xml_get_child_node_content_by_path $root_node { { does not exist } { properties } { person name nickname } { person sourcedid id } }] "Superman"
+        aa_equals "properties -> datetime" \
+         [xml_get_child_node_content_by_path $root_node { { person comments foo } { person name first_names } { properties datetime } }] "2001-08-08"
+        
+        $tree delete
 }
 
 aa_register_case \
