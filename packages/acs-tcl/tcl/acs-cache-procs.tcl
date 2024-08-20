@@ -530,14 +530,14 @@ namespace eval ::acs {
             #
             if {[info exists ${:prefix}]} {
                 if {$pattern eq "*"} {
-                    ns_log notice "### dict flush ${:prefix} <$pattern>"
+                    #ns_log notice "### dict flush ${:prefix} <$pattern>"
                     unset -nocomplain ${:prefix}
                 } elseif {[string first "*" $pattern] != -1} {
                     #
                     # A real pattern with wild-card was provided.
                     #
                     set keys [dict keys [set ${:prefix}] $pattern]
-                    ns_log notice "### dict flush ${:prefix} <$pattern> -> [llength $keys]"
+                    #ns_log notice "### dict flush ${:prefix} <$pattern> -> [llength $keys]"
                     foreach key $keys {
                         dict unset ${:prefix} $key
                     }
