@@ -192,16 +192,17 @@ aa_register_case \
 
                 aa_log "Server responded with: $json_response"
 
-                set root [dom parse -json -- $json_response]
+                set doc [dom parse -json -- $json_response]
                 set resp_key ""
                 set resp_value ""
-                foreach node [$root childNodes] {
+                foreach node [$doc childNodes] {
                     if {[$node nodeName] eq "data"} {
                         set child [$node firstChild]
                         set resp_key    [$child nodeName]
                         set resp_string [$child text]
                     }
                 }
+                $doc delete
 
                 aa_equals "Format seems correct" $resp_key $test_key
                 aa_equals "Value is correct" $resp_string $test_string
@@ -221,16 +222,17 @@ aa_register_case \
 
                 aa_log "Server responded with: $json_response"
 
-                set root [dom parse -json -- $json_response]
+                set doc [dom parse -json -- $json_response]
                 set resp_key ""
                 set resp_value ""
-                foreach node [$root childNodes] {
+                foreach node [$doc childNodes] {
                     if {[$node nodeName] eq "args"} {
                         set child [$node firstChild]
                         set resp_key    [$child nodeName]
                         set resp_string [$child text]
                     }
                 }
+                $doc delete
 
                 aa_equals "Format seems correct" $resp_key $test_key
                 aa_equals "Value is correct" $resp_string $test_string
