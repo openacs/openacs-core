@@ -870,10 +870,10 @@ ad_proc -private auth::sync::process_doc::ims::ProcessDocument {
     Process IMS Enterprise 1.1 document.
 } {
     set tree [xml_parse -persist $document]
-
     set root_node [xml_doc_get_first_node $tree]
 
     if { [xml_node_get_name $root_node] ne "enterprise" } {
+        $tree delete
         error "Root node was not <enterprise>"
     }
 
@@ -920,6 +920,7 @@ ad_proc -private auth::sync::process_doc::ims::ProcessDocument {
             -username $username \
             -array user_info
     }
+    $tree delete
 }
 
 
@@ -932,12 +933,15 @@ ad_proc -private auth::sync::process_doc::ims::GetAcknowledgementDocument {
     adaptation of the IMS Enterprise v 1.1 spec.
 } {
     set tree [xml_parse -persist $document]
+
     set root_node [xml_doc_get_first_node $tree]
     if { [xml_node_get_name $root_node] ne "enterprise" } {
+        $tree delete
         error "Root node was not <enterprise>"
     }
 
     set timestamp [xml_get_child_node_content_by_path $root_node { { properties datetime } }]
+    $tree delete
 
     append doc {<?xml version="1.0" encoding="} [ns_config "ns/parameters" OutputCharset] {"?>} \n
     append doc {<enterprise>} \n
