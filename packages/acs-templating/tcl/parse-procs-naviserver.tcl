@@ -2,6 +2,9 @@ ad_library {
     ADP to Tcl Compiler, NaviServer variant.
 }
 
+if {[ns_info name] ne "NaviServer"} {
+    return
+}
 #
 # NaviServer requires for disambiguation of flags and values at the
 # end of the argument processing a terminating "--"
