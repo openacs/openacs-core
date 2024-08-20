@@ -9,27 +9,27 @@
 -- @cvs-id $Id$
 
 -----------------------------
---     PACKAGE OBJECT	   --
+--     PACKAGE OBJECT      --
 -----------------------------
 
 -----------------------------
---     Knowledge Level	   --
+--     Knowledge Level     --
 -----------------------------
 
 create table apm_package_types (
     package_key			varchar(100)
-				constraint apm_package_types_p_key_pk primary key,
+                                constraint apm_package_types_p_key_pk primary key,
     pretty_name			varchar(100)
-    	    	    	    	constraint apm_package_types_pretty_n_nn not null
-				constraint apm_package_types_pretty_n_un unique,
-    pretty_plural	        varchar(100)
-				constraint apm_package_types_pretty_pl_un unique,
+                                constraint apm_package_types_pretty_n_nn not null
+                                constraint apm_package_types_pretty_n_un unique,
+    pretty_plural               varchar(100)
+                                constraint apm_package_types_pretty_pl_un unique,
     package_uri			varchar(1500)
-				constraint apm_packages_types_p_uri_nn not null
-				constraint apm_packages_types_p_uri_un unique,
+                                constraint apm_packages_types_p_uri_nn not null
+                                constraint apm_packages_types_p_uri_un unique,
     package_type		varchar(300)
-				constraint apm_packages_pack_type_ck 
-				check (package_type in ('apm_application', 'apm_service')),
+                                constraint apm_packages_pack_type_ck
+                                check (package_type in ('apm_application', 'apm_service')),
     spec_file_path		varchar(1500),
     spec_file_mtime		integer,
     initial_install_p		boolean default 'f'
@@ -57,7 +57,7 @@ comment on column apm_package_types.package_key is $$
 $$;
 
 comment on column apm_package_types.package_uri is $$
- The package URI indicates where the package can be downloaded and 
+ The package URI indicates where the package can be downloaded and
  is a unique identifier for the package.
 $$;
 
@@ -66,7 +66,7 @@ comment on column apm_package_types.spec_file_path is $$
 $$;
 
 comment on column apm_package_types.spec_file_mtime is $$
- The last time a spec file was modified.  This information is maintained in the 
+ The last time a spec file was modified.  This information is maintained in the
 database so that if a user changes the specification file by editing the file
 (as opposed to using the UI, the system can read the .info file and update
 the information in the database appropriately.
@@ -78,8 +78,8 @@ comment on column apm_package_types.initial_install_p is $$
 $$;
 
 comment on column apm_package_types.singleton_p is $$
- Indicates if the package can be used for subsites.  If this is set to 
- 't', the package can be enabled for any subsite.  Otherwise, it is 
+ Indicates if the package can be used for subsites.  If this is set to
+ 't', the package can be enabled for any subsite.  Otherwise, it is
  restricted to the acs-admin/ subsite.
 $$;
 
@@ -163,12 +163,12 @@ drop function inline_1 ();
 
 create table apm_packages (
     package_id			integer constraint apm_packages_package_id_fk
-				references acs_objects(object_id)
-				constraint apm_packages_package_id_pk primary key,
+                                references acs_objects(object_id)
+                                constraint apm_packages_package_id_pk primary key,
     package_key			varchar(100) constraint apm_packages_package_key_fk
-				references apm_package_types(package_key),
+                                references apm_package_types(package_key),
     instance_name		varchar(300)
-			        constraint apm_packages_instance_name_nn not null,
+                                constraint apm_packages_instance_name_nn not null,
     -- default system locale for this package
     default_locale              varchar(30)
 );
@@ -179,7 +179,7 @@ create index apm_packages_package_key_idx on apm_packages (package_key);
 alter table acs_objects add constraint acs_objects_package_id_fk foreign key (package_id) references apm_packages(package_id) on delete set null;
 
 comment on table apm_packages is '
-   This table maintains the list of all package instances in the system. 
+   This table maintains the list of all package instances in the system.
 ';
 
 comment on column apm_packages.instance_name is '
@@ -191,27 +191,27 @@ and "Boston Private Bboard" for managing private forums for the Boston subsite.
 ';
 
 -----------------------------
---   Operational  Level	   --
+--   Operational  Level    --
 -----------------------------
 
 create table apm_package_versions (
     version_id         integer
                        constraint apm_package_vers_id_pk primary key
-		       constraint apm_package_vers_id_fk	
-		         references acs_objects(object_id),
-    package_key        varchar(100) 
-		       constraint apm_package_vers_pack_key_nn not null
-		       constraint apm_package_vers_pack_key_fk 
-		         references apm_package_types(package_key),
+                       constraint apm_package_vers_id_fk
+                         references acs_objects(object_id),
+    package_key        varchar(100)
+                       constraint apm_package_vers_pack_key_nn not null
+                       constraint apm_package_vers_pack_key_fk
+                         references apm_package_types(package_key),
     version_name       varchar(100)
                        constraint apm_package_vers_ver_name_nn not null,
     version_uri        varchar(1500)
                        constraint apm_package_vers_ver_uri_nn not null
                        constraint apm_package_vers_ver_uri_un unique,
-    summary 	       varchar(3000),
+    summary            varchar(3000),
     description_format varchar(100)
-		       constraint apm_package_vers_desc_for_ck
-		         check (description_format in ('text/html', 'text/plain')),
+                       constraint apm_package_vers_desc_for_ck
+                         check (description_format in ('text/html', 'text/plain')),
     description        text,
     release_date       timestamptz,
     vendor             varchar(500),
@@ -232,9 +232,9 @@ create table apm_package_versions (
     -- FIXME: store the tarball in the content-repository
     -- distribution_tarball blob,
     item_id            integer,
-    -- This constraint can't be added yet, as the cr_items table 
+    -- This constraint can't be added yet, as the cr_items table
     -- has not been created yet.
-                       -- constraint apm_package_ver_item_id_fk 
+                       -- constraint apm_package_ver_item_id_fk
                        -- references cr_items(item_id),
     content_length     integer,
     distribution_uri   varchar(1500),
@@ -250,30 +250,30 @@ comment on table apm_package_versions is '
 ';
 
 comment on column apm_package_versions.version_name is $$
-A version number consists of: 
-   1.A major version number. 
-   2.Optionally, up to three minor version numbers. 
-   3.One of the following: 
+A version number consists of:
+   1.A major version number.
+   2.Optionally, up to three minor version numbers.
+   3.One of the following:
          The letter d, indicating a development-only version.
          The letter a, indicating an alpha release.
-         The letter b, indicating a beta release. 
+         The letter b, indicating a beta release.
          No letter at all, indicating a final release.
-In addition, the letters d, a, and b may be followed by another integer, indicating a version within the release. 
-For those who like regular expressions: 
+In addition, the letters d, a, and b may be followed by another integer, indicating a version within the release.
+For those who like regular expressions:
      version_number := integer ('.' integer){0,3} (('d'|'a'|'b') integer?)?
-So the following is a valid progression for version numbers: 
+So the following is a valid progression for version numbers:
      0.9d, 0.9d1, 0.9a1, 0.9b1, 0.9b2, 0.9, 1.0, 1.0.1, 1.1b1, 1.1
 $$;
 
 comment on column apm_package_versions.version_uri is '
   This column should uniquely identify a package version.  This URI should in practice be a URL at which this specific
-version can be downloaded.  
+version can be downloaded.
 ';
 
 comment on column apm_package_versions.summary is '
-Type a brief, one-sentence-or-less summary of the functionality of 
-your package.  The summary should begin with a capital letter 
-and end with a period. 
+Type a brief, one-sentence-or-less summary of the functionality of
+your package.  The summary should begin with a capital letter
+and end with a period.
 XXX (bquinn): Move to Content Repository?
 ';
 
@@ -282,7 +282,7 @@ comment on column apm_package_versions.description_format is '
 ';
 
 comment on column apm_package_versions.description is $$
-Type a one-paragraph description of your package. This is probably analogous 
+Type a one-paragraph description of your package. This is probably analogous
 to the first paragraph in your package's documentation.  This is used to describe
 the system to users considering installing it.
 $$;
@@ -295,7 +295,7 @@ usefulness of storing this information here.
 $$;
 
 comment on column apm_package_versions.vendor is '
-If the package is being released by a company or some kind of organization, 
+If the package is being released by a company or some kind of organization,
 its name should go here.
 ';
 
@@ -367,8 +367,8 @@ comment on column apm_package_versions.auto_mount is '
 -- TODO: Migrate this to use acs_attributes instead?
 create table apm_package_version_attr (
     version_id         integer
-                       constraint apm_package_vers_attr_vid_fk	
-                       references apm_package_versions(version_id) 
+                       constraint apm_package_vers_attr_vid_fk
+                       references apm_package_versions(version_id)
                        on delete cascade
                        constraint apm_package_vers_attr_vid_nn
                        not null,
@@ -645,8 +645,8 @@ comment on table apm_package_owners is '
 ';
 
 create table apm_package_callbacks (
-    version_id         integer 
-                       constraint apm_package_callbacks_vid_fk 
+    version_id         integer
+                       constraint apm_package_callbacks_vid_fk
                        references apm_package_versions(version_id)
                        on delete cascade,
     type               varchar(40),
@@ -657,7 +657,7 @@ create table apm_package_callbacks (
 
 comment on table apm_package_callbacks is '
   This table holds names of Tcl procedures to invoke at the time (before or after) the package is
-  installed, instantiated, or mounted.        
+  installed, instantiated, or mounted.
 ';
 
 comment on column apm_package_callbacks.proc is '
@@ -684,7 +684,7 @@ create view apm_package_version_info as
            v.activation_date, v.deactivation_date,
            coalesce(v.content_length,0) as tarball_length,
            distribution_uri, distribution_date
-    from   apm_package_types t, apm_package_versions v 
+    from   apm_package_types t, apm_package_versions v
     where  v.package_key = t.package_key;
 
 
@@ -694,43 +694,43 @@ create view apm_enabled_package_versions as
     where  enabled_p = 't';
 
 create table apm_parameters (
-	parameter_id		integer constraint apm_parameters_parameter_id_fk 
-				references acs_objects(object_id)
-			        constraint apm_parameters_parameter_id_pk primary key,
-	package_key		varchar(100)
-				constraint apm_parameters_package_key_nn not null 	
-				constraint apm_parameters_package_key_fk
-			        references apm_package_types (package_key),
-	parameter_name		varchar(100) 
-				constraint apm_pack_params_name_nn not null,
+        parameter_id		integer constraint apm_parameters_parameter_id_fk
+                                references acs_objects(object_id)
+                                constraint apm_parameters_parameter_id_pk primary key,
+        package_key		varchar(100)
+                                constraint apm_parameters_package_key_nn not null
+                                constraint apm_parameters_package_key_fk
+                                references apm_package_types (package_key),
+        parameter_name		varchar(100)
+                                constraint apm_pack_params_name_nn not null,
         description		varchar(2000),
-	section_name		varchar(200),
-	datatype	        varchar(100) not null
-			        constraint apm_parameters_datatype_ck 
-				check(datatype in ('number', 'string','text')),
+        section_name		varchar(200),
+        datatype                varchar(100) not null
+                                constraint apm_parameters_datatype_ck
+                                check(datatype in ('number', 'string','text')),
         scope                   varchar(10) default 'instance'
                                 constraint apm_parameters_scope_ck
                                 check (scope in ('global','instance'))
                                 constraint apm_parameters_scope_nn
                                 not null,
-	default_value		text,
-	min_n_values		integer default 1 not null
-			        constraint apm_parameters_min_n_values_ck
-			        check (min_n_values >= 0),
-	max_n_values		integer default 1 not null
-			        constraint apm_parameters_max_n_values_ck
-			        check (max_n_values >= 0),
-	constraint apm_parameters_attr_name_un
-	unique (parameter_name, package_key),
-	constraint apm_parameters_n_values_ck
-	check (min_n_values <= max_n_values)
+        default_value		text,
+        min_n_values		integer default 1 not null
+                                constraint apm_parameters_min_n_values_ck
+                                check (min_n_values >= 0),
+        max_n_values		integer default 1 not null
+                                constraint apm_parameters_max_n_values_ck
+                                check (max_n_values >= 0),
+        constraint apm_parameters_attr_name_un
+        unique (parameter_name, package_key),
+        constraint apm_parameters_n_values_ck
+        check (min_n_values <= max_n_values)
 );
 
 create index apm_parameters_package_idx on apm_parameters (package_key);
 
 comment on table apm_parameters is '
   This table stores information about parameters on packages.  Every package parameter
-is specific to a particular package instance and is queryable with the Tcl call 
+is specific to a particular package instance and is queryable with the Tcl call
 parameter::get.
 ';
 
@@ -749,40 +749,40 @@ comment on column apm_parameters.description is '
 
 comment on column apm_parameters.datatype is '
  Acceptable datatypes for parameters.  Currently only numbers and strings.
- XXX (bquinn): Integrate with acs objects metadata system.  It is not 
- currently so integrated because of fluctuations with the general 
+ XXX (bquinn): Integrate with acs objects metadata system.  It is not
+ currently so integrated because of fluctuations with the general
  storage mechanism during development.
 ';
 
 comment on column apm_parameters.default_value is '
   The default value that any package instance will inherit unless otherwise
-  specified. 
+  specified.
 ';
 
 comment on column apm_parameters.min_n_values is '
   The minimum number of values that this parameter can take.  Zero values means
   that the default is always enforced (but is somewhat pointless).  One value means that
-  it can only be set to one value.  Increasing this number beyond one enables associating 
-  a list of values with a parameter.  
+  it can only be set to one value.  Increasing this number beyond one enables associating
+  a list of values with a parameter.
   XXX (bquinn): More than one value is not supported by parameter::get call at this time.
 ';
 
 comment on column apm_parameters.max_n_values is '
 The maximum number of values that any attribute with this datatype
- can have. 
+ can have.
 ';
 
 create table apm_parameter_values (
-	value_id		integer constraint apm_parameter_values_fk
-				references acs_objects(object_id)
-				constraint apm_parameter_values_pk primary key,
-	package_id		integer constraint apm_parameter_values_pk_id_fk 
-				references apm_packages (package_id) on delete cascade,
-	parameter_id		integer constraint apm_parameter_values_pm_id_fk
-				references apm_parameters (parameter_id),
-	attr_value		text,
-	constraint apm_parameter_values_un 
-	unique (package_id, parameter_id)
+        value_id		integer constraint apm_parameter_values_fk
+                                references acs_objects(object_id)
+                                constraint apm_parameter_values_pk primary key,
+        package_id		integer constraint apm_parameter_values_pk_id_fk
+                                references apm_packages (package_id) on delete cascade,
+        parameter_id		integer constraint apm_parameter_values_pm_id_fk
+                                references apm_parameters (parameter_id),
+        attr_value		text,
+        constraint apm_parameter_values_un
+        unique (package_id, parameter_id)
 );
 
 create index apm_par_vals_parameter_idx on apm_parameter_values (parameter_id);
@@ -867,7 +867,7 @@ attr_id := acs_attribute__create_attribute (
    null,
    'type_specific',
    'f'
-   ); 
+   );
 
  attr_id := acs_attribute__create_attribute (
    'apm_parameter',
@@ -1029,7 +1029,7 @@ drop function inline_5 ();
 -- show errors
 
 create table apm_package_dependencies (
-    dependency_id      integer 
+    dependency_id      integer
                        constraint apm_package_deps_id_pk primary key,
     version_id         integer constraint apm_package_deps_version_id_fk references apm_package_versions on delete cascade
                        constraint apm_package_deps_version_id_nn not null,
@@ -1055,9 +1055,9 @@ comment on column apm_package_dependencies.service_version is '
 
 create table apm_applications (
        application_id		integer
-				constraint apm_applications_aplt_id_fk
-				references apm_packages(package_id)
-				constraint apm_applications_pk primary key
+                                constraint apm_applications_aplt_id_fk
+                                references apm_packages(package_id)
+                                constraint apm_applications_pk primary key
 );
 
 comment on table apm_applications is '
@@ -1067,13 +1067,13 @@ This table records data on all of the applications registered in OpenACS.
 
 create table apm_services (
        service_id			integer
-					constraint apm_services_service_id_fk
-					references apm_packages(package_id)
-				        constraint apm_services_service_id_pk primary key
+                                        constraint apm_services_service_id_fk
+                                        references apm_packages(package_id)
+                                        constraint apm_services_service_id_pk primary key
 );
 
 comment on table apm_services is '
-This table records data on all of the services registered in OpenACS. 
+This table records data on all of the services registered in OpenACS.
 ';
 
 
@@ -1085,7 +1085,7 @@ This table records data on all of the services registered in OpenACS.
 CREATE OR REPLACE FUNCTION inline_6(
 
 ) RETURNS integer AS $$
-DECLARE 
+DECLARE
         dummy   integer;
 BEGIN
 -- Create a new object type for applications.
@@ -1172,20 +1172,20 @@ CREATE OR REPLACE FUNCTION apm__register_package(
 DECLARE
 BEGIN
     PERFORM apm_package_type__create_type(
-    	package_key,
-	pretty_name,
-	pretty_plural,
-	package_uri,
-	package_type,
-	initial_install_p,
-	singleton_p,
+        package_key,
+        pretty_name,
+        pretty_plural,
+        package_uri,
+        package_type,
+        initial_install_p,
+        singleton_p,
         implements_subsite_p,
         inherit_templates_p,
-	spec_file_path,
-	spec_file_mtime
+        spec_file_path,
+        spec_file_mtime
     );
 
-    return 0; 
+    return 0;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -1214,19 +1214,19 @@ CREATE OR REPLACE FUNCTION apm__update_package(
 ) RETURNS varchar AS $$
 DECLARE
 BEGIN
- 
+
     return apm_package_type__update_type(
-    	package_key,
-	pretty_name,
-	pretty_plural,
-	package_uri,
-	package_type,
-	initial_install_p,
-	singleton_p,
+        package_key,
+        pretty_name,
+        pretty_plural,
+        package_uri,
+        package_type,
+        initial_install_p,
+        singleton_p,
         implements_subsite_p,
         inherit_templates_p,
-	spec_file_path,
-	spec_file_mtime
+        spec_file_path,
+        spec_file_mtime
     );
 END;
 $$ LANGUAGE plpgsql;
@@ -1248,18 +1248,18 @@ CREATE OR REPLACE FUNCTION apm__unregister_package(
 DECLARE
   v_cascade_p            boolean;
 BEGIN
-   if cascade_p is null then 
-	v_cascade_p := 't';
-   else 
+   if cascade_p is null then
+        v_cascade_p := 't';
+   else
        v_cascade_p := p_cascade_p;
    end if;
 
    PERFORM apm_package_type__drop_type(
-	package_key,
-	v_cascade_p
+        package_key,
+        v_cascade_p
    );
 
-   return 0; 
+   return 0;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -1277,14 +1277,14 @@ CREATE OR REPLACE FUNCTION apm__register_p(
    register_p__package_key varchar
 ) RETURNS integer AS $$
 DECLARE
-  v_register_p                       integer;       
+  v_register_p                       integer;
 BEGIN
-    select case when count(*) = 0 then 0 else 1 end into v_register_p 
-    from apm_package_types 
+    select case when count(*) = 0 then 0 else 1 end into v_register_p
+    from apm_package_types
     where package_key = register_p__package_key;
 
     return v_register_p;
-   
+
 END;
 $$ LANGUAGE plpgsql stable;
 
@@ -1314,20 +1314,20 @@ CREATE OR REPLACE FUNCTION apm__register_application(
 DECLARE
 BEGIN
    PERFORM apm__register_package(
-	package_key,
-	pretty_name,
-	pretty_plural,
-	package_uri,
-	'apm_application',
-	initial_install_p,
-	singleton_p,
+        package_key,
+        pretty_name,
+        pretty_plural,
+        package_uri,
+        'apm_application',
+        initial_install_p,
+        singleton_p,
         implements_subsite_p,
         inherit_templates_p,
-	spec_file_path,
-	spec_file_mtime
-   ); 
+        spec_file_path,
+        spec_file_mtime
+   );
 
-   return 0; 
+   return 0;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -1349,9 +1349,9 @@ CREATE OR REPLACE FUNCTION apm__unregister_application(
 DECLARE
   v_cascade_p            boolean;
 BEGIN
-   if p_cascade_p is null then 
-	v_cascade_p := 'f';
-   else 
+   if p_cascade_p is null then
+        v_cascade_p := 'f';
+   else
        v_cascade_p := p_cascade_p;
    end if;
 
@@ -1360,7 +1360,7 @@ BEGIN
         v_cascade_p
    );
 
-   return 0; 
+   return 0;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -1390,20 +1390,20 @@ CREATE OR REPLACE FUNCTION apm__register_service(
 DECLARE
 BEGIN
    PERFORM apm__register_package(
-	package_key,
-	pretty_name,
-	pretty_plural,
-	package_uri,
-	'apm_service',
-	initial_install_p,
-	singleton_p,
+        package_key,
+        pretty_name,
+        pretty_plural,
+        package_uri,
+        'apm_service',
+        initial_install_p,
+        singleton_p,
         implements_subsite_p,
         inherit_templates_p,
-	spec_file_path,
-	spec_file_mtime
-   );  
- 
-   return 0; 
+        spec_file_path,
+        spec_file_mtime
+   );
+
+   return 0;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -1425,18 +1425,18 @@ CREATE OR REPLACE FUNCTION apm__unregister_service(
 DECLARE
   v_cascade_p           boolean;
 BEGIN
-   if p_cascade_p is null then 
-	v_cascade_p := 'f';
-   else 
-	v_cascade_p := p_cascade_p;
+   if p_cascade_p is null then
+        v_cascade_p := 'f';
+   else
+        v_cascade_p := p_cascade_p;
    end if;
 
    PERFORM apm__unregister_package (
-	package_key,
-	v_cascade_p
+        package_key,
+        v_cascade_p
    );
 
-   return 0; 
+   return 0;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -1468,7 +1468,7 @@ DECLARE
   v_pkg                  record;
 
 BEGIN
-    -- Create the new parameter.    
+    -- Create the new parameter.
     v_parameter_id := acs_object__new(
        register_parameter__parameter_id,
        'apm_parameter',
@@ -1480,40 +1480,40 @@ BEGIN
        register_parameter__package_key || ' - ' || register_parameter__parameter_name,
        null
     );
-    
-    insert into apm_parameters 
-    (parameter_id, parameter_name, scope, description, package_key, datatype, 
+
+    insert into apm_parameters
+    (parameter_id, parameter_name, scope, description, package_key, datatype,
     default_value, section_name, min_n_values, max_n_values)
     values
     (v_parameter_id, register_parameter__parameter_name, register_parameter__scope,
-     register_parameter__description, register_parameter__package_key, 
-     register_parameter__datatype, register_parameter__default_value, 
-     register_parameter__section_name, register_parameter__min_n_values, 
+     register_parameter__description, register_parameter__package_key,
+     register_parameter__datatype, register_parameter__default_value,
+     register_parameter__section_name, register_parameter__min_n_values,
      register_parameter__max_n_values);
 
-    -- Propagate parameter to new instances.	
+    -- Propagate parameter to new instances.
     if register_parameter__scope = 'instance' then
       for v_pkg in
           select package_id
-  	from apm_packages
-  	where package_key = register_parameter__package_key
+        from apm_packages
+        where package_key = register_parameter__package_key
         loop
           v_value_id := apm_parameter_value__new(
-  	    null,
-  	    v_pkg.package_id,
-  	    v_parameter_id, 
-  	    register_parameter__default_value); 	
-        end loop;		
+            null,
+            v_pkg.package_id,
+            v_parameter_id,
+            register_parameter__default_value);
+        end loop;
      else
        v_value_id := apm_parameter_value__new(
-  	 null,
-  	 null,
-  	 v_parameter_id, 
-  	 register_parameter__default_value); 	
+         null,
+         null,
+         v_parameter_id,
+         register_parameter__default_value);
      end if;
-	
+
     return v_parameter_id;
-   
+
 END;
 $$ LANGUAGE plpgsql;
 
@@ -1570,12 +1570,12 @@ CREATE OR REPLACE FUNCTION apm__update_parameter(
 ) RETURNS varchar AS $$
 DECLARE
 BEGIN
-    update apm_parameters 
-	set parameter_name = coalesce(update_parameter__parameter_name, parameter_name),
+    update apm_parameters
+        set parameter_name = coalesce(update_parameter__parameter_name, parameter_name),
             default_value  = coalesce(update_parameter__default_value, default_value),
-            datatype       = coalesce(update_parameter__datatype, datatype), 
-	    description	   = coalesce(update_parameter__description, description),
-	    section_name   = coalesce(update_parameter__section_name, section_name),
+            datatype       = coalesce(update_parameter__datatype, datatype),
+            description    = coalesce(update_parameter__description, description),
+            section_name   = coalesce(update_parameter__section_name, section_name),
             min_n_values   = coalesce(update_parameter__min_n_values, min_n_values),
             max_n_values   = coalesce(update_parameter__max_n_values, max_n_values)
       where parameter_id = update_parameter__parameter_id;
@@ -1587,7 +1587,7 @@ BEGIN
      where object_id = update_parameter__parameter_id;
 
     return parameter_id;
-     
+
 END;
 $$ LANGUAGE plpgsql;
 
@@ -1606,15 +1606,15 @@ CREATE OR REPLACE FUNCTION apm__parameter_p(
    parameter_p__parameter_name varchar
 ) RETURNS integer AS $$
 DECLARE
-  v_parameter_p                       integer;       
+  v_parameter_p                       integer;
 BEGIN
-    select case when count(*) = 0 then 0 else 1 end into v_parameter_p 
+    select case when count(*) = 0 then 0 else 1 end into v_parameter_p
     from apm_parameters
     where package_key = parameter_p__package_key
     and parameter_name = parameter_p__parameter_name;
 
     return v_parameter_p;
-   
+
 END;
 $$ LANGUAGE plpgsql stable;
 
@@ -1634,13 +1634,13 @@ CREATE OR REPLACE FUNCTION apm__unregister_parameter(
 ) RETURNS integer AS $$
 DECLARE
 BEGIN
-    delete from apm_parameter_values 
+    delete from apm_parameter_values
     where parameter_id = unregister_parameter__parameter_id;
-    delete from apm_parameters 
+    delete from apm_parameters
     where parameter_id = unregister_parameter__parameter_id;
     PERFORM acs_object__delete(unregister_parameter__parameter_id);
 
-    return 0; 
+    return 0;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -1658,19 +1658,19 @@ CREATE OR REPLACE FUNCTION apm__id_for_name(
 DECLARE
   a_parameter_id                      apm_parameters.parameter_id%TYPE;
 BEGIN
-    select parameter_id into a_parameter_id 
-    from apm_parameters 
+    select parameter_id into a_parameter_id
+    from apm_parameters
     where parameter_name = id_for_name__parameter_name
       and package_key = (select package_key from apm_packages
                          where package_id = id_for_name__package_id);
 
     if NOT FOUND
       then
-      	raise EXCEPTION '-20000: The specified package % AND/OR parameter % do not exist in the system', id_for_name__package_id, id_for_name__parameter_name;
+        raise EXCEPTION '-20000: The specified package % AND/OR parameter % do not exist in the system', id_for_name__package_id, id_for_name__parameter_name;
     end if;
 
     return a_parameter_id;
-   
+
 END;
 $$ LANGUAGE plpgsql stable strict;
 
@@ -1696,21 +1696,22 @@ BEGIN
 
     if NOT FOUND
       then
-      	raise EXCEPTION '-20000: The specified package % AND/OR parameter % do not exist in the system', id_for_name__package_key, id_for_name__parameter_name;
+        raise EXCEPTION '-20000: The specified package % AND/OR parameter % do not exist in the system', id_for_name__package_key, id_for_name__parameter_name;
     end if;
 
     return a_parameter_id;
-   
+
 END;
 $$ LANGUAGE plpgsql stable strict;
 
 
 
--- added
 
 --
 -- procedure apm__get_value/2
 --
+select define_function_args('apm__get_value','package_id,parameter_name');
+
 CREATE OR REPLACE FUNCTION apm__get_value(
    get_value__package_id integer,
    get_value__parameter_name varchar
@@ -1726,14 +1727,9 @@ BEGIN
     and parameter_id = v_parameter_id;
 
     return value;
-   
+
 END;
 $$ LANGUAGE plpgsql stable strict;
-
-
-
--- added
-select define_function_args('apm__get_value','package_key,parameter_name');
 
 --
 -- procedure apm__get_value/2
@@ -1753,17 +1749,17 @@ BEGIN
     and parameter_id = v_parameter_id;
 
     return value;
-   
+
 END;
 $$ LANGUAGE plpgsql stable strict;
 
 
 
--- added
-
 --
 -- procedure apm__set_value/3
 --
+select define_function_args('apm__set_value','package_id,parameter_name,attr_value');
+
 CREATE OR REPLACE FUNCTION apm__set_value(
    set_value__package_id integer,
    set_value__parameter_name varchar,
@@ -1776,14 +1772,14 @@ BEGIN
     v_parameter_id := apm__id_for_name (set_value__package_id, set_value__parameter_name);
 
     -- Determine if the value exists
-    select value_id into v_value_id from apm_parameter_values 
-     where parameter_id = v_parameter_id 
+    select value_id into v_value_id from apm_parameter_values
+     where parameter_id = v_parameter_id
      and package_id = set_value__package_id;
     update apm_parameter_values set attr_value = set_value__attr_value
      where value_id = v_value_id;
-    update acs_objects set last_modified = now() 
+    update acs_objects set last_modified = now()
      where object_id = v_value_id;
-   --  exception 
+   --  exception
      if NOT FOUND
        then
          v_value_id := apm_parameter_value__new(
@@ -1794,7 +1790,7 @@ BEGIN
          );
      end if;
 
-    return 0; 
+    return 0;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -1817,14 +1813,14 @@ BEGIN
     v_parameter_id := apm__id_for_name (set_value__package_key, set_value__parameter_name);
 
     -- Determine if the value exists
-    select value_id into v_value_id from apm_parameter_values 
-     where parameter_id = v_parameter_id 
+    select value_id into v_value_id from apm_parameter_values
+     where parameter_id = v_parameter_id
      and package_id is null;
     update apm_parameter_values set attr_value = set_value__attr_value
      where value_id = v_value_id;
-    update acs_objects set last_modified = now() 
+    update acs_objects set last_modified = now()
      where object_id = v_value_id;
-   --  exception 
+   --  exception
      if NOT FOUND
        then
          v_value_id := apm_parameter_value__new(
@@ -1835,7 +1831,7 @@ BEGIN
          );
      end if;
 
-    return 0; 
+    return 0;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -1850,7 +1846,7 @@ CREATE OR REPLACE FUNCTION apm__set_value(
 ) RETURNS integer AS $$
 BEGIN
     return apm__set_global_value(set_value__package_key, set_value__parameter_name, set_value__attr_value);
-END;    
+END;
 $$ LANGUAGE plpgsql;
 
 
@@ -1872,7 +1868,7 @@ BEGIN
     return 't';
   end if;
 
-  for dependency in 
+  for dependency in
     select apd.service_uri
     from apm_package_versions apv, apm_package_dependencies apd
     where apd.version_id = apv.version_id
@@ -1885,7 +1881,7 @@ BEGIN
       return 't';
     end if;
   end loop;
-      
+
   return 'f';
 END;
 $$ LANGUAGE plpgsql;
@@ -1917,10 +1913,10 @@ BEGIN
           ip__package_id,
           cur_val.parameter_id,
           cur_val.default_value
-        ); 
-      end loop;   
+        );
+      end loop;
 
-      return 0; 
+      return 0;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -1946,21 +1942,21 @@ CREATE OR REPLACE FUNCTION apm_package__new(
 
 ) RETURNS integer AS $$
 DECLARE
-  v_singleton_p               integer;       
+  v_singleton_p               integer;
   v_package_type              apm_package_types.package_type%TYPE;
-  v_num_instances             integer;       
+  v_num_instances             integer;
   v_package_id                apm_packages.package_id%TYPE;
   v_instance_name             apm_packages.instance_name%TYPE;
 BEGIN
    v_singleton_p := apm_package__singleton_p(
-			new__package_key
-		    );
+                        new__package_key
+                    );
    v_num_instances := apm_package__num_instances(
-			new__package_key
-		    );
-  
+                        new__package_key
+                    );
+
    if v_singleton_p = 1 and v_num_instances >= 1 then
-       select package_id into v_package_id 
+       select package_id into v_package_id
        from apm_packages
        where package_key = new__package_key;
 
@@ -1971,13 +1967,13 @@ BEGIN
           new__object_type,
           new__creation_date,
           new__creation_user,
-	  new__creation_ip,
-	  new__context_id
-	 );
-       if new__instance_name is null or new__instance_name = '' then 
-	 v_instance_name := new__package_key || ' ' || v_package_id;
+          new__creation_ip,
+          new__context_id
+         );
+       if new__instance_name is null or new__instance_name = '' then
+         v_instance_name := new__package_key || ' ' || v_package_id;
        else
-	 v_instance_name := new__instance_name;
+         v_instance_name := new__instance_name;
        end if;
 
        select package_type into v_package_type
@@ -1995,20 +1991,20 @@ BEGIN
        where object_id = v_package_id;
 
        if v_package_type = 'apm_application' then
-	   insert into apm_applications
-	   (application_id)
-	   values
-	   (v_package_id);
+           insert into apm_applications
+           (application_id)
+           values
+           (v_package_id);
        else
-	   insert into apm_services
-	   (service_id)
-	   values
-	   (v_package_id);
+           insert into apm_services
+           (service_id)
+           values
+           (v_package_id);
        end if;
 
        PERFORM apm_package__initialize_parameters(
-	   v_package_id,
-	   new__package_key
+           v_package_id,
+           new__package_key
        );
 
        return v_package_id;
@@ -2016,7 +2012,7 @@ BEGIN
   end if;
 END;
 $$ LANGUAGE plpgsql;
-  
+
 
 
 -- added
@@ -2034,9 +2030,9 @@ DECLARE
 BEGIN
     -- Delete all parameters.
     for cur_val in select value_id from apm_parameter_values
-	where package_id = delete__package_id loop
-    	PERFORM apm_parameter_value__delete(cur_val.value_id);
-    end loop;    
+        where package_id = delete__package_id loop
+        PERFORM apm_parameter_value__delete(cur_val.value_id);
+    end loop;
 
    -- Delete the folders
     for v_folder_row in select
@@ -2052,14 +2048,14 @@ BEGIN
     delete from apm_packages where package_id = delete__package_id;
     -- Delete the site nodes for the objects.
     for cur_val in select node_id from site_nodes
-	where object_id = delete__package_id loop
-    	PERFORM site_node__delete(cur_val.node_id);
+        where object_id = delete__package_id loop
+        PERFORM site_node__delete(cur_val.node_id);
     end loop;
 
     -- Delete the object.
     PERFORM acs_object__delete (
        delete__package_id
-    );   
+    );
 
     return 0;
 END;
@@ -2080,11 +2076,11 @@ DECLARE
         v_initial_install_p             integer;
 BEGIN
         select 1 into v_initial_install_p
-	from apm_package_types
-	where package_key = initial_install_p__package_key
+        from apm_package_types
+        where package_key = initial_install_p__package_key
         and initial_install_p = 't';
-	
-        if NOT FOUND then 
+
+        if NOT FOUND then
            return 0;
         else
            return v_initial_install_p;
@@ -2107,8 +2103,8 @@ DECLARE
         v_singleton_p                   integer;
 BEGIN
         select count(*) into v_singleton_p
-	from apm_package_types
-	where package_key = singleton_p__package_key
+        from apm_package_types
+        where package_key = singleton_p__package_key
         and singleton_p = 't';
 
         return v_singleton_p;
@@ -2130,8 +2126,8 @@ DECLARE
         v_num_instances                integer;
 BEGIN
         select count(*) into v_num_instances
-	from apm_packages
-	where package_key = num_instances__package_key;
+        from apm_packages
+        where package_key = num_instances__package_key;
 
         return v_num_instances;
 
@@ -2176,13 +2172,13 @@ DECLARE
      v_version_id                    apm_package_versions.version_id%TYPE;
      v_max_version                   varchar;
 BEGIN
-     select max(apm_package_version__sortable_version_name(v.version_name)) into v_max_version 
+     select max(apm_package_version__sortable_version_name(v.version_name)) into v_max_version
        from apm_package_version_info v where v.package_key = highest_version__package_key;
 
-     select version_id into v_version_id from apm_package_version_info i 
-	where apm_package_version__sortable_version_name(version_name) = v_max_version and i.package_key = highest_version__package_key;
+     select version_id into v_version_id from apm_package_version_info i
+        where apm_package_version__sortable_version_name(version_name) = v_max_version and i.package_key = highest_version__package_key;
 
-      if NOT FOUND then 
+      if NOT FOUND then
          return 0;
       else
          return v_version_id;
@@ -2216,7 +2212,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql stable strict;
 
--- create or replace package body apm_package_version 
+-- create or replace package body apm_package_version
 
 
 -- added
@@ -2246,15 +2242,15 @@ DECLARE
 BEGIN
       if apm_pkg_ver__version_id is null then
          select nextval('t_acs_object_id_seq')
-	 into v_version_id
-	 from dual;
+         into v_version_id
+         from dual;
       else
          v_version_id := apm_pkg_ver__version_id;
       end if;
 
       v_version_id := acs_object__new(
-		v_version_id,
-		'apm_package_version',
+                v_version_id,
+                'apm_package_version',
                 now(),
                 null,
                 null,
@@ -2268,14 +2264,14 @@ BEGIN
       (version_id, package_key, version_name, version_uri, summary, description_format, description,
       release_date, vendor, vendor_uri, auto_mount, installed_p, data_model_loaded_p)
       values
-      (v_version_id, apm_pkg_ver__package_key, apm_pkg_ver__version_name, 
-       apm_pkg_ver__version_uri, apm_pkg_ver__summary, 
+      (v_version_id, apm_pkg_ver__package_key, apm_pkg_ver__version_name,
+       apm_pkg_ver__version_uri, apm_pkg_ver__summary,
        apm_pkg_ver__description_format, apm_pkg_ver__description,
        apm_pkg_ver__release_date, apm_pkg_ver__vendor, apm_pkg_ver__vendor_uri, apm_pkg_ver__auto_mount,
        apm_pkg_ver__installed_p, apm_pkg_ver__data_model_loaded_p);
 
-      return v_version_id;		
-  
+      return v_version_id;
+
 END;
 $$ LANGUAGE plpgsql;
 
@@ -2294,18 +2290,18 @@ CREATE OR REPLACE FUNCTION apm_package_version__delete(
 ) RETURNS integer AS $$
 DECLARE
 BEGIN
-      delete from apm_package_owners 
-      where version_id = delete__version_id; 
+      delete from apm_package_owners
+      where version_id = delete__version_id;
 
       delete from apm_package_dependencies
       where version_id = delete__version_id;
 
-      delete from apm_package_versions 
-	where version_id = delete__version_id;
+      delete from apm_package_versions
+        where version_id = delete__version_id;
 
       PERFORM acs_object__delete(delete__version_id);
 
-      return 0; 
+      return 0;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -2325,9 +2321,9 @@ CREATE OR REPLACE FUNCTION apm_package_version__enable(
 DECLARE
 BEGIN
       update apm_package_versions set enabled_p = 't'
-      where version_id = enable__version_id;	
+      where version_id = enable__version_id;
 
-      return 0; 
+      return 0;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -2346,11 +2342,11 @@ CREATE OR REPLACE FUNCTION apm_package_version__disable(
 ) RETURNS integer AS $$
 DECLARE
 BEGIN
-      update apm_package_versions 
+      update apm_package_versions
       set enabled_p = 'f'
-      where version_id = disable__version_id;	
+      where version_id = disable__version_id;
 
-      return 0; 
+      return 0;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -2373,51 +2369,51 @@ CREATE OR REPLACE FUNCTION apm_package_version__copy(
 
 ) RETURNS integer AS $$
 DECLARE
-  v_version_id                 integer;       
+  v_version_id                 integer;
 BEGIN
-	v_version_id := acs_object__new(
-		copy__new_version_id,
-		'apm_package_version',
+        v_version_id := acs_object__new(
+                copy__new_version_id,
+                'apm_package_version',
                 now(),
                 null,
                 null,
                 null
-        );    
+        );
 
-	insert into apm_package_versions(version_id, package_key, version_name,
-					version_uri, summary, description_format, description,
-					release_date, vendor, vendor_uri, auto_mount)
-	    select v_version_id, package_key, copy__new_version_name,
-		   copy__new_version_uri, summary, description_format, description,
-		   release_date, vendor, vendor_uri, auto_mount
-	    from apm_package_versions
-	    where version_id = copy__version_id;
-    
+        insert into apm_package_versions(version_id, package_key, version_name,
+                                        version_uri, summary, description_format, description,
+                                        release_date, vendor, vendor_uri, auto_mount)
+            select v_version_id, package_key, copy__new_version_name,
+                   copy__new_version_uri, summary, description_format, description,
+                   release_date, vendor, vendor_uri, auto_mount
+            from apm_package_versions
+            where version_id = copy__version_id;
+
         update acs_objects
         set title = (select v.package_key || ', Version ' || v.version_name
                      from apm_package_versions v
                      where v.version_id = copy__version_id)
         where object_id = copy__version_id;
 
-	insert into apm_package_dependencies(dependency_id, version_id, dependency_type, service_uri, service_version)
-	    select nextval('t_acs_object_id_seq'), v_version_id, dependency_type, service_uri, service_version
-	    from apm_package_dependencies
-	    where version_id = copy__version_id;
-    
+        insert into apm_package_dependencies(dependency_id, version_id, dependency_type, service_uri, service_version)
+            select nextval('t_acs_object_id_seq'), v_version_id, dependency_type, service_uri, service_version
+            from apm_package_dependencies
+            where version_id = copy__version_id;
+
         insert into apm_package_callbacks (version_id, type, proc)
                 select v_version_id, type, proc
                 from apm_package_callbacks
                 where version_id = copy__version_id;
-    
+
         if copy__copy_owners_p then
             insert into apm_package_owners(version_id, owner_uri, owner_name, sort_key)
                 select v_version_id, owner_uri, owner_name, sort_key
                 from apm_package_owners
                 where version_id = copy__version_id;
         end if;
-    
-	return v_version_id;
-   
+
+        return v_version_id;
+
 END;
 $$ LANGUAGE plpgsql;
 
@@ -2449,7 +2445,7 @@ CREATE OR REPLACE FUNCTION apm_package_version__edit(
 ) RETURNS integer AS $$
 DECLARE
   v_version_id                 apm_package_versions.version_id%TYPE;
-  version_unchanged_p          integer;       
+  version_unchanged_p          integer;
 BEGIN
        -- Determine if version has changed.
        select case when count(*) = 0 then 0 else 1 end into version_unchanged_p
@@ -2458,31 +2454,31 @@ BEGIN
        and version_name = edit__version_name;
        if version_unchanged_p <> 1 then
          v_version_id := apm_package_version__copy(
-			 edit__version_id,
-			 edit__new_version_id,
-			 edit__version_name,
-			 edit__version_uri,
+                         edit__version_id,
+                         edit__new_version_id,
+                         edit__version_name,
+                         edit__version_uri,
                          'f'
-			);
-         else 
-	   v_version_id := edit__version_id;			
+                        );
+         else
+           v_version_id := edit__version_id;
        end if;
-       
-       update apm_package_versions 
-		set version_uri = edit__version_uri,
-		summary = edit__summary,
-		description_format = edit__description_format,
-		description = edit__description,
-		release_date = date_trunc('days',now()),
-		vendor = edit__vendor,
-		vendor_uri = edit__vendor_uri,
-                auto_mount = edit__auto_mount,
-		installed_p = edit__installed_p,
-		data_model_loaded_p = edit__data_model_loaded_p
-	    where version_id = v_version_id;
 
-	return v_version_id;
-     
+       update apm_package_versions
+                set version_uri = edit__version_uri,
+                summary = edit__summary,
+                description_format = edit__description_format,
+                description = edit__description,
+                release_date = date_trunc('days',now()),
+                vendor = edit__vendor,
+                vendor_uri = edit__vendor_uri,
+                auto_mount = edit__auto_mount,
+                installed_p = edit__installed_p,
+                data_model_loaded_p = edit__data_model_loaded_p
+            where version_id = v_version_id;
+
+        return v_version_id;
+
 END;
 $$ LANGUAGE plpgsql;
 
@@ -2510,15 +2506,15 @@ BEGIN
       else
           v_dep_id := add_interface__interface_id;
       end if;
-  
+
       insert into apm_package_dependencies
       (dependency_id, version_id, dependency_type, service_uri, service_version)
       values
       (v_dep_id, add_interface__version_id, 'provides', add_interface__interface_uri,
-	add_interface__interface_version);
+        add_interface__interface_version);
 
       return v_dep_id;
-   
+
 END;
 $$ LANGUAGE plpgsql;
 
@@ -2536,10 +2532,10 @@ CREATE OR REPLACE FUNCTION apm_package_version__remove_interface(
 ) RETURNS integer AS $$
 DECLARE
 BEGIN
-    delete from apm_package_dependencies 
+    delete from apm_package_dependencies
     where dependency_id = remove_interface__interface_id;
 
-    return 0; 
+    return 0;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -2562,11 +2558,11 @@ DECLARE
   v_dep_id                           apm_package_dependencies.dependency_id%TYPE;
 BEGIN
       select dependency_id into v_dep_id from apm_package_dependencies
-      where service_uri = remove_interface__interface_uri 
+      where service_uri = remove_interface__interface_uri
       and interface_version = remove_interface__interface_version;
       PERFORM apm_package_version__remove_interface(v_dep_id);
 
-      return 0; 
+      return 0;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -2596,7 +2592,7 @@ BEGIN
       else
           v_dep_id := add_dependency__dependency_id;
       end if;
-  
+
       insert into apm_package_dependencies
       (dependency_id, version_id, dependency_type, service_uri, service_version)
       values
@@ -2604,7 +2600,7 @@ BEGIN
         add_dependency__dependency_uri, add_dependency__dependency_version);
 
       return v_dep_id;
-   
+
 END;
 $$ LANGUAGE plpgsql;
 
@@ -2622,10 +2618,10 @@ CREATE OR REPLACE FUNCTION apm_package_version__remove_dependency(
 ) RETURNS integer AS $$
 DECLARE
 BEGIN
-    delete from apm_package_dependencies 
+    delete from apm_package_dependencies
     where dependency_id = remove_dependency__dependency_id;
 
-    return 0; 
+    return 0;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -2647,12 +2643,12 @@ CREATE OR REPLACE FUNCTION apm_package_version__remove_dependency(
 DECLARE
   v_dep_id                           apm_package_dependencies.dependency_id%TYPE;
 BEGIN
-      select dependency_id into v_dep_id from apm_package_dependencies 
-      where service_uri = remove_dependency__dependency_uri 
+      select dependency_id into v_dep_id from apm_package_dependencies
+      where service_uri = remove_dependency__dependency_uri
       and service_version = remove_dependency__dependency_version;
       PERFORM apm_package_version__remove_dependency(v_dep_id);
 
-      return 0; 
+      return 0;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -2670,74 +2666,74 @@ CREATE OR REPLACE FUNCTION apm_package_version__sortable_version_name(
    version_name varchar
 ) RETURNS varchar AS $$
 DECLARE
-  a_fields               integer;       
-  a_start                integer;       
-  a_end                  integer;       
-  a_order                varchar(1000) default ''; 
-  a_char                 char(1);       
-  a_seen_letter          boolean default 'f';        
+  a_fields               integer;
+  a_start                integer;
+  a_end                  integer;
+  a_order                varchar(1000) default '';
+  a_char                 char(1);
+  a_seen_letter          boolean default 'f';
 BEGIN
         a_fields := 0;
-	a_start := 1;
-	loop
-	    a_end := a_start;
-    
-	    -- keep incrementing a_end until we run into a non-number        
-	    while substr(version_name, a_end, 1) >= '0' and substr(version_name, a_end, 1) <= '9' loop
-		a_end := a_end + 1;
-	    end loop;
-	    if a_end = a_start then
-	    	return -1;
-		-- raise_application_error(-20000, 'Expected number at position ' || a_start);
-	    end if;
-	    if a_end - a_start > 4 then
-	    	return -1;
-		-- raise_application_error(-20000, 'Numbers within versions can only be up to 4 digits long');
-	    end if;
-    
-	    -- zero-pad and append the number
-	    a_order := a_order || substr('0000', 1, 4 - (a_end - a_start)) ||
-		substr(version_name, a_start, a_end - a_start) || '.';
-            a_fields := a_fields + 1;                                
-	    if a_end > length(version_name) then
-		-- end of string - we're outta here
-		if a_seen_letter = 'f' then
-		    -- append the "final" suffix if there haven't been any letters
-		    -- so far (i.e., not development/alpha/beta)
-		    a_order := a_order || repeat('0000.',7 - a_fields) || '  3F.';
-		end if;
-		return a_order;
-	    end if;
-    
-	    -- what's the next character? if a period, just skip it
-	    a_char := substr(version_name, a_end, 1);
-	    if a_char = '.' then
-	    else
-		-- if the next character was a letter, append the appropriate characters
-		if a_char = 'd' then
-		    a_order := a_order || repeat('0000.',7 - a_fields) || '  0D.';
-		else if a_char = 'a' then
-		    a_order := a_order || repeat('0000.',7 - a_fields) || '  1A.';
-		else if a_char = 'b' then
-		    a_order := a_order || repeat('0000.',7 - a_fields) || '  2B.';
-		end if; end if; end if;
-    
-		-- can't have something like 3.3a1b2 - just one letter allowed!
-		if a_seen_letter = 't' then
-		    return -1;
-		    -- raise_application_error(-20000, 'Not allowed to have two letters in version name '''
-		    --	|| version_name || '''');
-		end if;
-		a_seen_letter := 't';
-    
-		-- end of string - we're done!
-		if a_end = length(version_name) then
-		    return a_order;
-		end if;
-	    end if;
-	    a_start := a_end + 1;
-	end loop;
-    
+        a_start := 1;
+        loop
+            a_end := a_start;
+
+            -- keep incrementing a_end until we run into a non-number
+            while substr(version_name, a_end, 1) >= '0' and substr(version_name, a_end, 1) <= '9' loop
+                a_end := a_end + 1;
+            end loop;
+            if a_end = a_start then
+                return -1;
+                -- raise_application_error(-20000, 'Expected number at position ' || a_start);
+            end if;
+            if a_end - a_start > 4 then
+                return -1;
+                -- raise_application_error(-20000, 'Numbers within versions can only be up to 4 digits long');
+            end if;
+
+            -- zero-pad and append the number
+            a_order := a_order || substr('0000', 1, 4 - (a_end - a_start)) ||
+                substr(version_name, a_start, a_end - a_start) || '.';
+            a_fields := a_fields + 1;
+            if a_end > length(version_name) then
+                -- end of string - we're outta here
+                if a_seen_letter = 'f' then
+                    -- append the "final" suffix if there haven't been any letters
+                    -- so far (i.e., not development/alpha/beta)
+                    a_order := a_order || repeat('0000.',7 - a_fields) || '  3F.';
+                end if;
+                return a_order;
+            end if;
+
+            -- what's the next character? if a period, just skip it
+            a_char := substr(version_name, a_end, 1);
+            if a_char = '.' then
+            else
+                -- if the next character was a letter, append the appropriate characters
+                if a_char = 'd' then
+                    a_order := a_order || repeat('0000.',7 - a_fields) || '  0D.';
+                else if a_char = 'a' then
+                    a_order := a_order || repeat('0000.',7 - a_fields) || '  1A.';
+                else if a_char = 'b' then
+                    a_order := a_order || repeat('0000.',7 - a_fields) || '  2B.';
+                end if; end if; end if;
+
+                -- can't have something like 3.3a1b2 - just one letter allowed!
+                if a_seen_letter = 't' then
+                    return -1;
+                    -- raise_application_error(-20000, 'Not allowed to have two letters in version name '''
+                    --	|| version_name || '''');
+                end if;
+                a_seen_letter := 't';
+
+                -- end of string - we're done!
+                if a_end = length(version_name) then
+                    return a_order;
+                end if;
+            end if;
+            a_start := a_end + 1;
+        end loop;
+
 END;
 $$ LANGUAGE plpgsql immutable;
 
@@ -2755,18 +2751,18 @@ CREATE OR REPLACE FUNCTION apm_package_version__version_name_greater(
    version_name_two varchar
 ) RETURNS integer AS $$
 DECLARE
-  a_order_a		 varchar(250);
-  a_order_b		 varchar(250);  
+  a_order_a              varchar(250);
+  a_order_b              varchar(250);
 BEGIN
-	a_order_a := apm_package_version__sortable_version_name(version_name_one);
-	a_order_b := apm_package_version__sortable_version_name(version_name_two);
-	if a_order_a < a_order_b then
-	    return -1;
-	else if a_order_a > a_order_b then
-	    return 1;
-	end if; end if;
+        a_order_a := apm_package_version__sortable_version_name(version_name_one);
+        a_order_b := apm_package_version__sortable_version_name(version_name_two);
+        if a_order_a < a_order_b then
+            return -1;
+        else if a_order_a > a_order_b then
+            return 1;
+        end if; end if;
 
-	return 0;   
+        return 0;
 END;
 $$ LANGUAGE plpgsql immutable;
 
@@ -2785,44 +2781,44 @@ CREATE OR REPLACE FUNCTION apm_package_version__upgrade_p(
    upgrade_p__final_version_name varchar
 ) RETURNS integer AS $$
 DECLARE
-  v_pos1                            integer;       
-  v_pos2                            integer;       
+  v_pos1                            integer;
+  v_pos2                            integer;
   v_tmp                             varchar(1500);
   v_path                            varchar(1500);
   v_version_from                    apm_package_versions.version_name%TYPE;
   v_version_to                      apm_package_versions.version_name%TYPE;
 BEGIN
 
-	-- Set v_path to the tail of the path (the file name).        
-	v_path := substr(upgrade_p__path, instr(upgrade_p__path, '/', -1) + 1);
+        -- Set v_path to the tail of the path (the file name).
+        v_path := substr(upgrade_p__path, instr(upgrade_p__path, '/', -1) + 1);
 
-	-- Remove the extension, if it is .sql.
-	v_pos1 := position('.sql' in v_path);
-	if v_pos1 > 0 then
-	    v_path := substr(v_path, 1, v_pos1 - 1);
-	end if;
+        -- Remove the extension, if it is .sql.
+        v_pos1 := position('.sql' in v_path);
+        if v_pos1 > 0 then
+            v_path := substr(v_path, 1, v_pos1 - 1);
+        end if;
 
-	-- Figure out the from/to version numbers for the individual file.
-	v_pos1 := instr(v_path, '-', -1, 2);
-	v_pos2 := instr(v_path, '-', -1);
-	if v_pos1 = 0 or v_pos2 = 0 then
-	    -- There aren't two hyphens in the file name. Bail.
-	    return 0;
-	end if;
+        -- Figure out the from/to version numbers for the individual file.
+        v_pos1 := instr(v_path, '-', -1, 2);
+        v_pos2 := instr(v_path, '-', -1);
+        if v_pos1 = 0 or v_pos2 = 0 then
+            -- There aren't two hyphens in the file name. Bail.
+            return 0;
+        end if;
 
-	v_version_from := substr(v_path, v_pos1 + 1, v_pos2 - v_pos1 - 1);
-	v_version_to := substr(v_path, v_pos2 + 1);
+        v_version_from := substr(v_path, v_pos1 + 1, v_pos2 - v_pos1 - 1);
+        v_version_to := substr(v_path, v_pos2 + 1);
 
-	if apm_package_version__version_name_greater(upgrade_p__initial_version_name, v_version_from) <= 0 and
-	   apm_package_version__version_name_greater(upgrade_p__final_version_name, v_version_to) >= 0 then
-	    return 1;
-	end if;
+        if apm_package_version__version_name_greater(upgrade_p__initial_version_name, v_version_from) <= 0 and
+           apm_package_version__version_name_greater(upgrade_p__final_version_name, v_version_to) >= 0 then
+            return 1;
+        end if;
 
-	return 0;
+        return 0;
         -- exception when others then
-	-- Invalid version number.
-	-- return 0;
-   
+        -- Invalid version number.
+        -- return 0;
+
 END;
 $$ LANGUAGE plpgsql immutable;
 
@@ -2842,16 +2838,16 @@ CREATE OR REPLACE FUNCTION apm_package_version__upgrade(
 DECLARE
 BEGIN
     update apm_package_versions
-    	set enabled_p = 'f',
-	    installed_p = 'f'
-	where package_key = (select package_key from apm_package_versions
-	    	    	     where version_id = upgrade__version_id);
+        set enabled_p = 'f',
+            installed_p = 'f'
+        where package_key = (select package_key from apm_package_versions
+                             where version_id = upgrade__version_id);
     update apm_package_versions
-    	set enabled_p = 't',
-	    installed_p = 't'
-	where version_id = upgrade__version_id;			  
-    
-    return 0; 
+        set enabled_p = 't',
+            installed_p = 't'
+        where version_id = upgrade__version_id;
+
+    return 0;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -2891,11 +2887,11 @@ BEGIN
     implements_subsite_p, inherit_templates_p)
    values
     (create_type__package_key, create_type__pretty_name, create_type__pretty_plural,
-     create_type__package_uri, create_type__package_type, create_type__spec_file_path, 
+     create_type__package_uri, create_type__package_type, create_type__spec_file_path,
      create_type__spec_file_mtime, create_type__initial_install_p, create_type__singleton_p,
      create_type__implements_subsite_p, create_type__inherit_templates_p);
 
-   return 0; 
+   return 0;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -2926,20 +2922,20 @@ CREATE OR REPLACE FUNCTION apm_package_type__update_type(
 DECLARE
 BEGIN
       UPDATE apm_package_types SET
-      	pretty_name = coalesce(update_type__pretty_name, pretty_name),
-    	pretty_plural = coalesce(update_type__pretty_plural, pretty_plural),
-    	package_uri = coalesce(update_type__package_uri, package_uri),
-    	package_type = coalesce(update_type__package_type, package_type),
-    	spec_file_path = coalesce(update_type__spec_file_path, spec_file_path),
-    	spec_file_mtime = coalesce(update_type__spec_file_mtime, spec_file_mtime),
-    	singleton_p = coalesce(update_type__singleton_p, singleton_p),
-    	initial_install_p = coalesce(update_type__initial_install_p, initial_install_p),
-    	implements_subsite_p = coalesce(update_type__implements_subsite_p, implements_subsite_p),
-    	inherit_templates_p = coalesce(update_type__inherit_templates_p, inherit_templates_p)
+        pretty_name = coalesce(update_type__pretty_name, pretty_name),
+        pretty_plural = coalesce(update_type__pretty_plural, pretty_plural),
+        package_uri = coalesce(update_type__package_uri, package_uri),
+        package_type = coalesce(update_type__package_type, package_type),
+        spec_file_path = coalesce(update_type__spec_file_path, spec_file_path),
+        spec_file_mtime = coalesce(update_type__spec_file_mtime, spec_file_mtime),
+        singleton_p = coalesce(update_type__singleton_p, singleton_p),
+        initial_install_p = coalesce(update_type__initial_install_p, initial_install_p),
+        implements_subsite_p = coalesce(update_type__implements_subsite_p, implements_subsite_p),
+        inherit_templates_p = coalesce(update_type__inherit_templates_p, inherit_templates_p)
       where package_key = update_type__package_key;
 
       return update_type__package_key;
-   
+
 END;
 $$ LANGUAGE plpgsql;
 
@@ -2959,7 +2955,7 @@ CREATE OR REPLACE FUNCTION apm_package_type__drop_type(
 
 ) RETURNS integer AS $$
 DECLARE
-  cur_val                           record; 
+  cur_val                           record;
 BEGIN
     if drop_type__cascade_p = 't' then
         for cur_val in select package_id
@@ -2967,27 +2963,27 @@ BEGIN
        where package_key = drop_type__package_key
         loop
             PERFORM apm_package__delete(
-	        cur_val.package_id
-	    );
+                cur_val.package_id
+            );
         end loop;
-	-- Unregister all parameters.
+        -- Unregister all parameters.
         for cur_val in select parameter_id from apm_parameters
        where package_key = drop_type__package_key
-	loop
-	    PERFORM apm__unregister_parameter(cur_val.parameter_id);
-	end loop;
-  
+        loop
+            PERFORM apm__unregister_parameter(cur_val.parameter_id);
+        end loop;
+
         -- Unregister all versions
-	for cur_val in select version_id from apm_package_versions
+        for cur_val in select version_id from apm_package_versions
        where package_key = drop_type__package_key
-	loop
-	    PERFORM apm_package_version__delete(cur_val.version_id);
+        loop
+            PERFORM apm_package_version__delete(cur_val.version_id);
         end loop;
     end if;
     delete from apm_package_types
     where package_key = drop_type__package_key;
 
-    return 0; 
+    return 0;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -3005,14 +3001,14 @@ CREATE OR REPLACE FUNCTION apm_package_type__num_parameters(
    num_parameters__package_key varchar
 ) RETURNS integer AS $$
 DECLARE
-  v_count                                integer;       
+  v_count                                integer;
 BEGIN
     select count(*) into v_count
     from apm_parameters
     where package_key = num_parameters__package_key;
 
     return v_count;
-   
+
 END;
 $$ LANGUAGE plpgsql stable;
 
@@ -3083,11 +3079,11 @@ CREATE OR REPLACE FUNCTION apm_parameter_value__delete(
 ) RETURNS integer AS $$
 DECLARE
 BEGIN
-    delete from apm_parameter_values 
+    delete from apm_parameter_values
     where value_id = delete__value_id;
     PERFORM acs_object__delete(delete__value_id);
 
-    return 0; 
+    return 0;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -3113,7 +3109,7 @@ CREATE OR REPLACE FUNCTION apm_application__new(
 
 ) RETURNS integer AS $$
 DECLARE
-  v_application_id       integer;       
+  v_application_id       integer;
 BEGIN
     v_application_id := apm_package__new (
       application_id,
@@ -3127,7 +3123,7 @@ BEGIN
     );
 
     return v_application_id;
-   
+
 END;
 $$ LANGUAGE plpgsql;
 
@@ -3152,7 +3148,7 @@ BEGIN
         delete__application_id
     );
 
-    return 0; 
+    return 0;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -3182,7 +3178,7 @@ CREATE OR REPLACE FUNCTION apm_service__new(
 
 ) RETURNS integer AS $$
 DECLARE
-  v_service_id           integer;       
+  v_service_id           integer;
 BEGIN
     v_service_id := apm_package__new (
       service_id,
@@ -3196,7 +3192,7 @@ BEGIN
     );
 
     return v_service_id;
-   
+
 END;
 $$ LANGUAGE plpgsql;
 
@@ -3218,10 +3214,9 @@ BEGIN
     delete from apm_services
     where service_id = delete__service_id;
     PERFORM apm_package__delete(
-	delete__service_id
+        delete__service_id
     );
 
-    return 0; 
+    return 0;
 END;
 $$ LANGUAGE plpgsql;
-

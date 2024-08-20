@@ -1179,13 +1179,6 @@ END;
 $$ LANGUAGE plpgsql;
 
 
--- function check_context_index
-
-select define_function_args('acs_object__check_context_index','object_id,ancestor_id,n_generations');
-
-
-
-
 -- function check_object_ancestors
 
 
