@@ -496,6 +496,7 @@ ad_proc -private lang::catalog::parse { catalog_file_contents } {
     # Get the message catalog root node
     set root_node [xml_doc_get_first_node $tree]
     if { [xml_node_get_name $root_node] ne $MESSAGE_CATALOG_TAG } {
+        $tree delete
         error "lang::catalog_parse: Could not find root node $MESSAGE_CATALOG_TAG"
     }
 
@@ -529,6 +530,7 @@ ad_proc -private lang::catalog::parse { catalog_file_contents } {
     # Add the keys and the texts to the descriptions array
     set msg_catalog_array(descriptions) [array get key_description_array]
 
+    $tree delete
     return [array get msg_catalog_array]
 }
 
