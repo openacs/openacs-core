@@ -4122,7 +4122,7 @@ namespace eval util::resources {
         -namespace:required
     } {
 
-        Conveniance function to register URNs based on the information provided by the resource_info dict.
+        Convenience function to register URNs based on the information provided by the resource_info dict.
         The dict members "urnMap", "prefix", and optionally "csp_lists" are used.
 
         @param resource_info a dict containing urnMap, prefix, and optionally csp_lists.

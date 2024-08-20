@@ -46,10 +46,23 @@ namespace eval ::acs::db {
 
     #
     # Mapping of SQL "package" name and "object" name to the names as
-    # stored in the database.
+    # stored in the database. We have several SQL functions defined
+    # via function_args, that do not belong to a 'package', having an
+    # empty 'package_name'.
+    #
+    # Examples:
+    #   acs_message_get_tree_sortkey
+    #   acs_object_type_get_tree_sortkey
+    #   cmp_pg_version
+    #   column_exists
+    #   ...
     #
     ::acs::db::postgresql method sql_function_name {package_name object_name} {
-        return ${package_name}__${object_name}
+        if {${package_name} ne ""} {
+            return ${package_name}__${object_name}
+        } else {
+            return ${object_name}
+        }
     }
     ::acs::db::oracle method sql_function_name {package_name object_name} {
         return ${package_name}.${object_name}
@@ -98,6 +111,7 @@ namespace eval ::acs::db {
         set db_definitions ""
         foreach item [:get_all_package_functions -dbn $dbn] {
             lassign $item package_name object_name sql_info
+            #ns_log notice "get_all_package_functions returns ($package_name $object_name)"
 
             if {[string match "*TRG" [string toupper $object_name]]} {
                 # no need to provide interface to trigger functions
@@ -222,7 +236,34 @@ namespace eval ::acs::db {
                 }
                 lappend result $arg
             }
+        #ns_log notice "build_function_argument_list: $result"
         return $result
+    }
+
+    ::acs::db::postgresql method argument_name_match {
+        -key
+        -function_arg_names
+        -db_names
+    } {
+        #
+        # Does the name from function_args match the names obtained
+        # from PostgreSQL?
+        #
+        set success 1
+        foreach function_arg_name $function_arg_names db_name $db_names {
+            if {$db_name ne ""
+                && $function_arg_name ne $db_name
+                && ![string match *_$function_arg_name $db_name]
+            } {
+                set success 0
+                #ns_log notice ===== argument match $key function_arg_name '$function_arg_name' does not match name from db '$db_name' \n \
+                    function_arg_names <$function_arg_names> db_names <$db_names>
+                break
+            }
+        }
+
+        #ns_log notice ===== argument match $key function_arg_names '$function_arg_names' db '$db_names' => $success
+        return $success
     }
 
     ::acs::db::postgresql public method get_all_package_functions {{-dbn ""}} {
@@ -279,7 +320,8 @@ namespace eval ::acs::db {
             select distinct
             af.function,
             substring(af.function from 0 for position('__' in af.function)) as package_name,
-            substring(af.function from position('__' in af.function)+2) as object_name,
+            case when position('__' in af.function)>0 then substring(af.function from position('__' in af.function)+2) else af.function end as object_name,
+            array_to_string(proargnames, ' '),
             oidvectortypes(proargtypes),
             format_type(prorettype, NULL)
             from pg_proc, acs_function_args af
@@ -287,11 +329,13 @@ namespace eval ::acs::db {
         }]
 
         foreach item $pg_data {
-            lassign $item key package_name object_name argument_types result_type
+            lassign $item key package_name object_name proargnames argument_types result_type
+            #ns_log notice "got from db" key $key package_name $package_name object_name $object_name
             set argument_types [lmap argument_type [split $argument_types ,] {
                 string trim $argument_type
             }]
-            set nr_defined_args [llength [dict get $db_definitions $key argument_names]]
+            set function_arg_names [string tolower [dict get $db_definitions $key argument_names]]
+            set nr_defined_args [llength $function_arg_names]
             if {[llength $argument_types] < $nr_defined_args} {
                 #
                 # This might be a definition with fewer arguments; we
@@ -303,9 +347,47 @@ namespace eval ::acs::db {
             } elseif {[llength $argument_types] < $nr_defined_args} {
                 ns_log warning "generate_stubs: $key has less arguments in " \
                     "function_definitions ($nr_defined_args) than in DB [llength $argument_types]"
+                ns_log notice ".... have already types [dict exists $db_definitions $key types]"
                 continue
             }
-            # ns_log notice "adding $key /$nr_defined_args, package_name: '$package_name'"
+
+            if {$proargnames eq ""} {
+                ns_log warning "$key /$nr_defined_args has no argument names in DB. " \
+                    "Names should match <$function_arg_names>"
+            } elseif {[llength $proargnames] > $nr_defined_args} {
+                #
+                # In case a function returns tuples from the DB, the
+                # name of the attributes of these tuples are also
+                # returned in proargnames from PostgreSQL. Just take
+                # the names, for which we have types.
+                #
+                set proargnames [lrange $proargnames 0 $nr_defined_args-1]
+                #ns_log notice $key FIXED proargnames <$proargnames>
+            }
+
+            # if {$key eq "CONTENT_ITEM__TRASH_RECOVER_SINGLE_ITEM"} {
+            #     ns_log notice "$key /$nr_defined_args, package_name: '$package_name'" \
+            #         function_arg_names <$function_arg_names> \n \
+            #         db_names <$proargnames> \n \
+            #         db_types <$argument_types>
+            # }
+
+            if {![:argument_name_match \
+                      -key $key \
+                      -function_arg_names $function_arg_names \
+                      -db_names $proargnames]} {
+                continue
+            }
+
+            if {[dict exists $db_definitions $key types]} {
+                ns_log warning "$key /$nr_defined_args, package_name: '$package_name' ignoring duplicate function" \
+                    function_arg_names <$function_arg_names> \n \
+                    db_names <$proargnames> \n \
+                    db_types <$argument_types> \
+                    have already <[dict get $db_definitions $key types]>
+
+                continue
+            }
             dict set db_definitions $key result_type $result_type
             dict set db_definitions $key types $argument_types
             dict set db_definitions $key package_name $package_name
@@ -420,6 +502,14 @@ namespace eval ::acs::db {
             ns_log notice FINAL=$cmd
         }
         {*}$cmd
+    }
+
+    ::acs::db::SQL method dbfunction_argument_value {-name -type} {
+        if {[dict exists [:typemap] $type]} {
+            string cat CAST(: [string tolower $name] " AS " $type )
+        } else {
+            string cat : [string tolower $name]
+        }
     }
 
     #
@@ -540,9 +630,11 @@ namespace eval ::acs::db {
         #
         # Build interface based on bind vars for PostgreSQL
         #
-        set bind_var_names [lmap argument_name [dict get $sql_info argument_names] {
-            string cat : [string tolower $argument_name]
-        }]
+        set bind_var_names [lmap \
+                                argument_name [dict get $sql_info argument_names] \
+                                type [dict get $sql_info types] {
+                                    :dbfunction_argument_value -name $argument_name -type $type
+                                }]
         return [list tcl "" sql_arguments [join $bind_var_names ,]]
     }
 
@@ -554,17 +646,21 @@ namespace eval ::acs::db {
         set arguments ""
         foreach \
             argument_name [dict get $sql_info argument_names] \
-            defaulted [dict get $sql_info defaulted] {
+            defaulted [dict get $sql_info defaulted] \
+            type [dict get $sql_info types] \
+            {
                 set argument_name [string tolower $argument_name]
+                set argument_value [:dbfunction_argument_value -name $argument_name -type $type]
+
                 if {$defaulted eq "Y"} {
                     lappend optional_parameters $argument_name
                 } else {
-                    lappend arguments  "$argument_name => :$argument_name"
+                    lappend arguments  "$argument_name => :$argument_value"
                 }
             }
         #
         # We have to check at runtime if the arguments where provided
-        #
+        # Missing: casts for optional parameters
         if {[llength $optional_parameters] > 0} {
             set tcl_code [ns_trim -delimiter | [string map [list @optional_parameters@ $optional_parameters] {
                 |set __optional_parameters ""
@@ -593,7 +689,8 @@ namespace eval ::acs::db {
         }
 
         set arg_info [:sql_function_argument_list $sql_info]
-        return [:build_psql_body \
+        set type_comment [subst {\# TYPES: [dict get $sql_info types]\n}]
+        return $type_comment[:build_psql_body \
                     [dict get $arg_info tcl] \
                     "${sql_function_name}([dict get $arg_info sql_arguments])" \
                     [dict get $sql_info result_type]]
