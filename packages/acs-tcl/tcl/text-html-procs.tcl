@@ -1392,53 +1392,57 @@ ad_proc -private ad_dom_fix_html {
 
     set queue {}
     lappend queue [list $root [$tree children [$tree children root]]]
-    while {$queue ne {}} {
-        lassign [lindex $queue 0] domparent treechildren
-        set queue [lrange $queue 1 end]
+    try {
+        while {$queue ne {}} {
+            lassign [lindex $queue 0] domparent treechildren
+            set queue [lrange $queue 1 end]
 
-        foreach child $treechildren {
-            set type [$tree get $child type]
-            set data [$tree get $child data]
-            if {$type eq "PCDATA"} {
-                set el [$doc createTextNode $data]
-            } else {
-                set el [$doc createElement $type]
+            foreach child $treechildren {
+                set type [$tree get $child type]
+                set data [$tree get $child data]
+                if {$type eq "PCDATA"} {
+                    set el [$doc createTextNode $data]
+                } else {
+                    set el [$doc createElement $type]
 
-                # parse element attributes
-                while {$data ne ""} {
-                    set data [string trim $data]
-                    # attribute with a value, optionally surrounded by double or single quotes
-                    if {[regexp "^(\[^= \]+)=(\"\[^\"\]*\"|'\[^'\].*'|\[^ \]*)" $data m attname attvalue]} {
-                        if {[string match "\"*\"" $attvalue] ||
-                            [string match "'*'" $attvalue]} {
-                            set attvalue [string range $attvalue 1 end-1]
+                    # parse element attributes
+                    while {$data ne ""} {
+                        set data [string trim $data]
+                        # attribute with a value, optionally surrounded by double or single quotes
+                        if {[regexp "^(\[^= \]+)=(\"\[^\"\]*\"|'\[^'\].*'|\[^ \]*)" $data m attname attvalue]} {
+                            if {[string match "\"*\"" $attvalue] ||
+                                [string match "'*'" $attvalue]} {
+                                set attvalue [string range $attvalue 1 end-1]
+                            }
+                            # attribute with no value
+                        } elseif {[regexp {^([^\s]+)} $data m attname]} {
+                            set attvalue ""
+                        } else {
+                            error "Unrecoverable attribute spec in supplied markup"
                         }
-                        # attribute with no value
-                    } elseif {[regexp {^([^\s]+)} $data m attname]} {
-                        set attvalue ""
-                    } else {
-                        error "Unrecoverable attribute spec in supplied markup"
-                    }
 
-                    # skip bogus attribute names
-                    if {[string is alnum -strict $attname]} {
-                        $el setAttribute $attname $attvalue
-                    }
+                        # skip bogus attribute names
+                        if {[string is alnum -strict $attname]} {
+                            $el setAttribute $attname $attvalue
+                        }
 
-                    set data [string range $data [string length $m] end]
+                        set data [string range $data [string length $m] end]
+                    }
+                }
+                $domparent appendChild $el
+
+                set elchildren [$tree children $child]
+                if {$elchildren ne {}} {
+                    lappend queue [list $el $elchildren]
                 }
             }
-
-            $domparent appendChild $el
-
-            set elchildren [$tree children $child]
-            if {$elchildren ne {}} {
-                lappend queue [list $el $elchildren]
-            }
         }
+    } on error {errorMsg} {
+        $doc delete
+        throw $::errorInfo $errorMsg
+    } finally {
+        $tree destroy
     }
-
-    $tree destroy
 
     if {$dom_p} {
         return $doc
