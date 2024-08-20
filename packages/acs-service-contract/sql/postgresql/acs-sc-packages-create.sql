@@ -528,7 +528,6 @@ $$ LANGUAGE plpgsql;
 --
 -- procedure acs_sc_binding__new/2
 --
---select define_function_args('acs_sc_binding__new','contract_id,impl_id');
 
 CREATE OR REPLACE FUNCTION acs_sc_binding__new(
    p_contract_id integer,
