@@ -663,7 +663,7 @@ ad_proc -private aa_runseries {
     #
     # Run each testcase
     #
-    foreach testcase_id $testcase_ids {
+    foreach testcase_id [lsort $testcase_ids] {
         ns_log notice "========================================= start $testcase_id (Errors: [dict get [ns_logctl stats] Error])"
         aa_test_start
         aa_run_testcase $testcase_id
@@ -750,6 +750,8 @@ ad_proc -private aa_run_testcase {
     if {$catch_val} {
         aa_log_result "fail" "$testcase_id: Error calling testcase function _${package_key}__$testcase_id: $msg"
     }
+
+    aa_check_leftovers -silent end
 
     #
     # Unstub any stubbed functions
@@ -867,7 +869,7 @@ ad_proc -public aa_test_start {} {
     return [set ::__aa_testing_mode 1]
 }
 
-ad_proc -public aa_test_end {} {
+ad_proc -private aa_test_end {} {
 
     Clear the flag indicating that a regressoin test is running.  It
      is not always necessary to call this procedurfe explicitly, since
@@ -2408,6 +2410,52 @@ ad_proc -public aa_display_result {
         aa_log_result "fail" "[aa_indent] $explanation"
     }
 }
+
+ad_proc -public aa_check_leftovers {-silent:boolean {msg final}} {
+    #
+    # Perform cleanup tests to check for object/command leaks in
+    # either the called functions or in the test itself.
+    #
+} {
+    if {[namespace which ::xo::at_cleanup] ne ""} {
+        ::xo::at_cleanup
+    }
+
+    set domNodes   [list {*}[info commands domNode0*] {*}[info commands domDoc0x*]]
+    set xotclObjs  [::xotcl::Object info instances -closure]
+    set nxObjs     [::nx::Object info instances  -closure]
+    set tmpObjs    [info commands ::nsf::__#*]
+    set nsSets     [expr {[acs::icanuse "ns_set stats"] ? [list [ns_set stats]] : [llength [ns_set list]]}]
+
+    dict set stats tdom    [llength $domNodes]
+    dict set stats nssets  [llength $nsSets]
+    dict set stats xotcl   [llength $xotclObjs]
+    dict set stats nx      [llength $nxObjs]
+    dict set stats tmpobjs [llength $tmpObjs]
+
+    dict with stats {
+        aa_equals "$msg leftover temp objects"     $tmpobjs 0
+        if {$tmpobjs > 0} {
+            foreach obj $tmpObjs {
+                set isXotcl [::nsf::dispatch $obj ::nsf::methods::object::info::hastype ::xotcl::Object]
+                set isNx    [::nsf::dispatch $obj ::nsf::methods::object::info::hastype ::nx::Object]
+                aa_log obj $obj (isXotcl $isXotcl isNx $isNx)
+                aa_log <pre>[$obj serialize]</pre>
+            }
+        }
+        aa_equals "$msg leftover tdom cmds"        $tdom 0
+        foreach n $domNodes {
+            if {[string match domDoc0x* $n]} {
+                aa_log node:$n\n<pre>[ns_quotehtml [$n asXML -indent 4]]</pre>
+            }
+        }
+        if {$silent_p} {
+            aa_log    "$msg xotcl objects: $xotcl nx objects: $nx nssets: $nssets"
+        }
+    }
+}
+
+
 
 ad_proc -private aa_selenium_init {} {
     Setup a global Selenium RC server connection

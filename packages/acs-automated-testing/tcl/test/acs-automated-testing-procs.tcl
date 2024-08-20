@@ -25,13 +25,14 @@ aa_register_case \
         acs::test::user::delete
         acs::test::url
 
+        aa_check_leftovers
         aa_register_case
         aa_runseries
         aa_test_end
         aa_test_running_p
         aa_test_start
-        ad_get_external_registries
         ad_context_node_list
+        ad_get_external_registries
     } \
     webtest_example {
 
