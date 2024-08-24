@@ -161,7 +161,8 @@ aa_register_case \
         aa_true "Invalid event throws an error" [catch {
             search::queue -object_id $object_id -event BOGUS
         }]             
-        
+        ns_logctl severity "Debug(sql)" 1
+        ns_logctl severity notice 1        
     }
 
 aa_register_case \
