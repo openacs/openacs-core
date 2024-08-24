@@ -38,7 +38,7 @@
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="AcceptablePortraitMIMETypes"  default="image/gif image/jpeg image/png" description="Enter a set of acceptable MIME types for portrait submissions." section_name="user-info"/>
             <parameter scope="instance" datatype="text"  min_n_values="1"  max_n_values="1"  name="AdminNavbarTabsList"  default="
 admin {
-    label #acs-subsite.Administration#
+    label #acs-admin.Administration#
     url admin/configure
     selected_patterns {
         admin/*
