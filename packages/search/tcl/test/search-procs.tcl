@@ -91,7 +91,7 @@ aa_register_case \
     } \
     extra_args {
 
-        Test the api dealing with extra args introduced by the
+        Test the API dealing with extra args introduced by the
         full-text engine in use.
 
     } {
@@ -156,9 +156,12 @@ aa_register_case \
             }
         }
 
-        aa_true "Invalud event throws an error" [catch {
+        ns_logctl severity notice 0
+        ns_logctl severity "Debug(sql)" 0
+        aa_true "Invalid event throws an error" [catch {
             search::queue -object_id $object_id -event BOGUS
-        }]
+        }]             
+        
     }
 
 aa_register_case \
