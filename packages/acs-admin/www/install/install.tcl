@@ -95,7 +95,12 @@ foreach package_key [array names repository] {
         || ![apm_package_supports_rdbms_p -package_key $package_key]
         || [string match "*-portlet" $package_key]
         || ($channel ne $current_channel && [info exists current_repository($package_key)])
-    } continue
+    } {
+        if {[dict get $version maturity] == 0} {
+            ns_log notice "install: do not offer to install $package_key with maturity 0"
+        }
+        continue
+    }
 
     if { $package_type eq "" || [dict get $version package.type] eq $package_type } {
         #
