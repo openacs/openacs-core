@@ -324,7 +324,9 @@ ad_proc -private lang::test::execute_upgrade {
 
     # Import the catalog file
     array unset message_count
+    ns_logctl severity error 0
     array set message_count [lang::catalog::import -package_key $package_key -locales [list $locale]]
+    ns_logctl severity error 1
     aa_log "Imported messages: [array get message_count]"
 
     # Check that we have the expected messages in the database
