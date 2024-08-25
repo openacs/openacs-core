@@ -627,7 +627,7 @@ namespace eval ::acs {
                     set sql [string map [list "WITH RECURSIVE" "WITH"] $sql]
                 }
 
-                set child_urls [::acs::dc list -prepare integer [current method]-all $sql]
+                set child_urls [::acs::dc list -prepare integer dbqd..[current method]-all $sql]
             } else {
                 if {$package_key ne ""} {
                     #
