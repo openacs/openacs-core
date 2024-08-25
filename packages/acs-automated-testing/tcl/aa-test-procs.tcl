@@ -2411,6 +2411,30 @@ ad_proc -public aa_display_result {
     }
 }
 
+ad_proc -private aa_used_application_memory {} {
+
+    Return the currently used application memory.  This function
+    depends on the usage of TCMalloc from Google Performance Tools.
+
+} {
+    try {
+        ns_info meminfo
+    } on ok {mem_info} {
+        dict with mem_info {
+            # check for a line looking in the TCMalloc result like:
+            #
+            #   MALLOC:     2531634144 ( 2414.4 MiB) Bytes in use by application
+            #
+            if {[info exists stats] && [regexp {\nMALLOC:\s+(\d+)\s} $stats . bytes]} {
+                set old_value [nsv_set -reset aa_test application_memory $bytes]
+                if {$old_value ne ""} {
+                    return [list current $bytes diff [expr {$bytes - $old_value}]]
+                }
+            }
+        }
+    }
+}
+
 ad_proc -public aa_check_leftovers {-silent:boolean {msg final}} {
     #
     # Perform cleanup tests to check for object/command leaks in
@@ -2441,16 +2465,25 @@ ad_proc -public aa_check_leftovers {-silent:boolean {msg final}} {
                 set isNx    [::nsf::dispatch $obj ::nsf::methods::object::info::hastype ::nx::Object]
                 aa_log obj $obj (isXotcl $isXotcl isNx $isNx)
                 aa_log <pre>[$obj serialize]</pre>
+                $obj destroy
             }
         }
         aa_equals "$msg leftover tdom cmds"        $tdom 0
         foreach n $domNodes {
             if {[string match domDoc0x* $n]} {
                 aa_log node:$n\n<pre>[ns_quotehtml [$n asXML -indent 4]]</pre>
+                $n delete
             }
         }
         if {$silent_p} {
             aa_log    "$msg xotcl objects: $xotcl nx objects: $nx nssets: $nssets"
+            set mem_info [aa_used_application_memory]
+            if {$mem_info ne ""} {
+                dict with mem_info {
+                    aa_log "current memory: [format %.6f [expr {$current/1000000.0}]] MB " \
+                        "difference to begin of this case: [format %.3f [expr {$diff/1000.0}]] KB"
+                }
+            }
         }
     }
 }
