@@ -36,10 +36,16 @@ aa_register_case \
         set property [ad_generate_random_string]
         set value [ad_generate_random_string]
         set value2 ${value}2
-        api_add_to_proc_doc \
-            -proc_name $proc_name \
-            -property $property \
-            -value $value
+
+        #
+        # Silence Warning: api_add_to_proc_doc: no proc_doc available for
+        #
+        aa_silence_log_entries -severities {warning} {
+            api_add_to_proc_doc \
+                -proc_name $proc_name \
+                -property $property \
+                -value $value
+        }
 
         aa_true "nsv was created" [nsv_exists api_proc_doc $proc_name]
 
@@ -637,22 +643,24 @@ aa_register_case -cats {
         # Get the form data
         #
         set form_data [::acs::test::get_form [dict get $d body] {//form[@id="api-search"]}]
+
         #
         # Fill in with the proc to search
         #
         set proc_to_search "ad_proc"
         set param_weight 3
-        #ns_log notice "HHHHHHHHHHHHH form_data $form_data"
+
         set d [::acs::test::form_reply \
-                    -last_request $d \
-                    -url [dict get $form_data @action] \
-                    -update [subst {
-                        query_string "$proc_to_search"
-                        param_weight $param_weight
-                    }] \
-                    [dict get $form_data fields]]
+                   -last_request $d \
+                   -url [dict get $form_data @action] \
+                   -update [subst {
+                       query_string "$proc_to_search"
+                       param_weight $param_weight
+                   }] \
+                   [dict get $form_data fields]]
+
         set reply [dict get $d body]
-        #ns_log notice "HHHHHHHHHHHHH d $d"
+
         #
         # Check, if the form was correctly validated.
         #
@@ -662,7 +670,13 @@ aa_register_case -cats {
         # Check the proc-search page directly
         #
         set page "/api-doc/proc-search?query_string=$proc_to_search&param_weight=$param_weight"
-        set d [acs::test::http -user_info $user_info $page]
+
+        #
+        # Silence Warning: CSRF failure
+        #
+        aa_silence_log_entries -severities warning {
+            set d [acs::test::http -user_info $user_info $page]
+        }
         acs::test::reply_has_status_code $d 200
     }
 }
