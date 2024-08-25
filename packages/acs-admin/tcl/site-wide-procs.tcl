@@ -88,6 +88,11 @@ namespace eval ::acs_admin {
             #
             set node_info [site_node::get -url $path]
             set package_id [dict get $node_info object_id]
+            if {$package_id eq ""} {
+                ns_log notice "::acs_admin::require_site_wide_package for <$path>" \
+                    "returns empty. This should only happen during bootstrap."
+            }
+
         } else {
             set package_id [site_node::instantiate_and_mount \
                                 -parent_node_id [dict get $node_info node_id] \
