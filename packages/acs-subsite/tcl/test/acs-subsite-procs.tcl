@@ -78,7 +78,9 @@ aa_register_case \
             from dual
         }]
 
-        aa_false "Message key has been flushed from all possible caches" {$group_name eq [_ ${package_key}.$message_key]}
+        aa_silence_log_entries -severities {error} {
+            aa_false "Message key has been flushed from all possible caches" {$group_name eq [_ ${package_key}.$message_key]}
+        }
 
         set new_value [ad_generate_random_string]
         set pretty_name [lang::util::convert_to_i18n \
