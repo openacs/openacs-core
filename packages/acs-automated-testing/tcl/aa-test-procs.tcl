@@ -11,8 +11,6 @@ ad_library {
 
     @author Peter Harper (peter.harper@open-msg.com)
     @creation-date 21 June 2001
-
-    @cvs-id $Id$
 }
 
 #
@@ -2488,7 +2486,27 @@ ad_proc -public aa_check_leftovers {-silent:boolean {msg final}} {
     }
 }
 
+ad_proc -public aa_silence_log_entries {
+    -severities:required
+    code
+} {
 
+    Silence expected messages in the system log. The proc deactivates
+    the specified severity levels during the code in the last arguemnt
+    is executed. After it has finished, the severity levels are reset
+    to their previous values.
+
+} {
+    set old_severity_values [lmap severity $severities {ns_logctl severity $severity 0}]
+     try {
+         set result [uplevel $code]
+    } finally {
+        foreach severity $severities old_severity_value $old_severity_values {
+            ns_logctl severity $severity $old_severity_value
+        }
+    }
+    return $result
+}
 
 ad_proc -private aa_selenium_init {} {
     Setup a global Selenium RC server connection

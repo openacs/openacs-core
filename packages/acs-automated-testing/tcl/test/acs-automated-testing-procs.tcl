@@ -26,6 +26,7 @@ aa_register_case \
         acs::test::url
 
         aa_check_leftovers
+        aa_silence_log_entries
         aa_register_case
         aa_runseries
         aa_test_end

@@ -156,13 +156,11 @@ aa_register_case \
             }
         }
 
-        ns_logctl severity notice 0
-        ns_logctl severity "Debug(sql)" 0
-        aa_true "Invalid event throws an error" [catch {
-            search::queue -object_id $object_id -event BOGUS
-        }]             
-        ns_logctl severity "Debug(sql)" 1
-        ns_logctl severity notice 1        
+        aa_silence_log_entries -severities {error notice} {
+            aa_true "Invalid event throws an error" [catch {
+                search::queue -object_id $object_id -event BOGUS
+            }]
+        }
     }
 
 aa_register_case \
