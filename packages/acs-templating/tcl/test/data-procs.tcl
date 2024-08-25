@@ -331,8 +331,10 @@ aa_register_case -cats {
 
     set message ""
     foreach {value expected} $values {
-        aa_$expected "Is $value a file?" \
-            [template::data::validate file value message]
+        aa_silence_log_entries -severities [expr {$expected eq "false" ? "warning" : ""}] {
+            aa_$expected "Is $value a file?" \
+                [template::data::validate file value message]
+        }
     }
     ad_file delete $tmpfile
 }

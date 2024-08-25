@@ -28,7 +28,9 @@ aa_register_case -cats {
             nsv_incr __acs-templating-test-ad-return-exception-template count
         }
 
-        set d [ns_http run -method GET $url]
+        aa_silence_log_entries -severities {error} {
+            set d [ns_http run -method GET $url]
+        }
 
         acs::test::reply_has_status_code $d 500
         aa_false "No code was executed after returning" \
@@ -50,7 +52,9 @@ aa_register_case -cats {
             nsv_incr __acs-templating-test-ad-return-exception-template count
         }
 
-        set d [ns_http run -method GET $url]
+        aa_silence_log_entries -severities {error} {
+            set d [ns_http run -method GET $url]
+        }
 
         acs::test::reply_has_status_code $d 404
         aa_false "No code was executed after returning" \
@@ -137,4 +141,3 @@ aa_register_case -cats {
             [acs_root_dir]/packages/acs-automated-testing/www/AD-RETURN-TEMPLATE-TEST.tcl
     }
 }
-
