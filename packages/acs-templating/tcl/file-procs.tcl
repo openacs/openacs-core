@@ -118,7 +118,7 @@ ad_proc -public template::data::validate::file { value_ref message_ref } {
     }
 
     if { !$result } {
-        set message [_ acs-templating.Invalid_file]
+        set message [_ acs-templating.Invalid_filename]
         ad_log warning "They tried to sneak in invalid value '$value'"
     }
 
