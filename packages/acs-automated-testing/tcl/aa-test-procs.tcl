@@ -2430,7 +2430,7 @@ ad_proc -private aa_used_application_memory {} {
                 }
             }
         }
-    }
+    } on error {errmsg} {}
 }
 
 ad_proc -public aa_check_leftovers {-silent:boolean {msg final}} {
