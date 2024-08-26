@@ -23,6 +23,7 @@ aa_register_case \
         content::item::delete
         content::item::get
         content::item::get_content_type
+        content::item::get_root_folder
         content::item::get_id
         content::item::get_latest_revision
         content::item::new
