@@ -33,7 +33,7 @@ if {![info exists folder_id]} {
 }
 
 if {![fs_folder_p $folder_id]} {
-  ad_complain [_ file-storage.lt_The_specified_folder__1]
+  ad_complain "The specified folder does not exist."
   return
 }
 
@@ -156,7 +156,7 @@ template::list::create \
     -filters {folder_id {} file_types {} selector_type {} fs_package_id {}} \
     -elements {
       name {
-	label "[_ file-storage.Name]"
+	label "[_ acs-content-repository.Name]"
 	display_template {
 	  <if @contents.folder_p;literal@ false>
 	  <input type="radio" name="linktarget" value="@contents.object_id@" 
@@ -178,17 +178,17 @@ template::list::create \
 	html {nowrap ""}    	
       }
       content_size_pretty {
-	label "[_ file-storage.Size]"
+	label "[_ acs-content-repository.Size]"
 	orderby_desc {content_size desc} 
 	orderby_asc {content_size asc}
       }
       type {
-	label "[_ file-storage.Type]"
+	label "[_ acs-content-repository.Type]"
 	orderby_desc {type desc}
 	orderby_asc {type asc}
       }
       last_modified_pretty {
-	label "[_ file-storage.Last_Modified]"
+	label "[_ acs-content-repository.Last_Modified]"
 	orderby_desc {last_modified_ansi desc}
 	orderby_asc {last_modified_ansi asc}
 	html {nowrap ""}
@@ -215,10 +215,9 @@ db_multirow -extend {
   set content_size_pretty  [lc_numeric $content_size]
 
   if {$type eq "folder"} {
-    # append content_size_pretty " [_ file-storage.items]"
     set content_size_pretty ""
   } else {
-    append content_size_pretty " [_ file-storage.bytes]"
+    append content_size_pretty " [_ acs-lang.localization-bytes]"
   }
   if {$title eq ""} {set title $name}
 
