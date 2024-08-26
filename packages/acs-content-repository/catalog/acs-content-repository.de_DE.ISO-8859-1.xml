@@ -5,4 +5,9 @@
   <msg key="Name">Name</msg>
   <msg key="Size">Größe</msg>
   <msg key="Type">Typ</msg>
+  <msg key="Creation_User">Ersteller</msg>
+  <msg key="Modification_User">Veränderer</msg>
+  <msg key="Description">Beschreibung</msg>
+  <msg key="Delete_Revision">Version löschen</msg>
+  <msg key="No_Revisions">Es sind keine Versionen verfügbar</msg>
 </message_catalog>
