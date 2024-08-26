@@ -2524,6 +2524,11 @@ ad_page_contract_filter localurl { name value } {
 #
 ####################
 
+#
+# GN: The following two rules cause warnings of the form
+#     Multiple definitions of the ad_page_contract_filter_rule
+#
+
 ad_page_contract_filter_rule html { name filters } {
     Makes sure the filter nohtml gets applied, unless some other html filter (html or allhtml)
     is already specified.
