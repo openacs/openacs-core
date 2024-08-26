@@ -103,10 +103,14 @@ aa_register_case \
     } {
         set list_of_lists [list]
         set list_of_expected [list]
+        #
+        # Avoid messages containing percentages
+        #
         db_foreach get_messages {
             select message_key, package_key
-            from lang_message_keys
+            from lang_messages
             where package_key = 'acs-lang'
+            and not message like '%\%%'  
             fetch first 10 rows only
         } {
             lappend list_of_lists [list \

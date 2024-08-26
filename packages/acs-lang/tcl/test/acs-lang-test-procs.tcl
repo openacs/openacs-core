@@ -554,7 +554,9 @@ aa_register_case \
     "
 
     # Replace message tags in the Tcl file and insert into catalog file
-    lang::util::replace_temporary_tags_with_lookups $tcl_file
+    aa_silence_log_entries -severities warning {
+        lang::util::replace_temporary_tags_with_lookups $tcl_file
+    }
 
     aa_unstub lang::catalog::get_catalog_file_path
 
@@ -710,7 +712,9 @@ aa_register_case \
     set localized_message "The %frog% jumped across the %fence%. About 50% of the time, he stumbled, or maybe it was %%20 %times%."
     set value_list {frog frog fence fence}
 
-    set subst_message [lang::message::format $localized_message $value_list]
+    aa_silence_log_entries -severities warning {
+        set subst_message [lang::message::format $localized_message $value_list]
+    }
     set expected_message "The frog jumped across the fence. About 50% of the time, he stumbled, or maybe it was %20 %times%."
 
     aa_equals "the frog should jump across the fence" $subst_message $expected_message
@@ -1011,7 +1015,17 @@ aa_register_case \
             lang::system::locale_set_enabled \
                 -locale en_GB \
                 -enabled_p 1
-            lang::catalog::import -locales en_GB
+            #
+            # GN: we see several message of the following form
+            #
+            #     Warning: Warning: No catalog files found for package acs-tcl in locales: en_GB
+            #
+            # Is this intended? However, it does not effect the
+            # outcome of the regression test.
+            #
+            aa_silence_log_entries -severities warning {
+                lang::catalog::import -locales en_GB
+            }
         }
         #
         # Create messages
@@ -1023,6 +1037,8 @@ aa_register_case \
         #
         # Test missing en_GB returns en_US message key
         #
+        ns_log notice 3
+
         lang::message::register "en_US" $package_key $message_key $us_message
         aa_equals "Looking up message in GB returns US message" \
             [lang::message::lookup "en_GB" "$package_key.$message_key" "NOT FOUND"] \
@@ -1030,6 +1046,8 @@ aa_register_case \
         #
         # Test existing en_GB returns en_GB message key
         #
+        ns_log notice 4
+
         lang::message::register "en_GB" $package_key $message_key $gb_message
         aa_equals "Looking up message in GB returns GB message" \
             [lang::message::lookup "en_GB" "$package_key.$message_key" "NOT FOUND"] \
@@ -1321,7 +1339,7 @@ aa_register_case \
             set package_key [lindex [file split [string range $f $root_prefix end]] 0]
 
             if {![info exists dependencies($package_key)]} {
-                aa_log "'$f' does not belong to a package installed on the system."
+                #aa_log "'$f' does not belong to a package installed on the system."
                 continue
             }
             if {[regexp $theme_regexp [string range $f [string length $::acs::rootdir] end]]} {
@@ -1329,16 +1347,27 @@ aa_register_case \
                 continue
             }
 
+            if {[file extension $f] in {.sql}} {
+                continue
+            } elseif {[file extension $f] in {.adp .html .htm}} {
+                set RE [lang::util::message_key_regexp]
+            } else {
+                set RE {[-a-zA-Z0-9_]+\.[-a-zA-Z0-9_]+}
+            }
+
             set rfd [open $f r]
             set content [read $rfd]
             close $rfd
 
             # ...parse every possible message key occurrence...
-            foreach occurrence [regexp -all -inline -- {[\w.,: -]+\.[\w.,: -]+} $content] {
-                lassign [split [string trim $occurrence] .] message_package_key message_key
+            foreach occurrence [regexp -all -inline -- $RE $content] {
+                lassign [split [string trim $occurrence "#"] .] message_package_key message_key
+                #ns_log notice [file extension $f] occurence '$occurrence' \
+                    message_package_key $message_package_key \
+                    message_key $message_key
                 # ...make sure it is a real message key...
                 if {![info exists message_keys(${message_package_key}.${message_key})]} {
-                    ns_log warning "$f: '${message_package_key}.${message_key}' is not a message key."
+                    #ns_log warning "$f: '${message_package_key}.${message_key}' is not a message key."
                     continue
                 }
                 # ..leave the core out of this: its message keys can always be used...
