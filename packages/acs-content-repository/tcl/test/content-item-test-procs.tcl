@@ -46,17 +46,6 @@ aa_register_case \
         -rollback \
         -test_code {
 
-            # <= 0 because it is -4 for Postgres and 0 for
-            # Oracle... Here we assume every normal folder will have
-            # something bigger than 0
-            set root_folder_id [db_string get_root_folder {
-                select min(item_id) from cr_items
-                where content_type = 'content_folder'
-                and parent_id <= 0
-            }]
-            aa_true "Folder $root_folder_id is a root folder" \
-                [content::folder::is_root -folder_id $root_folder_id]
-
             #########################################################
             # create a cr_folder
             #########################################################
@@ -66,6 +55,13 @@ aa_register_case \
                                               -folder_id $first_folder_id \
                                               -label $first_folder_label \
                                               -name "test_folder_${first_folder_id}"]
+
+            set root_folder_id [content::item::get_root_folder -item_id $first_folder_id]
+            aa_true "Folder $first_folder_id is distinct from root folder $root_folder_id" \
+                {$root_folder_id != $first_folder_id}
+            aa_true "Folder $root_folder_id is a root folder" \
+                [content::folder::is_root -folder_id $root_folder_id]
+
 
             aa_false "Folder $first_folder_id is not a root folder" \
                 [content::folder::is_root -folder_id $first_folder_id]
