@@ -597,13 +597,23 @@ namespace eval ::acs {
         } {
             return [uplevel 1 [list $cache $operation {*}$args]]
         } else {
+            #
+            # Complain only, when
+            # a) not during initial install, and
+            # b) if this is not during startup of an installed version
+            #
+            set complain_p [expr {[ns_ictl epoch] > 0 && [nsv_names acs_installer] eq ""}]
             if {$operation eq "eval"} {
                 nsf::parseargs {{-partition_key} {-expires} {-per_request:switch} key command} $args
-                ns_log warning "no cache $cache: need direct call $key $args"
+                if {$complain_p} {
+                    ns_log warning "no cache $cache: need direct call $key $args"
+                }
                 #ns_log warning "no cache $cache: need direct call $key [info exists partition_key] <$command>"
                 return [uplevel 1 $command]
             }
-            ns_log warning "no cache $cache: call ignored"
+            if {$complain_p} {
+                ns_log warning "no cache $cache: call ignored"
+            }
         }
     }
 }
