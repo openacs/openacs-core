@@ -305,8 +305,10 @@ aa_register_case \
         Test apm_source proc
     } {
         aa_section "Source nonexistent"
-        aa_equals "Proc returns 0 on nonexistent files" \
-            [apm_source noexist] 0
+        aa_silence_log_entries -severities error {
+            aa_equals "Proc returns 0 on nonexistent files" \
+                [apm_source noexist] 0
+        }
 
         aa_section "Source file outside the root_dir"
         close [ad_opentmpfile tmpfile]
@@ -324,13 +326,17 @@ aa_register_case \
         set testscript [acs_root_dir]/packages/acs-bootstrap-installer/[file tail $tmpfile]
 
         file copy -- $tmpfile [file dirname $testscript]
-        apm_source $testscript errors
+        aa_silence_log_entries -severities error {
+            apm_source $testscript errors
+        }
         file delete -- $testscript
 
         aa_true "Loading a broken script returned errors in the errors var" \
             [llength [array get errors]]
-        aa_equals "Proc returns 0 on broken scripts" \
-            [apm_source $testscript] 0
+        aa_silence_log_entries -severities error {
+            aa_equals "Proc returns 0 on broken scripts" \
+                [apm_source $testscript] 0
+        }
         unset errors
 
         aa_section "Source a good script"
