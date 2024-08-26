@@ -319,7 +319,7 @@ ad_proc -private apm_dependency_check {
                         # Unsatisfied dependency.
                         set satisfied_p 0
                         # Check to see if we've recorded it already
-                        set errmsg "Requires [lindex $req 0] of version >= [lindex $req 1]."
+                        set errmsg "Requires [lindex $req 0] of version >= [lindex $req 1]"
                         if { ![info exists install_error([pkg_info_key $pkg_info])] ||
                              $errmsg ni $install_error([pkg_info_key $pkg_info])} {
                             lappend install_error([pkg_info_key $pkg_info]) $errmsg
