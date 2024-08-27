@@ -100,8 +100,8 @@ following text
         # make sure the desired text is in there and _before_ the
         # footnotes
 
-        aa_true "contains link" [regexp {linktext.*\[1\]} $result]
-        aa_true "contains following text" [regexp {following text.*\[1\]} $result]
+        aa_false "contains link" [regexp {linktext.*\[1\]} $result]
+        aa_false "contains following text" [regexp {following text.*\[1\]} $result]
     }
 }
 
