@@ -60,7 +60,7 @@ aa_register_case \
                         set F_json [ad_opentmpfile tmpfile_app_json]
                         if {$impl eq "curl"} {
                             aa_log "... running [::util::which curl] $url -k -o -"
-                            puts $F_json [exec -ignorestderr [::util::which curl] $url -k -o -]
+                            puts $F_json [exec -ignorestderr [::util::which curl] $url -s -k -o -]
                         } else {
                             ns_http run -method GET -spoolsize 0 -outputchan $F_json $url
                         }
@@ -110,7 +110,7 @@ aa_register_case \
                         set F_iso8859_2 [ad_opentmpfile tmpfile_iso8859_2]
 
                         if {$impl eq "curl"} {
-                            puts $F_iso8859_2 [exec -ignorestderr [::util::which curl] $url -k -o -]
+                            puts $F_iso8859_2 [exec -ignorestderr [::util::which curl] $url -s -k -o -]
                         } else {
                             ns_http run -method GET -spoolsize 0 -outputchan $F_iso8859_2 $url
                         }
