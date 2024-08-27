@@ -455,10 +455,11 @@ aa_register_case \
         lappend files {*}[lmap f [apm_get_package_files \
                                       -package_key $package_key \
                                       -file_types {content_page include_page}] {
-            # Ignore non .tcl files
-            if {[ad_file extension $f] ne ".tcl"} continue
-            # Ignore docs
-            if { "$package_key" eq "acs-core-docs" } continue
+            # Ignore non .tcl files, doc, and common NaviServer modules
+            if {[ad_file extension $f] ne ".tcl"
+                || "$package_key" eq "acs-core-docs"
+                || [ad_file tail $f] eq "nsstats.tcl"
+            } continue
             set f $startdir/$package_key/$f
         }]
     }
