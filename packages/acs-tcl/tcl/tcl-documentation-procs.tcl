@@ -1309,6 +1309,9 @@ ad_proc -public ad_page_contract {
                 template::multirow append complaints $elm
             }
             ad_try {
+                if {[ns_conn isconnected] == 0} {
+                    ad_script_abort
+                }
                 if {[incr ::__ad_complain_depth] == 1} {
                     #
                     # Render the error page going through templating,
@@ -1318,10 +1321,11 @@ ad_proc -public ad_page_contract {
                     # the page will look "fancy" and consistent with
                     # the rest of the website.
                     #
+                    set context $::ad_page_contract_context
+                    set prev_url [util::get_referrer -trusted]
                     set html [ad_parse_template \
-                                  -params [list complaints [list context $::ad_page_contract_context] \
-                                               [list prev_url [util::get_referrer -trusted]] \
-                                              ] [template::themed_template "/packages/acs-tcl/lib/complain"]]
+                                  -params { context prev_url} \
+                                  [template::themed_template "/packages/acs-tcl/lib/complain"]]
                 } else {
                     #
                     # We detected a recursion. This can happen if the
