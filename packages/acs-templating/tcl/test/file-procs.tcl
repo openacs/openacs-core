@@ -66,11 +66,15 @@ aa_register_case -cats {
                 ns_return 200 text/plain $new_path
             }
 
-        set template [template::adp_compile -string {
-            <formtemplate id="test"></formtemplate>
-        }]
 
-        ns_return 200 text/html [template::adp_eval template]
+        if {[ns_conn isconnected]} {
+            set template [template::adp_compile -string {
+                <formtemplate id="test"></formtemplate>
+            }]
+            ns_return 200 text/html [template::adp_eval template]
+        } else {
+            ns_log notice "the connection is already closed"
+        }
     }
 
     try {
@@ -105,13 +109,15 @@ aa_register_case -cats {
 
         aa_true "Tmpfile '$tmpfile' exists" [file exists $tmpfile]
 
-        set d [::acs::test::form_reply \
-                   -last_request $d \
-                   -form $form \
-                   -update [list \
-                                upload_file {$file_name $tmpfile text/plain} \
-                                title $file_name \
-                                description $file_name]]
+        aa_silence_log_entries -severities warning {
+            set d [::acs::test::form_reply \
+                       -last_request $d \
+                       -form $form \
+                       -update [list \
+                                    upload_file {$file_name $tmpfile text/plain} \
+                                    title $file_name \
+                                    description $file_name]]
+        }
 
         aa_true "Tmpfile '$tmpfile' still exists" [file exists $tmpfile]
 
@@ -154,11 +160,15 @@ aa_register_case -cats {
             lappend export [ad_urlencode_query $att]=[ad_urlencode_query $value]
         }
         set body [join $export &]
-        set d [::util::http::post \
-                   -url $url \
-                   -max_depth 0 \
-                   -multipart \
-                   -formvars $body]
+
+        aa_silence_log_entries -severities warning {
+
+            set d [::util::http::post \
+                       -url $url \
+                       -max_depth 0 \
+                       -multipart \
+                       -formvars $body]
+        }
         dict set d body [dict get $d page]
 
         aa_true "Tmpfile '$tmpfile' still exists" [file exists $tmpfile]
