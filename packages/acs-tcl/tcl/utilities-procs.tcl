@@ -4119,15 +4119,15 @@ namespace eval util::resources {
     }
 
     ad_proc -public ::util::resources::register_urns {
-        -namespace:required
+        -prefix:required
     } {
 
         Convenience function to register URNs based on the information provided by the resource_info dict.
         The dict members "urnMap", "prefix", and optionally "csp_lists" are used.
 
-        @param resource_info a dict containing urnMap, prefix, and optionally csp_lists.
+        @param prefix needed for locating the resource_info_procs
     } {
-        foreach resource_info_proc [resource_info_procs -prefix $namespace] {
+        foreach resource_info_proc [resource_info_procs -prefix $prefix] {
             set resource_info [$resource_info_proc]
             if {[dict exists $resource_info urnMap]} {
                 foreach URN [dict keys [dict get $resource_info urnMap]] {
