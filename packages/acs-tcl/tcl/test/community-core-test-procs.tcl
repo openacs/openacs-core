@@ -241,6 +241,8 @@ aa_register_case \
         acs_user::get_user_id_by_screen_name
         acs_user::reject
         acs_user::unapprove
+
+        relation_segment_has_dependent
     } \
     -cats {
         smoke api

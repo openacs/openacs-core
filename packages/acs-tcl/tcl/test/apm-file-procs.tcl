@@ -66,6 +66,8 @@ aa_register_case \
         apm_get_package_files
         content::revision::get_cr_file_path
         util::file_content_check
+
+        db_blob_get_file
     } \
     apm_tarballs {
         Test creating and extracting a tarball from an APM Package
