@@ -209,16 +209,18 @@ aa_register_case \
             close $wfd
 
             set path /packages/acs-automated-testing/www/[file rootname [file tail $tmpfile]]
-            file rename -- $tmpfile [acs_root_dir]${path}.tcl
+            set callable_tmpfile [acs_root_dir]${path}.tcl
+            file rename -- $tmpfile $callable_tmpfile
 
             aa_$outcome "Template failure is $outcome?" [catch {
                 #
                 # The template is inflated in a background job so to
                 # not tamper with the actual request in case of error.
                 #
-                set result [ad_job template::adp_include $path $vars]
+                aa_silence_log_entries -severities warning {
+                    set result [ad_job template::adp_include $path $vars]
+                }
             }]
-
-            file delete -- $tmpfile
+            file delete -- $callable_tmpfile
         }
     }
