@@ -181,7 +181,9 @@ aa_register_case -cats {smoke production_safe} -error_level warning -procs {
          } {
             incr count
             if { ![info exists pa(see)] || [string is space $pa(see)] } {
-                aa_log_result fail "No @see for deprecated proc [api_proc_link $p]"
+                aa_silence_log_entries -severities warning {
+                    aa_log_result fail "No @see for deprecated proc [api_proc_link $p]"
+                }
             } else {
                 incr good
             }

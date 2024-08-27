@@ -186,7 +186,10 @@ aa_register_case \
                 sec_change_user_auth_token $user_id
 
                 aa_section "Check again if my login works"
-                set r [ns_http run -headers $headers -method GET $url]
+                aa_silence_log_entries -severities warning {
+                    # Warning: downgrade login_level of user ... since there is no login cookie provided
+                    set r [ns_http run -headers $headers -method GET $url]
+                }
                 aa_equals "I should now NOT be authenticated" [dict get $r status] 403
             } \
             -teardown_code {
