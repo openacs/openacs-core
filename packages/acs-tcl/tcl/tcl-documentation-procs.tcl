@@ -2001,7 +2001,7 @@ ad_page_contract_filter html { name value } {
     # Reject the NUL character
     #
     if {[string first \u00 $value] != -1} {
-        ns_log notice "--- found NUL"
+        ns_log notice "invalid input for 'html' filter: passed-in value contains NUL character"
         ad_complain [_ acs-tcl.lt_name_contains_invalid]
         return 0
     }
@@ -2242,7 +2242,7 @@ ad_page_contract_filter string_length { name value length } {
     if { $op eq "min" } {
         if { $actual_length < $nr } {
             set binding [list name $name actual_length $actual_length min_length $nr]
-            ad_complain [_ acs-tcl.lt_name_is_too_short__Pl_1]
+            ad_complain [_ acs-tcl.lt_name_is_too_short__Pl_1 $binding]
             return 0
         }
     } else {
