@@ -404,7 +404,13 @@ aa_register_case \
         if { $whitespace_count == 0 } {
             incr good
         } else {
-            aa_log_result fail "$file: trailing whitespace in lines: $line_numbers"
+            aa_silence_log_entries -severities notice {
+                #
+                # On large installations, these might be too many,
+                # .. we have these lines in the regression log anyway.
+                #
+                aa_log_result fail "$file: trailing whitespace in lines: $line_numbers"
+            }
         }
     }
     aa_log "$good of $count tcl files checked have no trailing whitespace"
