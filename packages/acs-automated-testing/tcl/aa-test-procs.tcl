@@ -662,11 +662,15 @@ ad_proc -private aa_runseries {
     # Run each testcase
     #
     foreach testcase_id [lsort $testcase_ids] {
-        ns_log notice "========================================= start $testcase_id (Errors: [dict get [ns_logctl stats] Error])"
+        set logStats [ns_logctl stats]
+        ns_log notice "========================================= start $testcase_id" \
+            "(Errors: [dict get $logStats Error], Warnings: [dict get $logStats Warning], Bugs: [dict get $logStats Bug])"
         aa_test_start
         aa_run_testcase $testcase_id
         aa_test_end
-        ns_log notice "========================================= end $testcase_id (Errors: [dict get [ns_logctl stats] Error])"
+        set logStats [ns_logctl stats]
+        ns_log notice "========================================= end $testcase_id" \
+            "(Errors: [dict get $logStats Error], Warnings: [dict get $logStats Warning], Bugs: [dict get $logStats Bug])"
     }
 
     #
