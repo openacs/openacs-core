@@ -143,9 +143,10 @@ aa_register_case \
         {[llength [callback b_callback -arg1 foo bar]] == 0}
 
     set foo(test) 2
-
-    aa_true "callback returns value for each defined callback and catches the error callback" \
-        {[llength [callback -catch a_callback -arg1 foo bar]] == 2}
+    aa_silence_log_entries -severities warning {
+        aa_true "callback returns value for each defined callback and catches the error callback" \
+            {[llength [callback -catch a_callback -arg1 foo bar]] == 2}
+    }
 
     aa_true "callback returns correct value for specified implementation" \
         {[callback -impl an_impl1 a_callback -arg1 foo bar] == 1}
@@ -158,7 +159,6 @@ aa_register_case \
 
     aa_true "callback errors with missing arg" \
         {[catch {callback -impl an_impl2 a_callback -arg1 foo} err] == 1}
-
     aa_true "throws error for invalid arguments with implementations" \
         [catch {callback a_callback bar} error]
 
@@ -173,8 +173,6 @@ aa_register_case \
 
     set x [catch {callback -impl an_impl2 a_callback -arg1 {[aa_test_EvilCallback]} bar} error]
     aa_false "EvilCallback not invoked returned $error" $x
-
-
 }
 
 # Local variables:

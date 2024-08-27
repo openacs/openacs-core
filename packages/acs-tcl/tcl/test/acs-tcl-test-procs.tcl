@@ -110,7 +110,11 @@ aa_register_case \
         close $spec_file_id
 
         # Read the XML file
-        array set spec_array [apm_read_package_info_file $spec_path]
+        aa_silence_log_entries -severities warning {
+            # suppress
+            # ... package info file ... contains an unsupported callback type 'unknown-type' ...
+            array set spec_array [apm_read_package_info_file $spec_path]
+        }
 
         # Assert that info parsed from XML file is correct
         array set parsed_callback_array $spec_array(callbacks)
