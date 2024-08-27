@@ -219,7 +219,7 @@ ad_proc -private ::content::revision::cleanup-file {
 } {
     set dir [cr_fs_path $storage_area_key]
     foreach filename $data {
-        ns_log notice "DELETE FILE $dir$filename"
+        #ns_log notice "::content::revision::cleanup-file: DELETE FILE $dir$filename"
         file delete $dir$filename
     }
 }
@@ -457,7 +457,10 @@ ad_proc -private ::content::revision::update_content {
            instead of 'content'. The caller is responsible
            for cleaning up the temporary file
 } {
-    ns_log notice "============== update_content-$storage_type $revision_id content '$content' mime_type $mime_type tmp_filename '$tmp_filename'"
+    #ns_log notice "::content::revision::update_content" \
+        "update_content-$storage_type $revision_id" \
+        "content '$content' mime_type $mime_type tmp_filename '$tmp_filename'"
+
     ::content::revision::update_content-$storage_type \
         -item_id $item_id \
         -revision_id $revision_id \
