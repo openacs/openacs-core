@@ -123,9 +123,14 @@ aa_register_case \
                     # oversized, but the chosen variant is not.
                     #
                 } else {
-                    aa_log_result fail "Constraint '$constraint_name' ($constraint_type)" \
-                        " violates naming standard ($hint)" \
-                        " oversized $oversized oversized by standard naming $oversized_checked"
+                    #
+                    # Too many entries for the log, we the information as well in the protocol
+                    #
+                    aa_silence_log_entries -severities warning {
+                        aa_log_result fail "Constraint '$constraint_name' ($constraint_type)" \
+                            " violates naming standard ($hint)" \
+                            " oversized $oversized oversized by standard naming $oversized_checked"
+                    }
                 }
             }
         }

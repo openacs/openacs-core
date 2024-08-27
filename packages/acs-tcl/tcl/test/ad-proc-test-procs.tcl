@@ -25,12 +25,29 @@ aa_register_case \
             ad_proc -callback contract { arg1 arg2 } { docs } -
         } error]
 
-    ad_proc -callback a_callback { -arg1 arg2 } { this is a test callback } -
+    aa_silence_log_entries -severities warning {
+        #
+        # In this situation, [info script] returns empty, and no
+        # package_key can be determined
+        #
+        #     Warning: cannot determine package key from script ''
+        #
+        ad_proc -callback a_callback { -arg1 arg2 } { this is a test callback } -
+    }
+
     set callback_procs [info commands ::callback::a_callback::*]
     aa_true "creation of a valid callback contract with '-' body" \
         {"::callback::a_callback::contract" in $callback_procs}
 
-    ad_proc -callback a_callback_2 { arg1 arg2 } { this is a test callback } {}
+    aa_silence_log_entries -severities warning {
+        #
+        # In this situation, [info script] returns empty, and no
+        # package_key can be determined
+        #
+        #     Warning: cannot determine package key from script ''
+        #
+        ad_proc -callback a_callback_2 { arg1 arg2 } { this is a test callback } {}
+    }
     set callback_procs [info commands ::callback::a_callback_2::*]
     aa_true "creation of a valid callback contract with no body" \
         {"::callback::a_callback_2::contract" in $callback_procs}
@@ -45,11 +62,21 @@ aa_register_case \
             ad_proc -callback a_callback -impl impl {} { docs } { body }
         } error]
 
-    ad_proc -callback a_callback -impl an_impl {} {
-        this is a test callback implementation
-    } {
+    aa_silence_log_entries -severities warning {
+        #
+        # In this situation, [info script] returns empty, and no
+        # package_key can be determined
+        #
+        #     Warning: cannot determine package key from script ''
+        #
+        ad_proc -callback a_callback -impl an_impl {} {
+            this is a test callback implementation
+        } {
+        }
     }
+
     set impl_procs [info commands ::callback::a_callback::impl::*]
+
     aa_true "creation of a valid callback implementation" \
         {"::callback::a_callback::impl::an_impl" in $impl_procs}
 }
