@@ -1370,23 +1370,6 @@ ad_proc -public acs_user::promote_person_to_user {
         }
         set hashed_password [ns_sha1 "$password$salt"]
 
-        ns_log notice "CALL  acs_user__new(:person_id, --user_id
-                                 'user', --object_type
-                                 now(), --creation_date
-                                 null, --creation_user
-                                 null, --creation_ip
-                                 null, --authority_id
-                                 :username, --username
-                                 null, --email
-                                 null, --url
-                                 :first_names, --first_names
-                                 :last_name, --last_name
-                                 :hashed_password, --password
-                                 :salt, --salt
-                                 null, --screen_name
-                                 't', --email_verified_p
-                                 null --context_id
-                                 )"
         db_exec_plsql noxql {
             SELECT acs_user__new(:person_id, --user_id
                                  'user', --object_type

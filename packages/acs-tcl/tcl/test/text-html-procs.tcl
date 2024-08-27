@@ -904,8 +904,8 @@ aa_register_case \
     set string   "\n\r\t  \na word  \'\n\n \t\"\" aaaaa\' \'\'\'\b \v\v\v  \f"
     set expected {\n\r\t  \na word  \'\n\n \t\"\" aaaaa\' \'\'\'\b \v\v\v  \f}
 
-    ns_log notice EXP:<$expected>
-    ns_log notice GOT:<[ad_js_escape $string]>
+    #ns_log notice EXP:<$expected>
+    #ns_log notice GOT:<[ad_js_escape $string]>
 
     aa_true " - String of escape sequences, quotes and text (with some quotes already escaped)" \
         {[ad_js_escape $string] eq $expected}
