@@ -8,24 +8,24 @@ ad_library {
 #
 # Copyright (c) 1998,1999 Zveno Pty Ltd
 # http://www.zveno.com/
-# 
+#
 # Zveno makes this software and all associated data and documentation
 # ('Software') available free of charge for non-commercial purposes only. You
 # may make copies of the Software but you must include all of this notice on
 # any copy.
-# 
+#
 # The Software was developed for research purposes and Zveno does not warrant
 # that it is error free or fit for any purpose.  Zveno disclaims any
 # liability for all claims, expenses, losses, damages and costs any user may
 # incur as a result of using, copying or modifying the Software.
 #
 # Copyright (c) 1997 Australian National University (ANU).
-# 
+#
 # ANU makes this software and all associated data and documentation
 # ('Software') available free of charge for non-commercial purposes only. You
 # may make copies of the Software but you must include all of this notice on
 # any copy.
-# 
+#
 # The Software was developed for research purposes and ANU does not warrant
 # that it is error free or fit for any purpose.  ANU disclaims any
 # liability for all claims, expenses, losses, damages and costs any user may
@@ -48,7 +48,7 @@ namespace eval xml {
 
     # Convenience routine
     proc cl x {
-	return "\[$x\]"
+        return "\[$x\]"
     }
 
     # Define various regular expressions
@@ -71,7 +71,7 @@ namespace eval xml {
 
     variable EntityPredef
     array set EntityPredef {
-	lt <   gt >   amp &   quot \"   apos '
+        lt <   gt >   amp &   quot \"   apos '
     }
 
 }
@@ -108,36 +108,36 @@ proc xml::parser {args} {
     variable ParserCounter
 
     if {[llength $args] > 0} {
-	set name [lindex $args 0]
-	set args [lreplace $args 0 0]
+        set name [lindex $args 0]
+        set args [lreplace $args 0 0]
     } else {
-	set name parser[incr ParserCounter]
+        set name parser[incr ParserCounter]
     }
 
     if {[namespace which [namespace current]::$name] ne {}} {
-	return -code error "unable to create parser object \"[namespace current]::$name\" command"
+        return -code error "unable to create parser object \"[namespace current]::$name\" command"
     }
 
     # Initialise state variable and object command
     upvar \#0 [namespace current]::$name parser
     set sgml_ns [namespace parent]::sgml
     array set parser [list name $name			\
-	-final 1					\
-	-elementstartcommand ${sgml_ns}::noop		\
-	-elementendcommand ${sgml_ns}::noop		\
-	-characterdatacommand ${sgml_ns}::noop		\
-	-processinginstructioncommand ${sgml_ns}::noop	\
-	-externalentityrefcommand ${sgml_ns}::noop	\
-	-xmldeclcommand ${sgml_ns}::noop		\
-	-doctypecommand ${sgml_ns}::noop		\
-	-warningcommand ${sgml_ns}::noop		\
-	-statevariable [namespace current]::$name	\
-	-reportempty 0					\
-	internaldtd {}					\
+        -final 1					\
+        -elementstartcommand ${sgml_ns}::noop		\
+        -elementendcommand ${sgml_ns}::noop		\
+        -characterdatacommand ${sgml_ns}::noop		\
+        -processinginstructioncommand ${sgml_ns}::noop	\
+        -externalentityrefcommand ${sgml_ns}::noop	\
+        -xmldeclcommand ${sgml_ns}::noop		\
+        -doctypecommand ${sgml_ns}::noop		\
+        -warningcommand ${sgml_ns}::noop		\
+        -statevariable [namespace current]::$name	\
+        -reportempty 0					\
+        internaldtd {}					\
     ]
 
     proc [namespace current]::$name {method args} \
-	"eval ParseCommand $name \$method \$args"
+        "eval ParseCommand $name \$method \$args"
 
     eval ParseCommand [list $name] configure $args
 
@@ -166,26 +166,26 @@ proc xml::ParseCommand {parser method args} {
     upvar \#0 [namespace current]::$parser state
 
     switch -- $method {
-	cget {
-	    return $state([lindex $args 0])
-	}
-	configure {
-	    foreach {opt value} $args {
-		set state($opt) $value
-	    }
-	}
-	parse {
-	    ParseCommand_parse $parser [lindex $args 0]
-	}
-	reset {
-	    if {[llength $args]} {
-		return -code error "too many arguments"
-	    }
-	    ParseCommand_reset $parser
-	}
-	default {
-	    return -code error "unknown method \"$method\""
-	}
+        cget {
+            return $state([lindex $args 0])
+        }
+        configure {
+            foreach {opt value} $args {
+                set state($opt) $value
+            }
+        }
+        parse {
+            ParseCommand_parse $parser [lindex $args 0]
+        }
+        reset {
+            if {[llength $args]} {
+                return -code error "too many arguments"
+            }
+            ParseCommand_reset $parser
+        }
+        default {
+            return -code error "unknown method \"$method\""
+        }
     }
 
     return {}
@@ -210,25 +210,25 @@ proc xml::ParseCommand_parse {object xml} {
 
     set parent [namespace parent]
     if {"::" eq $parent } {
-	set parent {}
+        set parent {}
     }
 
     set tokenized [lrange \
-	    [${parent}::sgml::tokenise $xml \
-	    $tokExpr \
-	    $substExpr \
-	    -internaldtdvariable [namespace current]::${object}(internaldtd)] \
-	4 end]
+            [${parent}::sgml::tokenise $xml \
+            $tokExpr \
+            $substExpr \
+            -internaldtdvariable [namespace current]::${object}(internaldtd)] \
+        4 end]
 
     eval ${parent}::sgml::parseEvent \
-	[list $tokenized \
-	    -emptyelement [namespace code ParseEmpty] \
-	    -parseattributelistcommand [namespace code ParseAttrs]] \
-	[array get parser -*command] \
-	[array get parser -entityvariable] \
-	[array get parser -reportempty] \
-	-normalize 0 \
-	-internaldtd [list $parser(internaldtd)]
+        [list $tokenized \
+            -emptyelement [namespace code ParseEmpty] \
+            -parseattributelistcommand [namespace code ParseAttrs]] \
+        [array get parser -*command] \
+        [array get parser -entityvariable] \
+        [array get parser -reportempty] \
+        -normalize 0 \
+        -internaldtd [list $parser(internaldtd)]
 
     return {}
 }
@@ -263,7 +263,7 @@ proc xml::ParseEmpty {tag attr e} {
 #	attrs	attribute string given in a tag
 #
 # Results:
-#	Returns a Tcl list representing the name-value pairs in the 
+#	Returns a Tcl list representing the name-value pairs in the
 #	attribute string
 #
 #	A ">" occurring in the attribute list causes problems when parsing
@@ -274,19 +274,19 @@ proc xml::ParseEmpty {tag attr e} {
 #	did manage to parse and the remainder of the attribute list.
 
 proc xml::ParseAttrs attrs {
-    variable Wsp 
+    variable Wsp
     variable Name
 
     set result {}
 
     while {[string length [string trim $attrs]]} {
-	if {[regexp ($Name)[cl $Wsp]*=[cl $Wsp]*("|')([cl ^<]*?)\\2(.*) $attrs discard attrName delimiter value attrs]} {
-	    lappend result $attrName $value
-	} elseif {[regexp $Name[cl $Wsp]*=[cl $Wsp]*("|')[cl ^<]*\$ $attrs]} { 
-	    return -code error [list {unterminated attribute value} $result $attrs]
-	} else {
-	    return -code error "invalid attribute list"
-	}
+        if {[regexp ($Name)[cl $Wsp]*=[cl $Wsp]*("|')([cl ^<]*?)\\2(.*) $attrs discard attrName delimiter value attrs]} {
+            lappend result $attrName $value
+        } elseif {[regexp $Name[cl $Wsp]*=[cl $Wsp]*("|')[cl ^<]*\$ $attrs]} {
+            return -code error [list {unterminated attribute value} $result $attrs]
+        } else {
+            return -code error "invalid attribute list"
+        }
     }
 
     return $result
@@ -306,8 +306,8 @@ proc xml::ParseCommand_reset object {
     upvar \#0 [namespace current]::$object parser
 
     array set parser [list \
-	    -final 1		\
-	    internaldtd {}	\
+            -final 1		\
+            internaldtd {}	\
     ]
 }
 
