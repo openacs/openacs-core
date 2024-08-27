@@ -507,7 +507,7 @@ proc ad_proc args {
     if {[regexp {^packages/([^/]+)/} $script . package_key]} {
         set  doc_elements(package_key) $package_key
     } else {
-        ns_log warning "cannot determine package key from '$script'"
+        ad_log warning "cannot determine package key from script '$script'"
     }
     #
     # As acs-automated-testing/tcl/aa-test-procs.tcl is loaded on startup before
