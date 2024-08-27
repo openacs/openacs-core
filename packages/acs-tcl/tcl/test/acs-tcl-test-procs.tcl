@@ -1605,7 +1605,6 @@ ad_proc -private _acs_tcl__acs_tcl_external_dependencies_helper {} {
         tesseract \
         tidy \
         uptime \
-        wget \
         xargs \
         zdump
 
