@@ -646,8 +646,10 @@ aa_register_case \
                         aa_true "'[ns_quotehtml $print_value]' is $filter" \
                             [ad_page_contract_filter_invoke $filter dummy value]
                     } else {
-                        aa_false "'[ns_quotehtml $print_value]' is NOT $filter" \
-                            [ad_page_contract_filter_invoke $filter dummy value]
+                        aa_silence_log_entries -severities [expr {$filter eq "tmpfile" ? "warning" : ""}] {
+                            aa_false "'[ns_quotehtml $print_value]' is NOT $filter" \
+                                [ad_page_contract_filter_invoke $filter dummy value]
+                        }
                     }
                 }
             }
