@@ -209,8 +209,10 @@ aa_register_case \
                     -parameter ScreenName \
                     -package_id $::acs::kernel_id \
                     -value $v
-                aa_equals "Value is correct" \
-                    [acs_user::ScreenName] solicit
+                aa_silence_log_entries -severities error {
+                    aa_equals "Value is correct" \
+                        [acs_user::ScreenName] solicit
+                }
             }
         } finally {
             # Cleanup

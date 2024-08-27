@@ -419,7 +419,9 @@ aa_register_case -cats {
         https://website.at.domain/afile https website.at.domain 443 1
         http://another.website.com:666/andsomecontent http another.website.com 666 1
     } {
-        set success [util::split_location $location proto hostname port]
+        aa_silence_log_entries -severities warning {
+            set success [util::split_location $location proto hostname port]
+        }
         set expected_success_pretty [expr {$expected_success ? "succeeds" : "fails"}]
         aa_equals "Parsing '$location' $expected_success_pretty" $expected_success $success
 
