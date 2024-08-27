@@ -1859,7 +1859,7 @@ ad_proc -private apm_mount_core_packages {} {
     # especially on large sites. By deactivating the following line,
     # just "Main Site Administrators" will have rights on the
     # /api-doc, which is probably the right thing to do on most sites.
-    # With the new permissions interface, providing more liberal rights via is 
+    # With the new permissions interface, providing more liberal rights via is
     #
     if {0} {
         # Only registered users should have permission to access the
@@ -1956,7 +1956,7 @@ ad_proc -public apm_upgrade_logic {
     The spec contains a flat list of triples of the form
     { "from_version" "to_version" "code_chunk"
         "from_version" "to_version" "code_chunk ..." }.
-    
+
     The list is compared against the "from_version_name" and
     "to_version_name" parameters supplied, and the code_chunks that fall
     within the from_version_name and to_version_name it'll get
@@ -2218,14 +2218,14 @@ ad_proc -public apm_get_repository_channels { {repository_url https://openacs.or
     $doc documentElement root
     foreach node [$root selectNodes {//ul/li/a}] {
         set href [$node getAttribute href]
-        if {[regexp {(\d+[-]\d+)} $href . version]} {
+        if {[regexp {^(\d+[-]\d+)} $href . version]} {
             set name $version
             set tag oacs-$version
             lappend repositories [list $name $tag]
         } else {
-            set txt [string trim [$node asText]]
-            ns_log warning "unexpected li found in repository $repository_url: $txt"
-            continue
+            #set txt [string trim [$node asText]]
+            #ns_log warning "unexpected href found in repository $repository_url: $txt ($href)"
+            #continue
         }
     }
     return $repositories
