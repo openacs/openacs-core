@@ -862,6 +862,7 @@ aa_register_case \
             aa_section "Test the reply API"
             set object_id [acs::test::require_package_instance -package_key acs-subsite \
                                -instance_name "test-notification-object"]
+
             set subject "My test reply"
             set content "This is the content of my reply"
             set from_user [dict get [acs::test::user::create] user_id]
@@ -936,7 +937,18 @@ aa_register_case \
             }
 
             aa_log "Make sure Service Contract implementation procs are generated"
+
+            #
+            # Provide a last-resort script name, which is better than
+            # URL of the testing interface. The function
+            # "acs_sc_update_alias_wrappers" creates procs, and wants
+            # to know, from which package amd source this is coming
+            # from.
+            #
+            set ::ad_conn(file) [acs_package_root_dir notifications]/tcl/test/
+
             acs_sc_update_alias_wrappers
+
             aa_equals "Processing the reply returns the value from the Service Contract implementation" \
                 $reply_id [notification::type::process_reply -type_id $type_id -reply_id $reply_id]
 
@@ -1018,6 +1030,7 @@ aa_register_case \
                        -body $content \
                        -message_headers $message_headers \
                        -reason $reason]
+
             aa_equals "From address is as expected" \
                 [dict get $r from_addr] $bounce_from
             aa_equals "To address is as expected" \
