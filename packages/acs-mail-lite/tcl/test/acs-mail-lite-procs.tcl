@@ -95,6 +95,19 @@ aa_register_case \
             }
 
         } -teardown_code {
+
+            #
+            # Delete the scheduled email
+            #
+            db_dml delete_scheduled_email {
+                delete from acs_mail_lite_queue
+                where object_id = :any_object_id
+                and to_addr = :to_addr
+                and from_addr = :from_addr
+                and subject = :subject
+                and body = :body
+            }
+
             parameter::set_value \
                 -package_id $package_id \
                 -parameter "send_immediately" \
