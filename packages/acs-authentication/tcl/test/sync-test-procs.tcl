@@ -1235,15 +1235,16 @@ aa_register_case \
                     $doc
 
                 aa_log "One invalid operation"
-
                 aa_true "With invalid operations, call returns an error" [catch {
                     # This is in fact the call that will fail, because
                     # of a check constraint on the 'operation' column.
-                    auth::sync::job::create_entry \
-                        -job_id $job_id \
-                        -operation broken \
-                        -username [dict get $user username] \
-                        -success
+                    aa_silence_log_entries -serverities error {
+                        auth::sync::job::create_entry \
+                            -job_id $job_id \
+                            -operation broken \
+                            -username [dict get $user username] \
+                            -success
+                    }
 
                     # If the check was not there in the database, this
                     # call would also fail, as the check is
@@ -1254,7 +1255,6 @@ aa_register_case \
                         -operation GetAcknowledgementDocument \
                         -call_args [list $job_id $doc [list]]
                 }]
-
             }
 
         aa_section auth::sync::process_doc::ims::ProcessDocument

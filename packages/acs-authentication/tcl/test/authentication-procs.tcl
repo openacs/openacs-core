@@ -211,8 +211,10 @@ aa_register_case \
                     -parameter RegisterAuthority \
                     -package_key "acs-authentication" \
                     -value $not_exists
-                aa_equals "Non existent register authority '$not_exists' falls back to the local authority" \
-                    [auth::authority::local] [auth::get_register_authority]
+                aa_silence_log_entries -severities error {
+                    aa_equals "Non existent register authority '$not_exists' falls back to the local authority" \
+                        [auth::authority::local] [auth::get_register_authority]
+                }
 
                 #
                 # Put the auhtority back as it was to not pollute
@@ -407,7 +409,11 @@ aa_register_case \
                 if {$auth_level ne ""} {
                     ad_conn -set auth_level $auth_level
                 }
-                ns_return 200 text/plain [auth::refresh_login]
+                ad_unless_script_abort {
+                    set user_id [auth::refresh_login]
+                } {
+                    ns_return 200 text/plain $user_id
+                }
             }
 
             set result [acs::test::user::create]
@@ -443,7 +449,11 @@ aa_register_case \
         try {
             set endpoint_name test__auth__self_registration
             ns_register_proc GET $endpoint_name {
-                ns_return 200 text/plain [auth::self_registration]
+                ad_unless_script_abort {
+                    set user_id [auth::self_registration]
+                } {
+                    ns_return 200 text/plain $user_id
+                }
             }
 
             set result [acs::test::user::create]

@@ -126,7 +126,11 @@ ad_proc -public auth::self_registration {} {
     if { [string is false [parameter::get_from_package_key \
                                -package_key acs-authentication \
                                -parameter AllowSelfRegister]] } {
-        util_user_message -message "Self registration is not allowed"
+        if {[ad_conn session_id] ne ""} {
+            util_user_message -message "Self registration is not allowed"
+        } else {
+            ns_log notice "auth::self_registration: cannot set user_message 'Self registration is not allowed'"
+        }
         auth::require_login
     }
 }

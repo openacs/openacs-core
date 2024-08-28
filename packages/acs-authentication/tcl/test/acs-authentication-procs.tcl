@@ -171,12 +171,14 @@ aa_register_case \
 
             # Authority bogus
             array unset auth_info
-            array set auth_info \
-                [auth::authenticate \
-                     -no_cookie \
-                     -authority_id -123 \
-                     -username $username \
-                     -password $password]
+            aa_silence_log_entries -severities error {
+                array set auth_info \
+                    [auth::authenticate \
+                         -no_cookie \
+                         -authority_id -123 \
+                         -username $username \
+                         -password $password]
+            }
 
             aa_equals "auth_status for bad authority_id authentication" $auth_info(auth_status) "failed_to_connect"
             aa_true "auth_message for bad authority_id authentication" {$auth_info(auth_message) ne ""}
@@ -562,16 +564,21 @@ aa_register_case  \
         -test_code {
             aa_log [list auth::password::recover_password \
                                            -authority_id $test_vars(authority_id) \
-                                           -username $test_vars(username)]
-            array set password_result [auth::password::recover_password \
-                                           -authority_id $test_vars(authority_id) \
-                                           -username $test_vars(username)]
+                        -username $test_vars(username)]
+            aa_silence_log_entries -severities error {
+                #
+                # Handle case without errors, when mail is not configred.
+                #
+                array set password_result [auth::password::recover_password \
+                                               -authority_id $test_vars(authority_id) \
+                                               -username $test_vars(username)]
+            }
             if {[::acs_mail_lite::configured_p]} {
                 aa_equals "status ok" $password_result(password_status) "ok"
             } else {
-                aa_equals "SMTP host not configured" $password_result(password_status) "failed_to_connect"                
+                aa_equals "SMTP host not configured" $password_result(password_status) "failed_to_connect"
             }
-            
+
             aa_true "nonempty message" {$password_result(password_message) ne ""}
         }
 }
@@ -616,13 +623,19 @@ aa_register_case  \
     Test the auth::password::retrieve proc.
 } {
     auth::test::get_password_vars -array_name test_vars
-    array set result [auth::password::retrieve \
-                          -authority_id $test_vars(authority_id) \
-                          -username $test_vars(username)]
+
+    aa_silence_log_entries -severities error {
+        #
+        # Handle case without errors, when mail is not configred.
+        #
+        array set result [auth::password::retrieve \
+                              -authority_id $test_vars(authority_id) \
+                              -username $test_vars(username)]
+    }
     if {[::acs_mail_lite::configured_p]} {
         aa_equals "retrieve pwd from local auth" $result(password_status) "ok"
     } else {
-        aa_equals "SMTP host not configured" $result(password_status) "failed_to_connect"                
+        aa_equals "SMTP host not configured" $result(password_status) "failed_to_connect"
     }
 
     aa_true "must have message on failure" {$result(password_message) ne ""}
