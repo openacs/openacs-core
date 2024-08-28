@@ -76,6 +76,9 @@ aa_register_case \
             [ns_md file $tmpdir2/$tmpname] $checksum
         aa_equals "File '$tmpdir2/second-file.txt' was extracted correctly" \
             [ns_md file $tmpdir2/second-file.txt] $checksum2
+
+        file delete -force $tmpdir
+        file delete -force $tmpdir2
     }
 
 aa_register_case \

@@ -122,5 +122,7 @@ aa_register_case \
             foreach f [apm_get_package_files -all -package_key acs-tcl] {
                 aa_true "File '$f' was found in the tarfile" [info exists tar_visited($f)]
             }
+            
+            file delete -force $tmpdir
         }
     }
