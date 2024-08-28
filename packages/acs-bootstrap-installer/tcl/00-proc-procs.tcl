@@ -498,6 +498,10 @@ proc ad_proc args {
     }
 
     set script [info script]
+    if {$script eq "" && [info exists ::ad_conn(file)]} {
+        set script $::ad_conn(file)
+        ns_log notice "ad_proc: get script name for proc '$proc_name' from ad_conn(file): $script"
+    }
     set root_length [string length $::acs::rootdir]
     if { $::acs::rootdir eq [string range $script 0 $root_length-1] } {
         set script [string range $script $root_length+1 end]
@@ -507,7 +511,7 @@ proc ad_proc args {
     if {[regexp {^packages/([^/]+)/} $script . package_key]} {
         set  doc_elements(package_key) $package_key
     } else {
-        ad_log warning "cannot determine package key from script '$script'"
+        ad_log warning "cannot determine package key from script '$script': ad_proc $args"
     }
     #
     # As acs-automated-testing/tcl/aa-test-procs.tcl is loaded on startup before
