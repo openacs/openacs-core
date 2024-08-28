@@ -2419,9 +2419,8 @@ ad_proc -private aa_used_application_memory {} {
     depends on the usage of TCMalloc from Google Performance Tools.
 
 } {
-    try {
-        ns_info meminfo
-    } on ok {mem_info} {
+    if {[::acs::icanuse "ns_info meminfo"]} {
+        set mem_info [ns_info meminfo] 
         dict with mem_info {
             # check for a line looking in the TCMalloc result like:
             #
@@ -2434,7 +2433,7 @@ ad_proc -private aa_used_application_memory {} {
                 }
             }
         }
-    } on error {errmsg} {}
+    }
 }
 
 ad_proc -public aa_check_leftovers {-silent:boolean {msg final}} {
