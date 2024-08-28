@@ -59,7 +59,7 @@ namespace eval ::acs {
         #
         #      ::acs::Container create acs::container
         #
-        
+
         :public method active_p {} {
             #
             # Check, if we are running inside a Docker container

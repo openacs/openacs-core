@@ -367,11 +367,11 @@ aa_register_case \
     aa_log "result is <pre>[ns_quotehtml $result]</pre>"
     set nrBr [regsub -all <br> $result <br> .]
     aa_true "text contains some [ns_quotehtml <br>] tags" {$nrBr > 0}
-    
+
     if {[::acs::icanuse "ns_parsehtml"]} {
         aa_true "text contains $nrBr [ns_quotehtml <br>] tags" {$nrBr == 2}
     }
-    
+
 
 }
 
@@ -614,12 +614,12 @@ aa_register_case \
     aa_log "result is <pre>[ns_quotehtml $result]</pre>"
     set nrBr [regsub -all <br> $result <br> .]
     aa_true "text contains [ns_quotehtml <br>] tags" {$nrBr > 0}
-    
+
     if {[::acs::icanuse "ns_parsehtml"]} {
         aa_true "text contains $nrBr [ns_quotehtml <br>] tags" {$nrBr == 1}
     }
     #aa_equals "new: $html _version should be the same" $html_version $string_with_img
-    
+
 }
 
 
@@ -637,7 +637,7 @@ aa_register_case \
         aa_log "Original string is $string_with_img"
         set html_version [ad_enhanced_text_to_html $string_with_img]
         aa_equals "new: $html_version should be the same" $html_version $string_with_img
-    }        
+    }
 
 aa_register_case \
     -cats {api smoke} \

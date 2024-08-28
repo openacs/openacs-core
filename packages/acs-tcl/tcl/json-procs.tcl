@@ -654,10 +654,10 @@ ad_proc util::json::indent {
 }
 
 ad_proc util::tdomDoc2dict {doc} {
-    
+
     Helper proc for util::json2dict, which outputsreturns the provided
     tDOM document in the form of a Tcl dict.
-    
+
 } {
     return [util::tdomNodes2dict [$doc childNodes] [$doc jsonType]]
 }

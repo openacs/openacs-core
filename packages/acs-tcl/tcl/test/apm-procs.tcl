@@ -71,7 +71,7 @@ aa_register_case \
         }
         set package_id [apm_package_id_from_key acs-kernel]
         aa_true "Kernel package_id '$package_id' plausible " {$package_id > 0}
-        
+
         set package_key [apm_package_key_from_id $package_id]
         aa_true "Kernel package_key '$package_key' plausible " {$package_key eq "acs-kernel"}
     }

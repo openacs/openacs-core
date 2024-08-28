@@ -253,7 +253,7 @@ aa_register_case \
     } \
     xml_get_child_node_content_by_path {
         Test xml_get_child_node_content_by_path
-    } {       
+    } {
         set tree [xml_parse -persist {
             <enterprise>
             <properties>
@@ -294,7 +294,7 @@ aa_register_case \
          [xml_get_child_node_content_by_path $root_node { { does not exist } { properties } { person name nickname } { person sourcedid id } }] "Superman"
         aa_equals "properties -> datetime" \
          [xml_get_child_node_content_by_path $root_node { { person comments foo } { person name first_names } { properties datetime } }] "2001-08-08"
-        
+
         $tree delete
 }
 
@@ -514,7 +514,7 @@ aa_register_case \
 
         dict set cases word {red 1 " " 0 "hello_world" 1 {$a} 0 a1 1 <p> 0 "a.b" 0 "-flag" 0 "1,2" 0 "r: -1" 0}
         dict set cases token {red 1 " " 1 "hello_world" 1 {$a} 0 a1 1 <p> 0 "a.b" 1 "-flag" 1 "1,2" 1 "r: -1" 1}
-        dict set cases safetclchars {red 1 " " 1 "hello world" 1 {$a} 0 a1 1 <p> 1 "a.b" 1 "-flag" 1 "1,2" 1 "r: -1" 1 {a[b]c} 0 x\\y 0} 
+        dict set cases safetclchars {red 1 " " 1 "hello world" 1 {$a} 0 a1 1 <p> 1 "a.b" 1 "-flag" 1 "1,2" 1 "r: -1" 1 {a[b]c} 0 x\\y 0}
 
         dict set cases sql_identifier  {red 1 " " 0 "hello_world" 1 {$a} 0 a1 1 <p> 0 "a.b" 0 "-flag" 0 "1,2" 0 "r: -1" 0}
         dict set cases email { {philip@mit.edu} 1 {Philip Greenspun <philip@mit.edu>} 0 }
@@ -1499,7 +1499,7 @@ aa_register_case \
         aa_equals "ad_decode $case $cases_complete return $result" "$result" [ad_decode $case {*}$cases_complete]
     }
     aa_equals "ad_decode gibberish $cases_complete return Unknown" "Unknown" [ad_decode gibberish {*}$cases_complete]
-    
+
     aa_equals "ad_decode no default, found"     [ad_decode b a 1 b 2] 2
     aa_equals "ad_decode no default, not found" [ad_decode x a 1 b 2] ""
     aa_equals "ad_decode no default, no alternatives" [ad_decode x] ""

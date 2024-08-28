@@ -68,7 +68,7 @@ aa_register_case \
     -cats {api smoke} \
     -procs {
         apm_package_instance_new
-        
+
         db_1row
     } \
     test_apm_package_instance__new {

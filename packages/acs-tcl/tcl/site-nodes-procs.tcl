@@ -806,7 +806,7 @@ namespace eval ::acs {
     # Caching
     #####################################################
     variable createCache
-    
+
     if {[namespace which ::ns_cache_names] ne ""} {
         set createCache [expr {"site_nodes_cache" ni [::ns_cache_names]}]
     } else {

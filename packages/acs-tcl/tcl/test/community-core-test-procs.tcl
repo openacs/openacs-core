@@ -308,7 +308,7 @@ aa_register_case \
                                  -filename test.png \
                                  -mime_type image/png \
                                  -file $tmpfile]
-            
+
             aa_equals "We can retrieve the portrait" \
                 [acs_user::get_portrait_id -user_id $user_id] $portrait_id
 

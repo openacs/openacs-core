@@ -22,4 +22,3 @@ aa_register_case \
                 [llength $repo] 2
         }
     }
-

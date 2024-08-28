@@ -1,4 +1,3 @@
-# packages/acs-tcl/tcl/http-auth-procs.tcl
 ad_library {
    Use OpenACS user logins for HTTP authentication
 }
@@ -10,7 +9,7 @@ ad_proc -public http_auth::basic_authentication_decode {
 } {
     Implements decoding of authorization header as defined in RFC 7617
     "username" containing a colon character is invalid (see RFC 7617,
-    Section 2). 
+    Section 2).
 
     @param authorization content of "Authorization:" reply header field,
                          such as e.g. "Basic 29234k3j49a"

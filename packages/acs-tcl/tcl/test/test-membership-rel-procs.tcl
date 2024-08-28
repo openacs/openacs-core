@@ -43,7 +43,7 @@ aa_register_case \
         aa_equals "Changed State to aprroved" \
             $member_state "approved"
 
-        
+
         # Try to change his state to banned
         aa_log "We change the state to banned"
         membership_rel::ban -rel_id $rel_id

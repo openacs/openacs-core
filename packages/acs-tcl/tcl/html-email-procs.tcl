@@ -34,7 +34,7 @@ ad_proc ad_build_mime_message {
 } {
     Composes multipart/alternative email containing plain text
     and html versions of the message, parses out the headers we need,
-    constructs an array  and returns it to the caller. 
+    constructs an array  and returns it to the caller.
 
     This proc is based on ad_html_sendmail, written by Doug Harris at
     the World Bank.
@@ -51,7 +51,7 @@ ad_proc ad_build_mime_message {
 
     # build body
 
-    ## JCD: I fail to see why you would want both a base64 and a quoted-printable 
+    ## JCD: I fail to see why you would want both a base64 and a quoted-printable
     ## version of html part of this email.  I am removing the base64 version.
     ## set base64_html_part [mime::initialize -canonical text/html -param [list charset $charset] -encoding base64 -string $html_body]
     set html_part [mime::initialize -canonical text/html \
@@ -150,7 +150,7 @@ ad_proc -public ad_parse_incoming_email {
     # Expand any first-level multipart/alternative children.
     set expanded_parts [list]
     foreach part $parts {
-        catch {mime::getproperty $part content} this_content 
+        catch {mime::getproperty $part content} this_content
         if { $this_content eq "multipart/alternative"} {
             foreach child_part [mime::getproperty $part parts] {
                 lappend expanded_parts $child_part
@@ -161,7 +161,7 @@ ad_proc -public ad_parse_incoming_email {
     }
 
     foreach part $expanded_parts {
-        catch {mime::getproperty $part content} this_content 
+        catch {mime::getproperty $part content} this_content
         switch -- $this_content {
             "text/plain" {
                 if { ![info exists plain] } {

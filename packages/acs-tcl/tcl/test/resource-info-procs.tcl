@@ -15,11 +15,11 @@ aa_register_case \
             cdn
             cdnHost
             configuredVersion
-            cssFiles 
+            cssFiles
             extraFiles
             jsFiles
             parameterInfo
-            prefix 
+            prefix
             resourceDir
             resourceName
             urnMap
@@ -32,7 +32,7 @@ aa_register_case \
         }
         foreach resource_info_proc [::util::resources::resource_info_procs] {
             set resource_info [$resource_info_proc]
-            foreach member $required_members { 
+            foreach member $required_members {
                 aa_true "$resource_info_proc resource_info contains $member" {$member in $required_members}
             }
             foreach key [dict keys $resource_info] {
@@ -49,4 +49,3 @@ aa_register_case \
         }
 
     }
-

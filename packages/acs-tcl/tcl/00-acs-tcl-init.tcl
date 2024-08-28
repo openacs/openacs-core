@@ -6,4 +6,3 @@
 set ::acs::kernel_id [ad_acs_kernel_id]
 
 ::acs::dc create_db_function_interface ;# -verbose ;# -match test.*
-

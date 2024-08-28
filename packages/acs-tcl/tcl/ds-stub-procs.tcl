@@ -4,7 +4,7 @@ ad_library {
     before we stub them out.
 
     This is done since the old ad_call_proc_if_exists
-    is somewhat expensive and these are called a lot in 
+    is somewhat expensive and these are called a lot in
     every request.
 
     @author Jeff Davis <davis@xarg.net>

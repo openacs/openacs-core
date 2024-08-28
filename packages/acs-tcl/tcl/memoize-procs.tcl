@@ -55,7 +55,7 @@ if { [catch {ns_cache set util_memoize __util_memoize_installed_p 1} error] } {
 }
 
 
-ad_proc -private util_memoize_flush_local {script} {    
+ad_proc -private util_memoize_flush_local {script} {
     Forget any cached value for <i>script</i> on the local server.
     You probably want to use <code>util_memoize_flush</code> to flush
     the caches on all servers in the cluster, in case clustering is

@@ -27,7 +27,7 @@ ad_proc -public text_templates::create_pdf_content {
     @param set_var_call procedure-name which sets the variables used
 
     @return the pdf-file-name
-} {   
+} {
     # create html.file
     set html_content [create_html_content -template_id $template_id -set_var_call $set_var_call]
 
@@ -43,7 +43,7 @@ ad_proc -public text_templates::create_pdf_from_html {
     @param html_content HTML Content that is transformed into PDF
     @return filename of the pdf file
 } {
-    
+
     set progname [parameter::get -parameter "HtmlDocBin" -default "htmldoc"]
     set htmldoc_bin [::util::which $progname]
     if {$htmldoc_bin eq ""} {
@@ -63,7 +63,7 @@ ad_proc -public text_templates::create_pdf_from_html {
         if {[ad_file exists $tmp_pdf_filename]} {
             return $tmp_pdf_filename
         }
-        
+
     } on error {errorMsg} {
         ns_log Error "Error during conversion from html to pdf: $errorMsg"
     } finally {
