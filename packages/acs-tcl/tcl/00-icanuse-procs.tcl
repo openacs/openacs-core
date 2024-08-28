@@ -115,6 +115,7 @@ namespace eval ::acs {
 ::acs::register_icanuse "ns_deletecookie -samesite" [acs::cmd_error_contains {ns_deletecookie} -samesite]
 ::acs::register_icanuse "ns_hash"                   {[info commands ::ns_hash] ne ""}
 ::acs::register_icanuse "ns_ictl trace idle"        [acs::cmd_error_contains {ns_ictl trace foo} idle]
+::acs::register_icanuse "ns_info meminfo"           [acs::cmd_has_subcommand ns_info meminfo]
 ::acs::register_icanuse "ns_ip"                     {[info commands ::ns_ip] ne ""}
 ::acs::register_icanuse "ns_parsehtml"              {[info commands ::ns_parsehtml] ne ""}
 ::acs::register_icanuse "ns_parsequery -charset"    [acs::cmd_error_contains {ns_parsequery} -charset]
