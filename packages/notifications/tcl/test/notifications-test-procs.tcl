@@ -144,7 +144,7 @@ aa_register_case \
             aa_equals "No intervals have been assigned to the new type" \
                 0 [llength [notification::get_intervals -type_id $type_id]]
 
-            aa_log "Deleleting notification type '$short_name'"
+            aa_log "Deleting notification type '$short_name'"
             notification::type::delete -short_name $short_name
 
             aa_false "Notification type is no more" \
@@ -596,13 +596,14 @@ aa_register_case \
     -cats {api smoke} \
     -procs {
         acs_sc::impl::new_from_spec
-        notification::type::new
+        ad_unless_script_abort
         notification::request::new
         notification::security::can_admin_request_p
         notification::security::can_notify_object_p
         notification::security::can_notify_user
         notification::security::require_admin_request
         notification::security::require_notify_object
+        notification::type::new
     } \
     notification_permission_tests {
         Tests permission API
@@ -717,14 +718,12 @@ aa_register_case \
 
             aa_section "Requiring admin permission for request '$request_id'"
             ns_register_proc GET __notification_security_require_admin_request [subst -nocommands {
-                ad_try -auto_abort=false {
-                    notification::security::require_admin_request \
-                        -user_id $user_id \
-                        -request_id $request_id
-                } trap {AD EXCEPTION ad_script_abort} {r} { ns_log notice SCRIPT ABORT
-                } on ok r {
-                    ns_log notice OK
-                    ns_return 200 text/plain [set r]
+                ad_unless_script_abort {
+                    set ok [notification::security::require_admin_request \
+                                -user_id $user_id \
+                                -request_id $request_id]
+                } {
+                    ns_return 200 text/plain [set ok]
                 }
             }]
             set d [acs::test::http __notification_security_require_admin_request]
@@ -737,14 +736,12 @@ aa_register_case \
 
             aa_section "Requiring notification permissions for object '$object_id'"
             ns_register_proc GET __notification_security_require_notify_object [subst -nocommands {
-                ad_try -auto_abort=false {
-                    notification::security::require_notify_object \
-                        -user_id $user_id \
-                        -object_id $object_id
-                } trap {AD EXCEPTION ad_script_abort} {r} { ns_log notice SCRIPT ABORT
-                } on ok r {
-                    ns_log notice OK
-                    ns_return 200 text/plain [set r]
+                ad_unless_script_abort {
+                    set ok [notification::security::require_notify_object \
+                                -user_id $user_id \
+                                -object_id $object_id]
+                } {
+                    ns_return 200 text/plain [set ok]
                 }
             }]
             set d [acs::test::http __notification_security_require_notify_object]

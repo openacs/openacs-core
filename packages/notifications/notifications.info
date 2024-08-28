@@ -19,7 +19,7 @@
 
         <provides url="notifications" version="5.10.1b1"/>
         <requires url="acs-kernel" version="5.10.1b1"/>
-        <requires url="acs-tcl" version="5.10.1b1"/>
+        <requires url="acs-tcl" version="5.10.1b12"/>
         <requires url="acs-mail-lite" version="5.10.1b1"/>
 
         <callbacks>
