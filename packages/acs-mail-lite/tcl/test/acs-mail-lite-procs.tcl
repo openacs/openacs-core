@@ -104,8 +104,6 @@ aa_register_case \
                 where object_id = :any_object_id
                 and to_addr = :to_addr
                 and from_addr = :from_addr
-                and subject = :subject
-                and body = :body
             }
 
             parameter::set_value \
@@ -121,3 +119,10 @@ aa_register_case \
             }
         }
     }
+
+#
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:
