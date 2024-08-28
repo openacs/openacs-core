@@ -1446,8 +1446,11 @@ ad_proc -private rp_concrete_file {
 ad_proc -public ad_script_abort {} {
     Aborts the current running Tcl script, returning to the request processor.
 
-    Used to stop processing after doing ad_returnredirect or other commands
-    which have already returned output to the client.
+    Used to stop processing after doing ad_returnredirect or other
+    commands which have already returned output to the client. After
+    such operations, the connection for this request is closed and no
+    more replies can be sent to the client.
+
 } {
     ad_raise ad_script_abort
 }
