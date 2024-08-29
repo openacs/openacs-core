@@ -3742,13 +3742,12 @@ if {$::tcl_version > 8.6} {
     #
     # Tcl 8.7 or newer
     #
-    ad_proc ad_mktmpdir {{prefix "oacs"}} {
+    ad_proc ad_mktmpdir {{prefix "oacsd"}} {
 
         Wrapper for Tcl's "file tempdir ...", but respects the server's
         tmpdir settings.
 
-        @param prefix optional parameter, for easier
-               identification of the directory
+        @param prefix optional parameter, for easier identification of the directory
         @return name of the created directory
     } {
         ::file tempdir [ns_config ns/parameters tmpdir]/$prefix
@@ -3757,18 +3756,33 @@ if {$::tcl_version > 8.6} {
     #
     # Tcl 8.6 or earlier
     #
-    ad_proc ad_mktmpdir {{prefix "oacs"}} {
+    if {[::acs::icanuse "ns_mkdtemp"]} {
+        ad_proc ad_mktmpdir {{prefix "oacsd"}} {
 
-        Wrapper for Tcl's "file tempdir ...", but respects the server's
-        tmpdir settings.
+            Create a temporary directory. The function respects the server's
+            tmpdir settings.
 
-        @param prefix optional parameter, for easier
-               identification of the directory
-        @return name of the created directory
+            @param prefix optional parameter, for easier identification of the directory
+            @return name of the created directory
 
-    } {
-        package require fileutil
-        ::fileutil::maketempdir -prefix ${prefix}_ -dir [ns_config ns/parameters tmpdir]
+        } {
+            ns_mkdtemp [ns_config ns/parameters tmpdir]/$prefix-XXXXXX
+        }
+    } else {
+        #
+        # no ns_mkdtemp, use package "fileutil" from tcllib
+        #
+        ad_proc ad_mktmpdir {{prefix "oacsd"}} {
+
+            Create a temporary directory. The function respects the server's
+            tmpdir settings.
+
+            @param prefix optional parameter, for easier identification of the directory
+            @return name of the created directory
+        } {
+            package require fileutil
+            ::fileutil::maketempdir -prefix ${prefix}_ -dir [ns_config ns/parameters tmpdir]
+        }
     }
 }
 
