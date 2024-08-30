@@ -50,7 +50,7 @@ aa_register_case \
         ds_init
     } \
     ds_features_enabled_test {
-        Check that the api to check for enabled features works as
+        Check that the API to check for enabled features works as
         expected.
     } {
         aa_log "Init variables"
@@ -135,7 +135,7 @@ aa_register_case \
         ds_profile
     } \
     ds_add_test {
-        Check that the api to add content to the report works as
+        Check that the API to add content to the report works as
         expected.
     } {
         set old_enabled_state [ds_enabled_p]
@@ -175,14 +175,14 @@ aa_register_case \
             ds_profile start __test
             aa_true "Profiling fails on invalid command" [catch {ds_profile __test __test}]
 
-            aa_true "DS is enabled, profiling started correcly" {
+            aa_true "DS is enabled, profiling started correctly" {
                 [info exists ::ds_profile__start_clock(__test)] &&
                 $::ds_profile__start_clock(__test) ne ""
             }
 
             aa_log "stopping profiling"
             ds_profile stop __test
-            aa_true "DS is enabled, profiling stopped correcly" {[llength [nsv_get ds_request $pr_key]] == 2}
+            aa_true "DS is enabled, profiling stopped correctly" {[llength [nsv_get ds_request $pr_key]] == 2}
 
             aa_log "Adding stuff to the report"
             ds_add comment __test

@@ -1362,7 +1362,7 @@ aa_register_case \
             # ...parse every possible message key occurrence...
             foreach occurrence [regexp -all -inline -- $RE $content] {
                 lassign [split [string trim $occurrence "#"] .] message_package_key message_key
-                #ns_log notice [file extension $f] occurence '$occurrence' \
+                #ns_log notice [file extension $f] occurrence '$occurrence' \
                     message_package_key $message_package_key \
                     message_key $message_key
                 # ...make sure it is a real message key...

@@ -567,7 +567,7 @@ aa_register_case  \
                         -username $test_vars(username)]
             aa_silence_log_entries -severities error {
                 #
-                # Handle case without errors, when mail is not configred.
+                # Handle case without errors, when mail is not configured.
                 #
                 array set password_result [auth::password::recover_password \
                                                -authority_id $test_vars(authority_id) \
@@ -626,7 +626,7 @@ aa_register_case  \
 
     aa_silence_log_entries -severities error {
         #
-        # Handle case without errors, when mail is not configred.
+        # Handle case without errors, when mail is not configured.
         #
         array set result [auth::password::retrieve \
                               -authority_id $test_vars(authority_id) \

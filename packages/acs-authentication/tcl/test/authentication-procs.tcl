@@ -204,7 +204,7 @@ aa_register_case \
                 }
 
                 # Finally, try a bogus one.
-                set not_exists [db_string get_bogus_auhtority {
+                set not_exists [db_string get_bogus_authority {
                     select '0' || min(short_name) from auth_authorities
                 }]
                 parameter::set_from_package_key \
@@ -217,7 +217,7 @@ aa_register_case \
                 }
 
                 #
-                # Put the auhtority back as it was to not pollute
+                # Put the authority back as it was to not pollute
                 # the cache.
                 #
                 parameter::set_from_package_key \

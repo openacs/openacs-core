@@ -2477,7 +2477,7 @@ ad_proc -public aa_check_leftovers {-silent:boolean {msg final}} {
             }
         }
         if {$silent_p} {
-            aa_log    "$msg xotcl objects: $xotcl nx objects: $nx nssets: $nssets"
+            aa_log    "$msg XOTcl objects: $xotcl nx objects: $nx nssets: $nssets"
             set mem_info [aa_used_application_memory]
             if {$mem_info ne ""} {
                 dict with mem_info {
@@ -2495,7 +2495,7 @@ ad_proc -public aa_silence_log_entries {
 } {
 
     Silence expected messages in the system log. The proc deactivates
-    the specified severity levels during the code in the last arguemnt
+    the specified severity levels during the code in the last argument
     is executed. After it has finished, the severity levels are reset
     to their previous values.
 
