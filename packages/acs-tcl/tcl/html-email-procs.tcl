@@ -39,6 +39,8 @@ ad_proc ad_build_mime_message {
     This proc is based on ad_html_sendmail, written by Doug Harris at
     the World Bank.
 
+    @return ns_set containing MIME-Version, Content-ID, Content-Type, and body
+
 } {
     # convert text to charset
     set encoding [ns_encodingforcharset $charset]
