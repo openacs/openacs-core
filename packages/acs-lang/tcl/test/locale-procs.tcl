@@ -57,6 +57,7 @@ aa_register_case \
 
     } {
         aa_run_with_teardown -rollback -test_code {
+
             set system_locale [lang::system::locale]
             set system_locales [lang::system::get_locales]
 
@@ -149,11 +150,20 @@ aa_register_case \
                 [lang::user::locale -package_id $package_id -user_id $user_id] \
                 it_IT
 
-            lang::user::set_locale -package_id $package_id -user_id $user_id de_DE
+            #
+            # Here are the specs for two different languages to reduce
+            # assumptions about potential predefined locales.
+            #
+            lassign {de_DE de deu} testLocale testLang testIso6392
+            #lassign {es_ES es spa} testLocale testLang testIso6392
+
+            lang::system::locale_set_enabled -locale $testLocale -enabled_p t
+
+            lang::user::set_locale -package_id $package_id -user_id $user_id $testLocale
 
             aa_equals "Package locale on, user locale on" \
                 [lang::user::locale -package_id $package_id -user_id $user_id] \
-                de_DE
+                $testLocale
 
             db_foreach q {
                 select locale, mime_charset
@@ -166,12 +176,12 @@ aa_register_case \
             }
 
             set conn_locale [lang::conn::locale -package_id $package_id -user_id $user_id]
-            aa_equals "Conn locale is correct" $conn_locale de_DE
-            aa_equals "Conn language is correct" \
-                [lang::conn::language -package_id $package_id -user_id $user_id] de
-            aa_equals "Conn language is correct" \
-                [lang::conn::language -package_id $package_id -user_id $user_id -iso6392] deu
+            aa_equals "Conn locale is correct" $conn_locale $testLocale
 
+            aa_equals "Conn language is correct" \
+                [lang::conn::language -package_id $package_id -user_id $user_id] $testLang
+            aa_equals "Conn language is correct" \
+                [lang::conn::language -package_id $package_id -user_id $user_id -iso6392] $testIso6392
 
             set conn_charset [lang::conn::charset]
             aa_equals "Conn charset is correct" \
@@ -180,10 +190,10 @@ aa_register_case \
                 $conn_charset [lang::util::charset_for_locale $system_locale]
 
             aa_equals "User language returns expected" \
-                [lang::user::language -package_id $package_id -user_id $user_id] de
+                [lang::user::language -package_id $package_id -user_id $user_id] $testLang
             aa_equals "User language returns expected (iso6392)" \
                 [lang::user::language -package_id $package_id -user_id $user_id -iso6392] \
-                [lang::util::iso6392_from_language -language de]
+                [lang::util::iso6392_from_language -language $testIso6392]
 
             parameter::set_value \
                 -parameter UsePackageLevelLocalesP \
@@ -202,13 +212,11 @@ aa_register_case \
 
             set conn_locale [lang::conn::locale -package_id $package_id -user_id $user_id]
             set conn_language [lang::conn::language -package_id $package_id -user_id $user_id]
-            aa_equals "Conn locale is correct (Cached by request!)" $conn_locale de_DE
+            aa_equals "Conn locale is correct (Cached by request!)" $conn_locale $testLocale
             aa_equals "Conn language is correct (Cached by request!)" \
-                [lang::conn::language -package_id $package_id -user_id $user_id] de
+                [lang::conn::language -package_id $package_id -user_id $user_id] $testLang
             aa_equals "Conn language is correct (Cached by request!)" \
-                [lang::conn::language -package_id $package_id -user_id $user_id -iso6392] deu
+                [lang::conn::language -package_id $package_id -user_id $user_id -iso6392] $testIso6392
         }
 
     }
-
-
