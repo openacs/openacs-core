@@ -119,7 +119,7 @@ the flow of control; the script runs to completion. If at the end
 the name is changed, the template of the original page is not used;
 instead the new page is processed, code first, then template. As
 that page&#39;s code can call <code>set_file</code> again, we get
-the following picure.</p>
+the following picture.</p>
 <center><table cellspacing="0" cellpadding="0" border="0">
 <tr>
 <td bgcolor="#FFCC99">code A</td><td width="1"><img src="/images/clear.gif"></td><td align="right"><font color="gray">(template A

@@ -254,7 +254,7 @@ Template</th><th width="15%">Output</th>
 </td><td align="center">
 <a href="compile.tcl?file=contract.adp">Form</a><br><a href="compile.tcl?file=contract-2.adp">Target</a><br><a href="compile.tcl?file=contract-err.adp">Error Page</a>
 </td><td align="center">
-<a href="contract">Form</a><br><a href="contract-2?count=5&amp;noun=racoon">Target</a><br>
+<a href="contract">Form</a><br><a href="contract-2?count=5&amp;noun=raccoon">Target</a><br>
  </td>
 </tr><tr>
 <td>Report an error related to a request.</td><td align="center"><a href="show.tcl?file=error.tcl">View</a></td><td align="center"><a href="show.tcl?file=error.adp">View</a></td><td align="center"><a href="compile.tcl?file=error.adp">Plain</a></td><td align="center"><a href="error">View</a></td>

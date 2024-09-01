@@ -139,7 +139,7 @@ CREATE
 <h3 class="title">Note</h3><p>If you get the error <code class="computeroutput">ERROR: could
 not access file "$libdir/tsearch": no such file or
 directory</code> It is probably because PostgreSQL&#39;s libdir
-configuration variable points to a diffent directory than where
+configuration variable points to a different directory than where
 tsearch is. You can find out where PostgreSQL expects to find
 tsearch via</p><pre class="screen"><strong class="userinput"><code>pg_config --pkglibdir</code></strong></pre>
 </div>
@@ -249,7 +249,7 @@ contract</p><pre class="screen">
 <p>Restart the service.</p><pre class="screen">
 [$OPENACS_SERVICE_NAME postgresql]$ <strong class="userinput"><code>svc -t /service/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
 </code></strong>
-                [$OPENACS_SERVICE_NAME postgresl]$
+                [$OPENACS_SERVICE_NAME postgresql]$
 </pre>
 </li>
 </ol></div><p>If you are lucky, Full Text Search is enabled now, if not

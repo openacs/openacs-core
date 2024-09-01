@@ -73,7 +73,7 @@ step is to create a directory tree beneath the module directory.
 The current convention is to put all .java files in a
 "/java/src/com/arsdigita/acs/<em>module name</em>/test"
 directory. The <em>module name</em> should be the ACS module name,
-but with all dashes removed and with appropriate capitilization.
+but with all dashes removed and with appropriate capitalization.
 All .java files that you create that contain test cases must have
 the word Test in the filename. All of the classes you create should
 be in the com.arsdigita.acs.<em>module name</em>.test package, and
