@@ -102,7 +102,7 @@ permitted under <i>PostgreSQL</i>.</if>
 </else>
 </p>
 
-<h2>Machine Readable Infomation for External Parties</h2>
+<h2>Machine Readable Information for External Parties</h2>
 
 <table class="table table-sm">
 <tr>

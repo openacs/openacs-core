@@ -323,7 +323,7 @@ if { $display_batch_history_p } {
 set context [list [list "." "Authentication"] $page_title]
 
 if { [info exists authority_id] && $authority_id ne "" } {
-    set num_users [lc_numeric [db_string num_users_in_auhtority {
+    set num_users [lc_numeric [db_string num_users_in_authority {
         select count(*) from users where authority_id = :authority_id
     }]]
 } else {
