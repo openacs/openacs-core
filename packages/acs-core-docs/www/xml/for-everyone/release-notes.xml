@@ -38,7 +38,7 @@ END OF TEMPLATE -->
       linkend="changelog-latest"></xref>) since the last release and in the
       entire &majorversion;.&minorversion; release sequence <xref linkend="changelog"></xref>.</para>
   -->
-
+  
   <xi:include href="release-notes-5-10-1.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
   </xi:include>
 
