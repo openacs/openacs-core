@@ -7,10 +7,10 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
 
-    <version name="5.10.1b3" url="http://openacs.org/repository/download/apm/acs-automated-testing-5.10.1b3.apm">
+    <version name="5.10.1" url="http://openacs.org/repository/download/apm/acs-automated-testing-5.10.1.apm">
 	<owner url="http://openacs.org">OpenACS</owner>
 	<summary>The interface to the automated testing facilities within OpenACS.</summary>
-	<release-date>2022-06-26</release-date>
+	<release-date>2024-09-02</release-date>
 	<vendor url="http://openacs.org">OpenACS</vendor>
 	<maturity>3</maturity>
 	<license url="http://www.gnu.org/copyleft/gpl.html">GPL version 2</license>
@@ -20,11 +20,11 @@
 	automatic-rebuild servers as in a test farm.</description>
 
 	<provides url="acs-automated-testing" version="5.10.132"/>
-	<requires url="acs-kernel" version="5.10.1b1"/>
-	<requires url="acs-tcl" version="5.10.1b1"/>
-        <requires url="acs-api-browser" version="5.10.1b1"/>
-	<requires url="acs-service-contract" version="5.10.1b1" />
-	<requires url="acs-authentication" version="5.10.1b1" />
+	<requires url="acs-kernel" version="5.10.1"/>
+	<requires url="acs-tcl" version="5.10.1"/>
+        <requires url="acs-api-browser" version="5.10.1"/>
+	<requires url="acs-service-contract" version="5.10.1" />
+	<requires url="acs-authentication" version="5.10.1" />
 
 	<callbacks>
 	</callbacks>
