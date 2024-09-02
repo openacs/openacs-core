@@ -2,10 +2,14 @@
 <property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Release Version Numbering}</property>
 <property name="doc(title)">Release Version Numbering</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="cvs-guidelines" leftLabel="Prev"
-			title="
-Chapter 12. Engineering Standards"
+			title="Chapter 12. Engineering
+Standards"
 			rightLink="eng-standards-constraint-naming" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
@@ -45,8 +49,7 @@ tags.)</p></li>
 </ul></div><p>Milestone markers are numbered: d1, d2, ..., a1, b1, rc1,
 etc.</p>
 </li>
-</ul></div><p>A complete sequence of milestones between two releases:</p><pre class="programlisting">
-5.0.0
+</ul></div><p>A complete sequence of milestones between two releases:</p><pre class="programlisting">5.0.0
 5.0.0rc2
 5.0.0rc1
 5.0.0b4
@@ -55,8 +58,7 @@ etc.</p>
 5.0.0a3
 5.0.0a1
 5.0.0d1
-4.6.3
-</pre><p>Version numbers are also recorded in the CVS repository so that
+4.6.3</pre><p>Version numbers are also recorded in the CVS repository so that
 the code tree can be restored to the exact state it was in for a
 particular release. To translate between a distribution tar file
 (acs-3.2.2.tar.gz) and a CVS tag, just swap '.' for
@@ -112,8 +114,7 @@ to the appropriate value for that release of the package.</p><pre class="program
         &lt;maturity&gt;1&lt;/maturity&gt;
         &lt;callbacks&gt;
             ...
-    
-</pre><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
+    </pre><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>
 <span class="strong"><strong>Level -1:
 Incompatible.</strong></span> This package is not supported for

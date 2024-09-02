@@ -2,10 +2,14 @@
 <property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Using Templates in OpenACS}</property>
 <property name="doc(title)">Using Templates in OpenACS</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="db-api" leftLabel="Prev"
-			title="
-Chapter 11. Development Reference"
+			title="Chapter 11. Development
+Reference"
 			rightLink="permissions" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">

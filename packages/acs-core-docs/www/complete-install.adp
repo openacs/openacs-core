@@ -1,9 +1,11 @@
 
-<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Chapter 3. Complete
-Installation}</property>
-<property name="doc(title)">Chapter 3. Complete
-Installation</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Chapter 3. Complete Installation}</property>
+<property name="doc(title)">Chapter 3. Complete Installation</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="individual-programs" leftLabel="Prev"
 			title="

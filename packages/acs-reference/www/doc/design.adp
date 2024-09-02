@@ -2,6 +2,10 @@
 <property name="context">{/doc/acs-reference/ {ACS Reference Data}} {acs-reference Design Documentation}</property>
 <property name="doc(title)">acs-reference Design Documentation</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h2>acs-reference Design Documentation</h2>
 <h3>I. Introduction</h3>
 <p>Reference data services are often overlooked in the rush to get

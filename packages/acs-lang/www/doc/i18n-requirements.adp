@@ -2,6 +2,10 @@
 <property name="context">{/doc/acs-lang/ {ACS Localization}} {ACS 4 Globalization Requirements}</property>
 <property name="doc(title)">ACS 4 Globalization Requirements</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h2>ACS 4 Globalization Requirements</h2>
 <p>by Henry Minsky, Yon Feldman, Lars Pind, others</p>
 <h3>I. Introduction</h3>
@@ -160,7 +164,7 @@ locale-specific formatting functions.
 <strong>20.10</strong> The locale for a request should be
 computed by the following method, in descending order of
 priority:</p><ul class="noindent">
-<li>get locale associated with subsite or package id</li><li>get locale from user preference</li><li>get locale from site-wide default
+<li>get locale associated with subsite or package id</li><li>get locale from user preference</li><li>get locale from site wide default
 <p>
 <strong>20.20</strong> An API will be provided for getting the
 current request locale from the <code>ad_conn</code> structure.</p>

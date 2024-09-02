@@ -2,6 +2,10 @@
 <property name="context">{/doc/acs-templating/ {ACS Templating}} {Templating an Existing Tcl Page}</property>
 <property name="doc(title)">Templating an Existing Tcl Page</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h2>Templating an Existing Tcl Page</h2>
 <a href="">Templating System</a>
  : Migration
@@ -33,8 +37,7 @@ script, and can use these data sources.</p>
 file.</p>
 <pre>
       [ns/server/myserver/adp]
-      DefaultParser=fancy
-</pre>
+      DefaultParser=fancy</pre>
 <p>A few more hints</p>
 <ul>
 <li>Do not write to the connection directly. Avoid
@@ -46,10 +49,8 @@ HTML fragments in a separate adp file (think of it as a widget)
 that will be <code>&lt;include&gt;</code>d from several pages.
 Prefer this to writing a Tcl proc that returns HTML.</li><li>Remember to remove backslashes where you had to escape special
 characters, as in
-<blockquote><pre>
-Nuts  <font color="red">\</font>$2.70 <font color="red">\</font>[&lt;a href="<font color="red">\</font>"shoppe<font color="red">\</font>"&gt;buy&lt;/a&gt;<font color="red">\</font>]
-          
-</pre></blockquote>
+<blockquote><pre>Nuts  <font color="red">\</font>$2.70 <font color="red">\</font>[&lt;a href="<font color="red">\</font>"shoppe<font color="red">\</font>"&gt;buy&lt;/a&gt;<font color="red">\</font>]
+          </pre></blockquote>
 </li>
 </ul>
 <h3>Forms</h3>
@@ -158,8 +159,7 @@ set context_bar [ad_context_bar \
 
 
 ad_return_template
-          
-</pre></td><td valign="top"><pre>
+          </pre></td><td valign="top"><pre>
 
 
 
@@ -198,8 +198,7 @@ ad_return_template
 \@body\@
 &lt;/blockquote&gt;
 
-          
-</pre></td>
+          </pre></td>
 </tr>
 </table>
 <h3>Multi-Row Data Sources</h3>
@@ -287,8 +286,7 @@ append body "
     security in place).
 
 &lt;/ul&gt;
-"
-</pre></td><td valign="top"><pre>
+"</pre></td><td valign="top"><pre>
 <font color="green">db_multirow <strong>item</strong>
 </font> news_items_select {
     select news_item_id, title
@@ -298,8 +296,7 @@ append body "
     and (   expiration_date is null
          or expiration_date &gt; sysdate)
 }
-          
-</pre></td><td valign="top"><pre>
+          </pre></td><td valign="top"><pre>
 
 &lt;ul&gt;
 
@@ -332,8 +329,7 @@ append body "
   security in place).
 
 &lt;/ul&gt;
-          
-</pre></td>
+          </pre></td>
 </tr>
 </table>
 
@@ -460,8 +456,7 @@ if { [db_table_exists "bboard_email_alerts"] } {
    "
  }
 }
-          
-</pre></td><td valign="top"><pre>
+          </pre></td><td valign="top"><pre>
 set discussion_forum_alert_p 0
 
 if { [db_table_exists "bboard_email_alerts"] } {
@@ -506,8 +501,7 @@ if { [db_table_exists "bboard_email_alerts"] } {
 }
 
           
-          
-</pre></td><td valign="top"><pre>
+          </pre></td><td valign="top"><pre>
 
 
 
@@ -560,8 +554,7 @@ if { [db_table_exists "bboard_email_alerts"] } {
 &lt;/blockquote&gt; </font>
 
 &lt;/if&gt;
-          
-</pre></td>
+          </pre></td>
 </tr>
 </table>
 <hr>

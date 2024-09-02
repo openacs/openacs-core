@@ -4,6 +4,10 @@ Components}</property>
 <property name="doc(title)">Templating System User Guide: Building Reusable Template
 Components</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h2>Building Reusable Template Components</h2>
 <a href="..">Templating System</a>
  : <a href="../developer-guide">Developer Guide</a>

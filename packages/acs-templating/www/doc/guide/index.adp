@@ -2,6 +2,10 @@
 <property name="context">{/doc/acs-templating/ {ACS Templating}} {Templating System User Guide: Overview}</property>
 <property name="doc(title)">Templating System User Guide: Overview</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h2>Overview</h2>
 <a href="../index">Templating System</a>
  : <a href="../developer-guide">Developer Guide</a>

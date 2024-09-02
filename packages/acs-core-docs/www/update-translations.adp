@@ -2,10 +2,14 @@
 <property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {How to Update the translations}</property>
 <property name="doc(title)">How to Update the translations</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="releasing-package" leftLabel="Prev"
-			title="
-Chapter 16. Releasing OpenACS"
+			title="Chapter 16. Releasing
+OpenACS"
 			rightLink="ix01" rightLabel="Next">
 		    <div class="section">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
@@ -16,13 +20,11 @@ locale, check the parameters, especially that the locale is in the
 format <span class="emphasis"><em>[two-letter code for language,
 lowercase]_[TWO-LETTER CODE FOR COUNTRY, UPPER-CASE]</em></span>,
 and create a sql command. A example sql command for creating a
-locale is:</p><pre class="programlisting">
-insert into ad_locales 
+locale is:</p><pre class="programlisting">insert into ad_locales 
        (locale, label, language, country, nls_language, nls_territory, 
         nls_charset, mime_charset, default_p, enabled_p)
        values ('fa_IR', 'Farsi (IR)', 'fa', 'IR', 'FARSI', 'IRAN', 'AL24UTFFSS', 
-        'windows-1256', 't', 'f');
-</pre><p>Put this command into the following four files. For the upgrade
+        'windows-1256', 't', 'f');</pre><p>Put this command into the following four files. For the upgrade
 files, the correct filename will depend on the exact version.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p><code class="computeroutput">/packages/acs-lang/sql/postgresql/ad-locales.sql</code></p></li><li class="listitem"><p><code class="computeroutput">/packages/acs-lang/sql/postgresql/upgrade/upgrade-<span class="replaceable"><span class="replaceable">current-version</span></span>.sql</code></p></li><li class="listitem"><p><code class="computeroutput">/packages/acs-lang/sql/oracle/ad-locales.sql</code></p></li><li class="listitem"><p><code class="computeroutput">/packages/acs-lang/sql/oracle/upgrade/upgrade-<span class="replaceable"><span class="replaceable">current-version</span></span>.sql</code></p></li>
 </ul></div>
@@ -36,10 +38,8 @@ as a new site, using the new site name (e.g.,
 usually, <code class="computeroutput">/etc/config.tcl</code> and
 <code class="computeroutput">/etc/daemontools/run</code> and modify
 appropriately. Also, copy over several translation-server-only
-files:</p><pre class="programlisting">
-...TBD
-          
-</pre>
+files:</p><pre class="programlisting">...TBD
+          </pre>
 </li><li class="listitem"><p>Shut down the production site and put up a notice (no procedure
 on how to do this yet.)</p></li><li class="listitem"><p>Start the new site, and upgrade it.</p></li><li class="listitem"><p>Go to <a class="ulink" href="/acs-lang/admin" target="_top">ACS
 Lang admin page</a> and click "Import All Messages"</p></li><li class="listitem"><p>Resolve conflicts, if any, on the provided page.</p></li><li class="listitem"><p>Back on the admin page, click the export link. If there are

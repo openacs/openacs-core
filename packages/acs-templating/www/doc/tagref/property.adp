@@ -2,6 +2,10 @@
 <property name="context">{/doc/acs-templating/ {ACS Templating}} {Templating System Tag Reference: Property}</property>
 <property name="doc(title)">Templating System Tag Reference: Property</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h2>Property</h2>
 <a href="..">Templating System</a>
  : <a href="../designer-guide">Designer Guide</a>
@@ -14,8 +18,7 @@ control, whether the content of the element should be processed by
 the ADP parser or not. Properties are most commonly used to pass
 information to a master template, such as a title or logo.</p>
 <h3>Usage</h3>
-<pre>
-&lt;master src="master"&gt;
+<pre>&lt;master src="master"&gt;
 &lt;property name="title"&gt;My Home Page&lt;/property&gt;
 &lt;p&gt;Welcome to my home page!&lt;/p&gt;x
 ...

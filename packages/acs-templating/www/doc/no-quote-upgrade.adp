@@ -2,6 +2,10 @@
 <property name="context">{/doc/acs-templating/ {ACS Templating}} {Upgrading existing ADPs to noquote templating}</property>
 <property name="doc(title)">Upgrading existing ADPs to noquote templating</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h2>Upgrading existing ADPs to noquote templating</h2>
 <h3>Introduction.</h3>
 
@@ -68,8 +72,7 @@ variables look like this:</p>
   &lt;input name=var2 value="value2"&gt;
   ... real form stuff ...
 &lt;/form&gt;
-      
-</pre></blockquote>
+      </pre></blockquote>
 
 ACS has a convenience function for creating hidden form variables,
 <kbd>export_form_vars</kbd>
@@ -79,8 +82,7 @@ variable names to variable values, as found in the Tcl environment.
 In that case, the Tcl code would set the HTML code to a variable:
 <blockquote><pre>
 set form_vars [export_vars -form {var1 var2}]
-      
-</pre></blockquote>
+      </pre></blockquote>
 
 The ADP will simply refer to the <kbd>form_vars</kbd>
  variable:
@@ -89,8 +91,7 @@ The ADP will simply refer to the <kbd>form_vars</kbd>
   \@form_vars\@              &lt;!-- WRONG!  Needs noquote --&gt;
   ... real form stuff ...
 &lt;/form&gt;
-      
-</pre></blockquote>
+      </pre></blockquote>
 
 This will no longer work as intended because <kbd>form_vars</kbd>
 
@@ -105,8 +106,7 @@ everything works as expected:
   \@form_vars;noquote\@
   ... real form stuff ...
 &lt;/form&gt;
-      
-</pre></blockquote>
+      </pre></blockquote>
 <p>
 <strong>Snippets of HTML produced by Tcl code, aka
 <em>widgets</em>
@@ -153,14 +153,12 @@ and context bars are handled this way. For example:</p>
   &lt;h1&gt;\@heading\@&lt;/h1&gt;
   &lt;slave&gt;
 &lt;/body&gt;
-      
-</pre><strong>slave:</strong><pre>
+      </pre><strong>slave:</strong><pre>
 &lt;master&gt;
 &lt;property name="title"&gt;\@title\@&lt;/property&gt;
 &lt;property name="heading"&gt;\@title\@&lt;/property&gt;
 ...
-      
-</pre>
+      </pre>
 </blockquote>
 
 The obvious intention of the master is to allow its slave templates
@@ -215,23 +213,20 @@ like this:</p>
 &lt;property name="doc(title)"&gt;\@title;literal\@&lt;/property&gt;
 &lt;property name="heading"&gt;\@title;literal\@&lt;/property&gt;
 ...
-      
-</pre>
+      </pre>
 </blockquote>
 <p>The exact same problems when the <kbd>include</kbd> statement
 passes some text. Here is an example:</p>
 <blockquote>
 <strong>Including template:</strong><pre>
 &lt;include src="user-kick-form" id=\@kicked_id\@ reason=\@default_reason\@&gt;
-      
-</pre><strong>Included template:</strong><pre>
+      </pre><strong>Included template:</strong><pre>
 &lt;form action="do-kick" method=POST&gt;
   Kick user \@name\@.&lt;br&gt;
   Reason: &lt;textarea name=reason&gt;\@reason\@&lt;/textarea&gt;&lt;br&gt;
   &lt;input type="submit" value="Kick"&gt;
 &lt;/form&gt;
-      
-</pre>
+      </pre>
 </blockquote>
 
 Here an include statement is used to include an HTML form widget
@@ -249,8 +244,7 @@ transfer non-constant text to an included page, make sure to add
 <blockquote>
 <strong>Including template, sans over-quoting:</strong><pre>
 &lt;include src="user-kick-form" id=\@kicked_id;literal\@ reason=\@default_reason;literal\@&gt;
-      
-</pre>
+      </pre>
 </blockquote>
 <h3>Upgrade Overview.</h3>
 

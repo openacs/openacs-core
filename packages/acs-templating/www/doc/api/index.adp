@@ -2,6 +2,10 @@
 <property name="context">{/doc/acs-templating/ {ACS Templating}} {Object and API Reference}</property>
 <property name="doc(title)">Object and API Reference</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h2>Object and API Reference</h2>
 <a href="..">Templating System</a>
  : <a href="../developer-guide">Developer Guide</a>

@@ -2,6 +2,10 @@
 <property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {OpenACS Core Documentation}</property>
 <property name="doc(title)">OpenACS Core Documentation</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="" leftLabel=""
 			title=""
@@ -279,8 +283,8 @@ database ANSI-style</a>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
 			leftLink="" leftLabel="" leftTitle=""
-			rightLink="for-everyone" rightLabel="Next" rightTitle="
-Part I. OpenACS For Everyone"
+			rightLink="for-everyone" rightLabel="Next" rightTitle="Part I. OpenACS For
+Everyone"
 			homeLink="" homeLabel="" 
 			upLink="" upLabel=""> 
 		    

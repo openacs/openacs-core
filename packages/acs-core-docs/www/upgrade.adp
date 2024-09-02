@@ -2,6 +2,10 @@
 <property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Chapter 5. Upgrading}</property>
 <property name="doc(title)">Chapter 5. Upgrading</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="how-do-I" leftLabel="Prev"
 			title="

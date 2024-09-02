@@ -2,10 +2,14 @@
 <property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Vacuum Postgres nightly}</property>
 <property name="doc(title)">Vacuum Postgres nightly</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="install-openacs-delete-tablespace" leftLabel="Prev"
-			title="
-Chapter 7. Database Management"
+			title="Chapter 7. Database
+Management"
 			rightLink="backup-recovery" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
@@ -22,8 +26,7 @@ database, you&#39;d prefer it to happen immediately after (not
 before!) you&#39;ve made a backup! The "vacuum" command
 is very reliable, but conservatism is the key to good system
 management. So, if you&#39;re using the export procedure described
-above, you don&#39;t need to do this extra step.</p><p>Edit your crontab:</p><pre class="programlisting">
-[joeuser ~]$ <strong class="userinput"><code>crontab -e</code></strong>
+above, you don&#39;t need to do this extra step.</p><p>Edit your crontab:</p><pre class="programlisting">[joeuser ~]$ <strong class="userinput"><code>crontab -e</code></strong>
 </pre><p>We&#39;ll set vacuum up to run nightly at 1 AM. Add the
 following line:</p><pre class="programlisting">
 0 1 * * * /usr/local/pgsql/bin/vacuumdb <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
@@ -32,8 +35,8 @@ following line:</p><pre class="programlisting">
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
 			leftLink="install-openacs-delete-tablespace" leftLabel="Prev" leftTitle="Deleting a tablespace"
-			rightLink="backup-recovery" rightLabel="Next" rightTitle="
-Chapter 8. Backup and Recovery"
+			rightLink="backup-recovery" rightLabel="Next" rightTitle="Chapter 8. Backup and
+Recovery"
 			homeLink="index" homeLabel="Home" 
 			upLink="database-management" upLabel="Up"> 
 		    

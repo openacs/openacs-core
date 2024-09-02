@@ -2,10 +2,14 @@
 <property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Install a Unix-like system and supporting software}</property>
 <property name="doc(title)">Install a Unix-like system and supporting software</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="complete-install" leftLabel="Prev"
-			title="
-Chapter 3. Complete Installation"
+			title="Chapter 3. Complete
+Installation"
 			rightLink="oracle" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
@@ -37,14 +41,14 @@ emacs keybindings for DocBook SGML)</p></li><li class="listitem"><p>daemontools 
 </ul></div><p>In order to cut and paste the example code into your shell, you
 must first do <a class="xref" href="install-steps" title="Setting a global shell variable for cut and paste">Setting a
 global shell variable for cut and paste</a>.</p><p>To install a machine to the specifications of the Reference
-Platform, do the <a class="link" href="install-redhat" title="Appendix A. Install Red Hat 8/9">walkthrough
-of the Red Hat 8.0 Install for OpenACS</a>.</p><div class="cvstag">($&zwnj;Id: os.xml,v 1.16 2017/08/07 23:47:55 gustafn
+Platform, do the <a class="link" href="install-redhat" title="Appendix A. Install Red Hat 8/9">walkthrough of the Red
+Hat 8.0 Install for OpenACS</a>.</p><div class="cvstag">($&zwnj;Id: os.xml,v 1.16 2017/08/07 23:47:55 gustafn
 Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-			leftLink="complete-install" leftLabel="Prev" leftTitle="
-Chapter 3. Complete Installation"
+			leftLink="complete-install" leftLabel="Prev" leftTitle="Chapter 3. Complete
+Installation"
 			rightLink="oracle" rightLabel="Next" rightTitle="Install Oracle 8.1.7"
 			homeLink="index" homeLabel="Home" 
 			upLink="complete-install" upLabel="Up"> 

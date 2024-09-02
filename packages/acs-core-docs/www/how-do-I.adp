@@ -2,11 +2,14 @@
 <property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {How Do I?}</property>
 <property name="doc(title)">How Do I?</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="configuring-configuring-permissions" leftLabel="Prev"
-			title="
-Chapter 4. Configuring a new OpenACS
-Site"
+			title="Chapter 4. Configuring a
+new OpenACS Site"
 			rightLink="upgrade" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
@@ -57,9 +60,7 @@ their appearance is driven by a layer of different files. Let&#39;s
 examine how this works:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem">
 <p>A templated page uses an ADP/Tcl pair. The first line in the ADP
-file is usually:</p><pre class="programlisting">
-&lt;master&gt;
-</pre><p>If it appears exactly like this, without any arguments, the
+file is usually:</p><pre class="programlisting">&lt;master&gt;</pre><p>If it appears exactly like this, without any arguments, the
 template processor uses <code class="computeroutput">default-master</code> for that subsite. For pages
 in <code class="computeroutput">/var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/www</code>, this
 is <code class="computeroutput">/var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/www/default-master.adp</code>
@@ -85,14 +86,14 @@ Templates</strong></p><div class="figure-contents"><div class="mediaobject"><img
 diagnose a permissions problem?</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem">
 <p>
-<strong>Steps to Reproduce. </strong>The events
-package does not allow users to register for new events.</p><div class="orderedlist"><ol class="orderedlist" type="1">
+<strong>Steps to Reproduce. </strong>The events package
+does not allow users to register for new events.</p><div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem"><p>Go to the http://yourserver.net/events as a visitor (ie, log out
 and, if necessary, clear cookies). This in on a 4.6.3 site with
 events version 0.1d3.</p></li><li class="listitem"><p>Select an available event</p></li><li class="listitem"><p>A link such as <code class="computeroutput">Registration:
-Deadline is 03/15/2004 10:00am. » Login or sign up to
-register for this event.</code> is visible. Click on "Login or
-sign up"</p></li><li class="listitem"><p>Complete a new registration. Afterwards, you should be
+Deadline is 03/15/2004 10:00am. » Login or sign up to register for
+this event.</code> is visible. Click on "Login or sign
+up"</p></li><li class="listitem"><p>Complete a new registration. Afterwards, you should be
 redirected back to the same page.</p></li>
 </ol></div><p>Actual Results: The page says <code class="computeroutput">"You do not have permission to register for
 this event."</code>
@@ -100,28 +101,24 @@ this event."</code>
 shown.</p>
 </li><li class="listitem">
 <p>
-<strong>Finding the problem. </strong>We start with
-the page that has the error. In the URL it&#39;s <code class="computeroutput">http://myserver.net/events/event-info.tcl</code>,
+<strong>Finding the problem. </strong>We start with the
+page that has the error. In the URL it&#39;s <code class="computeroutput">http://myserver.net/events/event-info.tcl</code>,
 so open the file <code class="computeroutput">/var/lib/aolserver/$OPENACS_SERVICE_NAME/packages/events/www/event-info.tcl</code>.
-It contains this line:</p><pre class="programlisting">
-set can_register_p [events::security::can_register_for_event_p -event_id $event_id]
-</pre><p>We need to know what that procedure does, so go to <a class="ulink" href="/api-doc" target="_top">/api-doc</a>, paste
+It contains this line:</p><pre class="programlisting">set can_register_p [events::security::can_register_for_event_p -event_id $event_id]</pre><p>We need to know what that procedure does, so go to <a class="ulink" href="/api-doc" target="_top">/api-doc</a>, paste
 events::security::can_register_for_event_p into the ACS Tcl API
 Search box, and click Feeling Lucky. The next pages shows the proc,
 and we click "show source" to see more information. The
-body of the proc is simply</p><pre class="programlisting">
-return [permission::permission_p -party_id $user_id -object_id $event_id -privilege write]
-</pre><p>This means that a given user must have the write privilege on
+body of the proc is simply</p><pre class="programlisting">return [permission::permission_p -party_id $user_id -object_id $event_id -privilege write]</pre><p>This means that a given user must have the write privilege on
 the event in order to register. Let&#39;s assume that the
 privileges inherit, so that if a user has the write privilege on
 the whole package, they will have the write privilege on the
 event.</p>
 </li><li class="listitem">
 <p>
-<strong>Setting Permissions. </strong>A permission
-has three parts: the privilege, the object of the privilege, and
-the subject being granted the privilege. In this case the privilege
-is "write," the object is the Events package, and the
+<strong>Setting Permissions. </strong>A permission has
+three parts: the privilege, the object of the privilege, and the
+subject being granted the privilege. In this case the privilege is
+"write," the object is the Events package, and the
 subject is all Registered Users.</p><div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem"><p>To grant permissions on a package, start at the <a class="ulink" href="/admin/site-map" target="_top">site map</a>. Find the event
 package and click "Set permissions".</p></li><li class="listitem"><p>Click "Grant Permission"</p></li><li class="listitem">
@@ -131,8 +128,8 @@ Permissions</strong></p><div class="figure-contents"><div class="mediaobject"><i
 </div><br class="figure-break">
 </li>
 </ol></div><p>OpenACS 5.0 offers a prettier version at <a class="ulink" href="/admin/applications" target="_top">/admin/applications</a>.</p><div class="figure">
-<a name="id1395" id="id1395"></a><p class="title"><strong>Figure 4.3. Granting Permissions in
-5.0</strong></p><div class="figure-contents"><div class="mediaobject"><img src="images/grant-perm-50.png" alt="Granting Permissions in 5.0"></div></div>
+<a name="id1395" id="id1395"></a><p class="title"><strong>Figure 4.3. Granting Permissions
+in 5.0</strong></p><div class="figure-contents"><div class="mediaobject"><img src="images/grant-perm-50.png" alt="Granting Permissions in 5.0"></div></div>
 </div><br class="figure-break">
 </li>
 </ul></div>
@@ -141,8 +138,7 @@ Permissions</strong></p><div class="figure-contents"><div class="mediaobject"><i
 <include src="/packages/acs-core-docs/lib/navfooter"
 			leftLink="configuring-configuring-permissions" leftLabel="Prev" leftTitle="Setting Permissions on an OpenACS
 package"
-			rightLink="upgrade" rightLabel="Next" rightTitle="
-Chapter 5. Upgrading"
+			rightLink="upgrade" rightLabel="Next" rightTitle="Chapter 5. Upgrading"
 			homeLink="index" homeLabel="Home" 
 			upLink="configuring-new-site" upLabel="Up"> 
 		    

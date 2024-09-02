@@ -4,6 +4,10 @@ Templates}</property>
 <property name="doc(title)">Content Repository Developer Guide: Applying
 Templates</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h2>Applying Templates</h2>
 <strong>
 <a href="../index">Content Repository</a> : Developer
@@ -21,12 +25,10 @@ merging the template with the actual content.</p>
 <p>The content repository handle templates as a special class of
 text object. The interface for handling templates builds on that of
 simple content items:</p>
-<pre>
-template_id := content_template.new(
+<pre>template_id := content_template.new(
     name          =&gt; 'image_template',
     parent_id     =&gt; :parent_id
-);
-</pre>
+);</pre>
 <p>The name represents the tail of the location for that content
 template. The parent ID must be another content item, or a subclass
 of content item such as a folder.</p>
@@ -52,14 +54,12 @@ maintain under separate source control.</p>
 <h3>Associating templates with content types</h3>
 <p>You use the <kbd>content_type.register_template</kbd> procedure
 to associate a template with a particular content type:</p>
-<pre>
-content_type.register_template(
+<pre>content_type.register_template(
   content_type =&gt; 'content_revision',
   template_id  =&gt; :template_id,
   use_context  =&gt; 'public',
   is_default   =&gt; 't'
-);
-</pre>
+);</pre>
 <p>The <kbd>use_context</kbd> is a simple keyword that specifies
 the situation in which the template is appropriate. One general
 context, <kbd>public</kbd>, is loaded when the content repository
@@ -75,23 +75,19 @@ templates registered to it, but there can be only one default
 template per pair.</p>
 <p>To make a template the default template for a content
 type/context pair:</p>
-<pre>
-content_type.set_default_template(
+<pre>content_type.set_default_template(
     content_type =&gt; 'content_revision',
     template_id  =&gt; :template_id,
     use_context  =&gt; 'public'
-);
-</pre>
+);</pre>
 <h3>Associating templates with content items</h3>
 <p>Individual items may also be associated with templates using the
 <kbd>content_item.register_template</kbd> procedure:</p>
-<pre>
-content_item.register_template(
+<pre>content_item.register_template(
   item_id     =&gt; :item_id,
   template_id =&gt; :template_id,
   use_context =&gt; 'intranet'
-);
-</pre>
+);</pre>
 <p>Unlike the case with content types, only one template may be
 registered with a content item for a particular context.</p>
 <p>The content management system uses this functionality to allow
@@ -105,16 +101,14 @@ each press release.</p>
 the <kbd>content_item.get_template</kbd> function to determine the
 proper template to use for rendering a page in any particular
 context:</p>
-<pre>
-template_id := content_item.get_template(
+<pre>template_id := content_item.get_template(
     item_id     =&gt; :item_id, 
     use_context =&gt; 'public'
 );
 
 template_path := content_template.get_path(
     template_id =&gt; :template_id
-);
-</pre>
+);</pre>
 <p>In the case that no template is registered to given item/context
 pair, <kbd>content_item.get_template</kbd> will return the default
 template (if it exists) for the related content type/context
@@ -122,22 +116,18 @@ pair.</p>
 <h3>Unregistering templates</h3>
 <p>The procedure for disassociating templates with content types is
 as follows:</p>
-<pre>
-content_type.unregister_template(
+<pre>content_type.unregister_template(
     content_type =&gt; 'content_revision',
     template_id  =&gt; :template_id,
     use_context  =&gt; 'intranet'
-);
-</pre>
+);</pre>
 <p>The corresponding procedure to disassociate templates with
 content items is:</p>
-<pre>
-content_item.unregister_template(
+<pre>content_item.unregister_template(
     item_id     =&gt; :item_id,
     template_id =&gt; :template_id,
     use_context =&gt; 'admin'
-);
-</pre>
+);</pre>
 <hr>
 <a href="mailto:karlg\@arsdigita.com">karlg\@arsdigita.com</a>
 <p>Last Modified: $&zwnj;Id: template.html,v 1.2.2.1 2021/04/05 19:49:49

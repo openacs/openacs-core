@@ -2,6 +2,10 @@
 <property name="context">{/doc/acs-content-repository/ {ACS Content Repository}} {Content Repository Developer Guide: HTML Conversion}</property>
 <property name="doc(title)">Content Repository Developer Guide: HTML Conversion</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h2>Converting Binary Documents to HTML</h2>
 <strong>
 <a href="../index">Content Repository</a> : Developer

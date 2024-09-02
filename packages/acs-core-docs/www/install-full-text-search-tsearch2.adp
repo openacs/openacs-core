@@ -2,11 +2,14 @@
 <property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Install Full Text Search using Tsearch2}</property>
 <property name="doc(title)">Install Full Text Search using Tsearch2</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="install-nspam" leftLabel="Prev"
-			title="
-Appendix B. Install additional supporting
-software"
+			title="Appendix B. Install
+additional supporting software"
 			rightLink="install-nsopenssl" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
@@ -18,7 +21,7 @@ using Tsearch2</h2></div></div></div><div class="authorblurb">
 OpenACS docs are written by the named authors, and may be edited by
 OpenACS documentation staff.</div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="install-tsearch2" id="install-tsearch2"></a>Install Tsearch2 module</h3></div></div></div><a class="indexterm" name="id7309" id="id7309"></a><p>In earlier versions of PostgreSQL (7.4), tsearch2 was a contrib
+<a name="install-tsearch2" id="install-tsearch2"></a>Install Tsearch2 module</h3></div></div></div><a class="indexterm" name="id7934" id="id7934"></a><p>In earlier versions of PostgreSQL (7.4), tsearch2 was a contrib
 module. With PostgreSQL 9.*, it was included in the standard
 PostgreSQL package with minor naming changes (e.g. the function
 "rank" became "ts_rank"). PostgreSQL 9 included

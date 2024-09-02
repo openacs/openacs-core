@@ -2,6 +2,10 @@
 <property name="context">{/doc/acs-subsite/ {ACS Subsite}} {ACS Subsite Documentation}</property>
 <property name="doc(title)">ACS Subsite Documentation</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h1>ACS Subsite Documentation</h1>
 
 ACS subsite docs

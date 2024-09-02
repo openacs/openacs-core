@@ -2,6 +2,10 @@
 <property name="context">{/doc/acs-templating/ {ACS Templating}} {Template System Guide}</property>
 <property name="doc(title)">Template System Guide</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h2>Programmer / Developer Guide</h2>
 <a href="">Templating System</a>
  : Developer Guide
@@ -21,7 +25,8 @@ that, and deliver it to the client. The adp page can use the
 datasources defined in the Tcl page.
 <h3>Guide</h3>
 <ol>
-<li>User Guide</li><li style="list-style: none"><ul>
+<li>User Guide
+<ul>
 <li><a href="guide/index">Overview</a></li><li>Establishing data sources
 <ul>
 <li><a href="guide/data">Implementing data sources</a></li><li><a href="guide/document">Documenting data sources</a></li>
@@ -48,7 +53,8 @@ types</a></li>
 <ul><li>See the "contract", "error", and
 "state" <a href="demo/">demos</a>.</li></ul>
 </li>
-</ul></li><li>Object and API Reference
+</ul>
+</li><li>Object and API Reference
 <ul>
 <li><a href="api/database">Database Query</a></li><li><a href="api/multirow">Mutirow Data Source</a></li><li><a href="api/request">Request</a></li><li><a href="api/form">Form</a></li><li><a href="api/element">Form Element</a></li><li><a href="widgets">Form Widgets</a></li>
 </ul>

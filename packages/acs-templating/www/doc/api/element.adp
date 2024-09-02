@@ -2,6 +2,10 @@
 <property name="context">{/doc/acs-templating/ {ACS Templating}} {Templating System API: Form Element}</property>
 <property name="doc(title)">Templating System API: Form Element</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h2>Form Element</h2>
 <strong>
 <a href="../index">Templating System</a> : API
@@ -49,6 +53,7 @@ template::element set_properties <em>form_name element_name
 template::element get_value <em>form_name element_name</em>
 </pre>
 <h3>Example</h3>
+<pre></pre>
 <pre>
 template::element get_values <em>form_name element_name</em>
 </pre>

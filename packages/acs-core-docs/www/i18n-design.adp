@@ -2,6 +2,10 @@
 <property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Design Notes}</property>
 <property name="doc(title)">Design Notes</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="i18n-convert" leftLabel="Prev"
 			title="

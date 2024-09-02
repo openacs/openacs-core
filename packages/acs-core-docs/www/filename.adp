@@ -2,10 +2,14 @@
 <property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Detailed Design Documentation Template}</property>
 <property name="doc(title)">Detailed Design Documentation Template</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="nxml-mode" leftLabel="Prev"
-			title="
-Chapter 13. Documentation Standards"
+			title="Chapter 13. Documentation
+Standards"
 			rightLink="requirements-template" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">

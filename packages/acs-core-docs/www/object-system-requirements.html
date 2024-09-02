@@ -5,7 +5,7 @@
         </div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="object-system-requirements-"></a>I. Introduction</h3></div></div></div><p>A major goal in OpenACS 4 is to unify and normalize many of the core services
 of the system into a coherent common data model and API. In the past, these
 services were provided to applications in an ad-hoc and irregular fashion.
-Examples of such services include:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>General Comments</p></li><li class="listitem"><p>User/groups</p></li><li class="listitem"><p>Attribute storage in user/groups</p></li><li class="listitem"><p>General Permissions</p></li><li class="listitem"><p>Site wide search</p></li><li class="listitem"><p>General Auditing</p></li></ul></div><p>All of these services involve relating extra information and services to
+Examples of such services include:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>General Comments</p></li><li class="listitem"><p>User/groups</p></li><li class="listitem"><p>Attribute storage in user/groups</p></li><li class="listitem"><p>General Permissions</p></li><li class="listitem"><p>Site-wide search</p></li><li class="listitem"><p>General Auditing</p></li></ul></div><p>All of these services involve relating extra information and services to
 application data objects, examples of which include:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>Bboard messages</p></li><li class="listitem"><p>A user home page</p></li><li class="listitem"><p>A ticket in the Ticket Tracker</p></li><li class="listitem"><p>A photograph in the PhotoDB</p></li></ul></div><p>In the past, developers had to use ad-hoc and inconsistent schemes to
 interface to the various "general" services mentioned above. Since
 each service used its own scheme for storing its metadata and mapping this
@@ -138,7 +138,7 @@ these implementations, every application must hook into every service
 separately.</p><p>Examples of utilities that do this in OpenACS 3.x system are:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>User/groups: Information is attached to group membership relations.</p></li><li class="listitem"><p>General Comments: Comments are attached to objects representing some kind
 of document.</p></li><li class="listitem"><p>General Permissions: Stores access control information on application
 data.</p></li><li class="listitem"><p>User Profiling: Maps users to pieces of content that they have looked at;
-content identifiers must be managed in a uniform way.</p></li><li class="listitem"><p>Site Wide Search: Stores all content in a single flat table, with object
+content identifiers must be managed in a uniform way.</p></li><li class="listitem"><p>Site-Wide Search: Stores all content in a single flat table, with object
 identifiers pointing to the object containing the content in the first place.
 This way, we can search the contents of many different types of objects in a
 uniform way.</p></li></ul></div><p>The OM will support and unify this programming idiom by providing objects

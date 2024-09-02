@@ -4,6 +4,10 @@ Items}</property>
 <property name="doc(title)">Content Repository Developer Guide: Organizing Content
 Items</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h2>Organizing Content Items</h2>
 <strong>
 <a href="/doc">ACS Documentation</a> : <a href="../index">Content Repository</a> : Developer Guide</strong>
@@ -94,8 +98,7 @@ begin
   );
   -- Store v_my_content_root in a safe place
 end;
-/ 
-</pre>
+/ </pre>
 <p>The important point is that you have to pass in <kbd>0</kbd> for
 the <kbd>parent_id</kbd>. This <kbd>parent_id</kbd> is special in
 that it indicates folders with no parent.</p>

@@ -2,11 +2,14 @@
 <property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Setting Permissions on an OpenACS package}</property>
 <property name="doc(title)">Setting Permissions on an OpenACS package</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="configuring-configuring-packages" leftLabel="Prev"
-			title="
-Chapter 4. Configuring a new OpenACS
-Site"
+			title="Chapter 4. Configuring a
+new OpenACS Site"
 			rightLink="how-do-I" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">

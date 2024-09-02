@@ -2,6 +2,10 @@
 <property name="context">{/doc/acs-content-repository/ {ACS Content Repository}} {Package: content_permission}</property>
 <property name="doc(title)">Package: content_permission</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h2>content_permission</h2>
 <p>
 <a href="../index">Content Repository</a> :
@@ -11,16 +15,15 @@ content_permission</p>
 <li><a href="#overview">Overview</a></li><li><a href="#related">Related Objects</a></li><li><a href="#api">API</a></li>
 </ul>
 <p> </p>
-<h3><a name="overview">Overview</a></h3>
+<a name="overview" id="overview"><h3>Overview</h3></a>
 <p>Permissions can be set to allow certain users certain things. -
 They can be compared with the Unix filesystem permission: read,
 write ...</p>
 <p> </p>
-<h3><a name="related">Related Objects</a></h3>
-
-See also: {content_item }
+<a name="related" id="related"><h3>Related Objects</h3></a>
+ See also: {content_item }
 <p> </p>
-<h3><a name="api">API</a></h3>
+<a name="api" id="api"><h3>API</h3></a>
 <ul>
 <li>
 <font size="+1">Function:</font>

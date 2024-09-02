@@ -4,11 +4,14 @@ authentication}</property>
 <property name="doc(title)">Install PAM Radius for use as external
 authentication</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="install-squirrelmail" leftLabel="Prev"
-			title="
-Appendix B. Install additional supporting
-software"
+			title="Appendix B. Install
+additional supporting software"
 			rightLink="install-ldap-radius" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
@@ -26,9 +29,8 @@ work with PAM LDAP accordingly and differences will be shown at the
 end of the file.</p><div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">
 <a name="install-ns_pam" id="install-ns_pam"></a><p>
-<strong>Install ns_pam. </strong>Download and
-install ns_pam</p><pre class="screen">
-[root aolserver]# <strong class="userinput"><code>cd /usr/local/src/aolserver/</code></strong>
+<strong>Install ns_pam. </strong>Download and install
+ns_pam</p><pre class="screen">[root aolserver]# <strong class="userinput"><code>cd /usr/local/src/aolserver/</code></strong>
           [root aolserver]# <strong class="userinput"><code>wget http://braindamage.alal.com/software/ns_pam-0.1.tar.gz</code></strong>
           [root aolserver]# <strong class="userinput"><code>tar xvfz ns_pam-0.1.tar.gz</code></strong>
           [root aolserver]# <strong class="userinput"><code>cd ns_pam-0.1</code></strong>
@@ -43,8 +45,8 @@ make install INST=/usr/local/aolserver
 </pre>
 </li><li class="listitem">
 <a name="configure-ns_pam" id="configure-ns_pam"></a><p>
-<strong>Configure ns_pam. </strong>Configure
-AOLserver for ns_pam</p><p>To enable ns_pam in AOLServer you will first have to edit your
+<strong>Configure ns_pam. </strong>Configure AOLserver for
+ns_pam</p><p>To enable ns_pam in AOLServer you will first have to edit your
 config.tcl file and enable the loading of the ns_pam module and
 configure the aolservers pam configuration file.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>Change <span class="emphasis"><em>config.tcl</em></span>. Remove
@@ -65,8 +67,7 @@ section <code class="computeroutput">ns/server/${server}/module/nspam</code> wit
 <a name="configure-pam-radius" id="configure-pam-radius"></a><p>
 <strong>Configure PAM Radius. </strong>Configure and
 install PAM Radius</p><p>You have to make sure that pam_radius v.1.3.16 or higher is
-installed, otherwise you will have to install it.</p><pre class="screen">
-[root ns_pam]# <strong class="userinput"><code>cd /usr/local/src/</code></strong>
+installed, otherwise you will have to install it.</p><pre class="screen">[root ns_pam]# <strong class="userinput"><code>cd /usr/local/src/</code></strong>
           [root src]# <strong class="userinput"><code>wget ftp://ftp.freeradius.org/pub/radius/pam_radius-1.3.16.tar</code></strong>
           [root src]# <strong class="userinput"><code>tar xvf pam_radius-1.3.16</code></strong>
           [root src]# <strong class="userinput"><code>cd pam_radius</code></strong>
@@ -83,8 +84,7 @@ cp pam_radius_auth.so /lib/security/
 </pre><p>Next you have to add the configuration lines to your Radius
 configuration file (/etc/rddb/server). For AOLserver to be able to
 access this information you have to change the access rights to
-this file as well.</p><pre class="screen">
-[root pam_radius]# <strong class="userinput"><code>echo "radius.<span class="replaceable"><span class="replaceable">yourdomain.com</span></span>:1645 <span class="replaceable"><span class="replaceable">your_radius_password</span></span> &gt;&gt;/etc/rddb/server</code></strong>
+this file as well.</p><pre class="screen">[root pam_radius]# <strong class="userinput"><code>echo "radius.<span class="replaceable"><span class="replaceable">yourdomain.com</span></span>:1645 <span class="replaceable"><span class="replaceable">your_radius_password</span></span> &gt;&gt;/etc/rddb/server</code></strong>
           [root src]# <strong class="userinput"><code>chown <span class="replaceable"><span class="replaceable">service0</span></span>:web /etc/rddb/server</code></strong>
 </pre>
 </li>

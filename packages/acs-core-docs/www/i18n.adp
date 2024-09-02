@@ -1,14 +1,15 @@
 
-<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {
-Chapter 14. Internationalization}</property>
-<property name="doc(title)">
-Chapter 14. Internationalization</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Chapter 14. Internationalization}</property>
+<property name="doc(title)">Chapter 14. Internationalization</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="requirements-template" leftLabel="Prev"
-			title="
-Part III. For OpenACS Package
-Developers"
+			title="Part III. For OpenACS
+Package Developers"
 			rightLink="i18n-overview" rightLabel="Next">
 		    <div class="chapter">
 <div class="titlepage"><div><div><h2 class="title">

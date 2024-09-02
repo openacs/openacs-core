@@ -4,6 +4,10 @@
 <property name="doc(title)">Content Repository Developer Guide: Subject Keywords
 (Categories)</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h2>Subject Keywords (Categories)</h2>
 <strong>
 <a href="../index">Content Repository</a> : Developer
@@ -37,8 +41,7 @@ Subject Keywords (see <kbd>content_keyword.sql</kbd>) The
    =&gt; 'content_keyword', pretty_name =&gt; 'Content Keyword',
    pretty_plural =&gt; 'Content Keywords', table_name =&gt; 'cr_keywords',
    id_column =&gt; 'keyword_id', name_method =&gt; 'acs_object.default_name'
-   ); 
-</pre>
+   ); </pre>
 
 In addition, the <kbd>cr_keywords</kbd>
  table (see

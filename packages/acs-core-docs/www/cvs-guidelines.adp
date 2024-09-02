@@ -2,10 +2,14 @@
 <property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {CVS Guidelines}</property>
 <property name="doc(title)">CVS Guidelines</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="style-guide" leftLabel="Prev"
-			title="
-Chapter 12. Engineering Standards"
+			title="Chapter 12. Engineering
+Standards"
 			rightLink="eng-standards-versioning" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
@@ -38,8 +42,7 @@ your environment. (Typically this is accomplished by putting
 <code class="computeroutput">export CVS_RSH=ssh</code> into
 <code class="computeroutput">~/.bash_profile</code>.). If your
 local account name does not match your cvs.openacs.org account
-name, create a file <code class="computeroutput">~/.ssh/config</code> with an entry like:</p><pre class="programlisting">
-Host cvs.openacs.org
+name, create a file <code class="computeroutput">~/.ssh/config</code> with an entry like:</p><pre class="programlisting">Host cvs.openacs.org
     User joel
 </pre><p>With this setup, you will be asked for your password with each
 cvs command. To avoid this, set up ssh certificate authentication
@@ -62,15 +65,12 @@ adduser --add_extra_groups cvs --gecos "<span class="replaceable"><span class="r
 <p>Grant cvs access to the user account. On any machine, in a
 temporary directory:</p><pre class="screen"><span class="action"><span class="action">cvs -d :ext:cvs.openacs.org:/cvsroot co CVSROOT
 cd CVSROOT
-emacs avail</span></span></pre><p>Add an avail line of the form:</p><pre class="programlisting">
-avail|<span class="replaceable"><span class="replaceable">username</span></span>|openacs-4
-</pre><pre class="screen"><span class="action"><span class="action">cvs commit -m "added commit on X for username" avail</span></span></pre>
+emacs avail</span></span></pre><p>Add an avail line of the form:</p><pre class="programlisting">avail|<span class="replaceable"><span class="replaceable">username</span></span>|openacs-4</pre><pre class="screen"><span class="action"><span class="action">cvs commit -m "added commit on X for username" avail</span></span></pre>
 </li>
 </ol></div>
 </div><div class="sidebar">
 <div class="titlepage"><div><div><p class="title"></p></div></div></div><p>Branimir suggests an additional level of abstraction. If you
-put</p><pre class="programlisting">
-Host cvs-server
+put</p><pre class="programlisting">Host cvs-server
       HostName cvs.openacs.org
       User <span class="replaceable"><span class="replaceable">yournamehere</span></span>
 </pre><p>into your <code class="computeroutput">~/.ssh/config</code>
@@ -144,8 +144,7 @@ modules.</p><p>
 <code class="computeroutput">acs-core</code> contains only
 critical common packages. It does not have any user applications,
 such as forums, bug-tracker, calendar, or ecommerce. These can be
-added at any time.</p><p>The complete list of core packages is:</p><pre class="programlisting">
-acs-admin 
+added at any time.</p><p>The complete list of core packages is:</p><pre class="programlisting">acs-admin 
 acs-api-browser 
 acs-authentication 
 acs-automated-testing 
@@ -161,8 +160,7 @@ acs-service-contract
 acs-subsite 
 acs-tcl
 acs-templating 
-ref-timezones search
-</pre><p>
+ref-timezones search</pre><p>
 <code class="computeroutput">dotlrn-all</code> contains the
 packages required, in combination with acs-core, to run the .LRN
 system.</p><p>
@@ -243,9 +241,8 @@ commit rights. You can then commit code directly to the
 repository:</p><div class="orderedlist"><ol class="orderedlist" type="a">
 <li class="listitem"><p>Use one of the checkout methods described above to get files to
 your system. This takes the place of steps 1 and 2 in <a class="xref" href="openacs" title="Installation Option 2: Install from tarball">the section called
-&ldquo;Installation Option 2: Install from
-tarball&rdquo;</a>. Continue setting up the site as described
-there.</p></li><li class="listitem"><p>Fix bugs and add features.</p></li><li class="listitem">
+“Installation Option 2: Install from tarball”</a>. Continue setting
+up the site as described there.</p></li><li class="listitem"><p>Fix bugs and add features.</p></li><li class="listitem">
 <p>Commit that file (or files):</p><pre class="screen"><span class="action"><span class="action">cvs commit -m "what I did and why" filename</span></span></pre><p>Because this occurs in your personal checkout and not an
 anonymous one, this commit automagically moves back upstream to the
 Mother Ship repository at cvs.openacs.org. The names of the changed
@@ -276,7 +273,6 @@ emacs modules</span></span></pre><p>Add a line of the form:</p><pre class="progr
 
 Checking in modules;<br>
 /cvsroot/CVSROOT/modules,v  &lt;--  modules<br>
-
 new revision: 1.94; previous revision: 1.93<br>
 
 done<br>
@@ -285,13 +281,11 @@ cvs commit: Rebuilding administrative file database</p></div>
 <p>Although you should add your package on HEAD, you should do
 package development on the latest release branch that your code is
 compatible with. So, after completing the import, you may want to
-branch your package:</p><pre class="programlisting">
-cd /var/lib/aolserver/<span class="replaceable"><span class="replaceable">service0</span></span>/packages/<span class="replaceable"><span class="replaceable">newpackage</span></span>
+branch your package:</p><pre class="programlisting">cd /var/lib/aolserver/<span class="replaceable"><span class="replaceable">service0</span></span>/packages/<span class="replaceable"><span class="replaceable">newpackage</span></span>
 cvs tag -b <span class="replaceable"><span class="replaceable">oacs-5-1</span></span>
 </pre>
 </li><li class="listitem"><p>See <a class="xref" href="releasing-package" title="How to package and release an OpenACS Package">the section called
-&ldquo;How to package and release an OpenACS
-Package&rdquo;</a>
+“How to package and release an OpenACS Package”</a>
 </p></li>
 </ol></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
 <h3 class="title">Note</h3><p>Some packages are already in cvs at <code class="computeroutput">openacs-4/contrib/packages</code>. Starting with
@@ -300,9 +294,7 @@ the <code class="computeroutput">contrib</code> directory
 un-necessary. If you are working on a <code class="computeroutput">contrib</code> package, you should move it to
 <code class="computeroutput">/packages</code>. This must be done by
 an OpenACS administrator. On cvs.openacs.org:</p><div class="orderedlist"><ol class="orderedlist" type="a">
-<li class="listitem"><pre class="programlisting">
-cp -r /cvsroot/openacs-4/contrib/packages/<span class="replaceable"><span class="replaceable">package0</span></span> /cvsroot/openacs-4/packages
-</pre></li><li class="listitem"><p>Update the modules file as described above.</p></li><li class="listitem"><p>Remove the directory from cvs in the old location using
+<li class="listitem"><pre class="programlisting">cp -r /cvsroot/openacs-4/contrib/packages/<span class="replaceable"><span class="replaceable">package0</span></span> /cvsroot/openacs-4/packages</pre></li><li class="listitem"><p>Update the modules file as described above.</p></li><li class="listitem"><p>Remove the directory from cvs in the old location using
 <code class="computeroutput">cvs rm</code>. One approach
 <code class="computeroutput">for file in `find | grep -v CVS`; do
 rm $file; cvs remove $file; done</code>

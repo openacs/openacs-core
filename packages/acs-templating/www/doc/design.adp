@@ -2,6 +2,10 @@
 <property name="context">{/doc/acs-templating/ {ACS Templating}} {Template System}</property>
 <property name="doc(title)">Template System</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h2>The Template System -- Design Document</h2>
 
 by Christian Brechbühler <a href="./">Templating System</a>
@@ -287,8 +291,7 @@ There are two parameters.
       DefaultMaster=/www/default-master
       ; anything other than "never" or "always" means normal operation
       RefreshCache=as necessary
-    
-</pre>
+    </pre>
 <h3>X. Future Improvements/Areas of Likely Change</h3>
 <p>Passing datasources by reference is new. The acs-templating
 syntax <code>&amp;formal="actual"</code> is different
@@ -304,11 +307,11 @@ complement sequential nested
 <li>System creator: <a href="mailto:karl\@arsdigita.com">Karl
 Goldstein</a>
 </li><li>System owners: <a href="mailto:karl\@arsdigita.com">Karl
-Goldstein</a> and <a href="mailto:christian\@arsdigita.com">Christian
-Brechbühler</a>
+Goldstein</a> and <a href="mailto:christian\@arsdigita.com">Christian Brechbühler</a>
 </li><li>Documentation authors: <a href="mailto:karl\@arsdigita.com">Karl
 Goldstein</a>, <a href="mailto:christian\@arsdigita.com">Christian
-Brechbühler</a>, and <a href="mailto:bquinn\@arsdigita.com">Bryan Quinn</a>
+Brechbühler</a>, and <a href="mailto:bquinn\@arsdigita.com">Bryan
+Quinn</a>
 </li>
 </ul>
 <h3>XII. Revision History</h3>

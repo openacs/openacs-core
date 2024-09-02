@@ -2,6 +2,10 @@
 <property name="context">{/doc/acs-templating/ {ACS Templating}} {Templating System Widget Reference: Input}</property>
 <property name="doc(title)">Templating System Widget Reference: Input</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h2>The Input Widgets</h2>
 <strong>
 <a href="../index">Templating System</a> : <a href="index">Widget Reference</a> : Input</strong>

@@ -2,10 +2,14 @@
 <property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Basic Caching}</property>
 <property name="doc(title)">Basic Caching</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="tutorial-html-email" leftLabel="Prev"
-			title="
-Chapter 10. Advanced Topics"
+			title="Chapter 10. Advanced
+Topics"
 			rightLink="tutorial-schedule-procs" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
@@ -21,13 +25,11 @@ in the caching mechanism. In this example, my_proc_not_cached takes
 one argument, -foo, so the wrapper passes that on. The wrapper also
 uses the list command, to ensure that the arguments get passed
 correctly and to prevent commands passed in as arguments from being
-executed.</p><pre class="programlisting">
-ad_proc my_proc {-foo} {
+executed.</p><pre class="programlisting">ad_proc my_proc {-foo} {
         Get a cached version of my_proc.
 } {
     return [util_memoize [list my_proc_not_cached -foo $foo]]
-}
-</pre>
+}</pre>
 </li><li class="listitem"><p>In your code, always call my_proc. There will be a separate
 cache item for each unique call to my_proc_not_cached so that calls
 with different arguments are cached separately. You can flush the

@@ -2,10 +2,13 @@
 <property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Resources}</property>
 <property name="doc(title)">Resources</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="os-security" leftLabel="Prev"
-			title="
-Appendix C. Credits"
+			title="Appendix C. Credits"
 			rightLink="acs-package-dev" rightLabel="Next">
 		    <div class="section">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
@@ -36,8 +39,8 @@ skills (requires registration)</p></li>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
 			leftLink="os-security" leftLabel="Prev" leftTitle="Security Information"
-			rightLink="acs-package-dev" rightLabel="Next" rightTitle="Part III. For
-OpenACS Package Developers"
+			rightLink="acs-package-dev" rightLabel="Next" rightTitle="Part III. For OpenACS
+Package Developers"
 			homeLink="index" homeLabel="Home" 
 			upLink="credits" upLabel="Up"> 
 		    

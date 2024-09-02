@@ -2,10 +2,14 @@
 <property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {OpenACS Installation Guide for Windows}</property>
 <property name="doc(title)">OpenACS Installation Guide for Windows</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="openacs" leftLabel="Prev"
-			title="
-Chapter 3. Complete Installation"
+			title="Chapter 3. Complete
+Installation"
 			rightLink="mac-installation" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">

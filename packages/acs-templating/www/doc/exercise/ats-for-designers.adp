@@ -2,6 +2,10 @@
 <property name="context">{/doc/acs-templating/ {ACS Templating}} {The ACS Templating System for Web Designers}</property>
 <property name="doc(title)">The ACS Templating System for Web Designers</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h2>The ACS Templating System for Web Designers</h2>
 <strong>
 <a href="../index">Templating System</a> : Templating
@@ -73,7 +77,8 @@ block of <code>list-and-var-sample.adp</code>; here,
 appearing once in the .adp file, are cycled repeatedly to show
 multiple sets of information when displayed in
 <code>list-and-var-sample.acs</code>; example:
-<blockquote><pre><code>    &lt;multiple name="<em>your_multirow</em>"&gt;
+<blockquote><pre><code>
+    &lt;multiple name="<em>your_multirow</em>"&gt;
     &lt;tr&gt;&lt;td&gt;\@<em>your_multirow</em>.first_names\@ \@<em>your_multirow</em>.last_name\@ &lt;/td&gt; &lt;/tr&gt;
     &lt;/multiple&gt;
     </code></pre></blockquote>
@@ -261,26 +266,26 @@ which can be found under the gender formwidget.</p>
 and &lt;else&gt; tags to your ATS toolbelt, it&#39;s time to put
 those tools to good use in formatting multirow data. First, read
 the <a href="../tags/multiple">docs</a> to learn about the
-automatcally generated <code>\@<em>your_multirow</em>.rownum\@</code>
-column, the <code>\@<em>your_multirow</em>:rowcount\@</code> onevalue
-which contains the total number of rows contained in your multirow,
-and the &lt;multiple&gt; <code>startrow</code> and
-<code>maxrows</code> attributes. Possible point of confusion: the
-variable <code>\@<em>your_multirow</em>:rowcount\@</code> is a
-onevalue and not a column of the multirow
-<code><em>your_multirow</em></code>, so it need not be used within
-&lt;multiple&gt; tags and in many cases should not be used within
-&lt;multiple&gt; tags. Why is this? (Take a look at how
-<code>\@address:rowcount\@</code> is used.) Now make the following
-improvements to the address book listing you found in
-<code>form-sample.acs</code>:</p>
+automatically generated
+<code>\@<em>your_multirow</em>.rownum\@</code> column, the
+<code>\@<em>your_multirow</em>:rowcount\@</code> onevalue which
+contains the total number of rows contained in your multirow, and
+the &lt;multiple&gt; <code>startrow</code> and <code>maxrows</code>
+attributes. Possible point of confusion: the variable
+<code>\@<em>your_multirow</em>:rowcount\@</code> is a onevalue and
+not a column of the multirow <code><em>your_multirow</em></code>,
+so it need not be used within &lt;multiple&gt; tags and in many
+cases should not be used within &lt;multiple&gt; tags. Why is this?
+(Take a look at how <code>\@address:rowcount\@</code> is used.) Now
+make the following improvements to the address book listing you
+found in <code>form-sample.acs</code>:</p>
 <ul>
 <li>stripe the table with banded rows of alternating grey and
 white, or some other color scheme of your preference</li><li>use the <code>startrow</code> attribute so that the address
 book listing begins at a rownumber determined by the Tcl file code
 (check the .dat page)</li><li>add navigation links to the address book so that users can move
 forward or back between row listings, or jump to the beginning or
-end of their address book</li><li style="list-style: none"><ul>
+end of their address book</li><li style="list-style: none; display: inline"><ul>
 <li>each link should set the url variable that determines the first
 row of the set to be displayed</li><li>the links should only appear when necessary, that is, a link
 pointing towards the next set of rows should not appear if the user
@@ -289,5 +294,5 @@ is already viewing rows 1-5 of 5 total rows.</li>
 </ul>
 <hr>
 <address><a href="mailto:shuynh\@arsdgita.com">shuynh\@arsdigita.com</a></address>
-<!-- hhmts start -->
-Last modified: Fri Nov 17 10:14:44 EST 2000 <!-- hhmts end -->
+<!-- hhmts start -->Last modified: Sun Sep 1 14:32:43 CEST 2024 
+<!-- hhmts end -->

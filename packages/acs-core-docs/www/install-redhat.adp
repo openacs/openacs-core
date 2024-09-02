@@ -1,9 +1,11 @@
 
-<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Appendix A. Install Red Hat
-8/9}</property>
-<property name="doc(title)">Appendix A. Install Red Hat
-8/9</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Appendix A. Install Red Hat 8/9}</property>
+<property name="doc(title)">Appendix A. Install Red Hat 8/9</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="backups-with-cvs" leftLabel="Prev"
 			title="
@@ -11,8 +13,7 @@ Part II. Administrator&#39;s Guide"
 			rightLink="install-more-software" rightLabel="Next">
 		    <div class="appendix">
 <div class="titlepage"><div><div><h2 class="title">
-<a name="install-redhat" id="install-redhat"></a>Appendix A. Install
-Red Hat 8/9</h2></div></div></div><div class="authorblurb">
+<a name="install-redhat" id="install-redhat"></a>Appendix A. Install Red Hat 8/9</h2></div></div></div><div class="authorblurb">
 <p>by <a class="ulink" href="mailto:joel\@aufrecht.org" target="_top">Joel Aufrecht</a>
 </p>
 OpenACS docs are written by the named authors, and may be edited by
@@ -38,7 +39,7 @@ correct the problem. <a class="link" href="install-resources" title="Resources">
 <a name="install-first-step" id="install-first-step"></a>Unplug
 the network cable from your computer. We don&#39;t want to connect
 to the network until we&#39;re sure the computer is secure.
-<a class="indexterm" name="id6765" id="id6765"></a> (Wherever you
+<a class="indexterm" name="id7390" id="id7390"></a> (Wherever you
 see the word secure, you should always read it as, "secure
 enough for our purposes, given the amount of work we&#39;re willing
 to exert and the estimated risk and consequences.")</p></li><li class="listitem"><p>Insert Red Hat 8.0 or 9.0 Disk 1 into the CD-ROM and reboot the
@@ -76,7 +77,7 @@ HARD DRIVE.</p></li><li class="listitem"><p>Click <code class="computeroutput"><
 screen</p></li>
 </ol></div>
 </li><li class="listitem">
-<p>Configure Networking. <a class="indexterm" name="id6833" id="id6833"></a> Again, if you know what you&#39;re doing, do this
+<p>Configure Networking. <a class="indexterm" name="id7458" id="id7458"></a> Again, if you know what you&#39;re doing, do this
 step yourself, being sure to note the firewall holes. Otherwise,
 follow the instructions in this step to set up a computer directly
 connected to the internet with a dedicated IP address.</p><div class="orderedlist"><ol class="orderedlist" type="a">
@@ -104,7 +105,7 @@ Click <code class="computeroutput"><span class="guibutton"><span class="guibutto
 development server we&#39;ll be setting up.</p></li>
 </ol></div>
 </li><li class="listitem"><p>
-<a class="indexterm" name="id6872" id="id6872"></a>Select any
+<a class="indexterm" name="id7497" id="id7497"></a>Select any
 additional languages you want the computer to support and then
 click <code class="computeroutput"><span class="guibutton"><span class="guibutton">
 <u><span class="accel">N</span></u>ext</span></span></code>
@@ -121,11 +122,11 @@ firewall, or a resource hog. Just don&#39;t install a database or
 web server, because that would conflict with the database and web
 server we&#39;ll install later.</p><table border="0" summary="Simple list" class="simplelist">
 <tr><td>check <code class="computeroutput"><span class="guilabel"><span class="guilabel">Editors</span></span></code>
-(this installs emacs<a class="indexterm" name="id6891" id="id6891"></a>),</td></tr><tr><td>click <code class="computeroutput"><span class="guilabel"><span class="guilabel">Details</span></span></code> next
+(this installs emacs<a class="indexterm" name="id7516" id="id7516"></a>),</td></tr><tr><td>click <code class="computeroutput"><span class="guilabel"><span class="guilabel">Details</span></span></code> next
 to <code class="computeroutput"><span class="guilabel"><span class="guilabel">Text-based Internet</span></span></code>, check
 <code class="computeroutput"><span class="guilabel"><span class="guilabel">lynx</span></span></code>, and click <code class="computeroutput"><span class="guibutton"><span class="guibutton">
 <u><span class="accel">O</span></u>K</span></span></code>;</td></tr><tr><td>check <code class="computeroutput"><span class="guilabel"><span class="guilabel">Authoring and
-Publishing</span></span></code> (<a class="indexterm" name="id6907" id="id6907"></a>this installs docbook),</td></tr><tr><td>uncheck <code class="computeroutput"><span class="guilabel"><span class="guilabel">Server Configuration
+Publishing</span></span></code> (<a class="indexterm" name="id7532" id="id7532"></a>this installs docbook),</td></tr><tr><td>uncheck <code class="computeroutput"><span class="guilabel"><span class="guilabel">Server Configuration
 Tools</span></span></code>,</td></tr><tr><td>uncheck <code class="computeroutput"><span class="guilabel"><span class="guilabel">Web
 Server</span></span></code>,</td></tr><tr><td>uncheck <code class="computeroutput"><span class="guilabel"><span class="guilabel">Windows File
 Server</span></span></code>,</td></tr><tr><td>check <code class="computeroutput"><span class="guilabel"><span class="guilabel">SQL Database
@@ -149,7 +150,7 @@ View</span></span></code> and wait. In a minute, a list of packages
 will appear.</p><table border="0" summary="Simple list" class="simplelist">
 <tr><td>uncheck <code class="computeroutput"><span class="guilabel"><span class="guilabel">apmd</span></span></code>
 (monitors power, not very useful for servers),</td></tr><tr><td>check <code class="computeroutput"><span class="guilabel"><span class="guilabel">ImageMagick</span></span></code>
-(required for the <a class="indexterm" name="id6950" id="id6950"></a>photo-album packages,</td></tr><tr><td>uncheck<code class="computeroutput"><span class="guilabel"><span class="guilabel">isdn4k-utils</span></span></code>
+(required for the <a class="indexterm" name="id7575" id="id7575"></a>photo-album packages,</td></tr><tr><td>uncheck<code class="computeroutput"><span class="guilabel"><span class="guilabel">isdn4k-utils</span></span></code>
 (unless you are using isdn, this installs a useless daemon),</td></tr><tr><td>check <code class="computeroutput"><span class="guilabel"><span class="guilabel">mutt</span></span></code> (a mail
 program that reads Maildir),</td></tr><tr><td>uncheck <code class="computeroutput"><span class="guilabel"><span class="guilabel">nfs-utils</span></span></code>
 (nfs is a major security risk),</td></tr><tr><td>uncheck <code class="computeroutput"><span class="guilabel"><span class="guilabel">pam-devel</span></span></code> (I
@@ -180,11 +181,9 @@ create a boot disk</span></span></code> and click <code class="computeroutput"><
 <u><span class="accel">E</span></u>xit</span></span></code>, remove the CD, and
 watch the computer reboot.</p></li><li class="listitem">
 <p>After it finishes rebooting and shows the login prompt, log
-in:</p><pre class="screen">
-yourserver login: <strong class="userinput"><code>root</code></strong>
+in:</p><pre class="screen">yourserver login: <strong class="userinput"><code>root</code></strong>
 Password:
-[root root]#
-</pre>
+[root root]#</pre>
 </li><li class="listitem"><p>Install any security patches. For example, insert your CD with
 patches, mount it with <code class="computeroutput">mount
 /dev/cdrom</code>, then <code class="computeroutput">cd
@@ -196,7 +195,7 @@ step.</p></li><li class="listitem">
 <p>Lock down SSH</p><div class="orderedlist"><ol class="orderedlist" type="a">
 <li class="listitem">
 <p>
-<a class="indexterm" name="id7035" id="id7035"></a> SSH is the
+<a class="indexterm" name="id7660" id="id7660"></a> SSH is the
 protocol we use to connect securely to the computer (replacing
 telnet, which is insecure). sshd is the daemon that listens for
 incoming ssh connections. As a security precaution, we are now
@@ -238,8 +237,7 @@ service level. We&#39;ll use this system for PostgreSQL, but
 we&#39;ll use daemontools to perform a similar function for
 AOLserver. (The reason for these discrepancies is that, while
 daemontools is better, it&#39;s a pain in the ass to deal with and
-nobody&#39;s had any trouble leaving PostgreSQL the way it is.)</p><pre class="screen">
-[root root]# <strong class="userinput"><code>service pcmcia stop</code></strong>
+nobody&#39;s had any trouble leaving PostgreSQL the way it is.)</p><pre class="screen">[root root]# <strong class="userinput"><code>service pcmcia stop</code></strong>
 [root root]# <strong class="userinput"><code>service netfs stop</code></strong>
 [root root]# <strong class="userinput"><code>chkconfig --del pcmcia</code></strong>
 [root root]# <strong class="userinput"><code>chkconfig --del netfs</code></strong>
@@ -252,8 +250,7 @@ chkconfig --del netfs</span></span>
 </li><li class="listitem"><p>Plug in the network cable.</p></li><li class="listitem">
 <p>Verify that you have connectivity by going to another computer
 and ssh&#39;ing to <span class="replaceable"><span class="replaceable">yourserver</span></span>, logging in as remadmin, and
-promoting yourself to root:</p><pre class="screen">
-[joeuser\@someotherserver]$ <strong class="userinput"><code> ssh <span class="replaceable"><span class="replaceable">remadmin\@yourserver.test</span></span>
+promoting yourself to root:</p><pre class="screen">[joeuser\@someotherserver]$ <strong class="userinput"><code> ssh <span class="replaceable"><span class="replaceable">remadmin\@yourserver.test</span></span>
 </code></strong>
 The authenticity of host 'yourserver.test (1.2.3.4)' can&#39;t be established.
 DSA key fingerprint is 10:b9:b6:10:79:46:14:c8:2d:65:ae:c1:61:4b:a5:a5.
@@ -263,8 +260,7 @@ Password:
 Last login: Mon Mar  3 21:15:27 2003 from host-12-01.dsl-sea.seanet.com
 [remadmin remadmin]$ <strong class="userinput"><code>su -</code></strong>
 Password: 
-[root root]#
-</pre>
+[root root]#</pre>
 </li><li class="listitem">
 <p>If you didn&#39;t burn a CD of patches and use it, can still
 download and install the necessary patches. Here&#39;s how to do it
@@ -273,8 +269,7 @@ packages.</p><p>Upgrade the kernel to fix a security hole. The default Red Hat
 8.0 system kernel (2.4.18-14, which you can check with
 <strong class="userinput"><code>uname -a</code></strong>) has
 several <a class="ulink" href="https://rhn.redhat.com/errata/RHSA-2003-098.html" target="_top">security problems</a>. Download the new kernel, install it,
-and reboot.</p><pre class="screen">
-[root root]# <strong class="userinput"><code>cd /var/tmp</code></strong>
+and reboot.</p><pre class="screen">[root root]# <strong class="userinput"><code>cd /var/tmp</code></strong>
 [root tmp]# <strong class="userinput"><code>wget http://updates.redhat.com/7.1/en/os/i686/kernel-2.4.18-27.7.x.i686.rpm</code></strong>
 --20:39:00--  http://updates.redhat.com/7.1/en/os/i686/kernel-2.4.18-27.7.x.i686.rpm
            =&gt; `kernel-2.4.18-27.7.x.i686.rpm'
@@ -307,9 +302,8 @@ reboot</span></span>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
 			leftLink="backups-with-cvs" leftLabel="Prev" leftTitle="Using CVS for backup-recovery"
-			rightLink="install-more-software" rightLabel="Next" rightTitle="
-Appendix B. Install additional supporting
-software"
+			rightLink="install-more-software" rightLabel="Next" rightTitle="Appendix B. Install
+additional supporting software"
 			homeLink="index" homeLabel="Home" 
 			upLink="acs-admin" upLabel="Up"> 
 		    

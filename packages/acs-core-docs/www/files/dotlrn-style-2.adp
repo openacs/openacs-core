@@ -2,6 +2,10 @@
 <property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {My Space - SloanSpace}</property>
 <property name="doc(title)">My Space - SloanSpace</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <ul id="breadcrumbs">
 <li><a href="#">My Space</a></li><li>&gt; <a href="#">MBA 101</a>
 </li><li>&gt; Files</li>

@@ -1,9 +1,11 @@
 
-<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Chapter 4. Configuring a new OpenACS
-Site}</property>
-<property name="doc(title)">Chapter 4. Configuring a new OpenACS
-Site</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Chapter 4. Configuring a new OpenACS Site}</property>
+<property name="doc(title)">Chapter 4. Configuring a new OpenACS Site</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="mac-installation" leftLabel="Prev"
 			title="
@@ -11,8 +13,8 @@ Part II. Administrator&#39;s Guide"
 			rightLink="configuring-install-packages" rightLabel="Next">
 		    <div class="chapter">
 <div class="titlepage"><div><div><h2 class="title">
-<a name="configuring-new-site" id="configuring-new-site"></a>Chapter 4. Configuring
-a new OpenACS Site</h2></div></div></div><div class="toc">
+<a name="configuring-new-site" id="configuring-new-site"></a>Chapter 4. Configuring a new
+OpenACS Site</h2></div></div></div><div class="toc">
 <p><strong>Table of Contents</strong></p><dl class="toc">
 <dt><span class="sect1"><a href="configuring-install-packages">Installing OpenACS
 packages</a></span></dt><dt><span class="sect1"><a href="configuring-mounting-packages">Mounting OpenACS

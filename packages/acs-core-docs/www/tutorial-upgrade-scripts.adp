@@ -2,10 +2,14 @@
 <property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Writing upgrade scripts}</property>
 <property name="doc(title)">Writing upgrade scripts</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="tutorial-parameters" leftLabel="Prev"
-			title="
-Chapter 10. Advanced Topics"
+			title="Chapter 10. Advanced
+Topics"
 			rightLink="tutorial-second-database" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
@@ -24,9 +28,8 @@ statement in this file. Test this out very well, because data model
 changes are more serious and fundamental changes than the program
 .tcl files.</p><p>Now use the APM to create a new package version 1.0b2. Commit
 all your changes, tag the release (<a class="xref" href="tutorial-upgrades" title="Distributing upgrades of your package">the section called
-&ldquo;Distributing upgrades of your
-package&rdquo;</a>), and both new installations and upgrades
-will be taken care of.</p>
+“Distributing upgrades of your package”</a>), and both new
+installations and upgrades will be taken care of.</p>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
 			leftLink="tutorial-parameters" leftLabel="Prev" leftTitle="Adding in parameters for your

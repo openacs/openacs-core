@@ -2,10 +2,14 @@
 <property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Connect to a second database}</property>
 <property name="doc(title)">Connect to a second database</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="tutorial-upgrade-scripts" leftLabel="Prev"
-			title="
-Chapter 10. Advanced Topics"
+			title="Chapter 10. Advanced
+Topics"
 			rightLink="tutorial-future-topics" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
@@ -16,8 +20,7 @@ legacy.</p><div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">
 <p>Modify config.tcl to accommodate the legacy database, and to
 ensure that the legacy database is not used for standard OpenACS
-queries:</p><pre class="programlisting">
-ns_section ns/db/pools
+queries:</p><pre class="programlisting">ns_section ns/db/pools
 ns_param   pool1              "Pool 1"
 ns_param   pool2              "Pool 2"
 ns_param   pool3              "Pool 3"
@@ -69,20 +72,17 @@ ns_param   defaultpool        pool1
 ns_section ns/server/${server}/acs/database
 ns_param database_names [list main legacy]
 ns_param pools_main [list pool1 pool2 pool3]
-ns_param pools_legacy [list legacy]
-</pre>
+ns_param pools_legacy [list legacy]</pre>
 </li><li class="listitem">
 <p>To use the legacy database, use the <code class="code">-dbn</code> flag for any of the <code class="code">db_</code> API calls. For example, suppose there is a table
 called "foo" in the legacy system, with a field
 "bar". List "bar" for all records with this Tcl
-file:</p><pre class="programlisting">
-db_foreach -dbn legacy get_bar_query {
+file:</p><pre class="programlisting">db_foreach -dbn legacy get_bar_query {
   select bar from foo
   limit 10
 } {
   ns_write "&lt;br/&gt;$bar"
-}
-</pre>
+}</pre>
 </li>
 </ol></div>
 </div>

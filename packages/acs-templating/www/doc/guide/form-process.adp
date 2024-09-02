@@ -4,6 +4,10 @@ Submissions}</property>
 <property name="doc(title)">Templating System User Guide: Validating and Processing Form
 Submissions</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h2>Validating and Processing Form Submissions</h2>
 <strong>
 <a href="../index">Templating System</a> : User

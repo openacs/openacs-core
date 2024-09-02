@@ -2,10 +2,14 @@
 <property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Creating an Application Package}</property>
 <property name="doc(title)">Creating an Application Package</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="tutorial" leftLabel="Prev"
-			title="
-Chapter 9. Development Tutorial"
+			title="Chapter 9. Development
+Tutorial"
 			rightLink="tutorial-database" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
@@ -124,23 +128,21 @@ to be satisfied from the files at <code class="computeroutput">/var/lib/aolserve
 <div class="titlepage"><div><div><h3 class="title">
 <a name="id1365" id="id1365"></a>Quick start</h3></div></div></div><p>The remainder of the tutorial walks you through each file one at
 a time as you create the package. You can skip all this, and get a
-working package, by doing the following:</p><pre class="screen">
-cd /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/packages/acs-core-docs/www/files/tutorial
+working package, by doing the following:</p><pre class="screen">cd /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/packages/acs-core-docs/www/files/tutorial
 psql <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span> -f myfirstpackage-create.sql
 cp note-edit.* note-delete.tcl index.* ../../../../myfirstpackage/www/
 mkdir ../../../../myfirstpackage/lib
 cp note-list.* ../../../../myfirstpackage/lib/
 cp myfirstpackage-*sql ../../../../myfirstpackage/sql/postgresql/
 cp myfirstpackage-procs.tcl ../../../../myfirstpackage/tcl/test/
-cp note-procs.tcl ../../../../myfirstpackage/tcl/
-</pre><p>After restarting the server, the tutorial application will be
+cp note-procs.tcl ../../../../myfirstpackage/tcl/</pre><p>After restarting the server, the tutorial application will be
 installed and working at the url you selected in the previous
 step.</p>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-			leftLink="tutorial" leftLabel="Prev" leftTitle="
-Chapter 9. Development Tutorial"
+			leftLink="tutorial" leftLabel="Prev" leftTitle="Chapter 9. Development
+Tutorial"
 			rightLink="tutorial-database" rightLabel="Next" rightTitle="Setting Up Database Objects"
 			homeLink="index" homeLabel="Home" 
 			upLink="tutorial" upLabel="Up"> 

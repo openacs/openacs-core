@@ -4,6 +4,10 @@
 <property name="doc(title)">Tsearch2 Full-text Search Engine Driver for OpenACS
 5.x</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h1>Tsearch2 Full-text Search Engine Driver for OpenACS 5.x</h1>
 <p>Tsearch2 Driver provides full-text searching of a PostgreSQL
 database by using PostgreSQL&#39;s tsearch2 FtsEngineDriver</p>
@@ -100,8 +104,7 @@ reindex:</p>
     insert into search_observer_queue (
             select <em>my_id</em>, now(),'INSERT' from <em>my_table</em>
             );
-  
-</pre>
+  </pre>
 <p>For forums and ETP this looks like:</p>
 <pre>
     insert into search_observer_queue (

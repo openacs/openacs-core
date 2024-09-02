@@ -2,6 +2,10 @@
 <property name="context">{/doc/acs-developer-support/ {ACS Developer Support}} {ACS Developer Support}</property>
 <property name="doc(title)">ACS Developer Support</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h1>ACS Developer Support</h1>
 <p>part of the <a href="">ArsDigita Community System</a>, by
 <a href="mailto:jsalz\@mit.edu">Jon Salz</a>
@@ -50,9 +54,7 @@ Tired of using <tt>ns_log</tt>
 grokking the error log to see what&#39;s wrong with your page? Use
 the <tt>ds_comment</tt>
  routine instead:
-<blockquote><pre>
-ds_comment "Foo is $foo"
-</pre></blockquote>
+<blockquote><pre>ds_comment "Foo is $foo"</pre></blockquote>
 
 Your comment will show up at the bottom of the page, beneath the
 <em>Developer Information</em>

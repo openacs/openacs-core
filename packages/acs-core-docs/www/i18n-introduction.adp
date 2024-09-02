@@ -4,6 +4,10 @@ OpenACS}</property>
 <property name="doc(title)">How Internationalization/Localization works in
 OpenACS</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="i18n-overview" leftLabel="Prev"
 			title="

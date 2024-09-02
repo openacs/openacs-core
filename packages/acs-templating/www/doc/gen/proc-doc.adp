@@ -2,6 +2,10 @@
 <property name="context">{/doc/acs-templating/ {ACS Templating}} {Commenting Tcl procedures for parsing}</property>
 <property name="doc(title)">Commenting Tcl procedures for parsing</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h2>Using comments to document Tcl procedures</h2>
 <strong>Templating System</strong>
 <h3>Text divisions, grouping</h3>
@@ -12,6 +16,7 @@ compartments: namespace, procedure and directive. Each of these
 divisions has its own text marker(s). In the end, your Tcl file
 should look something like this:
 <blockquote><pre><code><kbd>
+
 [------------------------------------------------------]
 [------  <em>ignored text at beginning of file</em>  -----------]
 [------------------------------------------------------]
@@ -109,7 +114,8 @@ When default-value information is not included, the entry value
 will be marked as <em>required</em> if it is a parameter, or
 display no information if it is an option.
 <p>For example: the fictional procedure grant_permission might be
-preceded by these comments:</p><blockquote><pre><code># \@public grant_permission
+preceded by these comments:</p><blockquote><pre><code>
+# \@public grant_permission
 # checks for whether or not a user has the privilege 
 # to manipulate an object in a specific manner
 

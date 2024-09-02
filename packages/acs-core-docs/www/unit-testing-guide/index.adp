@@ -2,6 +2,10 @@
 <property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {ACS4 Unit Tests}</property>
 <property name="doc(title)">ACS4 Unit Tests</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h2>ACS4 Unit Tests</h2>
 
 by <a href="mailto:pmcneill\@arsdigita.com">Patrick McNeill</a>
@@ -88,5 +92,4 @@ against.</p>
 <hr>
 <em>Last updated - 2000-12-19</em>
 <br>
-<a href="mailto:pmcneill\@arsdigita.com"></a>
-<address>pmcneill\@arsdigita.com</address>
+<a href="mailto:pmcneill\@arsdigita.com"><address>pmcneill\@arsdigita.com</address></a>

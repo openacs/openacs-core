@@ -4,6 +4,10 @@ Forms}</property>
 <property name="doc(title)">Templating System User Guide: Search-and-Select
 Forms</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h2>Implementing Search-and-Select Forms</h2>
 <strong>
 <a href="../index">Templating System</a> : User

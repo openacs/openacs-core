@@ -4,6 +4,10 @@ Content}</property>
 <property name="doc(title)">Content Repository Developer Guide: Publishing
 Content</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h2>Publishing Content</h2>
 <strong>
 <a href="../index">Content Repository</a> : Developer
@@ -122,5 +126,5 @@ the initial query for any needed attributes.</p>
 <a href="mailto:karlg\@arsdigita.com">karlg\@arsdigita.com</a>
 <br>
 
-Last Modified: $&zwnj;Id: publish.html,v 1.5.2.2 2022/08/29 11:00:26
-antoniop Exp $
+Last Modified: $&zwnj;Id: publish.html,v 1.5.2.3 2024/09/01 12:39:59
+gustafn Exp $

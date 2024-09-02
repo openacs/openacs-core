@@ -2,6 +2,10 @@
 <property name="context">{/doc/acs-content-repository/ {ACS Content Repository}} {Content Repository: Uninstalling}</property>
 <property name="doc(title)">Content Repository: Uninstalling</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h2>Uninstalling the Content Repository</h2>
 <strong><a href="index">Content Repository</a></strong>
 <p>The content repository includes an uninstall script,

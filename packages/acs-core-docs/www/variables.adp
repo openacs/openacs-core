@@ -2,10 +2,14 @@
 <property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Variables}</property>
 <property name="doc(title)">Variables</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="eng-standards-plsql" leftLabel="Prev"
-			title="
-Chapter 12. Engineering Standards"
+			title="Chapter 12. Engineering
+Standards"
 			rightLink="automated-testing-best-practices" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
@@ -19,9 +23,8 @@ OpenACS docs are written by the named authors, and may be edited by
 OpenACS documentation staff.</div><p>Starting with OpenACS 5.0 and the introduction of acs-lang, we
 recommend retrieving date/time information from the database in
 ANSI format and then using <a class="ulink" href="/api-doc/proc-view?proc=lc%5ftime%5ffmt" target="_top">lc_time_fmt</a> to format it for display.</p><div class="example">
-<a name="id1422" id="id1422"></a><p class="title"><strong>Example 12.1. Getting datetime from
-the database ANSI-style</strong></p><div class="example-contents"><pre class="programlisting">
-db_multirow -extend { mydate_pretty } {
+<a name="id1422" id="id1422"></a><p class="title"><strong>Example 12.1. Getting datetime
+from the database ANSI-style</strong></p><div class="example-contents"><pre class="programlisting">db_multirow -extend { mydate_pretty } {
     select to_char(mydate, 'YYYY-MM-DD HH24:MI:SS') as mydate_ansi,
           ...
     ...

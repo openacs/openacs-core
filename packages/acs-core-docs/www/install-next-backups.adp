@@ -2,10 +2,14 @@
 <property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Backup Strategy}</property>
 <property name="doc(title)">Backup Strategy</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="backup-recovery" leftLabel="Prev"
-			title="
-Chapter 8. Backup and Recovery"
+			title="Chapter 8. Backup and
+Recovery"
 			rightLink="snapshot-backup" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
@@ -31,8 +35,8 @@ then you can apply standard file-based backup strategies to
 </p>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-			leftLink="backup-recovery" leftLabel="Prev" leftTitle="
-Chapter 8. Backup and Recovery"
+			leftLink="backup-recovery" leftLabel="Prev" leftTitle="Chapter 8. Backup and
+Recovery"
 			rightLink="snapshot-backup" rightLabel="Next" rightTitle="Manual backup and recovery"
 			homeLink="index" homeLabel="Home" 
 			upLink="backup-recovery" upLabel="Up"> 

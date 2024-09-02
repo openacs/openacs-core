@@ -2,6 +2,10 @@
 <property name="context">{/doc/acs-templating/ {ACS Templating}} {Templating System Tag Reference: Multiple}</property>
 <property name="doc(title)">Templating System Tag Reference: Multiple</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h2>Multiple</h2>
 <a href="..">Templating System</a>
  : <a href="../designer-guide">Designer Guide</a>
@@ -13,8 +17,7 @@ for each row of a multirow data source. Column variables are reset
 with each repetition to the values of the next row of the data
 source.</p>
 <h3>Usage</h3>
-<pre>
-&lt;!-- Begin multiple layout, i.e. &lt;table&gt; --&gt;
+<pre>&lt;!-- Begin multiple layout, i.e. &lt;table&gt; --&gt;
 &lt;table&gt;
 
 &lt;multiple name="users"&gt;
@@ -39,8 +42,7 @@ source.</p>
 &lt;/multiple&gt;
 
 &lt;!-- End multiple layout, i.e. &lt;/table&gt; --&gt;
-&lt;/table&gt;
-</pre>
+&lt;/table&gt;</pre>
 <pre></pre>
 <h3>Notes</h3>
 <ul>

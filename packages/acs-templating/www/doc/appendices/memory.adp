@@ -4,6 +4,10 @@ memory}</property>
 <property name="doc(title)">Templating System Appendix D: Parsing templates in
 memory</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h2>Parsing Templates in Memory</h2>
 <strong><a href="../index">Templating System</a></strong>
 <p>The templating system code is oriented towards parsing templates

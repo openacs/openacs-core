@@ -2,6 +2,10 @@
 <property name="context">{/doc/acs-content-repository/ {ACS Content Repository}} {Content Repository Design}</property>
 <property name="doc(title)">Content Repository Design</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h2>Content Repository Design</h2>
 <strong>
 <a href="/doc">ACS Documentation</a> : <a href="index">Content Repository</a>

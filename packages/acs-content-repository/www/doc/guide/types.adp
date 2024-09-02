@@ -4,6 +4,10 @@ Types}</property>
 <property name="doc(title)">Content Repository Developer Guide: Defining Content
 Types</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h2>Defining Content Types</h2>
 <strong>
 <a href="../index">Content Repository</a> : Developer
@@ -43,16 +47,14 @@ in a custom table whose primary key references the associated ACS
 object ID (specific storage). To ensure efficient access to
 attributes, the content repository API requires you to use specific
 storage. Your table should have the form:</p>
-<pre>
-create table cr_<em>content_type</em> (
+<pre>create table cr_<em>content_type</em> (
     <em>content_type</em>_id       integer
                           constraint cr_<em>content_type</em>_id_fk
                           references cr_revisions
                           constraint cr_<em>content_type</em>_pk
                           primary key,
     <em>attributes</em>...
-);
-</pre>
+);</pre>
 <p>Note that your extended attribute table must reference the
 <kbd>cr_revisions</kbd> table, <em>not</em><kbd>cr_items</kbd>. As
 mentioned above, this allows you to maintain multiple revisions of
@@ -61,8 +63,7 @@ itself.</p>
 <h3>Use the Content Type API to create the content type</h3>
 <p>To define a content type, you should write an SQL script to
 create the content type and then add attributes to it:</p>
-<pre>
-declare
+<pre>declare
  attr_id        acs_attributes.attribute_id%TYPE;
 begin
 

@@ -2,10 +2,14 @@
 <property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Using PSGML mode in Emacs}</property>
 <property name="doc(title)">Using PSGML mode in Emacs</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="docbook-primer" leftLabel="Prev"
-			title="
-Chapter 13. Documentation Standards"
+			title="Chapter 13. Documentation
+Standards"
 			rightLink="nxml-mode" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
@@ -142,9 +146,8 @@ parents, what its contents can be and lists its attributes.</td>
 </table></div>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="psgml-mode-reading" id="psgml-mode-reading"></a>Further reading</h3></div></div></div><p>Start with the <a class="xref" href="docbook-primer" title="OpenACS Documentation Guide">the section called
-&ldquo;OpenACS Documentation
-Guide&rdquo;</a>
+<a name="psgml-mode-reading" id="psgml-mode-reading"></a>Further reading</h3></div></div></div><p>Start with the <a class="xref" href="docbook-primer" title="OpenACS Documentation Guide">the section called “OpenACS
+Documentation Guide”</a>
 </p><div class="cvstag">($&zwnj;Id: psgml-mode.xml,v 1.9.2.1 2021/09/02
 16:56:02 gustafn Exp $)</div>
 </div>

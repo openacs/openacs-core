@@ -2,6 +2,10 @@
 <property name="context">{/doc/acs-authentication/ {ACS Authentication}} {Configure Batch Synchronization}</property>
 <property name="doc(title)">Configure Batch Synchronization</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="ext-auth-ldap-install" leftLabel="Prev"
 			title="Installation"
@@ -22,8 +26,7 @@ are the URLs which the external Authority will supply with XML
 files in IMS Enterprise 1.1 format.</p></li><li>
 <p>Configure your Authority (RADIUS server, etc) to supply XML
 files to the URLs IncrementalURL and SnapshotURL. A typical set of
-incremental file record looks like:</p><pre class="programlisting">
-&lt;?xml version="1.0" encoding="ISO-8859-1"?&gt;
+incremental file record looks like:</p><pre class="programlisting">&lt;?xml version="1.0" encoding="ISO-8859-1"?&gt;
 &lt;enterprise&gt;
   &lt;properties&gt;
     &lt;datasource&gt;FOO&lt;/datasource&gt;

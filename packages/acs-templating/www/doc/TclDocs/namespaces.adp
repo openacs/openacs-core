@@ -2,6 +2,10 @@
 <property name="context">{/doc/acs-templating/ {ACS Templating}} {ATS and CMS Tcl Procedure Specifications}</property>
 <property name="doc(title)">ATS and CMS Tcl Procedure Specifications</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h2 class="title" align="center">ATS and CMS Tcl Procedure
 Specifications</h2>
 <table border="1" cellpadding="3" cellspacing="0" width="100%">

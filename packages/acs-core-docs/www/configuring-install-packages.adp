@@ -2,11 +2,14 @@
 <property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Installing OpenACS packages}</property>
 <property name="doc(title)">Installing OpenACS packages</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="configuring-new-site" leftLabel="Prev"
-			title="
-Chapter 4. Configuring a new OpenACS
-Site"
+			title="Chapter 4. Configuring a
+new OpenACS Site"
 			rightLink="configuring-mounting-packages" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
@@ -36,9 +39,8 @@ package, and click 'Install selected applications'. The
 system will check to make sure you have all necessary packages that
 the package you want depends on. If you&#39;re installing from
 Local Files, and you are missing any packages, you may have to add
-the packages your desired package depends on: <a class="xref" href="upgrade-openacs-files" title="Upgrading the OpenACS files">the section called
-&ldquo;Upgrading the OpenACS
-files&rdquo;</a>
+the packages your desired package depends on: <a class="xref" href="upgrade-openacs-files" title="Upgrading the OpenACS files">the section called “Upgrading the
+OpenACS files”</a>
 </p><p>If you run into any errors at all, check your
 /var/lib/aolserver/$OPENACS_SERVICE_NAME/log/error.log file, and
 post your error on the OpenACS forums</p><p>Once the package has been installed, then you will need to
@@ -46,9 +48,8 @@ post your error on the OpenACS forums</p><p>Once the package has been installed,
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-			leftLink="configuring-new-site" leftLabel="Prev" leftTitle="
-Chapter 4. Configuring a new OpenACS
-Site"
+			leftLink="configuring-new-site" leftLabel="Prev" leftTitle="Chapter 4. Configuring a new
+OpenACS Site"
 			rightLink="configuring-mounting-packages" rightLabel="Next" rightTitle="Mounting OpenACS packages"
 			homeLink="index" homeLabel="Home" 
 			upLink="configuring-new-site" upLabel="Up"> 

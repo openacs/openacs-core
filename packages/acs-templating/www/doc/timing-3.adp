@@ -2,6 +2,10 @@
 <property name="context">{/doc/acs-templating/ {ACS Templating}} {Template Timing Results}</property>
 <property name="doc(title)">Template Timing Results</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h3>Results</h3>
 <p>The measurements were taken on <code>reusia.boston</code> on 17
 October 2000, with tarball acs-3-4-6-R20001008. Templating under

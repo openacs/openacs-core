@@ -2,6 +2,10 @@
 <property name="context">{/doc/acs-templating/ {ACS Templating}} {Templating System Tag Reference: If}</property>
 <property name="doc(title)">Templating System Tag Reference: If</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h2>If</h2>
 <a href="..">Templating System</a>
  : <a href="../designer-guide">Designer Guide</a>
@@ -83,8 +87,7 @@ operands (<var>x</var>
 <p>Any of these operators can be prefixed with
 <code><strong>not</strong></code> to invert the outcome.</p>
 <h3>Usage Examples</h3>
-<pre>
-&lt;if \@x\@ eq 5&gt;True&lt;/if&gt;
+<pre>&lt;if \@x\@ eq 5&gt;True&lt;/if&gt;
 &lt;if \@x\@ eq "Greta"&gt;True&lt;/if&gt;
 
 &lt;if \@x\@ ne 5&gt;True&lt;/if&gt;
@@ -112,8 +115,7 @@ operands (<var>x</var>
 &lt;if \@s\@ not nil&gt;True&lt;/if&gt;
 
 &lt;if \@z\@ in "Greta" "Fred" "Sam"&gt;True&lt;/if&gt;
-&lt;if \@z\@ not in "Greta" "Fred" "Sam"&gt;True&lt;/if&gt;
-</pre>
+&lt;if \@z\@ not in "Greta" "Fred" "Sam"&gt;True&lt;/if&gt;</pre>
 <h3>Notes</h3>
 <ul>
 <li><p>Any legal variables that may be referenced in the template may
@@ -124,8 +126,7 @@ literally.</p></li><li>
 grouped correctly:</p><pre>
   &lt;if \@datasource.variable\@ eq "blue sky"&gt;
     &lt;td bgcolor="#0000ff"&gt;
-  &lt;/if&gt;
-</pre>
+  &lt;/if&gt;</pre>
 </li><li>
 <p>The <kbd>elseif</kbd> tag may be used following an <kbd>if</kbd>
 block to specify an alternate conditional template section.</p><pre>
@@ -137,8 +138,7 @@ block to specify an alternate conditional template section.</p><pre>
   &lt;/elseif&gt;
   &lt;else&gt;
     &lt;td bgcolor="#ffffff"&gt;
-  &lt;/else&gt;
-</pre>
+  &lt;/else&gt;</pre>
 </li><li>
 <p>The <kbd>else</kbd> tag may be used following an <kbd>if</kbd>
 block to specify an alternate template section when a condition is
@@ -148,8 +148,7 @@ not true:</p><pre>
   &lt;/if&gt;
   &lt;else&gt;
     &lt;td bgcolor="#ffffff"&gt;
-  &lt;/else&gt;
-</pre>
+  &lt;/else&gt;</pre>
 </li><li><p>Compound expressions can be created by combining terms with the
 <kbd>and</kbd> and <kbd>or</kbd> keywords, as illustrated above.
 Any number of statements may be connected in this fashion. There is

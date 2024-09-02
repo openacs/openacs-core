@@ -2,6 +2,10 @@
 <property name="context">{/doc/acs-templating/ {ACS Templating}} {Template Markup Tag Reference}</property>
 <property name="doc(title)">Template Markup Tag Reference</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h2>Template Markup Tag Reference</h2>
 <a href="..">Templating System</a>
  : <a href="../designer-guide">Designer Guide</a>
@@ -41,8 +45,7 @@ the beginning and end of the section. This can be avoided by
 crowding the start and end tags like so:</p><pre>
 &lt;td&gt;&lt;if %x% eq 5&gt;&lt;img src="five.gif"&gt;&lt;/if&gt;
 &lt;else&gt;&lt;img src="notfive.gif"&gt;&lt;/else&gt;&lt;/td&gt;
-        
-</pre><p>Note that this should not be done unless necessary, since it
+        </pre><p>Note that this should not be done unless necessary, since it
 reduces the legibility of the template to others who need to edit
 the template later.</p>
 </li>

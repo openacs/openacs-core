@@ -2,10 +2,14 @@
 <property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Automated Backup}</property>
 <property name="doc(title)">Automated Backup</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="snapshot-backup" leftLabel="Prev"
-			title="
-Chapter 8. Backup and Recovery"
+			title="Chapter 8. Backup and
+Recovery"
 			rightLink="backups-with-cvs" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
@@ -19,15 +23,11 @@ computer.</p><div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem"><p>Make sure that the manual backup process described above
 works.</p></li><li class="listitem"><p>Customize the default backup script. Edit <code class="filename">/var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/etc/backup.sh</code>
 with your specific parameters.</p></li><li class="listitem">
-<p>Make sure the file is executable:</p><pre class="programlisting">
-chmod +x backup.sh
-</pre>
+<p>Make sure the file is executable:</p><pre class="programlisting">chmod +x backup.sh</pre>
 </li><li class="listitem">
 <p>Set this file to run automatically by adding a line to
 root&#39;s crontab. (Typically, with <code class="computeroutput">export EDITOR=emacs; crontab -e</code>.) This
-example runs the backup script at 1:30 am every day.</p><pre class="programlisting">
-30 1 * * *        sh /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/etc/backup.sh
-</pre>
+example runs the backup script at 1:30 am every day.</p><pre class="programlisting">30 1 * * *        sh /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/etc/backup.sh</pre>
 </li>
 </ol></div>
 </div>

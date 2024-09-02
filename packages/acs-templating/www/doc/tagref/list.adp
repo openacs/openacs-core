@@ -2,6 +2,10 @@
 <property name="context">{/doc/acs-templating/ {ACS Templating}} {Templating System Tag Reference: List}</property>
 <property name="doc(title)">Templating System Tag Reference: List</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h2>List</h2>
 <a href="..">Templating System</a>
  : <a href="../designer-guide">Designer Guide</a>
@@ -11,8 +15,7 @@
 <p>The <kbd>list</kbd> tag is used to repeat a template section for
 each item in a list data source.</p>
 <h3>Usage</h3>
-<pre>
-&lt;list name="datasource"&gt;
+<pre>&lt;list name="datasource"&gt;
 
   &lt;if \@datasource:rownum\@ ne \@datasource:rowcount\@&gt;
     \@datasource:item\@ :
@@ -21,8 +24,7 @@ each item in a list data source.</p>
     &lt;b&gt;\@datasource:item\@&lt;/b&gt;
   &lt;/else&gt;
 
-&lt;/list&gt;
-</pre>
+&lt;/list&gt;</pre>
 <h3>Notes</h3>
 <ul>
 <li><p>The special variable

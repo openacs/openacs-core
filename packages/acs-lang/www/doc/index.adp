@@ -2,6 +2,10 @@
 <property name="context">{/doc/acs-lang/ {ACS Localization}} {ACS Localization Documentation}</property>
 <property name="doc(title)">ACS Localization Documentation</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h1>ACS Localization Documentation</h1>
 <h2>Engineering Documentation</h2>
 <ul>

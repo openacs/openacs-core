@@ -2,6 +2,10 @@
 <property name="context">{/doc/acs-templating/ {ACS Templating}} {Templating System Tag Reference: Switch}</property>
 <property name="doc(title)">Templating System Tag Reference: Switch</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h2>Switch</h2>
 <a href="..">Templating System</a>
  : <a href="../designer-guide">Designer Guide</a>
@@ -68,8 +72,7 @@ and curly braces to be matched correctly. Failure to quote words
 with spaces correctly results in an error.</p><pre>
   &lt;case "{blue sky}"&gt;
     &lt;td bgcolor="#0000ff"&gt;
-  &lt;/case&gt;
-</pre>
+  &lt;/case&gt;</pre>
 </li>
 </ul>
 <hr>

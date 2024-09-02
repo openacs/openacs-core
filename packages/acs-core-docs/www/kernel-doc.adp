@@ -1,18 +1,19 @@
 
-<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Chapter 15. Kernel
-Documentation}</property>
-<property name="doc(title)">Chapter 15. Kernel
-Documentation</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Chapter 15. Kernel Documentation}</property>
+<property name="doc(title)">Chapter 15. Kernel Documentation</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="acs-plat-dev" leftLabel="Prev"
-			title="Part IV. For
-OpenACS Platform Developers"
+			title="Part IV. For OpenACS
+Platform Developers"
 			rightLink="kernel-overview" rightLabel="Next">
 		    <div class="chapter">
 <div class="titlepage"><div><div><h2 class="title">
-<a name="kernel-doc" id="kernel-doc"></a>Chapter 15. Kernel
-Documentation</h2></div></div></div><div class="toc">
+<a name="kernel-doc" id="kernel-doc"></a>Chapter 15. Kernel Documentation</h2></div></div></div><div class="toc">
 <p><strong>Table of Contents</strong></p><dl class="toc">
 <dt><span class="sect1"><a href="kernel-overview">Overview</a></span></dt><dt><span class="sect1"><a href="object-system-requirements">Object Model
 Requirements</a></span></dt><dt><span class="sect1"><a href="object-system-design">Object
@@ -36,8 +37,8 @@ Requirements</a></span></dt>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-			leftLink="acs-plat-dev" leftLabel="Prev" leftTitle="Part IV. For
-OpenACS Platform Developers"
+			leftLink="acs-plat-dev" leftLabel="Prev" leftTitle="Part IV. For OpenACS
+Platform Developers"
 			rightLink="kernel-overview" rightLabel="Next" rightTitle="Overview"
 			homeLink="index" homeLabel="Home" 
 			upLink="acs-plat-dev" upLabel="Up"> 

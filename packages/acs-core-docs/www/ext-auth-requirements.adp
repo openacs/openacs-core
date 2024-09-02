@@ -2,10 +2,14 @@
 <property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {External Authentication Requirements}</property>
 <property name="doc(title)">External Authentication Requirements</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="bootstrap-acs" leftLabel="Prev"
-			title="
-Chapter 15. Kernel Documentation"
+			title="Chapter 15. Kernel
+Documentation"
 			rightLink="releasing-openacs" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
@@ -672,8 +676,8 @@ at Collaboraid.</td><td>20 Aug 2003</td><td>Joel Aufrecht</td>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
 			leftLink="bootstrap-acs" leftLabel="Prev" leftTitle="Bootstrapping OpenACS"
-			rightLink="releasing-openacs" rightLabel="Next" rightTitle="
-Chapter 16. Releasing OpenACS"
+			rightLink="releasing-openacs" rightLabel="Next" rightTitle="Chapter 16. Releasing
+OpenACS"
 			homeLink="index" homeLabel="Home" 
 			upLink="kernel-doc" upLabel="Up"> 
 		    

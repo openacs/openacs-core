@@ -4,6 +4,10 @@ Templates}</property>
 <property name="doc(title)">Templating System User Guide: Embedding Code in
 Templates</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h2>Embedding Code in Templates</h2>
 <a href="..">Templating System</a>
  : <a href="../developer-guide">Developer Guide</a>

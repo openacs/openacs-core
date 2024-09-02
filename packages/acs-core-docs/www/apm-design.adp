@@ -2,10 +2,14 @@
 <property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Package Manager Design}</property>
 <property name="doc(title)">Package Manager Design</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="apm-requirements" leftLabel="Prev"
-			title="
-Chapter 15. Kernel Documentation"
+			title="Chapter 15. Kernel
+Documentation"
 			rightLink="db-api-detailed" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
@@ -49,8 +53,8 @@ Examples of applications include <a class="ulink" href="/doc/forums" target="_to
 <span class="strong"><strong>OpenACS Services:</strong></span>
 the aforementioned building blocks. Examples of services include
 the <a class="ulink" href="/doc/acs-content-repository" target="_top">OpenACS Content Repository</a>, the <a class="ulink" href="/doc/acs-templating" target="_top">OpenACS Templating System</a>,
-and the <a class="link" href="kernel-doc" title="Chapter 15. Kernel Documentation">OpenACS
-Kernel</a>, which includes APM.</p></li>
+and the <a class="link" href="kernel-doc" title="Chapter 15. Kernel Documentation">OpenACS Kernel</a>,
+which includes APM.</p></li>
 </ul></div><p>An installation of the OpenACS includes the OpenACS Kernel, some
 services that extend the kernel&#39;s functionality, and some
 applications intended for end-users. Packages function as
@@ -595,7 +599,7 @@ A view (subset) of the above table with only enabled versions.</p></li>
 </ul></div>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="apm-design-ui" id="apm-design-ui"></a>User Interface</h3></div></div></div><p>The <a class="ulink" href="/acs-admin/apm" target="_top">APM&#39;s user interface</a> is part of the <a class="ulink" href="/acs-admin" target="_top">OpenACS Administration Service</a>.
+<a name="apm-design-ui" id="apm-design-ui"></a>User Interface</h3></div></div></div><p>The <a class="ulink" href="/acs-admin/apm" target="_top">APM&#39;s user interface</a> is part of the <a class="ulink" href="/acs-admin" target="_top">ACS Site-Wide Administration</a>.
 The UI is the primary point of contact with APM by developers and
 administrators. It is part of OpenACS Administration, because only
 the site-wide administrator should be able to access it. Thus in
