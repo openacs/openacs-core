@@ -17,20 +17,21 @@ information: What is OpenACS?"
 <div class="titlepage"><div><div><h3 class="title">
 <a name="release-notes-5-10-1" id="release-notes-5-10-1"></a>Release 5.10.1</h3></div></div></div><p>The release of OpenACS 5.10.1 contains the 94 packages of the
 oacs-5-10 branch. These packages include the OpenACS core packages,
-the major application packages (e.g. most the ones used on
-OpenACS.org), and DotLRN 2.10.1.</p><p>Altogether, OpenACS 5.10.1 differs from OpenACS 5.10.0 by the
+the major application packages (e.g., most of the ones used on
+OpenACS.org), and DotLRN 2.10.1. The release is probably the most
+secure and with the most tested code since ever.</p><p>Altogether, OpenACS 5.10.1 differs from OpenACS 5.10.0 by the
 following statistics</p><pre class="programlisting">
-        3027 files changed, 428212 insertions(+), 219697 deletions(-)</pre><p>contributed by 8 committers (Antonio Pisano, Gustaf Neumann,
-Günter Ernst, Héctor Romojaro, Michael Aram, Raúl Rodríguez,
-Sebastian Scheder, and Thomas Renner) and additional 8 patch/bugfix
-providers (Felix Mödritscher, Frank Bergmann, Franz Penz, Josue
-Cardona, Keith Paskett, Markus Moser, Marty Israelsen, and Monika
-Andergassen) - all sorted by the first names.</p><p>In terms of changes, this is the largest amount of changes at
-least since the release of OpenACS 5.9.0. Below is a summary of the
-most important changes, often together with the commit references
-in Git. The summary was made on subjective criteria, to get an
-overview of the changes.</p><p>For all details, consult the <a class="ulink" href="http://openacs.org/changelogs/ChangeLog-5.10.1" target="_top">raw
-ChangeLog</a>.</p><div class="sect2">
+        3038 files changed, 1291141 insertions(+), 354533 deletions(-)</pre><p>These changes were contributed by 8 committers (Antonio Pisano,
+Gustaf Neumann, Günter Ernst, Héctor Romojaro, Michael Aram, Raúl
+Rodríguez, Sebastian Scheder, and Thomas Renner) and additional 8
+patch/bugfix providers (Felix Mödritscher, Frank Bergmann, Franz
+Penz, Josue Cardona, Keith Paskett, Markus Moser, Marty Israelsen,
+and Monika Andergassen) - all sorted by the first names.</p><p>In terms of changes, the release contains the largest amount of
+changes of the releases in the last 10 years. The packages with the
+most changes are <code class="literal">acs-tcl</code>, <code class="literal">acs-templating</code>, <code class="literal">xowiki</code>, <code class="literal">xowf</code>,
+<code class="literal">acs-automated-testing</code>, <code class="literal">acs-admin</code>, and <code class="literal">xotcl-core</code>.</p><p>Below is a summary of the most important changes, often together
+with the commit references in Git. The summary was made on
+subjective criteria. For all details, consult the <a class="ulink" href="http://openacs.org/changelogs/ChangeLog-5.10.1" target="_top">raw ChangeLog</a>.</p><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="changes-in-the-acs-core-packages-between-openacs-5.10.0-and-5.10.1" id="changes-in-the-acs-core-packages-between-openacs-5.10.0-and-5.10.1"></a>Changes in the acs-core packages between OpenACS 5.10.0 and
 5.10.1</h3></div></div></div><div class="sect3">
@@ -2325,8 +2326,8 @@ styles still using these mechanisms will break.</p></li><li class="listitem"><p>
 turned off by default via the acs-kernel parameter ExcludedFiles in
 section request-processor (The variable provides a string match
 glob list of files and is defaulted to "*/CVS/* *~")</p></li>
-</ul></div><div class="cvstag">($&zwnj;Id: release-notes.xml,v 1.39.2.8 2023/07/19
-11:49:32 hectorr Exp $)</div>
+</ul></div><div class="cvstag">($&zwnj;Id: release-notes.xml,v 1.39.2.9 2024/09/02
+09:31:40 gustafn Exp $)</div>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="id1338" id="id1338"></a>Release

@@ -12,15 +12,16 @@
 <para>
   The release of OpenACS 5.10.1 contains the 94 packages of the
   oacs-5-10 branch. These packages include the OpenACS core packages,
-  the major application packages (e.g.&nbsp;most the ones used on
-  OpenACS.org), and DotLRN 2.10.1.
+  the major application packages (e.g., most of the ones used on
+  OpenACS.org), and DotLRN 2.10.1. The release is probably the most
+  secure and with the most tested code since ever.
 </para>
     <para> Altogether, OpenACS 5.10.1 differs from OpenACS 5.10.0 by the
         following statistics
         <programlisting>
-        3027 files changed, 428212 insertions(+), 219697 deletions(-)</programlisting>
+        3038 files changed, 1291141 insertions(+), 354533 deletions(-)</programlisting>
 
-        contributed by 8 committers (Antonio Pisano,
+        These changes were contributed by 8 committers (Antonio Pisano,
   Gustaf Neumann,
   Günter Ernst,
   Héctor Romojaro,
@@ -38,16 +39,20 @@
   Monika Andergassen) - all sorted by the first names.
     </para>
     <para>
-        In terms of changes, this is the largest amount of changes at
-        least since the release of OpenACS 5.9.0.
-        Below is a summary of the most important changes, often
-        together with the commit references in Git. The summary was
-        made on subjective criteria, to get an overview of the
-        changes.
+        In terms of changes, the release contains the largest amount
+        of changes of the releases in the last 10 years.  The packages
+        with the most changes are <literal>acs-tcl</literal>,
+        <literal>acs-templating</literal>, <literal>xowiki</literal>,
+        <literal>xowf</literal>,
+        <literal>acs-automated-testing</literal>,
+        <literal>acs-admin</literal>, and
+        <literal>xotcl-core</literal>.
     </para>
-    <para>
-        For all details, consult the
-        <ulink url="http://openacs.org/changelogs/ChangeLog-5.10.1">raw ChangeLog</ulink>.
+    <para>Below is a summary of the most important changes, often
+    together with the commit references in Git. The summary was made
+    on subjective criteria.  For all details, consult the <ulink
+    url="http://openacs.org/changelogs/ChangeLog-5.10.1">raw
+    ChangeLog</ulink>.
     </para>  
 
 <sect2 xml:id="changes-in-the-acs-core-packages-between-openacs-5.10.0-and-5.10.1">

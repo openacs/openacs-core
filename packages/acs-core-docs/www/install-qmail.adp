@@ -23,7 +23,7 @@ standard Debian/Ubuntu package, rpms for Fedora/Redhat/CenTOS are
 available from <a class="ulink" href="https://en.wikipedia.org/wiki/Qmail" target="_top">QMail wiki
 page</a>
 </p></li><li class="listitem">
-<p>Replace sendmail with qmail&#39;s wrapper.</p><a class="indexterm" name="id7842" id="id7842"></a><pre class="screen">[root qmail-1.03]# <strong class="userinput"><code>rm -f /usr/bin/sendmail /usr/sbin/sendmail</code></strong>
+<p>Replace sendmail with qmail&#39;s wrapper.</p><a class="indexterm" name="id7849" id="id7849"></a><pre class="screen">[root qmail-1.03]# <strong class="userinput"><code>rm -f /usr/bin/sendmail /usr/sbin/sendmail</code></strong>
 [root qmail-1.03]# <strong class="userinput"><code>ln -s /var/qmail/bin/sendmail /usr/sbin/sendmail</code></strong>
 [root qmail-1.03]#
 <span class="action"><span class="action">rm -f /usr/bin/sendmail /usr/sbin/sendmail
@@ -59,7 +59,7 @@ receive mail.</p><pre class="screen">[root qmail-1.03]# <strong class="userinput
 chmod 644 ~alias/.qmail* 
 /var/qmail/bin/maildirmake ~alias/Maildir/ 
 chown -R alias.nofiles /var/qmail/alias/Maildir</span></span>
-</pre><a class="indexterm" name="id7865" id="id7865"></a><p>Configure qmail to use the Maildir delivery format (instead of
+</pre><a class="indexterm" name="id7872" id="id7872"></a><p>Configure qmail to use the Maildir delivery format (instead of
 mbox), and install a version of the qmail startup script modified
 to use Maildir.</p><pre class="screen">[root alias]# <strong class="userinput"><code>echo "./Maildir" &gt; /var/qmail/bin/.qmail</code></strong>
 [root alias]# <strong class="userinput"><code>cp /tmp/openacs-5.9.0/packages/acs-core-docs/www/files/qmail.rc.txt /var/qmail/rc</code></strong>

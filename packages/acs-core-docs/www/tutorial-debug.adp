@@ -79,7 +79,7 @@ tests</h3></div></div></div><div class="authorblurb">
 <p>by <a class="ulink" href="mailto:simon\@collaboraid.net" target="_top">Simon Carstensen</a> and Joel Aufrecht</p>
 OpenACS docs are written by the named authors, and may be edited by
 OpenACS documentation staff.</div><p>
-<a class="indexterm" name="id8723" id="id8723"></a> It seems to
+<a class="indexterm" name="id8730" id="id8730"></a> It seems to
 me that a lot of people have been asking for some guidelines on how
 to write automated tests. I&#39;ve done several tests by now and
 have found the process to be extremely easy and useful. It&#39;s a

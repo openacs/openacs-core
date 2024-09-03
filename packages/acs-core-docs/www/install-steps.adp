@@ -116,7 +116,7 @@ for a standard install</strong></p><div class="table-contents"><table class="tab
 <td>name of administrative access account</td><td>remadmin</td>
 </tr><tr>
 <td>OpenACS service</td><td>
-<a class="indexterm" name="id3899" id="id3899"></a><span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span> (set to service0
+<a class="indexterm" name="id3906" id="id3906"></a><span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span> (set to service0
 in default install)</td>
 </tr><tr>
 <td>OpenACS service account</td><td><span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span></td>

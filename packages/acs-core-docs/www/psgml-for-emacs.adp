@@ -15,7 +15,7 @@ additional supporting software"
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="psgml-for-emacs" id="psgml-for-emacs"></a>Add PSGML commands to emacs init file
 (OPTIONAL)</h2></div></div></div><p>
-<a class="indexterm" name="id7751" id="id7751"></a> If you plan
+<a class="indexterm" name="id7758" id="id7758"></a> If you plan
 to write or edit any documentation with emacs, install a customized
 emacs configuration file with DocBook commands in the skeleton
 directory, so it will be used for all new users. The file also
