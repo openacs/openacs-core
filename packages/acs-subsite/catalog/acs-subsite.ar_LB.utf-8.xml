@@ -141,7 +141,7 @@
   <msg key="lt_It_would_be_a_very_ba">هي ستكون فكرة سيئّة جدا لإختيار هذا الخيار إذا أنت تستعمل كمبيوتر مشترك في مكتبة أو مدرسة. أيّ مستعمل لاحق لهذا الكمبيوتر سيكون قادر على التنكّر بشخصك و الدخول  على خدمتنا</msg>
   <msg key="lt_New_registration_at_s">التسجيلُ الجديدُ في %system_url%</msg>
   <msg key="lt_Note_text_in_red_below">ملاحظة الكتابة التي لونها أحمر و الموجودة أسفل المدخلات قد تم 
-تعدبلهامن قبل مدخلة فيOpenACSملف المدخلات  </msg>
+تعدبلهامن قبل مدخلة فيNaviServerملف المدخلات  </msg>
   <msg key="lt_Note_that_you_can_era">لاحظ أنّك يمكن أن تمسح عنوان بريد إلكترونيّ و كلمة السّرّ المحفوظان باختيار خيار&quot;خروج&quot; من مساحة عملك.</msg>
   <msg key="lt_num_children_Children">أطفال مخفية %num_children%</msg>
   <msg key="lt_On_portrait_publish_d">في %portrait_publish_date%، لقد أرسلت، &lt;a href=&quot;/user/portrait/&quot;&gt;%portrait_title%&lt;/a&gt;</msg>

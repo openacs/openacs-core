@@ -1,9 +1,13 @@
 
-<property name="context">{/doc/acs-content-repository {ACS Content Repository}} {Content Repository Developer Guide: Creating Content
+<property name="context">{/doc/acs-content-repository/ {ACS Content Repository}} {Content Repository Developer Guide: Creating Content
 Items}</property>
 <property name="doc(title)">Content Repository Developer Guide: Creating Content
 Items</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h2>Creating Content Items</h2>
 <strong>
 <a href="../index">Content Repository</a> : Developer
@@ -12,8 +16,7 @@ Guide</strong>
 <p>Content items are initialized using the
 <kbd>content_item.new</kbd> function. A name is the only parameter
 required to create an item:</p>
-<pre>
-item_id := content_item.new( name =&gt; 'my_item' );</pre>
+<pre>item_id := content_item.new( name =&gt; 'my_item' );</pre>
 <p>The name represents the tail of the URL for that content item.
 In most cases you will want to create items in a particular context
 with the repository hierarchy:</p>
@@ -45,8 +48,7 @@ then add a revision using the Content Revision API.</p>
 <p>If a content item has at least one revision, then it can be
 published by calling the <kbd>content_item.set_live_revision</kbd>
 procedure, which takes as input a <kbd>revision_id</kbd>:</p>
-<pre>
-content_item.set_live_revision( revision_id =&gt; :revision_id );</pre>
+<pre>content_item.set_live_revision( revision_id =&gt; :revision_id );</pre>
 <hr>
 <a href="mailto:karlg\@arsdigita.com">karlg\@arsdigita.com</a>
 <p>Last Modified: $&zwnj;Id: items.html,v 1.2 2017/08/07 23:47:47 gustafn

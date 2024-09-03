@@ -13,7 +13,7 @@ ad_library {
 namespace eval notification::reply::sweep {}
 
 
-ad_proc -public notification::reply::sweep::scan_all_replies {} {
+ad_proc -private notification::reply::sweep::scan_all_replies {} {
     Go through all the delivery methods and scan replies for that delivery method.
 } {
     ns_log Debug "notification::reply::sweep::scan_all_replies starting"
@@ -28,7 +28,7 @@ ad_proc -public notification::reply::sweep::scan_all_replies {} {
     }
 }
 
-ad_proc -public notification::reply::sweep::process_all_replies {} {
+ad_proc -private notification::reply::sweep::process_all_replies {} {
     Go through the replies in the DB and dispatch correctly to the right processor.
 } {
     ns_log Debug "notification::reply::sweep::process_all_replies starting"

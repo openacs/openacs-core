@@ -78,28 +78,27 @@ ad_form -extend -name subsite -form {
                                 -node_name $folder \
                                 -package_name $instance_name \
                                 -package_key $package_key]
-        
+
         # Set template
         subsite::set_theme -subsite_id $new_package_id -theme $theme
 
         # Set join policy
-        set group(join_policy) $join_policy
         set member_group_id [application_group::group_id_from_package_id -package_id $new_package_id]
-        group::update -group_id $member_group_id -array group
+        group::update -group_id $member_group_id [list join_policy $join_policy]
 
         # Add current user as admin
-	group::add_member \
+        group::add_member \
             -no_perm_check \
             -member_state "approved" \
             -rel_type "admin_rel" \
             -group_id $member_group_id \
             -user_id [ad_conn user_id]
-        
+
         # Set inheritance (called 'visibility' in form)
         if { $visibility ne "any" } {
             permission::set_not_inherit -object_id $new_package_id
         }
-        
+
     } on_error {
         ad_return_error "Problem Creating Application" "We had a problem creating the subsite."
     }

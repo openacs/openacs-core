@@ -64,8 +64,8 @@ if { [template::form is_valid group_type] } {
         incr exception_count
         append exception_text \
             "<li>The specified object type, $object_type, already exists. " \
-            [ad_decode $safe_object_type $object_type "" \
-                 "Note that we converted the object type to \"$safe_object_type\" to ensure that the name would be safe for the database."] \
+            [expr {$safe_object_type eq $object_type ? "" :
+                   "Note that we converted the object type to \"$safe_object_type\" to ensure that the name would be safe for the database."}] \
             "Please back up and choose another.</li>"
     } else {
         # let's make sure the names are unique

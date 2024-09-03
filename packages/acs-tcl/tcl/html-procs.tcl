@@ -1,6 +1,6 @@
 ad_library {
     Procs to read and manipulate HTML structures
-    
+
     @author Antonio Pisano
     @creation-date 2015-09-26
 }
@@ -11,9 +11,9 @@ ad_proc -public util::get_node_attributes {
     -node:required
 } {
     Extract attributes names and values from a tDOM node
-    
+
     @param node tDOM node
-    
+
     @return List in array get form of attribute names and values for node
 } {
     foreach attribute [$node attributes] {
@@ -29,13 +29,13 @@ ad_proc -public util::html::get_forms {
     -html:required
 } {
     Extract every form's specification from HTML supplied
-    
+
     @param html HTML text
-    
+
     @return Form specification as a nested list of lists in array get form
 } {
     # Parse document
-    dom parse -html -keepEmpties $html doc
+    dom parse -html -keepEmpties -- $html doc
     set root [$doc documentElement]
 
     set forms [list]
@@ -66,7 +66,7 @@ ad_proc -public util::html::get_forms {
         lappend form "fields" $fields
         lappend forms $form
     }
-    
+
     return $forms
 }
 
@@ -74,31 +74,29 @@ ad_proc -public util::html::get_form {
     -forms:required
     {-id ""}
 } {
-    Extract form with the specified id from a structure as that 
+    Extract form with the specified id from a structure as that
     coming from <code>util::html::get_forms</code> proc.
-    
+
     @param forms   Form structure
     @param id      HTML id of the form to be read. If structure contains only
                    one form, this parameter can be omitted, otherwise
                    the proc will throw an error.
-    
+
     @return form structure
-} {    
+} {
     if {[llength $forms] == 1} {
         return [lindex $forms 0]
-    }   
-    
+    }
+
     if {$id ne ""} {
-        # We have more than one, check for supplied id
+        # We have more than one form, check for supplied id
         foreach form $forms {
-            array set fo $form
-            array set a $fo(attributes)
-            if {$a(id) eq $id} {
+            if {[dict get $form attributes id] eq $id} {
                 return $form
             }
         }
     }
-    
+
     error "Form was not found in supplied HTML"
 }
 
@@ -107,66 +105,73 @@ ad_proc -public util::html::get_form_vars {
 } {
     Read vars from a form structure as that coming out from
     <code>util::html::get_form</code>.
-    
+
     @param form Form structure
-    
+
     @return var specification in a form suitable for the <code>vars</code>
             argument of proc <code>export_vars</code>.
 } {
-    array set fo $form
-    
+    set varDict ""
+    #
     # Extract value from every field
-    foreach field $fo(fields) {
-        array unset fld
-        array set fld $field
-        array unset a
-        array set a $fld(attributes)
+    #
+    foreach field [dict get $form fields] {
+        set attributes [dict get $field attributes]
         # no name, no variable
-        if {![info exists a(name)] || $a(name) eq ""} continue
-        set name $a(name) ; set tag $fld(tag)
+        if {![dict exists $attributes name]
+            || [dict get $attributes name] eq ""} {
+            continue
+        }
+        set name [dict get $attributes name]
+        set tag  [dict get $field tag]
         switch -- $tag {
             "input" {
-                if {[info exists a(value)]} {
-                    lappend v($name) $a(value)
+                if {[dict exists $attributes value]} {
+                    dict lappend varDict $name [dict get $attributes value]
                 }
             }
             "textarea" {
                 if {[info exists fld(value)]} {
-                    lappend v($name) $fld(value)
+                    dict lappend varDict $name [dict get $field value]
                 }
             }
             "select" {
-                foreach option $fld(options) {
-                    array set o $option
-                    array set a $o(attributes)
-                    if {[info exists a(selected)]} {
-                        lappend v($name) $o(value)
+                foreach option [dict get $field options] {
+                    set oAttributes [dict get $option attributes]
+                    if {[dict exists $oAttributes selected]} {
+                        dict lappend varDict $name [dict get $oAttributes value]
                     }
                 }
             }
         }
     }
-    
-    # Now vars must be translated in export_vars form
+
+    # Now varDict must be translated in export_vars form
     set vars [list]
-    foreach {name value} [array get v] {
-      # Multiple values must be specified 
+    foreach {name value} $varDict {
+      # Multiple values must be specified
       # with the :multiple modifier
       if {[llength $value] > 1} {
           set name ${name}:multiple
-      # Single values must be extracted 
+      # Single values must be extracted
       # from the list
       } else {
           set value [lindex $value 0]
       }
       # Formfield's name can contain colons,
       # I need to escape them.
-      regsub -all {:} $name {\:} name
+      regsub -all -- {:} $name {\:} name
       lappend vars [list $name $value]
     }
-    
+
     return $vars
 }
 
 
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

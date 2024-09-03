@@ -59,8 +59,8 @@ ad_proc -private doc_adp_quote_tcl_string { string } {
     Quotes special Tcl characters and newlines.
 
 } {
-    regsub -all {([\{\}\[\]\$\"\\])} $string {\\\1} string
-    regsub -all {\n} $string {\\n} string
+    regsub -all -- {([\{\}\[\]\$\"\\])} $string {\\\1} string
+    regsub -all -- {\n} $string {\\n} string
     return "\"$string\""
 }
 
@@ -127,9 +127,9 @@ ad_proc -public doc_adp_execute_file {
 	set tcl_code [doc_adp_compile $adp_code]
     } else {
 	set reparse_p 0
-	set mtime [file mtime $file_name]
-	set size [file size $file_name]
-	
+	set mtime [ad_file mtime $file_name]
+	set size [ad_file size $file_name]
+
 	# See whether the file has been cached, i.e., the __doc_adp_cache_info,$file_name
 	# proc has been declared. If it has, the proc will return a two-element list
 	# consisting of the mtime/size of the file when it was cached, which we then compare
@@ -140,7 +140,7 @@ ad_proc -public doc_adp_execute_file {
 	# We use procs so that the Tcl code can be byte-code-compiled for extra performance
 	# benefit.
 
-	if { [catch { set info [__doc_adp_cache_info,$file_name] }] 
+	if { [catch { set info [__doc_adp_cache_info,$file_name] }]
 	     || [lindex $info 0] != $mtime
 	     || [lindex $info 1] != $size } {
 	    set reparse_p 1
@@ -241,8 +241,8 @@ ad_proc -public doc_adp_compile { adp } {
 	if { [string index $adp $index] eq "/" } {
 	    set end_tag_p 1
 	    incr index
-	} elseif { ![info exists literal_tag] 
-		   && [string index $adp $index] eq "%" 
+	} elseif { ![info exists literal_tag]
+		   && [string index $adp $index] eq "%"
 	} {
 	    doc_adp_flush_text_buffer
 
@@ -255,8 +255,8 @@ ad_proc -public doc_adp_compile { adp } {
 	    }
 	    set tcl_code_begin $index
 
-	    while { $index < [string length $adp] 
-		    && ([string index $adp $index] ne "%" || [string index $adp $index+1] ne ">") 
+	    while { $index < [string length $adp]
+		    && ([string index $adp $index] ne "%" || [string index $adp $index+1] ne ">")
 		} {
 		incr index
 	    }
@@ -286,16 +286,16 @@ ad_proc -public doc_adp_compile { adp } {
 	if { ![info exists tag] } {
 	    # Find the next non-word character.
 	    set tag_begin $index
-	    while { [string index $adp $index] eq "-" 
-		    || [string is wordchar -strict [string index $adp $index]] 
+	    while { [string index $adp $index] eq "-"
+		    || [string is wordchar -strict [string index $adp $index]]
 		} {
 		incr index
 	    }
 	    set tag [string range $adp $tag_begin $index-1]
 	}
 
-	if { (![info exists literal_tag] || ($end_tag_p && $tag eq $literal_tag)) 
-	     && [nsv_exists doc_adptags $tag] 
+	if { (![info exists literal_tag] || ($end_tag_p && $tag eq $literal_tag))
+	     && [nsv_exists doc_adptags $tag]
 	 } {
 	    doc_adp_flush_text_buffer
 
@@ -323,10 +323,10 @@ ad_proc -public doc_adp_compile { adp } {
 
 		# Not a > - must be an attribute name.
 		set attr_name_begin $index
-		while { $index < $adp_length 
-			&& [string index $adp $index] ne ">" 
-			&& [string index $adp $index] ne "=" 
-			&& ![string is space -strict [string index $adp $index]] 
+		while { $index < $adp_length
+			&& [string index $adp $index] ne ">"
+			&& [string index $adp $index] ne "="
+			&& ![string is space -strict [string index $adp $index]]
 		    } {
 		    incr index
 		}
@@ -351,10 +351,10 @@ ad_proc -public doc_adp_compile { adp } {
 			incr index
 		    } else {
 			set value_begin $index
-			while { $index < $adp_length 
-				&& [string index $adp $index] ne ">" 
-				&& [string index $adp $index] ne "=" 
-				&& ![string is space -strict [string index $adp $index]] 
+			while { $index < $adp_length
+				&& [string index $adp $index] ne ">"
+				&& [string index $adp $index] ne "="
+				&& ![string is space -strict [string index $adp $index]]
 			    } {
 			    incr index
 			}
@@ -377,10 +377,10 @@ ad_proc -public doc_adp_compile { adp } {
 		doc_adp_append_code "\}"
 	    } else {
 		doc_adp_append_code "set __doc_attributes \[ns_set create\]"
-		for { set i 0 } { $i < [ns_set size $attributes] } { incr i } {
-		    doc_adp_append_code "ns_set put \$__doc_attributes [doc_adp_quote_tcl_string [ns_set key $attributes $i]] [doc_adp_quote_tcl_string [ns_set value $attributes $i]]"
+                foreach {key value} [ns_set array $attributes] {
+		    doc_adp_append_code "ns_set put \$__doc_attributes [doc_adp_quote_tcl_string $key] [doc_adp_quote_tcl_string $value]"
 		}
-		
+
 		if { $tag_info(balanced_p) } {
 		    doc_adp_append_code "$tag_info(handler) \$__doc_attributes \{"
 		    lappend balanced_tag_stack $tag

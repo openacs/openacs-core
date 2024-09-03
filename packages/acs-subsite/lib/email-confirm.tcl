@@ -1,14 +1,22 @@
-if {![db_0or1row userp {select 1 from users where user_id = :user_id}]
+ad_include_contract {
+    Verify users's email by checking the authentication token.
+    People normally come here from a confirmation email.
+} {
+    user_id:integer,notnull
+    token:word,notnull
+}
+
+set user [acs_user::get_user_info -user_id $user_id]
+if {$user eq ""
     || $token ne [auth::get_user_secret_token -user_id $user_id] } {
     set title "Bad token"
     set message "The link given to authenticate your email was invalid."
     ad_return_template /packages/acs-subsite/lib/message
 } else {
     auth::set_email_verified -user_id $user_id
+    set member_state [acs_user::get_user_info -user_id $user_id -element member_state]
 
-    acs_user::get -user_id $user_id -array user_info
-
-    set export_vars [export_vars -form { { username $user_info(username) } }]
+    set export_vars [export_vars -form { { username "[dict get $user username]" } }]
     set site_link [ad_site_home_link]
     set system_name [ad_system_name]
 }

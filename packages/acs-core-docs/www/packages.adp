@@ -1,7 +1,11 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {OpenACS Packages}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {OpenACS Packages}</property>
 <property name="doc(title)">OpenACS Packages</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="dev-guide" leftLabel="Prev"
 			title="Chapter 11. Development
@@ -9,20 +13,23 @@ Reference"
 			rightLink="objects" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="packages" id="packages"></a>OpenACS Packages</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">By Pete Su and Bryan Quinn</span></p><span style="color: red">&lt;/authorblurb&gt;</span><div class="sect2">
+<a name="packages" id="packages"></a>OpenACS Packages</h2></div></div></div><div class="authorblurb">
+<p>By Pete Su and Bryan Quinn</p>
+OpenACS docs are written by the named authors, and may be edited by
+OpenACS documentation staff.</div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="packages-overview" id="packages-overview"></a>Overview</h3></div></div></div><p>This document is a guide on how to write a software package for
 OpenACS. OpenACS packages are installed and maintained with the
 OpenACS Package Manager (APM) which is part of the acs-admin
 package. This document presents reasons for packaging software,
-conventions for the file system and naming that must be followed,
+conventions for the filesystem and naming that must be followed,
 and step by step instructions for creating a new package for the
 "Notes" example package.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="server-file-layout" id="server-file-layout"></a>Server file layout</h3></div></div></div><p>Here is how an OpenACS 5 server is laid out starting from the
 Server root (ROOT):</p><div class="figure">
-<a name="idp140682185326152" id="idp140682185326152"></a><p class="title"><strong>Figure 11.1. Server file layout
+<a name="id1413" id="id1413"></a><p class="title"><strong>Figure 11.1. Server file layout
 diagram</strong></p><div class="figure-contents"><pre class="programlisting">
 ROOT/
     bin/
@@ -48,7 +55,7 @@ ROOT/
 <a name="packages-looks" id="packages-looks"></a>What a Package Looks Like</h3></div></div></div><p>Each package encapsulates all of its data model, library code,
 logic, administration pages and user pages in a single part of the
 file tree. This means developers can track down <span class="emphasis"><em>everything</em></span> that is related to a
-particular package without hunting all over the file system.
+particular package without hunting all over the filesystem.
 Encapsulating everything about a package in one place also makes it
 much easier to distribute packages independently from the OpenACS
 Core.</p><p>In order to make this work, we need a system that keeps track of
@@ -61,7 +68,7 @@ removal. In OpenACS 5, this tool is called the <a class="link" href="packages" t
 <a class="indexterm" name="baby" id="baby"></a> To illustrate
 the general structure of a package, let&#39;s see what the package
 for the "notes" application should look like.</p><div class="figure">
-<a name="idp140682185307736" id="idp140682185307736"></a><p class="title"><strong>Figure 11.2. Package file layout
+<a name="id1414" id="id1414"></a><p class="title"><strong>Figure 11.2. Package file layout
 diagram</strong></p><div class="figure-contents"><pre class="programlisting">
 ROOT/
   +-- packages/    APM Root
@@ -124,14 +131,14 @@ ROOT/
 this case is <code class="computeroutput">ROOT/packages/notes</code>. The following table
 describes in detail what each of the files up in the diagram
 contain.</p><p>A special note on the <code class="computeroutput">
-<em class="replaceable"><code>PACKAGE-KEY</code></em>/www/resources</code>
-directory. Files in this directory are available at <code class="computeroutput">http://<em class="replaceable"><code>yourserver</code></em>/resources/<em class="replaceable"><code>PACKAGE-KEY</code></em>/...</code> and are
-returned without any permissions checking or even checks that the
-package is installed or mounted. Files are returned directly, so
-.tcl or .adp files are not sourced in these directories. This makes
-it suitable for storing icons, css files, javascript, and other
-static content which can be treated this way.</p><div class="table">
-<a name="idp140682185313912" id="idp140682185313912"></a><p class="title"><strong>Table 11.1. Package
+<span class="replaceable"><span class="replaceable">PACKAGE-KEY</span></span>/www/resources</code>
+directory. Files in this directory are available at <code class="computeroutput">http://<span class="replaceable"><span class="replaceable">yourserver</span></span>/resources/<span class="replaceable"><span class="replaceable">PACKAGE-KEY</span></span>/...</code> and are returned
+without any permissions checking or even checks that the package is
+installed or mounted. Files are returned directly, so .tcl or .adp
+files are not sourced in these directories. This makes it suitable
+for storing icons, css files, javascript, and other static content
+which can be treated this way.</p><div class="table">
+<a name="id1419" id="id1419"></a><p class="title"><strong>Table 11.1. Package
 files</strong></p><div class="table-contents"><table class="table" summary="Package files" cellspacing="0" border="1">
 <colgroup>
 <col><col><col>
@@ -252,7 +259,7 @@ instances</em></span>. Once a package is loaded, the administrator
 can create as many instances of the package as she likes, and map
 these instances to any URL in the site that she wants. If packages
 are analogous to executable programs in an operating system, then
-package instances are analgous to multiple running copies of a
+package instances are analogous to multiple running copies of a
 single program. Each instance can be independently administered and
 each instance maintains its own set of application parameters and
 options.</p><p>The following sections will show you how to make a package for
@@ -274,7 +281,7 @@ for easy reference:</p><div class="variablelist"><dl class="variablelist">
 <dt><span class="term">Package Key</span></dt><dd><p>This is a short text string that should uniquely name your
 package to distinguish it from all the others. It is used as a
 database key to keep track of the package and as the name of the
-directory in the file system where all the files related to your
+directory in the filesystem where all the files related to your
 package will live. Example package keys in the current system
 include: <code class="computeroutput">forums</code>, <code class="computeroutput">acs-kernel</code> and so on. For the example
 application, we will use the package key <code class="computeroutput">notes</code>.</p></dd><dt><span class="term">Package Name</span></dt><dd><p>This is a short human readable name for your package. For our
@@ -306,9 +313,10 @@ and <code class="computeroutput">ROOT/packages/notes/sql/postgresql/notes-drop.s
 click the link called "notes" to go to the management
 page for the new package. Now click the link called "Manage
 file information", then the "Scan the <code class="computeroutput">packages/notes</code> directory for additional
-files in this package" link on that page to scan the file
-system for new files. This will bring you do a page that lists all
-the files you just added and lets you add them to the <code class="computeroutput">notes</code> package.</p><p>Note that while the <code class="computeroutput">.sql</code>
+files in this package" link on that page to scan the
+filesystem for new files. This will bring you to a page that lists
+all the files you just added and lets you add them to the
+<code class="computeroutput">notes</code> package.</p><p>Note that while the <code class="computeroutput">.sql</code>
 files have been added to the package, they <span class="emphasis"><em>have not</em></span> been loaded into the database.
 For the purposes of development, you have to load the data model by
 hand, because while OpenACS has automatic mechanisms for loading
@@ -347,8 +355,8 @@ didn&#39;t put the pages underneath <code class="computeroutput">ROOT/www</code>
 What we have to do is <span class="emphasis"><em>mount</em></span>
 the application into the site map. That is, we have to define the
 URL from which the application will serve its pages.</p><p>In OpenACS 5, administrators can define an arbitrary mapping
-between the URLs the user types and the actual file in the file
-system that is served. This mapping is called the <span class="emphasis"><em>site map</em></span> and entries in the site map are
+between the URLs the user types and the actual file in the
+filesystem that is served. This mapping is called the <span class="emphasis"><em>site map</em></span> and entries in the site map are
 called <span class="emphasis"><em>site nodes</em></span>. Each site
 node maps a URL to an OpenACS object. Since package instances are
 objects, the site map allows us to easily map package instances to
@@ -370,7 +378,7 @@ which is by default available at <code class="computeroutput">/acs-admin/site-ma
 to add a new sub-folder called <code class="computeroutput">notes</code> to the root of the site, then click
 "new application" to mount a new instance of the
 <code class="computeroutput">notes</code> application to the site.
-Name the new instance <code class="computeroutput">notes-1</code>.</p><p>Then type this URL into your browser: <code class="computeroutput">http://<em class="replaceable"><code>yourserver</code></em>/notes/hello.html</code>
+Name the new instance <code class="computeroutput">notes-1</code>.</p><p>Then type this URL into your browser: <code class="computeroutput">http://<span class="replaceable"><span class="replaceable">yourserver</span></span>/notes/hello.html</code>
 </p><p>Now you should see the contents of the page that you added. What
 has happened is that all URLs that start with <code class="computeroutput">/notes</code> have been mapped in such a way as to
 serve content from the directory <code class="computeroutput">ROOT/packages/notes/www</code>. At this point, you
@@ -394,8 +402,8 @@ download and install. We&#39;ll cover this later.</p></li>
 <a name="packages-add-reading" id="packages-add-reading"></a>Additional Reading</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p><a class="xref" href="apm-design" title="Package Manager Design">Package Manager Design</a></p></li><li class="listitem"><p><a class="xref" href="apm-requirements" title="Package Manager Requirements">Package Manager Requirements</a></p></li><li class="listitem"><p><a class="link" href="tutorial-newpackage" title="Creating an Application Package">package development
 tutorial</a></p></li>
-</ul></div><p><span class="cvstag">($&zwnj;Id: packages.xml,v 1.13 2018/04/22
-19:24:37 gustafn Exp $)</span></p>
+</ul></div><div class="cvstag">($&zwnj;Id: packages.xml,v 1.13.2.3 2021/09/02
+16:56:01 gustafn Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

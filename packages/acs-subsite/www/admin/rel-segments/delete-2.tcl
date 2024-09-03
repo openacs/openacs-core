@@ -33,7 +33,7 @@ if {$operation eq "Yes, I really want to delete this segment"} {
 
     # Delete all the constraints that require this segment
     db_transaction {
-        rel_segments_delete $segment_id
+        rel_segment::delete $segment_id
     }
 }
 

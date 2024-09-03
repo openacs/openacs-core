@@ -21,13 +21,12 @@
    (<computeroutput>object_id</computeroutput>).
    </emphasis></para>
     <para>
-      The general permissions system has a flexible (and relatively complex) data model in OpenACS.
+      The general permission system has a flexible (and relatively complex) data model in OpenACS.
       Developers who have not had the time to learn the internals of the data model
       may end up writing seemingly correct code that crashes their system in
       weird ways. This writeup is the result of my running into such a piece
       of code and trying to understand exactly what went wrong.
-      It is geared towards developers who understand the general permissions
-      system to the extent that is described in the 
+      It is geared towards developers who understand the general permission system to the extent that is described in the 
       <ulink url="permissions.html">
       Groups, Context, Permissions documentation</ulink>,
       but who have not had the opportunity to take a long, careful look at the
@@ -72,7 +71,7 @@ create table <emphasis role="bold">acs_objects</emphasis> (
       allows developers to define relationships between any two entities <emphasis>A</emphasis>
       and <emphasis>B</emphasis> by defining a relationship between their corresponding entries
       in the <computeroutput>acs_objects</computeroutput> table.  One of the applications of this
-      powerful capability is the general permissions system. 
+      powerful capability is the general permission system. 
     </para>
 
     <para>
@@ -205,7 +204,7 @@ create table <emphasis role="bold">acs_objects</emphasis> (
 
     <para>
       Although quite feasible, this approach fails to take advantage of the fact
-      that objects in the system are commonly organized hierarchally,
+      that objects in the system are commonly organized hierarchically,
       and permissions usually follow the hierarchical structure, so that if user
       <emphasis>X</emphasis> has the <emphasis>read</emphasis> privilege on object <emphasis>A</emphasis>, she typically
       also has the <emphasis>read</emphasis> privilege on all objects attached under <emphasis>A</emphasis>.
@@ -706,7 +705,7 @@ security_inherit_p = 'f'
     <title>Party Hierarchy</title>
 
     <para>
-      Now for the third hierarchy playing a promiment role in the permission system. The party
+      Now for the third hierarchy playing a prominent role in the permission system. The party
       data model is set up as follows. 
     </para>
 
@@ -895,7 +894,7 @@ security_inherit_p = 'f'
       </tgroup>
     </informaltable>
 <para>Read <computeroutput>acs_rels</computeroutput>: right-side is a
-        subset of left-side, ie
+        subset of left-side, i.e.
         <computeroutput>object2</computeroutput> is a part of
         <computeroutput>object1</computeroutput>.
 </para>

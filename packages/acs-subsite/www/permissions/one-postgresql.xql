@@ -20,6 +20,24 @@
       </querytext>
 </fullquery>
 
+<fullquery name="nr_inherited_permissions">
+      <querytext>
+select count(*) from (
+  select grantee_id, grantee_name, privilege
+  from (
+	select grantee_id, acs_object__name(grantee_id) as grantee_name, privilege, 1 as counter
+	from acs_permission.permissions_all(:object_id)
+        union all
+        select grantee_id, acs_object__name(grantee_id) as grantee_name, privilege, -1 as counter
+        from acs_permissions
+        where object_id = :object_id ) dummy
+  group by grantee_id, grantee_name, privilege
+  having sum(counter) > 0
+) as counts
+      </querytext>
+</fullquery>
+
+
 <fullquery name="children">      
   <querytext>
     

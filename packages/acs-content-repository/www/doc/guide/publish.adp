@@ -1,9 +1,13 @@
 
-<property name="context">{/doc/acs-content-repository {ACS Content Repository}} {Content Repository Developer Guide: Publishing
+<property name="context">{/doc/acs-content-repository/ {ACS Content Repository}} {Content Repository Developer Guide: Publishing
 Content}</property>
 <property name="doc(title)">Content Repository Developer Guide: Publishing
 Content</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h2>Publishing Content</h2>
 <strong>
 <a href="../index">Content Repository</a> : Developer
@@ -97,9 +101,9 @@ item.</p>
 <kbd>content::get_content</kbd> in its Tcl file in order to
 automatically retrieve the current item&#39;s attributes. The
 attributes will be placed in a onerow datasource called
-<kbd>content</kbd> . The template may then call
-<kbd>template::util::array_to_vars content</kbd> in order to
-convert the onerow datasource to local variables.</p>
+<kbd>content</kbd> . The template may then loop through the content
+array in order to convert the onerow datasource to local
+variables.</p>
 <p>In addition to the "x" view, the Content Repository
 creates an "i" view, which simplifies the creation of new
 revisions. The "i" view has the same name as the content
@@ -116,11 +120,11 @@ the initial query for any needed attributes.</p>
 <h3>Merging Data with Templates</h3>
 <h3>Returning Output</h3>
 <ol>
-<li>Write to the file system</li><li>Service public requests directly</li>
+<li>Write to the filesystem</li><li>Service public requests directly</li>
 </ol>
 <hr>
 <a href="mailto:karlg\@arsdigita.com">karlg\@arsdigita.com</a>
 <br>
 
-Last Modified: $&zwnj;Id: publish.html,v 1.5 2017/08/07 23:47:47 gustafn
-Exp $
+Last Modified: $&zwnj;Id: publish.html,v 1.5.2.3 2024/09/01 12:39:59
+gustafn Exp $

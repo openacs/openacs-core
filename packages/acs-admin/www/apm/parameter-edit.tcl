@@ -43,7 +43,7 @@ plain text string that identifies the parameter.
 </tr>
 
 <tr>
-  <th aligh="right" nowrap>Parameter Name:</th>
+  <th align="right" nowrap>Parameter Name:</th>
   <td><input name="parameter_name" size="50" value="[ns_quotehtml $parameter_name]"></td>
 </tr>
 
@@ -52,8 +52,8 @@ plain text string that identifies the parameter.
   <td>Type a description of your parameter.
 </tr>
 
-<tr valign=top>
-  <th aligh="right"><br>Description:</th>
+<tr valign="top">
+  <th align="right"><br>Description:</th>
   <td><textarea name="description" cols="60" rows="8">[ns_quotehtml $description]</textarea>
 </td>
 </tr>
@@ -64,8 +64,8 @@ plain text string that identifies the parameter.
 to indicate which parameters pertain to security.
 </tr>
 
-<tr valign=top>
-  <th aligh="right"><br>Section Name:</th>
+<tr valign="top">
+  <th align="right"><br>Section Name:</th>
   <td><input name="section_name" value="[ns_quotehtml $section_name]" size=50><br>
 </td>
 </tr>
@@ -77,7 +77,7 @@ to indicate which parameters pertain to security.
 </tr>
 
 <tr>
-  <th aligh="right" nowrap>Type:</th>
+  <th align="right" nowrap>Type:</th>
   <td><select name="datatype">
       [ad_generic_optionlist {number string "textarea"} {number string text} $datatype]
       </select>
@@ -92,7 +92,7 @@ to indicate which parameters pertain to security.
 </tr>
 
 <tr>
-  <th aligh="right" nowrap>Default:</th>
+  <th align="right" nowrap>Default:</th>
 <td><textarea name="default_value" cols="60" rows="[expr {$datatype eq "text" ? 8 : 1}]">[ns_quotehtml $default_value]</textarea>
 </tr>
 

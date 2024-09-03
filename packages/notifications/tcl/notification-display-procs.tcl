@@ -27,7 +27,7 @@ ad_proc -public notification::display::request_widget {
     if { [apm_package_url_from_key [notification::package_key]] eq "" } {
         return {}
     }
-    
+
     if {$user_id eq ""} {
         set user_id [ad_conn user_id]
     }
@@ -37,7 +37,7 @@ ad_proc -public notification::display::request_widget {
 
     # Check if subscribed
     set request_id [notification::request::get_request_id -type_id $type_id -object_id $object_id -user_id $user_id]
-    
+
     if {$request_id ne ""} {
         set icon /resources/acs-subsite/email_delete.gif
         set icon_alt [_ acs-subsite.icon_of_envelope]
@@ -114,19 +114,18 @@ ad_proc -public notification::display::get_urls {
     {-object_id:required}
     {-return_url {}}
     {-pretty_name}
+    -user_id
 } {
-    Get both subscribe_url and unsubscribe_url as . 
-    At most one of them will be set.
+    Get both subscribe_url and unsubscribe_url as a list. At most one
+    of them will be set.
 
-    Example: <pre>
-    foreach { subscribe_url unsubscribe_url } \
-        [notification::display::get_urls \
+    Example:
+    <pre>
+    lassign [notification::display::get_urls \
              -type "my_notif_type" \
              -object_id $object_id \
-             -pretty_name $title] {}</pre>
-
-    The above foreach trick will cause subscribe_url and unsubscribe_url 
-    to be set correctly. Don't forget the end pair of curly braces.
+             -pretty_name $title] subscribe_url unsubscribe_url
+    </pre>
 
     @return a Tcl list with two elements (subscribe_url, unsubscribe_url)
 } {
@@ -141,7 +140,11 @@ ad_proc -public notification::display::get_urls {
     }
 
     # Check if subscribed
-    set request_id [notification::request::get_request_id -type_id $type_id -object_id $object_id -user_id [ad_conn untrusted_user_id]]
+    if {![info exists user_id]} {
+        set user_id [ad_conn untrusted_user_id]
+    }
+    set request_id [notification::request::get_request_id \
+                        -type_id $type_id -object_id $object_id -user_id $user_id]
 
 
     if { $request_id eq "" } {

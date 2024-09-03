@@ -1,9 +1,13 @@
 
-<property name="context">{/doc/acs-content-repository {ACS Content Repository}} {Content Repository Developer Guide: Creating Content
+<property name="context">{/doc/acs-content-repository/ {ACS Content Repository}} {Content Repository Developer Guide: Creating Content
 Revisions}</property>
 <property name="doc(title)">Content Repository Developer Guide: Creating Content
 Revisions</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h2>Creating Content Revisions</h2>
 <strong>
 <a href="/doc">ACS Documentation</a> : <a href="../index">Content Repository</a> : Developer Guide</strong>

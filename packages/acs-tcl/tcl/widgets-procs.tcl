@@ -4,38 +4,60 @@ ad_library {
     @cvs-id $Id$
 }
 
-ad_proc us_state_widget {
-    {default ""}
-    {select_name "usps_abbrev"}
+ad_proc -deprecated us_state_widget {
+   {default ""}
+   {select_name "usps_abbrev"}
 } {
-    Returns a state selection box.
-    This widget depends on the ref-us-states package.
-} {
-    set widget_value "<select name=\"$select_name\">\n"
-    if { $default eq "" } {
-        append widget_value "<option value=\"\" selected=\"selected\">Choose a State</option>\n"
-    }
+   Returns a state selection box.
+   This widget depends on the ref-us-states package.
 
-    db_foreach all_states {
-        select state_name, abbrev from states order by state_name
-    } {
-        if { $default == $abbrev } {
-            append widget_value "<option value=\"$abbrev\" selected=\"selected\">$state_name</option>\n"
-        } else {
-            append widget_value "<option value=\"$abbrev\">$state_name</option>\n"
-        }
-    }
-    append widget_value "</select>\n"
-    return $widget_value
+    DEPRECATED for various reasons: doesn't comply with OpenACS naming
+    convention, difficult to style, no good separation of Tcl and
+    HTML, 'select_name' is prone to code injection and the proc
+    depends on an external package. A better alternative would be
+    e.g. implementing this using the templating system.
+
+    @see template::widget::select
+    @see template::widget::multiselect
+    @see template::multirow
+
+} {
+   set widget_value "<select name=\"$select_name\">\n"
+   if { $default eq "" } {
+       append widget_value "<option value=\"\" selected=\"selected\">Choose a State</option>\n"
+   }
+
+   db_foreach all_states {
+       select state_name, abbrev from us_states order by state_name
+   } {
+       if { $default == $abbrev } {
+           append widget_value "<option value=\"$abbrev\" selected=\"selected\">$state_name</option>\n"
+       } else {
+           append widget_value "<option value=\"$abbrev\">$state_name</option>\n"
+       }
+   }
+   append widget_value "</select>\n"
+   return $widget_value
 }
 
-ad_proc country_widget {
+ad_proc -deprecated country_widget {
     {default ""}
     {select_name "country_code"}
     {size_subtag "size='4'"}
 } {
     Returns a country selection box.
     This widget depends on the ref-countries package.
+
+    DEPRECATED for various reasons: doesn't comply with OpenACS naming
+    convention, difficult to style, no good separation of Tcl and
+    HTML, 'size_subtag' is just implemented code injection and
+    furthermore, default value might depend on a parameter designed
+    just for "american readers". A better alternative would be
+    e.g. implementing this using the templating system.
+
+    @see template::widget::select
+    @see template::widget::multiselect
+    @see template::multirow
 } {
     set widget_value "<select name=\"$select_name\" $size_subtag>\n"
     if { $default eq "" } {
@@ -87,29 +109,57 @@ ad_proc ad_generic_optionlist {
     return $return_string
 }
 
-# use ad_integer_optionlist instead of day_list
-proc day_list {} {
+ad_proc -deprecated day_list {} {
+    DEPRECATED: this proc does not comply with OpenACS naming
+    convention and does not provide much value. One can e.g. use
+    'clock' based idioms to compute the number of days that are in a
+    specific month.
+
+    @see clock
+} {
     return  {1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31}
 }
 
-ad_proc month_list {} {
+ad_proc -deprecated month_list {} {
     Returns list of month abbreviations
+
+    DEPRECATED: this proc does not comply with OpenACS naming
+    convention and is not localized. 'clock' based idioms can provide
+    a localized list of months and/or message keys can be used.
 } {
     return  {Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec}
 }
 
-ad_proc long_month_list {} {
+ad_proc -deprecated long_month_list {} {
     Returns list of months
+
+    DEPRECATED: this proc does not comply with OpenACS naming
+    convention and is not localized. 'clock' based idioms can provide
+    a localized list of months and/or message keys can be used.
 } {
     return  {January February March April May June July August September October November December}
 }
 
-# use ad_integer_optionlist instead of month_value_list
-proc month_value_list {} {
+ad_proc -deprecated month_value_list {} {
+    DEPRECATED: this proc does not comply with OpenACS naming
+    convention and does not provide much value.
+
+    @see clock
+} {
     return {1 2 3 4 5 6 7 8 9 10 11 12}
 }
 
-ad_proc future_years_list {
+ad_proc -deprecated future_years_list args {
+    Returns a list containing the next num_year years in the future.
+
+    DEPRECATED: use the version complying with naming convention
+
+    @see ad_future_years_list
+} {
+    return [ad_future_years_list {*}$args]
+}
+
+ad_proc ad_future_years_list {
     {num_year 10}
 } {
     Returns a list containing the next num_year years in the future.
@@ -163,8 +213,14 @@ ad_proc ad_integer_optionlist {
     return $return_string
 }
 
-ad_proc ad_dateentrywidget {column { value 0 } } {
+ad_proc -deprecated ad_dateentrywidget {column { value 0 } } {
     Returns form pieces for a date entry widget. A null date may be selected.
+
+    DEPRECATED: better alternatives exist for date-entry widgets,
+    which would also support localization.
+
+    @see template::data::validate::h5date
+    @see template::data::validate::h5time
 } {
     # if you would like the default to be null, call with value= ""
 
@@ -182,7 +238,7 @@ ad_proc ad_dateentrywidget {column { value 0 } } {
         set year ""
     } else {
         lassign [split $value "-"] year month day
-        # trim the day, in case we get as well a time stamp
+        # trim the day, in case we get as well a timestamp
         regexp {^([0-9]+) } $day _ day
     }
 
@@ -204,7 +260,7 @@ ad_proc ad_dateentrywidget {column { value 0 } } {
     return $output
 }
 
-ad_proc ad_db_select_widget {
+ad_proc -deprecated ad_db_select_widget {
     {-size 0}
     {-multiple 0}
     {-default {}}
@@ -216,7 +272,7 @@ ad_proc ad_db_select_widget {
     sql_qry
     name
 } {
-    given a sql query this generates a select group.  If there is only
+    given a SQL query this generates a select group.  If there is only
     one value it returns the text and a hidden variable setting that value.
     The first selected column should contain the optionlist items. The
     second selected column should contain the optionlist values.
@@ -233,6 +289,13 @@ ad_proc ad_db_select_widget {
     <p>
     if -blank_if_no_db is true, then do not return a select widget unless
     there are rows from the database
+
+    DEPRECATED: the template system offers better ways to produce
+                markup from a query nowadays.
+
+    @see template::widget::select
+    @see template::widget::multiselect
+    @see /doc/acs-templating/tagref/multiple
 } {
     set retval {}
     set count 0
@@ -295,7 +358,7 @@ ad_proc ad_db_select_widget {
     }
 }
 
-ad_proc ad_html_colors {} "Returns an array of HTML colors and names." {
+ad_proc -deprecated ad_html_colors {} "Returns an array of HTML colors and names." {
     return {
         { Black 0 0 0 }
         { Silver 192 192 192 }
@@ -316,7 +379,14 @@ ad_proc ad_html_colors {} "Returns an array of HTML colors and names." {
     }
 }
 
-ad_proc ad_color_widget_js {} "Returns JavaScript code necessary to use color widgets." {
+ad_proc -deprecated ad_color_widget_js {} {
+    Returns JavaScript code necessary to use color widgets.
+
+    DEPRECATED: HTML now has a native color widget that requires no
+    custom implementation.
+
+    @see https://developer.mozilla.org/en-US/docs/Web/HTML/Element/Input/color
+} {
     return {
 
         var adHexTupletValues = '0123456789ABCDEF';
@@ -376,12 +446,17 @@ ad_proc ad_color_widget_js {} "Returns JavaScript code necessary to use color wi
     }
 }
 
-ad_proc ad_color_widget {
+ad_proc -deprecated ad_color_widget {
     name
     default
     { use_js 0 }
 } {
     Returns a color selection widget, optionally using JavaScript. Default is a string of the form '0,192,255'.
+
+    DEPRECATED: HTML now has a native color widget that requires no
+    custom implementation.
+
+    @see https://developer.mozilla.org/en-US/docs/Web/HTML/Element/Input/color
 } {
     set out {<table cellspacing="0" cellpadding="0"><tr><td>}
     append out [subst {<select name="$name.list"}]
@@ -435,8 +510,13 @@ ad_proc ad_color_widget {
     return $out
 }
 
-ad_proc ad_process_color_widgets args {
+ad_proc -deprecated ad_process_color_widgets args {
     Sets variables corresponding to the color widgets named in $args.
+
+    DEPRECATED: HTML now has a native color widget that requires no
+    custom implementation.
+
+    @see https://developer.mozilla.org/en-US/docs/Web/HTML/Element/Input/color
 } {
     foreach field $args {
         upvar $field var

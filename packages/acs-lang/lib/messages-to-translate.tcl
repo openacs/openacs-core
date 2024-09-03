@@ -1,3 +1,7 @@
+ad_include_contract {
+    Display messages to translate when translator mode is enabled.
+}
+
 set locale [ad_conn locale]
 
 set display_p [expr {[lang::util::translator_mode_p] && [ad_conn locale] ne "en_US" }]
@@ -27,8 +31,8 @@ template::list::create \
             label ""
             display_template {
                 <if @messages.translated_p;literal@ true>
-                  <a href="@messages.translate_url@" title="Edit the translation">
-                    <img src="/shared/images/Edit16.gif" height="16" width="16" alt="Edit" border="0">
+                  <a href="@messages.translate_url@">
+                    <adp:icon name="edit" title="Edit the translation">
                   </a>
                 </if>
             }

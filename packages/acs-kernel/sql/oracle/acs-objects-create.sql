@@ -158,6 +158,14 @@ create table acs_objects (
 	unique (context_id, object_id) disable
 );
 
+--
+-- Avoid potential loops on context_ids. A context_id must be
+-- different from the object_id. If no context_id should be checked, its
+-- value must be NULL. Note that this constraint is not guaranteed to
+-- avoid all loops; it is still possible to create indirect recursive
+-- loops but excludes some real-world problems.
+ALTER TABLE acs_objects ADD CONSTRAINT acs_objects_context_id_ck CHECK (context_id != object_id);
+
 create index acs_objects_context_object_idx on acs_objects (context_id, object_id);
 
 alter table acs_objects modify constraint acs_objects_context_object_un enable;
@@ -1021,7 +1029,7 @@ as
    -- N_GENERATIONS is how far the current DESCENDANT_ID is from
    -- OBJECT_ID.
 
-   -- This function will verfy that each actually descendant of
+   -- This function will verify that each actually descendant of
    -- OBJECT_ID has a row in the index table. It does not check that
    -- there aren't extraneous rows or that the ancestors of OBJECT_ID
    -- are maintained correctly.

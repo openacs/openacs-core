@@ -1,7 +1,11 @@
 
-<property name="context">{/doc/acs-developer-support {ACS Developer Support}} {Request Information}</property>
+<property name="context">{/doc/acs-developer-support/ {ACS Developer Support}} {Request Information}</property>
 <property name="doc(title)">Request Information</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h2>Request Information</h2>
 <a href="/pvt/home">Your Workspace</a>
  : <a href="/admin/">Admin
@@ -127,8 +131,7 @@ and submodule is null</pre></blockquote>
 </tr><tr valign="top">
 <td align="right" bgcolor="#FFFFFF" nowrap="nowrap">
   13 ms  </td><td bgcolor="#FFFFFF">1row nsdb2 (main pool)
-<blockquote><pre>
-select count(*) from user_group_map where user_id =1472 and group_id = 2</pre></blockquote>
+<blockquote><pre>select count(*) from user_group_map where user_id =1472 and group_id = 2</pre></blockquote>
 </td>
 </tr><tr valign="top">
 <td align="right" bgcolor="#DDDDDD" nowrap="nowrap">
@@ -141,14 +144,12 @@ and submodule is null</pre></blockquote>
 </tr><tr valign="top">
 <td align="right" bgcolor="#FFFFFF" nowrap="nowrap">
   12 ms  </td><td bgcolor="#FFFFFF">1row nsdb2 (main pool)
-<blockquote><pre>
-select multi_role_p from user_groups where group_id = 1</pre></blockquote>
+<blockquote><pre>select multi_role_p from user_groups where group_id = 1</pre></blockquote>
 </td>
 </tr><tr valign="top">
 <td align="right" bgcolor="#DDDDDD" nowrap="nowrap">
   17 ms  </td><td bgcolor="#DDDDDD">1row nsdb2 (main pool)
-<blockquote><pre>
-select decode(count(*), 0, 0, 1) from user_group_map where user_id = 1472 and group_id = 1 and role in ('administrator', 'all')</pre></blockquote>
+<blockquote><pre>select decode(count(*), 0, 0, 1) from user_group_map where user_id = 1472 and group_id = 1 and role in ('administrator', 'all')</pre></blockquote>
 </td>
 </tr><tr valign="top">
 <td align="right" bgcolor="#FFFFFF" nowrap="nowrap">
@@ -235,8 +236,7 @@ select decode(count(*), 0, 0, 1) from user_group_map where user_id = 1472 and gr
 </tr><tr valign="top">
 <td align="right" bgcolor="#FFFFFF" nowrap="nowrap">
   4 ms  </td><td bgcolor="#FFFFFF">select nsdb2 (main pool)
-<blockquote><pre>
-select newsgroup_id from newsgroups where scope = 'all_users' or scope = 'registered_users' or (scope = 'group' and group_id = 6)</pre></blockquote>
+<blockquote><pre>select newsgroup_id from newsgroups where scope = 'all_users' or scope = 'registered_users' or (scope = 'group' and group_id = 6)</pre></blockquote>
 </td>
 </tr><tr valign="top">
 <td align="right" bgcolor="#DDDDDD" nowrap="nowrap">
@@ -474,8 +474,7 @@ order by release_date desc, creation_date desc</pre></blockquote>
 </tr><tr valign="top">
 <td align="right" bgcolor="#FFFFFF" nowrap="nowrap">
   33 ms  </td><td bgcolor="#FFFFFF">0or1row nsdb2 (main pool)
-<blockquote><pre>
-select u.first_names || ' ' || u.last_name as name, u.bio, u.skills, 
+<blockquote><pre>select u.first_names || ' ' || u.last_name as name, u.bio, u.skills, 
                     ug.group_name as office, ug.group_id as office_id
                from im_employees_active u, user_groups ug, user_group_map ugm
               where u.user_id = ugm.user_id(+)
@@ -507,8 +506,7 @@ and ad_group_member_p ( 1472, ug.group_id ) = 't'</pre></blockquote>
 </tr><tr valign="top">
 <td align="right" bgcolor="#FFFFFF" nowrap="nowrap">
   11 ms  </td><td bgcolor="#FFFFFF">1row nsdb3 (log pool)
-<blockquote><pre>
-select ad_group_member_p(1472, system_administrator_group_id) from dual</pre></blockquote>
+<blockquote><pre>select ad_group_member_p(1472, system_administrator_group_id) from dual</pre></blockquote>
 </td>
 </tr><tr valign="top">
 <td align="right" bgcolor="#DDDDDD" nowrap="nowrap">

@@ -1,7 +1,11 @@
 
-<property name="context">{/doc/search {Search}} {How to make an object type searchable?}</property>
+<property name="context">{/doc/search/ {Search}} {How to make an object type searchable?}</property>
 <property name="doc(title)">How to make an object type searchable?</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <blockquote>
 <h2>How to make an object type searchable?</h2>
 by Neophytos Demetriou (<a href="mailto:k2pts\@cytanet.com.cy">k2pts\@cytanet.com.cy</a>)

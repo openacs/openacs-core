@@ -13,17 +13,17 @@ namespace eval acs_object {}
 ad_proc -private acs_lookup_magic_object_no_cache { name } {
     Non memoized version of acs_magic_object.
 
-    @return the magic object's object ID 
+    @return the magic object's object ID
 
     @see acs_magic_object
 } {
     return [db_string magic_object_select {} ]
 }
 
-ad_proc -private acs_lookup_magic_object { name } {
+ad_proc -private -deprecated acs_lookup_magic_object { name } {
     Non memoized version of acs_magic_object.
 
-    @return the magic object's object ID 
+    @return the magic object's object ID
 
     @see acs_magic_object
 } {
@@ -39,12 +39,9 @@ ad_proc -public acs_magic_object { name } {
 
     @error if no object exists with that magic name.
 } {
-    set key ::acs::magic_object($name)
-    if {[info exists $key]} {
-        return [set $key]
-    } else {
-        return [set $key [acs_lookup_magic_object $name]]
-    }
+    return [acs::per_thread_cache eval -key acs-tcl.acs_magic_object($name) {
+        acs_lookup_magic_object_no_cache $name
+    }]
 }
 
 ad_proc -public acs_object_name { object_id } {
@@ -52,7 +49,9 @@ ad_proc -public acs_object_name { object_id } {
     Returns the name of an object.
 
 } {
-    return [db_string object_name_get {}]
+    return [db_string object_name_get {
+        select acs_object.name(:object_id) from dual
+    }]
 }
 
 ad_proc -public acs_object_type { object_id } {
@@ -67,20 +66,53 @@ ad_proc -public acs_object_type { object_id } {
     } -default ""]
 }
 
-ad_proc -public acs_object::get { 
+ad_proc -public acs_object::get {
     {-object_id:required}
-    {-array:required}
+    {-array}
+    {-element}
 } {
     Gets information about an acs_object.
 
-    Returns object_id, package_id, object_type, context_id, security_inherit_p, 
-    creation_user, creation_date_ansi, creation_ip, last_modified_ansi,
-    modifying_user, modifying_ip, tree_sortkey,  object_name
+    If called without "-element", it returns a dict containing
+    object_id, package_id, object_type, context_id,
+    security_inherit_p, creation_user, creation_date_ansi,
+    creation_ip, last_modified_ansi, modifying_user, modifying_ip,
+    tree_sortkey, object_name.
+
+    If called with "-element" it returns the denoted element (similar
+    to e.g. "party::get").
 
     @param array An array in the caller's namespace into which the info should be delivered (upvared)
+    @param element to be returned
+    @param object_id for which the information should be retrieved
+    @error when object_id does not exist
 } {
-    upvar 1 $array row
-    db_1row select_object {} -column_array row
+    if {[info exists array]} {
+        upvar 1 $array row
+    }
+    db_1row select_object {
+        select o.object_id,
+               o.title,
+               o.package_id,
+               o.object_type,
+               o.context_id,
+               o.security_inherit_p,
+               o.creation_user,
+               to_char(o.creation_date, 'YYYY-MM-DD HH24:MI:SS') as creation_date_ansi,
+               o.creation_ip,
+               to_char(o.last_modified, 'YYYY-MM-DD HH24:MI:SS') as last_modified_ansi,
+               o.modifying_user,
+               o.modifying_ip,
+               acs_object.name(o.object_id) as object_name
+        from   acs_objects o
+        where  o.object_id = :object_id
+    } -column_array row
+
+    if {[info exists element]} {
+        return [dict get [array get row] $element]
+    } else {
+        return [array get row]
+    }
 }
 
 ad_proc -public acs_object::package_id {
@@ -90,9 +122,9 @@ ad_proc -public acs_object::package_id {
 
     @author Malte Sussdorff (malte.sussdorff@cognovis.de)
     @creation-date 2006-08-10
-    
+
     @param object_id the object to get the package_id for
-    
+
     @return package_id of the object. Empty string if the package_id is not stored
 } {
     return [util_memoize [list acs_object::package_id_not_cached -object_id $object_id]]
@@ -105,16 +137,16 @@ ad_proc -private acs_object::package_id_not_cached {
 
     @author Malte Sussdorff (malte.sussdorff@cognovis.de)
     @creation-date 2006-08-10
-    
+
     @param object_id the object to get the package_id for
-    
+
     @return package_id of the object. Empty string if the package_id is not stored
 } {
     return [db_string get_package_id {} -default ""]
 }
 
 
-ad_proc -public acs_object::get_element { 
+ad_proc -public acs_object::get_element {
     {-object_id:required}
     {-element:required}
 } {
@@ -127,8 +159,7 @@ ad_proc -public acs_object::get_element {
 
     @see acs_object::get
 } {
-    acs_object::get -object_id $object_id -array row
-    return $row($element)
+    return [acs_object::get -object_id $object_id -element $element]
 }
 
 ad_proc -public acs_object::object_p {
@@ -146,6 +177,50 @@ ad_proc -public acs_object::object_p {
 
 } {
     return [db_string object_exists {} -default 0]
+}
+
+ad_proc -private acs_object::is_type_p {
+    -object_id:required
+    -object_types:required
+    -no_hierarchy:boolean
+} {
+    Returns whether an object is of a given object type.
+
+    @return boolean
+} {
+    if { ![string is integer -strict $object_id] } {
+        return 0
+    }
+
+    set object [acs::per_request_cache eval \
+                    -key acs-tcl.acs_object.is_type_p($object_id,$object_types,$no_hierarchy_p) {
+
+                        set object_type [acs_object_type $object_id]
+
+                        if {$object_type eq ""} {
+                            # Object was not found
+                            return 0
+                        } elseif {$object_type in $object_types} {
+                            # Object is one of the types we look for
+                            return 1
+                        } elseif {$no_hierarchy_p} {
+                            # Object is not one of the types we look
+                            # for and we were told to not look into
+                            # the hierarchy
+                            return 0
+                        } else {
+                            # We expand the object type hierarchy and
+                            # see if one of our supertypes is a type
+                            # we look for
+                            foreach supertype [acs_object_type::supertypes -subtype $object_type] {
+                                if {$supertype in $object_types} {
+                                    return 1
+                                }
+                            }
+
+                            return 0
+                        }
+                    }]
 }
 
 ad_proc -public acs_object::set_context_id {

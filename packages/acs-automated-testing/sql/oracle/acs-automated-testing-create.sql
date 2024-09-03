@@ -31,7 +31,7 @@ create table aa_test_results (
   result             varchar2(4),
   notes              varchar2(2000)
 );
-
+CREATE INDEX aa_test_results_testcase_id_idx on aa_test_results(testcase_id);
 
 create table aa_test_final_results (
   testcase_id        varchar2(512),

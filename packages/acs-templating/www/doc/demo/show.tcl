@@ -13,7 +13,7 @@ ad_page_contract {
        }
        set dir [file dirname [ad_conn file]]
        if {![file readable $dir/$file] || [file isdirectory $dir/$file]} {
-           ad_complain "The specified file ist not readable"
+           ad_complain "The specified file is not readable"
        }
    }
 }

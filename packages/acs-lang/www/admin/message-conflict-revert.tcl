@@ -5,9 +5,9 @@ ad_page_contract {
 
     @author Peter Marklund
 } {
-    package_key
+    package_key:token
     message_key
-    locale
+    locale:word
     {return_url:localurl {[export_vars -base "message-conflicts" { package_key locale }]}}
 }
 

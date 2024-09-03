@@ -9,22 +9,24 @@
     <implements-subsite-p>t</implements-subsite-p>
     <inherit-templates-p>t</inherit-templates-p>
 
-    <version name="5.10.0d9" url="http://openacs.org/repository/download/apm/acs-subsite-5.10.0d9.apm">
+    <version name="5.10.1" url="http://openacs.org/repository/download/apm/acs-subsite-5.10.1.apm">
         <owner url="http://openacs.org">OpenACS</owner>
         <summary>Subsite</summary>
-        <release-date>2017-08-06</release-date>
+        <release-date>2024-09-02</release-date>
         <vendor url="http://openacs.org">OpenACS</vendor>
         <description format="text/html">Provides for creating subsites within the OpenACS Community System.  Aware of parties, groups, users, portraits.  Can be themed via a per subsite master template.</description>
         <license>GPL</license>
         <maturity>3</maturity>
 
-        <provides url="acs-subsite" version="5.10.0d9"/>
-        <requires url="acs-authentication" version="5.9.1"/>
-        <requires url="acs-content-repository" version="5.9.1"/>
-        <requires url="acs-kernel" version="5.9.1"/>
-        <requires url="acs-tcl" version="5.10.0d21"/>
-        <requires url="acs-lang" version="5.9.1"/>
-        <requires url="acs-mail-lite" version="5.9.1"/>
+        <provides url="acs-subsite" version="5.10.1"/>
+        <requires url="acs-authentication" version="5.10.1"/>
+        <requires url="acs-content-repository" version="5.10.1"/>
+        <requires url="acs-kernel" version="5.10.1"/>
+        <requires url="acs-templating" version="5.10.1"/>
+        <requires url="acs-tcl" version="5.10.1"/>
+        <requires url="acs-lang" version="5.10.1"/>
+        <requires url="acs-mail-lite" version="5.10.1"/>
+        <requires url="acs-automated-testing" version="5.10.1"/>
 
         <callbacks>
             <callback type="before-upgrade"  proc="subsite::before_upgrade"/>
@@ -37,7 +39,7 @@
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="AcceptablePortraitMIMETypes"  default="image/gif image/jpeg image/png" description="Enter a set of acceptable MIME types for portrait submissions." section_name="user-info"/>
             <parameter scope="instance" datatype="text"  min_n_values="1"  max_n_values="1"  name="AdminNavbarTabsList"  default="
 admin {
-    label #acs-subsite.Administration#
+    label #acs-admin.Administration#
     url admin/configure
     selected_patterns {
         admin/*
@@ -68,8 +70,12 @@ admin {
             label #acs-subsite.Site_Map#
             url admin/site-map/
         }
+        developer {
+            label {Developer Tools}
+            url /acs-admin/developer
+        }    
         advanced {
-            label #acs-subsite.Advanced#
+            label #acs-subsite.Subsite_Administration#
             folder admin
             selected_patterns {
                 site-map/*
@@ -81,10 +87,6 @@ admin {
                 object-types/*
             }
         }
-        developer {
-            label {Developer Tools}
-            url /acs-admin/developer
-        }    
         swa {
             label #acs-subsite.Site_Wide_Admin#
             url /acs-admin/
@@ -94,8 +96,11 @@ admin {
 }
 " description="Navigation tabs to show administrators" section_name="Navigation Tabs"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="AllowPersistentLoginP"  default="1" description="do we allow persistent logins?" section_name="user-login"/>
+            <parameter scope="instance" datatype="number"  min_n_values="1"  max_n_values="1"  name="PersistentLoginDefault" default="1" description="Default for persistent login, when AllowPersistentLoginP is true" section_name="user-login"/>
             <parameter scope="instance" datatype="number"  min_n_values="1"  max_n_values="1"  name="AsmForRegisterId"  default="1" description="Assessment used in the registration process." section_name="user-login"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="ContextBarSeparator"  default=":" description="Default character to use as separator in context bar"/>
+            <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="CSSToolkit"  description="Configuration value for the CSS toolkit. Potential values are empty (''), 'bootstrap' or 'bootstrap5'. When empty, the value is determined by the ThemeKey." section_name="theming"/>
+            <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="IconSet"  description="Configuration value for the preferred icon set. Potential values are empty (''), 'classic', 'glyphicons' or 'bootstrap-icons'. When empty, the value is determined by the CSSToolkit." section_name="theming"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="DefaultFormStyle"  description="The default form template to use if a particular form doesn't have something more specific defined already.  Set by the admin theme-switching UI." section_name="theming"/>
 	    <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="DefaultDimensionalStyle"  description="The default dimensional template to use if a particular ad_dimensional doesn't have -style set already.  Set by the admin theme-switching UI." section_name="theming"/>
 	    <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="ResourceDir"  description="The directory, from which the resources of acs-templating are loaded. If not set, or the required resource is not found, the default is taken from /packages/acs-templating/resources/.   Set by the admin theme-switching UI." section_name="theming"/>
@@ -129,6 +134,7 @@ admin {
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="RegistrationRedirectUrl"  description="A URL to redirect to instead of showing the normal registration page. Useful if you want to replace the registration page with a custom page." section_name="user-login"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="RegistrationRequiresApprovalP"  default="0" description="set this to 1 if user does not go live immediately" section_name="user-login"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="RegistrationRequiresEmailVerificationP"  default="0" description="set this to 1 if the user has to receive and email and come back to the site" section_name="user-login"/>
+            <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="LoginPasswordAutocomplete"  default="current-password" description="value of the attribute 'autocomplete' in the password field of the login form." section_name="user-login"/>
             <parameter scope="instance" datatype="number"  min_n_values="1"  max_n_values="1"  name="RestrictEntireServerToRegisteredUsersP"  default="0" description="Do we want to allow only registered users to visit this subsite? (restart required)"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="RestrictToSSL"  default="admin/*" description="URLs we want restricted to SSL. Note that this only takes effect if you have an SSL listener configured on your AOLserver and kernel parameter RegisterRestrictToSSLFilters is set to 1 (its default)."/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="ScreenNameP"  default="0" description="Set this to 1 if you want to show screen names instead of real names." section_name="user-info"/>
@@ -144,14 +150,14 @@ admin {
             <parameter scope="instance" datatype="text"  min_n_values="1"  max_n_values="1"  name="ThemeJS"  default=""
 		       description="A list of lists of JS specifications of the form '-attribute value' pairs to use with this theme. The allowed attributes are defined by the arguments of template::add_script.  Set by the admin theme-switching UI." section_name="theming"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="ThemeKey"  default="default_plain" description="Key of the acs-templating theme for this subsite.  Set by the admin theme-switching UI." section_name="theming"/>
-            <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="TmpDir"  default="" description="What tmp directories are used on this system? Could be something like '/tmp /var/tmp', note the leading / character. If this value is empty, 'ns_config ns/parameters tmpdir' is used"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="UserHomeTemplate"  default="/packages/acs-subsite/lib/home" description="Name of the template used for the user home page" section_name="Templates"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="UserInfoTemplate"  default="/packages/acs-subsite/lib/user-info" description="Name of the template used for description of a user" section_name="Templates"/>
             <parameter scope="instance" datatype="text"  min_n_values="1"  max_n_values="1"  name="UserNavbarTabsList"  default="home {label #acs-subsite.Subsite_Home#}" description="Navigation tabs to show to users" section_name="Navigation Tabs"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="UserNewTemplate"  default="/packages/acs-subsite/lib/user-new" description="Name of the template used for creation of a new user" section_name="Templates"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="application"  default="default" description="Name of the ETP application to use (default, faq, wiki, or create your own with the etp::define_application procedure)" section_name="EditThisPage"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="subtopic_application"  default="default" description="Name of the ETP application to use when creating a subtopic" section_name="EditThisPage"/>
-        </parameters>
+            <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="TmpDir"  default="" description="What tmp directories are used on this system? Could be something like '/tmp /var/tmp', note the leading / character. If this value is empty, 'ns_config ns/parameters tmpdir' is used. NOTICE: this parameter is deprecated hand has no effect. Please use ns_config ns/parameters tmpdir to configure your temporary folder." section_name="Deprecated"/>
+          </parameters>
 
     </version>
 </package>

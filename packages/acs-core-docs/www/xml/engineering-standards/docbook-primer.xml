@@ -8,7 +8,7 @@
   <title>OpenACS Documentation Guide</title>
 
   <para>
-    By Claus Rasmussen, with additions by Roberto Mello, Vinod Kurup, and the OpenACS Community
+    By Claus Rasmussen, with additions by Roberto Mello, Vinod Kurup, and the OpenACS community
   </para>
 
   <sect2 id="dbprimer-overview" xreflabel="OpenACS Documentation Overview">
@@ -127,7 +127,7 @@
   <sect2 id="docs-requirements" xreflabel="OpenACS General Documentation Requirements">
     <title>OpenACS General Documentation Requirements</title>
     <para>
-      By the OpenACS Community. This section is a collection of
+      By the OpenACS community. This section is a collection of
       documentation requirements that have been expressed in the
       OpenACS forums to 4th July 2003.
     </para>    
@@ -269,7 +269,7 @@
   <sect2 id="docs-end-user-reqs" xreflabel="End-user Documentation Requirements">
     <title>OpenACS Documentation Requirements for End-users</title>
     <para>
-      By the OpenACS Community. This section is a collection of
+      By the OpenACS community. This section is a collection of
       documentation requirements that have been expressed in the
       OpenACS forums to 4th July 2003.
     </para>    
@@ -339,7 +339,7 @@
           </para></listitem>
           <listitem><para>
             differentiate "service" by highlighting software
-            availability (licensing and completeness from mature to early
+            availability (licensing and completeness from mature too early
             adopters or development versions), community incident
             support, project collaborative opportunities, and
             contractor support availability
@@ -447,7 +447,7 @@
   <sect2 id="docs-admin-reqs" xreflabel="Administrators Documentation Requirements">
     <title>OpenACS Documentation Requirements for Site and Administrators</title>
     <para>
-      By the OpenACS Community. This section is a collection of
+      By the OpenACS community. This section is a collection of
       documentation requirements that have been expressed in the
       OpenACS forums to 4th July 2003.
     </para>    
@@ -480,7 +480,7 @@
         file documentation.
       </para></listitem>
       <listitem><para>
-        Resources on high level subjects such as web services,
+        Resources on high-level subjects such as web services,
         security guidelines
       </para></listitem>
       <listitem><para>
@@ -537,7 +537,7 @@
   <sect2 id="docs-install-reqs" xreflabel="Installation Documentation Requirements">
     <title>OpenACS Installation Documentation Requirements</title>
     <para>
-      By the OpenACS Community. This section is a collection of
+      By the OpenACS community. This section is a collection of
       documentation requirements that have been expressed in the
       OpenACS forums to 4th July 2003.
     </para>    
@@ -579,7 +579,7 @@
   <sect2 id="docs-developer-tutorial-reqs" xreflabel="Developer Tutorial Documentation Requirements">
     <title>OpenACS Developer Tutorial Documentation Requirements</title>
     <para>
-      By the OpenACS Community. This section is a collection of
+      By the OpenACS community. This section is a collection of
       documentation requirements that have been expressed in the
       OpenACS forums to 4th July 2003.
     </para>    
@@ -621,7 +621,7 @@
       </para>
       </listitem>
       <listitem><para>
-        The life of an http request to a dynamic, templated page
+        The life of an HTTP request to a dynamic, templated page
       </para>
       </listitem>
       <listitem><para>
@@ -656,7 +656,7 @@
   <sect2 id="docs-developer-reqs" xreflabel="Developer Documentation Requirements">
     <title>OpenACS Developer Documentation Requirements</title>
     <para>
-      By the OpenACS Community. This section is a collection of
+      By the OpenACS community. This section is a collection of
       documentation requirements that have been expressed in the
       OpenACS forums to 4th July 2003.
     </para>    
@@ -1462,7 +1462,7 @@
     
     <para>
       Once you have the <xref linkend="dbprimer-validation"/>
-      installed, you can convert your xml documents to HTML or other
+      installed, you can convert your XML documents to HTML or other
       formats.
     </para>
     

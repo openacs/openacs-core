@@ -151,7 +151,7 @@ ad_proc apm_callback_and_log { { -severity Notice } callback message } {
     ns_log $severity [ad_html_to_text -maxlen 140 -- $message]
 }
 
-ad_proc apm_one_package_descendents {
+ad_proc -private apm_one_package_descendents {
     package_key
 } {
 
@@ -265,7 +265,7 @@ ad_proc apm_one_package_inherit_order {
     lappend ::apm_package_inherit_order $package_key
 }
 
-ad_proc apm_one_package_load_libraries_dependencies {
+ad_proc -private apm_one_package_load_libraries_dependencies {
     package_key
 } {
 
@@ -349,13 +349,25 @@ ad_proc apm_package_url_resolution {
     return [nsv_get apm_package_url_resolution $package_key]
 }
 
-
 ad_proc apm_package_load_libraries_order {
     package_key
 } {
     Wrapper that returns the cached package library load order list.
 } {
     return [nsv_get apm_package_load_libraries_order $package_key]
+}
+
+ad_proc -private apm_package_singleton_p {
+    package_key
+} {
+    @return boolean telling whether a package is a singleton or not
+} {
+    return [acs::per_thread_cache eval -key acs-tcl.apm-singleton-$package_key {
+        db_string check_singleton {
+            select singleton_p from apm_package_types
+            where package_key = :package_key
+        } -default f
+    }]
 }
 
 ad_proc -public apm_version_loaded_p { version_id } {
@@ -366,7 +378,7 @@ ad_proc -public apm_version_loaded_p { version_id } {
     return [nsv_exists apm_version_init_loaded_p $version_id]
 }
 
-ad_proc -private apm_mark_files_for_reload {
+ad_proc -public apm_mark_files_for_reload {
     {-force_reload:boolean}
     file_list
 } {
@@ -389,8 +401,8 @@ ad_proc -private apm_mark_files_for_reload {
 
         # If the file exists, and either has never been loaded or has an mtime
         # which differs the mtime it had when last loaded, mark to be loaded.
-        if { [file isfile $full_path] } {
-            set mtime [file mtime $full_path]
+        if { [ad_file isfile $full_path] } {
+            set mtime [ad_file mtime $full_path]
             if { $force_reload_p
                  || (![nsv_exists apm_library_mtime $relative_path]
                      || [nsv_get apm_library_mtime $relative_path] != $mtime
@@ -412,7 +424,7 @@ ad_proc -private apm_mark_files_for_reload {
 
 proc ::foo0 {} {return 0}
 
-ad_proc -private apm_mark_version_for_reload {
+ad_proc -public apm_mark_version_for_reload {
     version_id
     { changed_files_var "" }
 } {
@@ -453,7 +465,7 @@ ad_proc -private apm_mark_version_for_reload {
     return $changed_files
 }
 
-ad_proc -private apm_version_load_status { version_id } {
+ad_proc -public apm_version_load_status { version_id } {
 
     If a version needs to be reloaded (i.e., a <code>-procs.tcl</code> has changed
                                        or been added since the version was loaded), returns "needs_reload".
@@ -481,8 +493,8 @@ ad_proc -private apm_version_load_status { version_id } {
         set full_path "[acs_package_root_dir $package_key]/$file"
         # If $file had a different mtime when it was last loaded, return
         # needs_reload. (If the file should exist but doesn't, just skip it.)
-        if { [file exists $full_path]
-             &&  [file mtime $full_path] ne [nsv_get apm_library_mtime "packages/$package_key/$file"]
+        if { [ad_file exists $full_path]
+             &&  [ad_file mtime $full_path] ne [nsv_get apm_library_mtime "packages/$package_key/$file"]
          } {
             return "needs_reload"
         }
@@ -498,8 +510,8 @@ ad_proc -private apm_version_load_status { version_id } {
         set full_path "[acs_package_root_dir $package_key]/$file"
         # If $file had a different mtime when it was last loaded, return
         # needs_reload. (If the file should exist but doesn't, just skip it.)
-        if { [file exists $full_path]
-             && [file mtime $full_path] ne [nsv_get apm_library_mtime "packages/$package_key/$file"]
+        if { [ad_file exists $full_path]
+             && [ad_file mtime $full_path] ne [nsv_get apm_library_mtime "packages/$package_key/$file"]
          } {
             return "needs_reload"
         }
@@ -521,8 +533,8 @@ ad_proc -private apm_load_libraries {
     Loads all -procs.tcl (if $procs_or_init is "procs") or -init.tcl  files into the
     current interpreter for installed, enabled packages. Only loads
     files which have not yet been loaded. This is intended to be called only during server
-    initialization (since it loads libraries only into the running interpreter, as opposed
-                    to in *all* active interpreters).
+    initialization, since it loads libraries only into the running interpreter, as opposed
+    to in *all* active interpreters.
 
 } {
     set file_types [list]
@@ -577,32 +589,35 @@ ad_proc -public apm_load_packages {
     {-load_queries_p 1}
     {-packages {}}
 } {
-    Load Tcl libraries and queries for the packages with given keys. Only
-    loads procs into the current interpreter. Will
-    load Tcl tests if the acs-automated-testing package is enabled.
+    Load Tcl libraries and queries for the packages with given
+    keys into the current interpreter. Will load Tcl
+    tests when the acs-automated-testing package is enabled.
 
     @param force_reload Reload Tcl libraries even if they are already loaded.
     @param load_libraries_p Switch to indicate if Tcl libraries in (-procs.tcl and -init.tcl)
-    files should be loaded. Defaults to true.
+                            files should be loaded. Defaults to true.
     @param load_queries_p   Switch to indicate if xql query files should be loaded. Default true.
     @param packages     A list of package_keys for packages to be loaded. Defaults to
-    all enabled packages.  These packages, along with the packages
-    they depend on, will be loaded in dependency-order using the
-    information provided in the packages' "provides" and "requires"
-    attributes.
+                        all enabled packages.  These packages, along with the packages
+                        they depend on, will be loaded in dependency-order using the
+                        information provided via the "provides" and "requires" definitions.
 
     @see apm_mark_version_for_reload
 
     @author Peter Marklund
 } {
+    set enabled_packages [apm_enabled_packages]
     if { $packages eq "" } {
-        set packages [apm_enabled_packages]
+        set packages $enabled_packages
     }
 
     set packages_to_load [list]
     foreach package_key $packages {
         foreach package_to_load [::apm_package_load_libraries_order $package_key] {
-            if {$package_to_load ni $packages_to_load} {
+            #
+            # Never add packages, which are not enabled.
+            #
+            if {$package_to_load ni $packages_to_load && $package_to_load in $enabled_packages} {
                 lappend packages_to_load $package_to_load
             }
         }
@@ -715,18 +730,17 @@ ad_proc -private apm_subdirs { path } {
 } {
     set dirs [list]
     lappend dirs $path
-    foreach subdir [glob -nocomplain -type d [file join $path *]] {
+    foreach subdir [glob -nocomplain -type d [ad_file join $path *]] {
         lappend dirs {*}[apm_subdirs $subdir]
     }
     return $dirs
 }
 
-ad_proc -private apm_pretty_name_for_file_type { type } {
+ad_proc -public apm_pretty_name_for_file_type { type } {
 
     Returns the pretty name corresponding to a particular file type key
 
     @see apm_file_type_names
-    @see apm_file_type_keys
 
     @author Peter Marklund
 } {
@@ -746,9 +760,9 @@ ad_proc -private apm_get_changed_watched_files {} {
         set path "$::acs::rootdir/$file"
         ns_log Debug "APM: File being watched: $path"
 
-        if { [file exists $path]
+        if { [ad_file exists $path]
              && (![nsv_exists apm_library_mtime $file]
-                 || [file mtime $path] ne [nsv_get apm_library_mtime $file])
+                 || [ad_file mtime $path] ne [nsv_get apm_library_mtime $file])
          } {
             lappend files_to_reload $file
         }
@@ -799,7 +813,7 @@ ad_proc -public apm_load_any_changed_libraries {
         }
         if {[llength $files] > 0} {
             ns_log notice "### blueprint_reloading: [llength $files] files $files"
-
+            #::xo::broadcast send {ns_ictl markfordelete}
             #
             # Transform files into reload-cmds
             #
@@ -808,9 +822,37 @@ ad_proc -public apm_load_any_changed_libraries {
             # Execute these cmds in a fresh interp to produce a new
             # blueprint.
             #
-            ns_log notice "### blueprint_reloading: cmds:\n[join $cmds \;\n]"
+            set before [list epoch [ns_ictl epoch] size [string length [ns_ictl get]]]
+            ns_log notice "### blueprint_reloading: before $before cmds:\n[join $cmds \;\n]"
 
             ns_eval [join $cmds \;]
+            #
+            # The current thread has still the old blueprint. If we
+            # would modify the naviserver sources, it would be simple
+            # the show the diffs. here, it is more involved. The see
+            # the effect in size on the blueprint, we have to run the
+            # change statistics in a fresh thread.  Let us hope that
+            # the ns_job thread update is not deferred by "ns_ictl
+            # maxconcurrentupdates", so we report as well the
+            # epoch. If there is a new epoch shown, one can be sure
+            # that we see the updated size. Otherwise, one will see
+            # this on the next reload in the log file.
+            #
+            ns_job queue ns_eval_q:[ns_info server] [subst -nocommands {
+                #
+                # Warning: Avoid dollar-substitution here, unless
+                # wanted at job registration time.
+                #
+                set blueprint [ns_ictl get]
+                set after [list epoch [ns_ictl epoch] size [string length [set blueprint]]]
+                set diff [expr {[dict get [set after] size] - [dict get {$before} size]}]
+                ns_log notice "### blueprint_reloading: after [set after] diff [set diff]"
+                if {0 && [set diff] != 0} {
+                    set F [open /tmp/__blueprint.[clock seconds] w]
+                    puts [set F] [set blueprint]
+                    close [set F]
+                }
+            }]
         }
     }
 
@@ -876,7 +918,7 @@ ad_proc -public apm_load_any_changed_libraries {
 
 ad_proc -private apm_package_reload_cmds {files} {
 
-    Map file names into reloading cmds. For every file, a loading
+    Map filenames into reloading cmds. For every file, a loading
     command is appended to the result. The command might be empty.
 
     @return list of Tcl cmds to be executed to load these files.
@@ -895,7 +937,7 @@ ad_proc -private apm_package_reload_cmds {files} {
         if { ![info exists reloaded_files($file)] } {
             # File is usually of form packages/package_key
             set file_path "$::acs::rootdir/$file"
-            set file_ext [file extension $file_path]
+            set file_ext [ad_file extension $file_path]
             switch -- $file_ext {
                 .tcl {
                     # Make sure this is not a -init.tcl file as those should only be sourced on server startup
@@ -925,7 +967,7 @@ ad_proc -private apm_package_version_release_tag { package_key version_name } {
     Returns a CVS release tag for a particular package key and version name.
 
 } {
-    regsub -all {\.} [string toupper "$package_key-$version_name"] "-" release_tag
+    regsub -all -- {\.} [string toupper "$package_key-$version_name"] "-" release_tag
     return $release_tag
 }
 
@@ -967,10 +1009,10 @@ ad_proc -public apm_package_registered_p {
     Returns 0 otherwise.
 } {
     ### Query the database for the indicated package_key
-    return [db_string apm_package_registered_p {
+    return [db_0or1row apm_package_registered_p {
         select 1 from apm_package_types
         where package_key = :package_key
-    } -default 0]
+    }]
 }
 
 ad_proc -public apm_package_installed_p {
@@ -979,21 +1021,13 @@ ad_proc -public apm_package_installed_p {
     Returns 1 if there is an installed package version corresponding to the package_key,
     0 otherwise. Uses a cached value for performance.
 } {
-    if { [util_memoize_initialized_p] } {
-        return [util_memoize [list apm_package_installed_p_not_cached $package_key]]
-    } else {
-        return [apm_package_installed_p_not_cached $package_key]
+    acs::try_cache ::acs::misc_cache eval apm_package_installed-$package_key {
+        db_0or1row apm_package_installed_p {
+            select 1 from apm_package_versions
+            where package_key = :package_key
+            and installed_p = 't'
+        }
     }
-}
-
-ad_proc -private apm_package_installed_p_not_cached {
-    package_key
-} {
-    return [db_string apm_package_installed_p {
-        select exists (select 1 from apm_package_versions
-                        where package_key = :package_key
-                          and installed_p) from dual
-    }]
 }
 
 ad_proc -public apm_package_enabled_p {
@@ -1002,7 +1036,13 @@ ad_proc -public apm_package_enabled_p {
     Returns 1 if there is an enabled package version corresponding to the package_key
     and 0 otherwise.
 } {
-    return [db_string apm_package_enabled_p {} -default 0]
+    acs::try_cache ::acs::misc_cache eval -per_request apm_package_enabled-$package_key {
+        db_0or1row apm_package_enabled_p {
+            select 1 from apm_package_versions
+            where package_key = :package_key
+            and enabled_p = 't'
+        }
+    }
 }
 
 ad_proc -public apm_enabled_packages {} {
@@ -1026,7 +1066,7 @@ ad_proc -public apm_highest_version {package_key} {
     Return the highest version of the indicated package.
     @return the version_id of the highest installed version of a package.
 } {
-    return [db_exec_plsql apm_highest_version {}]
+    return [acs::dc call apm_package highest_version -package_key $package_key]
 }
 
 ad_proc -public apm_highest_version_name {package_key} {
@@ -1112,10 +1152,6 @@ ad_proc -public apm_parameter_register {
         apm_copy_param_to_descendents $package_key $parameter_name
     }
 
-    # Update the cache.
-    db_foreach apm_parameter_cache_update {} {
-        ad_parameter_cache -set $attr_value $package_id $parameter_name
-    }
     return $parameter_id
 }
 
@@ -1123,15 +1159,42 @@ ad_proc -public apm_parameter_unregister {
     {-callback apm_dummy_callback}
     {-package_key ""}
     {-parameter ""}
-    parameter_id
+    {-parameter_id ""}
+    {parameter_id_legacy ""}
 } {
     Unregisters a parameter from the system.
+
+    @param parameter_id_legacy DEPRECATED: previous versions of this
+                               proc would specify parameter_id as an
+                               unnamed argument. This has now be
+                               changed to a flag, but the old syntax
+                               is still tolerated in old code. This
+                               will generate a warning though and will
+                               be dropped in future versions.
 } {
-    if { $parameter_id eq "" } {
-        set parameter_id [db_string select_parameter_id {}]
+    # Transitional code to support legacy definition of parameter_id
+    # specified as an unnamed argument.
+    if {$parameter_id_legacy ne "" &&
+        $parameter_id eq ""
+    } {
+        set parameter_id $parameter_id_legacy
+        ns_log warning "apm_parameter_unregister: use of unnamed argument is deprecated for this proc, please use -parameter_id flag"
     }
 
-    db_1row get_scope_and_name {}
+    if { $parameter_id eq "" } {
+        set parameter_id [db_string select_parameter_id {
+            select parameter_id
+            from apm_parameters
+            where package_key = :package_key
+            and parameter_name = :parameter
+        }]
+    }
+
+    db_1row get_scope_and_name {
+        select scope, parameter_name
+        from apm_parameters
+        where parameter_id = :parameter_id
+    }
 
     ns_log Debug "apm_parameter_unregister: Unregistering parameter $parameter_id."
 
@@ -1221,17 +1284,11 @@ namespace eval ::acs {}
 ad_proc -public apm_package_key_from_id {package_id} {
     @return The package key of the instance.
 } {
-    set key ::acs::apm_package_key_from_id($package_id)
-    if {[info exists $key]} {return [set $key]}
-    set $key [apm_package_key_from_id_not_cached $package_id]
-}
-
-ad_proc -private apm_package_key_from_id_not_cached {package_id} {
-    unmemoized version of apm_package_key_from_id
-} {
-    return [db_string apm_package_key_from_id {
-        select package_key from apm_packages where package_id = :package_id
-    } -default ""]
+    return [acs::per_thread_cache eval -key acs-tcl.apm_package_key_from_id($package_id) {
+        db_string apm_package_key_from_id {
+            select package_key from apm_packages where package_id = :package_id
+        } -default ""
+    }]
 }
 
 #
@@ -1271,8 +1328,17 @@ ad_proc -public apm_package_id_from_key {package_key} {
     return $result
 }
 
+ad_proc -public apm_flush_package_id_cache {package_key} {
+    Flush the package id cache for this package at least in the
+    current thread.  TODO: should be refactored together with the
+    2level cache (per thread and util_memoize).
+} {
+    unset -nocomplain ::apm::package_id_from_key($package_key)
+    util_memoize_flush [list apm_package_id_from_key_not_cached $package_key]
+}
+
 ad_proc -private apm_package_id_from_key_not_cached {package_key} {
-    unmemoized version of apm_package_id_from_key
+    DB accessing version of apm_package_id_from_key.
 } {
     return [db_string apm_package_id_from_key {
         select package_id from apm_packages where package_key = :package_key
@@ -1436,8 +1502,8 @@ ad_proc -private apm_post_instantiation_tcl_proc_from_key { package_key } {
 } {
     set procedure_name [string tolower "[string trim $package_key]_post_instantiation"]
     # Change all "-" to "_" to mimic our Tcl standards
-    regsub -all {\-} $procedure_name "_" procedure_name
-    if { [info commands ::$procedure_name] eq "" } {
+    regsub -all -- {\-} $procedure_name "_" procedure_name
+    if { [namespace which ::$procedure_name] eq "" } {
         # No such procedure exists...
         return ""
     }
@@ -1619,7 +1685,7 @@ ad_proc -public apm_invoke_callback_proc {
         }
     }
 
-    # We have a non-empty name of a callback proc to invoke
+    # We have a nonempty name of a callback proc to invoke
     # Form the full command including arguments
     set command [list {*}$proc_name {*}[apm_callback_format_args -type $type -arg_list $arg_list]]
 
@@ -1735,7 +1801,7 @@ ad_proc -public apm_supported_callback_types {} {
     }
 }
 
-ad_proc -private apm_callback_has_valid_args {
+ad_proc -public apm_callback_has_valid_args {
     {-type:required}
     {-proc_name:required}
 } {
@@ -1747,7 +1813,7 @@ ad_proc -private apm_callback_has_valid_args {
     @author Peter Marklund
 } {
 
-    if { [info commands ::$proc_name] eq "" } {
+    if { [namespace which ::$proc_name] eq "" } {
         return 0
     }
 
@@ -1763,7 +1829,7 @@ ad_proc -private apm_callback_has_valid_args {
         return [expr {[info args ::$proc_name] eq ""}]
     }
 
-    if {[info commands ::nsf::cmd::info] ne ""} {
+    if {[namespace which ::nsf::cmd::info] ne ""} {
         #
         # We can compare the signature of via nsf procs
         #
@@ -1813,16 +1879,30 @@ ad_proc -public apm_package_instance_new {
             set instance_name  "$p_name"
         }
     }
+    #
+    # Do not do anything for already instantiated singleton packages
+    #
+    if {![db_0or1row instantiated_singleton_p {
+        select package_id
+          from apm_package_types t,
+               apm_packages p
+         where t.singleton_p = 't'
+           and t.package_key = p.package_key
+           and t.package_key = :package_key}]
+    } {
+        #
+        # Instantiate package
+        #
+        set package_id [db_exec_plsql invoke_new {}]
 
-    set package_id [db_exec_plsql invoke_new {}]
+        apm_parameter_sync $package_key $package_id
 
-    apm_parameter_sync $package_key $package_id
-
-    foreach inherited_package_key [nsv_get apm_package_inherit_order $package_key] {
-        apm_invoke_callback_proc \
-            -package_key $inherited_package_key \
-            -type after-instantiate \
-            -arg_list [list package_id $package_id]
+        foreach inherited_package_key [nsv_get apm_package_inherit_order $package_key] {
+            apm_invoke_callback_proc \
+                -package_key $inherited_package_key \
+                -type after-instantiate \
+                -arg_list [list package_id $package_id]
+        }
     }
 
     return $package_id
@@ -1936,7 +2016,7 @@ ad_proc -public apm_log {
     }
 }
 
-ad_proc -private apm_application_new_checkbox {} {
+ad_proc -public apm_application_new_checkbox {} {
     Return an HTML checkbox of package_key and package names
     for applications that can be mounted in the site-map. Excludes
     singletons that are already instantiated.
@@ -1947,8 +2027,9 @@ ad_proc -private apm_application_new_checkbox {} {
     db_foreach package_types {
          select package_key, pretty_name
          from apm_package_types t
-         where not (singleton_p and exists (select 1 from apm_packages
-                                             where package_key = t.package_key))
+         where not (singleton_p = 't'
+                    and exists (select 1 from apm_packages
+                                where package_key = t.package_key))
          order by pretty_name
     } {
         lappend options [subst {<option value="$package_key">$pretty_name</option>}]
@@ -1977,19 +2058,19 @@ ad_proc -private apm::read_files {path file_list} {
 }
 
 ad_proc -public apm::metrics {
-    -package_key
-    -file_type
+    -package_key:required
+    -file_type:required
     -array
 } {
     Return some code metrics about the files in package $package_key. This
-    will return an array of 3 items:
+    will return an array or dict containing at least the following items:
     <ul>
     <li>count - the number of files</li>
     <li>lines - the number of lines in the files</li>
+    <li>blank_lines - the number of blank lines in the files</li>
+    <li>comment_lines - the number of blank lines in the files</li>
     <li>procs - the number of procs, if applicable (0 if not applicable)</li>
     </ul>
-    This will be placed in the array variable that is provided
-    to this proc.
     <p>
     Valid file_type's:
     <ul>
@@ -2001,6 +2082,8 @@ ad_proc -public apm::metrics {
     <li>test_procs - automated tests in package_key/tcl/test</li>
     <li>documentation - docs in package_key/www/doc</li>
     </ul>
+    When the array is provided, it will be used for setting the result.
+    Otherwise a dict with the metrics information is returned.
 
     This proc is cached.
 
@@ -2011,8 +2094,12 @@ ad_proc -public apm::metrics {
     @param file_type See options above
     @param array variable to hold the array that will be returned
 } {
-    upvar $array metrics
-    array set metrics [util_memoize [list apm::metrics_internal $package_key $file_type]]
+    set data [util_memoize [list apm::metrics_internal $package_key $file_type]]
+    if {[info exists array]} {
+        upvar $array metrics
+        array set metrics $data
+    }
+    return $data
 }
 
 ad_proc -private apm::metrics_internal {
@@ -2040,6 +2127,7 @@ ad_proc -private apm::metrics_internal {
     }
 
     set filelist [apm_get_package_files \
+                      -include_data_model_files \
                       -all_db_types \
                       -package_key $package_key \
                       -file_types $file_types]
@@ -2088,24 +2176,62 @@ ad_proc -private apm::metrics_internal {
     # read the files, so we can count lines and grep for procs
     set filedata [apm::read_files $package_path $filelist]
 
-    # The first 2 metrics are easy (file count and line count)
+    # The first metrics are easy and generic
     set metrics(count) [llength $filelist]
-    set metrics(lines) [llength [split $filedata \n]]
+    set lines [split $filedata \n]
+    set metrics(lines) [llength $lines]
 
-    # extract procs, depending on the file_type
+    set metrics(blank_lines) [regexp -all -line {^\s*$} $filedata]
+
+    #
+    # Count comment lines. We check here the comments available to
+    # proc_doc and add these to the line comments below.
+    #
+    set metrics(comment_lines) 0
+
+    foreach file $filelist {
+        if {[nsv_exists api_proc_doc_scripts packages/$package_key/$file]} {
+            #
+            # Add for every found entry in proc_doc the contents
+            # obtained from the doc argument of ad_proc.
+            #
+            foreach p [nsv_get api_proc_doc_scripts packages/$package_key/$file] {
+                set proc_doc [nsv_get api_proc_doc $p]
+                set main_doc 0
+                if {[dict exists $proc_doc main]} {
+                    incr main_doc [llength [split [dict get $proc_doc main] \n]]
+                }
+                set return_doc 0
+                if {[dict exists $proc_doc return]} {
+                    incr return_doc [llength [split [dict get $proc_doc return] \n]]
+                }
+                incr metrics(comment_lines) $main_doc
+                incr metrics(comment_lines) $return_doc
+                #ns_log notice "$file: $p [nsv_exists api_proc_doc $p] main $main_doc return doc $return_doc"
+            }
+        }
+    }
+
+    #
+    # Extract procs, depending on the file_type
+    #
     switch -exact $file_type {
         tcl_procs {
             set metrics(procs) [regexp -all -line {^\s*ad_proc} $filedata]
+            set metrics(comment_lines) [regexp -all -line {^\s*#} $filedata]
         }
         test_procs {
             set metrics(procs) [regexp -all -line {^\s*aa_register_case} $filedata]
+            set metrics(comment_lines) [regexp -all -line {^\s*#} $filedata]
         }
         data_model_pg {
             set metrics(procs) [regexp -all -line -nocase {^\s*create\s+or\s+replace\s+function\s+} $filedata]
+            set metrics(comment_lines) [regexp -all -line {^\s*--} $filedata]
         }
         data_model_ora {
             set metrics(procs) [expr {[regexp -all -line -nocase {^\s+function\s+} $filedata] +
                                       [regexp -all -line -nocase {^\s+procedure\s+} $filedata]}]
+            set metrics(comment_lines) [regexp -all -line {^\s*--} $filedata]
         }
         default {
             # other file-types don't have procs
@@ -2192,14 +2318,13 @@ ad_proc -deprecated -private apm_pretty_name_for_db_type { db_type } {
 
 } {
     set pos [lsearch -index 0 -exact $::acs::known_database_types $db_type]
-    return [lindex [lindex $::acs::known_database_types $pos] 2]
+    return [lindex $::acs::known_database_types $pos 2]
     # return [util_memoize [list db_string pretty_db_name_select "
     #     select pretty_db_name
     #     from apm_package_db_types
     #     where db_type_key = :db_type
     # " -default "all" -bind [list db_type $db_type]]]
 }
-
 
 #
 # Local variables:

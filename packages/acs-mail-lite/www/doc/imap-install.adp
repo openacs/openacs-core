@@ -1,6 +1,6 @@
 <master>
-  <property name="title">@title;noquote@</property>
-  <property name="context">@context;noquote@</property>
+  <property name="doc(title)">@title;literal@</property>
+  <property name="context">@context;literal@</property>
   <h1>@title@</h1>
   <p>
     These notes augment nsimap documentation at <a href="https://bitbucket.org/naviserver/nsimap">https://bitbucket.org/naviserver/nsimap</a>.
@@ -58,7 +58,7 @@
   <pre>
     # aolserver4 recommends descriptors limit (FD_SETSIZE) to be set to 1024, 
     # which is standard for most OS distributions
-    # For freebsd systems, uncomment following line:
+    # For FreeBSD systems, uncomment following line:
     ulimit -n 1024
   </pre>
   <p>Note: This does not fix any problem associated with a crash, only makes problem evaporate for low volume traffic sites.</p>
@@ -68,7 +68,7 @@
   <code>apt-get install libssl-dev libpam-unix2 libpam0g-dev libkrb5-dev</code>
   <p>Build panda-imap with:</p>
   <code>make ldb EXTRACFLAGS=-fPIC</code>
-  <p>If your system requires ipv4 only, add the flags:
+  <p>If your system requires IPv4 only, add the flags:
     <code>IP=4 IP6=4 SSLTYPE=nopwd</code> like this:</p>
   <code>make ldb EXTRACFLAGS=-fPIC IP=4 IP6=4 SSLTYPE=nopwd</code>
   <p>Some of these are defaults, but the defaults weren't recognized on the test system,

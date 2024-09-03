@@ -21,7 +21,7 @@ ad_proc -public lc_parse_number {
 } {
     Converts a number to its canonical
     representation by stripping everything but the
-    decimal separator and triming left 0's so it
+    decimal separator and trimming left 0's so it
     won't be octal. It can process the following types of numbers:
     <ul>
     <li>Just digits (allows leading zeros).
@@ -187,7 +187,8 @@ ad_proc -public lc_numeric {
 
     # Fall back on en_US if grouping is not on valid format
     if { $locale ne "en_US" && ![regexp {^[0-9 -]+$} $grouping] } {
-        ns_log Warning "lc_numeric: acs-lang.localization-grouping key has invalid value $grouping for locale $locale"
+        ns_log Warning "lc_numeric: acs-lang.localization-grouping key has " \
+            "invalid grouping value '$grouping' for locale '$locale'"
         set sep ,
         set dec .
         set grouping 3
@@ -198,7 +199,23 @@ ad_proc -public lc_numeric {
     return [lc_sepfmt $out $grouping $sep]
 }
 
-ad_proc -public clock_to_ansi {
+ad_proc -deprecated clock_to_ansi {
+    seconds
+} {
+    Convert a time in the Tcl internal clock seconds format to ANSI format, usable by lc_time_fmt.
+
+    DEPRECATED: this proc does not comply with naming convention
+    enforced by acs-tcl.naming__proc_naming automated test
+
+    @author Lars Pind (lars@pinds.com)
+    @return ANSI (YYYY-MM-DD HH24:MI:SS) formatted date.
+    @see lc_time_fmt
+    @see lc_clock_to_ansi
+} {
+    return [lc_clock_to_ansi $seconds]
+}
+
+ad_proc -public lc_clock_to_ansi {
     seconds
 } {
     Convert a time in the Tcl internal clock seconds format to ANSI format, usable by lc_time_fmt.
@@ -230,6 +247,46 @@ ad_proc -public lc_get {
     return [lang::message::lookup $locale $message_key {} {} 0 0]
 }
 
+ad_proc -private lc_datetime_to_clock {
+    datetime
+} {
+    Converts a datetime in one of the supported formats to a clock
+    value.
+
+    @param datetime A time string in one of the following formats as
+                    from clock tcl command specifications: "%Y-%m-%d
+                    %H:%M:%S", "%Y-%m-%d %H:%M" and
+                    "%Y-%m-%d". Database timestamps such as
+                    "2019-12-16 12:50:14.049896+01" are also
+                    tolerated, by normalizing them to "2019-12-16
+                    12:50:14". Note that in this case all information
+                    about timezone and fractions of second will be
+                    discarded.
+
+    @see https://www.tcl.tk/man/tcl/TclCmd/clock.html#M25
+
+    @return integer
+} {
+    set datetime [string range [string trim $datetime] 0 18]
+    foreach format {
+        "%Y-%m-%d %H:%M:%S"
+        "%Y-%m-%d %H:%M"
+        "%Y-%m-%d"
+    } {
+        set invalid_format_p [catch {
+            set date_clock [clock scan $datetime -format $format]
+        }]
+        if {!$invalid_format_p} {
+            break
+        }
+    }
+    if {$invalid_format_p} {
+        error "Invalid date: $datetime"
+    }
+
+    return $date_clock
+}
+
 ad_proc -public lc_time_fmt {
     datetime
     fmt
@@ -237,10 +294,14 @@ ad_proc -public lc_time_fmt {
 } {
     Formats a time for the specified locale.
 
-    @param datetime        Strictly in the form &quot;YYYY-MM-DD HH24:MI:SS&quot;.
-                           Formulae for calculating day of week from the Calendar FAQ
-                           (<a href="http://www.tondering.dk/claus/calendar.html">http://www.tondering.dk/claus/calendar.html</a>)
-    @param fmt             An ISO 14652 LC_TIME style formatting string.  The <b>highlighted</b> functions localize automatically based on the user's locale; other strings will use locale-specific text but not necessarily locale-specific formatting.
+    @param datetime A datetime in one of the supported formats. See
+                    lc_datetime_to_clock.
+
+    @param fmt An ISO 14652 LC_TIME style formatting string.  The
+               <b>highlighted</b> functions localize automatically
+               based on the user's locale; other strings will use
+               locale-specific text but not necessarily
+               locale-specific formatting.
     <pre>
       %a           FDCC-set's abbreviated weekday name.
       %A           FDCC-set's full weekday name.
@@ -289,14 +350,20 @@ ad_proc -public lc_time_fmt {
       %Z           The connection's timezone, e.g. 'America/New_York'.
       %%           A <percent-sign> character.
     </pre>
-    See also <pre>man strftime</pre> on a UNIX shell prompt for more of these abbreviations.
+
     @param locale          Locale identifier must be in the locale database
-    @error                 Fails if given a non-existent locale or a malformed datetime
-                           Doesn't check for impossible dates. Ask it for 29 Feb 1999 and it will tell you it was a Monday
-                           (1st March was a Monday, it wasn't a leap year). Also it only works with the Gregorian calendar -
-                           but that's reasonable, but could be a problem if you are running a seriously historical site
-                           (or have an 'on this day in history' style page that goes back a good few hundred years).
-    @return                A date formatted for a locale
+    @error Fails if given a non-existent locale or a malformed
+           datetime. Impossible dates will be treated as per clock
+           scan behavior and e.g. 29 Feb 1999 will be translated to
+           1st March, Monday, as it wasn't a leap year. The clock api
+           takes care of the proper handling of Julian/Gregorian
+           dates.
+
+    @see lc_datetime_to_clock
+    @see http://www.tondering.dk/claus/calendar.html
+    @see man strftime on a UNIX shell prompt for more date format abbreviations.
+
+    @return A date formatted for a locale
 } {
     if { $datetime eq "" } {
         return ""
@@ -306,51 +373,36 @@ ad_proc -public lc_time_fmt {
         set locale [ad_conn locale]
     }
 
-    # Some initialization...
-    # Now, expect d_fmt, t_fmt and d_t_fmt to exist of the form in ISO spec
-    # Rip $date into $lc_time_* as numbers, no leading zeroes
-    set matchdate {([0-9]{4})\-0?(1?[0-9])\-0?([1-3]?[0-9])}
-    set matchtime {0?([1-2]?[0-9]):0?([1-5]?[0-9]):0?([1-6]?[0-9])}
-    set matchfull "$matchdate $matchtime"
+    set date_clock [::lc_datetime_to_clock $datetime]
 
-    set lc_time_p 1
-    if {![regexp -- $matchfull $datetime match \
-              lc_time_year lc_time_month lc_time_days lc_time_hours lc_time_minutes lc_time_seconds]} {
-        if {[regexp -- $matchdate $datetime match \
-                 lc_time_year lc_time_month lc_time_days]} {
-            set lc_time_hours 0
-            set lc_time_minutes 0
-            set lc_time_seconds 0
-        } else {
-            error "Invalid date: $datetime"
-        }
+    set date_tokens [list]
+    foreach token [clock format $date_clock -format "%Y %m %d %H %M %S %w"] {
+        lappend date_tokens [util::trim_leading_zeros $token]
     }
-    set lc_time_year [util::trim_leading_zeros $lc_time_year]
 
-    set a [expr {(14 - $lc_time_month) / 12}]
-    set y [expr {$lc_time_year - $a}]
-    set m [expr {$lc_time_month + 12*$a - 2}]
-
-    # day_no becomes 0 for Sunday, through to 6 for Saturday.
-    # Perfect for addressing zero-based lists pulled from locale info.
-    set lc_time_day_no [expr {(($lc_time_days + $y + $y/4 - $y/100 + $y/400) + (31 * $m / 12)) % 7}]
+    lassign $date_tokens \
+        lc_time_year \
+        lc_time_month \
+        lc_time_days \
+        lc_time_hours \
+        lc_time_minutes \
+        lc_time_seconds \
+        lc_time_day_no
 
     #
     # Keep the results of lc_time_fmt_compile in the per-thread cache
     # (namespaced variable)
     #
-    set key ::acs::lc_time_fmt_compile($fmt,$locale)
-    if {![info exists $key]} {
-        set $key [lc_time_fmt_compile $fmt $locale]
-    }
-    return [subst [set $key]]
+    return [subst [acs::per_thread_cache eval -key acs-lang.lc_time_fmt_compile($fmt,$locale) {
+        lc_time_fmt_compile $fmt $locale
+    }]]
 }
 
-ad_proc -public lc_time_fmt_compile {
+ad_proc -private lc_time_fmt_compile {
     fmt
     locale
 } {
-    Compiles ISO 14652 LC_TIME style formatting string to variable substitions and proc calls.
+    Compiles ISO 14652 LC_TIME style formatting string to variable substitutions and proc calls.
 
     @param fmt             An ISO 14652 LC_TIME style formatting string.
     @param locale          Locale identifier must be in the locale database
@@ -410,17 +462,14 @@ ad_proc -public lc_time_utc_to_local {
         set tz [lang::conn::timezone]
     }
 
-    set local_time $time_value
-
-    ad_try {
-        set local_time [db_exec_plsql utc_to_local {}]
-    } on error {errorMsg} {
-       ad_log Warning "lc_time_utc_to_local: Query exploded on time conversion from UTC, probably just an invalid date, $time_value: $errorMsg"
-    }
+    set local_time [lc_time_tz_convert -from UTC -to $tz -time_value $time_value]
 
     if {$local_time eq ""} {
-        # If no conversion possible, log it and assume local is as given (i.e. UTC)
-        ns_log Notice "lc_time_utc_to_local: Timezone adjustment in ad_localization.tcl found no conversion to UTC for $time_value $tz"
+        #
+        # An empty result normally means a broken date or timezone. We
+        # throw a warning in this case.
+        #
+        ns_log warning "lc_time_utc_to_local: Timezone adjustment in ad_localization.tcl found no conversion to UTC for $time_value $tz"
     }
 
     return $local_time
@@ -433,23 +482,22 @@ ad_proc -public lc_time_local_to_utc {
     Converts a local time to a UTC time for the specified timezone.
 
     @param time_value        Local time in the ISO datetime format, YYYY-MM-DD HH24:MI:SS
-    @param tz                Timezone that must exist in tz_data table.
+    @param tz                Valid timezone as supported by the Tcl Clock command or
+                             must exist in tz_data table.
     @return                  UTC time.
 } {
     if { $tz eq "" } {
         set tz [lang::conn::timezone]
     }
 
-    set utc_time $time_value
-    ad_try {
-        set utc_time [db_exec_plsql local_to_utc {}]
-    } on error {errorMsg} {
-        ad_log Warning "lc_time_local_to_utc: Query exploded on time conversion to UTC, probably just an invalid date, $time_value: $errorMsg"
-    }
+    set utc_time [lc_time_tz_convert -from $tz -to UTC -time_value $time_value]
 
     if {$utc_time eq ""} {
-        # If no conversion possible, log it and assume local is as given (i.e. UTC)
-        ns_log Notice "lc_time_local_to_utc: Timezone adjustment in ad_localization.tcl found no conversion to local time for $time_value $tz"
+        #
+        # An empty result normally means a broken date or timezone. We
+        # throw a warning in this case.
+        #
+        ns_log warning "lc_time_local_to_utc: Timezone adjustment in ad_localization.tcl found no conversion to local time for $time_value $tz"
     }
 
     return $utc_time
@@ -467,7 +515,7 @@ ad_proc -public lc_time_system_to_conn {
     @param time_value        Timestamp from the database in the ISO datetime format.
     @return                  Timestamp in conn's local time, also in ISO datetime format.
 } {
-    if { ![ad_conn isconnected] } {
+    if { ![ns_conn isconnected] } {
         return $time_value
     }
 
@@ -488,9 +536,9 @@ ad_proc -public lc_time_conn_to_system {
     using the OpenACS timezone setting and user's preference
 
     @param time_value        Timestamp from conn input in the ISO datetime format.
-    @return                  Timestamp in the database's time zone, also in ISO datetime format.
+    @return                  Timestamp in the database's timezone, also in ISO datetime format.
 } {
-    if { ![ad_conn isconnected] } {
+    if { ![ns_conn isconnected] } {
         return $time_value
     }
 
@@ -512,21 +560,79 @@ ad_proc -public lc_time_tz_convert {
 } {
     Converts a date from one timezone to another.
 
-    @param time_value        Timestamp in the 'from' timezone, in the ISO datetime format.
-    @return                  Timestamp in the 'to' timezone, also in ISO datetime format.
+    @param time_value        A datetime in one of the supported formats. See
+                             lc_datetime_to_clock.
+
+    @return                  Timestamp in the 'to' timezone, also in ISO datetime
+                             format, or the empty string when
+                             'time_value' or one of the timezones are
+                             invalid, or when it is otherwise
+                             impossible to determine the right
+                             conversion.
+
+    @see lc_datetime_to_clock
 } {
-    ad_try {
-        set time_value [db_exec_plsql convert {}]
-    } on error {errorMsg} {
-        ad_log Warning "lc_time_tz_convert: Error converting timezone: $errorMsg"
+    #
+    # Here we enforce that the timestamp format is correct and
+    # apply Tcl clock date normalization (e.g. 2000-00-00 00:00:00
+    # -> 1999-11-30 00:00:00) so that the behavior is consistent
+    # across DBMSs)
+    #
+    try {
+        set clock_value [::lc_datetime_to_clock $time_value]
+    } on error {errmsg} {
+        ad_log warning "lc_time_tz_convert: invalid date '$time_value'"
+        return ""
     }
-    return $time_value
+
+    set time_value [clock format $clock_value -format {%Y-%m-%d %H:%M:%S}]
+
+    try {
+        #
+        # Tcl-based conversion
+        #
+        # Tcl clock api can perform timezone conversion fairly easy,
+        # with the advantage that we do not have to maintain a local
+        # timezones database, including daylight savings, to get a
+        # correct and consistent result.
+        #
+        set clock_local [clock scan $time_value -format {%Y-%m-%d %H:%M:%S} -timezone $from]
+        set clock_gmt [clock scan $clock_local -format %s -gmt 1]
+        set date_to [clock format $clock_gmt -format {%Y-%m-%d %H:%M:%S} -timezone $to]
+    } on error {errmsg} {
+        ns_log notice \
+            "lc_time_tz_convert: '$time_value' from '$from' to '$to' via Tcl returned:" \
+            $errmsg "- use DB-based conversion"
+
+        #
+        # DB-based conversion
+        #
+        # The typical Tcl installation will not deal with
+        # non-canonical timezones, but we may have this
+        # information in the ref-timezones datamodel. When the Tcl
+        # conversion fails, we try this approach instead.
+        #
+        set date_to [db_string tz_convert {
+            with gmt as
+            (
+             select cast(:time_value as timestamp) -
+                    cast(r.gmt_offset || ' seconds' as interval) as time
+               from timezones t, timezone_rules r
+              where t.tz_id = r.tz_id
+                and :time_value between r.local_start and r.local_end
+                and t.tz = :from
+             )
+            select to_char(gmt.time + cast(r.gmt_offset || ' seconds' as interval),
+                           'YYYY-MM-DD HH24:MI:SS')
+              from timezones t, timezone_rules r, gmt
+             where t.tz_id = r.tz_id
+               and gmt.time between r.utc_start and r.utc_end
+               and t.tz = :to
+        } -default ""]
+    }
+
+    return $date_to
 }
-
-
-
-
-
 
 
 ad_proc -public lc_list_all_timezones { } {
@@ -588,6 +694,94 @@ ad_proc -private lc_leading_zeros {
     Adds leading zeros to an integer to give it the desired number of digits
 } {
     return [format "%0${n_desired_digits}d" $the_integer]
+}
+
+
+ad_proc -public lc_content_size_pretty {
+    {-size "0"}
+    {-precision "1"}
+    {-standard "decimal"}
+} {
+
+    Transforms data size, provided in nonnegative bytes, to KB, MB... up to YB.
+
+    @param size       Size in bytes
+    @param precision  Numbers in the fractional part
+    @param standard   Standard to use for binary prefix. Three standards are
+                      supported currently by this proc:
+                        - decimal (default): SI (base-10, 1000 bytes = 1kB)
+                        - binary: IEC           (base-2,  1024 bytes = 1KiB)
+                        - legacy: JEDEC         (base-2,  1024 bytes = 1KB)
+
+    @return Size in given standard units (e.g. '5.2 MB')
+
+    @author Héctor Romojaro <hector.romojaro@gmail.com>
+    @creation-date 2019-06-25
+
+} {
+    #
+    # Localized byte/s
+    #
+    set bytes [lc_get "bytes"]
+    set byte  [lc_get "byte"]
+
+    switch $standard {
+        decimal {
+            #
+            # SI (base-10, 1000 bytes = 1KB)
+            #
+            set div 1000
+            set units [list $bytes kB MB GB TB PB EB ZB YB]
+        }
+        binary {
+            #
+            # IEC (base-2, 1024 bytes = 1KiB)
+            #
+            set div 1024
+            set units [list $bytes KiB MiB GiB TiB PiB EiB ZiB YiB]
+        }
+        legacy {
+            #
+            # JEDEC (base-2, 1024 bytes = 1KB)
+            #
+            set div 1024
+            set units [list $bytes KB MB GB TB PB EB ZB YB]
+        }
+        default {
+            return "Unknown value $standard for -standard option"
+        }
+    }
+    #
+    # For empty size, we assume 0
+    #
+    if {$size eq ""} {
+        set size 0
+    }
+
+    set len [string length $size]
+
+    if {$size < $div} {
+        #
+        # 1 byte or n bytes
+        #
+        if {$size == 1} {
+            set size_pretty [format "%s $byte" $size]
+        } else {
+            set size_pretty [format "%s $bytes" $size]
+        }
+    } else {
+        #
+        # > 1K
+        #
+        set unit [expr {($len - 1) / 3}]
+        set size_pretty [format "%.${precision}f %s" [expr {$size / pow($div,$unit)}] [lindex $units $unit]]
+    }
+    #
+    # Localize dot/comma just before return
+    #
+    set size_pretty "[lc_numeric [lindex $size_pretty 0]] [lindex $size_pretty 1]"
+
+    return $size_pretty
 }
 
 # Local variables:

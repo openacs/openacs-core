@@ -10,6 +10,7 @@
            u.first_names || ' ' || u.last_name
     from   cc_users u
     where  u.user_id not in (select grantee_id from acs_permissions_all where object_id = :object_id)
+    and    [template::list::filter_where_clauses -name users]
     order  by upper(first_names), upper(last_name)
 
       </querytext>

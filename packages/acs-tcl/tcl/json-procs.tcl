@@ -366,18 +366,18 @@ ad_proc -private util::json::gen_inner {value} {
                 return [util::json::array2json $arg]
             }
             default {
-                if { ![string is double -strict $value] 
+                if { ![string is double -strict $value]
                     && ![regexp {^(?:true|false|null)$} $value]} {
                     set value "\"$value\""
                 }
                 # Cleanup linebreaks
-                regsub -all {\r\n} $value "\n" value
-                regsub -all {\r} $value "\n" value
+                regsub -all -- {\r\n} $value "\n" value
+                regsub -all -- {\r} $value "\n" value
                 # JSON requires new line characters be escaped
-                regsub -all {\n} $value "\\n" value
+                regsub -all -- {\n} $value "\\n" value
                 return $value
             }
-         }
+        }
     }
 }
 
@@ -396,7 +396,7 @@ ad_proc -private util::json::object2json {objectVal} {
             lappend values "\"$key\":[util::json::gen_inner $val]"
         }
     }
-    return "\{[join $values ,]\}"
+    return "\{[ns_dbquotelist $values]\}"
 }
 
 ad_proc -private util::json::array2json {arrayVal} {
@@ -414,7 +414,7 @@ ad_proc -private util::json::array2json {arrayVal} {
             lappend values [util::json::gen_inner $val]
         }
     }
-    return "\[[join $values ,]\]"
+    return "\[[ns_dbquotelist $values]\]"
 }
 
 ad_proc util::json::gen {value} {
@@ -588,8 +588,8 @@ ad_proc util::json::object::set_by_path {
             -object [util::json::object::create \
                         [list a [util::json::object::create [list d null]]]] \
             -path {a b c} \
-            -value 3]  
- 
+            -value 3]
+
     Result:
 
     {"a":{"b":{"c":3},"d":null}}
@@ -651,6 +651,80 @@ ad_proc util::json::indent {
             [expr {[regexp -all "\{" $jsonette]-$incr_indent-[regexp -all "\}" $jsonette]}]
     }
     return [join $output \n]
+}
+
+ad_proc util::tdomDoc2dict {doc} {
+
+    Helper proc for util::json2dict, which outputsreturns the provided
+    tDOM document in the form of a Tcl dict.
+
+} {
+    return [util::tdomNodes2dict [$doc childNodes] [$doc jsonType]]
+}
+
+
+ad_proc -private util::tdomNodes2dict { nodes parentType } {
+
+    Helper proc for util::json2dict, which returns the tDOM structure
+    in the form of a Tcl dict.
+
+    Use this proc only on dom structures created with "porse -json",
+    since it depends on the internal node structure of tDOM. It would
+    be certainly better to have this function built-in in tDOM (call
+                                                                like "asDict", similar to "asXML")
+
+    @return dict
+    @author Gustaf Neumann
+} {
+    set result ""
+    foreach n $nodes {
+        set children [$n childNodes]
+        set jsonType [$n jsonType]
+        set childrendValue [util::tdomNodes2dict $children $jsonType]
+
+        switch $jsonType {
+            OBJECT {
+                if {[$n nodeName] ne "objectcontainer" || $parentType eq "OBJECT"} {
+                    lappend result [$n nodeName]
+                }
+                lappend result $childrendValue
+            }
+            NONE {
+                lappend result [$n nodeName] $childrendValue
+            }
+            ARRAY {
+               if {[$n nodeName] ne "arraycontainer" || $parentType eq "OBJECT"} {
+                   lappend result [$n nodeName]
+               }
+                lappend result $childrendValue
+            }
+            default {
+                set op [expr {[llength $nodes] > 1 ? "lappend" : "set"} ]
+                $op result [$n nodeValue]
+            }
+        }
+    }
+    return $result
+}
+
+ad_proc util::json2dict { jsonText } {
+
+    Parse JSON text into a Tcl dict.
+
+    This function is NOT based on the functions from the
+    "util::json::" namespace, and is built on top of tDOM.  It is a
+    replacement for the "json::json2dict" in the tcllib package
+    "json", but is on sample documents several times faster.
+
+    @param jsonText JSON text
+    @return dict containing the JSON objects represented by jsonText
+    @author Gustaf Neumann
+} {
+    #ns_log notice "PARSE\n$jsonText"
+    set doc [dom parse -json -- $jsonText]
+    set result [util::tdomDoc2dict $doc]
+    $doc delete
+    return $result
 }
 
 # Local variables:

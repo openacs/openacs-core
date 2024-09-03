@@ -2,6 +2,10 @@
 <property name="context">{/doc/acs-authentication/ {ACS Authentication}} {External Authentication}</property>
 <property name="doc(title)">External Authentication</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <div class="book" lang="en">
 <div class="titlepage"><div><div><h1 class="title">
 <a name="id2410693" id="id2410693"></a>External

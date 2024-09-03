@@ -97,6 +97,7 @@ ad_proc -public lang::message::register {
     {-upgrade_status "no_upgrade"}
     {-conflict:boolean}
     {-comment ""}
+    {-object_id ""}
     locale
     package_key
     message_key
@@ -140,6 +141,10 @@ ad_proc -public lang::message::register {
     @param conflict         Set this switch if the upgrade represents a conflict between
                             changes made in the database and in catalog files.
 
+    @param object_id        Bind this message key to an acs_object, so that
+                            upon deletion, the message key will be
+                            removed as well.
+
     @see lang::message::lookup
     @see _
 } {
@@ -161,16 +166,28 @@ ad_proc -public lang::message::register {
     set key_exists_p [db_string message_key_exists_p {}]
 
     if { ! $key_exists_p } {
+        # The system will not function correctly if there are keys
+        # registered in other locales than en_US. If this is a new
+        # message key for a locale different than en_US, register the
+        # en_US version first.
         if {$locale eq "en_US"} {
-            db_dml insert_message_key {}
+            db_dml insert_message_key {
+                insert into lang_message_keys
+                (message_key, package_key, object_id)
+                values
+                (:message_key, :package_key, :object_id)
+            }
         } else {
-            # Non-default locale
-            # The system will not function correctly if there are keys registered in other locales
-            # than en_US that are not present for en_US. This introduces the inconvenience of having to
-            # register the en_US messages first, but that is manageable
-            set error_message "lang::message::register - refusing to register message for non-en_US locale ${locale}. The message key ${package_key}.${message_key} must be registered in en_US first"
-            ns_log Error $error_message
-            error $error_message
+            lang::message::register \
+                -update_sync=$update_sync_p \
+                -upgrade_status $upgrade_status \
+                -conflict=$conflict_p \
+                -comment $comment \
+                -object_id $object_id \
+                en_US \
+                $package_key \
+                $message_key \
+                $message
         }
     }
 
@@ -180,11 +197,11 @@ ad_proc -public lang::message::register {
     # Build up an array of columns to set
     array set cols [list]
     if { $update_sync_p } {
-        set cols(sync_time) [db_map sync_time]
+        set cols(sync_time) current_timestamp
     } else {
         set cols(sync_time) "null"
     }
-    if { [string trim $message] eq "" } {
+    if { [string is space $message] } {
         set cols(message) "null"
     } else {
         set cols(message) [db_map message]
@@ -195,11 +212,17 @@ ad_proc -public lang::message::register {
     set cols(conflict_p) :conflict_db_p
 
     # Different logic for update and insert
-    if { [nsv_exists lang_message_$locale $key] } {
+    if { [db_0or1row message_exists {
+        select
+               -- For use in audit log call
+               message as old_message
+          from lang_messages
+        where locale = :locale
+          and package_key = :package_key
+          and message_key = :message_key
+    }] } {
         # Update existing message if the message has changed
 
-        # For use in audit log call
-        set old_message [nsv_get lang_message_$locale $key]
         # Peter TODO: should these attributes be cached?
         lang::message::get \
             -package_key $package_key \
@@ -231,13 +254,8 @@ ad_proc -public lang::message::register {
                 $old_message_array(conflict_p) \
                 $old_message_array(upgrade_status)
 
-            # Trying to avoid hitting Oracle bug#2011927
-            if { [string trim $message] eq "" } {
-                db_dml lang_message_update {}
-            } else {
-                set cols(message) [db_map message]
-                db_dml lang_message_update {} -clobs [list $message]
-            }
+            set cols(message) [db_map message]
+            db_dml lang_message_update {} -clobs [list $message]
         }
     } else {
         # Insert new message
@@ -259,16 +277,11 @@ ad_proc -public lang::message::register {
             lappend val_clauses $cols($col)
         }
 
-        # avoiding bug#2011927 from Oracle.
-        if { [string trim $message] eq "" } {
-            db_dml lang_message_insert_null_msg {}
-        } else {
-            db_dml lang_message_insert {} -clobs [list $message]
-        }
+        db_dml lang_message_insert {} -clobs [list $message]
     }
 
     # Update the message catalog cache
-    nsv_set lang_message_$locale $key $message
+    acs::clusterwide nsv_set lang_message_$locale $key $message
 }
 
 ad_proc -public lang::message::delete {
@@ -289,9 +302,33 @@ ad_proc -public lang::message::delete {
               conflict_p f \
               sync_time "" \
         ]
+
+    # Cleanup the nsv caching the message
+    set key "${package_key}.${message_key}"
+    acs::clusterwide nsv_unset -nocomplain -- lang_message_$locale $key
 }
 
-ad_proc -public lang::message::revert {
+ad_proc -private lang::message::undelete {
+    -package_key:required
+    -message_key:required
+    -locale:required
+} {
+    Undeletes a message from a particular locale.
+
+    @author Héctor Romojaro <hector.romojaro@gmail.com>
+} {
+    lang::message::edit \
+        $package_key \
+        $message_key \
+        $locale \
+        [list deleted_p f \
+              upgrade_status no_upgrade \
+              conflict_p f \
+              sync_time "" \
+        ]
+}
+
+ad_proc -private lang::message::revert {
     {-package_key:required}
     {-message_key:required}
     {-locale:required}
@@ -321,7 +358,7 @@ ad_proc -public lang::message::revert {
         $last_overwritten_message
 }
 
-ad_proc -public lang::message::get_element {
+ad_proc -private lang::message::get_element {
     -package_key:required
     -message_key:required
     -locale:required
@@ -458,46 +495,56 @@ ad_proc -private lang::message::edit {
     if { [info exists edit_array(message)] } {
         error "The proc lang::message::edit was invoked with the message attribute in the edit array. To edit the message text of a message use the lang::message::register proc instead"
     }
-
+    #
+    # Deleting/undeleting?
+    #
     if { [info exists edit_array(deleted_p)] } {
-        set edit_array(deleted_p) [db_boolean [template::util::is_true $edit_array(deleted_p)]]
+        set edit_array(deleted_p) [db_boolean [string is true -strict $edit_array(deleted_p)]]
+        if { [string is true -strict $edit_array(deleted_p)] } {
+            set delete_p t
+            set delete_comment "deleted"
+        } else {
+            set delete_p f
+            set delete_comment "undeleted"
+        }
+        #
+        # If we are deleting/undeleting we need to preserve the old message in the audit log
+        #
+        # Peter TODO: should these attributes be cached?
+        #
+        lang::message::get \
+            -package_key $package_key \
+            -message_key $message_key \
+            -locale $locale \
+            -array old_message_array
 
-        # If we are deleting we need to preserve the old message in the audit log
-        if { [template::util::is_true $edit_array(deleted_p)] } {
+        lang::audit::changed_message \
+            $old_message_array(message) \
+            $package_key \
+            $message_key \
+            $locale \
+            $delete_comment \
+            $old_message_array(deleted_p) \
+            $old_message_array(sync_time) \
+            $old_message_array(conflict_p) \
+            $old_message_array(upgrade_status)
 
-            # Peter TODO: should these attributes be cached?
-            lang::message::get \
-                -package_key $package_key \
-                -message_key $message_key \
-                -locale $locale \
-                -array old_message_array
-
-            lang::audit::changed_message \
-                $old_message_array(message) \
-                $package_key \
-                $message_key \
-                $locale \
-                "deleted" \
-                $old_message_array(deleted_p) \
-                $old_message_array(sync_time) \
-                $old_message_array(conflict_p) \
-                $old_message_array(upgrade_status)
-
-            # If we are deleting an en_US message we need to mark the message deleted in all locales
-            if {$locale eq "en_US"} {
-                set message_locales [db_list all_message_locales {
-                    select locale
-                    from lang_messages
-                    where package_key = :package_key
-                      and message_key = :message_key
-                      and locale <> 'en_US'
-                }]
-                foreach message_locale $message_locales {
-                    lang::message::delete \
-                        -package_key $package_key \
-                        -message_key $message_key \
-                        -locale $message_locale
-                }
+        #
+        # If we are deleting an en_US message we need to mark the message as deleted in all locales
+        #
+        if {$delete_p && $locale eq "en_US"} {
+            set message_locales [db_list all_message_locales {
+                select locale
+                from lang_messages
+                where package_key = :package_key
+                  and message_key = :message_key
+                  and locale <> 'en_US'
+            }]
+            foreach message_locale $message_locales {
+                lang::message::delete \
+                    -package_key $package_key \
+                    -message_key $message_key \
+                    -locale $message_locale
             }
         }
     }
@@ -507,10 +554,8 @@ ad_proc -private lang::message::edit {
         lappend set_clauses "$name = :$name"
         set $name $edit_array($name)
     }
-    if { $update_sync_p } {
-        if { ![info exists edit_array(sync_time)] } {
-            lappend set_clauses [db_map set_sync_time_now]
-        }
+    if { $update_sync_p && ![info exists edit_array(sync_time)] } {
+        lappend set_clauses {sync_time = current_timestamp}
     }
 
     if { [llength $set_clauses] > 0 } {
@@ -526,7 +571,7 @@ ad_proc -private lang::message::edit {
     }
 }
 
-ad_proc -public lang::message::conflict_count {
+ad_proc -private lang::message::conflict_count {
     {-package_key ""}
     {-locale ""}
 } {
@@ -538,21 +583,13 @@ ad_proc -public lang::message::conflict_count {
 
     @author Peter Marklund
 } {
-    # Build any package and locale where clauses
-    set where_clauses [list]
-    foreach col {package_key locale} {
-        if { [set $col] ne "" } {
-            lappend where_clauses "$col = :${col}"
-        }
-    }
-    set where_clause [ad_decode $where_clauses "" "" "and [join $where_clauses " and "]"]
-
-    return [db_string conflict_count "
+    return [db_string conflict_count {
         select count(*)
         from lang_messages
         where conflict_p = 't'
-        $where_clause
-    "]
+          and (:package_key is null or :package_key = package_key)
+          and (:locale      is null or :locale      = locale)
+    }]
 }
 
 ad_proc -private lang::message::remove_from_cache {
@@ -574,12 +611,12 @@ ad_proc -private lang::message::remove_from_cache {
         set nsv_array lang_message_$locale
         set nsv_key "${package_key}.${message_key}"
         if { [nsv_exists $nsv_array $nsv_key] } {
-            nsv_unset $nsv_array $nsv_key
+            acs::clusterwide nsv_unset $nsv_array $nsv_key
         }
     }
 }
 
-ad_proc -private lang::message::get_embedded_vars {
+ad_proc -public lang::message::get_embedded_vars {
     message
 } {
     Returns a list of embedded substitution variables on the form %varname% in a message.
@@ -609,7 +646,7 @@ ad_proc -private lang::message::get_embedded_vars {
     return $variables_list
 }
 
-ad_proc -private lang::message::format {
+ad_proc -public lang::message::format {
     localized_message
     {value_array_list {}}
     {upvar_level 3}
@@ -632,6 +669,10 @@ ad_proc -private lang::message::format {
 
     The frog jumped across the fence. About 50% of the time, he stumbled, or maybe it was %20 %times%.
 } {
+    if {[llength $value_array_list] % 2 != 0} {
+        ad_log error "Invalid value_array_list passed in: <$value_array_list>"
+    }
+
     array set value_array $value_array_list
     set value_array_keys [array names value_array]
     set remaining_message $localized_message
@@ -650,7 +691,9 @@ ad_proc -private lang::message::format {
                 # A substitution list is provided, the key should be in there
 
                 if {$variable_string ni $value_array_keys} {
-                    ns_log Warning "lang::message::format: The value_array_list \"$value_array_list\" does not contain the variable name $variable_string found in the message: $localized_message"
+                    ns_log Warning "lang::message::format: The value_array_list" \
+                        "\"$value_array_list\" does not contain the variable name" \
+                        "$variable_string found in the message: $localized_message"
 
                     # There is no value available to do the substitution with
                     # so don't substitute at all
@@ -675,7 +718,8 @@ ad_proc -private lang::message::format {
                         append formatted_message $local_variable($array_key)
                     }
                 } else {
-                    ns_log warning "Message contains a variable named '$variable_name' which doesn't exist in the caller's environment: message $localized_message"
+                    ns_log warning "Message contains a variable named '$variable_name' " \
+                        "which doesn't exist in the caller's environment: message $localized_message"
                     append formatted_message "MISSING: variable '$variable_name' is not available"
                 }
             }
@@ -688,7 +732,7 @@ ad_proc -private lang::message::format {
     return $formatted_message
 }
 
-ad_proc -private lang::message::embedded_vars_regexp {} {
+ad_proc -public lang::message::embedded_vars_regexp {} {
     The regexp pattern used to loop over variables embedded in
     message catalog texts.
 
@@ -698,15 +742,70 @@ ad_proc -private lang::message::embedded_vars_regexp {} {
     return {^(.*?)(%%|%[-a-zA-Z0-9_:\.]+(?:;noquote)?%)(.*)$}
 }
 
-ad_proc -public lang::message::message_exists_p { locale key } {
-    Return 1 if message exists in given locale, 0 otherwise.
+if {[ns_info name] eq "NaviServer"} {
+    #
+    # NaviServer supports since ages nsv_get with an optional output
+    # variable. This cuts the number of needed lock operations per
+    # lookup into half.
+    #
+    ad_proc -public lang::message::message_exists_p {
+        -varname
+        locale
+        key
+    } {
+        Return 1 if message exists in given locale, 0 otherwise.
 
-    @author Peter Marklund
-} {
-    # Make sure messages are in the cache
-    lang::message::cache
+        @param varname when specified, return value in this variable
+        @author Gustaf Neumann
+    } {
+        #
+        # Make sure messages are loaded into the cache.
+        #
+        acs::per_thread_cache eval -key acs-lang.message_cache_loaded {
+            lang::message::cache
+        }
+        #
+        # Provide linkage to the output variable and perform lookup
+        #
+        if {[info exists varname]} {
+            upvar 1 $varname var
+        }
+        try {
+            return [nsv_get lang_message_$locale $key var]
+        } on error {errmsg} {
+            return 0
+        }
+    }
+} else {
+    #
+    # AOLserver compatible version
+    #
+    ad_proc -public lang::message::message_exists_p {
+        -varname
+        locale
+        key
+    } {
+        Return 1 if message exists in given locale, 0 otherwise.
 
-    return [nsv_exists lang_message_$locale $key]
+        @param varname when specified, return value in this variable
+        @author Gustaf Neumann
+    } {
+        #
+        # Make sure messages are loaded into the cache.
+        #
+        acs::per_thread_cache eval -key acs-lang.message_cache_loaded {
+            lang::message::cache
+        }
+        #
+        # Check for existence and return value if required.
+        #
+        set exists [nsv_exists lang_message_$locale $key]
+        if {$exists && [info exists varname]} {
+            upvar 1 $varname var
+            set var [nsv_get lang_message_$locale $key]
+        }
+        return $exists
+    }
 }
 
 ad_proc -public lang::message::lookup {
@@ -739,7 +838,7 @@ ad_proc -public lang::message::lookup {
                               identifier for each locale. All keys belong to a certain
                               package and should be prefixed with the package key of that package
                               on the format package_key.message_key (the dot is reserved for separating
-                              the package key, the rest of the key should contain only alpha-numeric
+                              the package key, the rest of the key should contain only alphanumeric
                               characters and underscores). If the key does not belong to
                               any particular package it should not contain a dot. A lookup
                               is always attempted with the exact key given to this proc.
@@ -774,7 +873,9 @@ ad_proc -public lang::message::lookup {
     @return A localized piece of text.
 } {
     # Make sure messages are in the cache
-    lang::message::cache
+    acs::per_thread_cache eval -key acs-lang.message_cache_loaded {
+        lang::message::cache
+    }
 
     # Make sure that a default of "" is transformed into Translation Missing
     # As per discussion on IRC on 2008-03-06
@@ -785,7 +886,7 @@ ad_proc -public lang::message::lookup {
     if { $locale eq "" } {
         # No locale provided
 
-        if { [ad_conn isconnected] } {
+        if { [ns_conn isconnected] } {
             # We are in an HTTP connection (request) so use that locale
             set locale [ad_conn locale]
         } else {
@@ -802,35 +903,47 @@ ad_proc -public lang::message::lookup {
         }
     }
 
-    # We remember the passed-in locale, because we want the translator mode to show which
-    # messages have been translated, and which have not.
-    set org_locale $locale
+    #
+    # Probably, we should check for undefined locales passed in. We
+    # omit this for now due to missing performance evaluation of this
+    # change.
+    #
+    # elseif {$locale ni [lang::system::get_locales]} {
+    #    error "Unknown locale $locale passed as argument"
+    #}
 
+    #
     # Trying locale directly
-    if { [message_exists_p $locale $key] } {
-        set message [nsv_get lang_message_$locale $key]
-    } else {
-        # Trying default locale for language
+    #
+    if { ![message_exists_p -varname message $locale $key] } {
+        #
+        # Trying default locale for language.
+        #
         set language [lindex [split $locale "_"] 0]
-        set locale [lang::util::default_locale_from_lang $language]
-        if { [message_exists_p $locale $key] } {
-            set message [nsv_get lang_message_$locale $key]
-        } else {
-            # Trying system locale for package (or site-wide)
-            set locale [lang::system::locale]
-            if { [message_exists_p $locale $key] } {
-                set message [nsv_get lang_message_$locale $key]
-            } else {
+
+        #
+        # When the lookup returns empty (no locale for this language),
+        # or returns the same language we checked before, there is no
+        # reason for the message lookup and we can go to the next
+        # test.
+        #
+        set lang_locale [lang::util::default_locale_from_lang $language]
+        if { $lang_locale eq ""
+             || $lang_locale eq $locale
+             || ![message_exists_p -varname message $lang_locale $key]
+         } {
+            #
+            # Trying system locale for package
+            #
+            if { ![message_exists_p -varname message [lang::system::locale] $key] } {
+                #
                 # Trying site-wide system locale
-                set locale [lang::system::locale -site_wide]
-                if { [message_exists_p $locale $key] } {
-                    set message [nsv_get lang_message_$locale $key]
-                } else {
+                #
+                if { ![message_exists_p -varname message [lang::system::locale -site_wide] $key] } {
+                    #
                     # Resorting to en_US
-                    set locale "en_US"
-                    if { [message_exists_p $locale $key] } {
-                        set message [nsv_get lang_message_$locale $key]
-                    } else {
+                    #
+                    if { ![message_exists_p -varname message "en_US" $key] } {
                         if {"TRANSLATION MISSING" ne $default} {
                             set message $default
                         } else {
@@ -869,13 +982,15 @@ ad_proc -public lang::message::lookup {
     return $message
 }
 
-ad_proc -private lang::message::cache {} {
+ad_proc -public lang::message::cache {{-force:boolean}} {
     Loads the entire message catalog from the database into the cache.
 } {
-    # We segregate messages by language. It might reduce contention
-    # if we segregate instead by package. Check for problems with ns_info locks.
-
-    if {[nsv_incr lang_message_cache executed_p] == 1} {
+    #
+    # We segregate messages by language. It might reduce contention if
+    # we segregate instead by package keys. Check mutex contention
+    # nsstats (with ns_info locks).
+    #
+    if {[nsv_incr lang_message_cache executed_p] == 1 || $force_p} {
 
         set i 0
         db_foreach select_locale_keys {
@@ -886,8 +1001,6 @@ ad_proc -private lang::message::cache {} {
             nsv_set lang_message_$locale "${package_key}.${message_key}" $message
             incr i
         }
-
-        db_release_unused_handles
 
         ns_log Notice "lang::message::cache - Initialized message cache with $i rows from database"
     }
@@ -901,19 +1014,18 @@ ad_proc -private lang::message::cache {} {
 #
 #####
 
-ad_proc -public _mr { locale key message } {
+ad_proc -private -deprecated _mr { locale key message } {
 
     Registers a message in a given locale or language.
     Inserts the message into the table lang_messages
     if it does not exist and updates if it does.
 
-    For backward compatibility - it assumes that the key
-    is the concatenation of message and package key
-    like this:
+    It assumes that the key is the concatenation of message and
+    package key like this:  package_key.message_key
 
-    package_key.message_key
-
-    @author Jeff Davis (davis@xarg.net)
+    Actually, there is very little need for this proc (which is not
+    used in the 300+ packages in the repository), therefore, it is
+    marked as deprecated. Use lang::message::register instead.
 
     @param locale  Abbreviation for language of the message or the locale.
     @param key     Unique identifier for this message. Will be the same identifier
@@ -978,14 +1090,12 @@ ad_proc -public lang::message::update_description {
     {-message_key:required}
     {-description:required}
 } {
+    Update the description of a message key.
+
     @author Simon Carstensen
     @creation-date 2003-08-12
 } {
-    if { [string trim $description] eq "" } {
-        db_dml update_description_insert_null {}
-    } else {
-        db_dml update_description {} -clobs [list $description]
-    }
+    db_dml update_description {} -clobs [list $description]
 }
 
 # Local variables:

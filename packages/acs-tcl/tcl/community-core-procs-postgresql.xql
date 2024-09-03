@@ -9,11 +9,11 @@
       </querytext>
 </fullquery>
 
-<fullquery name="person::delete.delete_person">      
+<fullquery name="person::delete.delete_person">
       <querytext>
 
             select person__delete(:person_id);
-        
+
       </querytext>
 </fullquery>
 
@@ -37,20 +37,20 @@
   <querytext>
     (t1.object_type = 'group' or t1.object_type = 'person')
   </querytext>
-</partialquery>	      
+</partialquery>
 
 <partialquery name="party::types_valid_for_rel_type_multirow.start_with_clause">
   <querytext>
     t1.object_type = :start_with
   </querytext>
-</partialquery>	      
+</partialquery>
 
-<fullquery name="party::types_valid_for_rel_type_multirow.select_sub_rel_types">      
+<fullquery name="party::types_valid_for_rel_type_multirow.select_sub_rel_types">
   <querytext>
 
-	select types.pretty_name, 
-	       types.object_type, 
-	       types.tree_level, 
+	select types.pretty_name,
+	       types.object_type,
+	       types.tree_level,
 	       types.indent,
 	       case when valid_types.object_type = null then 0 else 1 end as valid_p
 	  from (select t2.pretty_name,
@@ -63,12 +63,12 @@
 		 where t2.tree_sortkey between t1.tree_sortkey and tree_right(t1.tree_sortkey)
 	           and $start_with_clause ) types
                   left outer join
-	            (select object_type 
+	            (select object_type
 		       from rel_types_valid_obj_two_types
 		      where rel_type = :rel_type ) valid_types
 		    using (object_type)
          order by types.tree_sortkey
-	
+
   </querytext>
 </fullquery>
 

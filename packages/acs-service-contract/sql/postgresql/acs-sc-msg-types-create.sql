@@ -27,26 +27,26 @@ create table acs_sc_msg_types (
 
 
 create table acs_sc_msg_type_elements (
-    msg_type_id		     integer
+    msg_type_id		     integer NOT NULL
 			     constraint acs_sc_msg_type_el_mtype_id_fk
 			     references acs_sc_msg_types(msg_type_id)
 			     on delete cascade,
-    element_name	     varchar(100),
-    element_msg_type_id	     integer
+    element_name	     varchar(100) NOT NULL,
+    element_msg_type_id	     integer NOT NULL
 			     constraint acs_sc_msg_type_el_emti_id_fk
 			     references acs_sc_msg_types(msg_type_id),
     element_msg_type_isset_p boolean,
     element_pos		     integer
 );
 
--- register function record
-select define_function_args('acs_sc_msg_type__new','msg_type_name,msg_type_spec');
--- declare function
-
+ALTER TABLE acs_sc_msg_type_elements ADD CONSTRAINT acs_sc_msg_type_el_un
+      UNIQUE (msg_type_id, element_name, element_msg_type_id);
 
 --
 -- procedure acs_sc_msg_type__new/2
 --
+select define_function_args('acs_sc_msg_type__new','msg_type_name,msg_type_spec');
+
 CREATE OR REPLACE FUNCTION acs_sc_msg_type__new(
    p_msg_type_name varchar,
    p_msg_type_spec varchar

@@ -119,7 +119,8 @@ ad_proc -public acs_mail_lite::sched_parameters {
         lpri_object_ids,
         reject_on_hit,
         reject_on_miss
-        from acs_mail_lite_ui limit 1
+        from acs_mail_lite_ui
+        fetch first 1 rows only
     } ]
 
     if { !$exists_p } {
@@ -154,7 +155,7 @@ ad_proc -public acs_mail_lite::sched_parameters {
                     max_blob_chars -
                     mpri_min -
                     mpri_max {
-                        set v_p [ad_var_type_check_integer_p $new(${spn})]
+                        set v_p [string is integer -strict $new(${spn})]
                         if { $v_p } {
                             if { $new(${spn}) < 0 } {
                                 set v_p 0
@@ -186,7 +187,9 @@ ad_proc -public acs_mail_lite::sched_parameters {
                     lpri_party_ids -
                     hpri_object_ids -
                     lpri_object_ids {
-                        set v_p [ad_var_type_check_integerlist_p $new(${spn})]
+                        # test, if list contains only integers
+                        set map [lmap x $new(${spn}) {if {[string is integer -strict $x]} continue; set x} ]
+                        set v_p [expr {$map eq ""}]
                     }
                     hpri_subject_glob -
                     lpri_subject_glob {
@@ -443,7 +446,7 @@ ad_proc -public acs_mail_lite::inbound_prioritize {
     ns_log Dev "inbound_prioritize: range '${range}' d_max '${d_max}' mp '${mp}'"
 
     # number of variables in fine granularity calcs:
-    # char_size, date time stamp
+    # char_size, date timestamp
     set varnum 2
     # Get most recent scan start time for reference to batch present time
     set start_cs [nsv_get acs_mail_lite si_start_t_cs]
@@ -526,7 +529,7 @@ ad_proc -public acs_mail_lite::email_type {
     If check_subject_p is set 1, \
     checks for common subjects identifying autoreplies. \
         This is not recommended to rely on exclusively. \
-        This feature provides a framework for expaning classification of \
+        This feature provides a framework for extending classification of \
         emails for deployment routing purposes.
     </p><p>
     If array includes keys from 'ns_imap struct', such as internaldate.*, \
@@ -570,7 +573,7 @@ ad_proc -public acs_mail_lite::email_type {
                      {autoresponder} \
                      {x-autorespond} \
                     ]
-    # Theses were in auto_reply, but are not specific to replies:
+    # These were in auto_reply, but are not specific to replies:
     #                     {auto-generated}
     #             {auto-notified}
     # See section on auto_gen types. (auto-submitted and the like)
@@ -604,7 +607,7 @@ ad_proc -public acs_mail_lite::email_type {
                         set header $h2
                     }
                     set value [string trim [string range $row $c_idx+1 end]]
-                    # string match from proc safe_eval
+                    # string match from proc ad_safe_eval
                     if { ![string match {*[\[;]*} $value ] } {
                         # 'append' is used instead of 'set' in
                         # the rare case that there's a glitch
@@ -718,7 +721,7 @@ ad_proc -public acs_mail_lite::email_type {
                 append dti "+"
             } else {
                 # Comment from panda-imap/src/c-client/mail.h:
-                # /* non-zero if west of UTC */
+                # /* nonzero if west of UTC */
                 # See also discussion beginning with:
                 # /* occidental *from Greenwich) timezones */
                 # in panda-imap/src/c-client/mail.c
@@ -1033,7 +1036,7 @@ ad_proc -private acs_mail_lite::inbound_queue_insert {
     #   h_arr(aml_size_chars)   size_chars
     #   h_arr(aml_processed_p)  processed_p
 
-    #   p_arr($section_id,<field>)  acs_mail_lite_ie_parts (content of a part)
+    #   p_arr($section_id,&lt;field&gt;)  acs_mail_lite_ie_parts (content of a part)
     #   p_arr($section_id,nv_list)  acs_mail_lite_part_nv_pairs
     #   p_arr(section_id_list) list of section_ids
     #
@@ -1253,7 +1256,7 @@ ad_proc -private acs_mail_lite::inbound_queue_pull {
             where processed_p <>'1'
             and release_p <>'1'
             order by priority
-            limit :email_max_ct } ]
+            fetch next :email_max_ct rows only}]
 
         set chunk_len [llength $chunk_ols]
         if { $chunk_len < 1} {
@@ -1282,12 +1285,12 @@ ad_proc -private acs_mail_lite::inbound_queue_pull {
                 # uses an email beginning with a number.
                 # Also, 'from' header could be spoofed..
                 # This practice should be deprecated in favor of signed
-                # acs_mail_lite::unqiue_id_create.
+                # acs_mail_lite::unique_id_create.
                 # For emails originating elsewhere, another authentication
                 # method, such as a pre-signed unique-id in message
                 # content could be added as well.
                 # For now, we warn whenever this is used.
-                if { [ad_var_type_check_number_p $pot_object_id] } {
+                if { [string is integer -strict $pot_object_id] } {
                     if { [acs_object::object_p -id h_arr(aml_object_id)] } {
                         ns_log Warning "acs_mail_lite::inbound_queue_pull \
  Accepted insecure email object_id '${pot_object_id}' \
@@ -1403,13 +1406,13 @@ ad_proc -private acs_mail_lite::inbound_queue_pull_one {
 
     h_arr(aml_type)         Type of email from acs_mail_lite::email_type
     h_arr(aml_received_cs)  Time received in seconds since Tcl epoch
-    h_arr(aml_datetime_cs)  Time unique_id generatd in seconds since Tcl epoch
+    h_arr(aml_datetime_cs)  Time unique_id generated in seconds since Tcl epoch
     h_arr(aml_processed_p)  processed_p
     h_arr(aml_priority)     a priority number assigned to email.
 
     Email parts (of body) are kept in a separate array:
 
-    p_arr($section_ref,<field>)  acs_mail_lite_ie_parts (content of a part)
+    p_arr($section_ref,&lt;field&gt;)  acs_mail_lite_ie_parts (content of a part)
     p_arr($section_ref,nv_list)  acs_mail_lite_part_nv_pairs
     p_arr(section_ref_list) list of section_refs
 
@@ -1701,12 +1704,13 @@ ad_proc -private acs_mail_lite::inbound_filters {
 
 ad_proc -private acs_mail_lite::inbound_cache_clear {
 } {
-    Clears table of all email uids for all history.
-    All unread input emails will be considered new and reprocessed.
-    To keep history, just temporarily forget it instead:
-    append a revision date to acs_mail_lite_email_src_ext_id_map.src_ext
-    <br/><br/>
-    If you are not sure if this will do what you want, try setting
+    
+    Clears table of all email uids for all history.  All unread input
+    emails will be considered new and reprocessed.  To keep history,
+    just temporarily forget it instead (delete it from
+    acs_mail_lite_email_uid_id_map).
+
+    <p>If you are not sure if this will do what you want, try setting
     reprocess_old_p to '1'.
     @see acs_mail_lite::sched_parameters
 
@@ -1714,7 +1718,6 @@ ad_proc -private acs_mail_lite::inbound_cache_clear {
     db_dml acs_mail_lite_email_uid_map_d {
         update acs_mail_lite_email_uid_id_map {
             delete from acs_mail_lite_email_uid_id_map
-
         }
     }
     return 1
@@ -1726,7 +1729,7 @@ ad_proc -private acs_mail_lite::inbound_cache_hit_p {
     uidvalidity
     mailbox_host_name
 } {
-    Check email unqiue id (UID) against history in table.
+    Check email unique id (UID) against history in table.
     If already exists, returns 1 otherwise 0.
     Adds checked case to cache if not already there.
 
@@ -1897,7 +1900,7 @@ ad_proc -private acs_mail_lite::unique_id_create {
             # It will be 10 for a while..
             # so use eleven 9's
             # Some cycles are saved by using a constant
-            append uid_partial "." [randomRange 99999999999]
+            append uid_partial "." [util::random_range 99999999999]
             append uid_partial "." [lindex $uid_list 2]
 
             set uid $uid_partial
@@ -2088,7 +2091,7 @@ ad_proc -private acs_mail_lite::inbound_email_context {
 
     # Note for imap paradigm: message-id should be in form:
     # <unique_id@local_domain.example>
-    # and unqiue_id should map to
+    # and unique_id should map to
     # any package, party and/or object_id so
     # as to not leak info unnecessarily.
     # See table acs_mail_lite_send_msg_id_map
@@ -2132,7 +2135,7 @@ ad_proc -private acs_mail_lite::inbound_email_context {
     #                        https://tools.ietf.org/html/rfc5598#section-3.4.1
     #
     # originator            A special case alternate to 'From' header.
-    #                       Usually defined by first SMTP MTA.
+    #                       Usually, defined by first SMTP MTA.
     #                       Notices may be sent to this address when
     #                       a bounce notice to the original email's 'From'
     #                       address bounces.
@@ -2188,7 +2191,7 @@ ad_proc -private acs_mail_lite::inbound_email_context {
     # adds same unique id to 'message-id' and 'content-id'.
     # example: <17445.1479806245.127@openacs.wu-wien.ac.at.wu-wien.ac.at>
 
-    # Content-ID is added by proc:  build_mime_message
+    # Content-ID is added by proc:  ad_build_mime_message
     # which relies on tcllib mime package
     # in file acs-tcl/tcl/html-email-procs.tcl
     # message-id is built by acs_mail_lite::generate_message_id
@@ -2247,7 +2250,7 @@ ad_proc -private acs_mail_lite::inbound_email_context {
     # notifications package parameter EmailReplyAddressPrefix
     # Mail-Followup-To is set to same value, then calls acs_mail_lite::send
 
-    lappend check_list mail-followup-to to
+    lappend check_list mail-followup-to
 
     # Contribute x-envelope-from from legacy case in
     # acs_mail_lite::bounce_prefix?
@@ -2341,7 +2344,7 @@ ad_proc -private acs_mail_lite::inbound_email_context {
     return $context_list
 }
 
-ad_proc acs_mail_lite::bounce_ministry {
+ad_proc -private acs_mail_lite::bounce_ministry {
     -header_array_name:required
 } {
     Check if this email is notifying original email bounced.
@@ -2446,7 +2449,7 @@ ad_proc -private acs_mail_lite::bounce_prefix {} {
     return [parameter::get_from_package_key -package_key "acs-mail-lite" -parameter "EnvelopePrefix"]
 }
 
-ad_proc -public acs_mail_lite::bouncing_user_p {
+ad_proc -private acs_mail_lite::bouncing_user_p {
     -user_id:required
 } {
     Checks if email address of user is bouncing mail
@@ -2474,7 +2477,7 @@ ad_proc -private acs_mail_lite::check_bounces {} {
         set fixed_sender [parameter::get -package_id $package_id -parameter "FixedSenderEmail"]
         if { $fixed_sender ne "" } {
             set notification_sender $fixed_sender
-        } elseif { [acs_mail_lite::utils::valid_email_p [ad_system_owner]] } {
+        } elseif { [util_email_valid_p [ad_system_owner]] } {
             set notification_sender [ad_system_owner]
         } else {
             # Set to an email address that is required to exist
@@ -2509,7 +2512,7 @@ ad_proc -private acs_mail_lite::check_bounces {} {
 
     # send notification to users with disabled email
     foreach notification $notifications {
-        set notification_list [util_ns_set_to_list -set $notification]
+        set notification_list [ns_set array $notification]
         array set user $notification_list
         set user_id $user(user_id)
         set href [export_vars -base [ad_url]/register/restore-bounce {user_id}]
@@ -2527,7 +2530,7 @@ To re-enable your email notifications, please visit\n${href}"
 }
 
 
-ad_proc -public acs_mail_lite::bounce_address {
+ad_proc -private acs_mail_lite::bounce_address {
     -user_id:required
     -package_id:required
     -message_id:required
@@ -2568,4 +2571,3 @@ deprecated way. Supply message_id. Use acs_mail_lite::unique_id_create"
 #    tcl-indent-level: 4
 #    indent-tabs-mode: nil
 # End:
-

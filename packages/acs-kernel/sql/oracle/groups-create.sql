@@ -32,7 +32,7 @@ create table membership_rels (
 			constraint mr_member_state_nn not null
                         constraint mr_member_state_ck
                         check (member_state in ('merged','approved', 'needs approval',
-                                              'banned', 'rejected', 'deleted'))
+                                              'banned', 'rejected', 'deleted', 'expired'))
 );
 
 create table admin_rels (
@@ -100,8 +100,8 @@ begin
 
  acs_rel_type.create_type (
    rel_type => 'membership_rel',
-   pretty_name => 'Membership Relation',
-   pretty_plural => 'Membership Relationships',
+   pretty_name => '#acs-kernel.Membership_Relation#',
+   pretty_plural => '#acs-kernel.lt_Membership_Relationsh#',
    table_name => 'membership_rels',
    id_column => 'rel_id',
    package_name => 'membership_rel',
@@ -116,8 +116,8 @@ begin
 
  acs_rel_type.create_type (
    rel_type => 'admin_rel',
-   pretty_name => 'Administrator Relation',
-   pretty_plural => 'Administrator Relationships',
+   pretty_name => '#acs-kernel.lt_Administrator_Relatio#',
+   pretty_plural => '#acs-kernel.lt_Administrator_Relatio_1#',
    supertype => 'membership_rel',
    table_name => 'admin_rels',
    id_column => 'rel_id',
@@ -269,6 +269,7 @@ create index group_elem_idx_group_idx on group_element_index (group_id);
 create index group_elem_idx_element_idx on group_element_index (element_id);
 create index group_elem_idx_rel_id_idx on group_element_index (rel_id);
 create index group_elem_idx_rel_type_idx on group_element_index (rel_type);
+create index group_elem_idx_container_idx on group_element_index(container_id);
 
 -- The index on container_id is not very good
 -- and in some cases can be quite detrimental
@@ -474,6 +475,10 @@ as
   );
 
   procedure deleted (
+    rel_id      in membership_rels.rel_id%TYPE
+  );
+
+  procedure expire (
     rel_id      in membership_rels.rel_id%TYPE
   );
 

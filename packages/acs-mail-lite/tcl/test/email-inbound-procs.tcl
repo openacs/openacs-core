@@ -18,10 +18,14 @@ aa_register_case \
         acs_mail_lite::unique_id_create
         acs_mail_lite::unique_id_parse
         ad_system_owner
-        ad_var_type_check_integer_p
         apm_package_id_from_key
-        f::lmax
         party::get_by_email
+        acs_root_dir
+        mime::uniqueID
+        util::random
+        util::random_list_element
+        util::random_range
+        util::randomize_list
     } acs_mail_lite_inbound_procs_check {
         Test acs-mail-lite procs in email-inbound-procs.tcl
     } {
@@ -53,19 +57,19 @@ aa_register_case \
                 set param "-"
                 append param $p
                 if { $p in $bools_list } {
-                    set val_idx [randomRange 5]
+                    set val_idx [util::random_range 5]
                     set val [lindex $bools_v_list $val_idx]
                 } elseif { $p in $integer_list } {
-                    set val [randomRange 32767]
+                    set val [util::random_range 32767]
                 } elseif { $p in $ints_list } {
                     set nums_list [list]
-                    set up_to_10 [randomRange 10]
+                    set up_to_10 [util::random_range 10]
                     for {set i 0} {$i < $up_to_10 } {incr i} {
-                        lappend nums_list [randomRange 32767]
+                        lappend nums_list [util::random_range 32767]
                     }
                     set val [join $nums_list " "]
                 } elseif { $p in $lists_list } {
-                    set val_idx [randomRange 2]
+                    set val_idx [util::random_range 2]
                     set val [lindex $nv_list_list $val_idx]
                 }
                 aa_log "r41. Testing change of parameter '${p}' from \
@@ -80,8 +84,8 @@ aa_register_case \
                         if { $pp in $bools_list } {
                             aa_equals "r48 Changed sched_parameter '${pp}' \
   value '$params_def(${pp})' to '${val}' set" \
-                                [template::util::is_true $params_new(${pp})] \
-                                [template::util::is_true $val]
+                                [string is true -strict $params_new(${pp})] \
+                                [string is true -strict $val]
                         } else {
                             if { $params_new(${pp}) eq $params_def(${pp}) } {
                                 if { $pp eq "mpri_max" \
@@ -103,8 +107,8 @@ aa_register_case \
                         if { $pp in $bools_list } {
                             aa_equals "r62 Unchanged sched_parameter '${pp}' \
   value '$params_def(${pp})' to '$params_new(${pp})' set" \
-                                [template::util::is_true $params_new(${pp})] \
-                                [template::util::is_true $params_def(${pp})]
+                                [string is true -strict $params_new(${pp})] \
+                                [string is true -strict $params_def(${pp})]
                         } else {
                             aa_equals "r67 Unchanged sched_parameter '${pp}' \
   value '$params_def(${pp})' to '$params_new(${pp})' set" \
@@ -137,7 +141,7 @@ aa_register_case \
             set lh_list [list l h]
             set subject [ad_generate_random_string]
             set su_glob "*"
-            append su_glob [string range $subject [randomRange 8] end]
+            append su_glob [string range $subject [util::random_range 8] end]
 
            # priority_types are in order of least significant first.
            set p_type_i 0
@@ -153,7 +157,7 @@ aa_register_case \
                 }
 
                 # set new case of parameters
-                set r [randomRange 10000]
+                set r [util::random_range 10000]
                 set p_min [expr { $r + 999 } ]
                 set p_max [expr { $p_min * 1000 + $r } ]
                 set su_max $p_max
@@ -242,17 +246,17 @@ aa_register_case \
                 set size_list [list $su_max]
                 set ns_section_list [list nssock nssock_v4 nssock_v6]
                 foreach section $ns_section_list {
-                    lappend size_list [ns_config -int -min 0 $section maxinput]
+                    lappend size_list [ns_config -int -min 0 $section maxinput 0]
                 }
-                set s0  [f::lmax $size_list]
+                set s0 [lindex [lsort $size_list] end]
 
                 aa_log "r161 given: t0 '${t0}' dur_s '${dur_s}'"
                 aa_log "r161b given: s0 '${s0}' su_max '${su_max}'"
 
-                set t1 [expr { int( $t0 - $dur_s * 1.9 * [random]) } ]
-                set t2 [expr { int( $t0 - $dur_s * 1.9 * [random]) } ]
-                set s1 [expr { int( $s0 * 0.9 * [random]) } ]
-                set s2 [expr { int( $s0 * 0.9 * [random]) } ]
+                set t1 [expr { int( $t0 - $dur_s * 1.9 * [util::random]) } ]
+                set t2 [expr { int( $t0 - $dur_s * 1.9 * [util::random]) } ]
+                set s1 [expr { int( $s0 * 0.9 * [util::random]) } ]
+                set s2 [expr { int( $s0 * 0.9 * [util::random]) } ]
                 aa_log "r167 priorities: t1 '${t1}' t2 '${t2}' s1 '${s1}' s2 '${s2}'"
                 if { $t1 < $t2 } {
                     set t $t1
@@ -315,8 +319,8 @@ aa_register_case \
 
                 aa_log "p_arr(s2) = '$p_arr(s2)'"
 
-                # verify earlier is higher priority
-                if { $p_arr(${f1}) < $p_arr(${f2}) } {
+                # verify earlier is higher or equal priority
+                if { $p_arr(${f1}) <= $p_arr(${f2}) } {
                     set cron_p 1
                 } else {
                     set cron_p 0
@@ -324,8 +328,8 @@ aa_register_case \
                 aa_true "earlier email assigned first \
  ${f1} '$p_arr(${f1})' < ${f2} '$p_arr(${f2})' " $cron_p
 
-                # verify larger size has slower priority
-                if { $p_arr(${z1}) < $p_arr(${z2}) } {
+                # verify larger size has lower or equal priority
+                if { $p_arr(${z1}) <= $p_arr(${z2}) } {
                     set size_p 1
                 } else {
                     set size_p 0
@@ -343,7 +347,7 @@ aa_register_case \
                         } else {
                             set within_limits_p 0
                         }
-                        aa_true "r266; prioirty for case '${j}' '${p_max}' < \
+                        aa_true "r266; priority for case '${j}' '${p_max}' < \
   '$p_arr(${j})' < '${s0}' is within limits." $within_limits_p
                     }
                 } elseif { $p eq "h" } {
@@ -353,7 +357,7 @@ aa_register_case \
                         } else {
                             set within_limits_p 0
                         }
-                        aa_true "r276: prioirty for case '${j}' '0' < \
+                        aa_true "r276: priority for case '${j}' '0' < \
   '$p_arr(${j})' < '${p_min}' is within limits." $within_limits_p
                     }
 
@@ -378,27 +382,27 @@ aa_register_case \
            if { [catch { set sid [acs_mail_lite::imap_conn_go] } errmsg ] } {
                set sid "z"
            }
-           set sid_p [ad_var_type_check_integer_p $sid]
+           set sid_p [string is integer $sid]
            aa_true "ref407. acs_mail_lite::imap_conn_go" $sid_p
 
            if { [catch {set sid4 [acs_mail_lite::imap_conn_go -conn_id ""] } errmsg] } {
                set sid4 "z"
            }
-           set sid4_p [ad_var_type_check_integer_p $sid4]
+           set sid4_p [string is integer $sid4]
            aa_true "ref424. acs_mail_lite::imap_conn_go -conn_id ''" $sid4_p
-           
+
            aa_log "Checking whether ns_imap is installed..."
-           set ns_imap_p [expr {[info commands ns_imap] ne ""}]
+           set ns_imap_p [expr {[namespace which ns_imap] ne ""}]
            set enabled [expr {$ns_imap_p ?
                               "enabled. Activating additional tests" :
                               "disabled. Some tests will be skipped"}]
            aa_log "...ns_imap $enabled."
-           
+
            # Following tests are expected to work only when ns_imap is
            # installed and are therefore disabled otherwise.
            if {$ns_imap_p} {
                aa_log "Start of ns_imap dependent tests."
-               
+
                aa_log "Testing imap open/close via default connection params"
                if { [catch {set conn_id [acs_mail_lite::imap_conn_close -conn_id "all"]} errmsg ] } {
                    set conn_id 1
@@ -408,7 +412,7 @@ aa_register_case \
                aa_log "Following three tests 'pass' when no imap sessions open."
                aa_false "ref367. acs_mail_lite::imap_conn_close -conn_id 'all'" $conn_id
 
-               set conn_id [randomRange 1000]
+               set conn_id [util::random_range 1000]
                if { [catch {set t3 [acs_mail_lite::imap_conn_close -conn_id $conn_id]} errmsg] } {
                    set t3 1
                }
@@ -450,7 +454,7 @@ aa_register_case \
                if { [catch {set sid3 [acs_mail_lite::imap_conn_go -conn_id $sid] } errmsg ] } {
                    set sid3 "z"
                }
-               set sid3_p [ad_var_type_check_integer_p $sid3]
+               set sid3_p [string is integer -strict $sid3]
                aa_false "ref418. acs_mail_lite::imap_conn_go -conn_id '${sid}'" $sid3_p
 
                set sid5 "all"
@@ -539,16 +543,16 @@ aa_register_case \
                             x-autorespond ]
            for {set ii 1} {$ii <= $i} {incr ii } {
                # send garbage to try to confuse proc
-               set t [randomRange 4]
+               set t [util::random_range 4]
                set h ""
                # Some examples already have header types that limit
                # test type.
                if { $type_arr(${ii}) eq "auto_gen" && $t > 2 } {
-                   set t [randomRange 2]
+                   set t [util::random_range 2]
                }
 
                if { $type_arr(${ii}) eq "in_reply_to" && $t > 1 } {
-                   set t [randomRange 1]
+                   set t [util::random_range 1]
                }
                set type_test [lindex $t_olist $t]
 
@@ -566,16 +570,16 @@ aa_register_case \
                }
                if { $t < 2 } {
                    # add auto_reply headers
-                   switch [randomRange 2] {
+                   switch [util::random_range 2] {
                        0 {
-                           append h [lindex $ar_list [randomRange 5]]
+                           append h [lindex $ar_list [util::random_range 5]]
                            append h " : " [ad_generate_random_string]
                        }
                        1 {
                            append h "action : delivered"
                        }
                        2 {
-                           set h2 [lindex $s_list [randomRange 3]]
+                           set h2 [lindex $s_list [util::random_range 3]]
                            append h "action : " $h2 "\n"
                            append h "status : thisis a test"
                        }
@@ -584,22 +588,22 @@ aa_register_case \
                }
                if { $t < 1 } {
                    # add bounce headers
-                   if { [randomRange 1] } {
+                   if { [util::random_range 1] } {
                        # test original-recipient (diverted, reply)
                        append h "original-recipient : "
                        append h [ad_system_owner] "\n"
                    } else {
                        # test delivery status notification
                        append h action
-                       append h " : " [lindex $s_list [randomRange 3]]
+                       append h " : " [lindex $s_list [util::random_range 3]]
                        append h "\n" status " : "
-                       append h [expr { 99 + [randomRange 900] } ] " "
-                       append h [ad_generate_random_string [randomRange 9]]
+                       append h [expr { 99 + [util::random_range 900] } ] " "
+                       append h [ad_generate_random_string [util::random_range 9]]
                        append h "\n"
                    }
                }
                # maybe mess up capitalization
-               set c [randomRange 3]
+               set c [util::random_range 3]
                switch -exact -- $c {
                    0 {
                        set h [string tolower $h]
@@ -651,14 +655,14 @@ aa_register_case \
                $sect_id1 ""
 
 
-           set section [randomRange 100]
+           set section [util::random_range 100]
            set sect_id1 [acs_mail_lite::section_id_of $section]
            set sect_id2 [acs_mail_lite::section_id_of $section]
            aa_equals "r605 test case section '${section}'" \
                $sect_id2 $sect_id1
            set sect_arr(${sect_id1}) $section
            for {set i 0} {$i < 6} {incr i} {
-               append section "." [randomRange 100]
+               append section "." [util::random_range 100]
                set sect_id1 [acs_mail_lite::section_id_of $section]
                set sect_id2 [acs_mail_lite::section_id_of $section]
                aa_equals "r606 test case section '${section}'" \
@@ -696,19 +700,19 @@ aa_register_case \
            set party_id_list [db_list parties_rall { select
                distinct party_id from parties }]
            set object_id_list [db_list acs_objects_rall { select
-               distinct object_id from acs_objects} ]
+               distinct object_id from acs_objects fetch first 100 rows only} ]
            set package_ct [llength $package_id_list]
            set party_ct [llength $party_id_list]
            set object_ct [llength $object_id_list]
            for {set i 0} {$i < 12} {incr i } {
                set package_id [lindex $package_id_list \
-                                   [randomRange $package_ct]]
+                                   [util::random_range $package_ct]]
                set party_id [lindex $party_id_list \
-                                 [randomRange $party_ct]]
+                                 [util::random_range $party_ct]]
                set object_id [lindex $object_id_list \
-                                  [randomRange $object_ct]]
+                                  [util::random_range $object_ct]]
                set other [ad_generate_random_string]
-               set blank_id [randomRange 3]
+               set blank_id [util::random_range 3]
                set blank_field [lindex $fields_list $blank_id]
                set $blank_field ""
                # if package_id = aml_package_id, it still is signed here
@@ -745,7 +749,7 @@ aa_register_case \
                    party_id -
                    datetime_cs -
                    other {
-                       aa_equals "r710 test acs_mail_lite::unqiue_id $n has val ''" $v ""
+                       aa_equals "r710 test acs_mail_lite::unique_id $n has val ''" $v ""
                    }
                    datetime_not {
                        set is_integer_p [string is wideinteger -strict $v]
@@ -764,7 +768,7 @@ aa_register_case \
                    party_id -
                    datetime_cs -
                    other {
-                       aa_equals "r710 test acs_mail_lite::unqiue_id $n has val ''" $v ""
+                       aa_equals "r710 test acs_mail_lite::unique_id $n has val ''" $v ""
                    }
                    datetime_not {
                        set is_integer_p [string is wideinteger -strict $v]

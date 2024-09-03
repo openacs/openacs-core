@@ -1,7 +1,11 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Connect to a second database}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Connect to a second database}</property>
 <property name="doc(title)">Connect to a second database</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="tutorial-upgrade-scripts" leftLabel="Prev"
 			title="Chapter 10. Advanced
@@ -10,8 +14,9 @@ Topics"
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="tutorial-second-database" id="tutorial-second-database"></a>Connect to a second database</h2></div></div></div><p>It is possible to use the OpenACS Tcl database API with other
-databases. In this example, the OpenACS site uses a PostGre
-database, and accesses another PostGre database called legacy.</p><div class="orderedlist"><ol class="orderedlist" type="1">
+databases. In this example, the OpenACS site uses a PostgreSQL
+database, and accesses another PostgreSQL database called
+legacy.</p><div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">
 <p>Modify config.tcl to accommodate the legacy database, and to
 ensure that the legacy database is not used for standard OpenACS

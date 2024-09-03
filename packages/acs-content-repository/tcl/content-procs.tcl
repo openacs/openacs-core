@@ -1,7 +1,7 @@
 ad_library {
 
     Functions that the content-repository uses to interact with the
-    file system.
+    filesystem.
 
     @author Dan Wickstrom (dcwickstrom@earthlink.net)
     @creation-date Sat May  5 13:45 2001
@@ -9,7 +9,7 @@ ad_library {
 }
 
 # The location for files
-ad_proc -public cr_fs_path { { location CR_FILES } } {
+ad_proc -private cr_fs_path { { location CR_FILES } } {
 
     Root path of content repository files.
 
@@ -17,9 +17,9 @@ ad_proc -public cr_fs_path { { location CR_FILES } } {
     return [nsv_get CR_LOCATIONS $location]
 }
 
-ad_proc -private cr_create_content_file_path {item_id revision_id} {
+ad_proc -public cr_create_content_file_path {item_id revision_id} {
 
-    Creates a unique file in the content repository file system based off of
+    Creates a unique file in the content repository filesystem based on
     the item_id and revision_id of the content item.
 
 } {
@@ -68,6 +68,16 @@ ad_proc -public cr_create_content_file {
 
     if the -move flag is given the file is renamed instead
 } {
+    #
+    # A malicious user may try to sneak a symlink in the content
+    # repository, for instance, via a zip file upload. We want to
+    # prevent this.
+    #
+    file lstat $client_filename file_info
+    if {$file_info(type) eq "link"} {
+        error "Attempt to store a symlink in the content repository!"
+    }
+
     set content_file [cr_create_content_file_path $item_id $revision_id]
     set dir [cr_fs_path]
 
@@ -77,13 +87,7 @@ ad_proc -public cr_create_content_file {
         file copy -force -- $client_filename $dir$content_file
     }
 
-    # Record an entry in the file creation log for managing orphaned
-    # files.
-    ad_mutex_eval [nsv_get mutex cr_file_creation] {
-        set f [open $dir/file-creation.log a]
-        puts $f $content_file
-        close $f
-    }
+    cr_add_to_file_creation_log $content_file
 
     return $content_file
 }
@@ -93,17 +97,15 @@ ad_proc -public cr_create_content_file_from_string {item_id revision_id str} {
     Copies the string to the content repository file storage area, and it
     returns the relative file path from the root of the content repository
     file storage area.
+
 } {
     ad_mutex_eval [nsv_get mutex cr_file_creation] {
         set content_file [cr_create_content_file_path $item_id $revision_id]
         set ofp [open [cr_fs_path]$content_file w]
         puts -nonewline $ofp $str
         close $ofp
-
-        set f [open [cr_fs_path]/file-creation.log a]
-        puts $f $content_file
-        close $f
     }
+    cr_add_to_file_creation_log $content_file
     return $content_file
 }
 
@@ -123,15 +125,18 @@ ad_proc -public cr_file_size {relative_file_path} {
 # involving file inserts in the content repository.
 #
 
-ad_proc -public cr_cleanup_orphaned_files {} {
+ad_proc -private cr_add_to_file_creation_log {content_file} {
 
-    Helper proc to cleanup orphaned files in the content
-    repository. Orphaned files can be created during aborted
-    transactions involving the files being added to the content
-    repository.
+    Record an entry in the file creation log for managing orphaned
+    files.
 
 } {
-    cr_delete_orphans [cr_get_file_creation_log]
+    set dir [cr_fs_path]
+    ad_mutex_eval [nsv_get mutex cr_file_creation] {
+        set f [open $dir/file-creation.log a]
+        puts $f $content_file
+        close $f
+    }
 }
 
 ad_proc -private cr_get_file_creation_log {} {
@@ -156,19 +161,38 @@ ad_proc -private cr_get_file_creation_log {} {
     return $content
 }
 
-ad_proc -public cr_count_file_entries {name} {
+ad_proc -private cr_check_file_entry {name} {
 
-    Count the number of entries from the content repository having the
-    specified partial path their content field. The result should be
-    0 or 1 in consistent databases.
+    Check if an entry from the content repository having the
+    specified partial path their content field exists.
+
+    @result boolean success
 
 } {
-    db_string count_entries {}
+    db_0or1orw check_entry {
+        SELECT 1 FROM cr_revisions
+        WHERE substring(content, 1, 100) = substring(:name, 1, 100)
+    }
 }
+
+ad_proc -private cr_count_file_entries {name} {
+
+    Count entries an entries from the content repository having the
+    specified partial path their content field.
+
+    @result integer count
+
+} {
+    db_string count_entries {
+        SELECT count(*) FROM cr_revisions
+        WHERE substring(content, 1, 100) = substring(:name, 1, 100)
+    }
+}
+
 
 ad_proc -private cr_delete_orphans {files} {
 
-    delete orphaned files in the content repository
+    Delete orphaned files in the content repository.
 
 } {
     set dir [cr_fs_path]
@@ -181,11 +205,12 @@ ad_proc -private cr_delete_orphans {files} {
 
         if {![regexp {^[0-9/]+$} $name]} {
             ns_log notice "orphan handling: ignore strange entry from deletion log <$dir$name>"
+            continue
         }
 
         set count [cr_count_file_entries $name]
         if {$count == 0} {
-            # the content entry does not exist anymore, therefore the
+            # the content entry does not exist anymore, therefore, the
             # file is an orphan and should be removed
             ns_log notice "delete orphaned file $dir$name"
             file delete -- $dir$name

@@ -572,12 +572,13 @@ create table users (
 	email_bouncing_p	char(1) default 'f' not null
 				constraint users_email_bouncing_p_ck
 				check (email_bouncing_p in ('t','f')),
-	no_alerts_until		date,
 	last_visit		date,
 	second_to_last_visit	date,
 	n_sessions		integer default 1 not null,
         -- local authentication information
-	password		char(40),
+	password		varchar2(128),
+        password_hash_algorithm varchar2(100)
+                                DEFAULT 'salted-sha1' NOT NULL,
 	salt			char(40),
 	password_question	varchar2(1000),
 	password_answer		varchar2(1000),
@@ -632,10 +633,6 @@ comment on table users is '
  constraint ("email must not be null") to the parent type?
 ';
 
-comment on column users.no_alerts_until is '
- For suppressing email alerts
-';
-
 comment on column users.last_visit is '
  Set when user reappears at site
 ';
@@ -678,11 +675,6 @@ as
   context_id	in acs_objects.context_id%TYPE default null
  )
  return users.user_id%TYPE;
-
- function receives_alerts_p (
-  user_id	in users.user_id%TYPE
- )
- return char;
 
  procedure approve_email (
   user_id	in users.user_id%TYPE
@@ -757,22 +749,6 @@ as
 
   return v_user_id;
  end new;
-
- function receives_alerts_p (
-  user_id in users.user_id%TYPE
- )
- return char
- is
-  counter	char(1);
- begin
-  select decode(count(*),0,'f','t') into counter
-   from users
-   where no_alerts_until >= sysdate
-   and user_id = acs_user.receives_alerts_p.user_id;
-
-  return counter;
-
- end receives_alerts_p;
 
  procedure approve_email (
   user_id	in users.user_id%TYPE

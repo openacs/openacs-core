@@ -11,7 +11,7 @@
 create table countries (
     -- this violates 3nf but is used for 2 reasons
     -- 1. to help efficiency
-    -- 2. to make querys not fail if no translation exists yet
+    -- 2. to make queries not fail if no translation exists yet
     default_name varchar(100)
         constraint countries_default_name_nn
         not null

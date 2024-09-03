@@ -1,7 +1,11 @@
 
-<property name="context">{/doc/acs-service-contract {ACS Service Contracts}} {ACS Service Contract Documentation}</property>
+<property name="context">{/doc/acs-service-contract/ {ACS Service Contracts}} {ACS Service Contract Documentation}</property>
 <property name="doc(title)">ACS Service Contract Documentation</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h1>ACS Service Contract Documentation</h1>
 <h2>Why</h2>
 <p>To facilitate greater code reuse, application integration, and
@@ -36,8 +40,8 @@ WDSL, the interface specification for web services.</p>
 containers for operations.</li><li>operation - a method of an interface. defines a method
 signature, including both input and outputs as well as metadata
 such as caching.</li><li>implementation - an implementation is a set of concrete
-functions that fufills an interface.</li><li>implementation alias - is the method of an implementation that
-fufills a given operation of the contract.</li><li>bindings - association between an interface and an
+functions that fulfillss an interface.</li><li>implementation alias - is the method of an implementation that
+fulfillss a given operation of the contract.</li><li>bindings - association between an interface and an
 implementation.</li><li>types - define the kind of input and outputs a operation
 receives.</li>
 </ul>
@@ -57,8 +61,8 @@ contract</p>
 <h2>FAQ</h2>
 <h3>Why Does an implementation reference an interface?</h3>
 <p>This might seem a little strange since a binding is the official
-reference between an implementation and an interface. However it is
-quite possible that an implementation for interface might exist
+reference between an implementation and an interface. However, it
+is quite possible that an implementation for interface might exist
 prior to the interface being defined, ie the interface defining
 package is not installed. By retaining this information the
 interface defining package can be installed and the implementations
@@ -74,16 +78,14 @@ example <code>ObjectDisplay.Name.InputType</code> as name
 </li></ul>
 <h3>Creating Interfaces</h3>
 <ul><li>(sql):
-<pre>
-acs_sc_contract__new (contract_name, contract_desc):</pre>
+<pre>                 acs_sc_contract__new (contract_name, contract_desc):</pre>
 </li></ul>
 <p>creates a new contract to serve as a logical container for
 operations. contract_desc is a text description of the
 contract.</p>
 <ul><li>(sql):
-<pre>
-acs_sc_operation__new (contract_name, operation_name,
-                                       operation_desc, operation_iscachable_p,
+<pre>                 acs_sc_operation__new (contract_name, operation_name,
+                                       operation_desc, operation_iscacheable_p,
                                        operation_inputtype, operation_outputtype
                                       ):</pre>
 </li></ul>

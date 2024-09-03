@@ -58,8 +58,9 @@ if { $extra_arg eq "thumbnail" || $extra_arg eq "avatar" } {
 }
 
 if {$extra_arg eq "info"} {
-    rp_form_put item_id $object_id
-    rp_form_put filename $filename
+    set form [ns_getform]
+    ns_set put $form item_id $object_id
+    ns_set put $form filename $filename
     rp_internal_redirect "/packages/acs-content-repository/www/image-info"
     ad_script_abort
 } else {

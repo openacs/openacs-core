@@ -19,17 +19,42 @@ namespace eval template::widget {}
 namespace eval template::data {}
 namespace eval template::data::transform {}
 
+ad_proc -public template::widget::merge_tag_attributes {
+    element_reference
+    tag_attributes
+} {
+    Consolidates the logics to compute the final tag attributes by
+    merging those explicitly supplied and those in the element
+    definition.
+
+    @return dict
+} {
+    upvar $element_reference element
+
+    if { [info exists element(html)] } {
+        foreach {key value} $element(html) {
+            dict lappend tag_attributes $key {*}$value
+        }
+    }
+
+    return $tag_attributes
+}
+
 ad_proc -public template::widget {} {
     The template::widget namespace contains the code
     for the various input widgets.
 
     @see template::widget::ampmFragment
+    @see template::widget::block
     @see template::widget::button
     @see template::widget::checkbox
+    @see template::widget::checkbox_text
+    @see template::widget::color
     @see template::widget::comment
     @see template::widget::currency
     @see template::widget::date
     @see template::widget::dateFragment
+    @see template::widget::email
     @see template::widget::file
     @see template::widget::hidden
     @see template::widget::inform
@@ -37,21 +62,22 @@ ad_proc -public template::widget {} {
     @see template::widget::menu
     @see template::widget::monthFragment
     @see template::widget::multiselect
+    @see template::widget::number
     @see template::widget::numericRange
     @see template::widget::password
     @see template::widget::party_search
     @see template::widget::radio
-    @see template::util::richtext
+    @see template::widget::radio_text
     @see template::widget::search
     @see template::widget::select
+    @see template::widget::select_text
     @see template::widget::submit
+    @see template::widget::tel
     @see template::widget::text
     @see template::widget::textarea
-    @see template::widget::block
+    @see template::widget::url
     @see template::element::create
-    @see template::widget::select_text
-    @see template::wdiget::radio_text
-    @see template::widget::checkbox_text
+    @see template::util::richtext
 } -
 
 
@@ -62,7 +88,7 @@ ad_proc -public template::widget::party_search { element_reference tag_attribute
 
     <p>
 
-    It only searches in all parties from the system currently. It should propably be extended to
+    It only searches in all parties from the system currently. It should probably be extended to
     allow one to restrict the search to a specific subsite, as well as searching only
     for groups or persons.
 
@@ -125,11 +151,11 @@ ad_proc -private template::data::transform::party_search {
 
     if { $value eq "" } {
         if { [string is true $is_optional] } {
-	    return ""
-	} else {
-	    template::element::set_error $element(form_id) $element_id "Please enter a search string."
-	    return [list]
-	}
+            return ""
+        } else {
+            template::element::set_error $element(form_id) $element_id "Please enter a search string."
+            return [list]
+        }
     }
 
     if {$value eq ":search:"} {
@@ -201,7 +227,6 @@ ad_proc -private template::data::transform::party_search {
     return $value
 }
 
-
 ad_proc -public template::widget::search {
     element_reference
     tag_attributes
@@ -223,11 +248,11 @@ ad_proc -public template::widget::search {
     }
 </pre>
     Can be either a select widget initially if options supplied
-    or a text box which on submit changes to a select widget.
+    or a search box which on submit changes to a select widget.
 
     @param element_reference Reference variable to the form element
     @param tag_attributes If the "options" attribute is passed in, a select widget
-           is created, otherwise a search text box.
+           is created, otherwise a search box.
 
     @return Form HTML for widget
 
@@ -236,8 +261,8 @@ ad_proc -public template::widget::search {
 
     if { ! [info exists element(options)] } {
 
-        # initial submission or no data (no options): a text box
-        set output [input text element $tag_attributes]
+        # initial submission or no data (no options): a search box
+        set output [input search element $tag_attributes]
 
     } else {
 
@@ -272,10 +297,8 @@ ad_proc -public template::widget::textarea {
 
     upvar $element_reference element
 
-    if { [info exists element(html)] } {
-        array set attributes $element(html)
-    }
-    array set attributes $tag_attributes
+    array set attributes \
+        [::template::widget::merge_tag_attributes element $tag_attributes]
 
     if { [info exists element(value)] } {
         set value $element(value)
@@ -351,18 +374,16 @@ ad_proc -private template::widget::textarea_internal {
     return $output
 }
 
-
-
 ad_proc -public template::widget::inform { element_reference tag_attributes } {
     A static information widget that does not submit any data
 } {
 
     upvar $element_reference element
 
-    if { [info exists element(value)] } {
-        return "[ns_quotehtml $element(value)][input hidden element $tag_attributes]"
+    if { [info exists element(noquote)] } {
+        return $element(value)
     } else {
-        return [input hidden element $tag_attributes]
+        return [ns_quotehtml $element(value)]
     }
 }
 
@@ -382,11 +403,8 @@ ad_proc -public template::widget::input {
 
     upvar $element_reference element
 
-    if { [info exists element(html)] } {
-        array set attributes $element(html)
-    }
-
-    array set attributes $tag_attributes
+    array set attributes \
+        [::template::widget::merge_tag_attributes element $tag_attributes]
 
     if { ( $type eq "checkbox" || $type eq "radio" )
          && [info exists element(value)]
@@ -466,13 +484,13 @@ ad_proc -public template::widget::text {
   }
 }
 
-
-
 ad_proc -public template::widget::file {
     element_reference
     tag_attributes
 } {
     Generate a file widget.
+
+    @see template::util::file_transform
 
     @param element_reference Reference variable to the form element
     @param tag_attributes HTML attributes to add to the tag
@@ -482,10 +500,19 @@ ad_proc -public template::widget::file {
 
     upvar $element_reference element
 
-    return [input file element $tag_attributes]
+    array set attributes \
+        [::template::widget::merge_tag_attributes element $tag_attributes]
+
+    #
+    # If the multiple flag is set for the element, we allow more than one file
+    # in the widget, by using the HTML5 'multiple' attribute of the 'input' tag
+    #
+    if { [info exists element(multiple)] } {
+        set attributes(multiple) {}
+    }
+
+    return [input file element [array get attributes]]
 }
-
-
 
 ad_proc -public template::widget::password {
     element_reference
@@ -546,7 +573,6 @@ ad_proc -public template::widget::hidden {
 
 }
 
-
 ad_proc -public template::widget::submit {
     element_reference
     tag_attributes
@@ -563,6 +589,8 @@ ad_proc -public template::widget::submit {
 
     # always ignore value for submit widget
     set element(value) $element(label)
+
+    dict lappend tag_attributes class prevent-double-click
 
     return [input submit element $tag_attributes]
 }
@@ -748,11 +776,8 @@ ad_proc -public template::widget::select {
 
     upvar $element_reference element
 
-    if { [info exists element(html)] } {
-        array set attributes $element(html)
-    }
-
-    array set attributes $tag_attributes
+    array set attributes \
+        [::template::widget::merge_tag_attributes element $tag_attributes]
 
     return [template::widget::menu \
                 $element(name) $element(options) $element(values) attributes $element(mode)]
@@ -772,11 +797,8 @@ ad_proc -public template::widget::multiselect {
 
     upvar $element_reference element
 
-    if { [info exists element(html)] } {
-        array set attributes $element(html)
-    }
-
-    array set attributes $tag_attributes
+    array set attributes \
+        [::template::widget::merge_tag_attributes element $tag_attributes]
 
     set attributes(multiple) {}
 
@@ -886,11 +908,8 @@ ad_proc -public template::widget::comment {
 
     upvar $element_reference element
 
-    if { [info exists element(html)] } {
-        array set attributes $element(html)
-    }
-
-    array set attributes $tag_attributes
+    array set attributes \
+        [::template::widget::merge_tag_attributes element $tag_attributes]
 
     set output {}
 
@@ -928,17 +947,14 @@ ad_proc -public template::widget::block {
 } {
     upvar $element_reference element
 
-    if { [info exists element(html)] } {
-        array set attributes $element(html)
-    }
+    array set attributes \
+        [::template::widget::merge_tag_attributes element $tag_attributes]
 
     if { [info exists element(value)] } {
         set value $element(value)
     } else {
         set value {}
     }
-
-    array set attributes $tag_attributes
 
     set output ""
     set options $element(options)
@@ -971,7 +987,7 @@ ad_proc -public template::widget::block {
                 lassign $question name required_p
                 append output \
                     "<td>" \
-                    [ad_decode $required_p "t" "<span style=\"color: #f00;\">*</span>" "&nbsp;"] \
+                    [expr {$required_p eq "t" ? {<span style="color: #f00;">*</span>} : {&nbsp;}}] \
                     "</td>"
                 foreach choice [lindex $question 2] {
                     if {$choice ni $value} {
@@ -1065,11 +1081,9 @@ ad_proc -public template::widget::select_text {
 } {
 
     upvar $element_reference element
-    if { [info exists element(html)] } {
-        array set attributes $element(html)
-    }
 
-    array set attributes $tag_attributes
+    array set attributes \
+        [::template::widget::merge_tag_attributes element $tag_attributes]
 
     if { [info exists element(value)] } {
         set select [template::util::select_text::get_property select_value $element(value)]
@@ -1178,11 +1192,9 @@ ad_proc -public template::widget::radio_text {
     @error
 } {
     upvar $element_reference element
-    if { [info exists element(html)] } {
-        array set attributes $element(html)
-    }
 
-    array set attributes $tag_attributes
+    array set attributes \
+        [::template::widget::merge_tag_attributes element $tag_attributes]
 
     if { [info exists element(value)] } {
         set radio [template::util::radio_text::get_property radio_value $element(value)]
@@ -1304,11 +1316,9 @@ ad_proc -public template::widget::checkbox_text {
     @error
 } {
     upvar $element_reference element
-    if { [info exists element(html)] } {
-        array set attributes $element(html)
-    }
 
-    array set attributes $tag_attributes
+    array set attributes \
+        [::template::widget::merge_tag_attributes element $tag_attributes]
 
     if { [info exists element(values)] } {
         set checkbox [template::util::checkbox_text::get_property checkbox_value $element(values)]
@@ -1340,7 +1350,7 @@ ad_proc -public template::widget::checkbox_text {
         append output \
             $checkbox_text \
             [subst { value="[ns_quotehtml $value]"}]
-        
+
         if { [info exists values($value)] } {
             append output { checked="checked"}
         }
@@ -1356,6 +1366,91 @@ ad_proc -public template::widget::checkbox_text {
         [template::widget::input text element $tag_attributes]
 
     return $output
+}
+
+ad_proc -public template::widget::number {
+    element_reference
+    tag_attributes
+} {
+    Render a number input widget.
+
+    @param element_reference Reference variable to the form element
+    @param tag_attributes HTML attributes to add to the tag
+
+    @return Form HTML for widget
+} {
+
+    upvar $element_reference element
+
+    return [input number element $tag_attributes]
+}
+
+ad_proc -public template::widget::url {
+    element_reference
+    tag_attributes
+} {
+    Render a URL input widget.
+
+    @param element_reference Reference variable to the form element
+    @param tag_attributes HTML attributes to add to the tag
+
+    @return Form HTML for widget
+} {
+
+    upvar $element_reference element
+
+    return [input url element $tag_attributes]
+}
+
+ad_proc -public template::widget::tel {
+    element_reference
+    tag_attributes
+} {
+    Render a tel input widget.
+
+    @param element_reference Reference variable to the form element
+    @param tag_attributes HTML attributes to add to the tag
+
+    @return Form HTML for widget
+} {
+
+    upvar $element_reference element
+
+    return [input tel element $tag_attributes]
+}
+
+ad_proc -public template::widget::email {
+    element_reference
+    tag_attributes
+} {
+    Render a email input widget.
+
+    @param element_reference Reference variable to the form element
+    @param tag_attributes HTML attributes to add to the tag
+
+    @return Form HTML for widget
+} {
+
+    upvar $element_reference element
+
+    return [input email element $tag_attributes]
+}
+
+ad_proc -public template::widget::color {
+    element_reference
+    tag_attributes
+} {
+    Render a color input widget.
+
+    @param element_reference Reference variable to the form element
+    @param tag_attributes HTML attributes to add to the tag
+
+    @return Form HTML for widget
+} {
+
+    upvar $element_reference element
+
+    return [input color element $tag_attributes]
 }
 
 #

@@ -1398,7 +1398,7 @@ as
 
   -- Return the node_id of a URL. If the url begins with '/' then the
   -- parent_id must be null. This will raise the no_data_found
-  -- exception if there is no mathing node in the site_nodes table.
+  -- exception if there is no matching node in the site_nodes table.
   -- This will match directories even if no trailing slash is included
   -- in the url.
 

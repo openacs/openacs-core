@@ -1,7 +1,11 @@
 
-<property name="context">{/doc/acs-content-repository {ACS Content Repository}} {Package: content_item}</property>
+<property name="context">{/doc/acs-content-repository/ {ACS Content Repository}} {Package: content_item}</property>
 <property name="doc(title)">Package: content_item</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h2>content_item</h2>
 <p>
 <a href="../index">Content Repository</a> :
@@ -447,11 +451,11 @@ item&#39;s name</td>
 </tr><tr>
 <th align="right" valign="top">nls_language:</th><td>  </td><td>The language for the item, used for Intermedia search</td>
 </tr><tr>
-<th align="right" valign="top">text:</th><td>  </td><td>The text content of the new revision, 4000 charcters maximum.
+<th align="right" valign="top">text:</th><td>  </td><td>The text content of the new revision, 4000 characters maximum.
 Cannot be specified simultaneously with the <kbd>data</kbd>
 parameter</td>
 </tr><tr>
-<th align="right" valign="top">data:</th><td>  </td><td>The blob content of the new revison. Cannot be specified
+<th align="right" valign="top">data:</th><td>  </td><td>The blob content of the new revision. Cannot be specified
 simultaneously with the <kbd>text</kbd> parameter</td>
 </tr><tr>
 <th align="right" valign="top">relation_tag:</th><td>  </td><td>If a parent-child relationship is registered for these content
@@ -741,5 +745,5 @@ procedure write_to_file (
 </ul>
 <p> </p>
 
-Last Modified: $&zwnj;Id: item.html,v 1.6 2018/04/11 21:35:06 hectorr Exp
-$
+Last Modified: $&zwnj;Id: item.html,v 1.6.2.1 2019/08/10 18:09:52 gustafn
+Exp $

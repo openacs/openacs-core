@@ -31,7 +31,7 @@ Examples of such services include:</para>
 
 <listitem><para>General Permissions</para></listitem>
 
-<listitem><para>Site wide search</para></listitem>
+<listitem><para>Site-wide search</para></listitem>
 
 <listitem><para>General Auditing</para></listitem>
 </itemizedlist>
@@ -111,7 +111,7 @@ mechanism for tagging application objects with unique identifiers.</para>
 <para><emphasis role="strong">Support for Unified Access Control</emphasis></para>
 
 <para>Access control should be as transparent as possible to the application
-developer. Until the implementation of the general permissions system, every
+developer. Until the implementation of the general permission system, every
 OpenACS application had to manage access control to its data separately. Later
 on, a notion of &quot;scoping&quot; was introduced into the core data
 model.</para>
@@ -213,7 +213,7 @@ data model exist, which you can read about in <xref linkend="object-system-desig
 model, or how to store information that may change extensively between
 releases or in different client installations. Furthermore, we want to avoid
 changes to an application&#39;s database queries in the face of any custom
-extensions, since such changes are difficult or dangerous to make at runtime,
+extensions, since such changes are difficult or dangerous to make at run time,
 and can make updating the system difficult. Some example applications in OpenACS
 3.x with modifiable data models include:</para>
 
@@ -342,7 +342,7 @@ data.</para></listitem>
 <listitem><para>User Profiling: Maps users to pieces of content that they have looked at;
 content identifiers must be managed in a uniform way.</para></listitem>
 
-<listitem><para>Site Wide Search: Stores all content in a single flat table, with object
+<listitem><para>Site-Wide Search: Stores all content in a single flat table, with object
 identifiers pointing to the object containing the content in the first place.
 This way, we can search the contents of many different types of objects in a
 uniform way.</para></listitem>
@@ -528,12 +528,12 @@ in the system, but it was awkward to use and limited in flexibility.</para>
 
 <para>The OpenACS 4 Object Model provides a generalized notion of scope that allows
 developers to represent a hierarchy of object <emphasis>contexts</emphasis>. These
-contexts are used as the basis for the permissions system. In general, if an
+contexts are used as the basis for the permission system. In general, if an
 object has no explicit permissions attached to it, then it inherits
 permissions from its context.</para>
 
 <para>The context data model also forms the basis of the <link linkend="subsites-requirements">subsites system</link>, and is
-a basic part of the <link linkend="permissions-requirements">permissions system</link>,
+a basic part of the <link linkend="permissions-requirements">permission system</link>,
 described in separate documents.</para>
 
 <para>The context data model should provide the following facilities:</para>

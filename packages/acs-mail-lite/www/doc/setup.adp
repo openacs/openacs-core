@@ -1,6 +1,6 @@
 <master>
-  <property name="title">@title;noquote@</property>
-  <property name="context">@context;noquote@</property>
+  <property name="doc(title)">@title;literal@</property>
+  <property name="context">@context;literal@</property>
   <h1>@title@</h1>
   <p>
     Messages can come from a variety of sources.
@@ -35,4 +35,4 @@
   <p>After <a href="imap-install">installing nsimap</a>, setup consists of filling out the relevant parameters in the acs-mail-lite package, mainly: BounceDomain, FixedSenderEmail and the IMAP section.
 </p>
   <h3>Postfix MailDir on Linux OS</h3>
-  <p>After <a href="maildir-install">installing and configuring Postifx</a>, a setup consists of filling out the relevant parameters in the acs-mail-lite package.
+  <p>After <a href="maildir-install">installing and configuring Postfix</a>, a setup consists of filling out the relevant parameters in the acs-mail-lite package.

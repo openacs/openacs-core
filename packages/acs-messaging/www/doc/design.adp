@@ -1,7 +1,11 @@
 
-<property name="context">{/doc/acs-messaging {ACS Messaging}} {ACS Messaging Design}</property>
+<property name="context">{/doc/acs-messaging/ {ACS Messaging}} {ACS Messaging Design}</property>
 <property name="doc(title)">ACS Messaging Design</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h2>ACS Messaging Design</h2>
 
 ACS Messaging was born out of the design of the new bboard. One

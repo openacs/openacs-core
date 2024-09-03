@@ -1,7 +1,11 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {System/Application Requirements Template}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {System/Application Requirements Template}</property>
 <property name="doc(title)">System/Application Requirements Template</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="filename" leftLabel="Prev"
 			title="Chapter 13. Documentation
@@ -10,8 +14,11 @@ Standards"
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="requirements-template" id="requirements-template"></a>System/Application Requirements
-Template</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">By <a class="ulink" href="mailto:youremail\@example.com" target="_top">You</a>
-</span></p><span style="color: red">&lt;/authorblurb&gt;</span><div class="sect2">
+Template</h2></div></div></div><div class="authorblurb">
+<p>By <a class="ulink" href="mailto:youremail\@example.com" target="_top">You</a>
+</p>
+OpenACS docs are written by the named authors, and may be edited by
+OpenACS documentation staff.</div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="yourpackage-requirements-introduction" id="yourpackage-requirements-introduction"></a>Introduction</h3></div></div></div><p><span class="emphasis"><em>Briefly explain to the reader what
 this document is for, whether it records the requirements for a new
@@ -103,9 +110,9 @@ requirements as well.</p></li>
 <a name="yourpackage-requirements-implementation" id="yourpackage-requirements-implementation"></a>Optional:
 Implementation Notes</h3></div></div></div><p><span class="emphasis"><em>Although in theory coding comes after
 design, which comes after requirements, we do not, and perhaps
-should not, always follow such a rigid process (a.k.a. the
-waterfall lifecyle). Often, there is a pre-existing system or
-prototype first, and thus you may want to write some thoughts on
+should not, always follow such a rigid process (aka the waterfall
+lifecycle). Often, there is a pre-existing system or prototype
+first, and thus you may want to write some thoughts on
 implementation, for aiding and guiding yourself or other
 programmers.</em></span></p>
 </div><div class="sect2">
@@ -124,8 +131,8 @@ programmers.</em></span></p>
 <td>0.1</td><td>Created</td><td>8/21/2000</td><td>Josh Finkler, Audrey McLoghlin</td>
 </tr>
 </tbody>
-</table></div><p><span class="cvstag">($&zwnj;Id: requirements-template.xml,v 1.7
-2017/08/07 23:47:54 gustafn Exp $)</span></p>
+</table></div><div class="cvstag">($&zwnj;Id: requirements-template.xml,v 1.7.2.2
+2020/07/02 08:39:25 gustafn Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

@@ -1,7 +1,11 @@
 
-<property name="context">{/doc/acs-templating {ACS Templating}} {Template System}</property>
+<property name="context">{/doc/acs-templating/ {ACS Templating}} {Template System}</property>
 <property name="doc(title)">Template System</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h2>The Template System -- Design Document</h2>
 
 by Christian Brechbühler <a href="./">Templating System</a>
@@ -251,7 +255,7 @@ and thus cached for future use. Tcl pages are also cached in a
 proc; this saves the trouble of reading and parsing the file the
 next time. The template system remembers the modification times of
 the adp and Tcl sources, and re-processes any requested file if the
-cached version is no longer current. Consequently, this cacheing is
+cached version is no longer current. Consequently, this caching is
 transparent in normal use.</p>
 <p>To emphasize that "normal" use essentially always
 applies, here&#39;s a scenario for abnormal use: Save version
@@ -265,7 +269,7 @@ parameter <code>RefreshCache</code> in section
 <code>template</code> to <code>never</code> or <code>always</code>.
 The former suppresses checking mtime and may improve performance on
 a production server, where the content pages don&#39;t change. The
-latter is only inteded for testing.</p>
+latter is only intended for testing.</p>
 <h3>VII. Data Model Discussion</h3>
 <p>This package doesn&#39;t need a data model.</p>
 <p>It comes with its own database interfaces, one for using ns_ora,
@@ -325,5 +329,5 @@ Quinn</a>
 <address><a href="mailto:christian\@arsdigita.com">Christian
 Brechbuehler</a></address>
 <!-- Created: Mon Aug 14 11:53:07 EDT 2000 -->
-Last modified: $&zwnj;Id: design.html,v 1.9 2018/04/11 20:52:01 hectorr
-Exp $
+Last modified: $&zwnj;Id: design.html,v 1.10.2.2 2019/08/15 10:18:49
+gustafn Exp $

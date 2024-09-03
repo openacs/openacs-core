@@ -18,23 +18,25 @@ ad_proc -private template::reset_request_vars {} {
     returned document.  This should be called at the beginning of any request
     handled by the templating system.
 } {
+    #ns_log notice "----- template::reset_request_vars [ad_conn url]"
     array unset ::template::head::scripts
     array unset ::template::head::links
     array unset ::template::head::metas
     array unset ::template::body_handlers
-    array unset ::template::body_scripts
 
-    set ::template::headers [list]
-    set ::template::footers [list]
+    set ::template::body_scripts {}
+    set ::template::headers {}
+    set ::template::footers {}
 }
 
 ad_proc -public template::register_urn {
     -urn:required
     -resource:required
+    {-csp_list ""}
 } {
 
     Register a URN for a resource. These URNs provide a single place
-    for e.g updating references to external resources when switching
+    for e.g. updating references to external resources when switching
     between a CDN and a local resource, or when a resource should be
     updated.
 
@@ -47,16 +49,18 @@ ad_proc -public template::register_urn {
     if {[info exists $key]} {
         set old_resource [set $key]
         #
-        # Prefer local URNs over non-local ones
+        # Prefer local URLs over non-local ones (starting with http*:)
         #
         if {[string match //* $old_resource] || [string match http* $old_resource]} {
             ns_log notice "overwrite URN: $urn <$old_resource> with <$resource>"
             set $key $resource
+            set ::template::head::urn_csp($urn) $csp_list
         } else {
             ns_log notice "keep old URN: $urn <$old_resource> instead of <$resource>"
         }
     } else {
         set $key $resource
+        set ::template::head::urn_csp($urn) $csp_list
         ns_log notice "add URN: $urn <$resource>"
     }
 }
@@ -161,6 +165,7 @@ ad_proc -public template::head::add_script {
     #
     set key ::template::head::urn($src)
     if {[info exists $key]} {
+        template::head::require_csp $::template::head::urn_csp($src)
         set src [set $key]
     } elseif {[string match urn:* $src]} {
         ns_log error "URN <$src> could not be resolved"
@@ -308,6 +313,22 @@ ad_proc -private template::head::included_p {
     return [info exists ::template::head::included($resource)]
 }
 
+ad_proc -private template::head::included_in {
+    resource
+} {
+
+    Return the containiner resource, containing the provided resource
+
+    @author Gustaf Neumann
+    @creation-date 2020-02-01
+
+    @param resource uri resource
+    @see ::template::head::includes
+} {
+    set key ::template::head::included($resource)
+    return [expr {[info exists $key] ? [set $key] : ""}]
+}
+
 ad_proc -private template::head::flush_included {
     resource
 } {
@@ -350,7 +371,7 @@ ad_proc -public template::head::add_meta {
     @param scheme     the scheme attribute of the meta tag defining which
                       metadata scheme should be used to interpret the metadata,
                       e.g. 'DC' for Dublin Core (http://dublincore.org/)
-    @param content    the content attribute of the meta tag, ie the metadata
+    @param content    the content attribute of the meta tag, i.e. the metadata
                       value
     @param lang       the lang attribute of the meta tag specifying the language
                       of its attributes if they differ from the document language
@@ -452,16 +473,19 @@ ad_proc -public template::head::add_javascript {
         -charset $charset \
         -script $script \
         -order $order \
-        -crossorigin $crossorigin -integrity $integrity
+        -crossorigin $crossorigin \
+        -integrity $integrity
 }
 
 ad_proc -public template::head::add_css {
     {-alternate:boolean}
+    {-crossorigin ""}
     {-href:required}
-    {-media "all"}
-    {-title ""}
+    {-integrity ""}
     {-lang ""}
+    {-media "all"}
     {-order "0"}
+    {-title ""}
 } {
     Add a link tag with relation type 'stylesheet' or 'alternate stylesheet',
     and type 'text/css' to the head section of the document to be returned to
@@ -481,6 +505,9 @@ ad_proc -public template::head::add_css {
                      of this link
     @param lang      the lang attribute of the link tag specifying the language
                      of its attributes if they differ from the document language
+    @param crossorigin  Enumerated attribute to indicate whether CORS
+                     (Cross-Origin Resource Sharing) should be used
+    @param integrity provide hash values for W3C Subresource Integrity recommendation
 
     @see template::head::add_link
 } {
@@ -496,7 +523,9 @@ ad_proc -public template::head::add_css {
         -media $media \
         -title $title \
         -lang $lang \
-        -order $order
+        -order $order \
+        -crossorigin $crossorigin \
+        -integrity $integrity \
 }
 
 ad_proc -public template::add_body_handler {
@@ -603,6 +632,17 @@ ad_proc -public template::add_body_script {
         # browsers by checking the user agent.
         #
         security::csp::require script-src 'unsafe-inline'
+    } else {
+        #
+        # Replace potential URN in src with resolved value
+        #
+        set key ::template::head::urn($src)
+        if {[info exists $key]} {
+            template::head::require_csp $::template::head::urn_csp($src)
+            set src [set $key]
+        } elseif {[string match urn:* $src]} {
+            ns_log error "URN <$src> could not be resolved"
+        }
     }
 
     lappend ::template::body_scripts $type $src $charset $defer $async $script $crossorigin $integrity
@@ -616,10 +656,10 @@ ad_proc -public template::add_header {
     {-html ""}
 } {
     Add a header include to the beginning of the document body.  This function
-    is used by site wide services to add functionality to the beginning of a
+    is used by site-wide services to add functionality to the beginning of a
     page.  Examples include the developer support toolbar, acs-lang translation
     interface and the acs-templating WYSIWYG editor textarea place holder.  If
-    you are not implementing a site wide service, you should not be using this
+    you are not implementing a site-wide service, you should not be using this
     function to add content to your page.  You must supply either src or html.
 
     @param direction whether the header should be added as the outer most
@@ -661,10 +701,10 @@ ad_proc -public template::add_footer {
     {-html ""}
 } {
     Add a footer include to the end of the document body.  This function
-    is used by site wide services to add functionality to the end of a
+    is used by site-wide services to add functionality to the end of a
     page.  Examples include the developer support toolbar, acs-lang translation
     interface and the acs-templating WYSIWYG editor textarea place holder.  If
-    you are not implementing a site wide service, you should not be using this
+    you are not implementing a site-wide service, you should not be using this
     function to add content to your page.  You must supply either src or html.
 
     @param direction whether the footer should be added as the outer most
@@ -675,7 +715,7 @@ ad_proc -public template::add_footer {
     @param html      literal html to include in the page.  This parameter will
                      be ignored if a values has been supplied for src.
 
-    @see template::add_footer
+    @see template::add_header
 } {
     variable ::template::footers
 
@@ -707,12 +747,33 @@ ad_proc -private template::head::resolve_urn {
 } {
     set key ::template::head::urn($resource)
     if {[info exists $key]} {
+        template::head::require_csp $::template::head::urn_csp($resource)
         set resource [set $key]
     }
     return $resource
 }
 
-ad_proc template::head::prepare_multirows {} {
+ad_proc template::head::can_resolve_urn {
+    resource
+} {
+    Return a boolean value indicating, whether we can resolve the URN.
+} {
+    return [info exists ::template::head::urn($resource)]
+}
+
+ad_proc -private template::head::require_csp {
+    csp_list
+} {
+    Require the CSP directives as defined for URNs.
+
+    @param csp_list flat list of pairs consisting of directives and values.
+} {
+    foreach {directive value} $csp_list {
+        security::csp::require $directive $value
+    }
+}
+
+ad_proc -private template::head::prepare_multirows {} {
     Generate multirows for meta, css, scripts
     Called only from blank-master.tcl
 } {
@@ -742,8 +803,12 @@ ad_proc template::head::prepare_multirows {} {
     #
     foreach name [array names links] {
         lassign [split $name ,] rel href
-        if {[::template::head::included_p $href]} {
-            template::head::flush_link -href $ref -rel $rel
+        set container [::template::head::included_in $href]
+        if {$container ne ""} {
+            set container [template::head::resolve_urn $container]
+            if {[array names links *,$container] ne ""} {
+                template::head::flush_link -href $href -rel $rel
+            }
         }
     }
 
@@ -812,8 +877,13 @@ ad_proc template::head::prepare_multirows {} {
     if {[array exists scripts]} {
 
         foreach name [array names scripts] {
-            if {[::template::head::included_p $name]} {
-                continue
+
+            set container [::template::head::included_in $name]
+            if {$container ne ""} {
+                set container [template::head::resolve_urn $container]
+                if {[array names scripts $container] ne ""} {
+                    continue
+                }
             }
 
             foreach {type src charset defer async content order crossorigin integrity} $scripts($name) {
@@ -832,7 +902,14 @@ ad_proc template::head::prepare_multirows {} {
         template::multirow sort headscript order
         array unset scripts
     }
+    template::prepare_body_script_multirow
+}
 
+ad_proc -private template::prepare_body_script_multirow {} {
+    Generate multirows body_scripts.  Called from
+    template::head::prepare_multirows and from steaming output
+    handler.
+} {
     # Generate the body <script /> tag multirow
     variable ::template::body_scripts
     template::multirow create body_script type src charset defer async content crossorigin integrity
@@ -849,7 +926,6 @@ ad_proc template::head::prepare_multirows {} {
         }
         unset body_scripts
     }
-
 }
 
 ad_proc template::get_header_html {
@@ -898,10 +974,66 @@ ad_proc template::get_footer_html {
     return $footer
 }
 
+ad_proc -private template::register_double_click_handler {} {
+} {
+    set default_timeout [parameter::get_from_package_key \
+                             -package_key acs-templating \
+                             -parameter DefaultPreventDoubleClickTimeoutMs \
+                             -default 2000]
+    if {$default_timeout == 0} {
+        return
+    }
+    template::add_body_script -script [subst -nobackslashes -nocommands [ns_trim {
+        function oacs_reenable_double_click_handler(target) {
+            if ( target.dataset.oacsClicked == 'true') {
+                target.dataset.oacsClicked = false;
+                target.disabled = false;
+                target.classList.remove("disabled");
+                console.log("re-enable click handler");
+            }
+        };
+        for (e of document.getElementsByClassName('prevent-double-click')) {
+            if (!e.dataset.oacsDoubleClickHandlerRegistered) {
+                e.addEventListener('click', function(event) {
+                    let target = event.target || event.srcElement;
+                    if ( target.dataset.oacsClicked == 'true') {
+                        event.stopPropagation();
+                        event.preventDefault();
+                        console.log("blocked double-click");
+                        return false;
+                    } else {
+                        setTimeout(function () {
+                            target.disabled = true;
+                            target.dataset.oacsClicked = true;
+                            target.classList.add("disabled");
+                        });
+                        const timeout = target.dataset.oacsTimeout || $default_timeout;
+                        setTimeout(oacs_reenable_double_click_handler, timeout, target);
+                        return true;
+                    }
+                }, true);
+                // In case the page has changed before the button was re-enabled
+                // and the user uses the brower's back button, we have to establish
+                // a clickable state.
+                e.addEventListener('focus', function(event) {
+                    oacs_reenable_double_click_handler(event.target || event.srcElement);
+                });
+                e.dataset.oacsDoubleClickHandlerRegistered = true;
+            }
+        };
+    }]]
+}
+
 ad_proc template::get_body_event_handlers {
 } {
-    Get body event handlers specified with template::add_body_handler
+
+    Get body event handlers specified with template::add_body_handler.
+    The proc clears the global variable ::template::body_handlers
+    after having processed its content.
+
 } {
+    template::register_double_click_handler
+
     #
     # Concatenate the JavaScript event handlers for the body tag
     #
@@ -935,11 +1067,11 @@ ad_proc template::get_body_event_handlers {
             # (https://developer.mozilla.org/en-US/docs/Web/Events)
             #
             regsub ^on $event "" event
-            append js [subst {
-                window.addEventListener('$event', function () {
-                    [join $script { }]
-                }, false);
-            }]
+            append js [ns_trim -delimiter | [subst {
+                | window.addEventListener('$event', function () {
+                |     [join $script { }]
+                | }, false);
+                |}]]
         }
         if {$js ne ""} {
             template::add_body_script -script $js
@@ -953,14 +1085,15 @@ ad_proc template::get_body_event_handlers {
 
 ad_proc template::add_confirm_handler {
     {-event click}
-    {-message "Are you sure?"}
+    {-message "#acs-templating.Are_you_sure#"}
     {-CSSclass "acs-confirm"}
     {-id}
+    {-selector}
     {-formfield}
 } {
     Register an event handler for confirmation dialogs for elements
-    either with a specified ID, CSS class, or for a formfield targeted
-    by form id and field name.
+    either with a specified ID, CSS class, a formfield targeted by
+    form id and field name or a CSS selector.
 
     @param event     register confirm handler for this type of event
     @param id        register confirm handler for this HTML ID
@@ -968,11 +1101,30 @@ ad_proc template::add_confirm_handler {
     @param formfield register confirm handler for this formfield, specified
                      in a list of two elements in the form
                      <code>{ form_id field_name }</code>
-    @param message  Message to be displayed in the confirmation dialog
+    @param selector register confirm handler for elements identified
+                    by this CSS selector. When a CSS selector contains
+                    double and single quotes, we won't add any of
+                    those around the selector automatically. Instead,
+                    the user must specify them explicitly, for instance
+                    like this: ... -selector {'[name="o\'hara"]'}. If
+                    the selector does not contain any single or double
+                    quotes, we can let the user omit them, as for the
+                    case of a simple tag name selector: ... -selector
+                    "li". Quotes can also be omitted if the selector
+                    contains only one kind of them, like ... -selector
+                    {[data-property='value']} or ... -selector
+                    {[data-property="value"]}
+    @param message  Message to be displayed in the confirmation dialog.
+                    If the message looks like a message key
+                    (starting and ending with a hash sign)
+                    it is treated as a message key
     @author  Gustaf Neumann
 } {
+    if {[regexp {^#(.*)*#$} $message . key]} {
+        set message [_ $key]
+    }
     set script [subst {
-        if (!confirm('$message')) {
+        if (!confirm(`$message`)) {
             event.preventDefault();
         }
     }]
@@ -984,6 +1136,8 @@ ad_proc template::add_confirm_handler {
         lappend cmd -id $id
     } elseif {[info exists formfield]} {
         lappend cmd -formfield $formfield
+    } elseif {[info exists selector]} {
+        lappend cmd -selector $selector
     } else {
         lappend cmd -CSSclass $CSSclass
     }
@@ -1013,18 +1167,52 @@ ad_proc template::add_refresh_on_history_handler {} {
     }
 }
 
+ad_proc template::set_css_property {
+    -class
+    -querySelector
+    -property:required
+    -value:required
+} {
+    Set the specified CSS property in the DOM tree of the browser for
+    elements for the specified class or query selector. This function
+    should be used sparely in special situations, where CSS
+    modification other approaches might be too complex.
+
+    @param class CSS class for which properties is set
+    @param querySelector CSS querySelector via the javascript function querySelectorAll
+    @param property CSS property
+    @param value value for the CSS property
+} {
+    if {[info exists class]} {
+        set selector [subst {document.getElementsByClassName("$class")}]
+    } elseif {[info exists querySelector]} {
+        set selector [subst {document.querySelectorAll("$querySelector")}]
+    } else {
+        error "either 'class' or 'querySelector' must be specified"
+    }
+    template::add_script -section body -script [subst -nocommands {
+        window.addEventListener('DOMContentLoaded', (event) => {
+            var els = $selector;
+            for(var i = 0; i < els.length; i++) { els[i].style.$property = "$value"; }
+        });
+    }]
+}
+
 ad_proc template::add_event_listener {
     {-event click}
     {-CSSclass "acs-listen"}
     {-id}
     {-formfield}
+    {-selector}
     {-usecapture:boolean false}
     {-preventdefault:boolean true}
     {-script:required}
 } {
-
-    Register an event handler for elements either with a specified ID,
-    CSS class, or for a formfield targeted by form id and field name.
+    Register an event handler for elements. The affected elements can
+    be specified in different ways, which will be checked in the
+    following order of precedence: id, formfield, selector and
+    CSSclass. Normally one needs to provide only one kind of
+    specification.
 
     @param event     register handler for this type of event
     @param id        register handler for this HTML ID
@@ -1032,41 +1220,82 @@ ad_proc template::add_event_listener {
     @param formfield register handler for this formfield, specified
                      in a list of two elements in the form
                      <code>{ form_id field_name }</code>
+    @param selector register handler for elements identified by this
+                    CSS selector. When a CSS selector contains double
+                    and single quotes, we won't add any of those
+                    around the selector automatically. Instead, the
+                    user must specify them explicitly, for instance
+                    like this: ... -selector {'[name="o\'hara"]'}. If
+                    the selector does not contain any single or double
+                    quotes, we can let the user omit them, as for the
+                    case of a simple tag name selector: ... -selector
+                    "li". Quotes can also be omitted if the selector
+                    contains only one kind of them, like ... -selector
+                    {[data-property='value']} or ... -selector
+                    {[data-property="value"]}
+    @param usecapture indicating whether event will be dispatched to the
+                      registered listener before being dispatched to any
+                      EventTarget beneath it in the DOM tree.
+    @param preventdefault this option can the used prevent default click handling
+
     @author  Gustaf Neumann
 } {
     set prevent [expr {$preventdefault_p ? "event.preventDefault();" : ""}]
-
-    set script [subst {
-        e.addEventListener('$event', function (event) {$prevent$script}, $usecapture_p);
-    }]
-
+    if {!$preventdefault_p && [regexp {^\s*([a-zA-Z0-9_]+)[\(]event[\)];\s*} $script . fn]} {
+        #
+        # In the most simple case, there is no need for a wrapper function.
+        #
+        set script [subst {e.addEventListener('$event', $fn, $usecapture_p);}]
+    } else {
+        set script [ns_trim -delimiter | [subst {
+           | e.addEventListener('$event', function (event) {$prevent$script}, $usecapture_p);
+        }]]
+    }
     if {[info exists id]} {
-        set script [subst {
-            var e = document.getElementById('$id');
-            if (e !== null) {$script}
-        }]
+        set script [ns_trim -delimiter | [subst {
+            | var e = document.getElementById('$id');
+            | if (e !== null) {$script}
+            |}]]
     } elseif {[info exists formfield]} {
         lassign $formfield id name
-        set script [subst {
-            var e = document.getElementById('$id').elements.namedItem('$name');
-            if (e !== null) {$script}
-        }]
+        set script [ns_trim -delimiter | [subst {
+            | var e = document.getElementById('$id').elements.namedItem('$name');
+            | if (e !== null) {$script}
+            |}]]
+    } elseif {[info exists selector]} {
+        #
+        # Find if either single or double quotes are absent from the
+        # selector and we can use them around it safely.
+        #
+        foreach q {' \"} {
+            if {[string first $q $selector] < 0} {
+                set selector ${q}${selector}${q}
+                break
+            }
+        }
+        set script [ns_trim -delimiter | [subst {
+            | for (e of document.querySelectorAll($selector)) {
+            |   $script
+            |}}]]
     } else {
         #
-        # In case, no id is provided, use the "CSSclass"
+        # In case, no "id" is provided, use the "CSSclass"
         #
-        set script [subst {
-            var elems = document.getElementsByClassName('$CSSclass');
-            for (var i = 0, l = elems.length; i < l; i++) {
-               var e = elems\[i\];
-               $script
-            }
-        }]
+        set script [ns_trim -delimiter | [subst {
+            | for (e of document.getElementsByClassName('$CSSclass')) {
+            |   $script
+            |}}]]
     }
 
     template::add_body_script -script $script
 }
 
+ad_proc template::collect_body_scripts {} {
+    Collect the body scripts via an easy to call function, hiding the
+    template used for the implementation.
+} {
+    return [template::adp_include /packages/acs-templating/lib/body_scripts {}]
+}
 
 # Local variables:
 #    mode: tcl

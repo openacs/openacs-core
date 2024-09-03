@@ -6,7 +6,7 @@ ad_library {
     @cvs-id $Id$
 }
 
-ad_proc -private core_docs_uninstalled_packages_internal {} {
+ad_proc -private ad_core_docs_uninstalled_packages_internal {} {
     Returns a list (in array set format) of package.key package-name
     (used for display on the index.adp page).
 
@@ -31,21 +31,35 @@ ad_proc -private core_docs_uninstalled_packages_internal {} {
         lappend out {*}$pkg
     }
     return  $out
-
 }
 
-ad_proc -public core_docs_uninstalled_packages {} {
+ad_proc -deprecated core_docs_uninstalled_packages {} {
     Returns a list (in array set format) of package.key package-name
     (used for display on the index.adp page).
 
-    Cached version of core_docs_uninstalled_packages_internal
+    Cached version of ad_core_docs_uninstalled_packages_internal
+
+    DEPRECATED: this proc does not comply with naming convention
+    enforced by acs-tcl.naming__proc_naming automated test
+
+    @see ad_core_docs_uninstalled_packages
+    @author Jeff Davis davis@xarg.net
+} {
+    return [ad_core_docs_uninstalled_packages]
+}
+
+ad_proc -private ad_core_docs_uninstalled_packages {} {
+    Returns a list (in array set format) of package.key package-name
+    (used for display on the index.adp page).
+
+    Cached version of ad_core_docs_uninstalled_packages_internal
 
     @author Jeff Davis davis@xarg.net
 } {
-    return [util_memoize core_docs_uninstalled_packages_internal]
+    return [util_memoize ad_core_docs_uninstalled_packages_internal]
 }
 
-ad_proc -public core_docs_html_redirector {args} {
+ad_proc -private ad_core_docs_html_redirector {args} {
 
     Performs internal redirect requests for .html-pages to .adp
     pages if these exist.
@@ -55,7 +69,7 @@ ad_proc -public core_docs_html_redirector {args} {
     #
     # There is no [ad_conn file] processed yet. Therefore, we have to
     # compute the path (consider just the path after the package_url
-    # for file name construction).
+    # for filename construction).
     #
     set url [ad_conn url]
     #

@@ -9,9 +9,12 @@ aa_register_case \
     -procs {
         lang::message::register
         lang::message::get
+        lang::message::delete
     } \
     test_message_register {
-    Simple test that registrates a new message to the BD.
+
+        Test the registration of a new message key, retrieval, soft
+        deletion and reinstating.
 
 } {
     aa_run_with_teardown -rollback -test_code {
@@ -34,6 +37,37 @@ aa_register_case \
             -array message_new
 
         aa_equals "Message add succeeded" $message_new(message) $message
+
+        aa_log "Soft-delete the message"
+        lang::message::delete \
+            -package_key $package_key \
+            -message_key $message_key \
+            -locale $locale
+
+        set key "${package_key}.${message_key}"
+        aa_false "The nsv was deleted" [nsv_exists lang_message_$locale $key]
+
+        aa_log "Delete the nsv regardless to simulate the behavior after restart"
+        nsv_unset -nocomplain -- lang_message_$locale $key
+
+        aa_true "Message still exists, flagged as deleted" [db_0or1row check {
+            select 1 from lang_messages
+            where locale = :locale
+            and package_key = :package_key
+            and message_key = :message_key
+            and deleted_p
+        }]
+
+        # Register the message again
+        lang::message::register $locale $package_key $message_key $message
+
+        aa_true "Message was reinstated" [db_0or1row check {
+            select 1 from lang_messages
+            where locale = :locale
+            and package_key = :package_key
+            and message_key = :message_key
+            and not deleted_p
+        }]
     }
 }
 

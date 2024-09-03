@@ -11,12 +11,19 @@ ad_proc -public acs_message_p {
 } {
     Check if an integer is a valid OpenACS message id.
 } {
-    return [string equal [db_exec_plsql acs_message_p {}] "t"]
+    return [db_0or1row is_message {
+        select 1 from acs_messages
+        where message_id = :message_id
+    }]
 }
 
-ad_page_contract_filter acs_message_id { name value } {
+ad_page_contract_filter -deprecated acs_message_id { name value } {
     Checks whether the value (assumed to be an integer) is the id
     of an already-existing OpenACS message.
+
+    DEPRECATED: OpenACS now has a generic filter object_type.
+
+    @see ad_page_contract_filter_proc_object_type
 } {
     # empty is okay (handled by notnull)
     if {$value eq ""} {
@@ -29,7 +36,7 @@ ad_page_contract_filter acs_message_id { name value } {
     return 1
 }
 
-ad_proc -public acs_messaging_format_as_html {
+ad_proc -private acs_messaging_format_as_html {
     {mime_type}
     {content}
 } {
@@ -64,25 +71,28 @@ ad_proc -public acs_messaging_first_ancestor {
     return $ancestor_id
 }
 
-ad_proc -public acs_messaging_send {
-    {-message_id:required}
-    {-recipient_id:required}
-    {-grouping_id ""}
-    {-wait_until ""}
-} {
-    Schedule one message to be sent to one party.
-} {
-    db_dml {
-        begin
-            acs_message.send (
-                message_id => :message_id,
-                recipient_id => :recipient_id,
-                grouping_id => :grouping_id,
-                wait_until => :wait_until
-            );
-        end;
-    }
-}
+# apisano 2021-10-21: since its introduction 21 years ago, this proc
+# has been broken. In fact, db_dml needs at least a query name to work
+# properly. Furthermore, no query for Postgres is available.
+# ad_proc -public acs_messaging_send {
+#     {-message_id:required}
+#     {-recipient_id:required}
+#     {-grouping_id ""}
+#     {-wait_until ""}
+# } {
+#     Schedule one message to be sent to one party.
+# } {
+#     db_dml {
+#         begin
+#             acs_message.send (
+#                 message_id => :message_id,
+#                 recipient_id => :recipient_id,
+#                 grouping_id => :grouping_id,
+#                 wait_until => :wait_until
+#             );
+#         end;
+#     }
+# }
 
 ad_proc -public acs_messaging_send_query {
     {-message_id:required}
@@ -127,7 +137,7 @@ ad_proc -private acs_messaging_timezone_offset {
 } {
     Returns a best guess of the timezone offset for the machine.
 } {
-    return [format "%+05d" [expr {([lindex [ns_localtime] 2] - [lindex [ns_gmtime] 2]) * 100]}]
+    return [format "%+05d" [expr {([lindex [ns_localtime] 2] - [lindex [ns_gmtime] 2]) * 100}]]
 }
 
 ad_proc -private acs_messaging_process_queue {

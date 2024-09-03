@@ -1,7 +1,11 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {OpenACS Data Models and the Object System}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {OpenACS Data Models and the Object System}</property>
 <property name="doc(title)">OpenACS Data Models and the Object System</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="packages" leftLabel="Prev"
 			title="Chapter 11. Development
@@ -9,7 +13,10 @@ Reference"
 			rightLink="request-processor" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="objects" id="objects"></a>OpenACS Data Models and the Object System</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">By Pete Su</span></p><span style="color: red">&lt;/authorblurb&gt;</span><div class="sect2">
+<a name="objects" id="objects"></a>OpenACS Data Models and the Object System</h2></div></div></div><div class="authorblurb">
+<p>By Pete Su</p>
+OpenACS docs are written by the named authors, and may be edited by
+OpenACS documentation staff.</div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="objects-overview" id="objects-overview"></a>Overview</h3></div></div></div><p>Developing data models in OpenACS 5.9.0 is much like developing
 data models for OpenACS 3, save for the implementation. As usual,
@@ -83,8 +90,8 @@ find the code needed to describe a new object type called
 for the PG version) file created when we <a class="link" href="packages" title="OpenACS Packages">created the package</a>.
 Then, do the following:</p><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="idp140682184897768" id="idp140682184897768"></a>Describe the new type to the type
-system</h4></div></div></div><p>First, add an entry to the <code class="computeroutput">acs_object_types</code> table with the following
+<a name="id1377" id="id1377"></a>Describe the new
+type to the type system</h4></div></div></div><p>First, add an entry to the <code class="computeroutput">acs_object_types</code> table with the following
 PL/SQL call:</p><pre class="programlisting">
 begin  
   acs_object_type.create_type ( 
@@ -139,8 +146,8 @@ these attributes. Again, because the new type <code class="computeroutput">note<
 attributes, so there is no need for us to define them.</p>
 </div><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="idp140682184883624" id="idp140682184883624"></a>Define a table in which to store your
-objects</h4></div></div></div><p>The next thing we do is make a small modification to the data
+<a name="id1378" id="id1378"></a>Define a table
+in which to store your objects</h4></div></div></div><p>The next thing we do is make a small modification to the data
 model to reflect the fact that each row in the <code class="computeroutput">notes</code> table represents something that is
 not only an object of type <code class="computeroutput">note</code>, but also an <code class="computeroutput">acs_object</code>. The new table definition looks
 like this:</p><pre class="programlisting">
@@ -163,8 +170,8 @@ transparently find any objects that are instances of any subtype of
 <code class="computeroutput">acs_objects</code>.</p>
 </div><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="idp140682184863496" id="idp140682184863496"></a>Define a package for type specific
-procedures</h4></div></div></div><p>The next step is to define a PL/SQL package for your new type,
+<a name="id1379" id="id1379"></a>Define a package
+for type specific procedures</h4></div></div></div><p>The next step is to define a PL/SQL package for your new type,
 and write some basic procedures to create and delete objects. Here
 is a package definition for our new type:</p><pre class="programlisting">
 create or replace package note 
@@ -210,8 +217,8 @@ other object that used OBJ as its context would also be "read
 only" by default. We&#39;ll talk about this more later.</p>
 </div><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="idp140682184871752" id="idp140682184871752"></a>Define a package body for type specific
-procedures</h4></div></div></div><p>The PL/SQL package body contains the implementations of the
+<a name="id1380" id="id1380"></a>Define a package
+body for type specific procedures</h4></div></div></div><p>The PL/SQL package body contains the implementations of the
 procedures defined above. The only subtle thing going on here is
 that we must use <code class="computeroutput">acs_object.new</code>
 to insert a row into <code class="computeroutput">acs_objects</code>, before inserting a row into
@@ -315,7 +322,7 @@ fields.</p></li><li class="listitem">
 <p>In particular, never assign any application specific semantics
 to the <code class="computeroutput">context_id</code> attribute of
 an object. This field is used for a very specific purpose by the
-permissions system, and using this field in <span class="emphasis"><em>any other way whatsoever</em></span> is guaranteed
+permission system, and using this field in <span class="emphasis"><em>any other way whatsoever</em></span> is guaranteed
 to make your application act strangely.</p><p>As we&#39;ll see later, the Notes example will point each note
 object&#39;s <code class="computeroutput">context_id</code> to the
 package instance in which the note was created. The idea will be
@@ -362,8 +369,8 @@ PL/SQL procedures defined above.</p></li><li class="listitem" style="list-style-
 <code class="computeroutput">acs_objects</code>. This means you
 should never use the fields in <code class="computeroutput">acs_objects</code> for application-specific
 purposes. This is especially true for the <code class="computeroutput">context_id</code> field.</p></li>
-</ul></div><p><span class="cvstag">($&zwnj;Id: objects.xml,v 1.10 2017/08/07
-23:47:54 gustafn Exp $)</span></p>
+</ul></div><div class="cvstag">($&zwnj;Id: objects.xml,v 1.10.2.1 2024/02/05
+15:35:06 gustafn Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

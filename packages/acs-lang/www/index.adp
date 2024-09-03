@@ -8,4 +8,4 @@
   </div>
 </if>
 
-<include src="/packages/acs-lang/www/change-locale-include" return_url="@return_url;literal@" return_p="@return_p;literal@">
+<include src="/packages/acs-lang/www/change-locale-include" return_url="@return_url;literal@">

@@ -3,12 +3,6 @@
 <queryset>
     <rdbms><type>oracle</type><version>8.1.6</version></rdbms>
 
-    <fullquery name="site_node::delete.delete_site_node">
-        <querytext>
-            begin site_node.del(:node_id); end;
-        </querytext>
-    </fullquery>
-
     <fullquery name="site_node::update_cache.select_child_site_nodes">
         <querytext>
 	    select n.node_id,

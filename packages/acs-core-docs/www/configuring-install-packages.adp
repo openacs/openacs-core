@@ -1,7 +1,11 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Installing OpenACS packages}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Installing OpenACS packages}</property>
 <property name="doc(title)">Installing OpenACS packages</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="configuring-new-site" leftLabel="Prev"
 			title="Chapter 4. Configuring a
@@ -9,11 +13,15 @@ new OpenACS Site"
 			rightLink="configuring-mounting-packages" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="configuring-install-packages" id="configuring-install-packages"></a>Installing OpenACS packages</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">by <a class="ulink" href="mailto:jade\@rubick.com" target="_top">Jade Rubick</a>
-</span></p><span style="color: red">&lt;/authorblurb&gt;</span><div class="sect2">
+<a name="configuring-install-packages" id="configuring-install-packages"></a>Installing OpenACS packages</h2></div></div></div><div class="authorblurb">
+<p>by <a class="ulink" href="mailto:jade\@rubick.com" target="_top">Jade Rubick</a>
+</p>
+OpenACS docs are written by the named authors, and may be edited by
+OpenACS documentation staff.</div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140682188971320" id="idp140682188971320"></a>Installing OpenACS packages</h3></div></div></div><p>An OpenACS package extends your website and lets it do things it
-wasn&#39;t able to do before. You can have a weblog, a forums, a
+<a name="id1343" id="id1343"></a>Installing
+OpenACS packages</h3></div></div></div><p>An OpenACS package extends your website and lets it do things it
+was not able to do before. You can have a weblog, a forums, a
 calendar, or even do sophisticated project-management via your
 website.</p><p>After you&#39;ve installed OpenACS, you can congratulate
 yourself for a job well done. Then, you&#39;ll probably want to
@@ -27,7 +35,7 @@ should install from local files.</p><p>Basically, if you have a local CVS reposi
 code, you need to install from 'Local Files'. Otherwise,
 you can install from the OpenACS repository</p><p>If you want to install new packages, click on 'Install from
 Repository' or 'Install from Local'. Select the
-package, and click 'Install checked applications'. The
+package, and click 'Install selected applications'. The
 system will check to make sure you have all necessary packages that
 the package you want depends on. If you&#39;re installing from
 Local Files, and you are missing any packages, you may have to add

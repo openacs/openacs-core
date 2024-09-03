@@ -1,7 +1,11 @@
 
-<property name="context">{/doc/ref-countries {Reference Data - Country}} {Reference Country Documentation}</property>
+<property name="context">{/doc/ref-countries/ {Reference Data - Country}} {Reference Country Documentation}</property>
 <property name="doc(title)">Reference Country Documentation</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h1>Reference Country Documentation</h1>
 <hr>
 <p>This package provides standard country codes as defined in

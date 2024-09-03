@@ -1,7 +1,11 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Object Model Design}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Object Model Design}</property>
 <property name="doc(title)">Object Model Design</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="object-system-requirements" leftLabel="Prev"
 			title="Chapter 15. Kernel
@@ -10,8 +14,10 @@ Documentation"
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="object-system-design" id="object-system-design"></a>Object Model
-Design</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">By Pete Su, Michael Yoon, Richard Li,
-Rafael Schloming</span></p><span style="color: red">&lt;/authorblurb&gt;</span><div class="sect2">
+Design</h2></div></div></div><div class="authorblurb">
+<p>By Pete Su, Michael Yoon, Richard Li, Rafael Schloming</p>
+OpenACS docs are written by the named authors, and may be edited by
+OpenACS documentation staff.</div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="object-system-design-essentials" id="object-system-design-essentials"></a>Essentials</h3></div></div></div><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
@@ -71,8 +77,8 @@ of one object type (e.g. users) to instances of another object type
 </li>
 </ul></div><p>The next section will explore these facilities in the context of
 the particular programming idioms that we wish to generalize.</p><p><span class="strong"><strong>Related Links</strong></span></p><p>This design document should be read along with the design
-documents for <a class="link" href="groups-design" title="Groups Design">the new groups system</a>, <a class="link" href="subsites-design" title="Subsites Design Document">subsites</a> and <a class="link" href="permissions-design" title="Permissions Design">the
-permissions system</a>
+documents for <a class="link" href="groups-design" title="Groups Design">the new groups system</a>, <a class="link" href="subsites-design" title="Subsites Design Document">subsites</a> and <a class="link" href="permissions-design" title="Permissions Design">the permission
+system</a>
 </p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
@@ -138,8 +144,8 @@ code that defines this table.</p>
 </div><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
 <a name="objects-design-obj-context" id="objects-design-obj-context"></a>Object Context and Access
-Control</h4></div></div></div><p>Until the implementation of the general permissions system,
-every OpenACS application had to manage access control to its data
+Control</h4></div></div></div><p>Until the implementation of the general permission system, every
+OpenACS application had to manage access control to its data
 separately. Later on, a notion of "scoping" was
 introduced into the core data model.</p><p>"Scope" is a term best explained by example. Consider
 some hypothetical rows in the <code class="computeroutput">address_book</code> table:</p><div class="informaltable"><table class="informaltable" cellspacing="0" border="1">
@@ -177,7 +183,7 @@ OpenACS security model will defer to an object&#39;s context if
 there is no information about user X&#39;s permission to perform
 action Y on object Z.</p><p>The context system forms the basis for the rest of the OpenACS
 access control system, which is described in two separate
-documents: one for the <a class="link" href="permissions-design" title="Permissions Design">permissions
+documents: one for the <a class="link" href="permissions-design" title="Permissions Design">permission
 system</a> and another for the <a class="link" href="groups-design" title="Groups Design">party groups</a> system.
 The context system is also used to implement <a class="link" href="subsites-design" title="Subsites Design Document">subsites</a>.</p>
 </div><div class="sect3">
@@ -227,10 +233,9 @@ constraints on the data.</p></li>
 still keeping track of the fact that each member of a subtype (i.e.
 for each row in the subtype&#39;s table), is also a member of the
 parent type (i.e. there is a corresponding row in the parent type
-table). Therefore, applications an use this mechanism without
-worrying about this bookkeeping themselves, and we avoid having
-applications pollute the core data model with their specific
-information.</p>
+table). Therefore, applications use this mechanism without worrying
+about this bookkeeping themselves, and we avoid having applications
+pollute the core data model with their specific information.</p>
 </div><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
 <a name="objects-design-attributes" id="objects-design-attributes"></a>Object Attributes, Skinny
@@ -258,20 +263,21 @@ add to the list of user preferences is to add a column to the
 <code class="computeroutput">users_preferences</code> table
 (exactly the kind of data model change that has historically
 complicated the process of upgrading to a more recent OpenACS
-version).</p><p>The Objet Model generalizes the scheme used in the old OpenACS
-3.x user/groups system. It defines a table called <code class="computeroutput">acs_attributes</code> that record what attributes
-belong to which object types, and how the attributes are stored. As
-before, attributes can either be stored in helper tables, or in a
-single central skinny table. The developer makes this choice on a
-case by case basis. For the most part, attribute data is stored in
-helper tables so that they can take full advantage of relational
-data modeling and because they will generally be more efficient.
-Occasionally, a data model will use skinny tables because doing so
-allows developers and users to dynamically update the set of
-attributes stored on an object without updating the data model at
-the code level. The bottom line: Helper tables are more functional
-and more efficient, skinny tables are more flexible but
-limited.</p>
+version).</p><p>The ACS Object Model generalizes the scheme used in the old
+OpenACS 3.x user/groups system. It defines a table called
+<code class="computeroutput">acs_attributes</code> that record what
+attributes belong to which object types, and how the attributes are
+stored. As before, attributes can either be stored in helper
+tables, or in a single central skinny table. The developer makes
+this choice on a case by case basis. For the most part, attribute
+data is stored in helper tables so that they can take full
+advantage of relational data modeling and because they will
+generally be more efficient. Occasionally, a data model will use
+skinny tables because doing so allows developers and users to
+dynamically update the set of attributes stored on an object
+without updating the data model at the code level. The bottom line:
+Helper tables are more functional and more efficient, skinny tables
+are more flexible but limited.</p>
 </div><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
 <a name="objects-design-relation-types" id="objects-design-relation-types"></a>Relation Types</h4></div></div></div><p>Many OpenACS 3.x modules use <span class="emphasis"><em>mapping
@@ -343,13 +349,13 @@ alternative. Here, some notion of subtyping is embedded into an
 existing SQL or SQL-like database engine. Examples of systems like
 this include the new Informix, PostgreSQL 7, and Oracle has
 something like this too. The main problem with these systems: each
-one implements their own non-portable extensions to SQL to
-implement subtyping. Thus, making OpenACS data models portable
-would become even more difficult. In addition, each of these object
-systems have strange limitations that make using inheritance
-difficult in practice. Finally, object databases are not as widely
-used as traditional relational systems. They have not been tested
-as extensively and their scalability to very large databases is not
+one implements their own nonportable extensions to SQL to implement
+subtyping. Thus, making OpenACS data models portable would become
+even more difficult. In addition, each of these object systems have
+strange limitations that make using inheritance difficult in
+practice. Finally, object databases are not as widely used as
+traditional relational systems. They have not been tested as
+extensively and their scalability to very large databases is not
 proven (though some will disagree with this statement).</p>
 </div><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
@@ -361,11 +367,11 @@ to make our data models more flexible, so that new modules can
 easily gain access to generic features. However, while the API
 itself doesn&#39;t enforce the idea that applications only use the
 object model for metadata, it is also the case that the data model
-is not designed to scale to large type hierarchies. In the more
+is not designed to scale too large type hierarchies. In the more
 limited domain of the metadata model, this is acceptable since the
 type hierarchy is fairly small. But the object system data model is
 not designed to support, for example, a huge type tree like the
-Java runtime libraries might define.</p><p>This last point cannot be over-stressed: <span class="strong"><strong>the object model is not meant to be used for large
+Java run time libraries might define.</p><p>This last point cannot be over-stressed: <span class="strong"><strong>the object model is not meant to be used for large
 scale application data storage</strong></span>. It is meant to
 represent and store metadata, not application data.</p>
 </div>

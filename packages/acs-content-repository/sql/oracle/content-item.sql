@@ -81,7 +81,7 @@ function new (
   storage_type  in cr_items.storage_type%TYPE default 'lob',
   security_inherit_p in acs_objects.security_inherit_p%TYPE default 't',
   package_id    in acs_objects.package_id%TYPE default null,
-  with_child_rels in boolean default 't'
+  with_child_rels in char default 't'
 ) return cr_items.item_id%TYPE
 is
   v_parent_id      cr_items.parent_id%TYPE;
@@ -1079,22 +1079,32 @@ end get_live_revision;
 procedure set_live_revision (
   revision_id    in cr_revisions.revision_id%TYPE,
   publish_status in cr_items.publish_status%TYPE default 'ready',
-  publish_date   in cr_revisions.publish_date%TYPE default sysdate
+  publish_date   in cr_revisions.publish_date%TYPE default sysdate,
+  is_latest      in char default 'f'
 ) is
 begin
 
-  update
-    cr_items
-  set
-    live_revision = set_live_revision.revision_id,
-    publish_status = set_live_revision.publish_status
-  where
-    item_id = (select
-                 item_id
-               from
-                 cr_revisions
-               where
-                 revision_id = set_live_revision.revision_id);
+  if set_live_revision.is_latest = 't' then
+    update cr_items
+      set
+            live_revision = set_live_revision.revision_id,
+            publish_status = set_live_revision.publish_status,
+            latest_revision = set_live_revision.revision_id
+      where
+            item_id = (select item_id
+               from   cr_revisions
+               where  revision_id = set_live_revision.revision_id);
+  else
+    update cr_items
+      set
+            live_revision = set_live_revision.revision_id,
+            publish_status = set_live_revision.publish_status
+      where
+            item_id = (select item_id
+               from   cr_revisions
+               where  revision_id = set_live_revision.revision_id);
+  end if;
+
 
   update
     cr_revisions

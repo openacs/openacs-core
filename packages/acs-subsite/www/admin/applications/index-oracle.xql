@@ -19,7 +19,7 @@
     where  n.parent_id = :subsite_node_id
     and    p.package_id = n.object_id
     and    pt.package_key = p.package_key
-    and [template::list::filter_where_clauses -and -name applications]
+    [template::list::filter_where_clauses -and -name applications]
     order  by lower(p.instance_name)
 
       </querytext>

@@ -52,7 +52,7 @@ foreach path [apm_get_package_files -package_key $package_key] {
 	}
     }
 
-    # For every changed component (at least the file name), write a row in the table.
+    # For every changed component (at least the filename), write a row in the table.
     while { $i < [llength $components] } {
 	append body "<tr><td>"
 	for { set j 0 } { $j < $i } { incr j } {
@@ -84,7 +84,7 @@ foreach path [apm_get_package_files -package_key $package_key] {
 		set server_rel_path "packages/$package_key/$path"
 		if { [apm_file_watchable_p $server_rel_path] } {
 		    if { [nsv_exists apm_reload_watch $server_rel_path] } {
-			# This procs file is already being watched.
+			# This "-procs" file is already being watched.
 			append body "<td>&nbsp;being watched&nbsp;</td>"
 		    } else {
 			if {![parameter::get -package_id [ad_acs_kernel_id] \

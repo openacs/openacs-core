@@ -3,8 +3,8 @@ ad_page_contract {
 
     @author Christian Hvid
 } {
-    locale
-    package_key
+    locale:word
+    package_key:token
     {show "all"}
     {page_start 0}
 }
@@ -136,7 +136,26 @@ ad_form -name batch_editor -edit_buttons $edit_buttons -form {
 
 set count $page_start
 array set sections {}
-db_foreach get_messages {} {
+db_foreach get_messages [subst -nocommands {
+    select lm1.message_key,
+           lm1.package_key,
+           lm1.message as default_message,
+           lm2.message as translated_message,
+           lmk.description
+    from   lang_messages lm1 left outer join
+           lang_messages lm2 on (lm2.locale = :locale
+                                 and lm2.message_key = lm1.message_key
+                                 and lm2.package_key = lm1.package_key),
+           lang_message_keys lmk
+    where  lm1.locale = :default_locale
+    and    lm1.package_key = :package_key
+    and    lm1.message_key = lmk.message_key
+    and    lm1.package_key = lmk.package_key
+    $where_clause
+    order  by upper(lm1.message_key), lm1.message_key
+    offset :page_start
+    fetch first 10 rows only
+}] {
     ad_form -extend -name batch_editor -form \
         [list [list "message_key_$count:text(hidden)" {value $message_key}]]
 
@@ -153,6 +172,7 @@ db_foreach get_messages {} {
     ad_form -extend -name batch_editor -form \
         [list [list "message_key_pretty_$count:text(inform)" \
                    {label "Message Key"} \
+                   {noquote} \
                    {value "<a href=\"[ns_quotehtml $message_url]\">$package_key.$message_key</a>"}]]
 
     if { $description ne "" } {
@@ -169,7 +189,7 @@ db_foreach get_messages {} {
         ad_form -extend -name batch_editor -form \
             [list [list "default_locale_message_$count:text(inform),optional" \
                        {label $default_locale_label} \
-                       {value {[ns_quotehtml $default_message]}}]]
+                       {value $default_message}]]
     }
 
     if { [string length $translated_message] > 80 } {

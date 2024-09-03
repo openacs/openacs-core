@@ -32,7 +32,7 @@ ad_proc -public search::convert::binary_to_text {
     set tmp_filename [ad_tmpnam]
     set result ""
 
-    switch $mime_type {
+    switch -glob $mime_type {
         application/msword -
         application/vnd.ms-word {
             set convert_command {catdoc $filename >$tmp_filename}
@@ -46,7 +46,12 @@ ad_proc -public search::convert::binary_to_text {
             set convert_command {catppt $filename >$tmp_filename}
         }
         application/pdf {
-            set convert_command {pdftotext -q $filename $tmp_filename}
+            if {![util::file_content_check -type pdf -file $filename]} {
+                ns_log warning "search: $filename ($mime_type) is not a pdf file; skip indexing"
+                file delete -- $tmp_filename
+                return ""
+            }
+            set convert_command {pdftotext $filename $tmp_filename}
         }
         application/vnd.oasis.opendocument.text -
         application/vnd.oasis.opendocument.text-template -
@@ -56,25 +61,115 @@ ad_proc -public search::convert::binary_to_text {
         application/vnd.oasis.opendocument.presentation-template -
         application/vnd.oasis.opendocument.spreadsheet -
         application/vnd.oasis.opendocument.spreadsheet-template {
-            set convert_command {unzip -p $filename content.xml >$tmp_filename}
+            if {![util::file_content_check -type zip -file $filename]} {
+                ns_log warning "search: $filename ($mime_type) is not a zip file; skip indexing"
+                file delete -- $tmp_filename
+                return ""
+            }
+            set convert_command {[util::which unzip] -p $filename content.xml >$tmp_filename}
+        }
+        application/vnd.openxmlformats-officedocument.* {
+            #
+            # File claims to be a MS Office Open XML Format
+            #
+            # Similar to ODF, these files are in fact a zip archive
+            # containing a directory structure that describes the
+            # document. The text content we are looking for is located
+            # in a specific path for every document type, but the
+            # principle is always the same: unzip the xml location
+            # from the archive and return it stripped of any markup.
+            #
+
+            switch $mime_type {
+                application/vnd.openxmlformats-officedocument.presentationml.presentation {
+                    #
+                    # PowerPoint .pptx
+                    #
+                    set xml_path ppt/slides/*.xml
+                }
+                application/vnd.openxmlformats-officedocument.spreadsheetml.sheet {
+                    #
+                    # Excel .xlsx
+                    #
+                    set xml_path xl/sharedStrings.xml
+                }
+                application/vnd.openxmlformats-officedocument.wordprocessingml.document {
+                    #
+                    # Word .docx
+                    #
+                    set xml_path word/document.xml
+                }
+                default {
+                    #
+                    # We do not support this file, exit.
+                    #
+                    return ""
+                }
+            }
+
+            file delete -- $tmp_filename
+
+            #
+            # First check that we can unzip the file
+            #
+            if {![util::file_content_check -type zip -file $filename]} {
+                ns_log warning "search: $filename ($mime_type) is not a zip file; skip indexing"
+                return ""
+            }
+
+            ad_try {
+                #
+                # Extract the markup...
+                #
+                set xml [exec -- [util::which unzip] -p $filename $xml_path]
+                #
+                # ... and clean it up so that only the plain text remains.
+                #
+                return [string trim [ns_striphtml $xml]]
+            } on error {errorMsg} {
+                ns_log error "SEARCH: conversion failed - cannot extract text from $filename ($mime_type): $errorMsg"
+                return ""
+            }
         }
         text/html {
-	    file delete -- $tmp_filename
-	    #
-	    # Reading the whole content into memory is not necessarily
-	    # the best when dealing with huge files. However, for
-	    # html-files this is probably ok.
-	    #
+            file delete -- $tmp_filename
+            #
+            # Reading the whole content into memory is not necessarily
+            # the best when dealing with huge files. However, for
+            # html-files this is probably ok.
+            #
             return [ns_striphtml [template::util::read_file $filename]]
         }
         text/plain {
-	    file delete -- $tmp_filename
-	    #
-	    # Reading the whole content into memory is not necessarily
-	    # the best when dealing with huge files. However, for
-	    # txt-files this is probably ok.
-	    #
-	    return [template::util::read_file $filename]
+            file delete -- $tmp_filename
+            #
+            # Don't trust blindly the extension and try to use the
+            # unix "file" command to get more info.
+            #
+            set file_command [::util::which file]
+            if {$file_command ne ""} {
+                set result [exec -ignorestderr $file_command --mime-type $filename]
+                set mime_type [lindex $result 1]
+                #
+                # Maybe, we are too restrictve by the following test,
+                # but let us be conservative first.
+                #
+                if {$mime_type ne "text/plain"} {
+                    #
+                    # The available file is not what it preteneds to
+                    # be. We could try further to extract content, but
+                    # we give simply up here.
+                    #
+                    ns_log notice "search-convert: not a plain text file $result"
+                    return ""
+                }
+            }
+            #
+            # Reading the whole content into memory is not necessarily
+            # the best when dealing with huge files. However, for
+            # txt-files this is probably ok.
+            #
+            return [template::util::read_file $filename]
         }
 
         default {
@@ -84,16 +179,24 @@ ad_proc -public search::convert::binary_to_text {
         }
     }
 
-    if {[catch {eval exec $convert_command} err]} {
-        catch {file delete -- $tmp_filename}
-        ns_log Error "SEARCH: conversion failed - $convert_command: $err"
-        return
+    ad_try {
+        set convert_command [subst $convert_command]
+        exec -- {*}$convert_command
+    } on error {errorMsg} {
+        if {$mime_type eq "application/pdf" &&
+            [string first $errorMsg "Command Line Error: Incorrect password"] >= 0} {
+            ns_log warning "SEARCH: pdf seems password protected - $convert_command"
+        } else {
+            ns_log error "SEARCH: conversion failed - $convert_command: $errorMsg"
+        }
+    } on ok {d} {
+        set fd [open $tmp_filename "r"]
+        set result [read $fd]
+        close $fd
+    } finally {
+        file delete -- $tmp_filename
     }
 
-    set fd [open $tmp_filename "r"]
-    set result [read $fd]
-    close $fd
-    file delete -- $tmp_filename
     return $result
 }
 

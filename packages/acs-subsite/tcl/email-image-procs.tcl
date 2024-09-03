@@ -3,6 +3,9 @@ ad_library {
     Tcl API for email_image store and manipulation
 
     @author Miguel Marin (miguelmarin@viaro.net) Viaro Networks (www.viaro.net)
+
+    @see https://openacs.org/forums/message-view?message_id=244725
+
 }
 
 namespace eval email_image {}
@@ -160,7 +163,7 @@ ad_proc -public email_image::new_item {
     set email [email_image::get_email -user_id $user_id]
     set image_name "email${user_id}.gif"
     set email_length [string length $email]
-    set dest_path "/tmp/$image_name"
+    set dest_path "[ad_tmpdir]/$image_name"
     set width [expr {($email_length * ($font_size / 2)) + 2}]
     set height $font_size
     set ypos [expr { ($height / 2) + 3 }]
@@ -173,19 +176,19 @@ ad_proc -public email_image::new_item {
     set bg "xc:$bgcolor"
 
     # Creating an image of the right length where the email will be
-    if {[catch {exec convert -size $size $bg $dest_path} errmsg]} {
+    if {[catch {exec [::util::which convert] -size $size $bg $dest_path} errmsg]} {
         return ""
     }
 
     # Creating the image with the email of the user on it
-    if {[catch {exec convert -font $font_type -fill blue -pointsize $font_size -draw "text 0,$ypos $email" \
+    if {[catch {exec [::util::which convert] -font $font_type -fill blue -pointsize $font_size -draw "text 0,$ypos $email" \
                     $dest_path $dest_path} errmsg]} {
         return ""
     }
 
     if { $transparent eq "" || $transparent eq "1" } {
         # Making the bg color transparent
-        if {[catch {exec convert $dest_path -transparent $bgcolor $dest_path} errmsg]} {
+        if {[catch {exec [::util::which convert] $dest_path -transparent $bgcolor $dest_path} errmsg]} {
             return ""
         }
     }
@@ -196,16 +199,22 @@ ad_proc -public email_image::new_item {
         set mime_type [cr_filename_to_mime_type -create $dest_path]
         set creation_ip [ad_conn peeraddr]
 
-        set item_id [content::item::new -name $image_name -parent_id $folder_id -content_type "email_image" \
-                         -storage_type "lob" -creation_ip $creation_ip]
+        set item_id [content::item::new \
+                         -name $image_name \
+                         -parent_id $folder_id \
+                         -content_type "email_image" \
+                         -creation_ip $creation_ip]
 
-        set revision_id [content::revision::new -item_id $item_id -title $image_name -mime_type $mime_type  \
-                             -description "User email image"  -creation_ip $creation_ip ]
+        set revision_id [content::revision::new \
+                             -item_id $item_id \
+                             -title $image_name \
+                             -mime_type $mime_type  \
+                             -description "User email image" \
+                             -creation_ip $creation_ip \
+                             -tmp_filename $dest_path \
+                             -is_live t]
 
         email_image::add_relation -user_id $user_id -item_id $item_id
-        content::item::set_live_revision -revision_id $revision_id
-        db_dml new_lob_content {} -blob_files [list ${dest_path}]
-        db_dml lob_size {}
     }
 
     # Delete the temporary file created by ImageMagick
@@ -213,7 +222,7 @@ ad_proc -public email_image::new_item {
 
     set img_src [ns_quotehtml "/shared/email-image-bits.tcl?user_id=$user_id&revision_id=$revision_id"]
     set send_email_url [ns_quotehtml "/shared/send-email?sendto=$user_id&return_url=$return_url"]
-    set email_image [subst {<a href="$send_email_url"><img style="border:0" src="$img_src" alt="#acs-subsite.Email#"></a>}
+    set email_image [subst {<a href="$send_email_url"><img style="border:0" src="$img_src" alt="#acs-subsite.Email#"></a>}]
 
     return "$email_image"
 }
@@ -245,7 +254,7 @@ ad_proc -public email_image::edit_email_image {
     set folder_id [email_image::get_folder_id]
     set image_name "email${user_id}.gif"
     set email_length [string length $new_email]
-    set dest_path "/tmp/$image_name"
+    set dest_path "[ad_tmpdir]/$image_name"
     set width [expr {($email_length * ($font_size / 2)) + 2}]
     set height $font_size
     set ypos [expr { ($height / 2) + 3 }]
@@ -258,18 +267,18 @@ ad_proc -public email_image::edit_email_image {
     set bg "xc:$bgcolor"
 
     # Creating an image of the right length where the email will be
-    if { [catch { exec convert -size $size $bg $dest_path } ] } {
+    if { [catch { exec [::util::which convert] -size $size $bg $dest_path } ] } {
         # ImageMagick not present
         return
     }
 
     # Creating the image with the email of the user on it
-    exec convert -font $font_type -fill blue -pointsize $font_size -draw "text 0,$ypos $new_email" \
+    exec [::util::which convert] -font $font_type -fill blue -pointsize $font_size -draw "text 0,$ypos $new_email" \
         $dest_path $dest_path
 
     if { $transparent eq "" || $transparent eq "1" } {
         # Making the bg color transparent
-        exec convert $dest_path -transparent $bgcolor $dest_path
+        exec [::util::which convert] $dest_path -transparent $bgcolor $dest_path
     }
 
     set email_image_id [email_image::get_related_item_id -user_id $user_id]
@@ -279,29 +288,34 @@ ad_proc -public email_image::edit_email_image {
     if { $email_image_id != "-1" } {
         db_transaction {
             set item_id $email_image_id
-            set revision_id [content::revision::new -item_id $item_id -title $image_name \
+            set revision_id [content::revision::new \
+                                 -item_id $item_id \
+                                 -title $image_name \
                                  -mime_type $mime_type  \
-                                 -description "User email image" -creation_ip $creation_ip ]
-            content::item::set_live_revision -revision_id $revision_id
-            db_dml lob_content {} -blob_files [list ${dest_path}]
-            db_dml lob_size {}
+                                 -description "User email image" \
+                                 -creation_ip $creation_ip \
+                                 -is_live t \
+                                 -tmp_filename $dest_path]
         }
     } else {
         db_transaction {
 
             set item_id [content::item::new \
-                             -name $image_name -parent_id $folder_id -content_type "email_image" \
-                             -storage_type "lob" -creation_ip $creation_ip]
+                             -name $image_name \
+                             -parent_id $folder_id \
+                             -content_type "email_image" \
+                             -creation_ip $creation_ip]
 
             set revision_id [content::revision::new \
-                                 -item_id $item_id -title $image_name -mime_type $mime_type  \
-                                 -description "User email image"  -creation_ip $creation_ip ]
+                                 -item_id $item_id \
+                                 -title $image_name \
+                                 -mime_type $mime_type  \
+                                 -description "User email image" \
+                                 -creation_ip $creation_ip \
+                                 -is_live t \
+                                 -tmp_filename $dest_path]
 
             email_image::add_relation -user_id $user_id -item_id $item_id
-
-            db_dml update_cr_items {}
-            db_dml lob_content {} -blob_files [list ${dest_path}]
-            db_dml lob_size {}
         }
     }
     # Delete the temporary file created by ImageMagick
@@ -340,7 +354,7 @@ ad_proc -public email_image::get_related_item_id {
 ad_proc -public email_image::create_type_folder_rel { } {
     Creates a new folder in the content repository with the name and label Email_Images.
     Also create a new type and register this type to the created folder.
-    Makes a new relation type to asociate the item_id (email_image in the content repository)
+    Makes a new relation type to associate the item_id (email_image in the content repository)
     with the user_id.
 } {
     set type_id [content::type::new \

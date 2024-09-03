@@ -75,7 +75,7 @@ namespace eval notification::email {
         }
     }
 
-    ad_proc -public reply_address {
+    ad_proc -private reply_address {
         {-object_id:required}
         {-type_id:required}
     } {
@@ -88,7 +88,7 @@ namespace eval notification::email {
         }
     }
 
-    ad_proc -public parse_reply_address {
+    ad_proc -private parse_reply_address {
         {-reply_address:required}
     } {
         This takes a reply address, checks it for consistency, and returns a list of object_id and type_id
@@ -125,7 +125,7 @@ namespace eval notification::email {
        set email [party::email -party_id $to_user_id]
        set user_locale [lang::user::site_wide_locale -user_id $to_user_id]
        if { $user_locale eq "" } {
-           set user_locale lang::system::site_wide_locale
+           set user_locale [lang::system::site_wide_locale]
        }
 
        # Variable used in the content
@@ -153,12 +153,25 @@ namespace eval notification::email {
        set reply_to [reply_address -object_id $reply_object_id -type_id $notification_type_id]
 
        if { $from_user_id ni {"" 0} && [person::person_p -party_id $from_user_id]} {
+           # Notification is sent on behalf of a person on the system.
            set from_email [party::email -party_id $from_user_id]
 
-           # Set the Mail-Followup-To address to the
-           # address of the notifications handler.
-           lappend extra_headers [list "Mail-Followup-To" $reply_to]
+           if {[parameter::get \
+                    -package_id [get_package_id] \
+                    -parameter EmailQmailQueueScanP -default 0] != 1} {
+               # We did not activate the processing of incoming
+               # messages: this means we do not process replies to
+               # notifications. There is no point in setting the
+               # Reply-To to something different than the Sender.
+               set reply_to ""
+           } else {
+               # We support notification replies.
+               # Set the Mail-Followup-To address to the
+               # address of the notifications handler.
+               lappend extra_headers [list "Mail-Followup-To" $reply_to]
+           }
        } else {
+           # Notification is sent by the system itself.
            set from_email $reply_to
        }
 
@@ -181,7 +194,7 @@ namespace eval notification::email {
         {-message_headers:required}
         {-reason ""}
     } {
-        This sends a bounce message indicating a failuring in sending
+        This sends a bounce message indicating a failure while sending
         a message to the system.
 
         @author mkovach@alal.com
@@ -200,7 +213,7 @@ namespace eval notification::email {
         set bounce_subject "failure notice"
         set l "Hi.  This is the notification program at $domain.\n"
         append l "I'm afraid I wasn't able to deliver your message to the\n"
-        append l "following addresses.  This is a permament error; I've\n"
+        append l "following addresses.  This is a permanent error; I've\n"
         append l "given up.  Sorry it didn't work out.\n\n"
         append l "<$from_addr>:\n"
         append l "$reason\n\n"
@@ -247,7 +260,7 @@ namespace eval notification::email {
         foreach msg $messages {
             ns_log Debug "load_qmail_mail_queue: opening file: $msg"
             if {[catch {set f [open $msg r]} errmsg]} {
-                # spit out an error message for failure to open and contiue to next message
+                # spit out an error message for failure to open and continue to next message
                 ns_log Warning "load_qmail_mail_queue: error opening file $errmsg"
                 continue
             }
@@ -320,7 +333,7 @@ namespace eval notification::email {
                 continue
             }
 
-            set body [parse_incoming_email $orig_file]
+            set body [ad_parse_incoming_email $orig_file]
 
 
 
@@ -402,7 +415,7 @@ namespace eval notification::email {
         return $list_of_reply_ids
     }
 
-    ad_proc -public scan_replies {} {
+    ad_proc -private scan_replies {} {
         scan for replies
     } {
         ns_log debug "notification::email::scan_replies: about to load qmail queue"

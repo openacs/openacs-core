@@ -16,11 +16,14 @@ if {![catch {ns_proxy configure ExecPool -maxruns 0}]} {
     ad_proc -public proxy::exec {
         {-call:required}
         {-cd}
+        {-ignorestderr:boolean}
     } {
         Execute the statement in a proxy instead of normal exec
 
         @param call Call which is passed to the "exec" command
         @param cd   Change to the given directory before executing the command
+        @param ignorestderr Boolean value to indicate, whether the stderr output
+               of the exec'ed command should be ignored.
     } {
         set start_time [clock clicks -milliseconds]
         set handle [ns_proxy get ExecPool]
@@ -39,8 +42,10 @@ if {![catch {ns_proxy configure ExecPool -maxruns 0}]} {
                 set pwd [ns_proxy eval $handle pwd]
                 ns_proxy eval $handle [list cd $cd]
             }
-            set return_string [ns_proxy eval $handle [list ::exec {*}$call]]
+            set exec_flags [expr {$ignorestderr_p ? "-ignorestderr --" : ""}]
+            set return_string [ns_proxy eval $handle [list ::exec {*}$exec_flags {*}$call]]
         } finally {
+
             if {[info exists pwd]} {
                 #
                 # Switch back to the previous directory.
@@ -53,9 +58,16 @@ if {![catch {ns_proxy configure ExecPool -maxruns 0}]} {
     }
 
     # Now rename exec; protect cases, where file is loaded multiple times
-    if {[info commands ::real_exec] eq ""} {rename exec real_exec}
+    if {[namespace which ::real_exec] eq ""} {
+        rename exec real_exec
+    }
 
-    ad_proc exec {args} {This is the wrapped version of exec} {proxy::exec -call $args}
+    ad_proc exec {-ignorestderr:boolean -- args} {
+        This is the wrapped version of exec
+    } {
+        proxy::exec -ignorestderr=$ignorestderr_p -call $args
+    }
+
 }
 
 # Local variables:

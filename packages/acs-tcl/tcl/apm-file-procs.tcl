@@ -1,6 +1,6 @@
 ad_library {
 
-    Functions that APM uses to interact with the file system and I/O.
+    Functions that APM uses to interact with the filesystem and I/O.
 
     @author Bryan Quinn (bquinn@arsdigita.com)
     @creation-date Fri Oct  6 21:46:05 2000
@@ -13,16 +13,13 @@ ad_proc -private apm_mkdir {path} {
     Creates the directory specified by path and returns it.
 
 } {
-    if { [catch {
+    if { ![file isdirectory $path] } {
+        #
+        # 'path' might exists and not be a directory, we force-reclaim
+        # it in this case.
+        #
+        file delete -force -- $path
         file mkdir $path
-    }] } {
-        # There must be a file blocking the directory creation.
-        if { [catch {
-            file delete -force -- $path
-            file mkdir $path
-        } errmsg]} {
-            error "Error creating directory $path: $errmsg"
-        }
     }
     return $path
 }
@@ -32,12 +29,8 @@ ad_proc -public apm_workspace_dir {} {
     Return the path to the apm-workspace, creating the directory if necessary.
 
 } {
-    set path [file join $::acs::rootdir apm-workspace]
-    if { [file isdirectory $path] } {
-        return $path
-    } else {
-        return [apm_mkdir $path]
-    }
+    set path [ad_file join $::acs::rootdir apm-workspace]
+    return [apm_mkdir $path]
 }
 
 ad_proc -public apm_workspace_install_dir {} {
@@ -47,11 +40,7 @@ ad_proc -public apm_workspace_install_dir {} {
 } {
     set base_path [apm_workspace_dir]
     set install_path "$base_path/install"
-    if { [file isdirectory $install_path] } {
-        return $install_path
-    } else {
-        return [apm_mkdir $install_path]
-    }
+    return [apm_mkdir $install_path]
 }
 
 ad_proc -public apm_file_type_names {} {
@@ -83,17 +72,20 @@ ad_proc -public apm_file_type_names {} {
     }
 }
 
-ad_proc -public apm_file_type_keys {} {
+ad_proc -deprecated apm_file_type_keys {} {
 
     Returns a list of valid file type keys.
 
+    DEPRECATED: this API in not used in upstream code and can be
+    inlined by a simple dict idiom.
+
     @see apm_file_type_names
     @see apm_pretty_name_for_file_type
+    @see dict
 
     @author Peter Marklund
 } {
-    array set file_type_names [apm_file_type_names]
-    return [array names file_type_names]
+    return [dict keys [apm_file_type_names]]
 }
 
 ad_proc -public apm_package_info_file_path {
@@ -111,21 +103,20 @@ ad_proc -public apm_package_info_file_path {
     } else {
         set path $path/$package_key
     }
-    if { [file exists $path/$package_key.info] } {
+    if { [ad_file exists $path/$package_key.info] } {
         return $path/$package_key.info
     }
     error "The directory $path does not contain a package specification file ($package_key.info)."
 }
 
 
-ad_proc -private apm_extract_tarball { version_id dir } {
+ad_proc -public apm_extract_tarball { version_id dir } {
 
     Extracts a distribution tarball into a particular directory,
     overwriting any existing files.
     DCW - 2001-05-03, modified to extract tarball from content repository.
 
 } {
-
     set apm_file [ad_tmpnam]
 
     db_blob_get_file distribution_tar_ball_select {
@@ -134,18 +125,30 @@ ad_proc -private apm_extract_tarball { version_id dir } {
         where revision_id = (select content_item.get_latest_revision(item_id)
                              from apm_package_versions
                              where version_id = :version_id)
-    } $apm_file
+    } -file $apm_file
 
     file mkdir $dir
-    # avoid chdir
-    #ns_log notice "exec sh -c 'cd $dir ; [apm_gzip_cmd] -d -q -c $apm_file | [apm_tar_cmd] xf - 2>/dev/null'"
-    exec [apm_gzip_cmd] -d -q -c -S .apm $apm_file | [apm_tar_cmd] -xf - -C $dir 2> [apm_dev_null]
+
+    #
+    # This would avoid the exec and could also be used elsewhere, but
+    # there are known issues with the tar package. See
+    # e.g. https://groups.google.com/g/comp.lang.tcl/c/vDKy7x_Q0cM/m/noKeUD6UCAAJ
+    # or
+    # https://core.tcl-lang.org/tcllib/tktview/27bed812fa2ec3d5d1aa96a31f7cad2f7917ad14.
+    #
+    # set rfd [open $apm_file rb]
+    # zlib push gunzip $rfd
+    # package require tar
+    # ::tar::untar $rfd -chan -dir $dir
+    # close $rfd
+    #
+    exec [apm_gzip_cmd] -d -q -c < $apm_file | [apm_tar_cmd] -xf - -C $dir 2> [apm_dev_null]
 
     file delete -- $apm_file
 }
 
 
-ad_proc -private apm_generate_tarball { version_id } {
+ad_proc -public apm_generate_tarball { version_id } {
 
     Generates a tarball for a version, placing it in the content repository.
     DCW - 2001-05-03, change to use the content repository for tarball storage.
@@ -343,7 +346,7 @@ ad_proc -public apm_file_watchable_p { path } {
     return $watchable_p
 }
 
-ad_proc -private apm_watch_all_files { package_key } {
+ad_proc -public apm_watch_all_files { package_key } {
     Watch all Tcl procs and xql query files in the given
     package
 
@@ -357,7 +360,7 @@ ad_proc -private apm_watch_all_files { package_key } {
     }
 }
 
-ad_proc -private apm_cancel_all_watches { package_key } {
+ad_proc -public apm_cancel_all_watches { package_key } {
     Cancel all watches in the given package.
 
     @param package_key The package_key of the package to stop watching.
@@ -399,7 +402,7 @@ ad_proc -private apm_system_paths {} {
     @return a list of acceptable system paths to search for executables in.
 
 } {
-    set paths [ad_parameter_all_values_as_list -package_id [ad_acs_kernel_id] SystemCommandPaths acs-kernel]
+    set paths [parameter::get -package_id [ad_acs_kernel_id] -parameter SystemCommandPaths]
     if {$paths eq ""} {
         return [list "/usr/local/bin" "/usr/bin" "/bin" "/usr/sbin" "/sbin" "/usr/sbin"]
     } else {
@@ -412,16 +415,16 @@ ad_proc -public apm_gzip_cmd {} {
     @return A valid command name for gzip.
 
 } {
-    return gzip
+    return [::util::which gzip]
 }
 
 
-ad_proc -private apm_tar_cmd {} {
+ad_proc -public apm_tar_cmd {} {
 
     @return A valid command name for tar.
 
 } {
-    return tar
+    return [::util::which tar]
 }
 
 
@@ -441,81 +444,11 @@ ad_proc -private apm_transfer_file {
     {-url}
     {-output_file_name}
 } {
-    #
-    # The original solution using ns_httpopen + file_copy does not work
-    # reliably under windows, for unknown reasons the downloaded file is
-    # truncated.
-    #
-    # Therefore, we check first for the NaviServer built in ns_http, then
-    # if the optional xotcl-core components are available...
-    #
-
-    # 5 minutes
-    set timeout 300
-
-    set httpImpls [util::http::available -url $url -spool]
-    if {$httpImpls ne ""} {
-        ns_log notice "we can use the http::util:: interface using the $httpImpls implementation"
-        set result [util::http::get -url $url -timeout $timeout -spool]
-        file rename [dict get $result file] $output_file_name
-    } elseif {[info commands ::ns_http] ne "" && [apm_version_names_compare [ns_info patchlevel] "4.99.5"] == 1} {
-        #
-        # ... use ns_http when we have a version with the "-file" flag ...
-        #
-        foreach i {1 2 3} {
-            ns_log notice "Transfer $url to $output_file_name based on ns_http"
-            set h [ns_http queue -timeout $timeout:0 $url]
-            set replyHeaders [ns_set create]
-            ns_http wait -file F -headers $replyHeaders -spoolsize 1 $h
-            if {[file exists $output_file_name]} {file delete -- $output_file_name}
-            file rename -- $F $output_file_name
-            set location [ns_set iget $replyHeaders location]
-            if {$location eq ""} break
-            ns_log notice "Transfer $url redirected to $location ..."
-            set url $location
-        }
-    } elseif {[info commands ::xo::HttpRequest] ne ""} {
-        #
-        # ... use xo::HttpRequest...
-        #
-        ns_log notice "Transfer $url to $output_file_name based on ::xo::HttpRequest"
-        #
-        set r [::xo::HttpRequest new -url $url]
-        set fileChan [open $output_file_name w 0640]
-        fconfigure $fileChan -translation binary -encoding binary
-        puts -nonewline $fileChan [$r set data]
-        close $fileChan
-
-    } elseif {[set wget [::util::which wget]] ne ""} {
-        #
-        # ... if we have no ns_http, no ::xo::* and we have "wget"
-        # installed, we use it.
-        #
-        ns_log notice "Transfer $url to $output_file_name based on wget"
-        catch {exec $wget -O $output_file_name $url}
-
-    } else {
-        #
-        # Everything else failed, fall back to the original solution.
-        #
-        ns_log notice "Transfer $url to $output_file_name based on ns_httpopen"
-        # Open a destination file.
-        set fileChan [open  $output_file_name w 0640]
-        # Open the channel to the server.
-        set httpChan [lindex [ns_httpopen GET $url] 0]
-        ns_log Debug "APM: Copying data from $url"
-        fconfigure $httpChan -encoding binary
-        fconfigure $fileChan -encoding binary
-        # Copy the data
-        fcopy $httpChan $fileChan
-        # Clean up.
-        ns_log Debug "APM: Done copying data."
-        close $httpChan
-        close $fileChan
-    }
+    set result [util::http::get -url $url -timeout 300 -spool]
+    file rename [dict get $result file] $output_file_name
 }
 
-ad_proc -private apm_load_apm_file {
+ad_proc -public apm_load_apm_file {
     {-callback apm_dummy_callback}
     {-url {}}
     {file_path {}}
@@ -540,9 +473,9 @@ ad_proc -private apm_load_apm_file {
             return
         }
 
-        if {![file exists $file_path]} {
+        if {![ad_file exists $file_path]} {
             apm_callback_and_log $callback  "
-            The file cannot be found.  Your URL or your file name is incorrect.  Please verify that the file name
+            The file cannot be found.  Your URL or your filename is incorrect.  Please verify that the filename
             is correct and try again."
             ns_log Error "Error loading APM file form url $url: The file cannot be found."
             return
@@ -553,7 +486,7 @@ ad_proc -private apm_load_apm_file {
     if { [catch {
         set files [split [string trim \
                               [exec [apm_gzip_cmd] -d -q -c -S .apm $file_path | [apm_tar_cmd] tf - 2> [apm_dev_null]]] "\n"]
-        apm_callback_and_log $callback  "<li>Done. Archive is [format %.1f [expr { [file size $file_path] / 1024.0 }]]KB, with [llength $files] files.<li>"
+        apm_callback_and_log $callback  "<li>Done. Archive is [format %.1f [expr { [ad_file size $file_path] / 1024.0 }]]KB, with [llength $files] files.<li>"
     } errmsg] } {
         apm_callback_and_log $callback "The follow error occurred during the uncompression process:
     <blockquote><pre>[ns_quotehtml $errmsg]</pre></blockquote><br>
@@ -582,7 +515,7 @@ ad_proc -private apm_load_apm_file {
             return
         }
 
-        if { [llength $components] == 2 && [file extension $file] eq ".info" } {
+        if { [llength $components] == 2 && [ad_file extension $file] eq ".info" } {
             if { [info exists info_file] } {
                 apm_callback_and_log $callback  "The archive contains more than one <tt>package/*/*.info</tt> file, so it is not a valid APM file.</ul>\n"
                 ns_log Error "Error loading APM file form url $url: Invalid APM file. More than one package .info file."
@@ -600,17 +533,16 @@ ad_proc -private apm_load_apm_file {
     }
 
     apm_callback_and_log $callback  "Extracting the .info file (<tt>$info_file</tt>)..."
-    set tmpdir [ad_tmpnam]
-    file mkdir $tmpdir
+    set tmpdir [ad_mktmpdir]
     exec [apm_gzip_cmd] -d -q -c -S .apm $file_path | [apm_tar_cmd] -xf - -C $tmpdir $info_file 2> [apm_dev_null]
 
     #exec sh -c "cd $tmpdir ; [apm_gzip_cmd] -d -q -c -S .apm $file_path | [apm_tar_cmd] xf - $info_file" 2> [apm_dev_null]
 
     if { [catch {
-        array set package [apm_read_package_info_file [file join $tmpdir $info_file]]
+        array set package [apm_read_package_info_file [ad_file join $tmpdir $info_file]]
     } errmsg]} {
         file delete -force -- $tmpdir
-        apm_callback_and_log $callback  "The archive contains an unparseable package specification file:
+        apm_callback_and_log $callback  "The archive contains an unparsable package specification file:
     <code>$info_file</code>.  The following error was produced while trying to
     parse it: <blockquote><pre>[ns_quotehtml $errmsg]</pre></blockquote>.
     <p>
@@ -631,7 +563,7 @@ ad_proc -private apm_load_apm_file {
     } else {
 
         set install_path [apm_workspace_install_dir]
-        if { ![file isdirectory $install_path] } {
+        if { ![ad_file isdirectory $install_path] } {
             file mkdir $install_path
         }
 
@@ -644,24 +576,6 @@ ad_proc -private apm_load_apm_file {
         return "${install_path}/${package_key}/${package_key}.info"
     }
 }
-
-
-#
-### Deprecated procs
-#
-
-# apisano 2018-05-14: current code won't use this proc and is also not
-# clear why we should get from the database something we have in a
-# proc already. Commented code was the original one
-ad_proc -deprecated -public apm_db_type_keys {} {
-
-    Returns a list of valid database type keys.
-
-} {
-    return [lmap dbtype $::acs::known_database_types {lindex $dbtype 0}]
-    # return [util_memoize [list db_list db_type_keys {select db_type_key from apm_package_db_types}]]
-}
-
 
 #
 # Local variables:

@@ -9,12 +9,15 @@ ad_page_contract {
     dependency_type
     service:notnull
     our_package_key:notnull
+    {update_info_file:boolean,notnull true}
 }
 
 set service [split $service ";"]
 lassign $service package_key version_name
 
-apm_package_install_spec $version_id
+if {$update_info_file} {
+    apm_package_install_spec $version_id
+}
 
 db_transaction {
     switch -- $dependency_type {

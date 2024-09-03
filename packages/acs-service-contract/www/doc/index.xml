@@ -78,10 +78,10 @@ operation - a method of an interface. defines a method signature,
                   such as caching.</para></listitem>
 <listitem><para>
 implementation - an implementation is a set of concrete functions
-                  that fufills an interface.</para></listitem>
+                  that fulfillss an interface.</para></listitem>
 <listitem><para>
 implementation alias - is the method of an implementation that
-                  fufills a given operation of the contract.</para></listitem>
+                  fulfillss a given operation of the contract.</para></listitem>
 <listitem><para>
 bindings - association between an interface and an implementation.</para></listitem>
 <listitem><para>
@@ -138,7 +138,7 @@ Implement the Contract</para>
 <para>
 
 This might seem a little strange since a binding is the official
-     reference between an implementation and an interface. However
+     reference between an implementation and an interface. However,
      it is quite possible that an implementation for interface might
      exist prior to the interface being defined, ie the interface
      defining package is not installed. By retaining this information
@@ -196,7 +196,7 @@ creates a new contract to serve as a logical
 (sql):<programlisting>
 <![CDATA[
 acs_sc_operation__new (contract_name, operation_name,
-                      operation_desc, operation_iscachable_p,
+                      operation_desc, operation_iscacheable_p,
                       operation_inputtype, operation_outputtype
                      ):
 ]]></programlisting>

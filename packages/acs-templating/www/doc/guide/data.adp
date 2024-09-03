@@ -1,7 +1,11 @@
 
-<property name="context">{/doc/acs-templating {ACS Templating}} {Templating System User Guide: Data Sources}</property>
+<property name="context">{/doc/acs-templating/ {ACS Templating}} {Templating System User Guide: Data Sources}</property>
 <property name="doc(title)">Templating System User Guide: Data Sources</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h2>Implementing Data Sources</h2>
 <a href="..">Templating System</a>
  : <a href="../developer-guide">Developer Guide</a>
@@ -59,8 +63,7 @@ data source in a template with simple <a href="../tagref/variable">variable subs
 <p>
 <kbd>onelist</kbd> data sources are implemented by creating a
 Tcl list:</p>
-<pre>
-set names [list "Walter" "Fred" "Susy" "Frieda"]</pre>
+<pre>set names [list "Walter" "Fred" "Susy" "Frieda"]</pre>
 <p>The <kbd>query</kbd> procedure may be used to set a onelist data
 source based on a one-column database query:</p>
 <code>query name onevalue "select name from users"</code>

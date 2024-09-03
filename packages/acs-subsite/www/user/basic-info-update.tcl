@@ -1,5 +1,5 @@
 ad_page_contract {
-    Displays form for currently logged in user to update his/her personal information
+    Displays form for currently logged-in user to update his/her personal information
 
     @author Unknown
     @creation-date Unknown
@@ -7,7 +7,7 @@ ad_page_contract {
 } {
     {return_url:localurl ""}
     {user_id:naturalnum ""}
-    {edit_p:boolean 0}
+    {edit_p:boolean,notnull 0}
     {message ""}
 }
 

@@ -1,15 +1,21 @@
-# upload an item revision from a file
+ad_library {
+
+    Tcl API for adding file content to the database and for sending
+    file content to back to the client.
+
+    @creation-date 2004-05-28
+}
 
 ad_proc -public cr_write_content {
     -string:boolean
     -item_id
     -revision_id
 } {
-    Write out the specified content to the current HTML connection or return
-    it to the caller by using the -string flag.  Only one of
-    item_id and revision_id should be passed to this procedure.  If item_id is
-    provided the item's live revision will be written, otherwise the specified
-    revision.
+    Write out the specified content to the current HTTP connection or
+    return it to the caller by using the -string flag.  Only one of
+    item_id and revision_id should be passed to this procedure.  If
+    item_id is provided the item's live revision will be written,
+    otherwise the specified revision.
 
     This routine was written to centralize the downloading of data from
     the content repository.  Previously, similar code was scattered among
@@ -34,113 +40,177 @@ ad_proc -public cr_write_content {
     }
 
     if { [info exists item_id] } {
-        if { ![db_0or1row get_item_info ""] } {
+        if { ![db_0or1row get_item_info {
+            select i.storage_type,
+                   i.storage_area_key,
+                   r.mime_type,
+                   r.revision_id,
+                   r.content,
+                   r.content_length
+            from cr_items i, cr_revisions r
+            where i.item_id = :item_id
+              and r.revision_id = i.live_revision
+        }] } {
             error "There is no content that matches item_id '$item_id'" {} NOT_FOUND
         }
     } elseif { [info exists revision_id] } {
-        if { ![db_0or1row get_revision_info ""] } {
+        if { ![db_0or1row get_revision_info {
+            select i.storage_type,
+                   i.storage_area_key,
+                   r.mime_type,
+                   i.item_id,
+                   r.content,
+                   r.content_length
+            from cr_items i, cr_revisions r
+            where r.revision_id = :revision_id and i.item_id = r.item_id
+        }] } {
             error "There is no content that matches revision_id '$revision_id'" {} NOT_FOUND
         }
     } else {
         error "Either revision_id or item_id must be specified"
     }
 
-    if { $storage_type ne "file"
-         && $storage_type ne "text"
-         && $storage_type ne "lob"
-     } {
+    if { [info commands ::cr_write_content-$storage_type] eq "" } {
         error "Storage type '$storage_type' is invalid."
     }
 
-    # I set content length to 0 here because otherwise I need to do
-    # db-specific queries for get_revision_info
-    if {$content_length eq ""} {
-        set content_length 0
-    }
-
-    switch -- $storage_type {
-        text {
-            set text [db_string write_text_content ""]
-            if { $string_p } {
-                return $text
-            }
-            ns_return 200 $mime_type $text
-        }
-        file {
-            set path [cr_fs_path $storage_area_key]
-            set filename [db_string write_file_content ""]
-            if {$filename eq ""} {
-                error "No content for the revision $revision_id.\
-                    This seems to be an error which occurred during the upload of the file"
-            } elseif {![file readable $filename]} {
-                ns_log Error "Could not read file $filename. Maybe the content repository is (partially) missing?"
-                ns_return 404 text/plain {}
-            } else {
-                if { $string_p } {
-                    set fd [open $filename "r"]
-                    fconfigure $fd \
-                        -translation binary \
-                        -encoding [encoding system]
-                    set text [read $fd]
-                    close $fd
-                    return $text
-                } else {
-                    # JCD: for webdavfs there needs to be a content-length 0 header
-                    # but ns_returnfile does not send one.   Also, we need to
-                    # ns_return size 0 files since if fastpath is enabled ns_returnfile
-                    # simply closes the connection rather than send anything (including
-                    # any headers).  This bug is fixed in AOLServer 4.0.6 and later
-                    # but work around it for now.
-                    set size [file size $filename]
-                    if {!$size} {
-                        ns_set put [ns_conn outputheaders] "Content-Length" 0
-                        ns_return 200 text/plain {}
-                    } else {
-                        if {[info commands ad_returnfile_background] eq "" || [security::secure_conn_p]} {
-                            ns_returnfile 200 $mime_type $filename
-                        } else {
-                            ad_returnfile_background 200 $mime_type $filename
-                        }
-                    }
-                }
-            }
-        }
-        lob  {
-
-            if { $string_p } {
-                return [db_blob_get write_lob_content ""]
-            }
-
-            #
-            # Need to set content_length header here.
-            #
-            # Unfortunately, old versions of OpenACS did not set the
-            # content_length correctly, so we fix this here locally.
-            #
-            if {$content_length eq "0" && [db_driverkey ""] eq "postgresql"} {
-                set content_length [db_string get_lob_length {
-                    select sum(byte_len)
-                    from cr_revisions, lob_data
-                    where revision_id = :revision_id and lob_id = cr_revisions.lob
-                }]
-            }
-
-            ns_set put [ns_conn outputheaders] "Content-Length" $content_length
-
-            ReturnHeaders $mime_type $content_length
-            #
-            # In a HEAD request, just send headers and no content
-            #
-            if {![string equal -nocase "head" [ns_conn method]]} {
-                db_write_blob write_lob_content ""
-            } else {
-                ns_conn close
-            }
-        }
-    }
-
-    return
+    return [cr_write_content-$storage_type \
+                -string=$string_p \
+                -item_id $item_id \
+                -revision_id $revision_id \
+                -mime_type $mime_type \
+                -content $content \
+                -content_length $content_length \
+                -storage_area_key $storage_area_key]
 }
+
+
+ad_proc -private cr_write_content-text {
+    -string:boolean
+    -item_id
+    -revision_id
+    -mime_type
+    -content
+    -content_length
+    -storage_area_key
+} {
+    if { $string_p } {
+        return $content
+    }
+    ns_return 200 $mime_type $content
+}
+
+ad_proc -private cr_write_content-file {
+    -string:boolean
+    -item_id
+    -revision_id
+    -mime_type
+    -content
+    -content_length
+    -storage_area_key
+} {
+    set path [cr_fs_path $storage_area_key]
+    if {[db_type] eq "oracle"} {
+        #
+        # CR datamodel for Oracle differs from the one in Postgres
+        # concerning file revisions. For Oracle, an additional column
+        # cr_revisions.filename stores the actual filename.
+        #
+        set filename [db_string write_file_content {}]
+    } else {
+        set filename $path$content
+    }
+
+    #
+    ## Note
+    #
+    # in many cases, filename will equal the following idiom:
+    #
+    # set filename ${path}[::cr_create_content_file_path $item_id $revision_id]
+    #
+    # but not in the case of copies. Copies will point to the
+    # filesystem file of the original item.
+    #
+
+    if {$filename eq ""} {
+        error "No content for the revision $revision_id.\
+                            This seems to be an error which occurred during the upload of the file"
+
+    } elseif {![file readable $filename]} {
+        ns_log Error "Could not read file $filename. Maybe the content repository is (partially) missing?"
+        ns_return 404 text/plain {}
+
+    } elseif { $string_p } {
+        set fd [open $filename "r"]
+        fconfigure $fd \
+            -translation binary \
+            -encoding [encoding system]
+        set text [read $fd]
+        close $fd
+        return $text
+
+    } else {
+        # JCD: for webdavfs there needs to be a content-length 0 header
+        # but ns_returnfile does not send one.   Also, we need to
+        # ns_return size 0 files since if fastpath is enabled ns_returnfile
+        # simply closes the connection rather than send anything (including
+        # any headers).  This bug is fixed in AOLServer 4.0.6 and later
+        # but work around it for now.
+        set size [file size $filename]
+        if {$size == 0} {
+            ns_set iupdate [ns_conn outputheaders] "Content-Length" 0
+            ns_return 200 text/plain {}
+        } else {
+            ::security::csp::add_static_resource_header -mime_type $mime_type
+            if {[namespace which ad_returnfile_background] eq "" || [security::secure_conn_p]} {
+                ns_returnfile 200 $mime_type $filename
+            } else {
+                ad_returnfile_background 200 $mime_type $filename
+            }
+        }
+    }
+}
+
+ad_proc -private cr_write_content-lob {
+    -string:boolean
+    -item_id
+    -revision_id
+    -mime_type
+    -content
+    -content_length
+    -storage_area_key
+} {
+
+    if { $string_p } {
+        return [db_blob_get write_lob_content ""]
+    }
+
+    #
+    # Unfortunately, old versions of OpenACS did not set the
+    # content_length correctly, so we fix this here locally.
+    #
+    if {$content_length eq "" && [db_driverkey ""] eq "postgresql"} {
+        set content_length [db_string get_lob_length {
+            select sum(byte_len)
+            from cr_revisions, lob_data
+            where revision_id = :revision_id and lob_id = cr_revisions.lob
+        }]
+    }
+
+    util_return_headers $mime_type $content_length
+    #
+    # In a HEAD request, just send headers and no content
+    #
+    if {![string equal -nocase "head" [ns_conn method]]} {
+        db_write_blob write_lob_content ""
+    } else {
+        ns_conn close
+    }
+}
+
+#
+# Loading content into a revision of the content repository
+#
 
 ad_proc -public cr_import_content {
     {-storage_type "file"}
@@ -181,7 +251,7 @@ ad_proc -public cr_import_content {
     @param object_name The name to give the result content item and revision
 
     This procedure handles all mime_type details, creating a new item of the appropriate
-    type and stuffing the content into either the file system or the database depending
+    type and stuffing the content into either the filesystem or the database depending
     on "storage_type".  The new revision is set live, and its item_id is returned to the
     caller.
 
@@ -205,7 +275,7 @@ ad_proc -public cr_import_content {
     # DRB: Eventually we should allow for text storage ... (CLOB for Oracle)
 
     if { $storage_type ne "file" && $storage_type ne "lob" } {
-        return -code error "Imported content must be stored in the file system or as a large object"
+        return -code error "Imported content must be stored in the filesystem or as a large object"
     }
 
     if {$mime_type eq "*/*"} {
@@ -223,11 +293,19 @@ ad_proc -public cr_import_content {
 
     # use content_type of existing item
     if {$old_item_p} {
-        set content_type [db_string get_content_type ""]
+        set content_type [db_string get_content_type {
+            select content_type
+            from cr_items
+            where item_id = :item_id
+        }]
     } else {
         # all we really need to know is if the mime type is mapped to image, we
         # actually use the passed in image_type or other_type to create the object
-        if {[db_string image_type_p "" -default 0]} {
+        if {[db_0or1row image_type_p {
+            select 1 from cr_content_mime_type_map
+            where mime_type = :mime_type
+            and content_type = 'image'
+        }]} {
             set content_type image
         } else {
             set content_type content_revision
@@ -237,15 +315,42 @@ ad_proc -public cr_import_content {
 
     db_transaction {
 
-        if { [db_string is_registered "" -default ""] eq "" } {
-            db_dml mime_type_insert ""
-            db_exec_plsql mime_type_register ""
+        if { ![db_0or1row is_registered {
+            select 1
+            from cr_content_mime_type_map
+            where mime_type = :mime_type
+            and content_type = 'content_revision'
+        }]} {
+            db_dml mime_type_insert {
+                insert into cr_mime_types (mime_type)
+                select :mime_type
+                from dual
+                where not exists (select 1 from cr_mime_types where mime_type = :mime_type)
+            }
+            db_dml mime_type_register {
+                insert into cr_content_mime_type_map (content_type, mime_type)
+                values ('content_revision', :mime_type)
+            }
         }
 
         switch -- $content_type {
             image {
 
-                if { [db_string image_subclass ""] == "f" } {
+                if { ![db_0or1row image_subclass {
+                    with recursive type_hierarchy as (
+                        select object_type, supertype
+                          from acs_object_types
+                         where object_type = :image_type
+                        union all
+                        select s.object_type, s.supertype
+                          from acs_object_types s,
+                               type_hierarchy h
+                         where h.object_type <> 'image'
+                           and s.object_type = h.supertype
+                        )
+                    select 1 from type_hierarchy
+                     where object_type = 'image'
+                }]} {
                     error "Image file must be stored in an image object"
                 }
 
@@ -286,7 +391,21 @@ ad_proc -public cr_import_content {
                     error "The file you uploaded was not an image (.gif, .jpg or .jpeg) file"
                 }
 
-                if { [db_string content_revision_subclass ""] == "f" } {
+                if { ![db_0or1row content_revision_subclass {
+                    with recursive type_hierarchy as (
+                        select object_type, supertype
+                          from acs_object_types
+                         where object_type = :other_type
+                        union all
+                        select s.object_type, s.supertype
+                          from acs_object_types s,
+                               type_hierarchy h
+                         where h.object_type <> 'content_revision'
+                           and s.object_type = h.supertype
+                        )
+                    select 1 from type_hierarchy
+                     where object_type = 'content_revision'
+                }]} {
                     error "Content must be stored in a content revision object"
                 }
 
@@ -298,19 +417,15 @@ ad_proc -public cr_import_content {
             }
         }
 
-        # insert the attachment into the database
-
-        switch -- $storage_type {
-            file {
-                set filename [cr_create_content_file $item_id $revision_id $tmp_filename]
-                db_dml set_file_content ""
-            }
-            lob {
-                db_dml set_lob_content "" -blob_files [list $tmp_filename]
-                db_dml set_lob_size ""
-            }
-        }
-
+        #ns_log notice "TESTING ::content::revision::update_content -storage_type $storage_type"
+        # insert the content into the database
+        ::content::revision::update_content \
+            -storage_type $storage_type \
+            -item_id $item_id \
+            -revision_id $revision_id \
+            -content "" \
+            -mime_type $mime_type \
+            -tmp_filename $tmp_filename
     }
 
     return $revision_id
@@ -346,14 +461,18 @@ ad_proc cr_set_imported_content_live {
 }
 
 
-ad_proc cr_registered_type_for_mime_type {
+ad_proc -private cr_registered_type_for_mime_type {
     mime_type
 } {
     Return the type registered for this mime type.
 
     @param mime_type param The mime type
 } {
-    return [db_string registered_type_for_mime_type "" -default ""]
+    return [db_string registered_type_for_mime_type {
+        select content_type
+        from cr_content_mime_type_map
+        where mime_type = :mime_type
+    } -default ""]
 }
 
 ad_proc cr_check_mime_type {
@@ -390,11 +509,19 @@ ad_proc cr_check_mime_type {
     # future. Usages of this proc in the systems are already set to
     # give us the path to the file here.
     set extension [string tolower [string trimleft [file extension $filename] "."]]
-    if {[db_0or1row lookup_mimetype {}]} {
+    if {[db_0or1row lookup_mimetype {
+      select mime_type
+        from cr_extension_mime_type_map
+       where extension = :extension
+    }]} {
         return $mime_type
     }
     set mime_type [string tolower [ns_guesstype $filename]]
-    if {[db_0or1row lookup_mimetype {}]} {
+    if {[db_0or1row lookup_mimetype {
+      select mime_type
+        from cr_extension_mime_type_map
+       where extension = :extension
+    }]} {
         return $mime_type
     }
     set allow_mimetype_creation_p \
@@ -426,7 +553,11 @@ ad_proc -public cr_filename_to_mime_type {
         return "*/*"
     }
 
-    if {[db_0or1row lookup_mimetype {}]} {
+    if {[db_0or1row lookup_mimetype {
+        select mime_type
+          from cr_extension_mime_type_map
+         where extension = :extension
+    }]} {
         return $mime_type
     } else {
         set mime_type [string tolower [ns_guesstype $filename]]
@@ -447,7 +578,7 @@ ad_proc -public cr_filename_to_mime_type {
     }
 }
 
-ad_proc -public cr_create_mime_type {
+ad_proc -private cr_create_mime_type {
     -mime_type:required
     {-extension ""}
     {-description ""}
@@ -463,10 +594,11 @@ ad_proc -public cr_create_mime_type {
 
     @author Jeff Davis (davis@xarg.net)
 } {
-    # make both lower since that is the convention.
-    # should never pass in anything that is not lower cased
-    # already but just be safe.
-
+    #
+    # Convert "mime_type" and "extension" to lowercase since that is
+    # the convention in the database.  One should never pass in
+    # anything that is not lowercased already but just be safe.
+    #
     set mime_type [string tolower $mime_type]
     set extension [string tolower $extension]
 

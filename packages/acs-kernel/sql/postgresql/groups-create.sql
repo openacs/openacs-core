@@ -33,8 +33,14 @@ create table membership_rels (
         -- null means waiting for admin approval
         member_state    varchar(20) constraint membership_rels_member_state_ck
                         check (member_state in ('merged', 'approved', 'needs approval',
-                                              'banned', 'rejected', 'deleted'))
+                                              'banned', 'rejected', 'deleted', 'expired'))
 );
+
+--
+-- Create a partial index for a very common case.
+--
+CREATE INDEX membership_rels_rel_id_approved_idx ON membership_rels(rel_id) WHERE member_state = 'approved';
+
 
 create table admin_rels (
         rel_id          integer constraint admin_rels_rel_id_fk
@@ -104,11 +110,11 @@ BEGIN
    'group',
    'composite',
     0, 
-    null,
+    null::integer,
    'group',
    'component',
    0,
-   null,
+   null::integer,
    't'
    );
 
@@ -127,13 +133,13 @@ BEGIN
    'rel_id',                         -- id_column
    'membership_rel',                 -- package_name
    'group',                          -- object_type_one
-   null,                               -- role_one
-   0,                                  -- min_n_rels_one
-   null,                               -- max_n_rels_one
+   null,                             -- role_one
+   0,                                -- min_n_rels_one
+   null::integer,                    -- max_n_rels_one
    'person',                         -- object_type_two
    'member',                         -- role_two
-   0,                                  -- min_n_rels_two
-   null,                                -- max_n_rels_two
+   0,                                -- min_n_rels_two
+   null::integer,                    -- max_n_rels_two
    't'
    );
 
@@ -153,11 +159,11 @@ BEGIN
    'group',                          -- object_type_one
    null,                             -- role_one
    0,                                -- min_n_rels_one
-   null,                             -- max_n_rels_one
+   null::integer,                    -- max_n_rels_one
    'person',                         -- object_type_two
    'admin',                          -- role_two
    0,                                -- min_n_rels_two
-   null,                             -- max_n_rels_two
+   null::integer,                    -- max_n_rels_two
    false                             -- composable_p
    );
 
@@ -318,6 +324,8 @@ create index group_elem_idx_rel_type_idx on group_element_index (rel_type);
 -- and in some cases can be quite detrimental
 -- see http://openacs.org/forums/message-view?message_id=142769
 -- create index group_elem_idx_container_idx on group_element_index (container_id);
+
+create index group_elem_idx_container_idx on group_element_index (container_id);
 
 
 comment on table group_element_index is $$

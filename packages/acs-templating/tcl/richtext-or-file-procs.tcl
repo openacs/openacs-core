@@ -249,11 +249,8 @@ ad_proc -public template::widget::richtext_or_file {
 } {
   upvar $element_reference element
 
-  if { [info exists element(html)] } {
-    array set attributes $element(html)
-  }
-
-  array set attributes $tag_attributes
+  array set attributes \
+      [::template::widget::merge_tag_attributes element $tag_attributes]
 
   if { [info exists element(value)] } {
       set storage_type [template::util::richtext_or_file::get_property storage_type $element(value)]
@@ -290,8 +287,10 @@ ad_proc -public template::widget::richtext_or_file {
           }]
       }
 
+      ::template::head::add_javascript -src /resources/acs-templating/richtext-or-file.js
+
       if { $storage_type eq "" || $storage_type eq "text" } {
-          append output [subst {<script type="text/javascript" nonce='$::__csp_nonce'><!--}] \
+          append output [subst {<script type="text/javascript" nonce='[security::csp::nonce]'><!--}] \
               \n {acs_RichText_WriteButtons();  //--></script>} \
               [textarea_internal "$element(id).text" attributes $text] \
               [subst {<br>Format: \

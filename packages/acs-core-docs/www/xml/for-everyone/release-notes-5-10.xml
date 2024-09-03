@@ -1,0 +1,329 @@
+<?xml version='1.0' ?>
+<!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+"http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd" [
+
+<!ENTITY % myvars SYSTEM "../variables.ent">
+%myvars;
+]>
+
+<sect2 id="release-notes-5-10-0">
+  <title>Release 5.10.0</title>
+  <itemizedlist>
+    <listitem><para>
+      The release of OpenACS 5.10.0 contains the 93 packages of the oacs-5-10
+      branch.  These packages include the OpenACS core packages, the major
+      application packages (e.g. most the ones used on OpenACS.org), and
+      DotLRN 2.10.0. 
+    </para></listitem>
+
+
+	<listitem><para>Functional improvements
+	<itemizedlist>
+		<listitem><para>Features:
+		<itemizedlist>
+			<listitem><para>Support for range types in .xql files:
+			<para>PostgreSQL supports range types since 9.5. When using range types, square braces have to be used in SQL statements. Since OpenACS uses always Tcl substitution in .xql files, and OpenACS does NOT allow backslash substitution in these files, square brackets could not be escaped and therefore not be used in .xql files so far. This change allows now a developer to deactivate the substitution by passing e.g. <computeroutput>-subst none</computeroutput> to the db_* command using the .xql file. Valid values for <computeroutput>-subst</computeroutput> are <computeroutput>all</computeroutput>, <computeroutput>none</computeroutput>, <computeroutput>vars</computeroutput>, and <computeroutput>commands</computeroutput>, default is <computeroutput>all</computeroutput> which is exactly the behavior of previous releases. Therefore, this change is fully backward compatible.</para>
+			</para></listitem>
+			<listitem><para>Registry for .js and .css libraries: allow besides classical URLs symbolic names for loading external resources (e.g. jquery), this makes it easier to upgrade libraries in multiple packages (without running into problems with duplicate versions) and supports switching between CDN and local pathsURN. The existing implementation is based on URNs and extends the existing template-head API to support registration for URNs. A URN provides an abstraction and a single place for e.g. updating references to external resources when switching between a CDN and a locally stored resource, or when a resource should be updated. Instead of adding e.g. a CDN URL via template::head::add_script, one can add an URN and control its content from a single place. Use common namespaces for OpenACS such as <computeroutput>urn:ad:css:* </computeroutput>and <computeroutput>urn:ad:js:*</computeroutput>.
+			<itemizedlist>
+				<listitem><para>
+				<para>Register URNs:</para>
+				Example provider (e.g. in some theme):
+
+				<programlisting>
+   template::register_urn \ 
+       -urn urn:ad:js:jquery \ 
+       -resource /resources/xowiki/jquery/jquery.min.js
+</programlisting>
+				</para></listitem>
+				<listitem><para>
+				<para>The registered URN can be used like classical URL after registration.</para>
+
+				<para>Example consumer:</para>
+
+				<programlisting>
+   template::head::add_javascript -src urn:ad:js:jquery</programlisting>
+				</para></listitem>
+				<listitem><para>Declare composite files: Provide an interface to define that a .js file or a .css file contains multiple other .js/.css files in order to reduce the number of requests.
+				<programlisting>
+   template::head::includes -container urn:js::style.js -parts {urn:ad:js:jquery ...}</programlisting>
+				</para></listitem>
+			</itemizedlist>
+			</para></listitem>
+			<listitem><para>Improved API browser: Visualization for code dependencies (which procs calls what, from where is a proc being called) and test-coverage</para></listitem>
+			<listitem><para>Warn site administrators about expiring certificates</para></listitem>
+			<listitem><para>Added text/markdown to the accepted text formats or rich-text widget</para></listitem>
+			<listitem><para>Additional input types (and widgets) for <computeroutput>ad_form</computeroutput>:
+			<itemizedlist>
+				<listitem><para>checkbox_text</para></listitem>
+				<listitem><para>color</para></listitem>
+				<listitem><para>email</para></listitem>
+				<listitem><para>tel</para></listitem>
+				<listitem><para>url</para></listitem>
+				<listitem><para>number</para></listitem>
+				<listitem><para>file (multiple)</para></listitem>
+				<listitem><para>h5date and h5time: date and time fields using native HTML5 visualization and input normalization</para></listitem>
+			</itemizedlist>
+			</para></listitem>
+			<listitem><para>Added additional page_contract filter: oneof(red|green|blue)</para></listitem>
+			<listitem><para><computeroutput>template::add_event_listener</computeroutput> and <computeroutput>template::add_confirm_handler</computeroutput> now can target elements by CSS selector</para></listitem>
+			<listitem><para>
+			<para>Improved support for streaming HTML: The new API function <computeroutput>template::collect_body_scripts</computeroutput> can be used to get the content of template::script or CSP calls (<computeroutput>template::add_body_script</computeroutput>, <computeroutput>template::add_event_listener</computeroutput>, <computeroutput>template::add_body_handler</computeroutput>, <computeroutput>template::add_script</computeroutput>) when streaming HTML (incremental HTML) is used. Before, these call could bot be used for streaming HTML.</para>
+			</para></listitem>
+		</itemizedlist>
+		</para></listitem>
+		<listitem><para>Reforms:
+		<itemizedlist>
+			<listitem><para>Login:
+			<itemizedlist>
+				<listitem><para>Get rid of bugging &quot;login page expired&quot; messages. The 17 years old construct was replaced by newer means to avoid caching of form values from the login form. Admins of existing sites should set the kernel parameter <computeroutput>LoginPageExpirationTime</computeroutput> to 0</para></listitem>
+			</itemizedlist>
+			</para></listitem>
+			<listitem><para>Forums:
+			<itemizedlist>
+				<listitem><para>Removed hard-coded dependency with registered_users group when checking forum permissions</para></listitem>
+				<listitem><para>Don&#39;t rely so heavily on acs_permissions to model forum configuration, as this can have unexpected consequences in convoluted multi-group/multi-subsite scenarios. Prefer simpler table attributes instead</para></listitem>
+				<listitem><para>New style of attachments to the forums, allowing multiple attachments to a single message directly from the message post page, using the multiple file input widget. Retain compatibility with old style attachments, using the new &#39;AttachmentStyle&#39; package instance parameter. Currently, this supports two values: &#39;simple&#39; (new behavior) and &#39;complex&#39; previous behavior.</para></listitem>
+			</itemizedlist>
+			</para></listitem>
+			<listitem><para>Chat:
+			<itemizedlist>
+				<listitem><para>Revamping of the GUI</para></listitem>
+				<listitem><para>Responsiveness</para></listitem>
+				<listitem><para>Full screen mode</para></listitem>
+				<listitem><para>Skins support (minimal, classic and bubbles, included): Skins are located in the new /packages/xowiki/www/resources/chat-skins/ directory. New skins can be created by just adding the css and js files in the skins directory, and naming them accordingly (chat-$SKIN_NAME.{js|css}).</para></listitem>
+				<listitem><para>Avatars (can be enabled per room)</para></listitem>
+				<listitem><para>Number of active users in chat</para></listitem>
+				<listitem><para>Tab notifications of new messages</para></listitem>
+				<listitem><para>Web Notifications:
+				<itemizedlist>
+					<listitem><para>https://www.w3.org/TR/notifications/</para></listitem>
+					<listitem><para>https://developer.mozilla.org/en-US/docs/Web/API/Notifications_API/Using_the_Notifications_API</para></listitem>
+				</itemizedlist>
+				</para></listitem>
+			</itemizedlist>
+			</para></listitem>
+			<listitem><para>acs-lang:
+			<itemizedlist>
+				<listitem><para>admin pages:
+				<itemizedlist>
+					<listitem><para>Added the option to unregister (delete permanently the message key from all locales) a message key that has been already marked as deleted. Useful for cleaning up old message keys.</para></listitem>
+					<listitem><para>Added the option to undelete, using the new ::message::undelete proc.</para></listitem>
+					<listitem><para>Made number and category (untranslated/deleted/...) of messages coherent in all pages.</para></listitem>
+					<listitem><para>Added the columns &#39;total&#39; and &#39;deleted&#39; to the index page.</para></listitem>
+				</itemizedlist>
+				</para></listitem>
+				<listitem><para>object_id reference: it is now possible to associate a message key to an object_id in a way that e.g. when the object is deleted, so is the message key. This addresses cases such as the message keys generated by group creation or by the new XoWiki localized fields</para></listitem>
+			</itemizedlist>
+			</para></listitem>
+			<listitem><para>Notifications:
+			<itemizedlist>
+				<listitem><para>Improved scalability for notifications: One of the most expensive operations in large site is the cleanup for notification_requests in situations, where the user has lost permissions on an object, on which the user wanted to receive notifications. This check was performed previously in <computeroutput>notification::sweep::cleanup_notifications</computeroutput> via a permission check over all notification requests, which can be very costly on large sites. This change moves this cleanup into the actual notification sending, where the permissions have to be sent anyhow.</para></listitem>
+				<listitem><para>When sending a notification on behalf of a person, if the system is not configured to process replies to notification, do not set the reply-to address to anything different than the sender</para></listitem>
+				<listitem><para>Notifications: proper cleanup of acs_objects resulting from the deletion of dynamic notification requests</para></listitem>
+			</itemizedlist>
+			</para></listitem>
+			<listitem><para>User/Person/Party API: rework and rationalize caching of all party, person and user API, create separate caches for each of these types, make the API and return dicts. acs_user::get will not fail anymore with non-existing user.</para></listitem>
+			<listitem><para>User Portrait: created API to retrieve and create, store and delete the user&#39;s portrait. Also address leftover child relationships from the past and delete them properly.</para></listitem>
+		</itemizedlist>
+		</para></listitem>
+	</itemizedlist>
+	</para></listitem>
+	<listitem><para>Non-functional Changes
+	<itemizedlist>
+		<listitem><para>Improved automated regression test infrastructure and test coverage
+		<itemizedlist>
+			<listitem><para>All packages in the <computeroutput>oacs-5-10</computeroutput> branch pass regression test</para></listitem>
+			<listitem><para>Web testing was separated from non-maintained tcltest and was built on the standard OpenACS infrastructure</para></listitem>
+			<listitem><para>Include web testing per default in standard regression testing</para></listitem>
+			<listitem><para>Introduced new test authentication authority, allowing to run many user administration tests outside the context of a &quot;real authority&quot;: in cases where the real authority depends on external services to proof identity, (e.g. Kerberos), those tests would just fail.</para></listitem>
+			<listitem><para>Introduce the display of warnings in the UI of automated testing</para></listitem>
+			<listitem><para>Added test coverage information in the automated testing pages, using the new proc-coverage API and providing test coverage information for packages and system wide.</para></listitem>
+			<listitem><para>Increased overall coverage of public API</para></listitem>
+			<listitem><para>New tests checking various data-model properties and smells
+			</para></listitem>
+		</itemizedlist>
+		</para></listitem>
+		<listitem><para>Improved scalability:
+		<itemizedlist>
+			<listitem><para>
+			<para>Provided lock-free implementation of <computeroutput>ad_page_contract_filters</computeroutput> and <computeroutput>ad_page_contract_filter_rules</computeroutput>. This change improves parallel processing of requests and is primarily interesting for sites with a few mio page views per days. These locks were among the most frequent nsv locks</para>
+			</para></listitem>
+			<listitem><para>
+			<para>Reduced locks on util_memoize_cache my more invariants values into per-thread caching (<computeroutput>acs_lookup_magic_object</computeroutput>, <computeroutput>ad_acs_version</computeroutput>, .... ) and by avoiding specialized calls, which can be realized by already optimized ones (<computeroutput>apm_package_installed_p_not_cached ref-timezones</computeroutput> was most frequently used util_memoize_cache entry). These changes are necessary to avoid full still-stand on the unfortunate long-time locks on util_memoize_cache stemming from permission and user management with wild-card flush operations, which require to iterate over all cache entries (which might be on a busy server several hundred thousands)</para>
+			</para></listitem>
+			<listitem><para>
+			<para>Added new interface for cache partitioning to reduce lock latencies on high load websites</para>
+			</para></listitem>
+			<listitem><para>
+			<para>Added new interface for lock-free per-thread and per-request caching to avoid scattered ad-hoc implementations</para>
+			</para></listitem>
+			<listitem><para>
+			<para>Better reuse of DB handles (reduced expiring/reopen/etc.), faster access to handles</para>
+			</para></listitem>
+		</itemizedlist>
+		</para></listitem>
+		<listitem><para>Improved startup time:
+		<itemizedlist>
+			<listitem><para>When the package acs-automated-testing is disabled, startup time is reduced by avoiding loading of support functions and tests; the size of the blueprint is reduced</para></listitem>
+			<listitem><para>xowf: loading of at-jobs is significantly improved.</para></listitem>
+		</itemizedlist>
+		</para></listitem>
+		<listitem><para>Security improvements:
+		<itemizedlist>
+			<listitem><para>Strengthened page contracts</para></listitem>
+			<listitem><para>CSP support for application packages</para></listitem>
+			<listitem><para>CSP fine tuning
+			&nbsp;</para></listitem>
+		</itemizedlist>
+		</para></listitem>
+		<listitem><para>Better exception handling based on Tcl 8.6 exception handlers (<computeroutput>try</computeroutput> and <computeroutput>throw</computeroutput>, also available in Tcl 8.5)
+		<itemizedlist>
+			<listitem><para>Provided a new <computeroutput>ad_try</computeroutput> implementation based on Tcl&#39;s <computeroutput>try</computeroutput> replaces now the old <computeroutput>ad_try</computeroutput>, <computeroutput>with_catch</computeroutput> and <computeroutput>with_finally</computeroutput>, which are marked as deprecated</para></listitem>
+			<listitem><para>The new <computeroutput>ad_try</computeroutput> is in essence Tcl&#39;s <computeroutput>try</computeroutput> but with predefined handling of <computeroutput>ad_script_abort</computeroutput> and should be also used instead of <computeroutput>catch</computeroutput>, when the OpenACS API is used (which might use script aborts)</para></listitem>
+			<listitem><para>All core packages use the new <computeroutput>ad_try</computeroutput> instead of the deprecated versions.</para></listitem>
+		</itemizedlist>
+		</para></listitem>
+		<listitem><para>Connection close reform:
+		<itemizedlist>
+			<listitem><para>NaviServer/AOLserver continue after connection closing commands to execute a script. This is in many situations not desired, especially, when for the page as well a .adp file exists, which will try to deliver this on the already closed connection. This can lead to errors in the error.log file, which are sometimes hard to analyze</para></listitem>
+			<listitem><para>Due to this cleanup, developers should use in most such cases cases <computeroutput>ad_script_abort</computeroutput></para></listitem>
+			<listitem><para>Connection closing commands are e.g. <computeroutput>ad_returnredirect</computeroutput>, <computeroutput>ad_redirect_for_registration</computeroutput>, <computeroutput>cr_write_content</computeroutput>, <computeroutput>ad_page_contract_handle_datasource_error</computeroutput>, <computeroutput>ad_return_string_as_file</computeroutput>, <computeroutput>ad_return_complaint</computeroutput>, <computeroutput>ad_return_error</computeroutput>, <computeroutput>ad_return_forbidden</computeroutput>, <computeroutput>ad_return_warning</computeroutput>, <computeroutput>ad_return_exception_page</computeroutput>, <computeroutput>ns_returnredirect</computeroutput>, <computeroutput>ns_return</computeroutput>, <computeroutput>ns_returnerror</computeroutput></para></listitem>
+			<listitem><para>The new version has made on most occasions explicit, when the script should abort.</para></listitem>
+		</itemizedlist>
+		</para></listitem>
+		<listitem><para>API changes (new and extended API calls):
+		<itemizedlist>
+			<listitem><para>New API call <computeroutput>category::get</computeroutput> to obtain category description for a category_id and locale</para></listitem>
+			<listitem><para>New utility <computeroutput>ad_pad</computeroutput> emulating both lpad and rpad typically available in DBMSs</para></listitem>
+			<listitem><para>New proc lc_content_size_pretty, prettify data size given in bytes. It supports three different standards (SI base-10, IEC base-2 and the old JEDEC base-2), default is SI base-10.</para></listitem>
+			<listitem><para>New flag <computeroutput>-export</computeroutput> for <computeroutput>ad_form</computeroutput>: this flag uses <computeroutput>export_vars</computeroutput> under the hood and supports all of this API&#39;s features (e.g. :multiple, :sign, :array). This addresses a long standing TODO</para></listitem>
+			<listitem><para><computeroutput>util::pdfinfo</computeroutput>: simple poppler-utils wrapper to extract pdf information</para></listitem>
+			<listitem><para>util::http: leverage new ns_http features such as request file spooling. Native implementation will now be used only on NaviServer &gt;= 4.99.15.</para></listitem>
+			<listitem><para>Database API:
+			<itemizedlist>
+				<listitem><para><computeroutput>db_foreach</computeroutput>: queries executed inside of a db_foreach will not be issued using a different handle and will therefore be safe to use in a transaction</para></listitem>
+				<listitem><para><computeroutput>db_list_of_lists</computeroutput>: new <computeroutput>-with_headers</computeroutput> flag, which will make the first element of the returned list to be the column names as defined in the query</para></listitem>
+			</itemizedlist>
+			</para></listitem>
+			<listitem><para>Groups API:
+			<itemizedlist>
+				<listitem><para>Logics to delete a group type have now been included in the API</para></listitem>
+				<listitem><para>Allow to filter group members by member_state in the API</para></listitem>
+			</itemizedlist>
+			</para></listitem>
+		</itemizedlist>
+		</para></listitem>
+		<listitem><para>Deprecated commands:
+		<itemizedlist>
+			<listitem><para>Many deprecated API calls were included in the code (and sometimes still in use) sometimes more than 10 years after these calls have been deprecated. In case a site modification still uses deprecated code, the user is warned about this. The OpenACS 5.10 code base does not depend on deprecated code.</para></listitem>
+			<listitem><para>Move deprecated code into separate files</para></listitem>
+			<listitem><para>Made loading of deprecated code optional (can be controlled via parameter &quot;WithDeprecatedCode&quot; in section &quot;ns_section ns/server/${server}/acs&quot; of the config file. By default, deprecated procs are still loaded</para></listitem>
+			<listitem><para>When deprecated code is not loaded, the blueprint of the interpreter is smaller. The following number of lines of code can be omitted when loading without the deprecated procs:
+			<itemizedlist>
+				<listitem><para>acs-tcl: 3178</para></listitem>
+				<listitem><para>acs-templating: 450</para></listitem>
+				<listitem><para>xotcl-core http-client-procs: 830</para></listitem>
+				<listitem><para>acs-content-repository: 1717 (including .xql files)</para></listitem>
+			</itemizedlist>
+			</para></listitem>
+		</itemizedlist>
+		</para></listitem>
+		<listitem><para>Bugfix and Code Maintenance:
+		<itemizedlist>
+			<listitem><para>Made sure all party emails are stored as lowercase through the API</para></listitem>
+			<listitem><para>Fixed long standing regression in template::list: we were looping through the list &quot;elements&quot;, rather than the &quot;display_elements&quot;. This prevents specifying different sets of columns to be returned depending on the <computeroutput>-formats</computeroutput> and <computeroutput>-selected_format</computeroutput> options in template::list::create.</para></listitem>
+			<listitem><para>acs-content-repository: New HEIC and HEIF mimetypes</para></listitem>
+			<listitem><para>acs-mail-lite: handle <computeroutput>to_addr</computeroutput> specified as &quot;DisplayName &lt;email&gt;&quot; without errors</para></listitem>
+			<listitem><para>Fixed invalidating of all existing user logins, (aka) &quot;Logout from everywhere&quot; feature, useful e.g. to make sure no device still holds a valid login when we change our password on a device</para></listitem>
+			<listitem><para>Don&#39;t lose the return URL when one tries to join a subsite before being logged in</para></listitem>
+			<listitem><para>Added <computeroutput>doc(base_href) </computeroutput>and <computeroutput>doc(base_target)</computeroutput> for setting &lt;base&gt; element via blank-baster (see issue #3435)</para></listitem>
+			<listitem><para>Groups:
+			<itemizedlist>
+				<listitem><para>When a new group is created, flush all the group::get_id caches with the same name so that the new group can be fetched correctly in case it replaces a previously deleted one</para></listitem>
+				<listitem><para>Cleanup message keys coming from groups in acs-translations when a group is deleted</para></listitem>
+			</itemizedlist>
+			</para></listitem>
+			<listitem><para>acs-lang:
+			<itemizedlist>
+				<listitem><para><computeroutput>lang::util::convert_to_i18n</computeroutput>: do not always register a en_US translation, which would be always overridden. Instead, let <computeroutput>lang::message::register</computeroutput> make sure that a en_US message exists and create one only as a fallback.</para></listitem>
+				<listitem><para><computeroutput>lc_time_fmt</computeroutput>: leverage Tcl clock to address shortcomings such as handling of dates in Julian/Gregorian calendar and impossible dates such as 1999-02-29, implement missing formats, support previously undocumented formats explicitly</para></listitem>
+			</itemizedlist>
+			</para></listitem>
+			<listitem><para>search: make sure objects in the search indexer queue still exist by the time they are swept by the indexer (e.g. items deleted before the indexer could sweep them)</para></listitem>
+			<listitem><para><computeroutput>attribute::delete</computeroutput>: fix proc so it leverages stored procedure capability of dropping the database table as well</para></listitem>
+			<listitem><para><computeroutput>util::http</computeroutput>: fix UTF-8 encoding issues for some cornercases</para></listitem>
+			<listitem><para>Localization: Complete Italian and Spanish localization for the whole .LRN set of packages (including themes). Message keys for new and previously localized packages have also been updated</para></listitem>
+		</itemizedlist>
+		</para></listitem>
+		<listitem><para>General cleanup/maintenance
+		<itemizedlist>
+			<listitem><para>Improved handling of server implementation-specific code: server-specific code can be optionally loaded via specifying the server family in the filename. Provided <computeroutput>*-procs-aolserver.tcl</computeroutput> and <computeroutput>*-procs-naviserver.tcl</computeroutput> similar to *.postgresql.xql and *.oracle.xql where appropriate</para></listitem>
+			<listitem><para>Modernization of Tcl idioms.</para></listitem>
+			<listitem><para>Compliance of files, proc names, ... to the naming conventions.</para></listitem>
+			<listitem><para>White space cleanup, indentation changes.</para></listitem>
+			<listitem><para>Improvement of public API documentation</para></listitem>
+			<listitem><para>Adjustment of proc protection levels (public, private)</para></listitem>
+			<listitem><para>Adjustment of log severity</para></listitem>
+			<listitem><para>Cleanup of obsolete files</para></listitem>
+			<listitem><para>Replacement of handcrafted forms by ad_form</para></listitem>
+			<listitem><para>Typo fixing</para></listitem>
+			<listitem><para>Editor hints</para></listitem>
+			<listitem><para>Replacement of deprecated calls</para></listitem>
+			<listitem><para>Addition of missing contracts</para></listitem>
+			<listitem><para>...</para></listitem>
+		</itemizedlist>
+		</para></listitem>
+		<listitem><para>SQL cleanup:
+		<itemizedlist>
+			<listitem><para>Cleanup of obsolete nonportable SQL constructs in a way Oracle and PostgreSQL code base divergency is reduced:
+			<itemizedlist>
+				<listitem><para>&quot;nvl&quot; -&gt; &quot;coalesce&quot;</para></listitem>
+				<listitem><para>&quot;sysdate&quot; / &quot;now()&quot; -&gt; standard &quot;current_date&quot; or &quot;current_timestamp&quot;</para></listitem>
+				<listitem><para>Use standard-compliant &quot;dual&quot; table where appropriate (required by Oracle, supported by PostgreSQL)</para></listitem>
+				<listitem><para>Use non-dialectal cast idioms when appropriate</para></listitem>
+				<listitem><para>Adopt CTE idioms in Oracle codebase as well (e.g. connect -&gt; with recursive)</para></listitem>
+				<listitem><para>... (reference Oracle version will be 11gr2 as is oldest version officially supported by Oracle (See <ulink url="http://www.oracle.com/us/support/library/lifetime-support-technology-069183.pdf" target="_blank">here</ulink> and <ulink url="https://n4stack.io/oracle-11g-end-of-life/" target="_blank">here</ulink>)</para></listitem>
+			</itemizedlist>
+			</para></listitem>
+			<listitem><para>Reduced superfluous .xql queries
+			<itemizedlist>
+				<listitem><para>acs-subsite: delete 21 files with un-referenced .xql queries</para></listitem>
+				<listitem><para>acs-tcl: delete 4 files</para></listitem>
+				<listitem><para>news: 3 files</para></listitem>
+				<listitem><para>file-storage: 1 file</para></listitem>
+				<listitem><para>dotlrn: 9 files</para></listitem>
+			</itemizedlist>
+			</para></listitem>
+		</itemizedlist>
+		</para></listitem>
+		<listitem><para>New Packages:
+		<itemizedlist>
+			<listitem><para>cookie-consent: alerting users about the use of cookies on a website</para></listitem>
+			<listitem><para>boomerang: performance of your website from your end user&rsquo;s point of view</para></listitem>
+			<listitem><para>xooauth: OAuth implementation, including LTI (Learning Tools Interoperability)</para></listitem>
+			<listitem><para>dotlrn-bootstrap3-theme: Bootstrap 3 theme for DotLRN</para></listitem>
+			<listitem><para>xowf-monaco-plugin: Integration of Monaco editor with for code exercise types in xowf</para></listitem>
+			<listitem><para>proctoring-support: utilities and user interfaces to implement proctoring of the user session, mainly intended in the context of distance education and online exams. The main proctoring feature relies only on web technologies and does not require any plugin or additional software. Optional support for the Safe Exam Browser has also been introduced. The package is currently at the core of WU Online Exam infrastructure and is integrated in the inclass exam implementation for xowf</para></listitem>
+		</itemizedlist>
+		</para></listitem>
+	</itemizedlist>
+	</para></listitem>
+	<listitem><para>Require Tcl 8.6, XOTcl 2.1, PostgreSQL 9.6 (PostgreSQL 9.5 EOL: <ulink url="https://www.postgresql.org/support/versioning/">February 2021</ulink>), tdom 0.9</para></listitem>
+</itemizedlist>
+
+<para> Altogether, OpenACS 5.10.0 differs from OpenACS 5.9.1 by the
+following statistics
+<programlisting>
+ 3445 files changed, 215464 insertions(+), 193642 deletions(-) 
+</programlisting>
+contributed by 7 committers (Antonio Pisano, Gustaf Neumann, Günter Ernst, Hector Romojaro, Michael Aram, Stefan Sobernig, Thomas Renner) and additional 13 patch/bugfix providers (Felix Mödritscher, Florian Mosböck, Frank Bergmann, Franz Penz, Hanifa Hasan, Keith Paskett, Markus Moser, Maurizio Martignano, Monika Andergassen, Nathan Coulter, Rainer Bachleitner, Stephan Adelsberger, Tony Kirkham).
+
+All packages of
+the release were tested with PostgreSQL 13.* and Tcl 8.6.*.
+</para>
+<para>
+  For more details, consult the
+  <ulink url="http://openacs.org/changelogs/ChangeLog-5.10.0">raw ChangeLog</ulink>.
+</para>  
+</sect2>

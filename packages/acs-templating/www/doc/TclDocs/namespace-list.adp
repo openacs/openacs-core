@@ -1,7 +1,11 @@
 
-<property name="context">{/doc/acs-templating {ACS Templating}} {All Namespaces}</property>
+<property name="context">{/doc/acs-templating/ {ACS Templating}} {All Namespaces}</property>
 <property name="doc(title)">All Namespaces</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h1><a href="namespaces" target="mainFrame">All
 Namespaces</a></h1>
 <table border="0" width="100%"><tr><td nowrap="nowrap" align="left">  <a href="doc" target="mainFrame">doc</a><br>

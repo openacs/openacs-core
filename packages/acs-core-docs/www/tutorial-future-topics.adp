@@ -1,7 +1,11 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Future Topics}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Future Topics}</property>
 <property name="doc(title)">Future Topics</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="tutorial-second-database" leftLabel="Prev"
 			title="Chapter 10. Advanced

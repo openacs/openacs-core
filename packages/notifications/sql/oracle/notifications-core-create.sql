@@ -133,6 +133,8 @@ create table notification_requests (
 );
 
 create index notification_requests_t_o_idx on notification_requests(type_id, object_id);
+create index notification_requests_u_id_idx on notification_requests(user_id);
+create index notification_requests_o_id_idx on notification_requests(object_id);
 
 -- preferences
 --
@@ -173,7 +175,6 @@ create table notifications (
 create index notifications_type_id_idx ON notifications(type_id);
 create index notifications_response_id_idx ON notifications(response_id);
 create index notifications_object_id_idx ON notifications(object_id);
-
 
 -- who has received this notification?
 create table notification_user_map (

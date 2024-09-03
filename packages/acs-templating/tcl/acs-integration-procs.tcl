@@ -33,8 +33,21 @@ ad_proc -public ad_return_template {
     }
 
     if { $string_p } {
-        return [template::adp_parse \
-                    [template::util::url_to_file $template [ad_conn file]] {}]
+        #
+        # We have to pass the application variables to ad_parse. As it
+        # looks, we have to omit the variables in use for
+        # "template::ad_parse" internally. This is not pretty, but it
+        # should help to get the base mechanism working. There is
+        # probably a more pretty solution for this.
+        #
+        set application_vars {}
+        foreach var [uplevel [list info vars]] {
+            if {[string match __adp* $var] || [string match __args* $var]} {
+                continue
+            }
+            lappend application_vars $var [uplevel [list set $var]]
+        }
+        return [template::adp_parse [template::util::url_to_file $template [ad_conn file]] $application_vars]
     }
 }
 
@@ -46,7 +59,7 @@ ad_proc -public ad_parse_template {
 
     @param params The parameters to pass to the template. Note that pass-by-reference params must be in the page namespace, they cannot be in a local procedure, or any other namespace.
 
-    @param template The template file name.
+    @param template The template filename.
 
     Example:
 
@@ -75,7 +88,7 @@ ad_proc -public ad_return_exception_template {
 
     @param status The HTTP status to return, by default HTTP 500 (Error)
     @param params The parameters to pass to the template.
-    @param template The template file name.
+    @param template The template filename.
 
     Example:
 
@@ -86,17 +99,23 @@ ad_proc -public ad_return_exception_template {
 }
 
 
-ad_proc adp_parse_ad_conn_file {} {
+ad_proc -private adp_parse_ad_conn_file {} {
 
     Handle a request for an adp and/or Tcl file in the template system
-    based on the current setting of [ad_conn file]. This file is
+    based on the current setting of [ad_conn file]. This proc is
     registered via rp_register_extension_handler
 
     @see rp_register_extension_handler
 } {
     set ::template::parse_level ""
     #ns_log debug "adp_parse_ad_conn_file => file '[file rootname [ad_conn file]]'"
-    template::reset_request_vars
+
+    #
+    # The proper place to reset the variables is after the request,
+    # not on the begin of a special kind of request (i.e. via "ns_ictl
+    # trace freeconn")
+    #
+    #template::reset_request_vars
 
     #
     # [ad_conn file] is always an absolute name, remove the
@@ -118,12 +137,12 @@ ad_proc adp_parse_ad_conn_file {} {
             set apm_package_url [apm_package_url_from_key "acs-lang"]
 
             # Attempt to move all message keys outside of tags
-            while { [regsub -all {(<[^>]*)(\x02\(\x01[^\x01]*\x01\)\x02)([^>]*>)} $parsed_template {\2\1\3} parsed_template] } {}
+            while { [regsub -all -- {(<[^>]*)(\x02\(\x01[^\x01]*\x01\)\x02)([^>]*>)} $parsed_template {\2\1\3} parsed_template] } {}
 
             # Attempt to move all message keys outside of <select>...</select> statements
-            regsub -all -nocase {(<option\s[^>]*>[^<]*)(\x02\(\x01[^\x01]*\x01\)\x02)([^<]*</option[^>]*>)} $parsed_template {\2\1\3} parsed_template
+            regsub -all -nocase -- {(<option\s[^>]*>[^<]*)(\x02\(\x01[^\x01]*\x01\)\x02)([^<]*</option[^>]*>)} $parsed_template {\2\1\3} parsed_template
 
-            while { [regsub -all -nocase {(<select[^>]*>[^<]*)(\x02\(\x01[^\x01]*\x01\)\x02)} $parsed_template {\2\1} parsed_template] } {}
+            while { [regsub -all -nocase -- {(<select[^>]*>[^<]*)(\x02\(\x01[^\x01]*\x01\)\x02)} $parsed_template {\2\1} parsed_template] } {}
 
             set start 0
             while { [regexp -nocase -indices -start $start {(<select[^\x02]*)(\x02\(\x01[^\x01]*\x01\)\x02)} $parsed_template indices select_idx message_idx] } {
@@ -148,25 +167,29 @@ ad_proc adp_parse_ad_conn_file {} {
                 set key [string range $parsed_template [lindex $key 0] [lindex $key 1]]
                 lassign [split $key "."] package_key message_key
 
+                set locale [ad_conn locale]
                 set edit_url [export_vars -base "${apm_package_url}admin/edit-localized-message" {
-                    { locale {[ad_conn locale]} } package_key message_key { return_url [ad_return_url] } }]
+                    { locale {$locale} } package_key message_key { return_url [ad_return_url] } }]
 
-                if { [lang::message::message_exists_p [ad_conn locale] $key] } {
-                    set edit_link [subst {<a href="[ns_quotehtml $edit_url]" title="$key" style="color: green;"><b>o</b></a>}]
+                if { [lang::message::message_exists_p $locale $key] } {
+                    set edit_link [subst {<a class="acs-lang-localized" href="[ns_quotehtml $edit_url]"
+                        title="$key"><adp:icon name="check" title="Message Key '$key': available in current locale $locale"></a>}]
                 } else {
                     if { [lang::message::message_exists_p "en_US" $key] } {
                         # Translation missing in this locale
-                        set edit_link [subst {<a href="[ns_quotehtml $edit_url]" title="$key" style="background-color: yellow; color: red;"><b>*</b></a>}]
+                        set edit_link [subst {<a class="acs-lang-us_only" href="[ns_quotehtml $edit_url]"
+                            title="$key"><adp:icon name="warn" title="Message Key $key: missing in $locale"></a>}]
                     } else {
                         # Message key missing entirely
                         set new_url [export_vars -base "${apm_package_url}admin/localized-message-new" {
                             { locale en_US } package_key message_key { return_url [ad_return_url] }
                         }]
-                        set edit_link [subst {<a href="[ns_quotehtml $new_url]" title="$key" style="background-color: red; color: white;"><b>@</b></a>}]
+                        set edit_link [subst {<a class="acs-lang-missing" href="[ns_quotehtml $new_url]"
+                            title="$key"><adp:icon name="warn" title="Message Key '$key': undefined"></a>}]
                     }
                 }
 
-                set parsed_template "${before}${edit_link}${after}"
+                set parsed_template "${before}[::template::adp_parse_tags ${edit_link}]${after}"
             }
         }
 

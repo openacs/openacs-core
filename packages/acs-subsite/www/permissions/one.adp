@@ -2,40 +2,57 @@
   <property name="doc(title)">#acs-subsite.Permissions_for_name#</property>
   <property name="context">@context;literal@</property>
 
-  <h3>#acs-subsite.lt_Inherited_Permissions#</h3>
-  <if @inherited:rowcount;literal@ gt 0>
-    <ul>
-      <multiple name="inherited">
-        <li>@inherited.grantee_name@, @inherited.privilege@</li>
-      </multiple>
-    </ul>
-  </if>
-  <else>
-    <p><em>#acs-subsite.none#</em></p>
-  </else>
+  <p>[ <a href="@toggle_view_href@">@toggle_view_label@</a> ]</p>
   <h3>#acs-subsite.Direct_Permissions#</h3>
-  <if @acl:rowcount;literal@ gt 0>
-    <form method="get" action="revoke">
-      @export_form_vars;noquote@
-      <multiple name="acl">
-        <if @mainsite_p@ true and @acl.grantee_id@ eq "-1">
-	<div>@acl.grantee_name@, @acl.privilege@ <strong>#acs-subsite.perm_cannot_be_removed#</strong></div>
-	</if>
-        <else>
-          <input type="checkbox" name="revoke_list" value="@acl.grantee_id@ @acl.privilege@" 
-            id="check_@acl.grantee_id@_@acl.privilege@">
+
+  <if @detail_p;literal@ true>
+    <if @acl:rowcount;literal@ gt 0>
+      <form method="get" action="revoke">
+        @export_form_vars;noquote@
+        <multiple name="acl">
+          <if @mainsite_p@ true and @acl.grantee_id@ eq "-1">
+            <div>@acl.grantee_name@, @acl.privilege@ <strong>#acs-subsite.perm_cannot_be_removed#</strong></div>
+	  </if>
+          <else>
+            <input type="checkbox" name="revoke_list" value="@acl.grantee_id@ @acl.privilege@" 
+              id="check_@acl.grantee_id@_@acl.privilege@">
             <label for="check_@acl.grantee_id@_@acl.privilege@">@acl.grantee_name@, @acl.privilege@</label><br>
-        </else>
-      </multiple>
+          </else>
+        </multiple>
+    </if>
+    <else>
+      <p><em>#acs-subsite.none#</em></p>
+    </else>
+    <if @acl:rowcount;literal@ gt 0>
+      <div><input type="submit" value="#acs-subsite.Revoke_Checked#"></div>
+      </form>
+    </if>
+  @controls;noquote@
+  </if><else>
+    <include src="/packages/acs-subsite/www/permissions/perm-include" &="object_id" &="return_url" &="privs">
+  </else>
+    
+  <h3>#acs-subsite.lt_Inherited_Permissions#</h3>
+
+  <if @inherited_permissions_p;literal@ false>
+    <p>@nr_inherited_permissions@ #acs-subsite.lt_Inherited_Permissions#
+    [<a href="@show_inherited_permissions_href@">#acs-subsite.Show#</a>]
   </if>
   <else>
-    <p><em>#acs-subsite.none#</em></p>
+    <p>@nr_inherited_permissions@ #acs-subsite.lt_Inherited_Permissions#
+    [<a href="@hide_inherited_permissions_href@">#acs-subsite.Hide#</a>]
+    <if @inherited:rowcount;literal@ gt 0>
+      <ul>
+        <multiple name="inherited">
+          <li>@inherited.grantee_name@, @inherited.privilege@</li>
+        </multiple>
+      </ul>
+    </if>
+    <else>
+      <p><em>#acs-subsite.none#</em></p>
+    </else>
   </else>
-  <if @acl:rowcount;literal@ gt 0>
-    <div><input type="submit" value="#acs-subsite.Revoke_Checked#"></div>
-    </form>
-  </if>
-  @controls;noquote@
+   
 
   <h3>#acs-subsite.Children#</h3>
   <if @children_p;literal@ true>

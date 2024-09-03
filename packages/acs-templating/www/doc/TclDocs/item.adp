@@ -1,7 +1,11 @@
 
-<property name="context">{/doc/acs-templating {ACS Templating}} {}</property>
+<property name="context">{/doc/acs-templating/ {ACS Templating}} {}</property>
 <property name="doc(title)"></property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h2>Namespace item</h2>
 <blockquote>The item commands allow easy access to properties of
 the content_item object. In the future, a unified API for caching

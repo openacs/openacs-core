@@ -231,7 +231,7 @@ root      5582  0.0  0.2  3276  628 pts/0    S    11:55   0:00 grep nsd
 			This script needs to be SUID-root, which means
 			that the script will run as root. This is necessary to ensure
 			that the AOLserver processes are killed regardless of who owns
-			them. However the script should be executable by the
+			them. However, the script should be executable by the
 			<computeroutput>web</computeroutput> group to ensure that the
 			users updating the web page can use the script, but that
 			general system users cannot run the script. You also need to
@@ -339,7 +339,7 @@ set httpsport             8443 </programlisting>
  to different values.</para>
       </formalpara>
       <formalpara>
-        <title>Services on different host names</title>
+        <title>Services on different hostnames</title>
         <para>For example, suppose you want to support
 <computeroutput>http://service0.com</computeroutput> and
     <computeroutput>http://bar.com</computeroutput> on the same
@@ -351,8 +351,7 @@ set address                127.0.0.1 </programlisting>
 </para>
     </formalpara>
 
-    <para>If you want to install two services with different host
-    names sharing the same ip, you&#39;ll need nsvhr to redirect requests
+    <para>If you want to install two services with different hostnames sharing the same ip, you&#39;ll need nsvhr to redirect requests
     based on the contents of the tcp headers.  See <ulink
     url="http://borkware.com/rants/aolserver-vhosting/">AOLserver
     Virtual Hosting with TCP</ulink> by <ulink url="mailto:markd@borkware.com">markd</ulink>.
@@ -492,7 +491,7 @@ cvs up -Pd index.adp</programlisting>
     <sect2>
       <title>Method 2: A/B Deployment</title>
   <para>The approach taken in this section is to always create a new service with the desired changes, running in parallel with the existing site.  This guarantees control, at least at the final step of the process: you know what changes you are about to make because you can see them directly.  It does not, by itself, guarantee the entire control chain.  You need additional measures to make sure that the change you are making is exactly and completely the change you intended to make and tested previously, and nothing more.  Those additional measures typically take the form of source control tags and system version numbers.  The parallel-server approach also guarantees rollback because the original working service is not touched; it is merely set aside.</para>
-  <para>This approach can has limitations.  If the database or file system regularly receiving new data, you must interrupt this function or risk losing data in the shuffle.  It also requires extra steps if the database will be affected.</para>
+  <para>This approach can has limitations.  If the database or filesystem regularly receiving new data, you must interrupt this function or risk losing data in the shuffle.  It also requires extra steps if the database will be affected.</para>
   <sect3>
     <title>Simple A/B Deployment: Database is not changed</title>
     <figure>
@@ -655,7 +654,7 @@ directory. You&#39;ll also need to edit all instances of service0 to your $OPENA
   (For help on all errors and warnings, see docs/errors.html)
 /usr/share/analog-5.32/analog: Warning R: Turning off empty Search Word Report
 [$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$</screen>
-        <para>Verify that it works by browing to <computeroutput>http://yourserver.test:8000/log/traffic.html</computeroutput></para>
+        <para>Verify that it works by browsing to <computeroutput>http://yourserver.test:8000/log/traffic.html</computeroutput></para>
       </listitem>
       <listitem>
         <para>Automate this by creating a file in
@@ -688,13 +687,13 @@ logout
     users into .LRN)</para>
     </listitem>
     <listitem>
-      <para>Is the file system out of space?  Is the machine swapping to disk constantly?</para>
+      <para>Is the filesystem out of space?  Is the machine swapping to disk constantly?</para>
     </listitem>
     <listitem>
       <para>Isolating and solving database problems.</para>
     <itemizedlist>
       <listitem>
-          <para>Without daily internal maintenance, most databases slowly degrade in performance.  For PostGreSQL, see <xref linkend="install-next-nightly-vacuum"/>.  For Oracle, use <computeroutput>exec dbms_stats.gather_schema_stats('SCHEMA_NAME')</computeroutput> (<ulink url="http://www.piskorski.com/docs/oracle.html">Andrew Piskorski&#39;s Oracle notes</ulink>).</para>
+          <para>Without daily internal maintenance, most databases slowly degrade in performance.  For PostgreSQL, see <xref linkend="install-next-nightly-vacuum"/>.  For Oracle, use <computeroutput>exec dbms_stats.gather_schema_stats('SCHEMA_NAME')</computeroutput> (<ulink url="http://www.piskorski.com/docs/oracle.html">Andrew Piskorski&#39;s Oracle notes</ulink>).</para>
       </listitem>
       <listitem>
         <para>You can track the exact amount of time each database query on a page takes:</para>
@@ -776,7 +775,7 @@ Password:</screen>
 
         <listitem>
           <para>Identify a runaway Postgres query.  First, logging must be enabled in the database.  This imposes a performance penalty and should not be done in normal operation.</para>
-          <para>Edit the file <computeroutput>postgresql.conf</computeroutput> - its location depends on the PostGreSQL installation - and change</para>
+          <para>Edit the file <computeroutput>postgresql.conf</computeroutput> - its location depends on the PostgreSQL installation - and change</para>
           <programlisting>#stats_command_string = false</programlisting>
           <para>to</para>
           <programlisting>stats_command_string = true</programlisting>

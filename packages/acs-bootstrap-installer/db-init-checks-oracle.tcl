@@ -53,7 +53,7 @@ proc db_installer_checks { errors error_p } {
     	append my_errors "<P>"
 	append my_errors [ns_fmttime [ns_time] "%Y-%m-%d"] 
 	append my_errors "</B><P><hr>"
-        append my_errors "<li><p><b>Your Oracle driver is correctly installed, however
+        append my_errors "<li><p><b>Your Oracle driver is correctly installed, however,
             Oracle's date format should be set to <i>YYYY-MM-DD</i>.</b></p>\n"
         set my_error_p 1
     }

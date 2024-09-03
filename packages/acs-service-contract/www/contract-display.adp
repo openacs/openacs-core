@@ -1,6 +1,6 @@
   <master>
-    <property name="doc(title)">Contract @contract_name;noquote@</property>
-    <property name="context">{@contract_name;noquote@}</property>
+    <property name="doc(title)">Contract @contract_name;literal@</property>
+    <property name="context">{@contract_name;literal@}</property>
 
     <ul>
       <multiple name=contract>

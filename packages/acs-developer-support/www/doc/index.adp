@@ -1,7 +1,11 @@
 
-<property name="context">{/doc/acs-developer-support {ACS Developer Support}} {ACS Developer Support}</property>
+<property name="context">{/doc/acs-developer-support/ {ACS Developer Support}} {ACS Developer Support}</property>
 <property name="doc(title)">ACS Developer Support</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h1>ACS Developer Support</h1>
 <p>part of the <a href="">ArsDigita Community System</a>, by
 <a href="mailto:jsalz\@mit.edu">Jon Salz</a>

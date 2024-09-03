@@ -62,45 +62,17 @@ ad_proc -public template::util::get_opts { argv } {
 # * Utility procedures for manipulating lists, arrays and ns_sets *
 # * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-ad_proc -public template::util::list_opts { {array_ref opts} } {
-    Converts an array to an option list
-
-    @param  array_ref  The name of the array in the calling frame containing
-    option-value pairs.  Defaults to "opts".
-
-    @return A list of option-value pairs suitable for appending to a command.
-} {
-
-    upvar $array_ref arr
-
-    set ret [list]
-    foreach {key value} [array get arr] {
-        lappend ret "-$key" $value
-    }
-
-    return $ret
-}
-
 ad_proc -public template::util::is_nil { ref } {
     Determines whether a variable both exists and is not an empty string.
 
     @param ref  The name of a variable to test in the calling frame.
 
     @return 1 if the variable either not exist or is an empty string.  0 if
-    the variable is either an array reference or a non-empty scalar.
+    the variable is either an array reference or a nonempty scalar.
 } {
-
     upvar $ref var
 
-    # check for an array as well
-    if { [array exists var] } { return 0 }
-
-    if { [info exists var] && $var ne {} } {
-        set result 0
-    } else {
-        set result 1
-    }
-    return $result
+    return [expr { ![array exists var] && (![info exists var] || $var eq "") }]
 }
 
 ad_proc -public template::util::is_unique { table columns values } {
@@ -130,16 +102,20 @@ ad_proc -public template::util::is_unique { table columns values } {
     return [expr {$count == 0}]
 }
 
-ad_proc -public template::util::is_true { x } {
+ad_proc -deprecated template::util::is_true { x } {
     interprets its argument as a boolean.
 
     @param x  the value to test
+
+    DEPRECATED 5.10.1: since October 2015 this proc is implemented via the
+    standard Tcl idiom "string is true -strict ..." that can be easily inlined.
+
+    @see string
 
     @return 0 if the variable can be interpreted as false;
     1 for true if it can't.
 } {
     #expr {[string tolower $x] ni {0 f false n no off ""}}
-    #ns_log notice "TRUE [expr {[string tolower $x] ni {0 f false n no off ""}}] [string is true -strict $x]"
     string is true -strict $x
 }
 
@@ -217,58 +193,14 @@ ad_proc -public template::util::lnest { listref value next args } {
     set inlist [array get values]
 }
 
-ad_proc -public template::util::set_to_list { set args } {
-    Turns an ns_set into a key-value list, excluding any number of
-    specified keys.  Useful for turning the contents on an ns_set into
-    a form that may be cached or manipulated as a native Tcl data structure.
-
-    @param set  A reference to an ns_set.
-    @param args Any number of key names to exclude from the list.
-
-    @return A list in the form { key value key value key value ... }
-} {
-
-    set result [list]
-
-    for { set i 0 } { $i < [ns_set size $set] } { incr i } {
-
-        set key [ns_set key $set $i]
-        if { $key in $args } { continue }
-
-        lappend result $key [ns_set value $set $i]
-    }
-
-    return $result
-}
-
-ad_proc -public template::util::set_to_vars { set args } {
-    Declare local variables for set values
-
-    @param set  A reference to an ns_set.
-    @param args Any number of keys to declare as local variables.
-} {
-
-    if { [llength $args] == 0 } {
-
-        for { set i 0 } { $i < [ns_set size $set] } { incr i } {
-            set key [ns_set key $set $i]
-            upvar $key value
-            set value [ns_set get $set $key]
-        }
-
-    } else {
-
-        foreach key $args {
-            upvar $key value
-            set value [ns_set get $set $key]
-        }
-    }
-}
-
-ad_proc -public template::util::array_to_vars { arrayname } {
+ad_proc -deprecated template::util::array_to_vars { arrayname } {
     Declare local variables for every key in an array.
 
     @param arrayname   The name of an array in the calling frame.
+
+    DEPRECATED: this is a trivial idiom that can just be inlined.
+
+    @see array
 } {
     upvar $arrayname arr
 
@@ -277,11 +209,15 @@ ad_proc -public template::util::array_to_vars { arrayname } {
     }
 }
 
-ad_proc -public template::util::vars_to_array { arrayname args } {
+ad_proc -deprecated template::util::vars_to_array { arrayname args } {
     Place local variables into an array
 
     @param arrayname   The name of an array in the calling frame.
     @param args        Any number of local variables to include in the array
+
+    DEPRECATED: this is a trivial idiom that can just be inlined.
+
+    @see array
 } {
     upvar $arrayname arr
 
@@ -291,7 +227,7 @@ ad_proc -public template::util::vars_to_array { arrayname args } {
     }
 }
 
-ad_proc -public template::util::list_to_array { values array_ref columns } {
+ad_proc -deprecated template::util::list_to_array { values array_ref columns } {
     Converts a list of values into an array, using a list of
     corresponding column names for the array keys.
 
@@ -300,6 +236,12 @@ ad_proc -public template::util::list_to_array { values array_ref columns } {
     @param columns   A list of column names to use for the array keys.
     The length of this list should be the same as the values
     list.
+
+    DEPRECATED: as of August 2022 no OpenACS code is using this
+    proc. The operation it implements can be easily achieved via plain
+    Tcl idioms.
+
+    @see array
 } {
 
     upvar $array_ref array
@@ -359,7 +301,7 @@ ad_proc -public template::util::multirow_to_list {
     @return a representation of a multirow data source as a list,
     suitable for passing by value in the form { { row } { row } { row } ... }
 
-    @see proc template::util::list_to_multirow
+    @see template::util::list_to_multirow
 } {
 
     upvar $level $name:rowcount rowcount
@@ -384,7 +326,7 @@ ad_proc -public template::util::list_to_multirow { name rows { level 1 } } {
     @param rows a representation of a multirow data source as a list,
     suitable for passing by value in the form { { row } { row } { row } ... }
 
-    @see proc template::util::multirow_to_list
+    @see template::util::multirow_to_list
 } {
 
     upvar $level $name:rowcount rowcount
@@ -402,7 +344,7 @@ ad_proc -public template::util::list_to_multirow { name rows { level 1 } } {
 ad_proc -public template::util::list_of_ns_sets_to_multirow {
     {-rows:required}
     {-var_name:required}
-    {-level "1"}
+    {-level 1}
 } {
     Transform a list of ns_sets (e.g. produced by db_list_of_ns_sets)
     into a multirow datasource.
@@ -421,7 +363,7 @@ ad_proc -public template::util::list_of_ns_sets_to_multirow {
         ns_set put $row_set rownum $i
 
         upvar $level $var_name:$i row
-        array set row [util_ns_set_to_list -set $row_set]
+        array set row [ns_set array $row_set]
         if {$i == 1} {
             set columns [array names row]
         }
@@ -430,7 +372,7 @@ ad_proc -public template::util::list_of_ns_sets_to_multirow {
 }
 
 # * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-# * Utility procedures for interacting with the file system *
+# * Utility procedures for interacting with the filesystem *
 # * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
 ad_proc -public template::util::read_file { path } {
@@ -443,7 +385,7 @@ ad_proc -public template::util::read_file { path } {
     if {![file exists $path]} {
         error "File $path does not exist"
     }
-    
+
     #
     # Use ad_try to make sure that the file descriptor is finally
     # closed.
@@ -493,7 +435,7 @@ ad_proc -public template::util::write_file { path text } {
 
     template::util::set_file_encoding $fd
 
-    puts $fd $text
+    puts -nonewline $fd $text
     close $fd
 }
 
@@ -533,7 +475,7 @@ ad_proc -public template::util::url_to_file { url {reference_url ""} } {
 }
 
 ad_proc -public template::util::resolve_directory_url { url } {
-    Resolve the file name for a directory URL
+    Resolve the filename for a directory URL
 } {
     set path $::acs::pageroot$url
 
@@ -585,8 +527,12 @@ ad_proc -public template::util::multirow_quote_html {multirow_ref column_ref} {
 }
 
 
-ad_proc -public template::util::nvl { value value_if_null } {
+ad_proc -deprecated template::util::nvl { value value_if_null } {
     Analogous to SQL NVL
+
+    DEPRECATED: a plain Tcl oneliner can easily replace this proc
+
+    @see expr {$value ne "" ? $value : $value_if_null}
 } {
     if {$value eq ""} {
         return $value_if_null
@@ -605,33 +551,18 @@ ad_proc -public template::util::number_list { last_number {start_at 0} } {
     return $ret
 }
 
-ad_proc -public template::util::tcl_to_sql_list { lst } {
-    Convert a Tcl list to a SQL list, for use with the "in" statement.
-    Uses double single quotes (similar to ns_dbquotevalue) to escape single quotes
-} {
-
-    if { [llength $lst] > 0 } {
-        # replace single quotes by two single quotes
-        regsub -all -- ' "$lst" '' lst2
-        set sql "'"
-        append sql [join $lst2 "', '"]
-        append sql "'"
-        return $sql
-    } else {
-        return ""
-    }
-}
-
 ad_proc -public template::themed_template {
+    {-verbose:boolean false}
     path
 } {
 
     Given a path like /packages/acs-admin/www/index pointing to an
     .adp file, this function tries to locate this path in the
     ResourceDir of the subsite (determined by the theme). If found the
-    themed template is returned, otherwse the passed template path.
+    themed template is returned, otherwise the passed template path.
 
     @param path absolute path within the open acs tree (without extension)
+    @verbose boolean flag; report tried path in the system log
     @return path to themed template or input value (without extension)
 
 } {
@@ -640,9 +571,18 @@ ad_proc -public template::themed_template {
     } else {
         set style $path
     }
-    set stub [template::resource_path -type templates -style $style -relative]
+    set stub [template::resource_path \
+                  {*}[expr {$verbose_p ? "-verbose" : ""}] \
+                  -type templates -style $style -relative]
     if {[file readable $::acs::rootdir/$stub.adp]} {
+        if {$verbose_p} {
+            ns_log notice "themed_template: found template in $stub"
+        }
         return $stub
+    } else {
+        if {$verbose_p} {
+            ns_log notice "themed_template: no themed template found for '$path'"
+        }
     }
     return $path
 }
@@ -664,6 +604,7 @@ ad_proc -public template::streaming_template {
 }
 
 ad_proc -public template::resource_path {
+    {-verbose:boolean false}
     -type:required
     -style:required
     -relative:boolean
@@ -681,6 +622,7 @@ ad_proc -public template::resource_path {
     @param relative return optionally the path relative to the OpenACS root directory
     @param theme_dir theming directory (alternative to determination via subsite), higher priority
     @param subsite_id subsite_id to determine theming information
+    @verbose boolean flag; report tried path in the system log
 
     @return path of the resource (without extension)
     @author Gustaf Neumann
@@ -706,6 +648,9 @@ ad_proc -public template::resource_path {
         if {$theme_dir ne ""} {
             set path $theme_dir/$type/$style
             set lookup_path [expr {[file extension $path] eq "" ? "${path}.adp" : $path}]
+            if {$verbose_p} {
+                ns_log notice "themed_template: try themed template '$lookup_path'"
+            }
             if {![file exists $::acs::rootdir/$lookup_path]} {
                 unset path
             }
@@ -722,7 +667,7 @@ ad_proc -public template::resource_path {
     }
 }
 
-ad_proc -public stack_frame_values {level} {
+ad_proc -private template::stack_frame_values {level} {
     return the variables and arrays of one frame as HTML
 } {
 
@@ -753,18 +698,26 @@ ad_proc -public stack_frame_values {level} {
     return $varlist
 }
 
-
-
-ad_proc -public stack_dump {} {
+ad_proc -deprecated stack_dump {} {
     return the whole call stack as HTML
+
+    DEPRECATED: does not comply with OpenACS naming convention.
+
+    @see template::stack_dump
+} {
+    return [template::stack_dump]
+}
+
+ad_proc -public template::stack_dump {} {
+    Return the whole call stack as HTML
 } {
     append page "<h1>Tcl Call Trace</h1>\n<ul>"
 
     for {set x [info level]} {$x > 0} {incr x -1} {
-        append page "<li>$x.  [info level $x]<ul>[stack_frame_values $x]</ul>\n"
+        append page "<li>$x.  [info level $x]<ul>[template::stack_frame_values $x]</ul>\n"
     }
 
-    append page "</ul>\n<h2>Globals</h2>\n<ul> [stack_frame_values 0] </ul>\n"
+    append page "</ul>\n<h2>Globals</h2>\n<ul> [template::stack_frame_values 0] </ul>\n"
 }
 
 # Local variables:

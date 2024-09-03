@@ -11,6 +11,14 @@ ad_library {
 
 namespace eval ::apidoc {
 
+    variable ns_api_host
+    variable ns_api_index
+    variable ns_api_root
+    variable ns_api_html_index
+    variable tcl_api_html_index
+    variable style
+    variable KEYWORDS
+
     if {[ns_info name] eq "NaviServer"} {
         #
         # NaviServer at sourceforge
@@ -33,7 +41,7 @@ namespace eval ::apidoc {
         set ns_api_html_index $ns_api_root
     }
 
-    set tcl_api_html_index "http://www.tcl.tk/man/tcl$::tcl_version/TclCmd/contents.htm"
+    set tcl_api_html_index "https://www.tcl-lang.org/man/tcl$::tcl_version/TclCmd/contents.htm"
 
     # set style {
     #     .code .comment  {color: #006600; font-weight: normal; font-style: italic;}
@@ -66,16 +74,16 @@ namespace eval ::apidoc {
 
     set KEYWORDS {
 
-        after append apply array bgerror binary break catch cd chan
-        clock close concat continue default dict encoding eof error
-        eval exec expr fblocked fconfigure fcopy file fileevent flush
+        after append apply array bgerror binary break case catch cd chan
+        clock close concat continue coroutine default dict encoding eof error
+        eval exec exit expr fblocked fconfigure fcopy file fileevent flush
         for foreach format gets glob global if incr info interp join
-        lappend lassign lindex linsert list llength load lrange
-        lreplace lreverse lsearch lset lsort namespace open package
+        lappend lassign lindex linsert list llength lmap load lrange
+        lrepeat lreplace lreverse lsearch lset lsort namespace open package
         pid proc puts pwd read refchan regexp regsub rename return
-        scan seek set socket source split string subst switch tell
-        time trace try unload unset update uplevel upvar variable vwait
-        while
+        scan seek set socket source split string subst switch tailcall tell
+        throw time tm trace transchan try unknown unload unset update uplevel
+        upvar variable vwait while yield yieldto zlib
 
     }
 
@@ -107,7 +115,7 @@ ad_proc -public api_read_script_documentation {
     set file [open "$::acs::rootdir/$path" "r"]
     while { [gets $file line] >= 0 } {
         # Eliminate any comment characters.
-        regsub -all {\#.*$} $line "" line
+        regsub -all -- {\#.*$} $line "" line
         set line [string trim $line]
         if { $line ne "" } {
             set has_contract_p [regexp {(^ad_(page|include)_contract\s)|(Package initialize )} $line]
@@ -144,7 +152,6 @@ ad_proc -public api_read_script_documentation {
     }
 
     return [array get doc_elements]
-
 }
 
 ad_proc -public api_script_documentation {
@@ -212,7 +219,7 @@ ad_proc -public api_script_documentation {
     #         array set as_default_value $doc_elements(as_default_value)
 
     #         if { [llength $doc_elements(as_arg_names)] > 0 } {
-    #         append out "<dt><b>Query Parameters:</b><dd>\n"
+    #         append out "<dt>Query Parameters:</dt><dd>\n"
     #         foreach arg_name $doc_elements(as_arg_names) {
     #         append out "<b>$arg_name</b>"
     #         set notes [list]
@@ -235,11 +242,11 @@ ad_proc -public api_script_documentation {
     #         append out "</dd>\n"
     #     }
     #     if { [info exists doc_elements(type)] && $doc_elements(type) ne "" } {
-    #         append out "<dt><b>Returns Type:</b><dd><a href=\"type-view?type=$doc_elements(type)\">$doc_elements(type)</a>\n"
+    #         append out "<dt>Returns Type:</dt><dd><a href=\"type-view?type=$doc_elements(type)\">$doc_elements(type)</a>\n"
     #     }
     #     # XXX: Need to support "Returns Properties:"
     #     }
-    append out "<dt><b>Location:</b><dd>$path\n"
+    append out "<dt>Location:</dt><dd>$path\n"
     append out [::apidoc::format_common_elements doc_elements]
 
     append out "</dl></blockquote>"
@@ -270,19 +277,19 @@ ad_proc -public api_library_documentation {
         append out [lindex $doc_elements(main) 0]
 
         append out "<dl>\n"
-        append out "<dt><b>Location:</b>\n<dd>[ns_quotehtml $path]\n"
+        append out "<dt>Location:</dt>\n<dd>[ns_quotehtml $path]\n"
         if { [info exists doc_elements(creation-date)] } {
-            append out "<dt><b>Created:</b>\n<dd>[lindex $doc_elements(creation-date) 0]\n"
+            append out "<dt>Created:</dt>\n<dd>[lindex $doc_elements(creation-date) 0]\n"
         }
         if { [info exists doc_elements(author)] } {
-            append out "<dt><b>Author[ad_decode [llength $doc_elements(author)] 1 "" "s"]:</b>\n"
+            append out "<dt>Author[expr {[llength $doc_elements(author)] > 1 ? "s" : ""}]:</dt>\n"
             foreach author $doc_elements(author) {
                 append out "<dd>[::apidoc::format_author $author]\n"
             }
         }
         if { [info exists doc_elements(cvs-id)] } {
             append out [subst {
-                <dt><b>CVS Identification:</b>
+                <dt>CVS Identification:</dt>
                 <dd><code>[ns_quotehtml [lindex $doc_elements(cvs-id) 0]]</code>
             }]
         }
@@ -293,10 +300,18 @@ ad_proc -public api_library_documentation {
     return $out
 }
 
-ad_proc -public api_type_documentation {
+ad_proc -deprecated -public api_type_documentation {
     type
 } {
-    @return html fragment of the API docs.
+    Deprecated: this was part of a feature which used to react to the
+    'type' property set in ad_page_contract's documentation and
+    generate an extra link in /api-doc/package-view, but currently no
+    upstream script seems to specify this value and no code seems to
+    create necessary 'doc_type_doc' nsv
+
+    @see /packages/acs-api-browser/www/type-view.tcl
+
+    @return HTML fragment of the API docs.
 } {
     array set doc_elements [nsv_get doc_type_doc $type]
     append out "<h3>$type</h3>\n"
@@ -346,14 +361,41 @@ ad_proc -public api_type_documentation {
 
     append out \
         [::apidoc::format_common_elements doc_elements] \
-        "<dt><b>Location:</b><dd>$doc_elements(script)\n" \
+        "<dt>Location:</dt><dd>$doc_elements(script)\n" \
         "</dl></blockquote>\n"
 
     return $out
 }
 
+
+ad_proc -private api_proc_format_switch {xotclArgs flags switch} {
+    if {$xotclArgs} {
+        if {"boolean" in $flags} {
+            set value "<i>on|off</i> "
+        } elseif {"switch" in $flags} {
+            set value ""
+        } else {
+            set value "</i>$switch</i> "
+        }
+        if {"required" in $flags} {
+            set result "-$switch $value"
+        } else {
+            set result "\[ -$switch $value\]"
+        }
+    } else {
+        if {"boolean" in $flags} {
+            set result "\[ -$switch \]"
+        } elseif {"required" in $flags} {
+            set result "-$switch <i>$switch</i>"
+        } else {
+            set result "\[ -$switch <i>$switch</i> \]"
+        }
+    }
+    return $result
+}
+
 ad_proc -public api_proc_documentation {
-    {-format text/html}
+    -format
     -script:boolean
     -source:boolean
     -xql:boolean
@@ -365,8 +407,8 @@ ad_proc -public api_proc_documentation {
 
     Generates formatted documentation for a procedure.
 
-    @param format    the type of documentation to generate. Currently, only
-                     <code>text/html</code> and <code>text/plain</code> are supported.
+    @param format    the type of documentation to generate. This
+                     parameter is deprecated and has no effect.
     @param script    include information about what script this proc lives in?
     @param xql       include the source code for the related xql files?
     @param source    include the source code for the script?
@@ -381,15 +423,16 @@ ad_proc -public api_proc_documentation {
     #
     if {[string match *::::* $proc_name]} {
         ad_log warning "api_proc_documentation: received invalid proc_name <$proc_name>, try to sanitize"
-        regsub -all {::::} $proc_name :: proc_name
+        regsub -all -- {::::} $proc_name :: proc_name
     }
-    if { $format ne "text/html" && $format ne "text/plain" } {
-        return -code error "Only text/html and text/plain documentation are currently supported"
+    if {[info exists format] && ![aa_test_running_p]} {
+        ad_log warning "-format flag is deprecated and has no effect"
     }
     array set doc_elements {
         flags ""
         default_values ""
-        switches ""
+        switches0 ""
+        switches1 ""
         positionals ""
         varargs_p 0
         script ""
@@ -401,7 +444,7 @@ ad_proc -public api_proc_documentation {
     array set default_values $doc_elements(default_values)
 
     if {![info exists label]} {
-        if {[llength $proc_name] > 1 && [info commands ::xo::api] ne ""} {
+        if {[llength $proc_name] > 1 && [namespace which ::xo::api] ne ""} {
             set label [::xo::api method_label $proc_name]
         } else {
             set label $proc_name
@@ -430,10 +473,15 @@ ad_proc -public api_proc_documentation {
     append out $first_line_tag$pretty_name$end_tag
 
     if {[regexp {^(.*) (inst)?proc (.*)$} $proc_name match cl prefix method]
-        && [info commands ::xo::api] ne ""
+        && [namespace which ::xo::api] ne ""
     } {
         set xotclArgs 1
         set scope ""
+        #
+        # Since we get "method" via regexp, we have to remove the
+        # curly brackets for ensemble methods
+        #
+        set method [lindex $method 0]
         regexp {^(.+) (.+)$} $cl match scope cl
         if {$prefix eq ""} {
             set pretty_proc_name "[::xo::api object_link $scope $cl] $method"
@@ -442,7 +490,7 @@ ad_proc -public api_proc_documentation {
         }
     } else {
         set xotclArgs 0
-        if {[info commands ::xo::api] ne "" && [::xo::api isclass "" [lindex $proc_name 1]]} {
+        if {[namespace which ::xo::api] ne "" && [::xo::api isclass "" [lindex $proc_name 1]]} {
             set name [lindex $proc_name 1]
             set pretty_proc_name "[$name info class] [::xo::api object_link {} $name]"
         } else {
@@ -451,29 +499,8 @@ ad_proc -public api_proc_documentation {
     }
 
     lappend command_line $pretty_proc_name
-    foreach switch $doc_elements(switches) {
-        if {$xotclArgs} {
-            if {"boolean" in $flags($switch)} {
-                set value "<i>on|off</i> "
-            } elseif {"switch" in $flags($switch)} {
-                set value ""
-            } else {
-                set value "</i>$switch</i> "
-            }
-            if {"required" in $flags($switch)} {
-                lappend command_line "-$switch $value"
-            } else {
-                lappend command_line "\[ -$switch $value\]"
-            }
-        } else {
-            if {"boolean" in $flags($switch)} {
-                lappend command_line "\[ -$switch \]"
-            } elseif {"required" in $flags($switch)} {
-                lappend command_line "-$switch <i>$switch</i>"
-            } else {
-                lappend command_line "\[ -$switch <i>$switch</i> \]"
-            }
-        }
+    foreach switch $doc_elements(switches0) {
+        lappend command_line [api_proc_format_switch $xotclArgs $flags($switch) $switch]
     }
 
     set counter 0
@@ -487,6 +514,10 @@ ad_proc -public api_proc_documentation {
     if { $doc_elements(varargs_p) } {
         lappend command_line "\[ <i>args</i>... \]"
     }
+    foreach switch $doc_elements(switches1) {
+        lappend command_line [api_proc_format_switch $xotclArgs $flags($switch) $switch]
+    }
+
     append out [util_wrap_list $command_line]
 
     set intro_out ""
@@ -519,10 +550,11 @@ ad_proc -public api_proc_documentation {
         }
     }
 
-    if { [llength $doc_elements(switches)] > 0 } {
-        append blocks_out "<dt><b>Switches:</b></dt><dd><dl>\n"
-        foreach switch $doc_elements(switches) {
-            append blocks_out "<dt><b>-$switch</b>"
+    set switches [concat $doc_elements(switches0) $doc_elements(switches1)]
+    if { [llength $switches] > 0 } {
+        append blocks_out "<dt>Switches:</dt><dd><dl>\n"
+        foreach switch $switches {
+            append blocks_out "<dt>-$switch</dt>"
             if {"boolean" in $flags($switch)} {
                 append blocks_out " (boolean)"
             }
@@ -547,7 +579,7 @@ ad_proc -public api_proc_documentation {
     }
 
     if { [llength $doc_elements(positionals)] > 0 } {
-        append blocks_out "<dt><b>Parameters:</b></dt><dd>\n"
+        append blocks_out "<dt>Parameters:</dt><dd>\n"
         foreach positional $doc_elements(positionals) {
             append blocks_out "<b>$positional</b>"
             if { [info exists default_values($positional)] } {
@@ -575,7 +607,7 @@ ad_proc -public api_proc_documentation {
         append blocks_out "<b>Options:</b><dl>"
         foreach param $doc_elements(option) {
             if { [regexp {^([^ \t]+)[ \t](.+)$} $param "" name value] } {
-                append blocks_out "<dt><b>-$name</b></dt><dd>$value<br></dd>"
+                append blocks_out "<dt>-$name</dt><dd>$value<br></dd>"
             }
         }
         append blocks_out "</dl>"
@@ -583,21 +615,29 @@ ad_proc -public api_proc_documentation {
 
 
     if { [info exists doc_elements(return)] } {
-        append blocks_out "<dt><b>Returns:</b></dt><dd>[join $doc_elements(return) "<br>"]</dd>\n"
+        append blocks_out "<dt>Returns:</dt><dd>[join $doc_elements(return) "<br>"]</dd>\n"
     }
 
     if { [info exists doc_elements(error)] } {
-        append blocks_out "<dt><b>Error:</b></dt><dd>[join $doc_elements(error) "<br>"]</dd>\n"
+        append blocks_out "<dt>Error:</dt><dd>[join $doc_elements(error) "<br>"]</dd>\n"
     }
 
     append blocks_out [::apidoc::format_common_elements doc_elements]
-
-    set callgraph [api_inline_svg_from_dot [api_call_graph_snippet -proc_name $proc_name -maxnodes 5]]
-    if {$callgraph ne ""} {
-        append blocks_out "<p><dt><b>Partial Call Graph (max 5 caller/called nodes):</b></dt><dd>$callgraph</dd>\n"
+    set css {
+        /*svg g a:link {text-decoration: none;}*/
+        div.inner svg {width: 100%; margin: 0 auto;}
+        svg g polygon {fill: transparent;}
+        svg g g ellipse {fill: #eeeef4;}
+        svg g g polygon {fill: #f4f4e4;}
     }
 
-    append blocks_out "<p><dt><b>Testcases:</b></dt><dd>\n"
+    set callgraph [util::inline_svg_from_dot -css $css \
+                       [api_call_graph_snippet -proc_name $proc_name -maxnodes 5]]
+    if {$callgraph ne ""} {
+        append blocks_out "<p><dt>Partial Call Graph (max 5 caller/called nodes):</dt><dd>$callgraph</dd>\n"
+    }
+
+    append blocks_out "<p><dt>Testcases:</dt><dd>\n"
 
     if {[info exists doc_elements(testcase)]} {
         set cases {}
@@ -617,12 +657,12 @@ ad_proc -public api_proc_documentation {
                  -package_key acs-api-browser \
                  -parameter FancySourceFormattingP \
                  -default 1]} {
-            set source_out [subst {<dt><b>Source code:</b></dt><dd>
+            set source_out [subst {<dt>Source code:</dt><dd>
                 <pre class="code">[::apidoc::tcl_to_html $proc_name]</pre>
                 </dd>
             }]
         } else {
-            set source_out [subst {<dt><b>Source code:</b></dt><dd>
+            set source_out [subst {<dt>Source code:</dt><dd>
                 <pre class="code">[ns_quotehtml [api_get_body $proc_name]]</pre>
                 </dd>
             }]
@@ -640,7 +680,7 @@ ad_proc -public api_proc_documentation {
         if { [file exists $::acs::rootdir/$xql_fn] } {
             set content [apidoc::get_xql_snippet -proc_name $proc_name -xql_file $xql_fn]
             if {$content ne ""} {set content "<pre class='code'>$content</pre>"}
-            append there [subst {<dt><b>Generic XQL file:</b> </dt>
+            append there [subst {<dt>Generic XQL file:</dt>
                 <dd>$content
                 <a href="[ns_quotehtml [export_vars -base content-page-view {{source_p 1} {path $xql_fn}}]]">$xql_fn</a>
                 <p>
@@ -655,7 +695,7 @@ ad_proc -public api_proc_documentation {
             set content [apidoc::get_xql_snippet -proc_name $proc_name -xql_file $xql_fn]
             if {$content ne ""} {set content "<pre class='code'>$content</pre>"}
             set href [export_vars -base content-page-view {{source_p 1} {path $xql_fn}}]
-            append there [subst {<dt><b>PostgreSQL XQL file:</b></dt>
+            append there [subst {<dt>PostgreSQL XQL file:</dt>
                 <dd>$content
                 <a href="[ns_quotehtml $href]">$xql_fn</a>
                 <p>
@@ -670,7 +710,7 @@ ad_proc -public api_proc_documentation {
             set content [apidoc::get_xql_snippet -proc_name $proc_name -xql_file $xql_fn]
             if {$content ne ""} {set content "<pre class='code'>$content</pre>"}
             set href [export_vars -base content-page-view {{source_p 1} {path $xql_fn}}]
-            append there [subst {<dt><b>Oracle XQL file:</b></dt>
+            append there [subst {<dt>Oracle XQL file:</dt>
                 <dd>$content
                 <a href="[ns_quotehtml $href]">$xql_fn</a>
                 <p>
@@ -680,7 +720,7 @@ ad_proc -public api_proc_documentation {
             lappend missing Oracle
         }
         if {[llength $missing] > 0} {
-            set xql_out [subst {<dt><b>XQL Not present:</b></dt><dd>[join $missing ", "]</dd>}]
+            set xql_out [subst {<dt>XQL Not present:</dt><dd>[join $missing ", "]</dd>}]
         }
         append xql_out $there
     } else {
@@ -720,7 +760,8 @@ ad_proc api_proc_pretty_name {
         } else {
             append out $label
         }
-        set debug_html [expr {$include_debug_controls_p && [info commands ::xo::api] ne ""
+        set debug_html [expr {$include_debug_controls_p
+                              && [namespace which ::xo::api] ne ""
                               ? [::xo::api debug_widget $proc] : ""}]
     }
     if {[nsv_exists api_proc_doc $proc]} {
@@ -774,9 +815,9 @@ ad_proc -public api_add_to_proc_doc {
 
     @author Gustaf Neumann
     @param proc_name name is fully qualified name without leading colons proc procs,
-        XOTcl methods are a triple with the fully qualified class name,
-        then proc|instproc and then the method name.
-    @param property name of property such as "testcase"
+           XOTcl methods are a triple with the fully qualified class name,
+           then proc|instproc and then the method name.
+    @param property name of property such as "main" "testcase" "calledby" "deprecated_p" "script" "protection"
     @param value    value of the property
 
 } {
@@ -810,8 +851,13 @@ ad_proc -private api_called_proc_names {
 } {
 
     Return list of procs called by the specified procname handle.
+    Note that this function is based on "::apidoc::tcl_to_html",
+    which is based on some heuristics and is not guaranteed to
+    return always the correct results (it might contain false positives).
+    Use this private function only, when heuristics are fine.
 
     @author Gustaf Neumann
+
     @param proc_name name is fully qualified name without leading colons proc procs,
     XOTcl methods are a triple with the fully qualified class name,
     then proc|instproc and then the method name.
@@ -836,7 +882,8 @@ ad_proc -private api_called_proc_names {
             #ns_log notice "api_called_proc_names <$proc_name> got body <$body>"
 
         } on error {errorMsg} {
-            ns_log warning "api_called_proc_names: cannot obtain body of '$proc_name' via ::apidoc::tcl_to_html: $errorMsg"
+            ns_log warning "api_called_proc_names: cannot obtain body of '$proc_name'" \
+                "via ::apidoc::tcl_to_html: $errorMsg"
             return ""
         }
     }
@@ -861,7 +908,7 @@ ad_proc -private api_called_proc_names {
 
 ad_proc -private api_add_calling_info_to_procdoc {{proc_name "*"}} {
 
-    Add the calling information (what a the functions called by this
+    Add the calling information (what are the functions called by this
     proc_name) to the collected proc_doc information.
 
     @author Gustaf Neumann
@@ -877,7 +924,10 @@ ad_proc -private api_add_calling_info_to_procdoc {{proc_name "*"}} {
     #
     set init_files packages/acs-bootstrap-installer/bootstrap.tcl
     foreach package_key [apm_enabled_packages] {
-        foreach file [apm_get_package_files -package_key $package_key -file_types {tcl_init content_page include_page}] {
+        foreach file [apm_get_package_files \
+                          -package_key $package_key \
+                          -file_types \
+                          {tcl_init content_page include_page}] {
             if {[file extension $file] eq ".tcl"} {
                 lappend init_files packages/$package_key/$file
             }
@@ -1051,7 +1101,7 @@ ad_proc -private api_call_graph_snippet {
     #
     set called_procs {}
     foreach c [api_called_proc_names -proc_name $proc_name] {
-        if {[info commands $c] eq $c
+        if {[namespace which $c] eq "::$c"
             && $c ni $callers
             && $c ne $proc_name
         } {
@@ -1081,48 +1131,8 @@ ad_proc -private api_call_graph_snippet {
             "\}\n" \
             $edges
     }
-    ns_log notice \n$dot_code
+    #ns_log notice \n$dot_code
     append result "digraph \{api = $dpi;" $dot_code "\}"
-}
-
-ad_proc -private api_inline_svg_from_dot {dot_code} {
-
-    Transform a dot source code into an inline svg image based on code
-    from xotcl-core; should be probably move later to a different
-    place.
-
-    @author Gustaf Neumann
-} {
-    catch {set dot [::util::which dot]}
-    if {$dot ne ""} {
-        set tmpnam [ad_tmpnam]
-        set tmpfile $tmpnam.svg
-        set f [open $tmpnam.dot w]; puts $f $dot_code; close $f
-
-        set f [open "|$dot -Tsvg -o $tmpfile" w]; puts $f $dot_code;
-        try {
-            close $f
-        } on error {errorMsg} {
-            ns_log warning "api_inline_svg_from_dot: dot returned $errorMsg"
-        } on ok {result} {
-            set f [open $tmpfile]; set svg [read $f]; close $f
-
-            # delete the first three lines generated from dot
-            regsub {^[^\n]+\n[^\n]+\n[^\n]+\n} $svg "" svg
-            set css {
-                /*svg g a:link {text-decoration: none;}*/
-                div.inner svg {width: 100%; margin: 0 auto;}
-                svg g polygon {fill: transparent;}
-                svg g g ellipse {fill: #eeeef4;}
-                svg g g polygon {fill: #f4f4e4;}
-            }
-            file delete -- $tmpfile
-            return "<style>$css</style><div><div class='inner'>$svg</div></div>"
-        } finally {
-            file delete -- $tmpnam.dot
-        }
-    }
-    return ""
 }
 
 ad_proc -public api_describe_function {
@@ -1168,24 +1178,53 @@ ad_proc -public api_get_body {proc_name} {
     # In case the proc_name contains magic chars, these have to be
     # escaped for Tcl commands expecting a pattern (e.g. "info procs")
     #
-    regsub -all {([?*])} $proc_name {\\\1} proc_name_pattern
+    regsub -all -- {([?*])} $proc_name {\\\1} proc_name_pattern
 
-    if {[info commands ::xo::api] ne ""
+    if {[namespace which ::xo::api] ne ""
         && [regexp {^(.*) (inst)?proc (.*)$} $proc_name match obj prefix method]} {
+        set method [lindex $proc_name end]
+
         if {[regexp {^(.*) (.*)$} $obj match scope obj]} {
             if {[::xo::api scope_eval $scope ::nsf::is object $obj]} {
-                return [::xo::api get_method_source $scope $obj $prefix $method]
+                set body [::xo::api get_method_body $scope ::$obj $prefix $method]
+                set isNx [::xo::api scope_eval $scope \
+                              ::nsf::directdispatch ::$obj \
+                              ::nsf::methods::object::info::hastype ::nx::Class]
             }
         } else {
             if {[::nsf::is object $obj]} {
-                return [::xo::api get_method_source "" $obj $prefix $method]
+                set body [::xo::api get_method_body "" ::$obj $prefix $method]
+                set isNx [::nsf::directdispatch ::$obj \
+                              ::nsf::methods::object::info::hastype ::nx::Class]
             }
         }
-        return ""
-    } elseif {[info commands ::xo::api] ne ""
+        if {[info exists body]} {
+            #
+            # Beautify source code: delete the leading indent.
+            # First check, if we have a nonempty indent...
+            #
+            set lines [split $body \n]
+            set firstNonEmptyLine ""
+            foreach line $lines {
+                if {[regexp {^(\s+)\S} $line . indent]} {
+                    break
+                }
+            }
+            #
+            # if we have some indent, remove it from the lines.
+            #
+            if {[info exists indent]} {
+                set body [ns_trim -prefix $indent $body]
+            }
+            if {$isNx} {
+                set doc [::xo::api get_doc_block $body body]
+            }
+            return $body
+        }
+    } elseif {[namespace which ::xo::api] ne ""
               && [regexp {^([^ ]+) (Class|Object) (.*)$} $proc_name . thread kind obj]} {
         return [::xo::api get_object_source $thread $obj]
-    } elseif {[info commands ::xo::api] ne ""
+    } elseif {[namespace which ::xo::api] ne ""
               && [regexp {(Class|Object) (.*)$} $proc_name . kind obj]} {
         return [::xo::api get_object_source "" $obj]
     } elseif {[info procs $proc_name_pattern] ne ""} {
@@ -1193,12 +1232,23 @@ ad_proc -public api_get_body {proc_name} {
     } elseif {[info procs ::nsf::procs::$proc_name_pattern] ne ""} {
         return [::nx::Object info method body ::nsf::procs::$proc_name]
     } else {
-        return "No such Tcl-proc '$proc_name'"
+        return $proc_name
     }
 }
 
 
 namespace eval ::apidoc {
+
+    ad_proc -private get_doc_property {proc_name property {default ""}} {
+        Return a certain doc property value, if property exists
+    } {
+        if {[nsv_get api_proc_doc $proc_name doc]} {
+            if {[dict exists $doc $property]} {
+                return [dict get $doc $property]
+            }
+        }
+        return $default
+    }
 
     ad_proc -private get_xql_snippet {-proc_name -xql_file} {
         @return matching xql snippet for specified proc_name
@@ -1206,9 +1256,9 @@ namespace eval ::apidoc {
         set content [template::util::read_file $::acs::rootdir/$xql_file]
 
         # make parsable XML, replace "partialquery" by "fullquery"
-        set prepared_content [db_qd_internal_prepare_queryfile_content $content]
+        set prepared_content [db_qd_prepare_queryfile_content $content]
 
-        dom parse -simple $prepared_content doc
+        dom parse -simple -- $prepared_content doc
         $doc documentElement root
         set result ""
         foreach q [$root selectNodes //fullquery] {
@@ -1228,7 +1278,7 @@ namespace eval ::apidoc {
         @param see a string expected to contain the resource to format
         @return the html string representing the resource
     } {
-        #regsub -all {proc *} $see {} see
+        #regsub -all -- {proc *} $see {} see
         set see [string trim $see]
         if {[nsv_exists api_proc_doc $see]} {
             set href [export_vars -base /api-doc/proc-view {{proc $see}}]
@@ -1255,7 +1305,12 @@ namespace eval ::apidoc {
         Extracts information about the author and formats it into an
         HTML string.
 
-        @param author_string author information to format
+        @param author_string author information to format. 3 kind of
+               formats are expected: email (a mailto link to the email
+               is generated), whitespace-separated couple "<name> (<email>)" (a
+               mailto link for email and the name are generated) and
+               free-form (the same input string is returned).
+
         @return the formatted result
     } {
         if { [regexp {^[^ \n\r\t]+$} $author_string]
@@ -1271,7 +1326,7 @@ namespace eval ::apidoc {
     ad_proc -private format_changelog_list { changelog } {
         Format the change log info
     } {
-        append out "<dt><b>Changelog:</b>\n"
+        append out "<dt>Changelog:</dt>\n"
         foreach change $changelog {
             append out "<dd>[format_changelog_change $change]</dd>\n"
         }
@@ -1298,7 +1353,7 @@ namespace eval ::apidoc {
         if { [llength $authors] == 0 } {
             return ""
         }
-        append out "<dt><b>Author[ad_decode [llength $authors] 1 "" "s"]:</b>\n"
+        append out "<dt>Author[expr {[llength $authors] > 1 ? "s" : ""}]:</dt>\n"
         foreach author $authors {
             append out "<dd>[format_author $author]</dd>\n"
         }
@@ -1314,13 +1369,13 @@ namespace eval ::apidoc {
             append out [format_author_list $doc_elements(author)]
         }
         if { [info exists doc_elements(creation-date)] } {
-            append out "<dt><b>Created:</b>\n<dd>[lindex $doc_elements(creation-date) 0]</dd>\n"
+            append out "<dt>Created:</dt>\n<dd>[lindex $doc_elements(creation-date) 0]</dd>\n"
         }
         if { [info exists doc_elements(change-log)] } {
             append out [format_changelog_list $doc_elements(change-log)]
         }
         if { [info exists doc_elements(cvs-id)] } {
-            append out "<dt><b>CVS ID:</b>\n<dd><code>[ns_quotehtml [lindex $doc_elements(cvs-id) 0]]</code></dd>\n"
+            append out "<dt>CVS ID:</dt>\n<dd><code>[ns_quotehtml [lindex $doc_elements(cvs-id) 0]]</code></dd>\n"
         }
         if { [info exists doc_elements(see)] } {
             append out [format_see_list $doc_elements(see)]
@@ -1332,11 +1387,11 @@ namespace eval ::apidoc {
     ad_proc -private format_see_list { sees } {
         Generate an HTML list of referenced procs and pages.
     } {
-        append out "<br><strong>See Also:</strong>\n<ul>"
+        append out "<dt>See Also:</dt>\n<dd><ul>"
         foreach see $sees {
             append out "<li>[format_see $see]\n"
         }
-        append out "</ul>\n"
+        append out "</ul></dd>\n"
 
         return $out
     }
@@ -1421,7 +1476,7 @@ namespace eval ::apidoc {
     } {
         # turn keywords into space-separated things
         # replace one or more commands with a space
-        regsub -all {,+} $keywords " " keywords
+        regsub -all -- {,+} $keywords " " keywords
 
         set score 0
         foreach word $keywords {
@@ -1435,7 +1490,7 @@ namespace eval ::apidoc {
     }
 
     ad_proc -private is_object {scope proc_name} {
-        Checks, whether the specified argument is an xotcl object.
+        Checks, whether the specified argument is an XOTcl object.
         Does not cause problems when xotcl is not loaded.
         @return boolean value
     } {
@@ -1444,10 +1499,10 @@ namespace eval ::apidoc {
         return $result
     }
 
-    ad_proc -private tcl_to_html {proc_name} {
+    ad_proc -public tcl_to_html {proc_name} {
 
         Given a proc name, formats it as HTML, including highlighting syntax in
-        various colors and creating hyperlinks to other proc definitions.<BR>
+        various colors and creating hyperlinks to other proc definitions.
         The inspiration for this proc was the tcl2html script created by Jeff Hobbs.
         <p>
         Known Issues:
@@ -1465,7 +1520,7 @@ namespace eval ::apidoc {
 
     } {
 
-        if {[info commands ::xo::api] ne ""} {
+        if {[namespace which ::xo::api] ne ""} {
             set scope [::xo::api scope_from_proc_index $proc_name]
         } else {
             set scope ""
@@ -1473,8 +1528,12 @@ namespace eval ::apidoc {
 
         set proc_namespace ""
         regexp {^(::)?(.*)::[^:]+$} $proc_name match colons proc_namespace
-
         return [tclcode_to_html -scope $scope -proc_namespace $proc_namespace [api_get_body $proc_name]]
+        #package req nx::pp
+        #append result \
+            #    [tclcode_to_html -scope $scope -proc_namespace $proc_namespace [api_get_body $proc_name]] \
+            #    <br> \
+            #    [nx::pp render [api_get_body $proc_name]]
     }
 
     ad_proc -private length_var {data} {
@@ -1492,7 +1551,7 @@ namespace eval ::apidoc {
     ad_proc -private length_proc {data} {
         @return Length of a command name.
     } {
-        if {[regexp -indices {^(::)?[A-Za-z][:A-Za-z0-9_@]+} $data found]} {
+        if {[regexp -indices {^(::)?[A-Za-z0-9][:\.\-A-Za-z0-9_@]+} $data found]} {
             return [lindex $found 1]
         }
         return 0
@@ -1507,7 +1566,7 @@ namespace eval ::apidoc {
 
     ad_proc -private length_braces {data} {
         @return length of subexpression, from open to close brace inclusive.
-         Doesn't deal with unescaped braces in substrings.
+                Doesn't deal with unescaped braces in substrings.
     } {
         set i 1
         for {set count 1} {1} {incr i} {
@@ -1561,17 +1620,30 @@ namespace eval ::apidoc {
                 incr i [length_exp [string range $data $i end]] ;# spaces
                 incr i [length_exp [string range $data $i end]] ;# expression - it could be a var
             }
-            incr i [length_exp [string range $data $i end]]
+            set expr_length [length_exp [string range $data $i end]]
+            if {$expr_length == 0} {
+                break
+            }
+            incr i $expr_length
             set curchar [string index $data $i]
         }
         return [expr {$i - 1}]
     }
 
     ad_proc -private search_on_webindex {-page -host -root -proc} {
-        Search for a matching link in the page and return the absolute link if found
+
+        Search for a matching link in the page and return the absolute
+        link if found. Avoid in-page links (starting with "#")
+
+        @param page HTML page
+        @param host for completing URLs starting with no "/"
+        @param root for completing URLs starting with a "/"
+        @param proc name of proc as used in link label
+
     } {
         set url ""
-        if { [regexp "<a href= *\['\"\](\[^>\"'\]+)\[\"'\]\[^>\]*>$proc</a>" $page match relative_url] } {
+        if { [regexp "<a href= *\['\"\](\[^#\]\[^>\"'\]+)\[\"'\]\[^>\]*>$proc</a>" \
+                  $page match relative_url] } {
             if {[string match "/*" $relative_url]} {
                 set url $host$relative_url
             } else {
@@ -1619,7 +1691,7 @@ namespace eval ::apidoc {
     ad_proc -public tclcode_to_html {{-scope ""} {-proc_namespace ""} script} {
 
         Given a script, this proc formats it as HTML, including highlighting syntax in
-        various colors and creating hyperlinks to other proc definitions.<BR>
+        various colors and creating hyperlinks to other proc definitions.
         The inspiration for this proc was the tcl2html script created by Jeff Hobbs.
 
         @param script script to be formatted in HTML
@@ -1635,7 +1707,7 @@ namespace eval ::apidoc {
         # to api-doc pages.  Perhaps we should hyperlink them to the Tcl man pages?
         # else and elseif are be treated as special cases later
 
-        if {[info commands ::xo::api] ne ""} {
+        if {[namespace which ::xo::api] ne ""} {
             set XOTCL_KEYWORDS [list self my next]
             # Only command names are highlighted, otherwise we could add XOTcl method
             # names by [lsort -unique [concat [list self my next] ..
@@ -1645,11 +1717,11 @@ namespace eval ::apidoc {
         }
 
         set data [string map [list & "&amp;" < "&lt;" > "&gt;"] \n$script]
-
         set in_comment 0
         set in_quotes 0
         set proc_ok 1
         set l [string length $data]
+
         for {set i 0} {$i < $l} {incr i} {
             set char [string index $data $i]
             switch -- $char {
@@ -1708,10 +1780,31 @@ namespace eval ::apidoc {
                     set in_comment 0
                 }
 
-                "\{" -
                 ";" {
-                    if {!$in_quotes} {
+                    if {!$in_quotes && !$in_comment} {
                         set proc_ok 1
+                    }
+                    append html $char
+                }
+
+                "\{" {
+                    if {!$in_quotes && !$in_comment} {
+                        set proc_ok 1
+                        set linestart [string last "\n" $data $i]
+                        if {$linestart != -1} {
+                            set segment [string range $data $linestart+1 $i]
+                            #ns_log notice "SEGMENT <$segment>"
+                            #
+                            # When the line looks like from a
+                            # definition of a proc/instproc/method,
+                            # don't expect that the next word is a
+                            # potential command, since this is rather
+                            # an argument.
+                            #
+                            if {[regexp {(proc|method) } $segment]} {
+                                set proc_ok 0
+                            }
+                        }
                     }
                     append html $char
                 }
@@ -1736,6 +1829,10 @@ namespace eval ::apidoc {
 
                 " " {
                     append html "&nbsp;"
+                }
+
+                "\t" {
+                    append html "&nbsp;&nbsp;&nbsp;&nbsp;"
                 }
 
                 default {
@@ -1796,14 +1893,24 @@ namespace eval ::apidoc {
                                     }
                                 }
                             }
+                            continue
                         }
-                        if {$proc_name in {* @ ?}} {
-                            append html $proc_name
-                        } elseif {$proc_name in $::apidoc::KEYWORDS ||
-                            ([regexp {^::(.*)} $proc_name match had_colons]
-                             && $had_colons in $::apidoc::KEYWORDS)} {
 
-                            set url "/api-doc/proc-view?proc=$proc_name"
+                        #
+                        # The last four words in the following clause
+                        # are deprecated procs which are unfortunately
+                        # picked up as commands by
+                        # apidoc::tclcode_to_html. Therefore, we
+                        # ignore these explicitly.
+                        #
+                        if {$proc_name in {* @ ? min max random content_type}} {
+                            append html $proc_name
+
+                        } elseif {$proc_name in $::apidoc::KEYWORDS ||
+                                  ([regexp {^::(.*)} $proc_name match had_colons]
+                                   && $had_colons in $::apidoc::KEYWORDS)} {
+
+                            set url "/api-doc/proc-view?proc=[string trimleft $proc_name :]"
                             append html "<a href='[ns_quotehtml $url]' title='Tcl command'>" \
                                 [pretty_token keyword $proc_name] </a>
 
@@ -1821,7 +1928,7 @@ namespace eval ::apidoc {
                             append html [pretty_token helper $proc_name]
 
                         } elseif {$proc_namespace ne ""
-                                  && [info commands ::${proc_namespace}::${proc_name}] ne ""}  {
+                                  && [namespace which ::${proc_namespace}::${proc_name}] ne ""}  {
 
                             if {[is_object $scope ${proc_namespace}::${proc_name}]} {
                                 set url [::xo::api object_url \
@@ -1834,10 +1941,11 @@ namespace eval ::apidoc {
                                 append html "<a href='[ns_quotehtml $url]' title='API command'>" \
                                     [pretty_token proc $proc_name] </a>
                             }
-                        } elseif {[info commands ::$proc_name] ne ""} {
+                        } elseif {[namespace which ::$proc_name] ne ""} {
+
                             set absolute_name [expr {[string match "::*" $proc_name]
-                                                     ? $proc_name
-                                                     : "::${proc_name}"}]
+                                                     ? $proc_name : "::${proc_name}" }]
+
                             if {[is_object $scope $absolute_name]} {
                                 set url [::xo::api object_url \
                                              -show_source 1 -show_methods 2 \
@@ -1850,8 +1958,11 @@ namespace eval ::apidoc {
                                     [pretty_token proc $proc_name] </a>
                             }
                         } else {
+                            #if {$procl > 2 && [string match ad_* $proc_name]} {
+                            #    ns_log notice "TCLCODE: giving up on '$proc_name' ($procl) [string range $data $i $i+20]"
+                            #}
                             append html $proc_name
-                            set proc_ok 1
+                            #set proc_ok 1
                         }
                         incr i $procl
 
@@ -1906,24 +2017,32 @@ namespace eval ::apidoc {
     } {
 
         set linkList [list]
-        set filename $::acs::rootdir/$path
-        set path_dirname [file dirname $path]
-        set file_dirname [file dirname $filename]
-        set file_rootname [file rootname [file tail $filename]]
-        regsub {(-oracle|-postgresql)$} $file_rootname {} file_rootname
-        set files \
-            [lsort -decreasing \
-                 [glob -nocomplain \
-                      -directory $file_dirname \
-                      "${file_rootname}{,-}{,oracle,postgresql}.{adp,tcl,xql}" ]]
+        set paths $path
+        set root_path [file rootname $path]
+        set themed_path [template::themed_template $root_path]
+        if {$themed_path ne $root_path} {
+            lappend paths $themed_path
+        }
+        foreach path $paths {
+            set filename $::acs::rootdir/$path
+            set path_dirname [file dirname $path]
+            set file_dirname [file dirname $filename]
+            set file_rootname [file rootname [file tail $filename]]
+            regsub {(-oracle|-postgresql)$} $file_rootname {} file_rootname
 
-        foreach file $files {
+            lappend files {*}[glob -nocomplain \
+                                  -directory $file_dirname \
+                                  "${file_rootname}{,-}{,oracle,postgresql}.{adp,tcl,xql}" ]
+        }
+
+        foreach file [lsort -decreasing $files] {
             set path [ns_urlencode $path_dirname/[file tail $file]]
             set link [export_vars -base content-page-view {{source_p 1} path}]
-            lappend linkList [list filename $file link $link]
+            set display_file [string range $file [string length $::acs::rootdir]+1 end]
+            lappend linkList [list filename $display_file link $link]
             if {$include_compiled && [file extension $file] eq ".adp"} {
                 set link [export_vars -base content-page-view {{source_p 1} {compiled_p 1} path}]
-                lappend linkList [list filename "$file (compiled)" link $link]
+                lappend linkList [list filename "$display_file (compiled)" link $link]
             }
         }
 
@@ -1964,17 +2083,17 @@ namespace eval ::apidoc {
 # procs for linking to libraries, pages, etc, should go here too.
 #
 
-ad_proc api_proc_url { proc } {
+ad_proc api_proc_url { {-source:boolean 1} proc } {
     @return the URL of the page that documents the given proc.
 
     @author Lars Pind (lars@pinds.com)
     @creation-date 14 July 2000
 } {
-    return "/api-doc/proc-view?proc=[ns_urlencode $proc]&source_p=1"
+    return "/api-doc/proc-view?proc=[ns_urlencode $proc]&source_p=$source_p"
 }
 
 ad_proc -private api_proc_doc_url {-proc_name -source_p -version_id} {
-    Return the procdic url from procname and optionally from source_p and version_id
+    Return the procdoc url from procname and optionally from source_p and version_id
 } {
     if {[string range $proc_name 0 0] eq " " && [lindex $proc_name 0] in {Object Class}} {
         set object [lindex $proc_name end]
@@ -1989,13 +2108,15 @@ ad_proc -private api_proc_doc_url {-proc_name -source_p -version_id} {
     return $url
 }
 
-ad_proc api_proc_link { proc } {
+ad_proc api_proc_link { {-source:boolean 1} proc } {
     @return full HTML link to the documentation for the proc.
+
+    @see api_proc_url
 
     @author Lars Pind (lars@pinds.com)
     @creation-date 14 July 2000
 } {
-    return "<a href=\"[ns_quotehtml [api_proc_url -proc_name $proc -source_p 1]]\">$proc</a>"
+    return "<a href=\"[ns_quotehtml [api_proc_url -source=$source_p $proc]]\">$proc</a>"
 }
 
 ad_proc -private api_test_case_url {testcase_pair} {

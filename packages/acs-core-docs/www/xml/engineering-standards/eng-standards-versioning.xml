@@ -171,7 +171,7 @@ the next.  These rules are fine-tuned with each release; an example is <ulink ur
       supported databases.  </para></listitem>
       <listitem><para> <emphasis role="strong">Level 4:
       Deprecated.</emphasis> The package was in some earlier version
-      is use, but was probably replaced by a another package. The
+      is use, but was probably replaced by another package. The
       package description should point to a preferred version.
       </para></listitem>
     </itemizedlist>

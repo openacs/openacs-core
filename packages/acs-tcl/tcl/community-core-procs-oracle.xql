@@ -13,7 +13,7 @@
       </querytext>
 </fullquery>
 
-<fullquery name="person::delete.delete_person">      
+<fullquery name="person::delete.delete_person">
       <querytext>
 	    begin
 			person.del(
@@ -40,45 +40,45 @@
   <querytext>
     (object_type = 'group' or object_type = 'person')
   </querytext>
-</partialquery>	      
+</partialquery>
 
 <partialquery name="party::types_valid_for_rel_type_multirow.start_with_clause">
   <querytext>
     object_type = :start_with
   </querytext>
-</partialquery>	      
+</partialquery>
 
-<fullquery name="party::types_valid_for_rel_type_multirow.select_sub_rel_types">      
+<fullquery name="party::types_valid_for_rel_type_multirow.select_sub_rel_types">
   <querytext>
-      
-	select 
-	    types.pretty_name, 
-	    types.object_type, 
-	    types.tree_level, 
+
+	select
+	    types.pretty_name,
+	    types.object_type,
+	    types.tree_level,
 	    types.indent,
 	    case when valid_types.object_type = null then 0 else 1 end as valid_p
-	from 
+	from
 	    (select
 	        t.pretty_name, t.object_type, level as tree_level,
-	        replace(lpad(' ', (level - 1) * 4), 
+	        replace(lpad(' ', (level - 1) * 4),
 	                ' ', '&nbsp;') as indent,
 	        rownum as tree_rownum
-	     from 
+	     from
 	        acs_object_types t
-	     connect by 
+	     connect by
 	        prior t.object_type = t.supertype
-	     start with 
+	     start with
 	        $start_with_clause ) types,
-	    (select 
-	        object_type 
-	     from 
+	    (select
+	        object_type
+	     from
 	        rel_types_valid_obj_two_types
-	     where 
+	     where
 	        rel_type = :rel_type ) valid_types
-	where 
+	where
 	    types.object_type = valid_types.object_type(+)
 	order by tree_rownum
-	
+
   </querytext>
 </fullquery>
 

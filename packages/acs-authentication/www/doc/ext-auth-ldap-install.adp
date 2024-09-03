@@ -2,6 +2,10 @@
 <property name="context">{/doc/acs-authentication/ {ACS Authentication}} {Using LDAP/Active Directory with OpenACS}</property>
 <property name="doc(title)">Using LDAP/Active Directory with OpenACS</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="ext-auth-pam-install" leftLabel="Prev"
 			title="Installation"

@@ -142,7 +142,7 @@ make install
               <para>If you get errors like:</para>
               <programlisting>nspostgres.c: In function `Ns_PgTableList':
 nspostgres.c:679: warning: passing arg 3 of `Tcl_DStringAppend' as signed due to prototype</programlisting>
-              <para>then PostGreSQL is probably not in the standard location.  The location of PostGreSQL is very dependent on which method was used to install it.  To correct the problem, replace <computeroutput>LSB</computeroutput> with the path to the path to your PostGreSQL installation.  Often this is <computeroutput>/usr/local/pgsql</computeroutput>.</para>
+              <para>then PostgreSQL is probably not in the standard location.  The location of PostgreSQL is very dependent on which method was used to install it.  To correct the problem, replace <computeroutput>LSB</computeroutput> with the path to the path to your PostgreSQL installation.  Often this is <computeroutput>/usr/local/pgsql</computeroutput>.</para>
 
               <para>You can use the
               <computeroutput>ldd</computeroutput> command to verify

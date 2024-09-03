@@ -1,7 +1,11 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {AOLserver keepalive with inittab}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {AOLserver keepalive with inittab}</property>
 <property name="doc(title)">AOLserver keepalive with inittab</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="install-openacs-keepalive" leftLabel="Prev"
 			title="Chapter 6. Production
@@ -25,7 +29,7 @@ service.</p>
 </li><li class="listitem"><p>Copy this <a class="ulink" href="files/restart-aolserver.txt" target="_top">file</a> into <code class="computeroutput">/var/tmp/restart-aolserver.txt</code>.</p></li><li class="listitem">
 <p>This script needs to be SUID-root, which means that the script
 will run as root. This is necessary to ensure that the AOLserver
-processes are killed regardless of who owns them. However the
+processes are killed regardless of who owns them. However, the
 script should be executable by the <code class="computeroutput">web</code> group to ensure that the users updating
 the web page can use the script, but that general system users
 cannot run the script. You also need to have Perl installed and

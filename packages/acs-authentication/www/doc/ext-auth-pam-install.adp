@@ -4,6 +4,10 @@ OpenACS}</property>
 <property name="doc(title)">Using Pluggable Authentication Modules (PAM) with
 OpenACS</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="ext-auth-install" leftLabel="Prev"
 			title="Installation"
@@ -11,7 +15,7 @@ OpenACS</property>
 		    <div class="sect1" lang="en">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="ext-auth-pam-install" id="ext-auth-pam-install"></a>Using
-Pluggable Authentication Modules (PAM) with OpenACS</h2></div></div></div><p>OpenACS supports PAM authetication via the ns_pam module in
+Pluggable Authentication Modules (PAM) with OpenACS</h2></div></div></div><p>OpenACS supports PAM authentication via the ns_pam module in
 AOLserver.</p><div class="orderedlist"><ol type="1">
 <li>
 <p>
@@ -85,14 +89,12 @@ file for each domain, all in <code class="computeroutput">/etc/pam.d</code>. Pre
 domain configuration lines into a single file, <code class="computeroutput">/etc/pam.conf</code>. On Red Hat, create the file
 <code class="computeroutput">/etc/pam.d/<span class="replaceable"><span class="replaceable">service0</span></span>
 </code> with these
-contents:</p><pre class="programlisting">
-auth       sufficient   /lib/security/pam_radius_auth.so
+contents:</p><pre class="programlisting">auth       sufficient   /lib/security/pam_radius_auth.so
 </pre>
 </li><li>
 <p>Modify the AOLserver configuration file to use this PAM domain.
-Edit the line</p><pre class="programlisting">
-ns_param   PamDomain             "<span class="replaceable"><span class="replaceable">service0</span></span>"</pre><p>So that the value of the parameter matches the name (just the
-file name, not the fully pathed name) of the domain file in</p><pre class="programlisting">/etc/pam.d/</pre>
+Edit the line</p><pre class="programlisting">ns_param   PamDomain             "<span class="replaceable"><span class="replaceable">service0</span></span>"</pre><p>So that the value of the parameter matches the name (just the
+filename, not the fully pathed name) of the domain file in</p><pre class="programlisting">/etc/pam.d/</pre>
 </li>
 </ol></div>
 </li><li><p>
@@ -102,8 +104,7 @@ file name, not the fully pathed name) of the domain file in</p><pre class="progr
 </li><li>
 <p><strong>Modify the AOLserver configuration file to support
 ns_pam. </strong></p><p>In <code class="computeroutput">/var/lib/aolserver/<span class="replaceable"><span class="replaceable">service0</span></span>/etc/config.tcl</code>, enable
-the nspam module by uncommenting this line:</p><pre class="programlisting">
-ns_param   nspam           ${bindir}/nspam.so</pre>
+the nspam module by uncommenting this line:</p><pre class="programlisting">ns_param   nspam           ${bindir}/nspam.so</pre>
 </li>
 </ol></div>
 </li><li><p>
@@ -119,7 +120,7 @@ Authority," used by default.</p><div class="orderedlist"><ol type="a">
 </code>. Create and name an
 authority (in the sitewide admin UI)</p></li><li><p>Set Authentication to PAM.</p></li><li><p>If the PAM domain defines a <code class="computeroutput">password</code> command, you can set Password
 Management to PAM. If not, the PAM module cannot change the
-user&#39;s password and you should leave this option Disabled.</p></li><li><p>Leave Account Registration disabed.</p></li><li><p><a href="configure-batch-sync" title="Configure Batch Synchronization">Configure Batch
+user&#39;s password and you should leave this option Disabled.</p></li><li><p>Leave Account Registration disabled.</p></li><li><p><a href="configure-batch-sync" title="Configure Batch Synchronization">Configure Batch
 Synchronization</a></p></li>
 </ol></div>
 </li>

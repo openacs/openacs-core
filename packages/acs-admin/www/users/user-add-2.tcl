@@ -3,7 +3,7 @@ ad_page_contract {
     @cvs-id $Id$
 } -query {
     user_id:naturalnum,notnull
-    password
+    password:optional
     {referer "/acs-admin/users"}
 } -properties {
     context:onevalue
@@ -24,6 +24,10 @@ acs_user::get -user_id $user_id -array user
 # easier to work with scalar vars than array
 foreach var_name [array names user] {
     set $var_name $user($var_name)
+}
+
+if { ![info exists password] || $password eq "" } {
+    set password [security::get_client_property_password]
 }
 
 if { $password eq "" } {

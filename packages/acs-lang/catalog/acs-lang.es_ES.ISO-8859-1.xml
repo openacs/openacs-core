@@ -17,9 +17,11 @@
   <msg key="Current_system_locale_is">El idioma actual del sistema es &lt;strong&gt;%system_locale%: %system_locale_label%&lt;/strong&gt;</msg>
   <msg key="Current_system_timezone_is">La zona horaria actual del sistema es &lt;strong&gt;%timezone%&lt;/strong&gt;</msg>
   <msg key="Default_Locale_For_Language">Configuración regional predeterminada del idioma</msg>
+  <msg key="Deleted">Eliminados</msg>
   <msg key="Delete_this_locale">Borrar este idioma</msg>
   <msg key="Disable_this_locale">Desactivar este idioma</msg>
   <msg key="Edit_definition_of_locale">Editar la definición del idioma</msg>
+  <msg key="Edit_history">Editar histórico</msg>
   <msg key="Edit_localized_messages_for">Editar los mensajes de %locales.locale_label%</msg>
   <msg key="Edit_this_message">Editar este mensaje</msg>
   <msg key="Enable_this_locale">Activar este idioma</msg>
@@ -48,6 +50,8 @@
   <msg key="localization-abday">{Dom} {Lun} {Mar} {Mié} {Jue} {Vie} {Sáb}</msg>
   <msg key="localization-abmon">{Ene} {Feb} {Mar} {Abr} {May} {Jun} {Jul} {Ago} {Sep} {Oct} {Nov} {Dic}</msg>
   <msg key="localization-am_str">AM</msg>
+  <msg key="localization-byte">byte</msg>
+  <msg key="localization-bytes">bytes</msg>
   <msg key="localization-currency_symbol">?</msg>
   <msg key="localization-d_fmt">%d/%m/%y</msg>
   <msg key="localization-d_t_fmt">%a %d %B %Y %H:%M %Z</msg>

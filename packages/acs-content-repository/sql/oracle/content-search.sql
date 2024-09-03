@@ -33,7 +33,34 @@ create index cr_rev_content_index on cr_revisions ( content )
 
 -- DRB: Use the "online" version if you have Oracle Enterprise Edition
 -- alter index cr_rev_content_index rebuild online parameters ('sync');
-alter index cr_rev_content_index rebuild  parameters ('sync');
+--
+-- The old variant based on
+--
+--    alter index cr_rev_content_index rebuild  parameters ('sync');
+--
+-- does not work on Oracle 19c any more.
+-- The suggested alternative is
+--
+--     execute ctx_dll.sync_index( 'CR_REV_CONTENT_INDEX' );
+--
+-- which return the error
+--
+--    PLS-00201: identifier 'CTX_DLL.SYNC_INDEX' must be declared
+--
+-- which in turn hints on insuffcient privileges. Granting these with
+-- the command
+--
+--    GRANT EXECUTE ON CTXSYS.CTX_DDL TO openacs;
+--
+-- leads to no improvement, although the grant command works. Maybe
+-- this has to do with the container datbases.
+--
+-- Therefore, we keep it simple and stupid. On creation, there is not
+-- much data, so "online" is not neccesary either.
+
+alter index cr_rev_content_index rebuild online;
+
+
 
 ------------------------------------------------------------
 -- Set up an XML index for searching attributes
@@ -108,5 +135,5 @@ show errors
 
 -- DRB: Use the "online" version if you have Oracle Enterprise Edition
 -- alter index cr_rev_attribute_index rebuild online parameters ('sync');
-alter index cr_rev_attribute_index rebuild parameters ('sync');
-
+--alter index cr_rev_attribute_index rebuild parameters ('sync');
+alter index cr_rev_attribute_index rebuild;

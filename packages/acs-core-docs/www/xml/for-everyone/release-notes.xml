@@ -38,9 +38,15 @@ END OF TEMPLATE -->
       linkend="changelog-latest"></xref>) since the last release and in the
       entire &majorversion;.&minorversion; release sequence <xref linkend="changelog"></xref>.</para>
   -->
+  
+  <xi:include href="release-notes-5-10-1.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
+  </xi:include>
 
+  <xi:include href="release-notes-5-10.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
+  </xi:include>
+  
   <sect2 id="release-notes-5-9-1">
-    <title>Release 5.9.2</title>
+    <title>Release 5.9.1</title>
     <itemizedlist>
       <listitem><para>
 	The release of OpenACS 5.9.1 contains the 88 packages of the oacs-5-9
@@ -182,7 +188,7 @@ END OF TEMPLATE -->
 	      </itemizedlist>
 	    </para></listitem>
 	    <listitem><para>
-	      Marked redundant / uncalled sql functions as deprecated
+	      Marked redundant / uncalled SQL functions as deprecated
 	    </para></listitem>
 	    <listitem><para>
 	      Replaced usages of obsolete view
@@ -206,7 +212,7 @@ END OF TEMPLATE -->
 	      </itemizedlist>
 	    </para></listitem>
 	    <listitem><para>
-	      Simplified core sql functions by using defaults:
+	      Simplified core SQL functions by using defaults:
 	      <itemizedlist>
 		<listitem><para>
 		  Number of functions reduced by a factor of 2 compared to OpenACS
@@ -768,7 +774,7 @@ END OF TEMPLATE -->
 		<itemizedlist>
 		  <listitem><para>
 		    NsShutdownWithNonZeroExitCode: tell NaviServer to return with a
-		    non-zero return code to cause restart (important under windows)
+		    nonzero return code to cause restart (important under windows)
 		  </para></listitem>
 		  <listitem><para>
 		    LogIncludeUserId: include user_id in access log
@@ -1158,7 +1164,7 @@ END OF TEMPLATE -->
 	      
 	      <listitem><para> Removed bug where same query-name was
 	      used in different branches of an if-statement for
-	      different sql statements, but the query-name lead to the
+	      different SQL statements, but the query-name lead to the
 	      wrong result.
 	      </para></listitem>
 
@@ -1242,8 +1248,7 @@ END OF TEMPLATE -->
 
 	    <listitem><para>
 	      Improved them-ability for display_templates. One can now
-	      provide a display_template_name (similar to the sql
-	      statement name) to refer to display templates. This
+	      provide a display_template_name (similar to the SQL statement name) to refer to display templates. This
 	      enables reusability and is theme-able.
 	    </para></listitem>
 
@@ -1289,7 +1294,7 @@ END OF TEMPLATE -->
 
 	    <listitem><para>
 	      Added ability to save data sent by
-	      ns_return in files on the file system. This can be used to
+	      ns_return in files on the filesystem. This can be used to
 	      validate HTML content also for password protected pages
 	      (controlled via package parameter "TclTraceSaveNsReturn" in
 	      the acs-tcl package parameters)
@@ -1304,7 +1309,7 @@ END OF TEMPLATE -->
 	    <listitem><para> Use per-thread caching to reduce number of
 	    mutex lock operations and lock contention on various caches
 	    (util-memoize, xo_site_nodes, xotcl_object_types) and nsvs
-	    (e.g ds_properties) </para></listitem>
+	    (e.g. ds_properties) </para></listitem>
 	    
  	    <listitem><para>
 	      Improved templating of OpenACS core documentation
@@ -1364,7 +1369,7 @@ END OF TEMPLATE -->
     </programlisting>
     contributed by 4 committers (Michael Aram, Victor Guerra, Gustaf Neumann, Antonio Pisano) and
     patch/bugfix providers (Frank Bergmann, Andrew Helsley, Felix
-    Mödritscher, Marcos Moser, Franz Penz, Thomas Renner).
+    Mödritscher, Markus Moser, Franz Penz, Thomas Renner).
     These are significantly more  changes as the differences
     in the last releases. All packages of the release were tested with
     PostgreSQL 9.4.* and Tcl 8.5.*.
@@ -1563,7 +1568,7 @@ END OF TEMPLATE -->
       <listitem>
         <para>
           Made changes that extend acs-kernel&#39;s create_type and create_attribute procs,
-          so they&#39;re optionally able to create sql tables and columns.  Optional metadata
+          so they&#39;re optionally able to create SQL tables and columns.  Optional metadata
           params allow for the automatic generation of foreign key references, check
           exprs, etc.
         </para>
@@ -2108,7 +2113,7 @@ END OF TEMPLATE -->
       </sect2>
   -->
 
-  <!-- &lt;if&gt; needs to be escaped, such as in changelog enteries 
+  <!-- &lt;if&gt; needs to be escaped, such as in changelog entries 
        before processing will validate
   -->
   <!--

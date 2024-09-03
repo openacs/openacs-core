@@ -1,9 +1,13 @@
 
-<property name="context">{/doc/acs-content-repository {ACS Content Repository}} {Content Repository Developer Guide: Object
+<property name="context">{/doc/acs-content-repository/ {ACS Content Repository}} {Content Repository Developer Guide: Object
 Relationships}</property>
 <property name="doc(title)">Content Repository Developer Guide: Object
 Relationships</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h2>Object Relationships</h2>
 <strong>
 <a href="../index">Content Repository</a> : Developer

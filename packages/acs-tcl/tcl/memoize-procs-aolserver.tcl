@@ -26,10 +26,10 @@ ad_proc -public util_memoize {script {max_age ""}} {
 } {
     #
     # The ::util_memoize_flush proc is defined in the *-init script,
-    # after the util_memoize cache was created. Therefore is save to
+    # after the util_memoize cache was created. Therefore, is safe to
     # use the util_memoize when this proc is available.
     #
-    if {[info commands ::util_memoize_flush] ne ""} {
+    if {[namespace which ::util_memoize_flush] ne ""} {
 
         if {$max_age ne "" && $max_age < 0} {
             error "max_age must not be negative"

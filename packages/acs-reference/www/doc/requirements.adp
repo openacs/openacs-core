@@ -1,7 +1,11 @@
 
-<property name="context">{/doc/acs-reference {ACS Reference Data}} {ACS Reference Requirements}</property>
+<property name="context">{/doc/acs-reference/ {ACS Reference Data}} {ACS Reference Requirements}</property>
 <property name="doc(title)">ACS Reference Requirements</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h2>ACS Reference Requirements</h2>
 <p>by <a href="mailto:jon\@jongriffin.com">Jon Griffin</a>
 </p>

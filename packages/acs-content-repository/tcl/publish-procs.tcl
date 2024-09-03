@@ -198,7 +198,7 @@ ad_proc -public publish::proc_exists { namespace_name proc_name } {
 
 } {
 
-    return [expr {[info commands ${namespace_name}::$proc_name] ne ""}]
+    return [expr {[namespace which ${namespace_name}::$proc_name] ne ""}]
 }
 
 ##########################################################
@@ -229,7 +229,7 @@ ad_proc -public publish::handle_binary_file {
 
   @param url_ref
      The name of the variable in the calling frame that will
-     receive the relative URL of the file in the file system
+     receive the relative URL of the file in the filesystem
      which contains the content blob
 
   @param error_ref
@@ -305,15 +305,12 @@ ad_proc -private publish::html_args { argv } {
 
   @private html_args
 
-  Concatenate a list of name-value pairs as returned by
-  <tt>set_to_pairs</tt> into a list of "name=value" pairs
+  Concatenate a list of name-value pairs as a list of "name=value"
+  pairs.
 
   @param argv   The list of name-value pairs
 
   @return An HTML string in format "name=value name=value ..."
-
-  @see publish::set_to_pairs
-
 } {
   set extra_html ""
   if { ![template::util::is_nil argv] } {
@@ -359,7 +356,7 @@ ad_proc -public publish::item_include_tag { item_id {extra_args {}} } {
 ad_proc -public publish::handle::image { item_id args } {
 
   The basic image handler. Writes the image blob to the filesystem,
-  then either merges with the template or provides a default <img>
+  then either merges with the template or provides a default &lt;img&gt;
   tag. Uses the title for alt text if no alt text is specified
   externally.
 
@@ -829,34 +826,6 @@ ad_proc -public publish::render_subitem {
 # The content tags
 
 
-ad_proc -private publish::set_to_pairs { params {exclusion_list ""} } {
-
-  @private set_to_pairs
-
-  Convert an ns_set into a list of name-value pairs, in form
-  {name value name value ...}
-
-  @param params   The ns_set id
-  @param exclusion_list {}
-     A list of keys to be ignored
-
-  @return A list of name-value pairs representing the data in the ns_set
-
-} {
-
-  set extra_args [list]
-  for { set i 0 } { $i < [ns_set size $params] } { incr i } {
-    set key   [ns_set key $params $i]
-    set value [ns_set value $params $i]
-    if { $key ni $exclusion_list } {
-      lappend extra_args $key $value
-    }
-  }
-
-  return $extra_args
-}
-
-
 ad_proc -private publish::process_tag { relation_type params } {
 
   @private process_tag
@@ -879,8 +848,12 @@ ad_proc -private publish::process_tag { relation_type params } {
   set parent_item_id [ns_set iget $params parent_item_id]
 
   # Concatenate all other keys into the extra arguments list
-  set extra_args [publish::set_to_pairs $params \
-    {tag index embed parent_item_id}]
+  set extra_args [list]
+  foreach {key value} [ns_set array $params] {
+      if {$key ni {tag index embed parent_item_id}} {
+          lappend extra_args $key $value
+      }
+  }
 
   # Render the item, append it to the page
   # set item_id [publish::get_main_item_id]
@@ -1000,7 +973,7 @@ ad_proc -public publish::write_content { revision_id args } {
   server's INI file (the value returnded by publish::get_page_root is
   used as the default). The file extension will be based on the
   revision's mime-type. <br>
-  For example, an revision whose mime-type is "image/jpeg"
+  For example, a revision whose mime-type is "image/jpeg"
   for an item at "Sitemap/foo/bar" may be written as
   /web/your_server_name/www/foo/bar.jpg
 

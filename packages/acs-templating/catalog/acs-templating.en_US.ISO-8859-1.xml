@@ -7,12 +7,15 @@
   <msg key="Add_the_selected_image">Add the selected image</msg>
   <msg key="Anyone_on_the_internet">Anyone on the Internet</msg>
   <msg key="Anyone_on_this_system">Anyone on this system</msg>
+  <msg key="Are_you_sure">Are you sure?</msg>
   <msg key="ascending_order">ascending order</msg>
   <msg key="Attach_File_Choose_a_file">Please choose a file to attach.</msg>
   <msg key="Choose_File">Choose File</msg>
   <msg key="Choose_Image">Choose Image</msg>
   <msg key="CSV">CSV</msg>
   <msg key="data">data</msg>
+  <msg key="Date_must_be_after_min_date">Date must be after %min_date%</msg>
+  <msg key="Date_must_be_before_max_date">Date must be before %max_date%</msg>
   <msg key="Day">Day</msg>
   <msg key="day">day</msg>
   <msg key="DefaultSummary">Data for %list_name%</msg>
@@ -20,7 +23,6 @@
   <msg key="Element_is_required">%label% is required</msg>
   <msg key="Element_is_too_long_Plural">%label% is %excess_no_bytes% characters too long.</msg>
   <msg key="Element_is_too_long_Singular">%label% is one character too long.</msg>
-  <msg key="Markdown_Text">Markdown Text</msg>
   <msg key="Enhanced_Text">Enhanced Text</msg>
   <msg key="Enter_your_search_text">Enter your search text here</msg>
   <msg key="filter_clear">Clear</msg>
@@ -67,13 +69,21 @@
   <msg key="HTMLArea_SpecifyUploadFilename">Specify a File for Upload</msg>
   <msg key="Invalid_choice">Invalid choice</msg>
   <msg key="Invalid_currency">Invalid currency</msg>
+  <msg key="Invalid_date">Invalid date</msg>
   <msg key="Invalid_decimal_number">Invalid decimal number</msg>
   <msg key="Invalid_email_format">Invalid email format</msg>
+  <msg key="Invalid_enumeration">Invalid enumeration</msg>
+  <msg key="Invalid_enumeration_duplicate_elements">Invalid enumeration. &#34;%value%&#34; does not contain unique values.</msg>
+  <msg key="Invalid_file">Invalid file</msg>
   <msg key="Invalid_filename">Invalid filename</msg>
   <msg key="Invalid_integer">Invalid integer</msg>
+  <msg key="Invalid_item">Invalid item</msg>
   <msg key="Invalid_keyword">Invalid keyword</msg>
-  <msg key="Invalid_natural_number">Invalid natural number </msg>
+  <msg key="Invalid_natural_number">Invalid natural number</msg>
+  <msg key="Invalid_number">Invalid number</msg>
+  <msg key="Invalid_time">Invalid time</msg>
   <msg key="Invalid_url">Invalid url</msg>
+  <msg key="Invalid_url_element">Invalid url: &#34;%value%&#34;. Please use only lowercase characters, numbers and hyphens, e.g. &#34;foo-bar&#34;.</msg>
   <msg key="Link_Title">Link Title</msg>
   <msg key="lt_Checkuncheck_all_rows">Check/uncheck all rows</msg>
   <msg key="lt_Checkuncheck_this_row">Check/uncheck this row, and select an action to perform below</msg>
@@ -82,6 +92,7 @@
   <msg key="lt_No_value_supplied_for_-field_pretty-">No value supplied for %field_pretty%</msg>
   <msg key="lt_The_-field_pretty-_must_be_non_negative">The %field_pretty% must be a non-negative integer</msg>
   <msg key="lt_When_specifying_a_non">When specifying a non-zero page_size, you must also provide either page_query or page_query_name</msg>
+  <msg key="Markdown_Text">Markdown Text</msg>
   <msg key="Meridian">Meridian</msg>
   <msg key="Minutes">Minutes</msg>
   <msg key="minutes">minutes</msg>
@@ -113,9 +124,12 @@
   <msg key="This_Group">This group</msg>
   <msg key="This_image_can_be_reused_by">This image can be reused by</msg>
   <msg key="This_image_can_be_reused_help">This allows your image to be used in other contexts</msg>
+  <msg key="Time_must_be_after_min_time">Time must be after %min_time%</msg>
+  <msg key="Time_must_be_before_max_time">Time must be before %max_time%</msg>
   <msg key="Upload_a_New_File">Upload a New File</msg>
   <msg key="Upload_a_New_Image">Upload a New Image</msg>
   <msg key="Year">Year</msg>
   <msg key="year">year</msg>
   <msg key="Year_must_be_positive">Year must be positive</msg>
+  <msg key="Year_must_be_between_1_and_9999">Year must be between 1 and 9999</msg>
 </message_catalog>

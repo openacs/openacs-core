@@ -2,6 +2,10 @@
 <property name="context">{/doc/acs-authentication/ {ACS Authentication}} {OpenACS Authentication}</property>
 <property name="doc(title)">OpenACS Authentication</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="index" leftLabel="Prev"
 			title="Introduction"
@@ -22,14 +26,14 @@ service-contract</a>
 <p class="style2"> </p>
 <p class="style2">Authorities</p>
 <p>acs-authentication can have multiple authorities, each one
-represent an specific configuration of authenticatication. For
+represent a specific configuration of authenticatication. For
 instance, in your openacs installation you can have users related
 to different authorities, some of them might authenticate locally
 since they are external or invited, others belongs to your
 corporate network and already have users, so might authenticate
 against LDAP and others in your own work office might use PAM for
 authentication because your local system authentication. Plus you
-might define an specific implementation (using the set of SC) to
+might define a specific implementation (using the set of SC) to
 connect to your client DB, which is in another DB, and allow your
 clients login to certain parts of your website. Then, this is right
 way to handle all those set of users, that already might have an
@@ -47,7 +51,7 @@ just one</strong> .</p>
 user/password)</li><li>Password Management (where to update passwords)</li><li>Account Registration (where to create new accounts)</li><li>On-Demand Sync (to get user info from the source in real
 time)</li>
 </ul>
-<p>Those configurations simply will perform the tcl proc that is
+<p>Those configurations simply will perform the Tcl proc that is
 defined in the SC above described for the given SC implementation
 that you choose. In other words:</p>
 <ul>
@@ -79,7 +83,7 @@ by changing the parameter at the kernel named: UseEmailForLoginP
 under Security section. If username is used for logging, it will
 ask for the authority to use, since username is unique by authority
 but not for the entire openacs installation (can exists several
-identic usernames but each one belongs to a different
+identical usernames but each one belongs to a different
 authority).</p>
 <p class="style2"> </p>
 <p class="style2"><strong>acs-authentication defines a set of SC to
@@ -120,7 +124,7 @@ acs-authentication. It happens like this:<br>
 <ol>
 <li>The user enters the email/user &amp; password</li><li>It will search the user in the users table and return the
 authority_id</li><li>With that authority_id it will find the respective SC
-implementation <em>which contains the adequate tcl proc for the
+implementation <em>which contains the adequate Tcl proc for the
 authentication process</em>
 </li><li>That proc will check the identity of the user based on the
 password (right now could be locally, pam or ldap authenticated,

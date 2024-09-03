@@ -12,6 +12,7 @@ ad_include_contract {
 }
 
 set user_id [ad_conn user_id]
+set return_url [ad_return_url]
 set swadmin_p 0
 db_multirow -extend { url admin_url param_url sitewide_admin_url} packages services_select {
     select package_id,
@@ -44,7 +45,7 @@ db_multirow -extend { url admin_url param_url sitewide_admin_url} packages servi
         }
     }
     if { $parameter_count > 0 } {
-        set param_url [export_vars -base "/shared/parameters" { package_id { return_url {[ad_return_url]} } }]
+        set param_url [export_vars -base "/shared/parameters" {package_id return_url}]
     }
     set instance_name [lang::util::localize $instance_name]
 
@@ -72,23 +73,23 @@ template::list::create \
             label "\#acs-admin.Administration\#"
             link_url_col admin_url
             link_html { title "\#acs-admin.Service_administration\#" }
-            display_template {<if @packages.admin_url@ not nil>\#acs-admin.Administration\#</if>}
-            html {align left}
+            display_template {<if @packages.admin_url@ not nil><adp:icon name="admin"> #acs-admin.Administration#</if>}
+            html {align left style "white-space: nowrap;"}
         }
         sitewide_admin {
             label "\#acs-admin.Site-Wide_Admin\#"
             link_url_col sitewide_admin_url
             link_html { title "\#acs-admin.Service_administration\#" }
-            display_template {<if @packages.sitewide_admin_url@ not nil>\#acs-admin.Administration\#</if>}
+            display_template {<if @packages.sitewide_admin_url@ not nil><adp:icon name="admin"> #acs-admin.Administration#</if>}
             hide_p {[string is false $swadmin_p]}
-            html {align left}
+            html {align left style "white-space: nowrap;"}
         }
         parameters {
             label "\#acs-admin.Parameters\#"
             link_url_col param_url
             link_html { title "\#acs-admin.Service_parameters\#" }
-            display_template {<if @packages.param_url@ not nil>\#acs-admin.Parameters\#</if>}
-            html {align left}
+            display_template {<if @packages.param_url@ not nil><adp:icon name="cog"> #acs-admin.Parameters#</if>}
+            html {align left style "white-space: nowrap;"}
         }
     }
 

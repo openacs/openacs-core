@@ -34,7 +34,7 @@ ad_proc -public auth::authority::create {
 
       <li> pretty_name         Label for the authority to be shown in a list to users picking an authority.
 
-      <li> enabled_p            't' if this authority available, 'f' if it's disabled. Defaults to 't'.
+      <li> enabled_p            't' if this authority available, 'f' if it's disabled. Defaults to 'f'.
 
       <li> sort_order          Sort ordering determines the order in which authorities are listed in the user interface.
                                Defaults to the currently highest sort order plus one.
@@ -156,39 +156,47 @@ ad_proc -public auth::authority::create {
     return $authority_id
 }
 
-
 ad_proc -public auth::authority::get {
-    {-authority_id:required}
-    {-array:required}
+    {-authority_id ""}
+    {-array}
 } {
-    Get info about an authority, either by authority_id, user_id, or authority short_name.
+    Get info about an authority and return the authority_id. If no authority is specified, then
+    return
 
-    @param authority_id The authority you want to get.
-
-    @param array Name of an array into which you want the attributes delivered.
-
+    @param  authority_id The authority you want to get.
+            If not specified, return the default authority
+    @param  array Name of an array into which the detailed attributes
+            should be delivered
     @return authority_id
 
     @author Lars Pind (lars@collaboraid.biz)
 } {
-    upvar $array row
 
-    array set row [util_memoize [list auth::authority::get_not_cached $authority_id]]
+    if {$authority_id eq ""} {
+        #
+        # Get the default authority (in future probably for the
+        # specified or current subsite).
+        #
+        set authority_id [lindex [auth::authority::get_authority_options] 0 1]
+    }
+
+    if {[info exists array]} {
+        upvar $array row
+        array set row [util_memoize [list auth::authority::get_not_cached $authority_id]]
+    }
 
     return $authority_id
 }
 
 ad_proc -public auth::authority::get_element {
-    {-authority_id:required}
+    {-authority_id ""}
     {-element:required}
 } {
     Return a specific element of the auth_authority data table.
-    Does a complete database query each time. Should not be used multiple times in a row.
-    Use auth::authority::get instead.
 
     @see auth::authority::get
 } {
-    if { [lsearch [get_select_columns] $element] == -1 } {
+    if { $element ni [get_select_columns] } {
         error "Column '$element' not found in the auth_authority data source."
     }
 
@@ -277,6 +285,7 @@ ad_proc -public auth::authority::delete {
     Delete an authority.
 } {
     db_exec_plsql delete_authority {}
+    auth::authority::get_id_flush
 }
 
 ad_proc -public auth::authority::get_authority_options {} {
@@ -327,7 +336,7 @@ ad_proc -public auth::authority::batch_sync {
             set doc_result(doc_message) $errorMsg
         }
 
-        set snapshot_p [template::util::is_true $doc_result(snapshot_p)]
+        set snapshot_p [string is true -strict $doc_result(snapshot_p)]
 
         auth::sync::job::end_get_document \
             -job_id $job_id \
@@ -465,7 +474,7 @@ ad_proc -private auth::authority::get_required_columns {} {
     }
 }
 
-ad_proc -private auth::authority::get_sc_impl_columns {} {
+ad_proc -public auth::authority::get_sc_impl_columns {} {
     Get a list of column names for storing service contract implementation ids
     of the authority.
 
@@ -515,21 +524,24 @@ ad_proc -private auth::authority::get_not_cached {
 } {
     set columns [get_columns]
 
-    lappend columns "(select impl_pretty_name from acs_sc_impls where impl_id = auth_impl_id) as auth_impl_name"
-    lappend columns "(select impl_pretty_name from acs_sc_impls where impl_id = pwd_impl_id) as pwd_impl_name"
-    lappend columns "(select impl_pretty_name from acs_sc_impls where impl_id = register_impl_id) as register_impl_name"
-    lappend columns "(select impl_pretty_name from acs_sc_impls where impl_id = user_info_impl_id) as user_info_impl_name"
+    lappend columns \
+        "(select impl_pretty_name from acs_sc_impls where impl_id = auth_impl_id) as auth_impl_name" \
+        "(select impl_pretty_name from acs_sc_impls where impl_id = pwd_impl_id) as pwd_impl_name" \
+        "(select impl_pretty_name from acs_sc_impls where impl_id = register_impl_id) as register_impl_name" \
+        "(select impl_pretty_name from acs_sc_impls where impl_id = user_info_impl_id) as user_info_impl_name"
+
     if {[apm_version_names_compare [ad_acs_version] 5.5.0] > -1} {
         lappend columns "(select impl_pretty_name from acs_sc_impls where impl_id = search_impl_id) as search_impl_name"
     }
-    lappend columns "(select impl_pretty_name from acs_sc_impls where impl_id = get_doc_impl_id) as get_doc_impl_name"
-    lappend columns "(select impl_pretty_name from acs_sc_impls where impl_id = process_doc_impl_id) as process_doc_impl_name"
+    lappend columns \
+        "(select impl_pretty_name from acs_sc_impls where impl_id = get_doc_impl_id) as get_doc_impl_name" \
+        "(select impl_pretty_name from acs_sc_impls where impl_id = process_doc_impl_id) as process_doc_impl_name"
 
-    db_1row select_authority "
+    db_1row select_authority [subst {
         select     [join $columns ",\n                   "]
         from       auth_authorities
         where      authority_id = :authority_id
-    " -column_array row
+    }] -column_array row
 
     return [array get row]
 }
@@ -552,8 +564,8 @@ ad_proc -private auth::authority::get_id_not_cached {
     Get authority_id by short_name. Not cached.
 } {
     return [db_string select_authority_id {
-        select authority_id 
-        from   auth_authorities 
+        select authority_id
+        from   auth_authorities
         where  short_name = :short_name
     } -default {}]
 }

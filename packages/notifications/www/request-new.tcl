@@ -10,6 +10,8 @@ ad_page_contract {
     object_id:naturalnum,notnull
     {pretty_name:allhtml ""}
     return_url:localurl
+    interval_id:integer,optional
+    delivery_method_id:integer,optional
 }
 
 set user_id [auth::require_login]
@@ -42,13 +44,15 @@ ad_form -name subscribe -export {
     }
 } -on_submit {
 
-    # Add the subscribe
-    notification::request::new \
-        -type_id $type_id \
-        -user_id $user_id \
-        -object_id $object_id \
-        -interval_id $interval_id \
-        -delivery_method_id $delivery_method_id
+    db_transaction {
+        # Add the subscribe
+        notification::request::new \
+            -type_id $type_id \
+            -user_id $user_id \
+            -object_id $object_id \
+            -interval_id $interval_id \
+            -delivery_method_id $delivery_method_id
+    }
 
     ad_returnredirect $return_url
     ad_script_abort

@@ -40,34 +40,36 @@ ad_proc -public ad_find_all_files {
     # add contained files to $new_files_to_examine (which will become
     # $files_to_examine in the next iteration).
     while { [incr max_depth -1] > 0 && [llength $files_to_examine] != 0 } {
-	set new_files_to_examine [list]
-	foreach file $files_to_examine {
-	    # Only examine the file if we haven't already. (This is just a safeguard
-	    # in case, e.g., Tcl decides to play funny games with symbolic links so
-	    # we end up encountering the same file twice.)
-	    if { ![info exists examined_files($file)] } {
-		# Remember that we've examined the file.
-		set examined_files($file) 1
+        set new_files_to_examine [list]
+        foreach file $files_to_examine {
+            # Only examine the file if we haven't already. (This is just a safeguard
+            # in case, e.g., Tcl decides to play funny games with symbolic links so
+            # we end up encountering the same file twice.)
+            if { ![info exists examined_files($file)] } {
+                # Remember that we've examined the file.
+                set examined_files($file) 1
 
-		if { $check_file_func eq "" || [$check_file_func $file] } {
-		    # If it's a file, add to our list. If it's a
-		    # directory, add its contents to our list of files to
-		    # examine next time.
-		    if { [file isfile $file] } {
-			lappend files $file
-		    } elseif { [file isdirectory $file] } {
+                if { $check_file_func eq "" || [$check_file_func $file] } {
+                    # If it's a file, add to our list. If it's a
+                    # directory, add its contents to our list of files to
+                    # examine next time.
+                    if { [file isfile $file] } {
+                        lappend files $file
+                    } elseif { [file isdirectory $file] } {
                         if { $include_bak_dirs && [string match "*.bak" $file] } {
                             continue
                         }
                         if { $include_dirs == 1 } {
                             lappend files $file
                         }
-			lappend new_files_to_examine {*}[glob -nocomplain "$file/*"]
-		    }
-		}
-	    }
-	}
-	set files_to_examine $new_files_to_examine
+                        if {[catch {lappend new_files_to_examine {*}[glob -nocomplain "$file/*"]} errorMsg]} {
+                            ns_log warning "ad_find_all_files: $errorMsg"
+                        }
+                    }
+                }
+            }
+        }
+        set files_to_examine $new_files_to_examine
     }
     return $files
 }

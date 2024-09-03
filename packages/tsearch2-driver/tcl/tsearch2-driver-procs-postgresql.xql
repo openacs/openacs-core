@@ -1,13 +1,24 @@
 <queryset>
 
   <fullquery name="tsearch2::index.index">
-  <rdbms><type>postgresql</type><version>8.3</version></rdbms>
     <querytext>
-      insert into txt (object_id,fti)
-      values (:object_id,
-              setweight(to_tsvector(coalesce(:title,'')),'A')
-              ||setweight(to_tsvector(coalesce(:keywords,'')),'B')
-              ||to_tsvector(coalesce(:txt,'')))
+      with index as (
+       select setweight(to_tsvector(coalesce(:title,'')),'A')
+            ||setweight(to_tsvector(coalesce(:keywords,'')),'B')
+            ||to_tsvector(coalesce(:txt,'')) as fti
+       from dual
+      ),
+      insert as (
+      insert into txt (object_id, fti)
+        select o.object_id, i.fti
+          from acs_objects o, index i
+         where object_id = :object_id
+           and not exists (select 1 from txt
+                            where object_id = o.object_id)
+      )
+      update txt set
+        fti = (select fti from index)
+       where object_id = :object_id
     </querytext>
   </fullquery>
 
@@ -58,7 +69,7 @@
   <fullquery name="dbqd.tsearch2-driver.tcl.tsearch2-driver-procs.callback::search::search::impl::tsearch2-driver.search_result_count">
   <rdbms><type>postgresql</type><version>8.4</version></rdbms>
     <querytext>
-      select count(distinct(orig_object_id)) from acs_permission__permission_p_recursive_array(array(
+      select count(distinct(orig_object_id)) from acs_permission.permission_p_recursive_array(array(
       select txt.object_id
       from [join $from_clauses ","]
       $base_query
@@ -73,17 +84,6 @@
     <querytext>
       select ts_headline(:txt,to_tsquery(:query))
     </querytext>
-  </fullquery>
-
-  <fullquery name="tsearch2::update_index.update_index">
-  <rdbms><type>postgresql</type><version>8.3</version></rdbms>
-    <querytext>
-       update txt set fti =
-         setweight(to_tsvector(coalesce(:title,'')),'A')
-           ||setweight(to_tsvector(coalesce(:keywords,'')),'B')
-           ||to_tsvector(coalesce(:txt,''))
-         where object_id=:object_id
-    </querytext>   
   </fullquery>
 
   <fullquery name="callback::search::search::impl::tsearch2-driver.count">

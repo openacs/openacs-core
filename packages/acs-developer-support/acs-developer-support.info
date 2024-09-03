@@ -8,20 +8,20 @@
     <singleton-p>t</singleton-p>
     <auto-mount>ds</auto-mount>
 
-    <version name="5.10.0d1" url="http://openacs.org/repository/download/apm/acs-developer-support-5.10.0d1.apm">
+    <version name="5.10.1" url="http://openacs.org/repository/download/apm/acs-developer-support-5.10.1.apm">
         <owner url="mailto:lars@pinds.com">Lars Pind</owner>
         <summary>Profiling for requests including database timing information.</summary>
-        <release-date>2017-08-06</release-date>
+        <release-date>2024-09-02</release-date>
         <vendor url="http://openacs.org">OpenACS</vendor>
         <description format="text/html">Developer support stores timing and other logged information for requests 
         to support debugging and tuning and supports user switching and a Tcl Shell to invoke arbitrary tcl code on the server.
         </description>
         <maturity>3</maturity>
 
-        <provides url="acs-developer-support" version="5.10.0d1"/>
-	<requires url="acs-tcl" version="5.9.1"/>
-	<requires url="acs-kernel" version="5.9.1"/>
-        <requires url="acs-templating" version="5.9.1"/>
+        <provides url="acs-developer-support" version="5.10.1"/>
+	<requires url="acs-tcl" version="5.10.1"/>
+	<requires url="acs-kernel" version="5.10.1"/>
+        <requires url="acs-templating" version="5.10.1"/>
 
         <callbacks>
         </callbacks>
@@ -29,7 +29,7 @@
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="AdpRevealEnabledP"  default="0" description="Should a frame be put around each ADP file in the page, with an identifying title and hyperlink to api-doc." section_name="developer-support"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="DataLifetime"  default="900" description="Number of seconds to keep connection data" section_name="developer-support"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="DataSweepInterval"  default="900" description="Number of seconds between sweeping for old data" section_name="developer-support"/>
-            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="ProfileEnabledP"  default="0" description="Remember timing informaton of included templates?" section_name="developer-support"/>
+            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="ProfileEnabledP"  default="0" description="Remember timing information of included templates?" section_name="developer-support"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="DatabaseEnabledP"  default="0" description="Remember information about every database request?" section_name="developer-support"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="EnabledIPs"  default="*" description="remember information for which client hosts?" section_name="developer-support"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="EnabledOnStartupP"  default="0" description="Remember information about connections, for developers' benefit?" section_name="developer-support"/>

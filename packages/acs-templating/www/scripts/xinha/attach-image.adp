@@ -45,7 +45,7 @@
 			</div> 
 		</td></tr>
 		<tr><td>
-			<formwidget id="select_btn">&nbsp;<input type="button" name="cancel" value="#acs-templating.HTMLArea_action_cancel#" onclick="javascript:onCancel();"></input>
+			<formwidget id="select_btn">&nbsp;<input type="button" name="cancel" value="#acs-templating.HTMLArea_action_cancel#" onclick="javascript:onCancel();">
 		</td></tr>
 		</table>
 		</fieldset>
@@ -75,7 +75,7 @@
 		    <formerror id="share">
 		      <div class="form-error">@formerror.share@</div>
 		    </formerror>                        
-	<br /><formwidget id="upload_btn">&nbsp;<input type="button" name="cancel" value="#acs-templating.HTMLArea_action_cancel#" onclick="javascript:onCancel();"></input>
+	<br /><formwidget id="upload_btn">&nbsp;<input type="button" name="cancel" value="#acs-templating.HTMLArea_action_cancel#" onclick="javascript:onCancel();">
 	</fieldset>
       </td>
     </tr>

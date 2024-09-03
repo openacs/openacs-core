@@ -1,7 +1,11 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {How to Update the OpenACS.org repository}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {How to Update the OpenACS.org repository}</property>
 <property name="doc(title)">How to Update the OpenACS.org repository</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="releasing-openacs-core" leftLabel="Prev"
 			title="Chapter 16. Releasing

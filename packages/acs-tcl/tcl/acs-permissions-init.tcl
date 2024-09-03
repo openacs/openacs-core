@@ -3,12 +3,18 @@
             # file like the following:
 #
 # ns_section ns/server/${server}/acs/acs-tcl
-#   ns_param PermissionCacheSize        100000
+#   ns_param PermissionCacheSize        100KB
 #   ns_param PermissionCachePartitions  2
 #
 ::acs::KeyPartitionedCache create ::acs::permission_cache \
     -package_key acs-tcl \
     -parameter PermissionCache \
-    -default_size 100000 \
+    -default_size 100KB \
     -partitions 2
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

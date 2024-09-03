@@ -1,6 +1,6 @@
 ad_page_contract {
 
-    Index of all object types (alphabetical, not hierarchichal)
+    Index of all object types (alphabetical, not hierarchical)
 
     @author Yonatan Feldman (yon@arsdigita.com)
     @creation-date August 15, 2000

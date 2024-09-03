@@ -1,7 +1,11 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Package Manager Requirements}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Package Manager Requirements}</property>
 <property name="doc(title)">Package Manager Requirements</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="subsites-design" leftLabel="Prev"
 			title="Chapter 15. Kernel
@@ -9,8 +13,10 @@ Documentation"
 			rightLink="apm-design" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="apm-requirements" id="apm-requirements"></a>Package Manager Requirements</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">By Bryan Quinn and Todd
-Nightingale</span></p><span style="color: red">&lt;/authorblurb&gt;</span><div class="sect2">
+<a name="apm-requirements" id="apm-requirements"></a>Package Manager Requirements</h2></div></div></div><div class="authorblurb">
+<p>By Bryan Quinn and Todd Nightingale</p>
+OpenACS docs are written by the named authors, and may be edited by
+OpenACS documentation staff.</div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="apm-requirements-intro" id="apm-requirements-intro"></a>Introduction</h3></div></div></div><p>The following is a requirements document for the OpenACS Package
 Manager (APM), version 4.0 (APM4). APM4 offers a superset of APM
@@ -32,7 +38,7 @@ document.</p>
 <a name="apm-requirements-vision" id="apm-requirements-vision"></a>Vision Statement</h3></div></div></div><p>A typical website will tend to offer its users a number of
 web-based services or applications, e.g. a bulletin board,
 calendaring, classified ads, etc. A website may also have
-underlying subsystems, such as a permissions system, content
+underlying subsystems, such as a permission system, content
 management system, etc. For such applications and subsystem
 components, modularity - or the degree to which a component can be
 encapsulated and decoupled from the rest of the system - is of
@@ -42,10 +48,10 @@ upgraded easily, with minimum disturbance to the rest of the
 system. This allows site owners to steadily offer users new and
 improved services, and also allows programmers to quickly and
 easily distribute their OpenACS components in a standardized manner
-to other OpenACS sites.</p><p>In general terms, a package is a unit of software that serves a
-single well-defined purpose. The OpenACS Package Manager (APM)
-provides a mechanism for packaging, installing, and configuring
-OpenACS software in a consistent, user-friendly, and subsite-aware
+to other OpenACS sites.</p><p>In general, a package is a unit of software that serves a single
+well-defined purpose. The OpenACS Package Manager (APM) provides a
+mechanism for packaging, installing, and configuring OpenACS
+software in a consistent, user-friendly, and subsite-aware
 manner.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
@@ -69,8 +75,8 @@ configuration file)</p></li><li class="listitem"><p>Upgrading packages, without 
 </ul></div>
 </li><li class="listitem"><p>
 <span class="strong"><strong>A registry of installed
-packages</strong></span>, database-backed and integrated with file
-system-based version control</p></li><li class="listitem">
+packages</strong></span>, database-backed and integrated with
+filesystem-based version control</p></li><li class="listitem">
 <p><span class="strong"><strong>Web-based tools for package
 development:</strong></span></p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle;">
 <li class="listitem"><p>Creating new packages locally</p></li><li class="listitem"><p>Releasing new versions of locally-created packages</p></li><li class="listitem"><p>Uploading packages to a global package repository on the web</p></li><li class="listitem"><p>Use of these tools should be safe, i.e. installing or removing a
@@ -260,7 +266,7 @@ API.</p>
 identified.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>
 <span class="strong"><strong>4.600.1</strong></span> Each
-package will have a PGP signature and there will be MD5 time stamps
+package will have a PGP signature and there will be MD5 timestamps
 for each file within the package.</p></li><li class="listitem"><p>
 <span class="strong"><strong>4.600.5</strong></span> The APM
 will provide a facility to validate both the PGP signature and MD5
@@ -308,18 +314,19 @@ created.</p>
 package</strong></span></p><p>
 <span class="strong"><strong>20.1</strong></span> The developer
 must be able to add files to the package. This is done by copying
-the files into the package directory in the host OS&#39;s file
-system. Files can be added at any point after package creation.</p><p>
+the files into the package directory in the host OS&#39;s
+filesystem. Files can be added at any point after package
+creation.</p><p>
 <span class="strong"><strong>20.3</strong></span> Once a package
 has been versioned and distributed, no new files should be added to
 the package without incrementing the version number.</p><p>
 <span class="strong"><strong>20.5</strong></span> The APM&#39;s
 UI should facilitate the process of adding new files, by scanning
-the file system for new files automatically, and allowing the
+the filesystem for new files automatically, and allowing the
 developer to confirm adding them.</p><p>
 <span class="strong"><strong>20.10</strong></span> The developer
 cannot add files to a given package via the UI that do not exist in
-the file system already.</p><p>
+the filesystem already.</p><p>
 <span class="strong"><strong>20.15</strong></span> Package file
 structure must follow a specified convention. Please see the
 <a class="link" href="apm-design" title="Package Manager Design">design document</a> for what we do
@@ -333,12 +340,12 @@ can be done in two ways.</p><div class="itemizedlist"><ul class="itemizedlist" s
 <span class="strong"><strong>30.1</strong></span> Access the APM
 UI, browse the file list, and remove files.</p><p>
 <span class="strong"><strong>30.1.1</strong></span>If a file is
-removed from the package list, but not from the file system, an
+removed from the package list, but not from the filesystem, an
 error should be generated at package load time.</p>
 </li><li class="listitem">
 <p>
 <span class="strong"><strong>30.5</strong></span> Remove the
-file from file system.</p><p>
+file from filesystem.</p><p>
 <span class="strong"><strong>30.5.1</strong></span> The APM UI
 should take note of the fact that the file is gone and offer the
 developer an option to confirm the file&#39;s deletion.</p>
@@ -349,8 +356,8 @@ developer an option to confirm the file&#39;s deletion.</p>
 <span class="strong"><strong>40.0 Modify files in a
 package</strong></span>.</p><p>
 <span class="strong"><strong>40.1</strong></span> The developer
-should be able to modify files in the file system. The APM UI
-should not interfere with this.</p><p>
+should be able to modify files in the filesystem. The APM UI should
+not interfere with this.</p><p>
 <span class="strong"><strong>40.5</strong></span> However, if
 the developer modifies files containing procedural definitions, APM
 UI should allow a means to <span class="strong"><strong>watch</strong></span> those files and
@@ -391,7 +398,7 @@ should be able to view the XML package specification that encodes
 all package information.</p>
 </li><li class="listitem">
 <p><span class="strong"><strong>70.0 Write an XML package
-specification to the file system</strong></span></p><p>
+specification to the filesystem</strong></span></p><p>
 <span class="strong"><strong>70.1</strong></span> The developer
 should be able to write an up-to-date XML specification to
 disk.</p><p>
@@ -461,7 +468,7 @@ Install</strong></span></p><p>
 administrator must be able to install new packages either from
 locally maintained .APM files or from URLs.</p><p>
 <span class="strong"><strong>90.5</strong></span> In the case of
-an URL, the APM transparently downloads the APM file off the web,
+a URL, the APM transparently downloads the APM file off the web,
 proceeds with a file based installation, and then optionally
 removes the .APM file just downloaded.</p><p>
 <span class="strong"><strong>90.10.1</strong></span> If .APM
@@ -559,7 +566,7 @@ been installed. Deinstallation entails:</p><div class="orderedlist"><ol class="o
 <span class="strong"><strong>110.1.1</strong></span> Running any
 data model scripts necessary to drop the package.</p></li><li class="listitem"><p>
 <span class="strong"><strong>110.1.5</strong></span> Moving all
-of the files into a separate location in the file system from the
+of the files into a separate location in the filesystem from the
 installed packages.</p></li><li class="listitem"><p>
 <span class="strong"><strong>4.110.1.10</strong></span> If the
 package is a compound package, then the administrator must confirm
@@ -588,10 +595,10 @@ throughout a site and should almost never be done.</p>
 <p><span class="strong"><strong>150.0 Scan for new or modified
 packages</strong></span></p><p>
 <span class="strong"><strong>150.1</strong></span> The
-administrator should be able to scan the file system for any
-changes made in any of the installed package files.</p><p>
+administrator should be able to scan the filesystem for any changes
+made in any of the installed package files.</p><p>
 <span class="strong"><strong>150.5</strong></span> The
-administrator should be able to scan the file system for any newly
+administrator should be able to scan the filesystem for any newly
 installed packages.</p>
 </li>
 </ul></div>

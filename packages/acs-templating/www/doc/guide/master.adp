@@ -1,7 +1,11 @@
 
-<property name="context">{/doc/acs-templating {ACS Templating}} {Templating System User Guide: Using Master Templates}</property>
+<property name="context">{/doc/acs-templating/ {ACS Templating}} {Templating System User Guide: Using Master Templates}</property>
 <property name="doc(title)">Templating System User Guide: Using Master Templates</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h2>Using Master Templates</h2>
 <a href="..">Templating System</a>
  : <a href="../developer-guide">Developer Guide</a>
@@ -45,8 +49,7 @@ registered users.</p>
 <h3>Write the Master Template</h3>
 <p>A master template to implement the page layout shown above would
 have this basic structure:</p>
-<blockquote><pre>
-&lt;html&gt;&lt;body&gt;&lt;table width="100%" cellspacing="0" cellpadding="0" border="0"&gt;
+<blockquote><pre>&lt;html&gt;&lt;body&gt;&lt;table width="100%" cellspacing="0" cellpadding="0" border="0"&gt;
 
 &lt;tr&gt;
   &lt;td&gt;&lt;!-- LOGO --&gt;&lt;/td&gt;
@@ -94,8 +97,7 @@ main content area. For example, you might wish to include the
 user&#39;s name on every page to indicate that the site has been
 personalized. The Tcl script associated with the master template
 would include code like this:</p>
-<blockquote><pre>
-set user_name [your_procedure_to_get_the_current_user_name]</pre></blockquote>
+<blockquote><pre>set user_name [your_procedure_to_get_the_current_user_name]</pre></blockquote>
 <p>The template would have a section like this:</p>
 <blockquote><pre>&lt;if \@user_name\@ nil&gt;
   &lt;a href="/register.acs"&gt;Register Now!&lt;/a&gt;

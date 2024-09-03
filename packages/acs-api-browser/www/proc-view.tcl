@@ -41,6 +41,19 @@ if { ![info exists source_p] || $source_p eq ""} {
     if {$source_p eq ""} {set source_p 0}
 }
 
+#
+# The check for "Class " is based on a regexp, since this is more
+# robust than e.g. llength and friends in case of hacking attacks,
+# which can lead to errors with invalid list structures.
+#
+# The following check is probably here not at the right place, since
+# the proc value should be directly usable here. So "Class " should
+# probably not be part of the link.
+#
+if {[regexp {^Class (.*)$} $proc . reminder]} {
+    set proc $reminder
+}
+
 if {[string match ::* $proc]} {
     set absolute_proc $proc
     set relative_proc [string range $proc 2 end]
@@ -76,12 +89,12 @@ proc $proc {[info args $proc]} {
 }
 </pre></p>
         }]
-    } elseif {[info commands $absolute_proc] eq $absolute_proc} {
+    } elseif {[namespace which $absolute_proc] eq $absolute_proc} {
 
         #
         # In case the cmd is an object, redirect to the object browser
         #
-        if {[info commands ::nsf::is] ne "" && [nsf::is object $absolute_proc]} {
+        if {[namespace which ::nsf::is] ne "" && [nsf::is object $absolute_proc]} {
             ad_returnredirect [export_vars -base /xotcl/show-object {{object $absolute_proc}}]
             ad_script_abort
         }
@@ -112,7 +125,7 @@ proc $proc {[info args $proc]} {
         }
 
         if {$url ne ""} {
-            ns_log notice "api-doc/www/proc-view got URL <$url>"
+            #ns_log notice "api-doc/www/proc-view got URL <$url>"
             ad_returnredirect -allow_complete_url $url
             ad_script_abort
         }
@@ -138,8 +151,9 @@ proc $proc {[info args $proc]} {
         set documentation [api_proc_documentation -script $proc_index]
     }
 }
-set procViewToggleURL [export_vars -base proc-view -no_empty [list proc [list source_p [expr {!$source_p}]] version_id]]
-set setDefaultURL [export_vars -base set-default [list source_p return_url]]
+set toggle_source_p [expr {!$source_p}]
+set procViewToggleURL [export_vars -base proc-view -no_empty {proc {source_p $toggle_source_p} version_id}]
+set setDefaultURL     [export_vars -base set-default {source_p return_url}]
 
 #
 # Local variables:

@@ -155,7 +155,7 @@ and some_table.condition_p = '$foo'</programlisting>
           Another very important reason for using bind variables is
 	  performance. Oracle can cache previously parsed queries. If
 	  there are values in the where clause, that is how the query
-	  is cached. It also performs bind variable susbstitution
+	  is cached. It also performs bind variable substitution
 	  after parsing the SQL statement. This means that SQL
 	  statements that use bind variables will always match
 	  (assuming all else is the same) while SQL statements that do
@@ -168,7 +168,7 @@ and some_table.condition_p = '$foo'</programlisting>
     </orderedlist>
 
     <para>
-      What the DB API (in conjuntion with the database drivers
+      What the DB API (in conjunction with the database drivers
       implemented for AOLserver) do is send the SQL statement to the
       server for parsing, then <emphasis>bind</emphasis> values to the
       variables and sends those values along separately as a second
@@ -185,7 +185,7 @@ and some_table.condition_p = '$foo'</programlisting>
       cannot change the actual text of the query, only the literal
       values in the placeholders.  The database API makes bind
       variables easy to use by hooking them smoothly into the Tcl
-      runtime so you simply provide :tclvar and the value of $tclvar 
+      run time so you simply provide :tclvar and the value of $tclvar 
       is sent to the backend to actually execute the query.
     </para>
 
@@ -193,7 +193,7 @@ and some_table.condition_p = '$foo'</programlisting>
       The database API parses the query and pulls out all the bind variable
       specifications and replaces them with generic placeholders.  It then
       automatically pulls the values of the named Tcl vars out of the
-      runtime environment of the script, and passes them to the database.
+      run time environment of the script, and passes them to the database.
     </para>
 
     <para>
@@ -441,9 +441,7 @@ PoolSequence.sec_id_seq=20
 	</term>
 
 	<listitem>
-	  <programlisting>
-db_abort_transaction
-	  </programlisting> 
+	  <programlisting>db_abort_transaction</programlisting> 
 
 	  <para>Aborts all levels of a transaction. That is if this is called within
 	    several nested transactions, all of them are terminated. Use this instead of
@@ -491,7 +489,7 @@ db_abort_transaction
     You may supply a code block, which will be executed for each row in
     the loop. This is very useful if you need to make computations that
     are better done in Tcl than in SQL, for example using ns_urlencode
-    or ad_quotehtml, etc. When the Tcl code is executed, all the columns
+    or ns_quotehtml, etc. When the Tcl code is executed, all the columns
     from the SQL query will be set as local variables in that code. Any
     changes made to these local variables will be copied back into the
     multirow.
@@ -521,8 +519,7 @@ db_abort_transaction
 
     <para>
     Notice the nonstandard numbering (everything
-    else in Tcl starts at 0); the reason is that the graphics designer, a non
-    programmer, may wish to work with row numbers.
+    else in Tcl starts at 0); the reason is that the graphics designer, a non-programmer, may wish to work with row numbers.
     </para>
 
     <para>

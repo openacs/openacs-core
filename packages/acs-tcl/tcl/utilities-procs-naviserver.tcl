@@ -17,14 +17,16 @@ if {[ns_info name] ne "NaviServer"} {
 # NaviServer implementation of ad_url(en|de)code* procs
 #-------------------------------------------------------------------------
 
-ad_proc -public ad_urlencode_folder_path {path} {
+ad_proc -public ad_urlencode_folder_path { folder_path } {
+
     Perform an urlencode operation on the segments of the provided
-    folder (for a full folder path rather than path segments as in
-            ad_urlencode_path).
+    folder path, i.e. for a full folder path rather than path segments
+    as in ad_urlencode_path.
+
     @see ad_urlencode_path
 } {
-    if {$path ne ""} {
-        return [ns_urlencode -part path -- {*}[split $path /]]
+    if {$folder_path ne ""} {
+        return [ns_urlencode -part path -- {*}[split $folder_path /]]
     } else {
         return ""
     }
@@ -33,7 +35,7 @@ ad_proc -public ad_urlencode_folder_path {path} {
 ad_proc -public ad_urlencode_path { string } {
     Encode provided string with url-encoding for paths segments
     (instead of query segments) as defined in RFC 3986
-} { 
+} {
     return [ns_urlencode -part path -- $string]
 }
 
@@ -47,7 +49,7 @@ ad_proc -public ad_urldecode_path { string } {
 ad_proc -public ad_urlencode_query { string } {
     Encode provided string with url-encoding for query segments
     (instead of paths) as defined in RFC 3986
-} { 
+} {
     return [ns_urlencode -part query -- $string]
 }
 
@@ -66,14 +68,19 @@ ad_proc -public ad_unset_cookie {
     {-secure f}
     {-domain ""}
     {-path "/"}
+    {-samesite lax}
     name
 } {
     Un-sets a cookie.
-    
+
     @see ad_get_cookie
     @see ad_set_cookie
 } {
-    ns_deletecookie -domain $domain -path $path -replace t -secure $secure -- $name
+    if {[::acs::icanuse "ns_deletecookie -samesite"]} {
+        ns_deletecookie -domain $domain -path $path -replace t -secure $secure -samesite $samesite -- $name
+    } else {
+        ns_deletecookie -domain $domain -path $path -replace t -secure $secure -- $name
+    }
 }
 
 #
@@ -81,13 +88,14 @@ ad_proc -public ad_unset_cookie {
 #
 ad_proc -public ad_get_cookie {
     { -include_set_cookies t }
-    name 
+    name
     { default "" }
-} { 
+} {
     Returns the value of a cookie, or $default if none exists.
 
     @see ad_set_cookie
     @see ad_unset_cookie
+    @see ad_get_signed_cookie
 } {
     ns_getcookie -include_set_cookies $include_set_cookies -- $name $default
 }
@@ -102,10 +110,11 @@ ad_proc -public ad_set_cookie {
     {-domain ""}
     {-path "/"}
     {-discard f}
-    {-scriptable t}    
-    name 
+    {-scriptable t}
+    {-samesite none}
+    name
     {value ""}
-} { 
+} {
 
     Sets a cookie.  Cookies are name/value pairs stored in a client's
     browser and are typically sent back to the server of origin with
@@ -115,8 +124,8 @@ ad_proc -public ad_set_cookie {
     seconds (consistent with RFC 2109). max_age "inf" specifies cookies
     that never expire. The default behavior is to issue session
     cookies.
-    
-    @param expire specifies whether we should expire (clear) the cookie. 
+
+    @param expire specifies whether we should expire (clear) the cookie.
     Setting Max-Age to zero ought to do this, but it doesn't in some browsers
     (tested on IE 6).
 
@@ -128,7 +137,7 @@ ad_proc -public ad_set_cookie {
 
     @param secure specifies to the user agent that the cookie should
     only be transmitted back to the server of secure transport.
-    
+
     @param replace forces the current output headers to be checked for
     the same cookie. If the same cookie is set for a second time
     without the replace option being specified, the client will
@@ -145,10 +154,11 @@ ad_proc -public ad_set_cookie {
     with earlier versions, OpenACS 5.8 has the default set to
     "true". OpenACS 5.9 will have the flag per default set to "false".
 
-    @param value is autmatically URL encoded.
+    @param value is automatically URL encoded.
 
     @see ad_get_cookie
-    @see ad_unset_cookie    
+    @see ad_unset_cookie
+    @see ad_set_signed_cookie
 } {
 
 
@@ -162,14 +172,19 @@ ad_proc -public ad_set_cookie {
         }
     }
 
+    if {$samesite ne "none" && [::acs::icanuse "ns_setcookie -samesite"]} {
+        set samesiteFlag "-samesite $samesite"
+    } else {
+        set samesiteFlag ""
+    }
     ns_setcookie -discard $discard -domain $domain -expires $expire -path $path \
-        -replace $replace -scriptable $scriptable -secure $secure -- \
+        -replace $replace -scriptable $scriptable -secure $secure {*}$samesiteFlag -- \
         $name $value
 }
 
 #-------------------------------------------------------------------------
 # Provide a clean way of handling exceptions in mutexed regions
-# (between locking and unlocking of an mutex). Should be used probably
+# (between locking and unlocking of a mutex). Should be used probably
 # on more places in OpenACS.
 #-------------------------------------------------------------------------
 
@@ -180,7 +195,7 @@ ad_proc -public ad_mutex_eval {mutex script} {
     eval".
 
     @author Gustaf Neumann
-    
+
 } {
     uplevel [list ns_mutex eval $mutex $script]
 }
@@ -191,4 +206,3 @@ ad_proc -public ad_mutex_eval {mutex script} {
 #    tcl-indent-level: 4
 #    indent-tabs-mode: nil
 # End:
-

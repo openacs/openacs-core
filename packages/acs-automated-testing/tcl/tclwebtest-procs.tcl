@@ -24,7 +24,7 @@ ad_proc twt::do_request { page_url } {
 
     # Qualify page_url if necessary
     if { [regexp {^/} $page_url] } {
-        set page_url "[twt::server_url]${page_url}"
+        set page_url [acs::test::url]${page_url}
     }
 
     set retry_count 0
@@ -38,7 +38,7 @@ ad_proc twt::do_request { page_url } {
                 {unreachable} - {refused} {
                     ::twt::log "Failed to connect to server with error \"$errmsg\" - retrying"
                     incr retry_count
-                    exec "sleep" "5"
+                    ns_sleep 5s
                     set error_p 0
                     continue
                 }
@@ -67,11 +67,16 @@ ad_proc twt::log { message } {
     ns_log Notice "twt::log - $message"
 }
 
-ad_proc twt::server_url {} {
+ad_proc -deprecated twt::server_url {} {
     Get the URL of the server (like ad_url) using the IP number of the server.
     Is more bulletproof than using the domain name.
 
     @author Peter Marklund
+
+    DEPRECATED: a more reliable api is now available that also allows
+    to override it via parameter.
+
+    @see acs::test::url
 } {
     set ip_address [ns_config ns/server/[ns_info server]/module/nssock Address]
 
@@ -91,11 +96,11 @@ ad_proc twt::server_url {} {
 
 #########################
 #
-# twt::user namespace
+# twt::usernamespace
 #
 #########################
 
-ad_proc twt::user::create {
+ad_proc -deprecated twt::user::create {
     {-user_id {}}
     {-admin:boolean}
  } {
@@ -107,14 +112,18 @@ ad_proc twt::user::create {
             the additional keys email and password.
 
     @author Peter Marklund
+
+    @see acs::test::user::create
  } {
      return [acs::test::user::create -user_id $user_id -admin=$admin_p]
 }
 
-ad_proc twt::user::delete {
+ad_proc -deprecated twt::user::delete {
     {-user_id:required}
 } {
     Remove a test user.
+
+    @see ::acs::test::user_delete
 } {
     ::acs::test::user_delete -user_id $user_id
 }
@@ -132,7 +141,7 @@ ad_proc twt::user::login { email password {username ""}}  {
     tclwebtest::cookies clear
 
     # Request the start page
-    ::twt::do_request "[twt::server_url]/register"
+    ::twt::do_request [acs::test::url]/register
 
     # Login the user
     tclwebtest::form find ~n login
@@ -165,7 +174,7 @@ ad_proc twt::user::login { email password {username ""}}  {
             error "Failed to login user with email=\"$email\" and password=\"$password\". No user with such email in database."
         } else {
             ns_log Error "Failed to log in user with email=\"$email\" and password=\"$password\" even though email exists (password may be incorrect). response_body=[tclwebtest::response body]"
-            error "Failed to log in user with email=\"$email\" and password=\"$password\" even though email exists (password may be incorrect). User should be able to request $home_uri without redirection, however response url=$response_url"
+            error "Failed to log in user with email=\"$email\" and password=\"$password\" even though email exists (password may be incorrect). User should be able to request $home_uri without redirection (response url=$response_url)"
 
         }
     }
@@ -174,7 +183,7 @@ ad_proc twt::user::login { email password {username ""}}  {
 ad_proc twt::user::logout {} {
     tclwebtest for logging the user out.
 } {
-    twt::do_request "[twt::server_url]/register/logout"
+    twt::do_request [acs::test::url]/register/logout
 }
 
 # Local variables:

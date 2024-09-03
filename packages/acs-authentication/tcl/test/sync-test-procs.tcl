@@ -16,6 +16,7 @@ aa_register_case \
         auth::sync::job::start
         auth::sync::job::start_get_document
         auth::sync::purge_jobs
+        auth::sync::job::get_authority_id
     } \
     sync_start_end {
     Test batch job basics: Starting, getting document, adding entries, ending.
@@ -24,10 +25,23 @@ aa_register_case \
         -rollback \
         -test_code {
 
-            # Start non-interactive job
+            # Start noninteractive job
+
+            set local_authority_id [auth::authority::local]
 
             set job_id [auth::sync::job::start \
-                            -authority_id [auth::authority::local]]
+                            -authority_id $local_authority_id]
+
+            aa_equals "Authority has been stored correctly" \
+                [auth::sync::job::get_authority_id -job_id $job_id] \
+                $local_authority_id
+
+            set broken_job_id [db_string get_broken_job {
+                select max(job_id) + 1 from auth_batch_jobs
+            }]
+            aa_true "Querying the authority on an invalid job id fails" [catch {
+                auth::sync::job::get_authority_id -job_id $broken_job_id
+            }]
 
             aa_true "Returns a job_id" {$job_id ne ""}
 
@@ -66,13 +80,13 @@ aa_register_case \
 
             aa_log "Elapsed time: $job(run_time_seconds) seconds"
 
-            aa_false "Not interactive" [template::util::is_true $job(interactive_p)]
+            aa_false "Not interactive" [string is true -strict $job(interactive_p)]
 
             aa_equals "Number of actions" $job(num_actions) 2
 
             aa_equals "Number of problems" $job(num_problems) 1
 
-            aa_false "Log URL non-empty" {$job(log_url) eq ""}
+            aa_false "Log URL nonempty" {$job(log_url) eq ""}
 
             # Purge not deleting the job
             auth::sync::purge_jobs \
@@ -111,7 +125,7 @@ aa_register_case \
         -rollback \
         -test_code {
 
-            # Start non-interactive job
+            # Start noninteractive job
 
             set job_id [auth::sync::job::start -authority_id [auth::authority::local]]
 
@@ -346,13 +360,13 @@ aa_register_case \
 
             aa_true "Elapsed time less than 30 seconds" {$job(run_time_seconds) < 30}
 
-            aa_false "Not interactive" [template::util::is_true $job(interactive_p)]
+            aa_false "Not interactive" [string is true -strict $job(interactive_p)]
 
             aa_equals "Number of actions" $job(num_actions) 6
 
             aa_equals "Number of problems" $job(num_problems) 2
 
-            aa_false "Log URL non-empty" {$job(log_url) eq ""}
+            aa_false "Log URL nonempty" {$job(log_url) eq ""}
 
         }
 }
@@ -362,7 +376,7 @@ aa_register_case \
     -procs {
         acs_user::get
         ad_generate_random_string
-        auth::authority::local
+        auth::authority::get_id
         auth::sync::job::action
         auth::sync::job::end
         auth::sync::job::get_entry
@@ -376,9 +390,11 @@ aa_register_case \
         -rollback \
         -test_code {
 
-            # Start non-interactive job
+            # Start noninteractive job
 
-            set job_id [auth::sync::job::start -authority_id [auth::authority::local]]
+            set test_authority_id [auth::authority::get_id -short_name "acs_testing"]
+
+            set job_id [auth::sync::job::start -authority_id $test_authority_id]
 
             aa_true "Returns a job_id" {$job_id ne ""}
 
@@ -421,7 +437,7 @@ aa_register_case \
                 aa_equals "user.first_names" [dict get $user first_names] $user_info(first_names)
                 aa_equals "user.last_name" [dict get $user last_name] $user_info(last_name)
                 aa_equals "user.email" [dict get $user email] [string tolower $email1]
-                aa_equals "user.authority_id" [dict get $user authority_id] [auth::authority::local]
+                aa_equals "user.authority_id" [dict get $user authority_id] $test_authority_id
                 aa_equals "user.username" [dict get $user username] $username1
                 aa_equals "user.url" [dict get $user url] $user_info(url)
             }
@@ -463,7 +479,7 @@ aa_register_case \
                 aa_equals "user.first_names" [dict get $user first_names] $user_info(first_names)
                 aa_equals "user.last_name" [dict get $user last_name] $user_info(last_name)
                 aa_equals "user.email" [dict get $user email] [string tolower $user_info(email)]
-                aa_equals "user.authority_id" [dict get $user authority_id] [auth::authority::local]
+                aa_equals "user.authority_id" [dict get $user authority_id] $test_authority_id
                 aa_equals "user.username" [dict get $user username] $username1
                 aa_equals "user.url" [dict get $user url] $user_info(url)
             }
@@ -476,7 +492,7 @@ aa_register_case \
             #####
 
             # We need this number to check the counts below
-            set authority_id [auth::authority::local]
+            set authority_id $test_authority_id
             set num_users_not_banned [db_string select_num {
                 select count(*)
                 from   cc_users
@@ -497,13 +513,13 @@ aa_register_case \
 
             aa_true "Elapsed time less than 30 seconds" {$job(run_time_seconds) < 30}
 
-            aa_false "Not interactive" [template::util::is_true $job(interactive_p)]
+            aa_false "Not interactive" [string is true -strict $job(interactive_p)]
 
             aa_equals "Number of actions" $job(num_actions) [expr {$num_users_not_banned + 1}]
 
             aa_equals "Number of problems" $job(num_problems) 0
 
-            aa_false "Log URL non-empty" {$job(log_url) eq ""}
+            aa_false "Log URL nonempty" {$job(log_url) eq ""}
 
         }
 }
@@ -543,6 +559,8 @@ aa_register_case \
         auth::sync::job::get_entries
         auth::sync::job::get_entry
         util_sets_equal_p
+
+        util_text_to_url
     } \
     sync_batch_ims_example_doc {
     Test IMS Enterprise 1.1 batch sync with the XML document from the specification.
@@ -697,7 +715,7 @@ aa_register_case \
                     -entry_id $entry_id \
                     -array entry
 
-                aa_false "Success_p is false" [template::util::is_true $entry(success_p)]
+                aa_false "Success_p is false" [string is true -strict $entry(success_p)]
 
                 array unset elm_msgs
                 array set elm_msgs $entry(element_messages)
@@ -737,9 +755,12 @@ aa_register_case \
         auth::authority::create
         auth::driver::set_parameter_value
         auth::sync::GetElements
+        auth::sync::process_doc::ims::GetElements
         auth::sync::job::get
         auth::sync::job::get_entries
         auth::sync::job::get_entry
+
+        util_text_to_url
     } \
     sync_batch_ims_test {
     Test IMS Enterprise 1.1 batch sync with a constructed document which actually works
@@ -1013,11 +1034,21 @@ aa_register_case \
 
 aa_register_case \
     -cats {api smoke} \
-    -procs acs_sc::invoke \
+    -procs {
+        ad_url
+        acs_sc::invoke
+        util_current_location
+
+        util_text_to_url
+        ad_sign
+        ad_get_signed_cookie_with_expr
+        ad_verify_signature_with_expr
+        auth::sync::get_doc::http::GetDocument
+    } \
     sync_http_get_document {
     Test the HTTPGet implementation of GetDocument service contract.
 } {
-    set url [ad_url]
+    set url [::acs::test::url]
     # When the server is configured with wildcard IPv4 address 0.0.0.0
     # and the hostname "localhost", and localhost is mapped on the
     # host to the IPv6 address "::1", then ns_http to
@@ -1025,6 +1056,12 @@ aa_register_case \
     # current IPv4 address http://127.0.0.1:.../ succeeds. However,
     # the determination of the current IP address requires NaviServer
     # 4.99.17d3 or newer, so we can't assume, this works always.
+    #
+    # If ad_url is empty, try util_current_location instead.
+    #
+    if {$url eq ""} {
+        set url [util_current_location]
+    }
     set parsed_url [ns_parseurl $url]
     if {[dict get $parsed_url host] eq "localhost"} {
         set url [dict get $parsed_url proto]://127.0.0.1:[dict get $parsed_url port]
@@ -1048,9 +1085,10 @@ aa_register_case \
     -procs {
         acs_sc::invoke
         template::util::read_file
+        auth::sync::get_doc::file::GetDocument
     } \
     sync_file_get_document {
-    Test the HTTPGet implementation of GetDocument service contract.
+    Test the LocalFilesystem implementation of GetDocument service contract.
 } {
     set path "$::acs::rootdir/www/SYSTEM/dbtest.tcl"
 
@@ -1067,6 +1105,250 @@ aa_register_case \
     aa_true "result.doc_message is empty" {$result(doc_message) eq ""}
     aa_equals "result.document is 'success'" $result(document) [template::util::read_file $path]
 }
+
+aa_register_case \
+    -cats {api web} \
+    -procs {
+        auth::sync::get_doc::http::GetParameters
+        auth::sync::get_doc::file::GetParameters
+    } \
+    sync_get_parameters {
+
+        Test the HTTPGet and LocalFilesystem implementations of
+        GetParameter service contract.
+
+    } {
+        set result [acs_sc::invoke \
+                        -error \
+                        -contract auth_sync_retrieve \
+                        -impl HTTPGet \
+                        -operation GetParameters]
+
+        aa_equals "Impl 'HTTPGet' parameters are ok" \
+            [lsort [dict keys $result]] {IncrementalURL SnapshotURL}
+
+        set result [acs_sc::invoke \
+                        -error \
+                        -contract auth_sync_retrieve \
+                        -impl LocalFilesystem \
+                        -operation GetParameters]
+
+        aa_equals "Impl 'LocalFilesystem' parameters are ok" \
+            [lsort [dict keys $result]] {IncrementalPath SnapshotPath}
+    }
+
+aa_register_case \
+    -cats {api web} \
+    -procs {
+        auth::sync::process_doc::ims::GetAcknowledgementDocument
+        auth::sync::process_doc::ims::GetElements
+        auth::sync::process_doc::ims::GetParameters
+        auth::sync::process_doc::ims::ProcessDocument
+        auth::sync::job::start
+        auth::sync::job::create_entry
+    } \
+    auth_sync_process_ims_implementations {
+        Test the IMS_Enterprise_v_1p1 implementations of
+        auth_sync_process service contract.
+    } {
+        aa_section auth::sync::process_doc::ims::GetParameters
+
+        set parameters [acs_sc::invoke \
+                            -contract auth_sync_process \
+                            -impl IMS_Enterprise_v_1p1 \
+                            -operation GetParameters]
+
+        aa_equals "Parameters are correct" \
+            [dict keys $parameters] Elements
+
+        aa_section auth::sync::process_doc::ims::GetElements
+
+        aa_equals "Elements correspond to the 'Elements' value in the parameters" \
+            [acs_sc::invoke \
+                 -contract auth_sync_process \
+                 -impl IMS_Enterprise_v_1p1 \
+                 -operation GetElements \
+                 -call_args [list $parameters]] \
+            [dict get $parameters Elements]
+
+        aa_section auth::sync::process_doc::ims::GetAcknowledgementDocument
+
+        aa_run_with_teardown \
+            -rollback \
+            -test_code {
+                set user [acs::test::user::create]
+                set authority_id [acs_user::get \
+                                      -user_id [dict get $user user_id] \
+                                      -element authority_id]
+
+                set job_id [auth::sync::job::start \
+                                -authority_id $authority_id]
+
+                array set recstatus {
+                    insert 1
+                    update 2
+                    delete 3
+                }
+
+                aa_log "One insert operation"
+
+                auth::sync::job::create_entry \
+                    -job_id $job_id \
+                    -operation insert \
+                    -username [dict get $user username] \
+                    -success
+
+                set timestamp 12345
+
+                set doc ""
+                append doc {<?xml version="1.0" encoding="} [ns_config "ns/parameters" OutputCharset] {"?>} \n
+                append doc {<enterprise>} \n
+                append doc {  <properties>} \n
+                append doc {    <type>acknowledgement</type>} \n
+                append doc {    <datetime>} $timestamp {</datetime>} \n
+                append doc {  </properties>} \n
+
+                # Loop over successful actions
+                db_foreach select_success_actions {
+                    select entry_id,
+                    operation,
+                    username
+                    from   auth_batch_job_entries
+                    where  job_id = :job_id
+                    and    success_p = 't'
+                    order  by entry_id
+                } {
+                    if { [info exists recstatus($operation)] } {
+                        append doc {  <person recstatus="} $recstatus($operation)  {">} \n
+                        append doc {    <sourcedid><source>OpenACS</source><id>} $username {</id></sourcedid>} \n
+                        append doc {  </person>} \n
+                    }
+                }
+                append doc {</enterprise>} \n
+
+                aa_equals "Document was built as expected" \
+                    [acs_sc::invoke \
+                         -contract auth_sync_process \
+                         -impl IMS_Enterprise_v_1p1 \
+                         -operation GetAcknowledgementDocument \
+                         -call_args [list $job_id $doc [list]]] \
+                    $doc
+
+                aa_log "One invalid operation"
+                aa_true "With invalid operations, call returns an error" [catch {
+                    # This is in fact the call that will fail, because
+                    # of a check constraint on the 'operation' column.
+                    aa_silence_log_entries -serverities error {
+                        auth::sync::job::create_entry \
+                            -job_id $job_id \
+                            -operation broken \
+                            -username [dict get $user username] \
+                            -success
+                    }
+
+                    # If the check was not there in the database, this
+                    # call would also fail, as the check is
+                    # implemented in tcl as well.
+                    acs_sc::invoke \
+                        -contract auth_sync_process \
+                        -impl IMS_Enterprise_v_1p1 \
+                        -operation GetAcknowledgementDocument \
+                        -call_args [list $job_id $doc [list]]
+                }]
+            }
+
+        aa_section auth::sync::process_doc::ims::ProcessDocument
+
+        aa_run_with_teardown \
+            -rollback \
+            -test_code {
+                # This user will be updated
+                set existing_user [acs::test::user::create]
+                set existing_user_id [dict get $existing_user user_id]
+                set authority_id [acs_user::get \
+                                      -user_id $existing_user_id \
+                                      -element authority_id]
+                set job_id [auth::sync::job::start \
+                                -authority_id $authority_id]
+
+                set existing_username [dict get $existing_user username]
+                set existing_first_names AAAA
+                set existing_last_name BBBB
+
+                # This user will be created
+                set new_user_username [db_string get_new_username {
+                    select max(username) || 'A' from users
+                }]
+                # Usernames could be emails, make sure the fake test
+                # email is formally correct regardless
+                set new_user_email [string tolower [string map {@ "" . ""} $new_user_username]@test.com]
+                set new_user_first_names AAAA
+                set new_user_last_name BBBB
+
+                # This user will be deleted
+                set rascal_user [acs::test::user::create]
+                set rascal_user_id [dict get $rascal_user user_id]
+                set rascal_username [dict get $rascal_user username]
+
+                set doc ""
+                append doc {<?xml version="1.0" encoding="} [ns_config "ns/parameters" OutputCharset] {"?>} \n
+                append doc {<enterprise>} \n
+                append doc {  <properties>} \n
+                append doc {    <type>acknowledgement</type>} \n
+                append doc {    <datetime>2022-09-19</datetime>} \n
+                append doc {  </properties>} \n
+
+                append doc {  <person recstatus="1">} \n
+                append doc {    <email>} $new_user_email {</email>} \n
+                append doc {    <name><n><given>} $new_user_first_names {</given><family>} $new_user_last_name {</family></n></name>} \n
+                append doc {    <sourcedid><source>OpenACS</source><id>} $new_user_username {</id></sourcedid>} \n
+                append doc {  </person>} \n
+
+                append doc {  <person recstatus="2">} \n
+                append doc {    <sourcedid><source>OpenACS</source><id>} $existing_username {</id></sourcedid>} \n
+                append doc {    <name><n><given>} $existing_first_names {</given><family>} $existing_last_name {</family></n></name>} \n
+                append doc {  </person>} \n
+
+                append doc {  <person recstatus="3">} \n
+                append doc {    <sourcedid><source>OpenACS</source><id>} $rascal_username {</id></sourcedid>} \n
+                append doc {  </person>} \n
+
+                append doc {</enterprise>} \n
+
+                acs_sc::invoke \
+                    -contract auth_sync_process \
+                    -impl IMS_Enterprise_v_1p1 \
+                    -operation ProcessDocument \
+                    -call_args [list $job_id $doc [list]]
+
+                set existing_user [acs_user::get -user_id $existing_user_id]
+                aa_equals "User '$existing_user_id' First Names was modified" \
+                    [dict get $existing_user first_names] $existing_first_names
+                aa_equals "User '$existing_user_id' Last Name was modified" \
+                    [dict get $existing_user last_name] $existing_last_name
+
+                set new_user_id [acs_user::get_by_username \
+                                     -authority_id $authority_id \
+                                     -username $new_user_username]
+                aa_true "New User was created" {$new_user_id ne ""}
+                if {$new_user_id ne ""} {
+                    set new_user [acs_user::get -user_id $new_user_id]
+                    aa_equals "User '$new_user_id' Email was modified" \
+                        [dict get $new_user email] $new_user_email
+                    aa_equals "User '$new_user_id' First Names was modified" \
+                        [dict get $new_user first_names] $new_user_first_names
+                    aa_equals "User '$new_user_id' Last Name was modified" \
+                        [dict get $new_user last_name] $new_user_last_name
+                }
+
+                aa_equals "Rascal user '$rascal_user_id' was banned" \
+                    [acs_user::get \
+                         -user_id $rascal_user_id \
+                         -element member_state] \
+                    banned
+            }
+
+    }
 
 # Local variables:
 #    mode: tcl

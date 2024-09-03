@@ -1,5 +1,3 @@
-# packages/acs-core-ui/www/acs_object/permissions/grant.tcl
-
 ad_page_contract {
 
     @author rhs@mit.edu
@@ -68,7 +66,7 @@ db_foreach select_privileges_hierarchy {} {
 
     # define the block
     set block_to_move [lrange $hierarchy $start_pos $end_pos]
-    # Only cut out the block if it is on the toplevel, which means it
+    # Only cut out the block if it is on the top-level, which means it
     # hasn't been moved yet. Otherwise the block will appear in two
     # places intentionally.
     if { [lindex $hierarchy $start_pos 0] == 0 } {

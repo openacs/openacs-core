@@ -23,13 +23,13 @@ list::create \
             sub_class narrow
             display_template {
                 <if @themes.active_p;literal@ true>
-                <img src="/resources/acs-subsite/Edit16.gif" height="16" width="16" alt="#acs-subsite.Edit_this_theme#" style="border:0">
+                <adp:icon name="edit" title="#acs-subsite.Edit_this_theme#">
                 </if>
             }
             link_url_eval {[export_vars -base view { {theme $key} }]}
             link_html { title "#acs-subsite.Edit_this_theme#" }
         }
-        
+
         key {
             label "[_ acs-subsite.Key]"
         }
@@ -45,16 +45,15 @@ list::create \
             label "[_ acs-subsite.Active_theme]"
             display_template {
                 <if @themes.active_p;literal@ true>
-                <img src="/shared/images/radiochecked.gif" height="16" width="16" alt="#acs-subsite.Modified_theme#"
-                style="display: block; margin-left: auto; margin-right: auto;">
+                <adp:icon name="radio-checked" title="#acs-subsite.Modified_theme#">
                 </if>
                 <else>
                 <a href="set?theme=@themes.key@" title="#acs-subsite.Select_theme#">
-                <img src="/shared/images/radio.gif" height="16" width="16" alt="#acs-subsite.Select_theme#"
-                style="display: block; margin-left: auto; margin-right: auto;">
+                <adp:icon name="radio-unchecked" title="#acs-subsite.Select_theme#">                
                 </a>
                 </else>
             }
+            html { align center }
         }
         modified_p {
             label "[_ acs-subsite.Modified_theme]"
@@ -71,18 +70,18 @@ list::create \
                 </form>
                 </if>
                 <else>
-                <img src="/shared/images/radiochecked.gif" height="16" width="16" alt="#acs-subsite.Modified_theme#"
-                style="display: block; margin-left: auto; margin-right: auto;">
+                <adp:icon name="radio-checked" title="#acs-subsite.Modified_theme#">
                 <a href="./?rename_theme=@themes.key;literal@">Save new</a>
                 </else>
                 </if>
             }
+            html { align center }
         }
         delete {
             sub_class narrow
             display_template {
                 <if @themes.usage_count;literal@ eq 0>
-                <img src="/shared/images/Delete16.gif" height="16" width="16" alt="#acs-subsite.Delete_this_theme#" style="border:0">
+                <adp:icon name="trash" title="#acs-subsite.Delete_this_theme#">
                 </if>
             }
             link_url_eval {[export_vars -base delete { {theme $key} }]}
@@ -93,8 +92,7 @@ list::create \
 set subsite_id [ad_conn subsite_id]
 set currentThemeKey [parameter::get -parameter ThemeKey -package_id $subsite_id]
 
-set package_keys '[join [subsite::package_keys] ',']'
-
+set package_keys [subsite::package_keys]
 db_multirow -extend {active_p modified_p delete_p usage_count} themes select_themes {} {
     set active_p [expr {$currentThemeKey eq $key}]
     set modified_p [expr {$active_p && [subsite::get_theme_subsites \
@@ -105,7 +103,7 @@ db_multirow -extend {active_p modified_p delete_p usage_count} themes select_the
         select count(*)
         from apm_parameters p, apm_parameter_values v
         where p.parameter_name = 'ThemeKey'
-        and   p.package_key in ($package_keys)
+        and   p.package_key in ([ns_dbquotelist $package_keys])
         and   p.parameter_id = v.parameter_id
         and   v.attr_value = :key
     }]]

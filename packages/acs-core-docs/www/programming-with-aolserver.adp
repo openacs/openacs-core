@@ -1,7 +1,11 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Programming with AOLserver}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Programming with AOLserver}</property>
 <property name="doc(title)">Programming with AOLserver</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="object-identity" leftLabel="Prev"
 			title="Chapter 11. Development
@@ -9,8 +13,10 @@ Reference"
 			rightLink="form-builder" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="programming-with-aolserver" id="programming-with-aolserver"></a>Programming with AOLserver</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">By Michael Yoon, Jon Salz and Lars
-Pind.</span></p><span style="color: red">&lt;/authorblurb&gt;</span><div class="sect2">
+<a name="programming-with-aolserver" id="programming-with-aolserver"></a>Programming with AOLserver</h2></div></div></div><div class="authorblurb">
+<p>By Michael Yoon, Jon Salz and Lars Pind.</p>
+OpenACS docs are written by the named authors, and may be edited by
+OpenACS documentation staff.</div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="programming-aolserver-global" id="programming-aolserver-global"></a>The <code class="computeroutput">global</code> command</h3></div></div></div><p>When using AOLserver, remember that there are effectively
 <span class="emphasis"><em>two</em></span> types of global
@@ -40,7 +46,7 @@ AOLserver.</p><p>Also, AOLserver purges all script-global variables in a thread
 that would affect (and complicate) our use of script-global
 variables dramatically, which would then be better described as
 <span class="emphasis"><em>thread</em></span>-global variables.
-Given AOLserver&#39;s behaviour, however, "script-global"
+Given AOLserver&#39;s behavior, however, "script-global"
 is a more appropriate term.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
@@ -49,7 +55,7 @@ Procedures</h3></div></div></div><p>
 <code class="computeroutput">ns_schedule_proc</code> and
 <code class="computeroutput">ad_schedule_proc</code> each take a
 <code class="computeroutput">-thread</code> flag to cause a
-scheduled procedure to run asychronously, in its own thread. It
+scheduled procedure to run asynchronously, in its own thread. It
 almost always seems like a good idea to specify this switch, but
 there&#39;s a problem.</p><p>It turns out that whenever a task scheduled with <code class="computeroutput">ns_schedule_proc -thread</code> or <code class="computeroutput">ad_schedule_proc -thread t</code> is run,
 AOLserver creates a brand new thread and a brand new interpreter,
@@ -228,8 +234,8 @@ lightweight, so memory consumption should not be a problem.
 However, when using <code class="computeroutput">ns_set get</code>
 to perform lookup by name, they perform a linear lookup, whereas
 arrays use a hash table, so <code class="computeroutput">ns_set</code>s are slower than arrays when the
-number of entries is large.</p><p><span class="cvstag">($&zwnj;Id: programming-with-aolserver.xml,v 1.9
-2017/12/22 13:23:35 gustafn Exp $)</span></p>
+number of entries is large.</p><div class="cvstag">($&zwnj;Id: programming-with-aolserver.xml,v 1.10.2.1
+2019/08/09 20:04:23 gustafn Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

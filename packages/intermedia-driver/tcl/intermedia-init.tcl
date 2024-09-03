@@ -10,3 +10,9 @@ ad_library {
 }
 
 ad_schedule_proc -thread t 14400 db_exec_plsql optimize_intermedia_index {begin Ctx_Ddl.Optimize_Index ('swi_index','FAST'); end;}
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

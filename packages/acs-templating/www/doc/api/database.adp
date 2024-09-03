@@ -1,7 +1,11 @@
 
-<property name="context">{/doc/acs-templating {ACS Templating}} {Templating System API: Database Query}</property>
+<property name="context">{/doc/acs-templating/ {ACS Templating}} {Templating System API: Database Query}</property>
 <property name="doc(title)">Templating System API: Database Query</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h2>Database Query</h2>
 <strong>
 <a href="../index">Templating System</a> : API

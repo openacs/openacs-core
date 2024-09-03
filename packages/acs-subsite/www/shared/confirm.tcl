@@ -32,8 +32,8 @@ set no_list [split $no_url "?"]
 set no_path [lindex $no_list 0]
 set no_args_set [ns_parsequery [lindex $no_list 1]]
 
-set export_vars_yes [export_ns_set_vars form {} $yes_args_set]
-set export_vars_no [export_ns_set_vars form {} $no_args_set]
+set export_vars_yes [export_vars -form -set $yes_args_set]
+set export_vars_no [export_vars -form -set $no_args_set]
 
 ad_return_template
 

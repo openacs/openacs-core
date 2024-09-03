@@ -4,7 +4,7 @@ ad_page_contract {
 
     @author Peter Marklund
 } {
-    locale:optional
+    locale:word,optional
     package_key:optional
     upgrade_status:optional
 }
@@ -29,7 +29,7 @@ list::create \
         edit {
             label ""
             display_template {
-                <img src="/shared/images/Edit16.gif" alt="edit" width="16" height="16">
+                <adp:icon name="edit" title="Edit the message key">
             }
             link_url_col edit_url
         }
@@ -121,8 +121,8 @@ db_multirow -unclobber -extend { edit_url accept_url revert_url message_truncate
     set accept_url [export_vars -base "message-conflict-resolve" { package_key locale message_key {return_url [ad_return_url]}}]
     set revert_url [export_vars -base "message-conflict-revert" { package_key locale message_key {return_url [ad_return_url]}}]
 
-    set message_truncated [string_truncate -len 150 -- $message]
-    set old_message_truncated [string_truncate -len 150 -- $old_message]
+    set message_truncated [ad_string_truncate -len 150 -- $message]
+    set old_message_truncated [ad_string_truncate -len 150 -- $old_message]
 }
 
 # Local variables:

@@ -24,7 +24,7 @@ ad_proc -public template::adp_include {
     src
     varlist
 } {
-    return a the output of a Tcl/ADP pair as a string.  adp_level is
+    return the output of a Tcl/ADP pair as a string.  adp_level is
     set to the calling procedure so that pass by reference works.
     and example of using this is in the search indexer for various content
     types:
@@ -34,8 +34,8 @@ ad_proc -public template::adp_include {
               [list &book "bookdata" base $base style feed]]
     </pre>
 
-    The [list &book "bookdata" ...] tells adp_include to pass the book array by reference to the adp include, where it is
-    referred to via @book.field@.
+    The [list &book "bookdata" ...] tells adp_include to pass the book array
+    by reference to the adp include, where it is referred to via @book.field@.
 
     @param uplevel how far up the stack should the adp_level be set to
     (default is the calling procedures level)
@@ -63,24 +63,27 @@ ad_proc -public template::adp_include {
     return $__adp_out
 }
 
-ad_proc -private template::adp_parse { __adp_stub __args } {
+ad_proc -public template::adp_parse { __adp_stub __args } {
     Execute procedures to prepare data sources and then to output
     template.  Assumes adp_level is set on entry.  in general the
     public version template::adp_include should be used for generating
     strings from adp files.
 
     @param __adp_stub   The root (without the file extension) of the
-    absolute path to the template and associated code.
+                        absolute path to the template and associated code.
     @param __args       One list containing any number of key-value pairs
-    passed to an included template from its container.
-    All data sources may be passed by reference.
+                        passed to an included template from its container.
+                        All data sources may be passed by reference.
     @see template::adp_include
 } {
     # declare any variables passed in to an include or master
     # TODO: call adp_set_vars instead.
 
     foreach {__key __value} $__args {
-        if {[string match "&*" $__key]} {    # "&" triggers call by reference
+        #
+        # Keys starting with "&" trigger call by reference.
+        #
+        if {[string range $__key 0 0] eq "&"} {
             if {"&" ne $__key } {
                 set __name [string range $__key 1 end]
             } else {
@@ -95,13 +98,18 @@ ad_proc -private template::adp_parse { __adp_stub __args } {
                     upvar \#[adp_level] $__value:$__i $__name:$__i
                 }
             }
-        } else {                # not "&" => normal arg (no reference)
+        } else {
+            #
+            # Key does not start with "&" => normal arg (no reference).
+            #
             set $__key $__value
         }
     }
 
-    # set the stack frame at which the template is being parsed so that
-    # other procedures can reference variables cleanly
+    #
+    # Set the stack frame at which the template is being parsed so
+    # that other procedures can reference variables cleanly.
+    #
     lappend ::template::parse_level [info level]
 
     # execute the code to prepare the data sources for a template
@@ -116,8 +124,10 @@ ad_proc -private template::adp_parse { __adp_stub __args } {
         set mime_type [get_mime_type]
         set template_extension [get_mime_template_extension $mime_type]
 
-        # generate ADP output if a template exists (otherwise assume plain Tcl page)
-
+        #
+        # Generate ADP output if a template exists (otherwise assume
+        # plain Tcl page)
+        #
         set templated_p 0
         if { [ad_conn locale] ne ""
              && [file exists "$__adp_stub.[ad_conn locale].$template_extension"]} {
@@ -129,41 +139,47 @@ ad_proc -private template::adp_parse { __adp_stub __args } {
             set templated_p 1
         }
 
-        if { [info commands ::ds_page_fragment_cache_enabled_p] ne ""
+        if { [namespace which ::ds_page_fragment_cache_enabled_p] ne ""
              && [::ds_enabled_p]
              && [::ds_page_fragment_cache_enabled_p]
              && [::ds_collection_enabled_p] } {
-            ns_cache get ds_page_bits [ad_conn request] template_list
-            lappend template_list $__adp_stub.$template_extension
-            ns_cache set ds_page_bits [ad_conn request] $template_list
+            ns_cache lappend ds_page_bits [ad_conn request] \
+                $__adp_stub.$template_extension
         }
 
         if { $templated_p } {
-
-            # ensure that template output procedure exists and is up-to-date
-            template::adp_init $template_extension $__adp_stub
-
-            # get result of template output procedure into __adp_output, and properties into __adp_properties
-            template::code::${template_extension}::$__adp_stub
+            #
+            # Ensure that template output procedure exists and is
+            # up-to-date. By executing the reset, get result of
+            # template output procedure into __adp_output, and
+            # properties into __adp_properties
+            #
+            [template::adp_init $template_extension $__adp_stub]
 
             # JCD: Lets keep a copy of all the page fragments!  WooHoo.
-            if { [info commands ::ds_page_fragment_cache_enabled_p] ne ""
+            if { [namespace which ::ds_page_fragment_cache_enabled_p] ne ""
                  && [::ds_enabled_p]
                  && [::ds_page_fragment_cache_enabled_p]
                  && [::ds_collection_enabled_p] } {
-                ns_cache set ds_page_bits "[ad_conn request]:$__adp_stub.$template_extension" $__adp_output
+                ns_cache set ds_page_bits \
+                    "[ad_conn request]:$__adp_stub.$template_extension" $__adp_output
             }
 
             # call the master template if one has been defined
             if { [info exists __adp_master] } {
                 # pass properties on to master template
                 set __adp_output [template::adp_parse $__adp_master \
-                                      [concat [list __adp_slave $__adp_output] [array get __adp_properties]]]
+                                      [concat \
+                                           [list __adp_slave $__adp_output] \
+                                           [array get __adp_properties]]]
             }
         } else {
-            # no template;  found_script_p tells us if adp_prepare at least found a script.
+            #
+            # No template; found_script_p tells us if adp_prepare at
+            # least found a script.
+            #
             if { !$found_script_p } {
-                # No template. Perhaps there is an html file.
+                # No template. Perhaps there is an HTML file.
                 if { [file exists $__adp_stub.html] } {
                     ns_log debug "getting output from ${__adp_stub}.html"
                     set __adp_output [template::util::read_file "${__adp_stub}.html"]
@@ -215,7 +231,7 @@ ad_proc -private template::adp_set_vars {} {
         set __adp_level [adp_level 2]
         foreach {__adp_key __adp_value} $args {
 
-            set __adp_expr {^@([A-Za-z0-9_]+)\.\*@$}
+            set __adp_expr {^@([[:alnum:]_]+)\.\*@$}
             if { [regexp  $__adp_expr $__adp_value __adp_x __adp_name] } {
 
                 upvar #$__adp_level $__adp_name $__adp_key
@@ -293,8 +309,9 @@ ad_proc -public template::adp_level { { up "" } } {
 }
 
 
-ad_proc -public template::adp_levels {} {
+ad_proc -deprecated template::adp_levels {} {
     @return all stack frame levels
+    @see template::adp_level
 } {
     if { [info exists ::template::parse_level] } {return $::template::parse_level}
     return ""
@@ -314,19 +331,18 @@ ad_proc -private template::adp_prepare {} {
 
         if { [file exists $__adp_stub.tcl] } {
 
-            # ensure that data source preparation procedure exists and is up-to-date
-            adp_init tcl $__adp_stub
-
-            # remember the file_stub in case the procedure changes it
+            # Remember the file_stub in case the procedure changes it
             set __adp_remember_stub $__adp_stub
 
-            # execute data source preparation procedure
-            code::tcl::$__adp_stub
+            # Ensure that data source preparation procedure exists and
+            # is up-to-date and execute it.
+            [adp_init tcl $__adp_stub]
 
             # propagate aborting
             if {[info exists ::request_aborted]} {
-                ns_log warning "propagating abortion from $__adp_remember_stub.tcl\
-          (status [lindex $::request_aborted 0]): '[lindex $::request_aborted 1]')"
+                ns_log warning "propagating abortion from $__adp_remember_stub.tcl" \
+                    "(status [lindex $::request_aborted 0]:"\
+                    "'[lindex $::request_aborted 1]'"
                 unset ::request_aborted
                 ad_script_abort
                 #adp_abort
@@ -335,7 +351,7 @@ ad_proc -private template::adp_prepare {} {
 
             # if the file has changed then prepare again
             if { $__adp_stub ne $__adp_remember_stub } {
-                adp_prepare;            # propagate result up
+                adp_prepare          ;# propagate result up
             } { return 1 }
         }
         return 0
@@ -346,7 +362,7 @@ ad_proc -public template::set_file { path } {
     Set the path of the template to render.  This is typically used to
     implement multiple "skins" on a common set of data sources.  The
     initial code (which may be in a .tcl file not associated with a .adp
-                  file) sets up any number of data sources, and then calls set_file to
+    file) sets up any number of data sources, and then calls set_file to
     specify the template to actually render.  Any code associated with
     the specified template is executed in the same stack frame as the
     initial code, so that each "skin" may reference additional specific
@@ -361,7 +377,7 @@ ad_proc -public template::set_file { path } {
     set file_stub $path
 }
 
-ad_proc -private template::adp_init { type file_stub } {
+ad_proc -public template::adp_init { type file_stub } {
     Ensures that both data source Tcl files and compiled ADP templates
     are wrapped in procedures in the current interpreter.  Procedures
     are cached in byte code form in the interpreter, so this is more
@@ -371,22 +387,35 @@ ad_proc -private template::adp_init { type file_stub } {
 
     @param type       Either ADP (template) or Tcl (code)
     @param file_stub  The root (sans file extension) of the absolute path
-    to the .adp or .tcl file to source.
+                      to the .adp or .tcl file to source.
 } {
-    # this will return the name of the proc if it exists
-    set proc_name [info commands ::template::mtimes::${type}::$file_stub]
-
+    #
+    # Depending on the iconset, the result of the compiled template
+    # might be different. So, cache per iconset
+    #
+    set cache [iconset]-$type
+    #
+    # Check, if the compiled proc exists already.
+    #
+    set proc_name [namespace which ::template::mtimes::${cache}::$file_stub]
+    #ns_log notice "$type $file_stub -> '$proc_name'"
+    
     set pkg_id [apm_package_id_from_key acs-templating]
-    set refresh_cache [parameter::get -package_id $pkg_id -parameter RefreshCache -default "as needed"]
+    set refresh_cache [parameter::get \
+                           -package_id $pkg_id \
+                           -parameter RefreshCache \
+                           -default "as needed"]
 
     if {$proc_name eq "" || $refresh_cache ne "never" } {
         set mtime [file mtime $file_stub.$type]
         if {$proc_name eq ""
             || $mtime != [$proc_name]
             || $refresh_cache eq "always"} {
-
-            # either the procedure does not already exist or is not up-to-date
-
+            #
+            # Either the procedure does not already exist or is not
+            # up-to-date
+            #
+            namespace eval ::template::code::${cache} {}
             switch -exact $type {
 
                 tcl {
@@ -396,30 +425,33 @@ ad_proc -private template::adp_init { type file_stub } {
                     set code [adp_compile -file $file_stub.$type]
                 }
             }
+            #ns_log notice "$type $file_stub -> compiled '$code'"
 
-            # wrap the code for both types of files within an uplevel in
-            # the declared procedure, so that data sources are set in the
-            # same frame as the code that outputs the template.
-
-
-            # Here we add profiling calls if developer support exists on the
-            # system.
-            if {[info commands ::ds_enabled_p] ne ""} {
-                proc ::template::code::${type}::$file_stub {} "if {\[::ds_enabled_p\] && \[::ds_collection_enabled_p\] && \[::ds_profiling_enabled_p\]} { ds_profile start $file_stub.$type }
+            #
+            # Wrap the code for both types of files within an uplevel
+            # in the declared procedure, so that data sources are set
+            # in the same frame as the code that outputs the template.
+            #
+            # Here we add profiling calls if developer support exists
+            # on the system.
+            #
+            if {[namespace which ::ds_enabled_p] ne ""} {
+                proc ::template::code::${cache}::$file_stub {} "if {\[::ds_enabled_p\] && \[::ds_collection_enabled_p\] && \[::ds_profiling_enabled_p\]} { ds_profile start $file_stub.$type }
 uplevel {
     $code
 }
 if {\[::ds_enabled_p\] && \[::ds_collection_enabled_p\] &&\[::ds_profiling_enabled_p\]} { ds_profile stop $file_stub.$type }\n"
       } else {
-        proc ::template::code::${type}::$file_stub {} "
+        proc ::template::code::${cache}::$file_stub {} "
 uplevel {
     $code
 }\n"
       }
-
-      proc ::template::mtimes::${type}::$file_stub {} "return $mtime"
+      namespace eval ::template::mtimes::${cache} {}
+      proc ::template::mtimes::${cache}::$file_stub {} "return $mtime"
     }
   }
+  return ::template::code::${cache}::$file_stub
 }
 
 ad_proc -public template::expand_percentage_signs { message } {
@@ -436,7 +468,8 @@ ad_proc -public template::expand_percentage_signs { message } {
 } {
     set remaining_message $message
     set formatted_message ""
-    while { [regexp [lang::message::embedded_vars_regexp] $remaining_message match before_percent percent_match remaining_message] } {
+    while { [regexp [lang::message::embedded_vars_regexp] $remaining_message \
+                 match before_percent percent_match remaining_message] } {
         append formatted_message $before_percent
 
         if {$percent_match eq "%%"} {
@@ -455,16 +488,16 @@ ad_proc -public template::expand_percentage_signs { message } {
             # Convert syntax to Tcl syntax:
             # It's either an array variable or a Tcl variable
             #   array variables
-            # TODO: ad_quotehtml
+            # TODO: ns_quotehtml
             # TODO: lang::util::localize
-            regsub -all {[\]\[\{\}\"]\\$} $substitution {\\&} substitution
-            if { [regexp {^%([a-zA-Z0-9_]+)\.([a-zA-Z0-9_]+)%$} $substitution match arr key] } {
+            regsub -all -- {[\]\[\{\}\"]\\$} $substitution {\\&} substitution
+            if { [regexp {^%([[:alnum:]_]+)\.([[:alnum:]_]+)%$} $substitution match arr key] } {
                 # the array key name is substitured by the Tcl parser s
-                regsub -all {[\]\[\{\}\"]\\$} $key {\\&} key
+                regsub -all -- {[\]\[\{\}\"]\\$} $key {\\&} key
                 set command "set ${arr}(${key})"
                 set substitution [uplevel $command]
             }
-            if { [regexp {^%([a-zA-Z0-9_:]+)%$} $substitution match var] } {
+            if { [regexp {^%([[:alnum:]_:]+)%$} $substitution match var] } {
                 set command "set $var"
                 set substitution [uplevel $command]
             }
@@ -481,11 +514,14 @@ ad_proc -public template::expand_percentage_signs { message } {
     return $formatted_message
 }
 
-ad_proc -public template::adp_compile { {-file ""} {-string ""} } {
+ad_proc -public template::adp_compile {
+    {-file ""}
+    {-string ""}
+} {
     Converts an ADP template into a chunk of Tcl code.  Caching this code
     avoids the need to reparse the ADP template with each request.
 
-    @param file The file name of the source
+    @param file The filename of the source
     @param string string to be compiled
     @return The compiled code.
 
@@ -506,14 +542,15 @@ ad_proc -public template::adp_compile { {-file ""} {-string ""} } {
     # substitute <% ... %> blocks with registered tags so they can be handled
     # by our proc rather than evaluated.
 
-    regsub -all {<%} $chunk {<tcl>} chunk
+    regsub -all -- {<%} $chunk {<tcl>} chunk
     # avoid substituting when it is a percentage attribute to an HTML tag.
-    regsub -all {([^0-9])%>} $chunk {\1</tcl>} chunk
+    regsub -all -- {([^0-9])%>} $chunk {\1</tcl>} chunk
     # warn about the first ambiguity in the source
     if {[regexp {[0-9]+%>} $chunk match]} {
-        ns_log warning "ambiguous '$match'; write Tcl escapes with a space like\
-      <% set x 50 %> and HTML tags with proper quoting, like <hr width=\"50%\">\
-      when compiling ADP source: template::adp_compile $source_type {$source}"
+        ns_log warning "ambiguous '$match'; write Tcl escapes with a space like" \
+            {<% set x 50 %> and HTML tags with proper quoting, like <hr width="50%">} \
+            "when compiling ADP source: " \
+            [list template::adp_compile -file $file -string $string]
     }
 
     # recursively parse the template
@@ -532,47 +569,37 @@ ad_proc -public template::adp_compile { {-file ""} {-string ""} } {
     # Since messages may read the variables of the adp page they go through
     # expand_percentage_signs which amongst other things does an uplevel subst
     while {[regsub -all \
-                {([^\\])\#([-a-zA-Z0-9_:]+[.][-a-zA-Z0-9_:]+)\#} \
+                {([^\\])\#([-[:alnum:]_:]+[.][-[:alnum:]_:]+)\#} \
                 $code \
                 {\1[template::expand_percentage_signs [lang::message::lookup $__ad_conn_locale {\2} {TRANSLATION MISSING} {} -1]]} \
                 code]} {}
 
-    # We do each substitution set in two pieces, separately for normal
-    # variables and for variables with ";noquote" attached to them.
-    # Specifically, @x@ gets translated to [ns_quotehtml ${x}], whereas
-    # @x;noquote@ gets translated to ${x}.  The same goes for array
-    # variable references.
+    #
+    # We do each substitution set in several pieces, separately for
+    # normal variables and for variables having ";noquote", ";no18n",
+    # and ";literal" attached to them.  Specifically, @x@ gets
+    # translated to [ns_quotehtml ${x}], whereas @x;noquote@ gets
+    # translated to ${x}.  The same goes for array variable
+    # references.
+    #
+    # The approach with several regexp operations can be optimized,
+    # but since this is happening only at ADP compile time, this does
+    # not seem critical.
 
     # substitute array variable references
-    while {[regsub -all [template::adp_array_variable_regexp_noquote] $code {\1[lang::util::localize $\2(\3)]} code]} {}
-    while {[regsub -all [template::adp_array_variable_regexp_noi18n] $code {\1[ns_quotehtml $\2(\3)]} code]} {}
-    while {[regsub -all [template::adp_array_variable_regexp_literal] $code {\1$\2(\3)} code]} {}
-    #
-    # Some aolservers have broken implementations of ns_quotehtml
-    # (returning for the empty string input a one byte output). If this
-    # happens, we fall back to the "manual" ad_quotehtml. However, we
-    # prefer to use the faster (C-implemented) ns_quotehtml, since the
-    # actual substitutions occur at page-view time, and they are called
-    # therefore very often.
-    #
-    if {[ns_quotehtml ""] eq ""} {
-        while {[regsub -all [template::adp_array_variable_regexp] $code {\1[ns_quotehtml [lang::util::localize $\2(\3)]]} code]} {}
-    } else {
-        while {[regsub -all [template::adp_array_variable_regexp] $code {\1[ns_quotehtml [lang::util::localize $\2(\3)]]} code]} {}
-    }
+    while {[regsub -all -- [adp_array_variable_regexp_noquote] $code {\1[template::adp_parse_tags_and_localize $\2(\3)]} code]} {}
+    while {[regsub -all -- [template::adp_array_variable_regexp_noi18n] $code {\1[ns_quotehtml $\2(\3)]} code]} {}
+    while {[regsub -all -- [template::adp_array_variable_regexp_literal] $code {\1$\2(\3)} code]} {}
+    while {[regsub -all -- [template::adp_array_variable_regexp] $code {\1[ns_quotehtml [lang::util::localize $\2(\3)]]} code]} {}
 
     # substitute simple variable references
-    while {[regsub -all [template::adp_variable_regexp_noquote] $code {\1[lang::util::localize ${\2}]} code]} {}
-    while {[regsub -all [template::adp_variable_regexp_noi18n] $code {\1[ns_quotehtml ${\2}]} code]} {}
-    while {[regsub -all [template::adp_variable_regexp_literal] $code {\1${\2}} code]} {}
-    if {[ns_quotehtml ""] eq ""} {
-        while {[regsub -all [template::adp_variable_regexp] $code {\1[ns_quotehtml [lang::util::localize ${\2}]]} code]} {}
-    } else {
-        while {[regsub -all [template::adp_variable_regexp] $code {\1[ns_quotehtml [lang::util::localize ${\2}]]} code]} {}
-    }
+    while {[regsub -all -- [adp_variable_regexp_noquote] $code {\1[template::adp_parse_tags_and_localize ${\2}]} code]} {}
+    while {[regsub -all -- [template::adp_variable_regexp_noi18n] $code {\1[ns_quotehtml ${\2}]} code]} {}
+    while {[regsub -all -- [template::adp_variable_regexp_literal] $code {\1${\2}} code]} {}
+    while {[regsub -all -- [template::adp_variable_regexp] $code {\1[ns_quotehtml [lang::util::localize ${\2}]]} code]} {}
 
-    # unescape protected # references
-    # unescape protected @ references
+
+    # unescape protected "#" and "@" references
     set code [string map { \\@ @ \\# #} $code]
 
     return $code
@@ -586,7 +613,7 @@ ad_proc -public template::adp_array_variable_regexp {} {
     @author Peter Marklund (peter@collaboraid.biz)
     @creation-date 25 October 2002
 } {
-    return {(^|[^\\])@([a-zA-Z0-9_:]+)\.([a-zA-Z0-9_\.:]+)@}
+    return {(^|[^\\])@([[:alnum:]_:]+)\.([[:alnum:]_\.:]+)@}
 }
 
 ad_proc -public template::adp_array_variable_regexp_noquote {} {
@@ -595,7 +622,7 @@ ad_proc -public template::adp_array_variable_regexp_noquote {} {
     @author Dirk Gomez (openacs@dirkgomez.de)
     @creation-date 12 February 2003
 } {
-    return {(^|[^\\])@([a-zA-Z0-9_:]+)\.([a-zA-Z0-9_:\.]+);noquote@}
+    return {(^|[^\\])@([[:alnum:]_:]+)\.([[:alnum:]_:\.]+);noquote@}
 }
 
 ad_proc -public template::adp_array_variable_regexp_literal {} {
@@ -604,7 +631,7 @@ ad_proc -public template::adp_array_variable_regexp_literal {} {
     @author Gustaf Neumann
     @creation-date December 2012
 } {
-    return {(^|[^\\])@([a-zA-Z0-9_:]+)\.([a-zA-Z0-9_:\.]+);literal@}
+    return {(^|[^\\])@([[:alnum:]_:]+)\.([[:alnum:]_:\.]+);literal@}
 }
 
 ad_proc -public template::adp_array_variable_regexp_noi18n {} {
@@ -613,7 +640,7 @@ ad_proc -public template::adp_array_variable_regexp_noi18n {} {
     @author Gustaf Neumann
     @creation-date June 2015
 } {
-    return {(^|[^\\])@([a-zA-Z0-9_:]+)\.([a-zA-Z0-9_:\.]+);noi18n@}
+    return {(^|[^\\])@([[:alnum:]_:]+)\.([[:alnum:]_:\.]+);noi18n@}
 }
 
 ad_proc -public template::adp_variable_regexp {} {
@@ -625,7 +652,7 @@ ad_proc -public template::adp_variable_regexp {} {
     @author Peter Marklund (peter@collaboraid.biz)
     @creation-date 25 October 2002
 } {
-    return {(^|[^\\])@([a-zA-Z0-9_:]+)@}
+    return {(^|[^\\])@([[:alnum:]_:]+)@}
 }
 
 ad_proc -public template::adp_variable_regexp_noquote {} {
@@ -634,16 +661,16 @@ ad_proc -public template::adp_variable_regexp_noquote {} {
     @author Dirk Gomez (openacs@dirkgomez.de)
     @creation-date 12 February 2003
 } {
-    return {(^|[^\\])@([a-zA-Z0-9_:]+);noquote@}
+    return {(^|[^\\])@([[:alnum:]_:]+);noquote@}
 }
 
 ad_proc -public template::adp_variable_regexp_literal {} {
     adp_variable_regexp augmented by "literal"
 
     @author Gustaf Neumann
-    @creation-date Dezember 2012
+    @creation-date December 2012
 } {
-    return {(^|[^\\])@([a-zA-Z0-9_:]+);literal@}
+    return {(^|[^\\])@([[:alnum:]_:]+);literal@}
 }
 
 ad_proc -public template::adp_variable_regexp_noi18n {} {
@@ -652,26 +679,17 @@ ad_proc -public template::adp_variable_regexp_noi18n {} {
     @author Gustaf Neumann
     @creation-date June 2015
 } {
-    return {(^|[^\\])@([a-zA-Z0-9_:]+);noi18n@}
+    return {(^|[^\\])@([[:alnum:]_:]+);noi18n@}
 }
 
-# NaviServer requires for disambiguation of flags and values at the
-# end of the argument processing a terminating "--" (like for other
-# commands). AOLserver does not allow the "--".
-if {[ns_info name] eq "NaviServer"} {
-    ad_proc template::adp_parse_string { chunk } {Parse string as ADP} {ns_adp_parse -string -- $chunk}
-} else {
-    ad_proc template::adp_parse_string { chunk } {Parse string as ADP} {ns_adp_parse -string $chunk}
-}
-
-ad_proc -private template::adp_compile_chunk { chunk } {
+ad_proc -public template::adp_compile_chunk { chunk } {
     Parses a single chunk of a template.  A chunk is either the entire
     template or the portion of a template contained within a balanced
     tag.  This procedure does not return the compiled chunk; compiled
     code is assembled in the template::parse_list variable.
 
     @param chunk   A string containing markup, potentially with embedded
-    ATS tags.
+    ADP tags.
 } {
     # parse the template chunk inside the tag
     set remaining [adp_parse_string $chunk]
@@ -684,6 +702,63 @@ ad_proc -private template::adp_compile_chunk { chunk } {
         adp_append_string $remaining_quoted
     }
 }
+
+ad_proc -public template::adp_parse_tags {HTML} {
+
+    Parse the tags of the provided HTML text.  This function is
+    similar to
+
+    <blockquote>
+       template::adp_compile -string $HTML
+    </blockquote>
+
+    but it just performs tag substitution, but not ADP variable
+    substitution, since this is done differently in some contextes on
+    the provided HTML chunk.  An example for specialized handling is
+    the handling of instance attributes in xowiki.
+
+    @param HTML text containing potentially ADP tags
+    @return HTML text with substituted ADP tags
+} {
+    #
+    #ns_log notice "adp_parse_tags BEGIN [info exists ::template::parse_list]: $HTML"
+    if {[string is space $HTML]} {
+        return $HTML
+    }
+    set old_parse_list [expr {[info exists ::template::parse_list] ? $::template::parse_list : ""}]
+    set ::template::parse_list ""
+    #
+    # The following exception handler is just for safety to achieve a
+    # high-level of backward compatibility. In case
+    # "adp_compile_chunk" and or the evaluation of the resulting code
+    # fails, fall back to the original behavior without ADP tag
+    # substitution.
+    #
+    try {
+        template::adp_compile_chunk $HTML
+        lappend ::template::parse_list {set __adp_output}
+        #ns_log notice "adp_parse_tags parse list '[join $::template::parse_list \n]'"
+        set HTML [eval [join $::template::parse_list \n]]
+    } on error {errorMsg} {
+        ad_log warning "adp_parse_tags failed on parsing:\n'$HTML'"
+    }
+    set ::template::parse_list $old_parse_list
+    #ns_log notice "adp_parse_tags END: $HTML"
+    return $HTML
+}
+
+ad_proc -private template::adp_parse_tags_and_localize {HTML} {
+
+    Helper proc to combine "adp_parse_tags" and "lang::util::localize"
+    as used in the regsub operations for resolving template variables.
+
+} {
+    if {$HTML ne ""} {
+        #ns_log notice "YYYY adp_parse_tags_and_localize called with '$HTML'"
+        return [::lang::util::localize [adp_parse_tags $HTML]]
+    }
+}
+
 
 ad_proc -private template::adp_quote_chunk { chunk_var_name quoted_var_name } {
     Quotes (precedes by backslash) all square brackets, curly braces,
@@ -698,7 +773,7 @@ ad_proc -private template::adp_quote_chunk { chunk_var_name quoted_var_name } {
 } {
     upvar $chunk_var_name chunk $quoted_var_name quoted
 
-    regsub -all {[\]\[\{\}\"\\$]} $chunk {\\&} quoted
+    regsub -all -- {[\]\[\{\}\"\\$]} $chunk {\\&} quoted
 }
 
 ad_proc -private template::adp_append_string { s } {
@@ -712,15 +787,18 @@ ad_proc -private template::adp_append_string { s } {
     adp_append_code "append __adp_output \"$s\""
 }
 
-ad_proc -private template::adp_append_code { code { nobreak "" } } {
+ad_proc -public template::adp_append_code { code { nobreak "" } } {
     Adds a line of code to the Tcl output from the compiler.
+
+    Called by basically any adp custom tag implementation and also
+    from developer support.
 
     @param code       A line of Tcl code
 
     @option nobreak   Flag indicating that code should be appended to the
     current last line rather than adding a new line, for
     cases where code must continue on the same line, such
-    as the else tag
+    as the "else" tag.
 } {
     if { [string is space $code] } { return }
 
@@ -739,7 +817,7 @@ ad_proc -private template::adp_append_code { code { nobreak "" } } {
 }
 
 ad_proc -private template::adp_puts { text } {
-    Add text to the ADP currently being rendered.  May be used within escaped
+    Add text to the ADP currently being rendered.  Maybe used within escaped
     Tcl code in the template to add to the output.
 
     @param text A string containing text or markup.
@@ -833,7 +911,7 @@ ad_proc -private template::enclosing_tag {
     return $name
 }
 
-ad_proc -private template::get_attribute { tag params name { default "ERROR" } } {
+ad_proc -public template::get_attribute { tag params name { default "ERROR" } } {
     Retrieves a named attribute value from the parameter set passed to a
     tag handler.  If a default is not specified, assumes the attribute
     is required and throws an error.
@@ -868,4 +946,3 @@ ad_proc -private template::get_attribute { tag params name { default "ERROR" } }
 #    tcl-indent-level: 4
 #    indent-tabs-mode: nil
 # End:
-

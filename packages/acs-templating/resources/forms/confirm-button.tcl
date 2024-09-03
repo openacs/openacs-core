@@ -16,23 +16,14 @@ multirow create __form_contents__ __key__ __value__
 
 if { [set __form__ [ns_getform]] ne "" } {
 
-    set __form_size__ [ns_set size $__form__]
-    set __form_counter__ 0
-   
-    while { $__form_counter__ < $__form_size__ } {
-        if { [ns_set key $__form__ $__form_counter__] eq "__confirmed_p" } {
+    foreach __key__ [ns_set keys $__form__] {
+        if { $__key__ eq "__confirmed_p" } {
             multirow append __form_contents__ __confirmed_p 1
         } else {
-
-	    set __key__ [ns_set key $__form__ $__form_counter__]
-	    set __values__ [ns_querygetall $__key__]
-
-	    foreach __value__ $__values__ {
+	    foreach __value__ [ns_querygetall $__key__] {
 		multirow append __form_contents__ $__key__ $__value__
 	    }
-
         }
-        incr __form_counter__
     }
 
 }

@@ -13,6 +13,7 @@ aa_register_case \
         whos_online::all_invisible_user_ids
         whos_online::unset_invisible
         whos_online::user_ids
+        whos_online::user_invisible_p
     } whos_online__check_online_visibility {
 
         Check procs related with users online visibility

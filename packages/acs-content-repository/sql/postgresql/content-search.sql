@@ -1,4 +1,4 @@
--- @cvs-id $Id$ 
+-- @cvs-id $Id$
 ------------------------------------------------------------
 -- declare CR as a content provider for search/indexing interface
 ------------------------------------------------------------
@@ -14,7 +14,7 @@ select acs_sc_impl_alias__new(
            'FtsContentProvider',		-- impl_contract_name
            'content_revision',                  -- impl_name
 	   'datasource',			-- impl_operation_name
-	   'content_search__datasource',        -- impl_alias
+	   'content_search::datasource',        -- impl_alias
 	   'TCL'				-- impl_pl
 );
 
@@ -22,7 +22,7 @@ select acs_sc_impl_alias__new(
            'FtsContentProvider',		-- impl_contract_name
            'content_revision',                  -- impl_name
 	   'url',				-- impl_operation_name
-	   'content_search__url',               -- impl_alias
+	   'content_search::url',               -- impl_alias
 	   'TCL'				-- impl_pl
 );
 
@@ -38,7 +38,7 @@ select acs_sc_impl_alias__new(
            'FtsContentProvider',		-- impl_contract_name
            'image',                             -- impl_name
 	   'datasource',			-- impl_operation_name
-	   'image_search__datasource',          -- impl_alias
+	   'image_search::datasource',          -- impl_alias
 	   'TCL'				-- impl_pl
 );
 
@@ -46,7 +46,7 @@ select acs_sc_impl_alias__new(
            'FtsContentProvider',		-- impl_contract_name
            'image',                             -- impl_name
 	   'url',				-- impl_operation_name
-	   'image_search__url',                 -- impl_alias
+	   'image_search::url',                 -- impl_alias
 	   'TCL'				-- impl_pl
 );
 
@@ -62,7 +62,7 @@ select acs_sc_impl_alias__new(
            'FtsContentProvider',		-- impl_contract_name
            'content_template',                  -- impl_name
 	   'datasource',			-- impl_operation_name
-	   'template_search__datasource',       -- impl_alias
+	   'template_search::datasource',       -- impl_alias
 	   'TCL'				-- impl_pl
 );
 
@@ -70,7 +70,7 @@ select acs_sc_impl_alias__new(
            'FtsContentProvider',		-- impl_contract_name
            'content_template',                  -- impl_name
 	   'url',				-- impl_operation_name
-	   'template_search__url',              -- impl_alias
+	   'template_search::url',              -- impl_alias
 	   'TCL'				-- impl_pl
 );
 
@@ -127,7 +127,7 @@ CREATE OR REPLACE FUNCTION content_item_search__utrg () RETURNS trigger AS $$
 BEGIN
     if new.live_revision is not null and coalesce(old.live_revision,0) <> new.live_revision
     and (select publish_date from cr_revisions where revision_id=new.live_revision) <= current_timestamp then
-        perform search_observer__enqueue(new.live_revision,'INSERT');        
+        perform search_observer__enqueue(new.live_revision,'INSERT');
     end if;
 
     if old.live_revision is not null and old.live_revision <> coalesce(new.live_revision,0)
@@ -143,10 +143,10 @@ END;
 $$ LANGUAGE plpgsql;
 
 create trigger content_search__itrg after insert on cr_revisions
-for each row execute procedure content_search__itrg (); 
+for each row execute procedure content_search__itrg ();
 
 create trigger content_search__utrg after update on cr_revisions
-for each row execute procedure content_search__utrg (); 
+for each row execute procedure content_search__utrg ();
 
 
 create trigger content_item_search__utrg before update on cr_items

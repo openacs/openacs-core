@@ -217,6 +217,103 @@ ad_proc ad_page_contract_eval { args } {
 #
 ####################
 
+ad_proc -private ad_page_contract_argspec_flag_regexp {} {
+   Returns the regexp defining what an argspec flag should look like.
+} {
+    return {[a-zA-Z0-9_]+(?:\((?:\\\(|\\\)|[^\)])+\))?}
+}
+
+ad_proc -private ad_page_contract_parse_argspec {arg_spec} {
+
+    Parse the argument spec: this is a string in the form
+    &lt;name&gt;:&lt;flag_spec&gt;[,&lt;flag_spec&gt;...]
+    <ul>
+    <li> &lt;name&gt; is a token made of any non-space, non-tab and non-colon
+    <li> &lt;flag_spec&gt; is string in the form
+         &lt;flag_name&lgt;[(&lt;flag_parameter&gt;[|&lt;flag_parameter&gt;...])]
+    <li> &lt;flag_parameter&gt; is a string containing arbitrary characters,
+                       however, because parenthesys ")" and "(" and
+                       pipe "|" are separators in the argspec syntax,
+                       they need to be escaped via the character backslash (\)
+    </ul>
+
+    Examples of valid argspecs:
+
+<pre>
+    - my_page_parameter
+    - my_page_parameter:integer
+    - my_page_parameter:integer,notnull
+    - my_page_parameter:integer,notnull,oneof(1|2|3)
+    - another_page_parameter:oneof(this is valid|This, is also valid|This is valid \(as well!\))
+</pre>
+} {
+    set flag_rx [ad_page_contract_argspec_flag_regexp]
+
+    if { ![regexp [subst -nocommands {^([^ \t:]+)(?::(${flag_rx}(?:,${flag_rx})*))?$}] $arg_spec match name flags] } {
+        error "Argspec '$arg_spec' doesn't have the right format. It must be var\[:flag\[,flag ...\]\]"
+    }
+
+    return [list $name $flags]
+}
+
+ad_proc -private ad_page_contract_split_argspec_flags {flags} {
+
+    Splits the flags in an argspec definition into a list.
+
+} {
+    set flag_rx [ad_page_contract_argspec_flag_regexp]
+
+    set pre_flag_list [list]
+    while { [regexp [subst -nocommands {^(${flag_rx})(?:,(.+)|)$}] $flags _ flag rest] } {
+        lappend pre_flag_list $flag
+        set flags $rest
+    }
+
+   return $pre_flag_list
+}
+
+ad_proc -private ad_page_contract_split_argspec_flag_parameters {flag_parameters} {
+
+    Splits the flag parameters from an argespec into a list of values.
+
+    Flag parameters are a list of values expressed as &lt;value&gt;[|&lt;value&gt; ...]
+
+} {
+    # First, unescape the parenthesys
+    regsub -all {\\\(} $flag_parameters {(} flag_parameters
+    regsub -all {\\\)} $flag_parameters {)} flag_parameters
+
+    set parameters [list]
+    while {[string length $flag_parameters] > 0} {
+        set flag_parameter ""
+
+        # First, keep appending to the string as long as we find
+        # escaped occurrences of the pipe character.
+        while { [set quoted_sep_i [string first {\|} $flag_parameters]] >= 0 } {
+            append flag_parameter [string range $flag_parameters 0 ${quoted_sep_i}-1]|
+            set flag_parameters [string range $flag_parameters ${quoted_sep_i}+2 end]
+        }
+
+        # Now that all escaped occurrences are over, find the first
+        # unescaped one.
+        set pi [string first | $flag_parameters]
+        if {$pi == -1} {
+            # There was none, the entire remainder of the string is
+            # our parameter and we are done.
+            append flag_parameter $flag_parameters
+            set flag_parameters ""
+        } else {
+            # Our parameter is all of the remaining string up to the
+            # pipe character. We will keep parsing further.
+            append flag_parameter [string range $flag_parameters 0 ${pi}-1]
+            set flag_parameters [string range $flag_parameters ${pi}+1 end]
+        }
+        lappend parameters $flag_parameter
+    }
+
+    return $parameters
+}
+
 # global:
 
 # ad_page_contract_variables: list of all the variables, required or
@@ -226,6 +323,7 @@ ad_proc -public ad_page_contract {
     {-form {}}
     {-level 1}
     {-context ""}
+    {-warn:boolean}
     -properties
     docstring
     args
@@ -244,14 +342,14 @@ ad_proc -public ad_page_contract {
     <blockquote><pre>ad_page_contract  {
         Some documentation.
         &#64;author me (my@email)
-        &#64;cvs-id $<foo>Id</foo>$
+        &#64;cvs-id $Id$
     } {
         foo
         bar:integer,notnull,multiple,trim
         {greble:integer {[expr {[lindex $bar 0] + 1}]}}
     } -validate {
         greble_is_in_range -requires {greble:integer} {
-            if { $greble < 1 || $greble > 100 } {
+            if { $greble &lt; 1 || $greble &gt; 100 } {
                 ad_complain
             }
         }
@@ -340,7 +438,7 @@ ad_proc -public ad_page_contract {
     <dt><a href="proc-view?proc=ad_page_contract_filter_proc_date"><b>date</b></a>
     <dd>Pluggable filter, installed by default, that makes sure the array validates as a date.
     Use this filter with :array to do automatic date filtering.  To use it, set up in your HTML form
-    a call to [ad_dateentrywidget varname].  Then on the receiving page, specify the filter using
+    a call to a date formfield.  Then on the receiving page, specify the filter using
     <code>varname:array,date</code>.  If the date validates, there will be a variable set in your
     environment <code>varname</code> with four keys: <code>day, month, year,</code> and <code>date</code>.
     You can safely pass <code>$varname(date)</code> to Oracle.
@@ -414,6 +512,12 @@ ad_proc -public ad_page_contract {
     <dt><a href="proc-view?proc=ad_page_contract_filter_proc_localurl"><b>localurl</b></a>
     <dd>Pluggable filter, installed by default, that makes sure that argument contains a
     non-external url, which can be used in ad_returnredirect without throwing an error.
+
+    <dt><a href="proc-view?proc=ad_page_contract_filter_proc_clock"><b>clock</b></a>
+    <dd>Pluggable filter, installed by default, that makes sure that
+    argument is a time string formatted according to the format
+    specified in the flag. The format uses the syntax from the clock
+    Tcl command. Usage example time:clock(%H:%M:%S).
 
     </dl>
 
@@ -497,7 +601,7 @@ ad_proc -public ad_page_contract {
 
     <p>
 
-    Each validation block can also have a <b><fcode>-requires</code></b> switch, which takes a list of
+    Each validation block can also have a <code>-requires</code> switch, which takes a list of
     validations that must already have been successfully passed, for the validation to get executed.
     The intent is that you want to provide as much feedback as possible at once, but you don't want
     redundant feedback, like "foo must be an integer" <em>and</em> "foo must be in range 10 to 20".
@@ -617,9 +721,7 @@ ad_proc -public ad_page_contract {
 
         set arg_spec [lindex $element 0]
 
-        if { ![regexp {^([^ \t:]+)(?::([a-zA-Z0-9_,(|)]*))?$} $arg_spec match name flags] } {
-            return -code error "Argspec '$arg_spec' doesn't have the right format. It must be var\[:flag\[,flag ...\]\]"
-        }
+        lassign [ad_page_contract_parse_argspec $arg_spec] name flags
 
         lappend apc_formals $name
         set apc_formal($name) 1
@@ -628,11 +730,25 @@ ad_proc -public ad_page_contract {
             set apc_default_value($name) [lindex $element 1]
         }
 
-        set pre_flag_list [split [string tolower $flags] ,]
         set flag_list [list]
 
         # find parameterized flags
-        foreach flag $pre_flag_list {
+        foreach flag [ad_page_contract_split_argspec_flags $flags] {
+
+            #
+            # The following statement is transitional code, and should
+            # help in the upgrading phase, when newer page_contracts
+            # with "object_id" are processed, but the
+            # page_contract_filter_proc is not yet defined.
+            #
+            if {$flag eq "object_id"
+                && [info commands ad_page_contract_filter_proc_object_id] eq ""
+            } {
+                # fall back to "integer"
+                set flag integer
+                ns_log notice "Warning: page contract contains 'object_id', but filter proc is not available"
+            }
+
             set left_paren [string first "(" $flag]
             if { $left_paren == -1 } {
                 lappend flag_list $flag
@@ -644,9 +760,9 @@ ad_proc -public ad_page_contract {
                 set flag [string range $flag 0 $left_paren-1]
 
                 lappend flag_list $flag
-                foreach flag_parameter [split $flag_parameters "|"] {
-                    lappend apc_filter_parameters($name:$flag) $flag_parameter
-                }
+
+                set apc_filter_parameters($name:$flag) \
+                    [ad_page_contract_split_argspec_flag_parameters $flag_parameters]
             }
         }
 
@@ -743,7 +859,7 @@ ad_proc -public ad_page_contract {
     # Parse -properties argument
     #
     ####################
-    # This must happen even if the query (a.k.a. parameters, formals) is empty
+    # This must happen even if the query (aka parameters, formals) is empty
 
     if { [info exists properties] } {
         upvar 1 __page_contract_property property
@@ -866,11 +982,6 @@ ad_proc -public ad_page_contract {
             # This is the value
             set actual_value [ns_set value $form $form_counter_i]
 
-            # This is needed for double click protection so we can access the two variables down below.
-            if {$actual_name eq "__submit_button_name" || $actual_name eq "__submit_button_value"} {
-                set $actual_name $actual_value
-            }
-
             # It may be a signature for another variable
             if { [regexp {^(.*):sig$} $actual_name match formal_name] } {
                 set apc_signatures($formal_name) $actual_value
@@ -908,7 +1019,7 @@ ad_proc -public ad_page_contract {
                  && $actual_value eq ""
              } {
                 # LARS:
-                # If you lappend an emptry_string, it'll actually add the empty string to the list as an element
+                # If you lappend an empty_string, it'll actually add the empty string to the list as an element
                 # which is not what we want
                 continue
             }
@@ -1027,7 +1138,7 @@ ad_proc -public ad_page_contract {
                     # This is not an array, verify the scalar variable
                     if { ![info exists apc_signatures($formal_name)]
                          || ![ad_verify_signature \
-                                  -secret [ns_config "ns/server/[ns_info server]/acs" parametersecret ""] \
+                                  -secret [ns_config "ns/server/[ns_info server]/acs" parameterSecret ""] \
                                   $var $apc_signatures($formal_name)]
                      } {
                         ad_complain -key $formal_name:verify [_ acs-tcl.lt_The_signature_for_the]
@@ -1037,7 +1148,7 @@ ad_proc -public ad_page_contract {
                     # This is an array: verify the [array get] form of the array
                     if { ![info exists apc_signatures($formal_name)]
                          || ![ad_verify_signature \
-                                  -secret [ns_config "ns/server/[ns_info server]/acs" parametersecret ""] \
+                                  -secret [ns_config "ns/server/[ns_info server]/acs" parameterSecret ""] \
                                   [lsort [array get var]] $apc_signatures($formal_name)]
                      } {
                         ad_complain -key $formal_name:verify [_ acs-tcl.lt_The_signature_for_the]
@@ -1064,14 +1175,17 @@ ad_proc -public ad_page_contract {
             }
 
         } else {
-
-            # no value supplied for this arg spec
-
+            #
+            # No value supplied for this arg spec.
+            #
             if { [info exists apc_default_value($formal_name)] } {
-
-                # Only use the default value if there has been no complaints so far
-                # Why? Because if there are complaints, the page isn't going to serve anyway,
-                # and because one default value may depend on another variable having a correct value.
+                #
+                # Only use the default value if there has been no
+                # complaints so far Why? Because if there are
+                # complaints, the page isn't going to serve anyway,
+                # and because one default value may depend on another
+                # variable having a correct value.
+                #
                 if { [ad_complaints_count] == 0 } {
                     # we need to set the default value
                     if { [info exists apc_internal_filter($formal_name:array)] } {
@@ -1081,9 +1195,11 @@ ad_proc -public ad_page_contract {
                     }
                 }
 
-            } elseif { ![info exists apc_internal_filter($formal_name:optional)]} {
+            } elseif { ![info exists apc_internal_filter($formal_name:optional)]
+                       && ![info exists ::ad_page_contract_validations_passed($formal_name)] } {
                 #
-                # The element is not optional.
+                # The element is not optional and it was not already
+                # flagged by the notnull constraint.
                 #
                 # Before we complain, we check, if a multirow or array
                 # with the name are already defined in the target
@@ -1096,7 +1212,8 @@ ad_proc -public ad_page_contract {
                 #
                 set multirow_name $formal_name:rowcount
                 if {![uplevel $level [list info exists $multirow_name]]
-                    && ![uplevel $level [list info exists $formal_name]] } {
+                    && ![uplevel $level [list info exists $formal_name]]
+                } {
                     ad_complain -key $formal_name [_ acs-tcl.lt_You_must_supply_a_val]
                 }
             }
@@ -1177,53 +1294,80 @@ ad_proc -public ad_page_contract {
 
     if { [ad_complaints_count] > 0 } {
 
-        #
-        # Add safety belt to prevent recursive loop
-        #
-        if {[incr ::__ad_complain_depth] < 10} {
+        set complaints [ad_complaints_get_list]
+        if {$warn_p} {
+            ad_log warning "contract in '$::ad_page_contract_context'"\
+                "was violated:\n" [join $complaints "\n "]
+        }
 
-            if { [info exists return_errors] } {
-                upvar 1 $return_errors error_list
-                set error_list [ad_complaints_get_list]
-            } else {
-                template::multirow create complaints text
-                foreach elm [ad_complaints_get_list] {
-                    template::multirow append complaints $elm
-                }
-                ad_try {
-                    set html [ad_parse_template \
-                                  -params [list complaints [list context $::ad_page_contract_context] \
-                                               [list prev_url [get_referrer]] \
-                                              ] [template::themed_template "/packages/acs-tcl/lib/complain"]]
-                } on error {errorMsg} {
-                    set errorCode $::errorCode
-                    #
-                    # Check, if we were called from "ad_script_abort" (intentional abortion)
-                    #
-                    if {[ad_exception $errorCode] eq "ad_script_abort"} {
-                        #
-                        # Yes, this was an intentional abortion
-                        #
-                        return ""
-                    }
-                    ad_log error "problem rendering complain page: $errorMsg ($errorCode) $::errorInfo"
-                    set html "Invalid input"
-                }
-                ns_return 422 text/html $html
-                ad_script_abort
+        if { [info exists return_errors] } {
+            upvar 1 $return_errors error_list
+            set error_list $complaints
+        } else {
+            template::multirow create complaints text
+            foreach elm $complaints {
+                template::multirow append complaints $elm
             }
+            ad_try {
+                if {[ns_conn isconnected] == 0} {
+                    ad_script_abort
+                }
+                if {[incr ::__ad_complain_depth] == 1} {
+                    #
+                    # Render the error page going through templating,
+                    # theming and so on.
+                    #
+                    # This is the intended complaint behavior, where
+                    # the page will look "fancy" and consistent with
+                    # the rest of the website.
+                    #
+                    set context $::ad_page_contract_context
+                    set prev_url [util::get_referrer -trusted]
+                    set html [ad_parse_template \
+                                  -params { context prev_url} \
+                                  [template::themed_template "/packages/acs-tcl/lib/complain"]]
+                } else {
+                    #
+                    # We detected a recursion. This can happen if the
+                    # templates involved in rendering the complaint
+                    # also fail their own validation.
+                    #
+                    # We fallback to a basic rendering that won't
+                    # involve any other template in order to break the
+                    # cycle.
+                    #
+                    ad_log Warning "Depth of recursive complaints exceeded. We will return a basic rendering."
+                    set html [subst {
+                        <html>
+                           <head>
+                              <title>[_ acs-tcl.lt_Problem_with_your_inp]</title>
+                           </head>
+                           <body>
+                              <ul>
+                              <li>[join $complaints </li><li>]</li>
+                              </ul>
+                           </body>
+                        </html>
+                    }]
+                }
+            } on error {errorMsg} {
+                set errorCode $::errorCode
+                #
+                # Check, if we were called from "ad_script_abort" (intentional abortion)
+                #
+                if {[ad_exception $errorCode] eq "ad_script_abort"} {
+                    #
+                    # Yes, this was an intentional abortion
+                    #
+                    return ""
+                }
+                ad_log error "problem rendering complain page: $errorMsg ($errorCode) $::errorInfo"
+                set html "Invalid input"
+            }
+            ns_return 422 text/html $html
+            ad_script_abort
         }
     }
-
-    # Set the __submit_button_variable. This is used in double click protection.
-    if {[info exists __submit_button_name]
-        && $__submit_button_name ne ""
-        && [info exists __submit_button_value]
-    } {
-        uplevel 1 [list set $__submit_button_name $__submit_button_value]
-    }
-
-
 }
 
 ad_proc -public ad_page_contract_get_variables { } {
@@ -1239,12 +1383,12 @@ ad_proc -public ad_page_contract_get_variables { } {
 
 ad_proc ad_include_contract {docstring args} {
 
-    Define interface between a page and an <include> similar to the
-    page_contract. This is a light-weight implementation based on the
-    ad_page_contract. It allows one to check the passed arguments (types,
-    optionality) and can be used for setting defaults the usual way.
-    Using ad_include_contracts helps to improve documentation of
-    included content.
+    Define an interface between a page and an ADP &lt;include&gt;
+    similar to the page_contract. This is a light-weight
+    implementation based on the ad_page_contract. It allows one to
+    check the passed arguments (types, optionality) and can be used
+    for setting defaults the usual way.  Using ad_include_contracts
+    helps to improve documentation of included content.
 
     @param docstring documentation of the include
     @param args passed parameter
@@ -1288,13 +1432,13 @@ ad_proc ad_include_contract {docstring args} {
     #ns_log notice "final command: $__cmd"
 
     if {[uplevel {info exists __adp_remember_stub}]} {
-        set path [string range [uplevel {set __adp_remember_stub}] [string length $::acs::rootdir]+1 end]
-        set context "include $path"
+        set __path [string range [uplevel {set __adp_remember_stub}] [string length $::acs::rootdir]+1 end]
+        set __context "include $__path"
     } else {
-        set context ""
+        set __context ""
     }
 
-    ad_page_contract -level 2 -context $context -form [{*}$__cmd] $docstring {*}$args
+    ad_page_contract -warn -level 2 -context $__context -form [{*}$__cmd] $docstring {*}$args
 }
 
 ####################
@@ -1325,12 +1469,12 @@ if { [apm_first_time_loading_p] } {
     nsv_array set ad_page_contract_filter_rules {}
     array set ::acs::ad_page_contract_filter_rules {}
 
-    nsv_set ad_page_contract_mutex filters [ns_mutex create]
-    nsv_set ad_page_contract_mutex filter_rules [ns_mutex create]
-
+    nsv_set ad_page_contract_mutex filters [ns_mutex create page_contract_filter]
+    nsv_set ad_page_contract_mutex filter_rules [ns_mutex create page_contract_filter_rule]
 }
 
 ad_proc -public ad_page_contract_filter {
+    -deprecated:boolean
     {-type filter}
     {-priority 1000}
     name
@@ -1402,6 +1546,8 @@ ad_proc -public ad_page_contract_filter {
 
     @param doc_string Standard documentation-string. Tell other programmers what your filter does.
 
+    @param deprecated used to flag a filter as deprecated
+
     @author Lars Pind (lars@pinds.com)
     @creation-date 25 July 2000
 } {
@@ -1456,14 +1602,16 @@ ad_proc -public ad_page_contract_filter {
     # If you declare a filter like this: ad_page_contract_filter foo { name value } { ... }
     # it turns into this proc:
     # ad_proc ad_page_contract_filter_proc_foo { name value_varname } { upvar $value_varname value ; ... }
-    # so that when the filtger proc is passed the name of a variable, the body of the proc
+    # so that when the filter proc is passed the name of a variable, the body of the proc
     # will have access to that variable as if the value had been passed.
+
+    set visibility [expr {$deprecated_p ? "-deprecated" : "-public"}]
 
     lassign $proc_args arg0 arg1 arg2
     if { $proc_args_len == 2 } {
-        ad_proc -public $proc_name [list $arg0 ${arg1}_varname] $doc_string "upvar \$${arg1}_varname $arg1\n$body"
+        ad_proc $visibility $proc_name [list $arg0 ${arg1}_varname] $doc_string "upvar \$${arg1}_varname $arg1\n$body"
     } else {
-        ad_proc -public $proc_name [list $arg0 ${arg1}_varname $arg2] $doc_string "upvar \$${arg1}_varname $arg1\n$body"
+        ad_proc $visibility $proc_name [list $arg0 ${arg1}_varname $arg2] $doc_string "upvar \$${arg1}_varname $arg1\n$body"
     }
 }
 
@@ -1567,7 +1715,7 @@ ad_proc ad_page_contract_filter_rule {
 } {
     A filter rule determines what filters are applied to a given value. The code is passed the
     name of the formal argument and the list of filters currently being applied, and should
-    on that basis modify the list of filters to suit its needs. Usually a filter rule will add
+    on that basis modify the list of filters to suit its needs. Usually, a filter rule will add
     a certain filter, unless some list of filters are already present.
 
     <p>
@@ -1647,13 +1795,16 @@ ad_page_contract_filter integer { name value } {
     @author Lars Pind (lars@pinds.com)
     @creation-date 25 July 2000
 } {
+    #
+    # We can't really use "string is integer -strict", since it allows
+    # numbers, which are invalid for e.g. SQL... e.g. "0x40".
+    #
+    ## First simple a quick check avoiding the slow regexp
+    #if {[string is integer -strict $value]} {
+    #    return 1
+    #}
 
-    # First simple a quick check avoiding the slow regexp
-    if {[string is integer -strict $value]} {
-        return 1
-    }
-
-    if { [regexp {^(-)(.*)$} $value match sign rest] } {
+    if { [regexp {^(-)?(\d+)$} $value _ sign rest] } {
         # Trim the value for any leading zeros
         set value $sign[util::trim_leading_zeros $rest]
         # the string might be still too large, so check again...
@@ -1673,10 +1824,13 @@ ad_page_contract_filter naturalnum { name value } {
     @creation-date 25 July 2000
 } {
 
+    # We can't really use "string is integer -strict", since it allows
+    # numbers, which are invalid for e.g. SQL... e.g. "0x40".
+    #
     # First a simple quick check to avoid the slow regexp
-    if {[string is integer -strict $value] && $value >= 0} {
-        return 1
-    }
+    # if {[string is integer -strict $value] && $value >= 0} {
+    #    return 1
+    # }
 
     # Check with leading zeros, but no "-" allowed, so it must be positive
     if { [regexp {^(0*)([1-9][0-9]*|0)$} $value match zeros value] } {
@@ -1687,6 +1841,64 @@ ad_page_contract_filter naturalnum { name value } {
 
     ad_complain [_ acs-tcl.lt_name_is_not_a_natural]
     return 0
+}
+
+ad_page_contract_filter object_id { name value } {
+
+    Checks whether the value is a valid object_id, i.e. in the range
+    defined for the SQL datatype "integer", which is the same for
+    Oracle and PostgreSQL. In case, object_types are altered in future
+    versions of OpenACS to e.g. "longinteger", this function has to be
+    adjusted as well.
+
+    The function is essentially the same as ad_page_contract_filter
+    "integer", but with the additional value range check.
+
+    @author Gustaf Neumann
+    @creation-date May 23, 2021
+
+} {
+    if { [regexp {^(-)?(\d+)$} $value _ sign rest] } {
+        set value $sign[util::trim_leading_zeros $rest]
+        if {[string is integer -strict $value]
+            && $value >= -2147483648
+            && $value <= 2147483647 } {
+            return 1
+        }
+    }
+    ad_complain [_ acs-tcl.lt_name_is_not_an_oid]
+    return 0
+}
+
+ad_page_contract_filter object_type { name object_id types } {
+
+    Checks whether the supplied object_id is an acs_object of one of
+    the types specified in the flag parameters.
+
+    The check will take the object_type hierarchy into account
+    e.g. will always succeed if one of the types is "acs_object". In
+    this case the filter will just behave as an existence check.
+
+    Example: some_user_id:object_type(user),notnull
+
+} {
+    if { $types eq "" } {
+        set types acs_object
+    }
+
+    # First make sure the object_id is formally correct
+    if { ![ad_page_contract_filter_proc_object_id $name object_id] } {
+        return 0
+    }
+
+    if { ![acs_object::is_type_p \
+               -object_id $object_id \
+               -object_types $types] } {
+        ad_complain [_ acs-tcl.lt_invalid_object_type]
+        return 0
+    }
+
+    return 1
 }
 
 ad_page_contract_filter range { name value range } {
@@ -1760,11 +1972,40 @@ ad_page_contract_filter nohtml { name value } {
     return 1
 }
 
+ad_page_contract_filter dbtext { name value } {
+    Ensure that the value can be used in an SQL query.
+
+    Note that this is not the same as quoting or otherwise ensuring
+    the safety of the statement itself. What we enforce here is that
+    the value will be accepted by the db interface without
+    complaining. The actual definition may change or be database
+    specific in the future.
+} {
+    #
+    # Reject the NUL character
+    #
+    if {[string first \u00 $value] != -1} {
+        ad_complain [_ acs-tcl.lt_name_contains_invalid]
+        return 0
+    }
+
+    return 1
+}
+
 ad_page_contract_filter html { name value } {
     Checks whether the value contains naughty HTML
     @author Lars Pind (lars@pinds.com)
     @creation-date 25 July 2000
 } {
+    #
+    # Reject the NUL character
+    #
+    if {[string first \u00 $value] != -1} {
+        ns_log notice "invalid input for 'html' filter: passed-in value contains NUL character"
+        ad_complain [_ acs-tcl.lt_name_contains_invalid]
+        return 0
+    }
+
     set naughty_prompt [ad_html_security_check $value]
     if { $naughty_prompt ne "" } {
         ad_complain $naughty_prompt
@@ -1774,30 +2015,48 @@ ad_page_contract_filter html { name value } {
 }
 
 ad_page_contract_filter tmpfile { name value } {
-    Checks to see that the tmpfile path is allowed on the system
+    Validate a tmpfile path. This must exist, be a direct child of the
+    configured tmpfolder in the server-wide parameter and be readable
+    and writable by the current user.
+
+    Example usage: uploaded_file.tmpfile:tmpfile,optional
+
     @author Lars Pind (lars@pinds.com)
     @creation-date 25 July 2000
 } {
-    # ensure no .. in the path
-    ns_normalizepath $value
+    set tmpfile_p [security::safe_tmpfile_p \
+                       -must_exist \
+                       $value]
 
-    # check to make sure path is to an authorized directory
-    set tmpdir_list [ad_parameter_all_values_as_list -package_id [ad_conn subsite_id] TmpDir]
-    if { $tmpdir_list eq "" } {
-        set tmpdir_list [list [ns_config ns/parameters tmpdir] "/var/tmp" "/tmp"]
+    if {!$tmpfile_p} {
+        ad_log warning "They tried to sneak in invalid tmpfile '$value'"
+        ad_complain [_ acs-tcl.lt_You_specified_a_path_]
     }
 
-    foreach tmpdir $tmpdir_list {
-        if { [string match "$tmpdir*" $value] } {
-            return 1
+    return $tmpfile_p
+}
+
+ad_page_contract_filter clock { name value {formats "%Y-%m-%d"} } {
+    Ensures the supplied date string is in one of the specified clock
+    formats.
+
+    @author Antonio Pisano
+    @see clock
+} {
+    set valid_p 0
+    foreach format $formats {
+        if { ![catch { clock scan $value -format $format } errmsg] } {
+            set valid_p 1
+            break
         }
     }
 
-    # Log details about this filter failing, to make it easier to debug.
-    ns_log Notice "ad_page_contract tmpfile filter on variable '$name' at URL '[ad_conn url]': The tmpfile given was '$value', and the list of valid directories is '$tmpdir_list'."
+    if {!$valid_p} {
+        set time(time) [ns_quotehtml $value]
+        ad_complain [_  acs-tcl.lt_Invalid_time_timetime_2]
+    }
 
-    ad_complain [_ acs-tcl.lt_You_specified_a_path_]
-    return 0
+    return $valid_p
 }
 
 ad_page_contract_filter -type post date { name date } {
@@ -1983,7 +2242,7 @@ ad_page_contract_filter string_length { name value length } {
     if { $op eq "min" } {
         if { $actual_length < $nr } {
             set binding [list name $name actual_length $actual_length min_length $nr]
-            ad_complain [_ acs-tcl.lt_name_is_too_short__Pl_1]
+            ad_complain [_ acs-tcl.lt_name_is_too_short__Pl_1 $binding]
             return 0
         }
     } else {
@@ -2002,9 +2261,9 @@ ad_page_contract_filter email { name value } {
 
     @author Philip Greenspun (philip@mit.edu)
     @author Randy Beggs (randyb@arsdigita.com)
-    @creation-date 22 August 20000
+    @creation-date 22 August 2000
 } {
-    set valid_p [regexp "^\[^@\t ]+@\[^@.\t]+(\\.\[^@.\n ]+)+$" $value]
+    set valid_p [util_email_valid_p $value]
     if { !$valid_p } {
         ad_complain [_ acs-tcl.lt_name_does_not_appear_]
         return 0
@@ -2112,10 +2371,15 @@ ad_page_contract_filter phone { name value } {
 }
 
 
-ad_page_contract_filter usphone { name value } {
+ad_page_contract_filter -deprecated usphone { name value } {
     Checks whether the value is more or less a valid US phone number with
     the area code.
     Exact filter is XXX-XXX-XXXX
+
+    DEPRECATED: this filter is US-specific. One should use less
+                specific alternatives.
+
+    @see ad_page_contract_filter_proc_phone
 
     @author Randy Beggs (randyb@arsdigita.com)
     @creation-date 22 August 2000
@@ -2174,6 +2438,48 @@ ad_page_contract_filter token { name value } {
     return 0
 }
 
+ad_page_contract_filter safetclchars { name value } {
+
+    Checks whether the value contains just characters, which can be
+    used safely in a Tcl eval or subst command. This means, that the characters
+    '$', '[', ']' and '\' disallowed,.
+
+    @author Gustaf Neumann
+    @creation-date 15 Mar 2023
+} {
+
+    if {[info commands ns_valid_utf8] ne ""
+        && ![ns_valid_utf8 $value]} {
+        ad_complain [_ acs-tcl.lt_name_contains_invalid]
+        return 0
+    }
+
+    if {[regexp {^[^\[\]\\\$]+$} $value]} {
+        return 1
+    }
+    ad_complain [_ acs-tcl.lt_name_contains_invalid]
+    return 0
+}
+
+ad_page_contract_filter printable { name value } {
+
+    Checks whether the value contains only characters with a printable
+    representation. This represents character class of the Tcl
+    character class "print", which consists of the characters with a
+    visible representation and space.  This filter is useful for
+    e.g. avoiding invalid byte sequences for the database.
+
+    @author Gustaf Neumann
+    @creation-date 22 April 2021
+} {
+
+    if {![regexp {[^[:print:]]} $value]} {
+        return 1
+    }
+    ad_complain [_ acs-tcl.lt_name_contains_invalid]
+    return 0
+}
+
 ad_page_contract_filter path { name value } {
     Checks whether the value is a Tcl word, or contains a few
     rather safe other characters ("-", "/", ".") used
@@ -2203,7 +2509,15 @@ ad_page_contract_filter localurl { name value } {
         ad_complain [_ acs-tcl.lt_name_is_not_valid]
         return 0
     }
-    return 1
+
+    try {
+        ns_parseurl $value
+    } on error {errMsg} {
+        return 0
+    } on ok {d} {
+        return [expr {![dict exists $d proto] || [dict get $d proto] in {http https}}]
+    }
+
 }
 
 
@@ -2213,6 +2527,11 @@ ad_page_contract_filter localurl { name value } {
 # Standard filter rules
 #
 ####################
+
+#
+# GN: The following two rules cause warnings of the form
+#     Multiple definitions of the ad_page_contract_filter_rule
+#
 
 ad_page_contract_filter_rule html { name filters } {
     Makes sure the filter nohtml gets applied, unless some other html filter (html or allhtml)
@@ -2274,7 +2593,7 @@ ad_proc ad_page_contract_handle_datasource_error {error} {
     ns_return 422 text/html [ad_parse_template \
                                  -params [list [list exception_count $exception_count] \
                                               [list exception_text $exception_text] \
-                                              [list prev_url  [get_referrer]] \
+                                              [list prev_url [util::get_referrer -trusted]] \
                                              ]  $complaint_template]
 }
 

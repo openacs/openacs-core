@@ -58,7 +58,7 @@ ad_proc -public ad_form {
 
     <p>
 
-    In general the full functionality of the form builder is exposed by ad_form, but with a
+    In general, the full functionality of the form builder is exposed by ad_form, but with a
     much more user-friendly and readable syntax and with state management handled automatically.
 
     <p>
@@ -585,7 +585,7 @@ ad_proc -public ad_form {
     # persist flags which where specified in previous calls
     # (e.g. these global variables).
     global af_parts
-    set valid_args [dict get [nsv_get api_proc_doc [lindex [info level 0] 0]] switches]
+    set valid_args [dict get [nsv_get api_proc_doc [lindex [info level 0] 0]] switches0]
     foreach valid_arg $valid_args {
         if { [info exists $valid_arg] } {
             if { [info exists af_parts(${form_name}__$valid_arg)]
@@ -790,12 +790,6 @@ ad_proc -public ad_form {
 
         template::element create $form_name __refreshing_p -datatype integer -widget hidden -value 0
 
-        #
-        # Add the hidden button element.
-        #
-        template::element create $form_name "__submit_button_name" -datatype text -widget hidden -value ""
-        template::element create $form_name "__submit_button_value" -datatype text -widget hidden -value ""
-
         if {[info exists csrf_protection_p] && $csrf_protection_p} {
             #
             # Add CSRF value to every ad_form. Validation might be
@@ -806,12 +800,13 @@ ad_proc -public ad_form {
         }
     }
 
-    # Antonio Pisano: export property will eventually end up into
-    # template::form::render, where export_vars will take care of
-    # creating the required hidden form fields according to
-    # specification.
+    # Use export_vars to serialize variables from -export flag as
+    # hidden form fields. We need to do it now rather than later in
+    # the rendering, as only now the uplevel variables come from is
+    # well known.
     if { [info exists export] } {
-        template::form::set_properties $form_name export $export
+        template::form::set_properties $form_name exported_vars \
+            [uplevel [list export_vars -form $export]]
     }
 
     # We need to track these for submission time and for error checking
@@ -859,12 +854,8 @@ ad_proc -public ad_form {
                         template::element create $form_name __new_p -datatype integer -widget hidden -value 0
                     }
 
-                    multiple {
-                        if { $af_element_parameters($element_name:$flag) ne "" } {
-                            return -code error "element $element_name: $flag attribute can not have a parameter"
-                        }
-                    }
-
+                    multiple -
+                    noquote -
                     nospell -
                     optional {
                         if { $af_element_parameters($element_name:$flag) ne "" } {
@@ -889,17 +880,17 @@ ad_proc -public ad_form {
                     }
 
                     default {
-                        if { [info commands "::template::data::validate::$flag"] eq "" } {
+                        if { [namespace which ::template::data::validate::$flag] eq "" } {
                            return -code error "element $element_name: data type \"$flag\" is not valid"
                         }
                         lappend form_command "-datatype" $flag
                         set af_type(${form_name}__$element_name) $flag
                         if { $af_element_parameters($element_name:$flag) eq "" } {
-                            if { [info commands "::template::widget::$flag"] ne "" } {
+                            if { [namespace which ::template::widget::$flag] ne "" } {
                                 lappend form_command "-widget" $flag
                             }
                         } else {
-                            if { [info commands "::template::widget::$af_element_parameters($element_name:$flag)"] eq ""} {
+                            if { [namespace which ::template::widget::$af_element_parameters($element_name:$flag)] eq "" } {
                                 return -code error "element $element_name: widget \"$af_element_parameters($element_name:$flag)\" does not exist"
                             }
                             lappend form_command "-widget" $af_element_parameters($element_name:$flag)
@@ -909,7 +900,10 @@ ad_proc -public ad_form {
             }
 
             foreach extra_arg $af_extra_args($element_name) {
-                lappend form_command "-[lindex $extra_arg 0]" [uplevel [list subst [lindex $extra_arg 1]]]
+                lappend form_command "-[lindex $extra_arg 0]"
+                if {[llength $extra_arg] == 2} {
+                    lappend form_command [uplevel [list subst [lindex $extra_arg 1]]]
+                }
             }
             {*}$form_command
 
@@ -924,17 +918,17 @@ ad_proc -public ad_form {
     foreach element_name $af_element_names($form_name) {
         if { [llength $element_name] == 1 } {
             if { [info exists af_from_sql(${form_name}__$element_name)] } {
-                if { [info commands "::template::util::$af_type(${form_name}__$element_name)::acquire"] eq "" } {
+                if { [namespace which ::template::util::$af_type(${form_name}__$element_name)::acquire] eq "" } {
                     return -code error "\"from_sql\" not valid for type \"$af_type(${form_name}__$element_name)\""
                 }
             }
             if { [info exists af_to_sql(${form_name}__$element_name)] } {
-                if { [info commands ::template::util::$af_type(${form_name}__$element_name)::get_property] eq "" } {
+                if { [namespace which ::template::util::$af_type(${form_name}__$element_name)::get_property] eq "" } {
                     return -code error "\"to_sql\" not valid for type \"$af_type(${form_name}__$element_name)\""
                 }
             }
             if { [info exists af_to_html(${form_name}__$element_name)] } {
-                if { [info commands ::template::util::$af_type(${form_name}__$element_name)::get_property] eq "" } {
+                if { [namespace which ::template::util::$af_type(${form_name}__$element_name)::get_property] eq "" } {
                     return -code error "\"to_html\" not valid for type \"$af_type(${form_name}__$element_name)\""
                 }
             }
@@ -1005,7 +999,7 @@ ad_proc -public ad_form {
 
                 } else {
 
-                    # The key exists, grab the existing values if we have an select_query clause
+                    # The key exists, grab the existing values if we have a select_query clause
 
                     if { ![info exists select_query] && ![info exists select_query_name] } {
                         return -code error "Key \"$key_name\" has the value \"[set $key_name]\" but no select_query, select_query_name, or edit_request clause exists.  (This can be caused by having ad_form request blocks in the wrong order.)"
@@ -1027,7 +1021,7 @@ ad_proc -public ad_form {
                                 set values($element_name) \
                                     [template::util::$af_type(${form_name}__$element_name)::acquire \
                                          $af_from_sql(${form_name}__$element_name) $values($element_name)]
-                            } elseif { [info commands ::template::data::from_sql::$af_type(${form_name}__$element_name)] ne "" } {
+                            } elseif { [namespace which ::template::data::from_sql::$af_type(${form_name}__$element_name)] ne "" } {
                                 set values($element_name) [template::data::from_sql::$af_type(${form_name}__$element_name) $values($element_name)]
                             }
                         }
@@ -1104,14 +1098,6 @@ ad_proc -public ad_form {
                 uplevel #$level [list set $element_name $value]
             }
         }
-        #
-        # Update the clicked button if it does not already exist.
-        #
-        uplevel #$level {
-            if {[info exists __submit_button_name] && $__submit_button_name ne ""} {
-                set $__submit_button_name $__submit_button_value
-            }
-        }
 
         if { [info exists key_name] } {
             upvar #$level $key_name __key
@@ -1127,7 +1113,7 @@ ad_proc -public ad_form {
 
         if {[template::element::exists $form_name __csrf_token]} {
             #
-            # CSRF protection is activated, therefore validate the
+            # CSRF protection is activated, therefore, validate the
             # hidden form field content.
             #
             security::csrf::validate
@@ -1141,7 +1127,10 @@ ad_proc -public ad_form {
                 if { ![template::element error_p $form_name $element_name]
                      && ![uplevel #$level [list expr $validate_expr]]
                  } {
-                    template::element set_error $form_name $element_name [uplevel [list subst $error_message]]
+                    template::element set_error \
+                        $form_name \
+                        $element_name \
+                        [util::var_subst_quotehtml -ulevel 2 $error_message]
                 }
             }
         }
@@ -1205,7 +1194,7 @@ ad_proc -public ad_form {
 
                 # 1. an on_submit block (useful for forms that don't touch the
                 #    database or can share smart Tcl API for both add and edit forms)
-                # 2. an new_data block (when __new_p is true)
+                # 2. a new_data block (when __new_p is true)
                 # 3. an edit_data block (when __new_p is false)
                 # 4. an after_submit block (for ad_returnredirect and the like that
                 #    is the same for new and edit)
@@ -1299,7 +1288,7 @@ ad_proc -public ad_form {
 
 }
 
-ad_proc -public ad_set_element_value {
+ad_proc -private ad_set_element_value {
     -element:required
     value
 } {
@@ -1372,11 +1361,7 @@ ad_proc -public ad_form_new_p {
 
     @param key the name of the key element. In the above example: <code>ad_form_new_p -key item_id</code>
 } {
-
-    set form [ns_getform]
-
-    return [expr {$form eq "" || [ns_set find $form $key] == -1 || [ns_set get $form __new_p] == 1 }]
-
+    return [expr {![ns_queryexists $key] || [ns_queryget __new_p] == 1}]
 }
 
 #

@@ -1,7 +1,11 @@
 
-<property name="context">{/doc/acs-templating {ACS Templating}} {}</property>
+<property name="context">{/doc/acs-templating/ {ACS Templating}} {}</property>
 <property name="doc(title)"></property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h2>Namespace content</h2>
 <blockquote>Procedures for generating and processing content
 content creation and editing forms..</blockquote>
@@ -458,7 +462,7 @@ specified, returns a simple list of attribute names.</td>
 </table>
 <table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name="content::get_default_content_method" id="content::get_default_content_method"><font size="+1" weight="bold">content::get_default_content_method</font></a></td></tr><tr><td>
-<blockquote>Gets the content input method most appropriate for an
+<blockquote>Gets the content input method most appropriate for a
 content type, based on the MIME types that are registered for that
 content type.</blockquote><dl><dd>
 <strong>Parameters:</strong><table><tr>
@@ -472,7 +476,7 @@ needed.</td>
 </table>
 <table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name="content::get_sql_value" id="content::get_sql_value"><font size="+1" weight="bold">content::get_sql_value</font></a></td></tr><tr><td>
-<blockquote>Return the sql statement for a column value in an
+<blockquote>Return the SQL statement for a column value in an
 insert or update statement, using a bind variable for the actual
 value and wrapping it in a conversion function where
 appropriate.</blockquote><dl><dd>

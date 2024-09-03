@@ -13,7 +13,7 @@ ad_page_contract {
     @creation-date Jul 14, 2000
     @cvs-id $Id$
 } {
-    {name_weight:integer,notnull 0}
+    {name_weight:notnull 0}
     {doc_weight:integer,notnull 0}
     {param_weight:integer,notnull 0}
     {source_weight:integer,notnull 0}
@@ -95,7 +95,8 @@ foreach proc [nsv_array names api_proc_doc] {
     ## Param Search:
     ################
     if {$param_weight} {
-        incr score [expr {$param_weight * [::apidoc::ad_keywords_score $query_string "$doc_elements(positionals) $doc_elements(switches)"]}]
+        set arglist "$doc_elements(positionals) $doc_elements(switches0) $doc_elements(switches1)"
+        incr score [expr {$param_weight * [::apidoc::ad_keywords_score $query_string $arglist]}]
     }
 
 

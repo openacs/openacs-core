@@ -1,5 +1,3 @@
-# /packages/acs-subsite/tcl/group-procs.tcl
-
 ad_library {
 
     Procs to manage groups
@@ -130,13 +128,22 @@ ad_proc -public group::new {
     # key, there is no need to convert this a second time.
 
     if {![regexp [lang::util::message_key_regexp] $pretty_name]} {
-        set pretty_name [lang::util::convert_to_i18n -message_key "group_title_${group_id}" -text "$pretty_name"]
+        set pretty_name [lang::util::convert_to_i18n \
+                             -object_id $group_id \
+                             -message_key "group_title_${group_id}" \
+                             -text $pretty_name]
     }
 
     # Update the title to the pretty name
     if {$pretty_name ne ""} {
         db_dml title_update "update acs_objects set title = :pretty_name where object_id = :group_id"
     }
+
+    # Make sure the resolving of group id by name has a chance to
+    # include this new group
+    util_memoize_flush_pattern [list group::get_id_not_cached \
+                                    -group_name $group_name]*
+
     return $group_id
 }
 
@@ -170,6 +177,10 @@ ad_proc group::delete { group_id } {
     # the acs_group package...
 
     db_exec_plsql delete_group {}
+
+    # Remove the automatically generated message key localizing the
+    # group name
+    lang::message::unregister acs-translations "group_title_${group_id}"
 
     return $object_type
 }
@@ -299,6 +310,7 @@ ad_proc -private group::get_id_not_cached {
 ad_proc -public group::get_members {
     {-group_id:required}
     {-type "party"}
+    {-rel_type ""}
     {-member_state ""}
 } {
     Get party_ids of all members from cache.
@@ -314,15 +326,16 @@ ad_proc -public group::get_members {
     @creation-date 2005-07-26
 } {
     acs::group_cache eval -partition_key $group_id \
-        members-$group_id-$type-$member_state {
+        members-$group_id-$type-$rel_type-$member_state {
             group::get_members_not_cached -group_id $group_id \
-                -type $type -member_state $member_state
+                -type $type -rel_type $rel_type -member_state $member_state
         }
 }
 
 ad_proc -private group::get_members_not_cached {
     {-group_id:required}
     {-type:required}
+    {-rel_type ""}
     {-member_state ""}
 } {
     Get party_ids of all members.
@@ -348,6 +361,8 @@ ad_proc -private group::get_members_not_cached {
                :type = 'party' or
                (select object_type from acs_objects
                  where object_id = m.member_id) = :type)
+          and (:rel_type is null or
+               rel_type = :rel_type)
     }]
 }
 
@@ -364,10 +379,6 @@ ad_proc -private group::flush_members_cache {
     @creation-date 2005-07-26
 } {
     ::acs::group_cache flush_pattern -partition_key $group_id *-$group_id-*
-    #util_memoize_flush [list group::get_members_not_cached -group_id $group_id -type party]
-    #util_memoize_flush [list group::get_members_not_cached -group_id $group_id -type user]
-    #util_memoize_flush [list group::get_members_not_cached -group_id $group_id -type person]
-    #util_memoize_flush_regexp [list group::member_p_not_cached -group_id $group_id (.*)]
 }
 
 ad_proc -deprecated -public group::permission_p {
@@ -415,28 +426,33 @@ ad_proc -public group::description {
 
 ad_proc -public group::update {
     {-group_id:required}
-    {-array:required}
+    {-array}
+    {dict ""}
 } {
-    Updates a group.
+
+    Updates a group.The updated values can be either specified as dict or as array.
+    Valid columns are group_name, join_policy and description.
+    Valid join_policy values are 'open', 'closed', 'needs approval'.
 
     @param group_id The ID of the group to update.
-
     @param array    Name of array containing the columns to update.
-                    Valid columns are group_name, join_policy.
-                    Valid join_policy values are 'open', 'closed', 'needs approval'.
-
+    @param dict     dict for columns to update.
 } {
-    upvar $array row
 
     # Construct clauses for the update statement
     set columns { group_name join_policy description }
+    if {[llength $dict] == 0} {
+        upvar $array row
+        set dict [array get row]
+    }
     set set_clauses [list]
-    foreach name [array names row] {
+    
+    foreach {name value} $dict {
         if {$name ni $columns} {
             error "Attribute '$name' isn't valid for groups."
         }
         lappend set_clauses "$name = :$name"
-        set $name $row($name)
+        set $name $value
     }
 
     if { [llength $set_clauses] == 0 } {
@@ -446,12 +462,14 @@ ad_proc -public group::update {
 
     db_dml update_group "
         update groups
-        set    [join $set_clauses ", "]
+        set    [join $set_clauses ,]
         where  group_id = :group_id
     "
 
     if {[info exists group_name]} {
-        set pretty_name [lang::util::convert_to_i18n -message_key "group_title.${group_id}" -text "$group_name"]
+        set pretty_name [lang::util::convert_to_i18n \
+                             -message_key "group_title_${group_id}" \
+                             -text "$group_name"]
         db_dml update_object_title {
             update acs_objects
             set title = :pretty_name
@@ -484,32 +502,32 @@ ad_proc -public group::get_member_state_pretty {
     #
     # We can't use spaces in message keys, so replace it with a "_".
     #
-    regsub -all " " $member_state "_" member_state
+    regsub -all -- " " $member_state "_" member_state
 
     switch -- $component {
         pretty_name {
             set message #acs-kernel.member_state_$member_state#
         }
         action {
-            if {$user_name eq ""} { error "user_name must be specified and must be non-empty" }
+            if {$user_name eq ""} { error "user_name must be specified and must be nonempty" }
             set message #acs-kernel.member_state_action_$member_state#
         }
         account_mail {
-            if {$site_name eq ""} { error "site_name must be specified and must be non-empty" }
+            if {$site_name eq ""} { error "site_name must be specified and must be nonempty" }
             if {[string match "#*#" $site_name]} {
                 # site names can be localized
                 set site_name [lang::util::localize $site_name $locale]
             }
-            if {$url eq ""} { error "url must be specified and must be non-empty" }
+            if {$url eq ""} { error "url must be specified and must be nonempty" }
             set message #acs-kernel.member_state_account_mail_$member_state#
         }
         community_mail {
-            if {$community_name eq ""} { error "community_name must be specified and must be non-empty" }
+            if {$community_name eq ""} { error "community_name must be specified and must be nonempty" }
             if {[string match "#*#" $community_name]} {
                 # community_names can be localized
                 set community_name [lang::util::localize $community_name $locale]
             }
-            if {$url eq ""} { error "url must be specified and must be non-empty" }
+            if {$url eq ""} { error "url must be specified and must be nonempty" }
             set message #acs-kernel.member_state_community_mail_$member_state#
         }
         default {
@@ -572,10 +590,10 @@ ad_proc -public group::default_member_state {
 
 
 ad_proc -public group::member_p {
-    { -user_id "" }
-    { -group_name "" }
-    { -group_id "" }
-    { -subsite_id "" }
+    {-user_id ""}
+    {-group_name ""}
+    {-group_id ""}
+    {-subsite_id ""}
     -cascade:boolean
 } {
     Return 1 if the user is a member of the group specified.
@@ -602,12 +620,14 @@ ad_proc -public group::member_p {
     }
 
     if { $group_name eq "" && $group_id eq "" } {
+        ad_log warning "group::member_p: neither group_name nor group_id was provided; returning 0"
         return 0
     }
 
     if { $group_name ne "" } {
         set group_id [group::get_id -group_name $group_name -subsite_id $subsite_id]
         if { $group_id eq "" } {
+            ad_log warning "group::member_p: could not lookup '$group_name' (for subsite_id '$subsite_id'); returning 0"
             return 0
         }
     }
@@ -620,22 +640,19 @@ ad_proc -public group::member_p {
 }
 
 ad_proc -private group::member_p_not_cached {
-    { -user_id "" }
-    { -group_id "" }
-    {-cascade_p ""}
+    -user_id:required
+    -group_id:required
+    {-cascade_p f}
 } {
     Return 1 if the user is a member of the group specified.
-    You can specify a group id.
 
-    If there is more than one group with this name, it will use the first one.
-
-    If cascade is true, check to see if the user is a member of the
+    If cascade_p is true, check to see if the user is a member of the
     group by virtue of any other component group. e.g. if group B is
     a component of group A then if a user is a member of group B then
     he is automatically a member of A also.
 
-    If cascade is false, then the user must have specifically been
-    granted membership on the group in question.</p>
+    If cascade_p is false, then the user must have specifically been
+    granted membership on the group in question.
 
     @return boolean value
     @see group::flush_members_cache
@@ -645,7 +662,7 @@ ad_proc -private group::member_p_not_cached {
     set cascade [db_boolean $cascade_p]
     set result [db_string user_is_member {} -default "f"]
 
-    return [template::util::is_true $result]
+    return [string is true -strict $result]
 }
 
 ad_proc -public group::party_member_p {
@@ -672,7 +689,7 @@ ad_proc -public group::party_member_p {
 } {
     if { $group_name ne "" } {
         if {$group_id ne ""} {
-            ad_log warning "group::party_member_p: ignore specified group_id $group_id, usin name '$group_name' instead"
+            ad_log warning "group::party_member_p: ignore specified group_id $group_id, using name '$group_name' instead"
         }
         set group_id [group::get_id -group_name $group_name -subsite_id $subsite_id]
     }
@@ -685,10 +702,10 @@ ad_proc -public group::party_member_p {
         # will be there for both their roles of member and
         # administrator).
         set result [db_0or1row party_is_member {
-            select 1 from group_approved_member_map
-            where member_id = :party_id
-            and group_id = :group_id
-            limit 1
+            select 1 from dual where exists
+            (select 1 from group_approved_member_map
+             where member_id = :party_id
+             and group_id = :group_id)
         }]
     }
     return $result
@@ -739,7 +756,7 @@ ad_proc -public group::admin_p {
                           -object_id_two $user_id \
                           -rel_type "admin_rel"]
 
-    # The party is an admin if the call above returned something non-empty
+    # The party is an admin if the call above returned something nonempty
     return [expr {$admin_rel_id ne ""}]
 }
 
@@ -756,7 +773,7 @@ ad_proc -public group::add_member {
     Can default both the rel_type and the member_state to their relevant values.
 
     @param no_perm_check avoid permission check
-    @param no_automatic_membership_rel Use this flag, when we do not wan to add automatically a membership_rel (e.g. in DotLRN)
+    @param no_automatic_membership_rel Use this flag, when we do not want to add automatically a membership_rel (e.g. in DotLRN)
     @param group_id group, to which a member should be added
     @param user_id user, which should be added to a group
     @param rel_type relationship type to be used (defaults to membership_rel)

@@ -83,7 +83,7 @@ ad_form -extend -name reset -form {
 
     } else {
         form set_error reset password_1 "Invalid hash"
-	break
+        break
     }
 
 } -after_submit {

@@ -10,14 +10,21 @@ ad_page_contract {
     return_url:localurl
 }
 
+auth::require_login
+
 set user_id [ad_conn user_id]
 
-# get the notification information
-
-db_1row select_notification_request {
+# Get the notification information. Make also sure only the requesting
+# user can modify the frequency.
+if {![db_0or1row select_notification_request {
     select type_id, interval_id, object_id
     from notification_requests
     where request_id = :request_id
+      and user_id = :user_id
+}]} {
+    # Don't be very vocal about why we have failed.
+    ns_returnnotfound
+    ad_script_abort
 }
 
 acs_object::get -object_id $object_id -array obj

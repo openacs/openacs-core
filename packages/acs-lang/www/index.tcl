@@ -2,7 +2,6 @@ ad_page_contract {
     Localization home
 } {
     {return_url:localurl ""}
-    {return_p:boolean "f"}
 }
 
 set instance_name [ad_conn instance_name]

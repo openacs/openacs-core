@@ -3,21 +3,6 @@
 <queryset>
     <rdbms><type>oracle</type><version>8.1.6</version></rdbms>
 
-    <fullquery name="path_select">
-        <querytext>
-            select node_id,
-                   name,
-                   directory_p,
-                   level,
-                   acs_object.name(object_id) as obj_name,
-                   acs_permission.permission_p(object_id, :user_id, 'admin') as admin_p
-            from site_nodes
-            start with node_id = :root_id
-            connect by node_id = prior parent_id
-            order by level desc
-        </querytext>
-    </fullquery>
-
     <fullquery name="nodes_select">
         <querytext>
             select package_id,
@@ -65,20 +50,20 @@
         </querytext>
     </fullquery>
 
-    <fullquery name="services_select">
+    <fullquery name="path_select">
         <querytext>
-            select package_id,
-                   ap.package_key,
-                   ap.instance_name,
-                   apm_package_type.num_parameters(ap.package_key) as parameter_count
-            from apm_packages ap,
-                 apm_package_types
-            where ap.package_key = apm_package_types.package_key
-            and package_type = 'apm_service'
-            and not exists (select 1 from site_nodes sn where sn.object_id = package_id)
-            and exists (select 1 from acs_object_party_privilege_map ppm 
-                        where ppm.object_id = package_id and ppm.party_id = :user_id and ppm.privilege = 'admin')
-            order by instance_name
+    WITH site_node_path(node_id,parent_id,name,object_id,directory_p,mylevel) AS (
+       select node_id, parent_id, name, object_id, directory_p, 1 as mylevel
+       from site_nodes where node_id = :root_id
+    UNION ALL
+       select c.node_id, c.parent_id, c.name, c.object_id, c.directory_p, p.mylevel+1 mylevel
+       from site_node_path p, site_nodes c where  c.node_id = p.parent_id
+    )
+    select
+       node_id, name, directory_p, mylevel,
+       acs_object.name(object_id) as obj_name,
+       acs_permission.permission_p(object_id, :user_id, 'admin') as admin_p
+    from   site_node_path order by mylevel desc
         </querytext>
     </fullquery>
 

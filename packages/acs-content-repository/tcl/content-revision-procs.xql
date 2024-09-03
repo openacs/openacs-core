@@ -14,9 +14,4 @@
     </querytext>
   </fullquery>
 
-  <fullquery name="content::revision::new.mime_type_registered_p">
-    <querytext>
-      select exists(select 1 from cr_mime_types where mime_type = :mime_type)
-    </querytext>
-  </fullquery>
 </queryset>

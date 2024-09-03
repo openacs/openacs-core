@@ -1,7 +1,11 @@
 
-<property name="context">{/doc/acs-content-repository {ACS Content Repository}} {ACS Content Repository}</property>
+<property name="context">{/doc/acs-content-repository/ {ACS Content Repository}} {ACS Content Repository}</property>
 <property name="doc(title)">ACS Content Repository</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h1>ACS Content Repository</h1>
 <strong><a href="/doc">ACS Documentation</a></strong>
 <ul>

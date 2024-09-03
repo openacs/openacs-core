@@ -13,11 +13,6 @@ ad_page_contract {
     utc_ansi
 }
 
-if { ![lang::system::timezone_support_p] } {
-    ad_return_error "Timezone support not installed" "This installation of the acs-lang package does not support timezone settings. The ref-timezones package needs to be installed first"
-    ad_script_abort
-}
-
 if { $timezone_recommended ne "" } {
     lang::system::set_timezone $timezone_recommended
 } elseif { $timezone_all ne "" } {
@@ -55,17 +50,25 @@ ad_try {
 # example input:
 # ss=m3><strong>UTC</strong> \(or GMT/Zulu\)-time used: <strong id=ctu>Friday, July 27, 2012 at 19:20:27</strong>
 
-if { [regexp {<strong>UTC</strong>[^:]+[:][ ]*<strong[^>]*>([^<]+)</strong>} $time_and_date_page match utc_from_page] } {
+if { [regexp {<strong>UTC</strong>[^:]+[:][ ]*<strong[^>]*>([^<]+)</strong>} \
+          $time_and_date_page match utc_from_page]
+ } {
     # UTC in format (including some historical ones to help keep a robust regexp:
-    # Friday, July 27, 2012 at 19:20:27
-    # Wednesday, 20 November 2002, at 2:49:07 PM
-    # Wednesday, 6 August  2003, at 12:11:48
-    # this regexp is a little more flexible and accepting of data types to help with parsing
-    set reg_p [regexp -nocase -- {^([^,]+)[,][ ]+([a-z0-9]+)[ ]+([a-z0-9]+)[,]?[ ]+([a-z0-9]+)[at, ]+[ ]+(.*)$} $utc_from_page match weekday day month year time]
+    #    Friday, July 27, 2012 at 19:20:27
+    #    Wednesday, 20 November 2002, at 2:49:07 PM
+    #    Wednesday, 6 August  2003, at 12:11:48
+    #
+    # This following regexp is a little more flexible and accepting of
+    # data types to help with parsing
+    set reg_p [regexp -nocase -- {^([^,]+)[,][ ]+([a-z0-9]+)[ ]+([a-z0-9]+)[,]?[ ]+([a-z0-9]+)[at, ]+[ ]+(.*)$} \
+                   $utc_from_page match weekday day month year time]
 
     if { $reg_p && [info exists month] && [info exists day] && [info exists year] && [info exists time] } {
-        # did timeanddate swap day/month?
-        if { [ad_var_type_check_number_p $month] } {
+        #
+        # Did timeanddate swap day/month? If yes then the content of
+        # variable month is here an integer.
+        #
+        if { [string is integer -strict [util::trim_leading_zeros $month]] } {
             set temp $day
             set day $month
             set month $temp
@@ -106,9 +109,9 @@ if { [info exists utc_epoch] } {
         set try_offsets [list]
         foreach offset [list $recommended_offset [expr {$recommended_offset -24}]] {
             if { $offset < 0 } {
-                lappend try_offsets '[db_quote [expr {-int(abs($offset)*60*60)}]]'
+                lappend try_offsets [expr {-int(abs($offset)*60*60)}]
             } else {
-                lappend try_offsets '[db_quote [expr {int($offset*60*60)}]]'
+                lappend try_offsets [expr {int($offset*60*60)}]
             }
         }
 
@@ -116,7 +119,7 @@ if { [info exists utc_epoch] } {
             select tz.tz, tz.gmt_offset
             from   timezones tz,
                    timezone_rules tzr
-            where  tzr.gmt_offset in ([join $try_offsets ", "])
+            where  tzr.gmt_offset in ([ns_dbquotelist $try_offsets])
             and    tzr.tz_id = tz.tz_id
             and    to_date('$utc_ansi', 'YYYY-MM-DD HH24:MI:SS') between tzr.utc_start and tzr.utc_end
             order  by tz

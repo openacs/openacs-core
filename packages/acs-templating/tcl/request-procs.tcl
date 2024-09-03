@@ -53,7 +53,7 @@ ad_proc -public template::request::create { args } {
     if { [info exists opts(params)] } {
 
     # strip carriage returns
-        regsub -all {\r} $opts(params) {} param_data
+        regsub -all -- {\r} $opts(params) {} param_data
 
         foreach param [split $param_data "\n"] {
 

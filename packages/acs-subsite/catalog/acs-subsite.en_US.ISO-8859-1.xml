@@ -1,13 +1,20 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <message_catalog package_key="acs-subsite" locale="en_US" charset="ISO-8859-1">
 
+  <msg key="400_title">Client Error</msg>
+  <msg key="403_message">You don&#39;t have permissions to retrieve this page</msg>
+  <msg key="404_message">The requested file was not found</msg>
+  <msg key="404_title">Bad Request</msg>
+  <msg key="500_message">An error occurred while processing your request</msg>
+  <msg key="500_title">Server Error</msg>
+  <msg key="503_message">The service you requested is currently unavailable</msg>
   <msg key="_or">, or</msg>
   <msg key="_Update_Basic_Information">Update Basic Information</msg>
   <msg key="A_member_of_the_system">A member of the %system_name% community since</msg>
   <msg key="About_You">About you</msg>
   <msg key="Account_at_system_closed">Your account at %system_name% has been closed.</msg>
   <msg key="Account_close_confirm_no_label">No, take me back to %pvt_home_name%</msg>
-  <description key="Account_close_confirm_no_label">Description please - does this refer to &#39;Close account&#39; on the &#39;Your(/My) Account&#39; page? Where ist the user taken if he doesn&#39;t confirm? On the &#39;MySpace&#39; page? (pvt=private?)
+  <description key="Account_close_confirm_no_label">Description please - does this refer to &#39;Close account&#39; on the &#39;Your(/My) Account&#39; page? Where is the user taken if he doesn&#39;t confirm? On the &#39;MySpace&#39; page? (pvt=private?)
 
 --Anja Wicht</description>
 
@@ -48,7 +55,7 @@
   <msg key="Admin">Control Panel</msg>
   <msg key="admin">Admin</msg>
   <msg key="Administer_subsite">Administer %subsite_name%</msg>
-  <msg key="Administration">Administration</msg>
+  <msg key="Administration">Subsite Administration</msg>
   <msg key="Administrative_options">Administrative options for this user</msg>
   <msg key="Advanced">Advanced</msg>
   <msg key="Advanced_Features">Advanced Features</msg>
@@ -112,6 +119,7 @@ logging in again. &lt;/p&gt;
   <msg key="Configuration">Configuration</msg>
   <msg key="Configure">Configure</msg>
   <msg key="Confirm">Confirm</msg>
+  <msg key="Confirm_Permissions">Confirm Permission Settings</msg>
   <msg key="confirmation_password_changed">You have successfully chosen a new password.</msg>
   <msg key="Continue">Continue</msg>
   <msg key="Continue_to_your_account">Continue to %pvt_home_name%</msg>
@@ -167,7 +175,7 @@ logging in again. &lt;/p&gt;
   <msg key="Edit_this_theme">Edit this theme</msg>
   <msg key="Elements_not_editable">Certain elements are not editable, because they are managed by %authority_name%.</msg>
   <msg key="Email">Email</msg>
-  <msg key="Email_already_exists">#acs-subsite.Email# already exists</msg>
+  <msg key="Email_already_exists">Email already exists</msg>
   <msg key="email_as_a_form">Allow others to contact me through a web form</msg>
   <msg key="email_as_a_form_admin">Allow contact with a form</msg>
   <msg key="email_as_image">Show my E-mail as an image</msg>
@@ -209,13 +217,17 @@ Please visit the following link to change your password now:
   <msg key="Erase_Portrait">Erase Portrait</msg>
   <msg key="erase_portrait">erase portrait</msg>
   <msg key="Error">Error</msg>
+  <msg key="Error_joining">Error Joining</msg>
+  <msg key="Error_joining_details">We experienced an error adding you to the group.</msg>
   <msg key="Error_sending_mail">Error sending mail</msg>
   <msg key="Error_sending_verification_mail">We got an error sending out the email for email verification</msg>
   <msg key="Error_trying_to_register">We experienced an error while trying to register an account for you.</msg>
   <msg key="Error_update_account_info">We experienced an error while trying to update the account information</msg>
   <msg key="Expires">Expires</msg>
+  <msg key="external_identity_providers_title">External Identity Providers</msg>
   <msg key="Female">Female</msg>
   <msg key="Filename">Filename</msg>
+  <msg key="Filter_username_and_email">Filter for username and email</msg>
   <msg key="First_names">First name</msg>
   <msg key="First_names_not_provided_by_authority">First name is not provided by the login authority. Please enter your first name.</msg>
   <msg key="First_select_the_supertype">First, select the supertype for the new relationship type</msg>
@@ -228,6 +240,8 @@ Please visit the following link to change your password now:
   <msg key="go_upload_your_portrait">go upload your portrait</msg>
   <msg key="Grant">Grant</msg>
   <msg key="Grant_Permission">Grant Permission</msg>
+  <msg key="Grant_Permissions_to_Users">Grant Permissions to Users</msg>
+  <msg key="Grant_Permissions_to_Users-helptext">Select users to grant these permissions</msg>
   <msg key="Group_administration">Group administration</msg>
   <msg key="Group_members">Members of Group: %group_name%</msg>
   <msg key="Group_type">Group type</msg>
@@ -246,7 +260,8 @@ Please visit the following link to change your password now:
   <msg key="Hostname_must_be_unique">Hostname must be unique</msg>
   <msg key="icon_of_envelope">Icon of envelope</msg>
   <msg key="If_you_were_to">If you were to</msg>
-  <msg key="Information_Updated">Information Updated</msg>
+  <msg key="Information_Updated">Information updated</msg>
+  <msg key="Inherited_Permission-helptext">This permission is inherited, to remove, click the &#34;Do not inherit ...&#34; button above.</msg>
   <msg key="Install_locales">Install Locales</msg>
   <msg key="Invite">Invite</msg>
   <msg key="Invite_a_user">Invite a user</msg>
@@ -260,6 +275,7 @@ Please visit the following link to change your password now:
   <msg key="Join_subsite">Join subsite</msg>
   <msg key="Join_this_community">Join this community</msg>
   <msg key="Join_this_subsite">Join this subsite</msg>
+  <msg key="Joined_group">You have joined the group %group_name%.</msg>
   <msg key="Key">Key</msg>
   <msg key="Keyword">Keyword</msg>
   <msg key="Last_name">Last name</msg>
@@ -310,9 +326,8 @@ shared computer in a library or school.  Any subsequent user of this
 machine would be able to masquerade as you on our service.</msg>
   <msg key="lt_New_registration_at_s">New registration at %system_url%</msg>
   <msg key="lt_Note_text_in_red_below">Note text in red below the parameter entry fields indicates the value of this
-    parameter is being overridden by an entry in the OpenACS parameter file.  The
-    use of the parameter file is discouraged but some sites need it to provide
-    instance-specific values for parameters independent of the apm_parameter
+    parameter is being overridden by an entry in the NaviServer configuration file.
+    Some sites need it to provide instance-specific values for parameters independent of the apm_parameter
     tables.</msg>
   <msg key="lt_Note_that_you_can_era">Note that you can erase your saved email address and password by
 choosing the &#34;log out&#34; option from your workspace.</msg>
@@ -463,6 +478,7 @@ You can always change your password by doing the following:
   <msg key="Permissions">Permissions</msg>
   <msg key="permissions">permissions</msg>
   <msg key="Permissions_for_name">Permissions for %name%</msg>
+  <msg key="Permissions_Updated">Permissions updated.</msg>
   <msg key="Place_of_birth">Place of birth</msg>
   <msg key="Place_of_residence">Place of residence</msg>
   <msg key="Please_return_to_home">Please return to %home_link%.</msg>
@@ -502,7 +518,8 @@ You can always change your password by doing the following:
   <msg key="Req_membership_comm">Request membership of this community</msg>
   <msg key="Req_membership_subs">Request membership of this subsite</msg>
   <msg key="Request_Change_Password_token_email">Request to Change Password: A token for changing your password has been emailed to you. Follow the instructions in that email to change your password</msg>
-  <msg key="Request_join_submitted">Your request to join group '%group_name%' has been submitted</msg>
+  <msg key="Request_group_submitted">Your request to join group &#39;%group_name%&#39; has been submitted.</msg>
+  <msg key="Request_join_submitted">Your request to join group &#39;%group_name%&#39; has been submitted</msg>
   <msg key="Request_membership">Request membership</msg>
   <msg key="Reset_Password">Reset Password</msg>
   <msg key="return_to_application">return to application</msg>
@@ -532,7 +549,7 @@ You can always change your password by doing the following:
   <msg key="Site_Map">Site Map</msg>
   <msg key="Site_Map_Instructions">Site Map Instructions</msg>
   <msg key="Site_node_you_would_like_to_map_hostname_to">Site node you would like to map hostname to</msg>
-  <msg key="Site_Wide_Admin">Site Wide Administration</msg>
+  <msg key="Site_Wide_Admin">Site-Wide Administration</msg>
   <msg key="Site_wide_administration">Site-wide administration</msg>
   <msg key="sorry_forgotten_pwd">Sorry, we can&#39;t help you with your forgotten password.</msg>
   <msg key="Status">Status</msg>
@@ -542,6 +559,7 @@ You can always change your password by doing the following:
   <msg key="subcommunities">subcommunities</msg>
   <msg key="subcommunity">subcommunity</msg>
   <msg key="subsite">subsite</msg>
+  <msg key="Subsite_Administration">Subsite Administration</msg>  
   <msg key="Subsite_Configuration">Subsite Configuration</msg>
   <msg key="Subsite_Home">%subsite_name% Home</msg>
   <msg key="Subsite_name">Subsite name</msg>
@@ -622,15 +640,4 @@ copy it as above to the new location, then select &lt;em&gt;unmount&lt;/em&gt; a
   <msg key="Your_Portrait">Your Portrait</msg>
   <msg key="Your_system_alerts">Your %gc_system_name% alerts</msg>
   <msg key="Youre_marked_as_back">You&#39;re marked as back from vacation at %site_link%.</msg>
-  <msg key="Request_group_submitted">Your request to join group '%group_name%' has been submitted.</msg>
-  <msg key="Joined_group">You have joined the group %group_name%.</msg>
-  <msg key="Error_joining">Error Joining</msg>
-  <msg key="Error_joining_details">We experienced an error adding you to the group.</msg>
-  <msg key="404_title">Bad Request</msg>
-  <msg key="404_message">The requested file was not found</msg>
-  <msg key="403_message">You don't have permissions to retrieve this page</msg>
-  <msg key="400_title">Server Error</msg>
-  <msg key="500_message">An error occurred while processing your request</msg>    
-  <msg key="503_message">The service you requested is currently unavailable</msg>    
-
 </message_catalog>

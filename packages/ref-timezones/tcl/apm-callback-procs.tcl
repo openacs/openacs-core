@@ -1,9 +1,7 @@
-# 
-
 ad_library {
-    
+
     APM Callback procs
-    
+
     @author Victor Guerra (vguerra@wu-wien.ac.at)
     @creation-date 2008-12-16
     @cvs-id $Id$
@@ -11,7 +9,7 @@ ad_library {
 
 namespace eval ref-timezones::apm {}
 
-ad_proc -public ref-timezones::apm::after_upgrade {
+ad_proc -private ref_timezones::apm::after_upgrade {
     {-from_version_name:required}
     {-to_version_name:required}
 } {
@@ -24,14 +22,25 @@ ad_proc -public ref-timezones::apm::after_upgrade {
             5.5.0d1 5.5.0d2 {
                 db_load_sql_data [acs_root_dir]/packages/ref-timezones/sql/[db_driverkey ""]/upgrade/upgrade-timezones.ctl
                 set entries [db_string _ "select count(*) from timezones"]
-                ns_log Notice "$entries time zones loaded"
+                ns_log Notice "$entries timezones loaded"
             }
             5.9.0b1 5.9.0b2 {
                 db_load_sql_data [acs_root_dir]/packages/ref-timezones/sql/[db_driverkey ""]/upgrade/upgrade-timezones.ctl
                 set entries [db_string _ "select count(*) from timezones"]
-                ns_log Notice "$entries time zones loaded"
+                ns_log Notice "$entries timezones loaded"
             }
-            
+            5.10.1b1 5.10.1b2 {
+                ns_log notice "Load fresh timezone data"
+                db_load_sql_data [acs_root_dir]/packages/ref-timezones/sql/[db_driverkey ""]/upgrade/upgrade-timezones.ctl
+                set entries [db_string _ "select count(*) from timezones"]
+                ns_log Notice "$entries timezones loaded"
+            }
+            5.10.1b2 5.10.1b3 {
+                ns_log notice "Load fresh timezone data"
+                db_load_sql_data [acs_root_dir]/packages/ref-timezones/sql/[db_driverkey ""]/upgrade/upgrade-timezones.ctl
+                set entries [db_string _ "select count(*) from timezones"]
+                ns_log Notice "$entries timezones loaded"
+            }
         }
 }
 

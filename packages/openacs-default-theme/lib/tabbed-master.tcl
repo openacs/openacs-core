@@ -1,4 +1,6 @@
-# Set the tabs then use the plain master to render the page.
+ad_include_contract {
+    Set the tabs then use the plain master to render the page.
+}
 
 subsite_navigation::define_pageflow \
     -navigation_multirow navigation -group main -subgroup sub \

@@ -38,19 +38,32 @@ ad_proc -public auth::require_login {
                      -account_status $account_status]
 
     if { $user_id != 0 } {
-        # user is in fact logged in, return user_id
+        #
+        # The user is in fact logged in, return her user_id.
+        #
         return $user_id
     }
 
-    set message {}
+    set message ""
+
     if {[ad_conn auth_level] eq "expired"} {
+        #
+        # The login has expired.
+        #
         set message [_ acs-subsite.lt_Your_login_has_expire]
+        #
+        # If the login was issued from an external_registry, use this
+        # as well for refreshing.
+        #
+        set external_registry [sec_login_get_external_registry]
+    } else {
+        set external_registry ""
     }
 
     #
     # The -return switch causes the URL to return to the current page.
     #
-    set return_url [ad_get_login_url -return]
+    set return_url [ad_get_login_url -return -external_registry $external_registry]
 
     # Long URLs (slightly above 4000 bytes) can kill aolserver-4.0.10, causing
     # a restart. They lead to empty Browser-windows with AOLserver 4.5 (but no
@@ -64,7 +77,7 @@ ad_proc -public auth::require_login {
     # When submitting needs authentication, OpenACS generates the redirect to
     # /register with the form-data coded into the URL to continue there.....
 
-    # set user_agent [string tolower [ns_set get [ns_conn headers] User-Agent]]
+    # set user_agent [string tolower [ns_set iget [ns_conn headers] User-Agent]]
     # ns_log notice "URL have url, len=[string length $return_url] $user_agent"
 
     if {[string length $return_url] > 2083} {
@@ -73,29 +86,38 @@ ad_proc -public auth::require_login {
         set return_url [ad_get_login_url]
     }
 
-    ad_returnredirect -message $message -- $return_url
+    # If the login was issued from an external_registry,
+    # we have to allow the redirect to a complete url
+    ad_returnredirect -allow_complete_url=[expr {$external_registry ne ""}] -message $message -- $return_url
     ad_script_abort
 }
 
 ad_proc -public auth::refresh_login {} {
-    If there currently is a user associated with this session,
-    but the user's authentication is expired, redirect the
-    user to refresh his/her login. This allows for users to not be logged in,
-    but if the user is logged in, then we require that the authentication is not expired.
 
-    @return user_id of user, if the user is logged in and auth_status is not expired, or 0 if the user is not logged in.
-    If user's auth_status is expired, this proc will issue a returnredirect and abort the current page.
+    If there currently is a user associated with this session, but the
+    user's authentication is expired, redirect the user to refresh
+    his/her login. This allows for users to not be logged in, but if
+    the user is logged in, then we require that the authentication is
+    not expired.
+
+    @return user_id of user, if the user is logged in and auth_status
+            is not expired, or 0 if the user is not logged in.
+            If user's auth_status is expired, this proc will issue a
+            returnredirect and abort the current page.
 
     @see ad_script_abort
 } {
     if { [ad_conn auth_level] ne "expired" } {
         return [ad_conn user_id]
     }
-
+    #
     # The -return switch causes the URL to return to the current page
-    ad_returnredirect [ad_get_login_url -return]
+    #
+    ad_returnredirect [ad_get_login_url -return \
+                           -external_registry [sec_login_get_external_registry]]
     ad_script_abort
 }
+
 
 ad_proc -public auth::self_registration {} {
     Check AllowSelfRegister parameter and set user message if
@@ -104,7 +126,11 @@ ad_proc -public auth::self_registration {} {
     if { [string is false [parameter::get_from_package_key \
                                -package_key acs-authentication \
                                -parameter AllowSelfRegister]] } {
-        util_user_message -message "Self registration is not allowed"
+        if {[ad_conn session_id] ne ""} {
+            util_user_message -message "Self registration is not allowed"
+        } else {
+            ns_log notice "auth::self_registration: cannot set user_message 'Self registration is not allowed'"
+        }
         auth::require_login
     }
 }
@@ -196,7 +222,7 @@ ad_proc -public auth::authenticate {
     <li> account_url:     A URL to redirect the user to. Could e.g. ask the user to update his password.
     <li> account_message: Human-readable message about account status. Guaranteed to be set if auth_status is not ok
     and account_url is empty.
-    If non-empty, must be relayed to the user regardless of account_status. May contain HTML.
+    If nonempty, must be relayed to the user regardless of account_status. May contain HTML.
     This proc is responsible for concatenating any remote and/or local account messages into
     one single message which can be displayed to the user.
 
@@ -252,7 +278,7 @@ ad_proc -public auth::authenticate {
     array set result {auth_status "n/a" auth_message "" account_status "n/a" account_message ""}
 
     ad_try {
-        array set result [auth::authentication::Authenticate \
+        array set result [auth::authentication::authenticate \
                               -username $username \
                               -authority_id $authority_id \
                               -password $password]
@@ -403,23 +429,27 @@ ad_proc -public auth::authenticate {
             set cookie_domain ""
         }
         ns_log notice "auth::authenticate receives host_node_id $host_node_id domain <$cookie_domain>"
-        auth::issue_login \
-            -user_id $result(user_id) \
-            -persistent=$persistent_p \
+        ad_user_login \
             -account_status $result(account_status) \
-            -cookie_domain $cookie_domain
+            -cookie_domain $cookie_domain \
+            -forever=$persistent_p \
+            $result(user_id)
     }
 
     return [array get result]
 }
 
-ad_proc -private auth::issue_login {
+ad_proc -deprecated auth::issue_login {
     {-user_id:required}
     {-account_status "ok"}
     {-cookie_domain ""}
     {-persistent:boolean}
 } {
     Issue the login cookie.
+
+    DEPRECATED: just a trivial wrapper of ad_user_login
+
+    @see ad_user_login
 } {
     ad_user_login \
         -account_status $account_status \
@@ -428,7 +458,7 @@ ad_proc -private auth::issue_login {
         $user_id
 }
 
-ad_proc -private auth::get_register_authority {
+ad_proc -public auth::get_register_authority {
 } {
     Get the ID of the authority in which accounts get created. Is based on the RegisterAuthority parameter
     but will default to the local authority if that parameter has an invalid value.
@@ -487,18 +517,18 @@ ad_proc -public auth::create_user {
     <ul>
     <li> creation_status:  ok, data_error, reg_error, failed_to_connect. Says whether user creation succeeded.
     <li> creation_message: Information about the problem, to be relayed to the user. If creation_status is not ok, then either
-    creation_message or element_messages is guaranteed to be non-empty, and both are
+    creation_message or element_messages is guaranteed to be nonempty, and both are
     guaranteed to be in the array list.  May contain HTML.
     <li> element_messages: list of (element_name, message, element_name, message, ...) of
     errors on the individual registration elements.
     to be relayed on to the user. If creation_status is not ok, then either
-    creation_message or element_messages is guaranteed to be non-empty, and both are
+    creation_message or element_messages is guaranteed to be nonempty, and both are
     guaranteed to be in the array list. Cannot contain HTML.
     <li> account_status:   ok, closed. Only set if creation_status was ok, this says whether the newly created account
     is ready for use or not. For example, we may require approval, in which case the account
     would be created but closed.
     <li> account_message:  A human-readable explanation of why the account was closed. May include HTML, and thus shouldn't
-    be quoted. Guaranteed to be non-empty if account_status is not ok.
+    be quoted. Guaranteed to be nonempty if account_status is not ok.
     <li> user_id:          The user_id of the created user. Only when creation_status is ok.
     </ul>
 
@@ -681,7 +711,7 @@ ad_proc -public auth::create_user {
 
     # Unless nologin was specified, issue login cookie if login was successful
     if { !$nologin_p && $creation_info(creation_status) eq "ok" && $creation_info(account_status) eq "ok" && [ad_conn user_id] == 0 } {
-        auth::issue_login -user_id $creation_info(user_id)
+        ad_user_login $creation_info(user_id)
     }
 
     return [array get creation_info]
@@ -780,11 +810,11 @@ ad_proc -public auth::get_registration_form_elements {
 
     array set widgets {
         username text
-        email text
+        email email
         first_names text
         last_name text
         screen_name text
-        url text
+        url url
         password password
         password_confirm password
         secret_question text
@@ -873,7 +903,7 @@ ad_proc -public auth::get_registration_form_elements {
             # The form element is finished - add it to the list
             lappend form_elements $form_element
         } else {
-            lappend form_elements "${element}:text(hidden),optional [list value {}]"
+            lappend form_elements "${element}:text(hidden),optional {value {}}"
         }
     }
 
@@ -888,25 +918,29 @@ ad_proc -public auth::create_local_account {
 } {
     Create the local account for a user.
 
-    @param array Name of an array containing the registration elements to update.
+    @param array Name of an array containing the registration elements
+                 to update. Fields are specified by
+                 auth::get_all_registration_elements
+
+    @see auth::get_all_registration_elements
 
     @return Array list containing the following entries:
 
     <ul>
     <li> creation_status:  ok, data_error, reg_error, failed_to_connect. Says whether user creation succeeded.
     <li> creation_message: Information about the problem, to be relayed to the user. If creation_status is not ok, then either
-    creation_message or element_messages is guaranteed to be non-empty, and both are
+    creation_message or element_messages is guaranteed to be nonempty, and both are
     guaranteed to be in the array list.  May contain HTML.
     <li> element_messages: list of (element_name, message, element_name, message, ...) of
     errors on the individual registration elements.
     to be relayed on to the user. If creation_status is not ok, then either
-    creation_message or element_messages is guaranteed to be non-empty, and both are
+    creation_message or element_messages is guaranteed to be nonempty, and both are
     guaranteed to be in the array list. Cannot contain HTML.
     <li> account_status:   ok, closed. Only set if creation_status was ok, this says whether the newly created account
     is ready for use or not. For example, we may require approval, in which case the account
     would be created but closed.
     <li> account_message:  A human-readable explanation of why the account was closed. May include HTML, and thus shouldn't
-    be quoted. Guaranteed to be non-empty if account_status is not ok.
+    be quoted. Guaranteed to be nonempty if account_status is not ok.
     </ul>
 
     All entries are guaranteed to always be set, but may be empty.
@@ -970,10 +1004,25 @@ ad_proc -public auth::create_local_account {
         }
     }
 
-    # Default a local account username
-    if { $user_info(authority_id) == [auth::authority::local]
-         && [auth::UseEmailForLoginP]
-         && $username eq "" } {
+    # We can generate a username ourselves when this is missing and
+    # the system is configured to do so, but only if the account is
+    # managed locally.
+    if { $username eq "" && [auth::UseEmailForLoginP] } {
+        set local_authority_id [auth::authority::local]
+        set local_auth_impl_id [auth::authority::get_element \
+                                    -authority_id $local_authority_id \
+                                    -element "auth_impl_id"]
+
+        set auth_impl_id [auth::authority::get_element \
+                              -authority_id $authority_id \
+                              -element "auth_impl_id"]
+
+        set generate_username_p [expr {$local_auth_impl_id == $auth_impl_id}]
+    } else {
+        set generate_username_p false
+    }
+
+    if { $generate_username_p } {
 
         # Generate a username that is guaranteed to be unique.
         # Rather much work, but that's the best I could think of
@@ -1029,7 +1078,7 @@ ad_proc -public auth::create_local_account {
 
         # Update person.bio
         if { [info exists user_info(bio)] } {
-            person::update_bio \
+            person::update \
                 -person_id $user_id \
                 -bio $user_info(bio)
         }
@@ -1157,12 +1206,12 @@ ad_proc -public auth::update_local_account {
     <ul>
     <li> update_status:    ok, data_error, update_error, failed_to_connect. Says whether user update succeeded.
     <li> update_message:   Information about the problem, to be relayed to the user. If update_status is not ok, then either
-    update_message or element_messages is guaranteed to be non-empty, and both are
+    update_message or element_messages is guaranteed to be nonempty, and both are
     guaranteed to be in the array list.  May contain HTML.
     <li> element_messages: list of (element_name, message, element_name, message, ...) of
     errors on the individual registration elements.
     to be relayed on to the user. If update_status is not ok, then either
-    udpate_message or element_messages is guaranteed to be non-empty, and both are
+    update_message or element_messages is guaranteed to be nonempty, and both are
     guaranteed to be in the array list. Cannot contain HTML.
     </ul>
 
@@ -1210,9 +1259,9 @@ ad_proc -public auth::update_local_account {
                     -last_name $user_info(last_name)
             }
 
-            # Update person.bio
+            # Update person's bio
             if { [info exists user_info(bio)] } {
-                person::update_bio \
+                person::update \
                     -person_id $user_id \
                     -bio $user_info(bio)
             }
@@ -1282,7 +1331,7 @@ ad_proc -public auth::delete_local_account {
     <ul>
     <li> delete_status:  ok, delete_error, failed_to_connect. Says whether user deletion succeeded.
     <li> delete_message: Information about the problem, to be relayed to the user.
-    If delete_status is not ok, then delete_message is guaranteed to be non-empty. May contain HTML.
+    If delete_status is not ok, then delete_message is guaranteed to be nonempty. May contain HTML.
     </ul>
 
     All entries are guaranteed to always be set, but may be empty.
@@ -1323,15 +1372,13 @@ ad_proc -public auth::set_email_verified {
         -email_verified_p "t"
 }
 
-ad_proc -private auth::verify_account_status {} {
+ad_proc -public auth::verify_account_status {} {
     Verify the account status of the current user,
     and set [ad_conn account_status] appropriately.
 } {
     # Just recheck the authentication cookie, and it'll do the verification for us
     sec_login_handler
 }
-
-
 
 
 #####
@@ -1573,7 +1620,7 @@ ad_proc -public auth::get_local_account_status {
     return $result
 }
 
-ad_proc -private auth::get_user_secret_token {
+ad_proc -public auth::get_user_secret_token {
     -user_id:required
 } {
     Get a secret token for the user. Can be used for email verification purposes.
@@ -1684,10 +1731,13 @@ ad_proc -private auth::validate_account_info {
 
     if { [info exists user(screen_name)] } {
         set screen_name_user_id [acs_user::get_user_id_by_screen_name -screen_name $user(screen_name)]
-        if { $screen_name_user_id ne "" && (!$update_p || $screen_name_user_id != $user(user_id)) } {
+        if { $screen_name_user_id ne ""
+             && (!$update_p || $screen_name_user_id != $user(user_id))
+         } {
             set element_messages(screen_name) [_ acs-subsite.screen_name_already_taken]
 
-            # We could do the same logic as below with 'stealing' the screen_name of an old, banned user.
+            # We could do the same logic as below with 'stealing' the
+            # screen_name of an old, banned user.
         }
     }
 
@@ -1744,36 +1794,38 @@ ad_proc -private auth::validate_account_info {
     }
 }
 
-ad_proc -private auth::can_admin_system_without_authority_p {
+ad_proc -public auth::can_admin_system_without_authority_p {
     {-authority_id:required}
 } {
     Before disabling or deleting an authority we need to check
     that there is at least one site-wide admin in a different
-    authority that can administer the system. This proc returns
-    1 if there is such an admin and 0 otherwise.
+    authority that can administer the system.
+
+    @return boolean
 
     @author Peter Marklund
 } {
     #
-    # Count all users from other authorities having swa admins (having
-    # admin rights on the magic object 'security_context_root').
+    # Is there a user from other authorities having swa admins (having
+    # admin rights on the magic object 'security_context_root')?
     #
-    set number_of_admins_left [db_string count_admins_left {
-        select count(*)
-        from acs_permissions p,
+    return [db_0or1row admins_left_p {
+        select 1 from dual where exists
+        (
+          select 1
+          from acs_permissions p,
              party_approved_member_map m,
              acs_magic_objects amo,
              cc_users u
-        where amo.name = 'security_context_root'
-        and p.object_id = amo.object_id
-        and p.grantee_id = m.party_id
-        and u.user_id = m.member_id
-        and u.member_state = 'approved'
-        and u.authority_id <> :authority_id
-        and acs_permission.permission_p(amo.object_id, u.user_id, 'admin')
+          where amo.name = 'security_context_root'
+          and p.object_id = amo.object_id
+          and p.grantee_id = m.party_id
+          and u.user_id = m.member_id
+          and u.member_state = 'approved'
+          and u.authority_id <> :authority_id
+          and acs_permission.permission_p(amo.object_id, u.user_id, 'admin') = 't'
+        )
     }]
-
-    return [ad_decode $number_of_admins_left "0" "0" "1"]
 }
 
 #####
@@ -1782,7 +1834,7 @@ ad_proc -private auth::can_admin_system_without_authority_p {
 #
 #####
 
-ad_proc -private auth::authentication::Authenticate {
+ad_proc -public auth::authentication::authenticate {
     {-authority_id:required}
     {-username:required}
     {-password:required}
@@ -1805,28 +1857,29 @@ ad_proc -private auth::authentication::Authenticate {
                         -authority_id $authority_id \
                         -impl_id $impl_id]
 
-    # See http://openacs.org/bugtracker/openacs/bug?format=table&f%5fstate=8&bug%5fnumber=2200
-    # Basically, we want upgrades to work, so we have to check for
-    # version number -jfr
-
-    set authentication_version [util_memoize [list apm_highest_version_name acs-authentication]]
-    set old_version_p [util_memoize [list apm_version_names_compare 5.1.3 $authentication_version]]
-
-    if {[string is true $old_version_p]} {
-        return [acs_sc::invoke \
-                    -error \
-                    -impl_id $impl_id \
-                    -operation Authenticate \
-                    -call_args [list $username $password $parameters]]
-
-    } else {
-        return [acs_sc::invoke \
-                    -error \
-                    -impl_id $impl_id \
-                    -operation Authenticate \
-                    -call_args [list $username $password $parameters $authority_id]]
-    }
+    return [acs_sc::invoke \
+                -error \
+                -impl_id $impl_id \
+                -operation Authenticate \
+                -call_args [list $username $password $parameters $authority_id]]
 }
+
+# ad_proc -deprecated auth::authentication::Authenticate args {
+#     Invoke the Authenticate service contract operation for the given authority.
+
+#     DEPRECATED: this used to be a private api, however, it could be
+#     made public, as it calls only public api itself and provides some
+#     convenience. Unfortunately, it has been named in camelcase, so we
+#     have to create a new alias and deprecate this one.
+
+#     @see auth::authentication::authenticate
+
+#     @param authority_id The ID of the authority to ask to verify the user.
+#     @param username Username of the user.
+#     @param password The password as the user entered it.
+# } {
+#     return [auth::authentication::authenticate {*}$args]
+# }
 
 #####
 #
@@ -1946,7 +1999,7 @@ ad_proc -private auth::user_info::GetUserInfo {
 # failed consecutive failed login attempts based on the ip-address and subsite.
 #
 # After the maximum number of consecutive failed login attempts
-# has been excedeed, all further login attempts will be automatically rejected
+# has been exceeded, all further login attempts will be automatically rejected
 # for a specified lock-out/cool-down time, even if the correct credentials have been
 # provided. Every successful login before reaching the threshold resets the
 # counter to 0 again. Beware, the counting is done via caching and is
@@ -1978,7 +2031,9 @@ ad_proc -private ::auth::login_attempts::threshold_reached_p {
                                        -package_key "acs-authentication" \
                                        -default 0]
 
-    if {$max_failed_login_attempts > 0 && [::auth::login_attempts::get -key $login_attempt_key] > $max_failed_login_attempts} {
+    if {$max_failed_login_attempts > 0
+        && [::auth::login_attempts::get -key $login_attempt_key] > $max_failed_login_attempts
+    } {
         return 1
     } else {
         return 0

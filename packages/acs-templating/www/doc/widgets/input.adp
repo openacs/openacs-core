@@ -1,7 +1,11 @@
 
-<property name="context">{/doc/acs-templating {ACS Templating}} {Templating System Widget Reference: Input}</property>
+<property name="context">{/doc/acs-templating/ {ACS Templating}} {Templating System Widget Reference: Input}</property>
 <property name="doc(title)">Templating System Widget Reference: Input</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h2>The Input Widgets</h2>
 <strong>
 <a href="../index">Templating System</a> : <a href="index">Widget Reference</a> : Input</strong>
@@ -38,7 +42,7 @@ will create a radio button group with 3 options: "Cheap",
 whose value is 1000, "Medium", whose value is 50000, and
 "Expensive", whose value is 999999. The value of the
 entire widget is either the empty string (if the user did not
-select any of the radio buttons), or a the value of the currently
+select any of the radio buttons), or the value of the currently
 selected radio button. For instance, if the user selects
 "Medium" in the example above, the value of
 <code>cost</code>

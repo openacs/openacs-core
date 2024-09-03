@@ -17,12 +17,12 @@ ad_page_contract_filter attribute_dynamic_p { name value } {
     @creation-date 12/30/2000
 
 } {
-    set dynamic_p [db_string attribute_for_dynamic_object_p {
-        select exists (select 1 from acs_attributes a, acs_object_types t
-                        where t.dynamic_p = 't'
-                          and a.object_type = t.object_type
-                          and a.attribute_id = :value)
-        from dual
+    set dynamic_p [db_0or1row attribute_for_dynamic_object_p {
+        select 1 from dual where exists
+        (select 1 from acs_attributes a, acs_object_types t
+         where t.dynamic_p = 't'
+         and a.object_type = t.object_type
+         and a.attribute_id = :value)
     }]
     if {!$dynamic_p} {
         ad_complain "Attribute does not belong to a dynamic object and cannot be modified"
@@ -137,7 +137,7 @@ namespace eval attribute {
         for { set i 0 } { $i < [llength $plsql] } { incr i } {
             set cmd [lindex $plsql $i]
             if { [catch $cmd err_msg] } {
-                # Rollback what we've done so far. The loop contitionals are:
+                # Rollback what we've done so far. The loop conditionals are:
                 #  start at the end of the plsql_drop list (Drop things in reverse order of creation)
                 # execute drop statements until we reach position $i+1
                 #  This position represents the operation on which we failed, and thus
@@ -177,7 +177,7 @@ namespace eval attribute {
         @author Michael Bryzek (mbryzek@arsdigita.com)
         @creation-date 12/2000
 
-        @param default If specified, we add a default clause to the sql statement
+        @param default If specified, we add a default clause to the SQL statement
 
     } {
         set type ""
@@ -242,7 +242,7 @@ namespace eval attribute {
         }
 
         if { $table_name eq "" || $column_name eq "" } {
-            # We have to have both a non-empty table name and column name
+            # We have to have both a nonempty table name and column name
             error "We do not have enough information to automatically remove this attribute. Namely, we are missing either the table name or the column name"
         }
 
@@ -291,27 +291,27 @@ namespace eval attribute {
         # attribute, but we don't do that now.
 
         if { ![db_0or1row select_last_sort_order {
-            select v.sort_order as old_sort_order
-              from acs_enum_values v
-             where v.attribute_id = :attribute_id
-               and v.enum_value = :enum_value
+            select sort_order as old_sort_order
+              from acs_enum_values
+             where attribute_id = :attribute_id
+               and enum_value = :enum_value
         }] } {
             # nothing to delete
             return
         }
 
         db_dml delete_enum_value {
-            delete from acs_enum_values v
-            where v.attribute_id = :attribute_id
-            and v.enum_value = :enum_value
+            delete from acs_enum_values
+            where attribute_id = :attribute_id
+            and enum_value = :enum_value
         }
         if { [db_resultrows] > 0 } {
             # update the sort order
             db_dml update_sort_order {
-                update acs_enum_values v
-                   set v.sort_order = v.sort_order - 1
-                 where v.attribute_id = :attribute_id
-                   and v.sort_order > :old_sort_order
+                update acs_enum_values
+                   set sort_order = sort_order - 1
+                 where attribute_id = :attribute_id
+                   and sort_order > :old_sort_order
             }
         }
 
@@ -368,7 +368,7 @@ namespace eval attribute {
         if {$datatype eq "enumeration"} {
             return 1
         }
-        if { [info commands "::template::data::validate::$datatype"] eq "" } {
+        if { [namespace which ::template::data::validate::$datatype] eq "" } {
             return 0
         }
         return 1
@@ -418,14 +418,40 @@ namespace eval attribute {
         upvar $enum_array_name enum_values
         set attr_list [list]
 
-        set storage_clause ""
-
         if {$include_storage_types ne ""} {
-            set storage_clause "
-              and a.storage in ('[join $include_storage_types "', '"]')"
+            set storage_clause "and a.storage in ([ns_dbquotelist $include_storage_types])"
+        } else {
+            set storage_clause ""
         }
 
-        db_foreach select_attributes {} {
+        db_foreach select_attributes [subst -nocommands {
+            with recursive object_type_hierarchy as (
+                select object_type,
+                       0 as type_level
+                  from acs_object_types
+                 where object_type = :start_with
+
+                union all
+
+                select t.object_type,
+                       h.type_level + 1 as type_level
+                  from acs_object_types t,
+                       object_type_hierarchy h
+                 where t.supertype = h.object_type
+            )
+            select coalesce(a.column_name, a.attribute_name) as name,
+                   a.pretty_name,
+                   a.attribute_id,
+                   a.datatype,
+                   v.enum_value,
+                   v.pretty_name as value_pretty_name
+            from acs_object_type_attributes a left outer join
+                   acs_enum_values v using (attribute_id),
+                   object_type_hierarchy t
+             where a.object_type = :object_type
+               and t.object_type = a.ancestor_type $storage_clause
+            order by t.type_level, a.sort_order
+        }] {
             # Enumeration values show up more than once...
             if {$name ni $attr_list} {
                 lappend attr_list $name
@@ -480,11 +506,11 @@ namespace eval attribute {
             $object_type]
 
         if { [array size attr_props] > 0 } {
-            db_foreach attribute_select "
-            select *
-            from ($package_object_view)
-            where object_id = :object_id
-            " {
+            db_foreach attribute_select [subst -nocommands {
+                select *
+                from ($package_object_view) dummy
+                where object_id = :object_id
+            }] {
                 foreach key $attr_list {
                     set col_value [set $key]
                     set attribute_id $attr_props(id:$key)
@@ -550,14 +576,14 @@ namespace eval attribute {
                     lappend option_list [list " (no value) " ""]
                 }
                 template::element create $form_id "$variable_prefix$attribute_name" \
-                    -datatype "text" [ad_decode $required_p "f" "-optional" ""] \
+                    -datatype "text" [expr {$required_p eq "f" ? "-optional" : ""}] \
                     -widget select \
                     -options $option_list \
                     -label "$pretty_name" \
                     -value $default
             } else {
                 template::element create $form_id "$variable_prefix$attribute_name" \
-                    -datatype $datatype [ad_decode $required_p "f" "-optional" ""] \
+                    -datatype $datatype [expr {$required_p eq "f" ? "-optional" : ""}] \
                     -widget text \
                     -label $pretty_name \
                     -value $default

@@ -1,9 +1,13 @@
 
-<property name="context">{/doc/acs-content-repository {ACS Content Repository}} {Content Repository Developer Guide: Subject Keywords
+<property name="context">{/doc/acs-content-repository/ {ACS Content Repository}} {Content Repository Developer Guide: Subject Keywords
 (Categories)}</property>
 <property name="doc(title)">Content Repository Developer Guide: Subject Keywords
 (Categories)</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h2>Subject Keywords (Categories)</h2>
 <strong>
 <a href="../index">Content Repository</a> : Developer
@@ -108,7 +112,7 @@ detailed description of the function and its parameters.</p>
 <th>Function/Procedure</th><th>Purpose</th><th>Description</th>
 </tr><tr>
 <td><a href="/api-doc/proc-view?proc=content::keyword::new">new</a></td><td>Create a new Subject Keyword</td><td>This is a standard <kbd>new</kbd> function, used to create a
-new Subject Keyword. If the parent id is specified, the new keword
+new Subject Keyword. If the parent id is specified, the new keyword
 becomes a child of the parent keyword (which may now be called a
 Subject Category)</td>
 </tr><tr>

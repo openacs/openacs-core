@@ -1,6 +1,6 @@
 <master>
-<property name="doc(title)">@title;noquote@</property>
-<property name="context">@context;noquote@</property>
+<property name="doc(title)">@title;literal@</property>
+<property name="context">@context;literal@</property>
 <h1>@title@</h1>
 
 Acs Mail Lite handles sending of email via sendmail or smtp and
@@ -42,7 +42,7 @@ following way:</p>
 bounced mail then his bounce-record gets deleted since it can be
 assumed that his email account is working again and no longer
 refusing emails. This value can be changed with the parameter
-"MaxDaysToBounce".</li><li>If more then Y emails were returned by a particular user then
+"MaxDaysToBounce".</li><li>If more than Y emails were returned by a particular user then
 his email account gets disabled from receiving any more mails from
 the system by setting the email_bouncing_p flag to t. This value
 can be changed with the parameter "MaxBounceCount".</li><li>To notify users that they will not receive any more mails and
@@ -65,7 +65,7 @@ database</li>
 </ul>
 
 In case of multiple services on one system, create a bounce email
-for each of them (e.g. changeing "bounce" to
+for each of them (e.g. changing "bounce" to
 "bounce_service1") and create a new user that runs the
 aolserver process for each of them. You do not want to have
 service1 deal with bounces for service2.

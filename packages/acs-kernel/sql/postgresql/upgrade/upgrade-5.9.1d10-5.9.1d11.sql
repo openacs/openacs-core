@@ -78,7 +78,7 @@ $$ LANGUAGE plpgsql stable;
 --
 -- procedure acs_permission.permission_p_recursive_array/3
 --
---      Return for a an array of objects a set of objects where the
+--      Return for an array of objects a set of objects where the
 --      specified user has the specified rights.
 
 CREATE OR REPLACE FUNCTION  acs_permission.permission_p_recursive_array(

@@ -4,9 +4,9 @@ ad_page_contract {
 
     @author Peter Marklund
     @creation-date 28 January 2003
-    @cvs-id $Id$  
+    @cvs-id $Id$
 } {
-    version_id:naturalnum,notnull    
+    version_id:naturalnum,notnull
     {type ""}
 }
 
@@ -39,19 +39,23 @@ if { $type eq "" } {
     set page_title "Edit Tcl Callback"
 }
 
-set context [list [list "." "Package Manager"] [list [export_vars -base version-view { version_id }] "$pretty_name $version_name"] [list $return_url "Tcl Callbacks"] $page_title]
+set context [list \
+                 [list "." "Package Manager"] \
+                 [list [export_vars -base version-view { version_id }] "$pretty_name $version_name"] \
+                 [list $return_url "Tcl Callbacks"] \
+                 $page_title]
 
 set type_label "Tcl procedure name"
 ad_form -name callback -cancel_url $return_url -form {
-    {version_id:integer(hidden) 
+    {version_id:integer(hidden)
       {value $version_id}
     }
 
-    {return_url:text(hidden) 
+    {return_url:text(hidden)
       {value $return_url}
     }
 
-    {edit_mode_p:text(hidden) 
+    {edit_mode_p:text(hidden)
       {value $edit_mode_p}
     }
 
@@ -69,19 +73,21 @@ ad_form -name callback -cancel_url $return_url -form {
 
 } -validate {
     {proc
-	{ {info commands ::$proc} ne "" }
-	{The specified procedure name does not exist. Is the -procs.tcl file loaded?}
+        { {namespace which ::$proc} ne "" }
+        {The specified procedure name does not exist. Is the -procs.tcl file loaded?}
     }
     {proc
-	{ [apm_callback_has_valid_args -type $type -proc_name $proc] }
-	{The callback proc $proc must be defined with ad_proc [ad_decode [apm_arg_names_for_callback_type -type $type] "" "and should take no arguments" "and have the following required switches: [apm_arg_names_for_callback_type -type $type]"]}
+        { [apm_callback_has_valid_args -type $type -proc_name $proc] }
+        {The callback proc $proc must be defined with ad_proc [expr {[apm_arg_names_for_callback_type -type $type] eq "" ?
+                                                                     "and should take no arguments" :
+                                                                     "and have the following required switches: [apm_arg_names_for_callback_type -type $type]"}]}
     }
 } -on_submit {
-    
+
     apm_set_callback_proc -type $type -version_id $version_id $proc
 
     apm_package_install_spec $version_id
-    
+
     ad_returnredirect $return_url
     ad_script_abort
 }

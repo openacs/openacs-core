@@ -56,7 +56,7 @@ ad_proc -private whos_online::flush {} {
     }
 }
 
-ad_proc -private whos_online::interval {} {
+ad_proc -public whos_online::interval {} {
     Returns the last number of seconds within a user must have requested
     a page to be considered online. Based on the LastVisitUpdateInterval parameter
     of the main site and defaults to 600 seconds = 10 minutes.

@@ -1,7 +1,11 @@
 
-<property name="context">{/doc/acs-templating {ACS Templating}} {Upgrading existing ADPs to noquote templating}</property>
+<property name="context">{/doc/acs-templating/ {ACS Templating}} {Upgrading existing ADPs to noquote templating}</property>
 <property name="doc(title)">Upgrading existing ADPs to noquote templating</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h2>Upgrading existing ADPs to noquote templating</h2>
 <h3>Introduction.</h3>
 
@@ -16,7 +20,7 @@ Instead, we will assume that you have read the previous article and
 focus on the topic of this one: the changes you need to apply to
 make your module conformant to the new quoting rules.
 <p>This text is written as a result of our efforts to make the ACS
-installation for the German Bank project work, therefore it is
+installation for the German Bank project work, therefore, it is
 based on field experience rather than academic discussion. We hope
 you will find it useful.</p>
 <h3>Recap of the Theory.</h3>
@@ -35,7 +39,7 @@ effort that is required. Actually, the variables are subject to
 HTML-quoting and internationalization. The suffix
 <kbd>;noquote</kbd>
  means that the variable&#39;s content will be
-internationalized, but not HTML-quoted, while <kbd>;no18n</kbd>
+internationalized, but not HTML-quoted, while <kbd>;noi18n</kbd>
 
 means quote, but don&#39;t internationalize. Finally
 <kbd>;literal</kbd>
@@ -104,7 +108,7 @@ everything works as expected:
 &lt;/form&gt;
       </pre></blockquote>
 <p>
-<strong>Snippets of HTML produced by Tcl code, a.k.a.
+<strong>Snippets of HTML produced by Tcl code, aka
 <em>widgets</em>
 </strong>.<br>
 Normally we try to fit all HTML code into the ADP template and have
@@ -168,7 +172,7 @@ heading. What&#39;s wrong with this code?
 the slave template, and once by the master template. This is the
 result of how the templating system works: <em>every</em>
 occurrence of <kbd>\@<var>variable</var>\@</kbd> is converted to
-<kbd>[ad_quotehtml $<var>variable</var>]</kbd>, even when it
+<kbd>[ns_quotehtml $<var>variable</var>]</kbd>, even when it
 is used only to set a property and you would expect the quoting to
 be suppressed.</p>
 <blockquote><font size="-1">Implementation note: Ideally, the
@@ -311,5 +315,5 @@ database or from the user.</p>
 <hr>
 <address><a href="mailto:hniksic\@xemacs.org">Hrvoje
 Niksic</a></address>
-<!-- Created: Mon Feb 26 12:12:00 CET 2001 --><!-- hhmts start -->Last modified: Thu Aug 20 18:38:05 CEST 2015 
+<!-- Created: Mon Feb 26 12:12:00 CET 2001 --><!-- hhmts start -->Last modified: Fri Nov 1 14:11:00 CET 2019 
 <!-- hhmts end -->

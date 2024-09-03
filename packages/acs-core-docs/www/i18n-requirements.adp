@@ -1,7 +1,11 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {OpenACS Internationalization Requirements}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {OpenACS Internationalization Requirements}</property>
 <property name="doc(title)">OpenACS Internationalization Requirements</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="db-api-detailed" leftLabel="Prev"
 			title="Chapter 15. Kernel
@@ -10,9 +14,12 @@ Documentation"
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="i18n-requirements" id="i18n-requirements"></a>OpenACS Internationalization
-Requirements</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">by Henry Minsky, <a class="ulink" href="mailto:yon\@openforce.net" target="_top">Yon Feldman</a>, <a class="ulink" href="mailto:lars\@collaboraid.biz" target="_top">Lars
+Requirements</h2></div></div></div><div class="authorblurb">
+<p>by Henry Minsky, <a class="ulink" href="mailto:yon\@openforce.net" target="_top">Yon Feldman</a>, <a class="ulink" href="mailto:lars\@collaboraid.biz" target="_top">Lars
 Pind</a>, <a class="ulink" href="mailto:peter\@collaboraid.biz" target="_top">Peter Marklund</a>, <a class="ulink" href="mailto:christian\@collaboraid.biz" target="_top">Christian
-Hvid</a>, and others.</span></p><span style="color: red">&lt;/authorblurb&gt;</span><div class="sect2">
+Hvid</a>, and others.</p>
+OpenACS docs are written by the named authors, and may be edited by
+OpenACS documentation staff.</div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="i18n-requirements-introduction" id="i18n-requirements-introduction"></a>Introduction</h3></div></div></div><p>This document describes the requirements for functionality in
 the OpenACS platform to support globalization of the core and
@@ -151,7 +158,7 @@ locale</p><p>
 <span class="emphasis"><em>10.20</em></span> There will be a Tcl
 library of locale-aware formatting and parsing functions for
 numbers, dates and times. <span class="emphasis"><em>Note that Java
-has builtin support for these already</em></span>.</p><p>
+has built-in support for these already</em></span>.</p><p>
 <span class="emphasis"><em>10.30</em></span> For each locale
 there will be default date, number and currency formats.
 <em><span class="remark">Currency i18n is NOT IMPLEMENTED for
@@ -160,7 +167,7 @@ there will be default date, number and currency formats.
 <span class="emphasis"><em>10.40</em></span>Administrators can
 upgrade their servers to use new locales via the APM.
 <em><span class="remark">NOT IMPLEMENTED in 5.0.0; current
-workaround is to get an xml file and load it
+workaround is to get an XML file and load it
 manually.</span></em>
 </p>
 </blockquote></div>
@@ -177,7 +184,7 @@ formatting functions.</p><div class="blockquote"><blockquote class="blockquote">
 request should be computed by the following method, in descending
 order of priority:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>get locale associated with subsite or package id</p></li><li class="listitem"><p>get locale from user preference</p></li><li class="listitem">
-<p>get locale from site wide default</p><p>
+<p>get locale from site-wide default</p><p>
 <span class="emphasis"><em>20.20</em></span> An API will be
 provided for getting the current request locale from the
 <code class="literal">ad_conn</code> structure.</p>
@@ -261,7 +268,7 @@ filesystem</p></li><li class="listitem"><p>Accepting form input data from users<
 <li class="listitem"><p>When the acs-templating package opens an ADP or Tcl file, it
 assumes the file is iso-8859-1. If the output charset
 (OutputCharset) in the AOLserver config file is set, then
-acs-templating assumes it&#39;s that charset. Writing Files</p></li><li class="listitem"><p>When the acs-templating package writes an an ADP or Tcl file, it
+acs-templating assumes it&#39;s that charset. Writing Files</p></li><li class="listitem"><p>When the acs-templating package writes an ADP or Tcl file, it
 assumes the file is iso-8859-1. If the output charset
 (OutputCharset) in the AOLserver config file is set, then
 acs-templating assumes it&#39;s that charset.</p></li>
@@ -288,7 +295,7 @@ probably from the filename.</p>
 <a name="Submitted_Form_Data_Character_Set" id="Submitted_Form_Data_Character_Set"></a>Submitted Form Data
 Character Set</h4></div></div></div><p>
 <span class="emphasis"><em>50.30</em></span> Data which is
-submitted with a HTTP request using a GET or POST method may be in
+submitted with an HTTP request using a GET or POST method may be in
 any character set. The system must be able to determine the
 encoding of the form data and convert it to Unicode on demand.</p><p>
 <span class="emphasis"><em>50.35</em></span> The developer must
@@ -398,23 +405,23 @@ handle full-text search in any supported language.</p>
 <a name="VI.G_Time_Zones" id="VI.G_Time_Zones"></a>Time Zones</h3></div></div></div><div class="blockquote"><blockquote class="blockquote">
 <p>
 <span class="emphasis"><em>90.10</em></span> Provide API support
-for specifying a time zone</p><p>
+for specifying a timezone</p><p>
 <span class="emphasis"><em>90.20</em></span> Provide an API for
 computing time and date operations which are aware of timezones. So
 for example a calendar module can properly synchronize items
-inserted into a calendar from users in different time zones using
+inserted into a calendar from users in different timezones using
 their own local times.</p><p>
 <span class="emphasis"><em>90.30</em></span> Store all dates and
-times in universal time zone, UTC.</p><p>
+times in universal timezone, UTC.</p><p>
 <span class="emphasis"><em>90.40</em></span> For a registered
-users, a time zone preference should be stored.</p><p>
+users, a timezone preference should be stored.</p><p>
 <span class="emphasis"><em>90.50</em></span> For a
-non-registered user a time zone preference should be attached via a
+non-registered user a timezone preference should be attached via a
 session or else UTC should be used to display every date and
 time.</p><p>
 <span class="emphasis"><em>90.60</em></span> The default if we
-can&#39;t determine a time zone is to display all dates and times
-in some universal time zone such as GMT.</p>
+can&#39;t determine a timezone is to display all dates and times in
+some universal timezone such as GMT.</p>
 </blockquote></div>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">

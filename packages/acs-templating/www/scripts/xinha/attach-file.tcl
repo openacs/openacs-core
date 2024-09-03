@@ -107,7 +107,7 @@ if {$write_p} {
                 template::form::set_error upload_form f_title "Specify a [_ acs-templating.Link_Title]"
             }
             set error_p 0
-            # check file name
+            # check filename
                 if { $f_url eq "" && $url_ok_btn ne ""} {
                     template::form::set_error upload_form f_url "Specify a [_ acs-templating.Link_Url]"
                     set error_p 1
@@ -212,7 +212,7 @@ if {$write_p} {
                         set file_name [lindex $recent_files_options [lsearch -index 1 $recent_files_options $item_id] 0]
 
                         # we have to get rid of the icon from the form.
-                        set file_name [regsub -all {<.*?>} $file_name {}]
+                        set file_name [regsub -all -- {<.*?>} $file_name {}]
                     }
                 }
                 set file_name [string trim $file_name]

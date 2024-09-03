@@ -1,7 +1,11 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Chapter 2. Installation Overview}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Chapter 2. Installation Overview}</property>
 <property name="doc(title)">Chapter 2. Installation Overview</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="acs-admin" leftLabel="Prev"
 			title="
@@ -15,8 +19,11 @@ Overview</h2></div></div></div><div class="toc">
 <dt><span class="sect1"><a href="install-steps">Basic
 Steps</a></span></dt><dt><span class="sect1"><a href="individual-programs">Prerequisite Software</a></span></dt>
 </dl>
-</div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">by <a class="ulink" href="mailto:vinod\@kurup.com" target="_top">Vinod Kurup</a>
-</span></p><span style="color: red">&lt;/authorblurb&gt;</span>
+</div><div class="authorblurb">
+<p>by <a class="ulink" href="mailto:vinod\@kurup.com" target="_top">Vinod Kurup</a>
+</p>
+OpenACS docs are written by the named authors, and may be edited by
+OpenACS documentation staff.</div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
 			leftLink="acs-admin" leftLabel="Prev" leftTitle="Part II. Administrator&#39;s

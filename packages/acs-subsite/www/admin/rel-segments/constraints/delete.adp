@@ -1,6 +1,6 @@
 <master>
 <property name="context">@context;literal@</property>
-<property name="doc(title)">Delete @constraint_name;noquote@</property>
+<property name="doc(title)">Delete @constraint_name;literal@</property>
 
 Are you sure you want to delete the constraint @constraint_name@ on segment @segment_name@?
 

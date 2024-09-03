@@ -1,5 +1,3 @@
-# /packages/subsite/tcl/subsite-procs.tcl
-
 ad_library {
 
     Procs to manage the default template's navigation multirow.
@@ -97,7 +95,7 @@ ad_proc -public subsite_navigation::define_pageflow {
                 }
                 array set subsection_a $subsection_spec
                 set subsection_a(name) $subsection_name
-                set subsection_a(folder) [file join $section_a(folder) $subsection_a(folder)]
+                set subsection_a(folder) [ad_file join $section_a(folder) $subsection_a(folder)]
 
                 add_section_row \
                     -subsite_id $subsite_id \
@@ -134,8 +132,8 @@ ad_proc -private subsite_navigation::add_section_row {
      } {
         set info(url) "[string range $info(url) 0 [string last / $info(url)]]."
     }
-    
-    if { [ad_conn node_id] == 
+
+    if { [ad_conn node_id] ==
          [site_node::closest_ancestor_package -include_self \
             -node_id [site_node::get_node_id_from_object_id -object_id $subsite_id] \
             -package_key [subsite::package_keys] \
@@ -145,8 +143,8 @@ ad_proc -private subsite_navigation::add_section_row {
         # Need to prepend the path from the subsite to this package
         set current_url [string range [ad_conn url] [string length $base_url] end]
     }
-    
-    set info(url) [file join $info(folder) $info(url)]
+
+    set info(url) [ad_file join $info(folder) $info(url)]
     regsub {\.$} $info(url) "" info(url)
 
     # Default to not selected
@@ -160,7 +158,7 @@ ad_proc -private subsite_navigation::add_section_row {
         set selected_p 1
     } else {
         foreach pattern $info(selected_patterns) {
-            set full_pattern [file join $info(folder) $pattern]
+            set full_pattern [ad_file join $info(folder) $pattern]
             if { [string match $full_pattern $current_url] } {
                 set selected_p 1
                 break
@@ -169,17 +167,17 @@ ad_proc -private subsite_navigation::add_section_row {
     }
 
     # DRB: Expr thinks "-" is a subtraction operator thus this caveman if...
-    if { $selected_p } { 
+    if { $selected_p } {
         set navigation_id ${group}-navigation-active
     } else {
         set navigation_id ""
     }
 
-    set joined_url [file join $base_url $info(url)]
+    set joined_url [ad_file join $base_url $info(url)]
     if {[string index $info(url) end] eq "/"} {
         append joined_url /
     }
-    
+
     template::multirow append $multirow \
         $group $info(label) $joined_url \
         "" $info(title) "" $info(accesskey) "" $navigation_id [template::multirow size $multirow] \
@@ -204,7 +202,7 @@ ad_proc -public subsite_navigation::get_section_info {
     }
 
     template::multirow foreach $navigation_multirow {
-        if { [template::util::is_true $selected_p] } {
+        if { [string is true -strict $selected_p] } {
             array set row [list label $label url $url]
             break
         }
@@ -254,7 +252,7 @@ ad_proc -public subsite_navigation::get_pageflow_struct {
     if {$subsite_id eq ""} {
         set subsite_id [ad_conn subsite_id]
     }
-    
+
     set pageflow $initial_pageflow
     set subsite_node_id [site_node::get_node_id_from_object_id -object_id $subsite_id]
     set subsite_url [site_node::get_element -node_id $subsite_node_id -element url]
@@ -279,13 +277,13 @@ ad_proc -public subsite_navigation::get_pageflow_struct {
     }
 
     if { $show_applications_p } {
-    
+
     set index_redirect_url [parameter::get -parameter "IndexRedirectUrl" -package_id $subsite_id]
     set index_internal_redirect_url [parameter::get -parameter "IndexInternalRedirectUrl" -package_id $subsite_id]
     regsub {(.*)/packages} $index_internal_redirect_url "" index_internal_redirect_url
     regexp {(/[-[:alnum:]]+/)(.*)$} $index_internal_redirect_url dummy index_internal_redirect_url
     set child_urls [lsort -ascii [site_node::get_children -node_id $subsite_node_id -package_type apm_application]]
-    
+
         foreach child_url $child_urls {
             array set child_node [site_node::get_from_url -exact -url $child_url]
             if { $child_url ne $index_redirect_url  &&

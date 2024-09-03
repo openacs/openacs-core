@@ -1,7 +1,11 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {ACS4 Unit Tests}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {ACS4 Unit Tests}</property>
 <property name="doc(title)">ACS4 Unit Tests</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h2>ACS4 Unit Tests</h2>
 
 by <a href="mailto:pmcneill\@arsdigita.com">Patrick McNeill</a>
@@ -73,7 +77,7 @@ step is to create a directory tree beneath the module directory.
 The current convention is to put all .java files in a
 "/java/src/com/arsdigita/acs/<em>module name</em>/test"
 directory. The <em>module name</em> should be the ACS module name,
-but with all dashes removed and with appropriate capitilization.
+but with all dashes removed and with appropriate capitalization.
 All .java files that you create that contain test cases must have
 the word Test in the filename. All of the classes you create should
 be in the com.arsdigita.acs.<em>module name</em>.test package, and

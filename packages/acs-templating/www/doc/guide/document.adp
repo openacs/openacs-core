@@ -1,9 +1,13 @@
 
-<property name="context">{/doc/acs-templating {ACS Templating}} {Templating System User Guide: Documenting Data
+<property name="context">{/doc/acs-templating/ {ACS Templating}} {Templating System User Guide: Documenting Data
 Sources}</property>
 <property name="doc(title)">Templating System User Guide: Documenting Data
 Sources</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h2>Documenting Data Sources</h2>
 <a href="..">Templating System</a>
  : <a href="../developer-guide">Developer Guide</a>

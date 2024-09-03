@@ -9,7 +9,7 @@ ad_proc -public util::diff {
     -new
     {-show_old_p "t"}
 } {
-    Perform a UNIX diff on 'old' and 'new', and return a HTML fragment of the changes.
+    Perform a UNIX diff on 'old' and 'new', and return an HTML fragment of the changes.
 
     Requires struct::list (from tcllib)
 
@@ -101,7 +101,7 @@ ad_proc -public util::html_diff {
     -new
     {-show_old_p "t"}
 } {
-    Perform a UNIX diff on 'old' and 'new', and return a HTML fragment of the changes.
+    Perform a UNIX diff on 'old' and 'new', and return an HTML fragment of the changes.
 
     Requires struct::list (from tcllib)
 

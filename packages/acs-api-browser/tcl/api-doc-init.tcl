@@ -1,4 +1,3 @@
-
 # Decide, whether we want to include calling-info based on static
 # analysis in the procdoc structure (what function calls what other
 # functions). This calling-info is just relevant for developer
@@ -14,11 +13,21 @@
 # ns_section ns/server/${server}/acs/acs-api-browser
 #         ns_param IncludeCallingInfo true
 #
-if {[parameter::get \
-	 -package_id [apm_package_id_from_key acs-api-browser] \
-	 -parameter IncludeCallingInfo \
-	 -default false]} {
+if {[parameter::get_from_package_key \
+        -package_key acs-api-browser \
+        -parameter IncludeCallingInfo \
+        -default false]} {
     ad_schedule_proc -thread t -once t 1 ::api_add_calling_info_to_procdoc
 }
 
+# When xotcl-core is enabled, update the OO documentation for
+# automatically-generated api
+if {[namespace which ::xo::api] ne ""} {
+    ::xo::api update_object_doc "" ::acs::db::[::acs::dc cget -driver]-[::acs::dc cget -backend] ""
+}
 
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

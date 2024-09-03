@@ -33,7 +33,7 @@ ad_proc -private auth::package_install {} {} {
         # Register HTTP method for GetDocument
         auth::sync::get_doc::http::register_impl
 
-        # Register local file system method for GetDocument
+        # Register local filesystem method for GetDocument
         auth::sync::get_doc::file::register_impl
 
         # Register IMS Enterprise 1.1 ProcessDocument implementation
@@ -51,7 +51,7 @@ ad_proc -private auth::package_uninstall {} {} {
         # Unregister HTTP method for GetDocument
         auth::sync::get_doc::http::unregister_impl
 
-        # Unregister local file system method for GetDocument
+        # Unregister local filesystem method for GetDocument
         auth::sync::get_doc::file::unregister_impl
 
         # Unregister local authentication implementations and update the local authority
@@ -235,7 +235,7 @@ ad_proc -private auth::authentication::create_contract {} {
 }
 
 ad_proc -private auth::authentication::delete_contract {} {
-    Delet service contract for authentication.
+    Delete service contract for authentication.
 } {
     acs_sc::contract::delete -name "auth_authentication"
 }
@@ -256,7 +256,7 @@ ad_proc -private auth::password::create_contract {} {
             CanChangePassword {
                 description {
                     Return whether the user can change his/her password through this implementation.
-                    The value is not supposed to depend on the username and should be cachable.
+                    The value is not supposed to depend on the username and should be cacheable.
                 }
                 input {
                     parameters:string,multiple
@@ -264,7 +264,7 @@ ad_proc -private auth::password::create_contract {} {
                 output {
                     changeable_p:boolean
                 }
-                iscachable_p "t"
+                iscacheable_p "t"
             }
             ChangePassword {
                 description {
@@ -285,7 +285,7 @@ ad_proc -private auth::password::create_contract {} {
             CanRetrievePassword {
                 description {
                     Return whether the user can retrieve his/her password through this implementation.
-                    The value is not supposed to depend on the username and should be cachable.
+                    The value is not supposed to depend on the username and should be cacheable.
                 }
                 input {
                     parameters:string,multiple
@@ -293,7 +293,7 @@ ad_proc -private auth::password::create_contract {} {
                 output {
                     retrievable_p:boolean
                 }
-                iscachable_p "t"
+                iscacheable_p "t"
             }
             RetrievePassword {
                 description {
@@ -314,7 +314,7 @@ ad_proc -private auth::password::create_contract {} {
             CanResetPassword {
                 description {
                     Return whether the user can reset his/her password through this implementation.
-                    The value is not supposed to depend on the username and should be cachable.
+                    The value is not supposed to depend on the username and should be cacheable.
                 }
                 input {
                     parameters:string,multiple
@@ -322,7 +322,7 @@ ad_proc -private auth::password::create_contract {} {
                 output {
                     resettable_p:boolean
                 }
-                iscachable_p "t"
+                iscacheable_p "t"
             }
             ResetPassword {
                 description {
@@ -526,7 +526,7 @@ ad_proc -private auth::process_doc::create_contract {} {
             }
             GetElements {
                 description {
-                    Get an list of the elements handled by this batch synchronization
+                    Get a list of the elements handled by this batch synchronization
                     (first_names, last_name, username, email, etc). These elements will 
                     not be editable by the user, so as not to risk overwriting the user's 
                     changes with a later synchronization.

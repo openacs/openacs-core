@@ -590,7 +590,7 @@ a.admin:hover {
   background-color: #ffc; 
 }
 
-ul.action-links li {
+ul.action-links > li {
   list-style: circle url(/resources/acs-subsite/action-link-marker.png);
   margin: 8px;
   margin-left: -16px;
@@ -720,6 +720,29 @@ ul.compact li, .action-list ul li {
 .dimensional-table tr td {
     text-align: center;
 }
+
+a.acs-lang-localized,
+a.acs-lang-us_only,
+a.acs-lang-missing {
+    padding: 1px 1px 1px 1px;
+    text-decoration: none;
+}
+a.acs-lang-localized {
+    border-radius: 25px;
+    border: 1px solid green;
+    color: green;
+}
+a.acs-lang-us_only {
+    border-radius: 25px;
+    border: 1px solid orange;
+    color: orange;
+}
+a.acs-lang-missing {
+    border-radius: 25px;
+    border: 1px solid red;
+    color: red;
+}
+
 
 
 /**********************************************************************

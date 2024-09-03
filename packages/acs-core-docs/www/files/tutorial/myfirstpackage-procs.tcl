@@ -79,7 +79,7 @@ aa_register_case \
             
             # Make a site-wide admin user for this test
             # We use an admin to avoid permission issues
-            array set user_info [twt::user::create -admin -user_id $user_id]
+            array set user_info [acs::test::user::create -admin -user_id $user_id]
             
             # Login the user
             twt::user::login $user_info(email) $user_info(password)
@@ -91,8 +91,8 @@ aa_register_case \
             # Request note-edit page
             set package_uri [apm_package_url_from_key myfirstpackage]
             set edit_uri "${package_uri}note-edit"
-            aa_log "[twt::server_url]$edit_uri"
-            twt::do_request "[twt::server_url]$edit_uri"
+            aa_log [acs::test::url]$edit_uri
+            twt::do_request [acs::test::url]$edit_uri
             
             # Submit a new note
 
@@ -140,7 +140,7 @@ aa_register_case \
             
         } -teardown_code {
             
-            twt::user::delete -user_id $user_id
+            acs::test::user::delete -user_id $user_id
         }
     }
 

@@ -8,23 +8,20 @@ nsv_array set proc_source_file [list]
 
 
 #
-# Safetybelt for ::acs::useNsfProc for upgrade phase to oacs-5-9
+# Safety belt for ::acs::useNsfProc for upgrade phase to oacs-5-9
 #
 if {![info exists ::acs::useNsfProc]} {
     ns_log notice "use fallback value for ::acs::useNsfProc"
     set ::acs::useNsfProc 0
+} else {
+    #
+    # Keep the initcmds of classes for documentation purposes.
+    #
+    ::nsf::configure keepcmds 1
 }
 if {![info exists ::acs::useNaviServer]} {
     ns_log notice "use fallback value for ::acs::useNaviServer"
     set ::acs::useNaviServer [expr {[ns_info name] eq "NaviServer"}]
-}
-
-proc number_p { str } {
-    return [regexp {^[-+]?[0-9]*(.[0-9]+)?$} $str]
-
-    # Note that this will return true for empty string!
-    #
-    # TODO: Why not use Tcl's "string is double" ?
 }
 
 proc empty_string_p { query_string } {
@@ -58,7 +55,7 @@ proc ad_get_tcl_call_stack { { level -2 }} {
         set info [info level $x]
         regsub -all \n $info {\\n} info
         #
-        # In case, we have an nsf frame, add information about the
+        # In case, we have an NSF frame, add information about the
         # current object and the current class to the debug output.
         #
         if {![catch {uplevel #$x ::nsf::current} obj]
@@ -121,7 +118,16 @@ proc ad_parse_documentation_string { doc_string elements_var } {
 }
 
 proc ad_proc_valid_switch_p {str} {
-  return [expr {[string index $str 0] eq "-" && ![number_p $str]}]
+    #
+    # Check if this looks like a switch:
+    #   - first character is '-'
+    #   - next character is not a Tcl number
+    #   - next string is a printable character
+    #
+    return [expr {[string index $str 0] eq "-"
+              && ![string is double -strict $str]
+              && [regexp {^-[[:graph:]]+$} $str]
+    }]
 }
 
 proc ad_proc args {
@@ -175,6 +181,14 @@ proc ad_proc args {
                 return -code error "Invalid switch [lindex $args $i] passed to ad_proc"
             }
         }
+    }
+
+    # Callback hooks and callback implementations are treated as
+    # private: rationale is they never get called by other packages
+    # directly.
+    if {$callback ne ""} {
+        set public_p 0
+        set private_p 1
     }
 
     if { $public_p && $private_p } {
@@ -340,17 +354,21 @@ proc ad_proc args {
     #
     #####
 
-    set switches [list]
+    set switches0 {}
+    set switches1 {}
     set positionals [list]
     set seen_positional_with_default_p 0
     set n_positionals_with_defaults 0
     array set default_values [list]
     array set flags [list]
+    set seen_arg_checkers_p 0
     set varargs_p 0
     set switch_code ""
 
+    #
     # If the first element contains 0 or more than 2 elements, then it must
     # be an old-style ad_proc. Mangle effective_arg_list accordingly.
+    #
     if { [llength $arg_list] > 0 } {
         set first_arg [lindex $arg_list 0]
         if { [llength $first_arg] == 0 || [llength $first_arg] > 2 } {
@@ -390,7 +408,20 @@ proc ad_proc args {
             foreach flag [split [lindex $arg_split 1] ","] {
                 set flag [string trim $flag]
                 if { $flag ne "required" && $flag ne "boolean" } {
-                    return -code error "Invalid flag \"$flag\""
+                    #
+                    # In earlier versions, we used to raise an error here
+                    #
+                    #    return -code error "Invalid flag \"$flag\""
+                    #
+                    # However, since XOTcl 2 (and nsf::proc) support
+                    # arg checkers since many years, and since XOTcl
+                    # is a required component of OpenACS, we can allow
+                    # these as well safely. However, in order to avoid
+                    # surprises during upgrades, we should avoid the
+                    # checker usage in acs-core, until OpenACS 5.10 is
+                    # released.
+                    #
+                    set seen_arg_checkers_p 1
                 }
                 lappend arg_flags $flag
             }
@@ -399,13 +430,19 @@ proc ad_proc args {
         }
 
         if {[string index $arg 0] eq "-"} {
-            if { [llength $positionals] > 0 } {
-                return -code error "Switch -$arg specified after positional parameter"
+            if { [llength $positionals] > 0} {
+                if {$::acs::useNsfProc} {
+                    set trailing_nonpos_p 1
+                } else {
+                    return -code error "Switch -$arg specified after positional parameter"
+                }
+            } else {
+                set trailing_nonpos_p 0
             }
 
             set switch_p 1
             set arg [string range $arg 1 end]
-            lappend switches $arg
+            lappend switches$trailing_nonpos_p $arg
 
             if {"boolean" in $arg_flags} {
                 set default_values(${arg}_p) 0
@@ -453,7 +490,7 @@ proc ad_proc args {
         }
     }
 
-    foreach element { protection deprecated_p warn_p varargs_p arg_list switches positionals } {
+    foreach element { protection deprecated_p warn_p varargs_p arg_list switches0 positionals switches1} {
         set doc_elements($element) [set $element]
     }
     foreach element { default_values flags } {
@@ -461,13 +498,45 @@ proc ad_proc args {
     }
 
     set script [info script]
+    if {$script eq "" && [info exists ::ad_conn(file)]} {
+        set script $::ad_conn(file)
+        ns_log notice "ad_proc: get script name for proc '$proc_name' from ad_conn(file): $script"
+    }
     set root_length [string length $::acs::rootdir]
     if { $::acs::rootdir eq [string range $script 0 $root_length-1] } {
         set script [string range $script $root_length+1 end]
     }
 
     set doc_elements(script) $script
-    if { ![nsv_exists api_proc_doc $proc_name] } {
+    if {[regexp {^packages/([^/]+)/} $script . package_key]} {
+        set  doc_elements(package_key) $package_key
+    } else {
+        ad_log warning "cannot determine package key from script '$script': ad_proc $args"
+    }
+    #
+    # As acs-automated-testing/tcl/aa-test-procs.tcl is loaded on startup before
+    # acs-bootstrap-installer/tcl/00-proc-procs.tcl, it is possible that the
+    # testcase element of the api_proc_doc nsv has been already populated,
+    # therefore creating the key for that proc on the nsv.
+    #
+    # Previously, some procs where not included in the api_proc_doc_scripts nsv
+    # because of that, as the nsv lappend was skipped if the key existed.
+    #
+    # For example:
+    # - file_storage::twt::delete_file
+    # - file_storage::twt::create_url_in_folder
+    # - file_storage::twt::create_url
+    # - ...
+    #
+    # We avoid this by checking as well if the testcase element is the only one
+    # for that particular proc in the nsv.
+    #
+    if { ![nsv_exists api_proc_doc $proc_name]
+         || (
+             [dict exists [nsv_get api_proc_doc $proc_name] testcase]
+             && [dict size [nsv_get api_proc_doc $proc_name]] eq "1"
+             )
+    } {
         nsv_lappend api_proc_doc_scripts $script $proc_name
     }
 
@@ -495,12 +564,12 @@ proc ad_proc args {
 
     set log_code ""
     if { $warn_p } {
-        set log_code "ns_log Notice \"Deprecated proc $proc_name used:\\n\[ad_get_tcl_call_stack\]\"\n"
+        set log_code [list ad_log_deprecated proc $proc_name]
     }
 
     if { $callback ne "" && $impl ne "" } {
 
-        if { [info commands "::callback::${callback}::contract__arg_parser"] eq "" } {
+        if { [namespace which ::callback::${callback}::contract__arg_parser] eq "" } {
             # We create a dummy arg parser for the contract in case
             # the contract hasn't been defined yet.  We need this
             # because the implementation doesn't tell us what the
@@ -519,7 +588,9 @@ proc ad_proc args {
                  "    ::callback::${callback}::contract__arg_parser\n${log_code}$code_block"]
         }
 
-    } elseif { $callback eq "" && [llength $switches] == 0 } {
+    } elseif { $callback eq ""
+               && [llength $switches0] + [llength $switches1] == 0
+               && !$seen_arg_checkers_p} {
         #
         # Nothing special is used in the argument definition, create a
         # plain proc
@@ -547,8 +618,13 @@ proc ad_proc args {
                     }
                 }]
             }
-            #ns_log notice "---- define nsf::proc for [::list proc $proc_name_as_passed $arg_list $code_block]"
-            uplevel [::list ::nsf::proc -ad $proc_name_as_passed $arg_list ${log_code}$code_block]
+            #ns_log notice "---- define nsf::proc for [::list proc -ad -debug=$debug_p $proc_name_as_passed $arg_list $code_block]"
+            uplevel [::list ::nsf::proc \
+                         -ad \
+                         -debug=$debug_p \
+                         $proc_name_as_passed \
+                         $arg_list \
+                         ${log_code}$code_block]
             return
         }
 
@@ -721,7 +797,7 @@ ad_proc -public ::foobar::new {
     description), but one cannot read the mind of the original programmer to find out
     what s/he had in mind.
 
-    \@author Roberto Mello <rmello at fslc.usu.edu>
+    \@author Roberto Mello
     \@creation-date 2002-01-21
 
     \@param oacs_user   If this user is already an OpenACS user. oacs_user_p is defined
@@ -785,7 +861,9 @@ ad_proc -public ::foobar::new {
     @param warn specifies that the procedure should generate a warning
                 when invoked (requires that -deprecated also be set)
     @param callback the name of the callback contract being defined or
-                implemented
+                    implemented. When this flag is specified, -private
+                    and -public flags are ignored and the resulting
+                    proc will always be private.
     @param impl the name of the callback implementation for the specified
                 contract
     @param arg_list the list of switches and positional parameters which can be
@@ -801,6 +879,13 @@ ad_proc -public ad_arg_parser { allowed_args argv } {
     Switch values are placed in corresponding variable names in the calling
     environment.
 
+    GN: This function is a hack to overcome shortcomings of argument
+    parsing at the first place, since the old-style argument parser of
+    OpenACS does NOT support non-positional arguments after the
+    positional ones. Since the advent of XOTcl2, this limitation is
+    gone and just used for installations without XOTcl.... but since
+    XOTcl is required since many years, this is not an issue anymore.
+
     @param allowed_args a list of allowable switch names.
     @param argv a list of command-line options. May end with <code>args</code> to
         indicate that extra values should be tolerated after switches and placed in
@@ -808,6 +893,8 @@ ad_proc -public ad_arg_parser { allowed_args argv } {
     @error if the list of command-line options is not valid.
 
 } {
+    #ns_log notice "ad_arg_parser '$allowed_args' <$argv>"
+
     if {[lindex $allowed_args end] eq "args"} {
         set varargs_p 1
         set allowed_args [lrange $allowed_args 0 [llength $allowed_args]-2]
@@ -862,7 +949,7 @@ ad_proc -public callback {
     as follows:
     <dl>
      <dt>return -code ok or "<b>return</b>"</dt>
-     <dd>With a plain return, a non-empty return value will be lappended to
+     <dd>With a plain return, a nonempty return value will be lappended to
        the list of returns from the callback function</dd>
 
      <dt>return -code error or "<b>error</b>"</dt>
@@ -883,7 +970,7 @@ ad_proc -public callback {
 
      <dt>return -code break</dt>
      <dd>return the current list of returned values including this implementations
-       return value if non-empty</dd>
+       return value if nonempty</dd>
 
      <dt>return -code continue</dt>
      <dd>Continue processing, ignore the return value from this implementation</dd>
@@ -902,19 +989,30 @@ ad_proc -public callback {
 
     @param args pass the set of arguments on to each callback
 
-    @return list of the returns from each callback that does a normal (non-empty) return
+    @return list of the returns from each callback that does a normal (nonempty) return
 
     @see ad_proc
 } {
     if {$callback eq ""} {
         error "callback: no callback name given"
     }
-    # see that the contract exists and call the contract for
+    #
+    # Check, if the contract exists and call the contract for
     # arg validation -- ::callback::${callback}::contract is an
     # empty function that only runs the ad_proc generated arg parser.
 
-    if {[info commands ::callback::${callback}::contract] eq ""} {
-        error "Undefined callback $callback"
+    if {[namespace which ::callback::${callback}::contract] eq ""} {
+        if {[ns_ictl epoch] == 0} {
+            #
+            # During initial startup, a callback implementation might
+            # not be loaded yet. Ignore the callback invocation, but
+            # inform the admin in the system log about it.
+            #
+            ns_log notice "callback invocation $callback during startup ignored. " \
+                "The callback implementation might not be loaded yet."
+        } else {
+            error "Undefined callback $callback"
+        }
     }
     ::callback::${callback}::contract {*}$args
 
@@ -931,7 +1029,14 @@ ad_proc -public callback {
             }
             1 { # code error - either rethrow the current error or log
                 if {$catch_p} {
-                    ns_log Error "callback $callback error invoking $procname: $ret\n[ad_print_stack_trace]\n"
+                    set msg "callback $callback error invoking $procname: $ret"
+                    if {[aa_test_running_p]} {
+                        set severity warning
+                    } else {
+                        set severity error
+                        append msg \n[ad_print_stack_trace]
+                    }
+                    ns_log $severity $msg
                 } else {
                     return -code $c -errorcode $::errorCode -errorinfo $::errorInfo $ret
                 }
@@ -961,6 +1066,40 @@ ad_proc -public callback {
 }
 
 
+ad_proc ad_log_deprecated {what oldCmd {newCmd ""}} {
+
+    Provide a standardized interface for reporting deprecated ad_procs
+    or other artifacts. In some situations, the flag "-deprecated" in
+    the proc is not sufficient. When "newCmd" is not specified, this
+    function tries to get the replacement command from the @see
+    specification of the documentation.
+
+    @param what type of artifact being used (e.g. "proc" or "class")
+    @param oldCmd the name of the deprecated command
+    @param newCmd replacement command, when specified
+
+} {
+    set msg "*** $what $oldCmd is deprecated."
+    if {$newCmd eq "" && $what eq "proc"} {
+        #
+        # If no replacement command is provided, use whatever is
+        # specified in the @see property of the definition.
+        #
+        # The "oldCmd" should be fully qualified but with no leading
+        # colons, like "template::util::date::now_min_interval_plus_hour"
+        #
+        if {[nsv_get api_proc_doc $oldCmd dict]
+            && [dict exists $dict see]
+        } {
+            set newCmd [dict get $dict see]
+        }
+    }
+    if {$newCmd ne ""} {
+        append msg " Use '$newCmd' instead."
+    }
+    ns_log warning "$msg\n[uplevel ad_get_tcl_call_stack]"
+}
+
 ad_proc ad_library {
     doc_string
 } {
@@ -982,8 +1121,12 @@ ad_library {
     @cvs-id $Id$
 }
 
-ad_proc -public empty_string_p {query_string} {
-    returns 1 if a string is empty; this is better than using == because it won't fail on long strings of numbers
+ad_proc -deprecated -public empty_string_p {query_string} {
+    returns 1 if a string is empty; this is better than using == because it won't fail on long strings of numbers.
+
+    This might have been needed in the old good days, but not anymore.
+
+    @see string equal
 } -
 
 ad_proc -public acs_root_dir {} {
@@ -992,21 +1135,21 @@ ad_proc -public acs_root_dir {} {
 
 ad_proc -public acs_package_root_dir { package_key } {
     Returns the path root for a particular package within the OpenACS installation.
-    For example /web/yourserver/packages/foo, i.e., a full file system path with no ending slash.
+    For example /web/yourserver/packages/foo, i.e., a full filesystem path with no ending slash.
 } -
 
 ad_proc -public ad_make_relative_path { path } {
     Returns the relative path corresponding to absolute path $path.
 } -
 
-ad_proc ad_proc_valid_switch_p {str} {
-    Check of the provided argument looks like a switch (i.e. it starts
+ad_proc -private ad_proc_valid_switch_p {str} {
+    Check if the provided argument looks like a switch (i.e. it starts
     with a dash and is not a number).
 } -
 
 
 # procedures for doing type based dispatch
-ad_proc -public ad_method {
+ad_proc -deprecated ad_method {
     method_name
     type
     argblock
@@ -1023,11 +1166,17 @@ ad_proc -public ad_method {
     @param argblock the argument description block, is passed to ad_proc
     @param docblock the documentation block, is passed to ad_proc
     @param body the body, is passed to ad_proc
+
+    @see ad_proc
+    @see xotcl-core package offers a real ORM interface for acs_object
+         types
+    @see NSF idioms
+    @see OO Tcl idioms
 } {
     ad_proc ${method_name}__$type $argblock $docblock $body
 }
 
-ad_proc -public ad_call_method {
+ad_proc -deprecated ad_call_method {
     method_name
     object_id
     args
@@ -1045,11 +1194,17 @@ ad_proc -public ad_call_method {
     @param method_name method name
     @param object_id the target, it is the first arg to the method
     @param args the remaining arguments
+
+    @see expansion operator "{*}"
+    @see xotcl-core package offers a real ORM interface for acs_object
+         types
+    @see NSF idioms
+    @see OO Tcl idioms
 } {
-    return [ad_apply ${method_name}__[util_memoize [list acs_object_type $object_id]] [concat $object_id $args]]
+    return [${method_name}__[util_memoize [list acs_object_type $object_id]] $object_id {*}$args]
 }
 
-ad_proc -public ad_dispatch {
+ad_proc -deprecated ad_dispatch {
     method_name
     type
     args
@@ -1063,11 +1218,17 @@ ad_proc -public ad_dispatch {
     @param method_name method name
     @param type associated type
     @param args the remaining arguments
+
+    @see expansion operator "{*}"
+    @see xotcl-core package offers a real ORM interface for acs_object
+         types
+    @see NSF idioms
+    @see OO Tcl idioms
 } {
     return [ad_apply ${method_name}__$type $args]
 }
 
-ad_proc -public ad_assert_arg_value_in_list {
+ad_proc -public -deprecated ad_assert_arg_value_in_list {
     arg_name
     allowed_values_list
 } {
@@ -1076,6 +1237,10 @@ ad_proc -public ad_assert_arg_value_in_list {
 
     @param arg_name The name of the argument to check
     @param allowed_values_list The list of values that are permissible for the argument
+
+    Deprecated: this proc can be replaced via very simple expr or if idioms
+
+    @see native if or expr idioms
 
     @return Returns 1 if the argument has a valid value, throws an informative
                     error otherwise.
@@ -1104,6 +1269,36 @@ ad_proc -public ad_with_deprecated_code_p {} {
     return [ns_config ns/server/[ns_info server]/acs WithDeprecatedCode 1]
 }
 
+ad_proc ad_file {subcmd arg1 args} {
+
+    Tcl supports csh-style tilde substitution. If a filename starts
+    with a tilde, then the filename will be interpreted as if the
+    first element is replaced with the location of the home directory
+    for the given user. If the user does not exist, an exception is
+    raised. (e.g. [file dirname ~gustafn.foo]).
+
+    https://www.tcl-lang.org/man/tcl/TclCmd/filename.htm#M20
+
+    This little proc can be used in cases, where (a) the
+    tilde-substitution is unwanted, and where the "name" argument
+    (usually the first argument after the subcommand) might contain
+    user provided values.
+
+} {
+    if {[string range $arg1 0 0] eq {~}} {
+        set arg1 ./$arg1
+    }
+    uplevel [list ::file $subcmd $arg1 {*}$args]
+}
+
+# if {[cmd_exists xxx]}
+if {[info commands ::nsf::cmd::info ] ne ""} {
+    interp alias {} cmd_exists {} ::nsf::cmd::info exists
+} else {
+    ad_proc -private cmd_exists {cmd} {
+        expr {[::namespace which $cmd] ne ""}
+    }
+}
 
 # Local variables:
 #    mode: tcl

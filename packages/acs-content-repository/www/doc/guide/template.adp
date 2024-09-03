@@ -1,17 +1,21 @@
 
-<property name="context">{/doc/acs-content-repository {ACS Content Repository}} {Content Repository Developer Guide: Applying
+<property name="context">{/doc/acs-content-repository/ {ACS Content Repository}} {Content Repository Developer Guide: Applying
 Templates}</property>
 <property name="doc(title)">Content Repository Developer Guide: Applying
 Templates</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h2>Applying Templates</h2>
 <strong>
 <a href="../index">Content Repository</a> : Developer
 Guide</strong>
 <p>The content repository allows you to associate templates with
 both content types and individual content items. A template
-determines how a content item is rendered when exported to the file
-system or served directly to a client.</p>
+determines how a content item is rendered when exported to the
+filesystem or served directly to a client.</p>
 <p>The content repository does not make any assumptions about the
 type of templating system used by the application server with which
 it is being used. Templates are simply made available to the
@@ -43,7 +47,7 @@ the ID returned by
 <kbd>content_template.get_root_folder</kbd>).</p>
 <p>Templates are placed under their own root to ensures that bare
 templates are never accessible via a public URL. This is also done
-because the relationship with the file system may be different for
+because the relationship with the filesystem may be different for
 templates than for content items. For example, templates may be
 associated with additional code or resource files that developers
 maintain under separate source control.</p>
@@ -126,5 +130,5 @@ content items is:</p>
 );</pre>
 <hr>
 <a href="mailto:karlg\@arsdigita.com">karlg\@arsdigita.com</a>
-<p>Last Modified: $&zwnj;Id: template.html,v 1.2 2017/08/07 23:47:47
+<p>Last Modified: $&zwnj;Id: template.html,v 1.2.2.1 2021/04/05 19:49:49
 gustafn Exp $</p>

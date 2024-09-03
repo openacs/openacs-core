@@ -99,7 +99,7 @@ ad_proc -public template::query { statement_name result_name type sql args } {
     if { [info exists opts(cache)] } {
 
         # cache the query result
-        set_cached_result
+        template::set_cached_result
     }
 
     #set timeElapsed [expr ([clock clicks -milliseconds] - $beginTime)]
@@ -162,13 +162,7 @@ ad_proc -private template::query::onerow { statement_name db result_name sql } {
         # Set the results in the calling frame.
         upvar $opts(uplevel) $result_name result
 
-        set size [ns_set size $row]
-
-        for { set i 0 } { $i < $size } { incr i } {
-
-            set column [ns_set key $row $i]
-            set result($column) [ns_set value $row $i]
-        }
+        array set result [ns_set array $row]
 
         if { [info exists opts(cache)] } {
             set opts(result) [array get result]
@@ -203,7 +197,7 @@ ad_proc -private template::query::multirow { statement_name db result_name sql }
 
     upvar $opts(uplevel) $result_name:rowcount rowcount $result_name:columns column_list
 
-    # set a local variable as to whether we are cacheing or not
+    # set a local variable as to whether we are caching or not
     if { [info exists opts(cache)] } {
         set is_cached 1
         set cached_result {}
@@ -236,16 +230,9 @@ ad_proc -private template::query::multirow { statement_name db result_name sql }
 
         set result(rownum) $rowcount
 
-        set size [ns_set size $row]
-
-        for { set i 0 } { $i < $size } { incr i } {
-
-            set column [ns_set key $row $i]
-            set result($column) [ns_set value $row $i]
-
-            if {$rowcount == 1 } {
-                lappend column_list $column
-            }
+        array set result [ns_set array $row]
+        if { $rowcount == 1 } {
+            lappend column_list {*}[ns_set keys $row]
         }
 
         # Execute custom code for each row
@@ -287,14 +274,7 @@ ad_proc -private template::query::multilist { statement_name db result_name sql 
     set rows {}
 
     while { [ns_db getrow $db $row] } {
-
-        set values {}
-        set size [ns_set size $row]
-
-        for { set i 0 } { $i < $size } { incr i } {
-            lappend values [ns_set value $row $i]
-        }
-        lappend rows $values
+        lappend rows [ns_set values $row]
     }
 
     if { [info exists opts(cache)] } {
@@ -333,12 +313,7 @@ ad_proc -private template::query::nestedlist { statement_name db result_name sql
 
     while { [ns_db getrow $db $row] } {
 
-        set values {}
-        set size [ns_set size $row]
-
-        for { set i 0 } { $i < $size } { incr i } {
-            lappend values [ns_set value $row $i]
-        }
+        set values [ns_set values $row]
 
         # build the values on which to group
         set group_values [list]
@@ -404,7 +379,7 @@ ad_proc -private template::query::dml { statement_name db name sql } {
 }
 
 
-ad_proc -private get_cached_result { name type } {
+ad_proc -private template::get_cached_result { name type } {
     Looks in the appropriate cache for the named query result
     If a valid result is found, then sets the result in the returning
     stack frame.
@@ -436,7 +411,7 @@ ad_proc -private get_cached_result { name type } {
                 if { $timeout > [ns_time] } {
                     set success 1
                 } else {
-                    ns_cache flush template_query_cache $cache_key
+                    acs::clusterwide ns_cache flush template_query_cache $cache_key
                 }
             }
         }
@@ -483,7 +458,7 @@ ad_proc -private get_cached_result { name type } {
     return $success
 }
 
-ad_proc -private set_cached_result {} {
+ad_proc -private template::set_cached_result {} {
 
     Places a query result in the appropriate cache.
 
@@ -537,9 +512,9 @@ ad_proc -private template::query::flush_cache { cache_match } {
     foreach name $names {
         if { [string match $cache_match $name] } {
             ns_log debug "template::query::flush_cache: FLUSHING QUERY (persistent): $name"
-            ns_cache flush template_query_cache $name
+            acs::clusterwide ns_cache flush template_query_cache $name
             if {[ns_info name] ne "NaviServer"} {
-                ns_cache flush template_timeout_cache $name
+                acs::clusterwide ns_cache flush template_timeout_cache $name
             }
         }
     }
@@ -556,7 +531,7 @@ ad_proc -private template::query::flush_cache { cache_match } {
 }
 
 
-ad_proc -public multirow {
+ad_proc -deprecated multirow {
     {-ulevel 1}
     {-local:boolean}
     -unclobber:boolean
@@ -570,6 +545,8 @@ ad_proc -public multirow {
     may be omitted depending on what the namespace
     is.  .tcl pages are evaluated in the template::
     namespace.
+
+    DEPRECATED: namespace should actually NOT be omitted
 
     @see template::multirow
     @see template::query::multirow
@@ -974,7 +951,18 @@ ad_proc -public template::multirow {
 }
 
 ad_proc -public template::url { command args } {
+    Maintains an ns_set of parameters that can be bulk converted to URL
+    parameters.
 
+    It is not clear if this API makes a lot of sense, many
+    alternatives exist to export parameters in various forms...
+
+    @see export_vars
+
+    @param command one of 'set_param *name* *value*' (set a
+           parameter), 'get_param *name* *default*' (get a parameter
+           value), or 'get_query' (export all parameters as URL
+           query).
 } {
 
     global __template_url_params
@@ -1004,9 +992,7 @@ ad_proc -public template::url { command args } {
 
         get_query {
             set keyvalues [list]
-            for { set i 0 } { $i < [ns_set size $params] } { incr i } {
-                set key [ns_set key $params $i]
-                set value [ns_set value $params $i]
+            foreach {key value} [ns_set array $params] {
                 lappend keyvalues [ns_urlencode $key]=[ns_urlencode $value]
             }
             set result [join $keyvalues &]
@@ -1022,9 +1008,6 @@ ad_proc -public template::url { command args } {
 }
 
 # Generic template caching
-
-nsv_set __template_cache_value . .
-nsv_set __template_cache_timeout . .
 
 ad_proc -public template::cache { command cache_key args } {
     Generic Caching
@@ -1049,8 +1032,8 @@ ad_proc -public template::cache { command cache_key args } {
                     # validate timeout
                     if { $timeout > [ns_time] } {
                         set result $value
-                   } else {
-                        ns_cache flush template_cache $cache_key
+                    } else {
+                        acs::clusterwide ns_cache flush template_cache $cache_key
                     }
                 }
             }
@@ -1081,13 +1064,13 @@ ad_proc -public template::cache { command cache_key args } {
         flush {
             # The key is actually a string match pattern
             if {[ns_info name] eq "NaviServer"} {
-                ns_cache_flush -glob template_cache $cache_key
+                acs::clusterwide ns_cache_flush -glob template_cache $cache_key
             } else {
                 set names [ns_cache names template_cache]
                 foreach name $names {
                     if { [string match $cache_key $name] } {
                         ns_log debug "template::cache: FLUSHING CACHE: $name"
-                        ns_cache flush template_cache $name
+                        acs::clusterwide ns_cache flush template_cache $name
                     }
                 }
             }

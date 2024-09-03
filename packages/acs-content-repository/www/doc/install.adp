@@ -1,7 +1,11 @@
 
-<property name="context">{/doc/acs-content-repository {ACS Content Repository}} {Content Repository: Installation}</property>
+<property name="context">{/doc/acs-content-repository/ {ACS Content Repository}} {Content Repository: Installation}</property>
 <property name="doc(title)">Content Repository: Installation</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h2>Installing the Content Repository</h2>
 <strong><a href="index">Content Repository</a></strong>
 <p>The content repository is a part of the core data model of ACS

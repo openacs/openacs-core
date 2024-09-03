@@ -1,5 +1,3 @@
-# /packages/mbryzek-subsite/tcl/package-procs.tcl
-
 ad_library {
 
     Procs to help build PL/SQL packages
@@ -20,7 +18,7 @@ ad_proc -public package_type_dynamic_p {
 } {
     return [db_0or1row object_type_dynamic_p {
         select 1 from acs_object_types
-         where dynamic_p and object_type = :object_type
+        where dynamic_p = 't' and object_type = :object_type
     }]
 }
 
@@ -206,7 +204,7 @@ ad_proc -private package_attribute_default {
 
     # return to null unless this attribute is required
     # (min_n_values > 0)
-    return [ad_decode $min_n_values 0 "NULL" ""]
+    return [expr {$min_n_values > 0 ? "" : "NULL"}]
 }
 
 
@@ -502,9 +500,14 @@ ad_proc -private package_object_view_helper {
     for { set i 0 } { $i < [llength $primary_keys] - 1 } { incr i } {
         lappend pk_formatted "[lindex $primary_keys $i] = [lindex $primary_keys $i+1]"
     }
+    set where_clause ""
+    if {[llength $pk_formatted] > 0} {
+        set where_clause [join [string tolower $pk_formatted] "\n   AND "]
+        set where_clause " WHERE $where_clause"
+    }
     return "SELECT [string tolower [join $columns ",\n       "]]
   FROM [string tolower [join $tables ", "]]
-[ad_decode [llength $pk_formatted] "0" "" " WHERE [join [string tolower $pk_formatted] "\n   AND "]"]"
+$where_clause"
 
 }
 
@@ -519,7 +522,7 @@ ad_proc -private package_insert_default_comment { } {
     @creation-date 12/29/2000
 
 } {
-    set author [expr {[ad_conn isconnected] ?
+    set author [expr {[ns_conn isconnected] ?
                       [acs_user::get_element -element name] : "Unknown"}]
     set creation_date [db_string current_timestamp {
         select current_timestamp from dual}]
@@ -553,7 +556,7 @@ ad_proc package_object_attribute_list {
 
     if {$include_storage_types ne ""} {
         set storage_clause "
-          and a.storage in ('[join $include_storage_types "', '"]')"
+          and a.storage in ([ns_dbquotelist $include_storage_types])"
     }
 
     return [db_list_of_lists attributes_select {}]
@@ -564,10 +567,10 @@ ad_proc -private package_plsql_args {
     { -object_name "NEW" }
     package_name
 } {
-    Generates a list of parameters expected to a plsql function defined within
-    a given package.
-
-    <p>
+    
+    Return a list of parameters expected to a plsql function defined
+    within a given package and cache these per thread.  Changes in the
+    interface will require a server restart.
 
     @author Ben Adida (ben@openforce.net)
     @creation-date 11/2001
@@ -576,13 +579,9 @@ ad_proc -private package_plsql_args {
     @param object_name The function name which we're looking up
     @return list of parameters
 } {
-    # Get just the args
-    set key ::acs::package_plsql_args($object_name-$package_name)
-    if {[info exists $key]} {
-        return [set $key]
-    }
-    return [set $key [db_list select_package_func_param_list {}]]
-
+    return [acs::per_thread_cache eval -key acs-subsite.package_plsql_args($object_name-$package_name) {
+        db_list select_package_func_param_list {}
+    }]
 }
 
 ad_proc -private package_function_p {
@@ -591,11 +590,9 @@ ad_proc -private package_function_p {
 } {
     @return true if the package's object is a function.
 } {
-    set key ::acs::package_function_p($object_name-$package_name)
-    if {[info exists $key]} {
-        return [set $key]
-    }
-    return [set $key [db_0or1row function_p ""]]
+    return [acs::per_thread_cache eval -key acs-subsite.package_function_p($object_name-$package_name) {
+        db_0or1row function_p ""
+    }]
 }
 
 ad_proc -private package_table_columns_for_type {
@@ -665,7 +662,7 @@ ad_proc -public package_instantiate_object {
     @param creation_user The current user. Defaults to <code>[ad_conn
                                                               user_id]</code> if not specified and there is a connection
 
-    @param creation_ip The current user's ip address. Defaults to <code>[ad_conn
+    @param creation_ip The current user's IP address. Defaults to <code>[ad_conn
                                                                          peeraddr]</code> if not specified and there is a connection
 
     @param package_name The PL/SQL package associated with this object
@@ -725,7 +722,7 @@ ad_proc -public package_instantiate_object {
         set package_name $acs_type(package_name)
     }
 
-    if { [ad_conn isconnected] } {
+    if { [ns_conn isconnected] } {
         if { $creation_user eq "" } {
             set creation_user [ad_conn user_id]
         }
@@ -755,7 +752,7 @@ ad_proc -public package_instantiate_object {
     # function. Pieces is just a list of lists where each list contains only
     # one item - the name of the parameter. We keep track of
     # parameters we've already added in the array param_array (all keys are
-    # in upper case)
+    # in uppercase)
 
     set pieces [list]
 
@@ -774,10 +771,7 @@ ad_proc -public package_instantiate_object {
 
     # Go through the extra_vars (ben - OpenACS)
     if {$extra_vars ne "" } {
-        for {set i 0} {$i < [ns_set size $extra_vars]} {incr i} {
-            set __key [ns_set key $extra_vars $i]
-            set __value [ns_set value $extra_vars $i]
-
+        foreach {__key __value} [ns_set array $extra_vars] {
             if { ![info exists real_params([string toupper $__key])] } {
                 # The parameter is not accepted as a parameter to the
                 # pl/sql function. Ignore it.
@@ -822,8 +816,8 @@ ad_proc -public package_instantiate_object {
 
     set object_id [db_exec_plsql create_object {}]
 
-    if { [ad_conn isconnected] } {
-        subsite_callback -object_type $object_type "insert" $object_id
+    if { [ns_conn isconnected] } {
+        subsite::callback -object_type $object_type "insert" $object_id
     }
 
     # BUG FIX (ben - OpenACS)
@@ -876,7 +870,7 @@ ad_proc -public package_exec_plsql {
     # function. Pieces is just a list of lists where each list contains only
     # one item - the name of the parameter. We keep track of
     # parameters we've already added in the array param_array (all keys are
-    # in upper case)
+    # in uppercase)
 
     set pieces [list]
 
@@ -886,7 +880,7 @@ ad_proc -public package_exec_plsql {
             # The parameter is not accepted as a parameter to the
             # pl/sql function. Ignore it.
             ns_log Warning "package_exec_plsql: skipping $__key not found in params for $__package_name $__object_name"
-            continue;
+            continue
         }
         lappend pieces [list $__key]
         set param_array([string toupper $__key]) 1

@@ -1,7 +1,11 @@
 
-<property name="context">{/doc/acs-content-repository {ACS Content Repository}} {Package: content_revision}</property>
+<property name="context">{/doc/acs-content-repository/ {ACS Content Repository}} {Package: content_revision}</property>
 <property name="doc(title)">Package: content_revision</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h2>content_revision</h2>
 <p>
 <a href="../index">Content Repository</a> :

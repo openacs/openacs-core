@@ -1,7 +1,11 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Security Design}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Security Design}</property>
 <property name="doc(title)">Security Design</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="security-requirements" leftLabel="Prev"
 			title="Chapter 15. Kernel
@@ -9,8 +13,10 @@ Documentation"
 			rightLink="security-notes" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="security-design" id="security-design"></a>Security Design</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">By Richard Li and Archit
-Shah</span></p><span style="color: red">&lt;/authorblurb&gt;</span><div class="sect2">
+<a name="security-design" id="security-design"></a>Security Design</h2></div></div></div><div class="authorblurb">
+<p>By Richard Li and Archit Shah</p>
+OpenACS docs are written by the named authors, and may be edited by
+OpenACS documentation staff.</div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="security-design-essentials" id="security-design-essentials"></a>Essentials</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;"><li class="listitem"><p><a class="xref" href="security-requirements" title="Security Requirements">OpenACS 4 Security Requirements</a></p></li></ul></div>
 </div><div class="sect2">
@@ -62,7 +68,7 @@ over insecure connections. This means that users will need to
 reauthenticate themselves over SSL when performing some action that
 requires secure authentication.</p><p>Although this makes the site less user friendly, this design
 significantly increases the security of the system because this
-insures that the authentication tokens presented to a secure
+ensures that the authentication tokens presented to a secure
 section of the web site were not sniffed. The system is not
 entirely secure, since the actual authentication password can be
 sniffed from the system, after which the sniffer can apply for a
@@ -204,7 +210,7 @@ system.</p>
 <a name="session-creation" id="session-creation"></a>Session Creation</h4></div></div></div><p>The creation and setup of sessions is handled in <code class="computeroutput">sec_setup_session</code>, which is called either
 to create a new session from <code class="computeroutput">sec_handler</code> or from <code class="computeroutput">ad_user_login</code> when there is a change in
 authorization level. The session management code must do two
-things: insure that session-level data does not float between
+things: ensure that session-level data does not float between
 users, and update the users table which has columns for
 <code class="computeroutput">n_sessions</code>, <code class="computeroutput">last_visit</code>, and <code class="computeroutput">second_to_last_visit</code>.</p><p>If there is no session already setup on this hit, a new session
 is created. This happens when <code class="computeroutput">sec_setup_session</code> is called from
@@ -213,8 +219,8 @@ from a user to another user, a new session is created, otherwise,
 the current session is continued, simply with a higher
 authorization state. This allows for data associated with a session
 to be carried over when a user logs in.</p><p>The users table is updated by <code class="computeroutput">sec_update_user_session_info</code> which is
-called when an existing session is assigned a non-zero user_id, or
-when a session is created with a non-zero user_id.</p>
+called when an existing session is assigned a nonzero user_id, or
+when a session is created with a nonzero user_id.</p>
 </div><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
 <a name="passwords" id="passwords"></a>Passwords</h4></div></div></div><p>
@@ -249,7 +255,7 @@ procedures use <code class="computeroutput">ad_parameter</code> to
 obtain the constant value of a given parameter; these values are
 used to dynamically generate a procedure that returns a constant.
 This approach avoids (relatively) expensive calls to <code class="computeroutput">ad_parameter</code> in <code class="computeroutput">sec_handler</code>. The impact of this approach is
-that these parameters cannot be dynamically changed at runtime and
+that these parameters cannot be dynamically changed at run time and
 require a server restart.</p>
 </div><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
@@ -493,7 +499,7 @@ have a maximum life, properties have a maximum life. It would be
 nice to expand the interface to allow for more persistent
 properties. In the past, there was a sec_browser_properties table
 that held permanent properties about each unique visitor (for
-logged in users, these are just user properties). This was
+logged-in users, these are just user properties). This was
 unscalable because there was no way to delete these properties, and
 the table tended to grow to millions of rows. It would be nice to
 view browser and session properties as two types of client
@@ -516,7 +522,7 @@ it into the database on every hit is too big a hammer.</p>
 </div><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
 <a name="cookieless-sessions" id="cookieless-sessions"></a>Cookieless Sessions</h4></div></div></div><p>Two trends drive the requirement for removing cookie dependence.
-WAP browsers that do not have cookies, and publc perceptions of
+WAP browsers that do not have cookies, and public perceptions of
 cookies as an invasion of privacy. The rely on the cookies
 mechanism in HTTP to distinguish one request from the next, and we
 trust it to force requests from the same client to carry the same

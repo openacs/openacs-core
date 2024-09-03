@@ -1,7 +1,11 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Subsites Design Document}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Subsites Design Document}</property>
 <property name="doc(title)">Subsites Design Document</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="subsites-requirements" leftLabel="Prev"
 			title="Chapter 15. Kernel
@@ -9,9 +13,11 @@ Documentation"
 			rightLink="apm-requirements" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="subsites-design" id="subsites-design"></a>Subsites Design Document</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">By <a class="ulink" href="http://planitia.org" target="_top">Rafael H.
-Schloming</a>
-</span></p><span style="color: red">&lt;/authorblurb&gt;</span><p><span class="emphasis"><em>*Note* This document has not gone
+<a name="subsites-design" id="subsites-design"></a>Subsites Design Document</h2></div></div></div><div class="authorblurb">
+<p>By <a class="ulink" href="http://planitia.org" target="_top">Rafael H. Schloming</a>
+</p>
+OpenACS docs are written by the named authors, and may be edited by
+OpenACS documentation staff.</div><p><span class="emphasis"><em>*Note* This document has not gone
 through the any of the required QA process yet. It is being tagged
 as stable due to high demand.</em></span></p><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
@@ -26,7 +32,7 @@ wants (e.g. a single user could have their own news and forums), to
 a highly structured project subsite with multiple interdependent
 applications. Thus, flexibility in application deployment is the
 overarching philosophy of subsites.</p><p>Meeting such broad requirements of flexibility demands
-architecture-level support, i.e. very low level support from the
+architecture-level support, i.e. very low-level support from the
 core OpenACS 4 data model. For example, the subsites concept
 demands that any package can have multiple instances installed at
 different URLs - entailing support from the APM and the Request
@@ -156,7 +162,7 @@ be a package instance.</p><pre class="programlisting"><code class="computeroutpu
     directory_p char(1) not null
             constraint site_nodes_directory_p_ck
             check (directory_p in ('t', 'f')),
-        -- Should urls that are logical children of this node be
+        -- Should URLs that are logical children of this node be
     -- mapped to this node?
         pattern_p   char(1) default 'f' not null
             constraint site_nodes_pattern_p_ck
@@ -185,7 +191,7 @@ as
     node_id     in site_nodes.node_id%TYPE
   );
 
-  -- Return the node_id of a url. If the url begins with '/' then the
+  -- Return the node_id of a URL. If the url begins with '/' then the
   -- parent_id must be null. This will raise the no_data_found
   -- exception if there is no matching node in the site_nodes table.
   -- This will match directories even if no trailing slash is included

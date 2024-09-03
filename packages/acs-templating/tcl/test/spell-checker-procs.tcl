@@ -11,6 +11,7 @@ aa_register_case \
     -procs {
         parameter::get_from_package_key
         template::util::spellcheck::get_element_formtext
+        util_sets_equal_p
     } \
     spellcheck__get_element_formtext {
     Test the spell-check proc that does the actual spell-checking.

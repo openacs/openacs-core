@@ -15,7 +15,7 @@ namespace eval content {
 
 
 ad_proc -public content::get_template_root {} {
-    Find the directory in the file system where templates are stored.
+    Find the directory in the filesystem where templates are stored.
     There are a variety of ways in which this can be set. The proc
     looks for that directory in the following places in this order:
     (1) the TemplateRoot parameter of the package for which the request is
@@ -213,7 +213,7 @@ ad_proc -public content::init {
     # Make sure that a live revision exists
     if { $rev_id eq "" } {
       if {"best" eq $revision} {
-	  # lastest_revision unless live_revision is set, then live_revision
+	  # latest_revision unless live_revision is set, then live_revision
 	  set revision_id [::content::item::get_best_revision -item_id $item_id]
       } else {
 	  # default live_revision
@@ -270,7 +270,9 @@ if { \"text/html\" ne \$content(mime_type) && !\[ad_html_text_convertible_p -fro
 }
 
 \# Ordinary text/* mime type.
-template::util::array_to_vars content
+foreach {key value} [array get content] {
+   set $key $value
+}
 
 set text \[cr_write_content -string -revision_id \$revision_id\]
 if { !\[string equal \"text/html\" \$content(mime_type)\] } {
@@ -290,9 +292,15 @@ ad_return_template
 
 
 
-ad_proc -public content::deploy { url_stub } {
-    render the template and write it to the file system
+ad_proc -deprecated content::deploy { url_stub } {
+    render the template and write it to the filesystem
     with template::util::write_file
+
+    DEPRECATED: since its birth ~2003 this proc refers to a
+    nonexistent variable and is therefore broken.
+
+    @see modern ways to produce templated content e.g. theme packages or
+         xowiki pages
 } {
     set output_path $::acs::pageroot$url_stub
 

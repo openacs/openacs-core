@@ -24,12 +24,19 @@ namespace eval group_type {
 
     } {
         if { $user_id eq "" } {
-            if { ![ad_conn isconnected] } {
-                error "group_type::drop_all_groups_p: User ID not specified and we have no connection from which to obtain current user ID.\n"
+            if { ![ns_conn isconnected] } {
+                error "group_type::drop_all_groups_p: User ID not specified and we have no connection from which to obtain current user ID."
             }
             set user_id [ad_conn user_id]
         }
-        return [db_string group_exists_p {}]
+        return [db_string group_exists_p {
+            select case when exists
+            (select 1 from acs_objects o
+             where object_type = :group_type
+             and not acs_permission.permission_p(o.object_id, :user_id, 'delete'))
+            then 1 else 0 end
+            from dual
+        }]
     }
 
 
@@ -44,8 +51,8 @@ namespace eval group_type {
 
         <p><b>Example:</b>
         <pre>
-        # create a new group type user_discount_class
-        set group_type [group_type::new -group_type user_discount_class \
+        # create a new group of type user_discount_class
+        set group_type [group_type::new -group_type $group_type \
                 -supertype group \
                 "User Discount Class" "User Discount Classes"]
         </pre>
@@ -76,12 +83,12 @@ namespace eval group_type {
             }
         }
 
-        set table_name [string toupper "${group_type}_ext"]
+        set table_name "${group_type}_ext"
         # Since all group types are extensions of groups, maintain a
         # unique group_id primary key
 
         set id_column [db_string select_group_id_column {
-            select upper(id_column) from acs_object_types where object_type='group'
+            select id_column from acs_object_types where object_type='group'
         }]
         set package_name [string tolower $group_type]
 
@@ -154,6 +161,7 @@ namespace eval group_type {
                             constraint $constraint(pk) primary key
                             constraint $constraint(fk)
                             references $references_table ($references_column)
+                            on delete cascade
                  )}]} errmsg] } {
 
             # Roll back our work so far
@@ -213,7 +221,12 @@ namespace eval group_type {
         db_transaction {
             # First delete the groups
             if { $package_name ne "" } {
-                foreach group_id [db_list select_group_ids {}] {
+                foreach group_id [db_list select_group_ids {
+                   select o.object_id
+                   from acs_objects o
+                   where o.object_type = :group_type
+                   and   acs_permission.permission_p(o.object_id, :user_id, 'delete')
+                }] {
                     group::delete $group_id
                 }
 
@@ -231,7 +244,9 @@ namespace eval group_type {
             }
 
             if { [db_string type_exists {
-                select exists (select 1 from acs_object_types t where t.object_type = :group_type)
+                select case when exists
+                (select 1 from acs_object_types t where t.object_type = :group_type)
+                then 1 else 0 end
                 from dual
             }] } {
                 db_exec_plsql drop_type {}

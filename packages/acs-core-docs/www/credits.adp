@@ -1,7 +1,11 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Appendix C. Credits}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Appendix C. Credits}</property>
 <property name="doc(title)">Appendix C. Credits</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="aolserver" leftLabel="Prev"
 			title="
@@ -16,8 +20,11 @@ this document come from?</a></span></dt><dt><span class="section"><a href="os-in
 Guides</a></span></dt><dt><span class="section"><a href="os-security">Security
 Information</a></span></dt><dt><span class="section"><a href="install-resources">Resources</a></span></dt>
 </dl>
-</div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">By <a class="ulink" href="mailto:vinod\@kurup.com" target="_top">Vinod Kurup</a>
-</span></p><span style="color: red">&lt;/authorblurb&gt;</span><p>
+</div><div class="authorblurb">
+<p>By <a class="ulink" href="mailto:vinod\@kurup.com" target="_top">Vinod Kurup</a>
+</p>
+OpenACS docs are written by the named authors, and may be edited by
+OpenACS documentation staff.</div><p>
 <a class="ulink" href="mailto:vinod\@kurup.com" target="_top">Vinod Kurup</a> put together the January 2002 version of
 this guide from many sources of information.</p><p>
 <a class="ulink" href="mailto:joel\@aufrecht.org" target="_top">Joel Aufrecht</a> updated the document starting in March
@@ -41,8 +48,8 @@ Rubick, Fred Yankowski, Dan Chak, Sebastiano Pilla, Reuven Lerner,
 Malte Sussdorff, Stan Kaufman and Pascal Scheffers.</p><p>
 <span class="strong"><strong>All questions and
 comments</strong></span> regarding this guide should be posted on
-the <a class="ulink" href="http://openacs.org/forums/" target="_top">OpenACS forums</a>.</p><p><span class="cvstag">($&zwnj;Id: credits.xml,v 1.14 2018/04/04
-18:51:56 hectorr Exp $)</span></p>
+the <a class="ulink" href="http://openacs.org/forums/" target="_top">OpenACS forums</a>.</p><div class="cvstag">($&zwnj;Id: credits.xml,v 1.14.2.1 2019/04/08
+13:02:14 gustafn Exp $)</div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
 			leftLink="aolserver" leftLabel="Prev" leftTitle="Install AOLserver 3.3oacs1"

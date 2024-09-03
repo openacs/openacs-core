@@ -1,7 +1,11 @@
 
-<property name="context">{/doc/acs-templating {ACS Templating}} {}</property>
+<property name="context">{/doc/acs-templating/ {ACS Templating}} {}</property>
 <property name="doc(title)"></property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h2>Namespace pagination</h2>
 <blockquote>Procedures for paginating a datasource</blockquote>
 <h3>Method Summary</h3>
@@ -58,7 +62,7 @@ datasource</blockquote><dl><dd>
 <tr>
 <td align="right">
 <code>sql</code><font color="red">*</font>
-</td><td align="left">The sql query to paginate</td>
+</td><td align="left">The SQL query to paginate</td>
 </tr><tr>
 <td align="right">
 <code>page</code><font color="red">*</font>

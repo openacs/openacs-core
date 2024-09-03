@@ -1,5 +1,5 @@
 --
--- Make sure, that table_name and column_name work
+-- Make sure that table_name and column_name work
 -- case-insensitive (similar to function_args)
 --
 

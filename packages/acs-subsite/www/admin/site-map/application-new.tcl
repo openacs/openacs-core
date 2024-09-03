@@ -9,7 +9,14 @@ ad_page_contract {
 set page_title "New Application"
 set context [list [list "." "Site Map"] $page_title]
 
-set packages [db_list_of_lists package_types {}]
+set packages [db_list_of_lists package_types {
+    select pretty_name, package_key
+    from   apm_package_types t
+    where  not exists (select 1 from apm_packages
+                       where package_key = t.package_key) or
+           not t.singleton_p
+    order  by upper(pretty_name)
+}]
 
 ad_form -name application -cancel_url . -form {
     {package_key:text(select)

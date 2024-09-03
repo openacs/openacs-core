@@ -1,7 +1,11 @@
 
-<property name="context">{/doc/acs-subsite {ACS Subsite}} {Group Admin Pages - Acceptance test}</property>
+<property name="context">{/doc/acs-subsite/ {ACS Subsite}} {Group Admin Pages - Acceptance test}</property>
 <property name="doc(title)">Group Admin Pages - Acceptance test</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h2><font><font>Group Admin Pages - Acceptance
 test</font></font></h2>
 <font>
@@ -171,8 +175,8 @@ attribute "salary" (type integer)</font></li>
 <ol>
 <li><font>Go back to the admin page (/admin)</font></li><li><font>Click on the Groups -&gt; GuideStar.org. Add ArsDigita as
 a component</font></li><li><font>Remove the composition rel type from this
-group</font></li><li><font>Readd the composition rel type. Make sure arsdigita
-doesn&#39;t show up</font></li><li><font>remove the composition rel type</font></li><li><font>Add a permissible rel type:
+group</font></li><li><font>Re-add the composition rel type. Make sure arsdigita
+doesn&#39;t show up</font></li><li><font>Remove the composition rel type</font></li><li><font>Add a permissible rel type:
 project_lead_relation</font></li><li><font>Click yes to create a rel segment named "GuideStar
 Project Leads"</font></li><li><font>Go back to /admin/groups</font></li><li><font>Click on "relationship to site"</font></li><li><font>Remove yourself from the group.</font></li><li><font>Add yourself again as a member (using the membership
 relation). You will have to select an existing party from the
@@ -229,6 +233,6 @@ drop package developer_defined_test_type;
 <address><font><a href="mailto:mbryzek\@arsdigita.com">Michael
 Bryzek</a></font></address>
 <font>
-<br><font size="-1">$&zwnj;Id: group-admin-pages-acceptance-test.html,v 1.4
-2017/08/07 23:47:59 gustafn Exp $</font>
+<br><font size="-1">$&zwnj;Id: group-admin-pages-acceptance-test.html,v
+1.4.2.1 2019/10/05 13:01:38 gustafn Exp $</font>
 </font>

@@ -25,8 +25,9 @@ namespace eval notification::security {
 
         @param user_id
         @param delivery_method_id
+        @return boolean value
     } {
-        return [db_string user_approved_p {} -default 0]
+        return [expr {[acs_user::get_user_info -user_id $user_id -element member_state] eq "approved"}]
     }
 
     ad_proc -public can_notify_object_p {
@@ -37,8 +38,7 @@ namespace eval notification::security {
 
         @param user_id
         @param object_id
-
-        @see permission::permission_p
+        @return boolean value
     } {
         return [permission::permission_p -party_id $user_id -object_id $object_id -privilege "read"]
     }
@@ -47,12 +47,14 @@ namespace eval notification::security {
         {-user_id ""}
         {-object_id:required}
     } {
-        Require the ability to notify on an object.
+
+        Require the ability to notify on an object.  The function
+        raised potentially a script_abort exception, when the user is
+        not logged in.
 
         @param user_id
         @param object_id
-
-        @see permission::require_permission
+        @return boolean value expressing if we can notify the user
     } {
         # require user to be logged in
         auth::require_login
@@ -67,8 +69,7 @@ namespace eval notification::security {
 
         @param user_id
         @param request_id
-
-        @see permission::permission_p
+        @return boolean value
     } {
         # owner of notification or side-wide admin
         set allowed 0
@@ -78,11 +79,11 @@ namespace eval notification::security {
         if {[acs_user::site_wide_admin_p -user_id $user_id]} {
             set allowed 1
         } else {
-            set sql "select user_id from notification_requests where object_id = :request_id"
-            set owner_id [db_string get_user_id $sql -default ""]
-            if {$owner_id eq $user_id} {
-                set allowed 1
-            }
+            set allowed [db_0or1row check_owner {
+                select 1 from notification_requests
+                where request_id = :request_id
+                  and user_id = :user_id
+            }]
         }
         return $allowed
     }
@@ -91,10 +92,13 @@ namespace eval notification::security {
         {-user_id ""}
         {-request_id:required}
     } {
-        Require the ability to admin a request.
+        Require the ability to admin a request. The function
+        raised potentially a script_abort exception, when the user is
+        not logged in.
 
         @param user_id
         @param request_id
+        @return boolean value expressing if the user can issued an admin request
 
         @see permission::require_permission
     } {

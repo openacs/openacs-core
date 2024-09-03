@@ -83,7 +83,7 @@
         <tertiary>Linux/Unix</tertiary>
       </indexterm>
       <para>The required platform for OpenACS 4.6 is the same as
-      4.5, with the exception of OpenFTS.  OpenACS 4.6 and later require OpenFTS 0.3.2 for full text search on PostGreSQL.  If you have OpenFTS 0.2, you&#39;ll need to upgrade.  </para>
+      4.5, with the exception of OpenFTS.  OpenACS 4.6 and later require OpenFTS 0.3.2 for full text search on PostgreSQL.  If you have OpenFTS 0.2, you&#39;ll need to upgrade.  </para>
       <para>If upgrading from 4.4, you need to manually run acs-kernel/sql/postgres/upgrade-4.4-4.5.sql.  See <ulink url="http://openacs.org/bugtracker/openacs/bug?bug_number=632">Bug #632</ulink></para>
       <itemizedlist mark="circle">
         <listitem><para>A computer with OpenACS 4.5.</para>
@@ -97,7 +97,7 @@
         <listitem>
           <formalpara>
             <title>Make a Backup</title>
-            <para>Back up the database and file system (see <xref linkend="snapshot-backup"/>).</para>
+            <para>Back up the database and filesystem (see <xref linkend="snapshot-backup"/>).</para>
           </formalpara>
         </listitem>
         <listitem>
@@ -114,7 +114,7 @@
         </listitem>
         <listitem>
           <formalpara>
-            <title>Upgrade the file system</title>
+            <title>Upgrade the filesystem</title>
             <para><xref linkend="upgrade-openacs-files"/></para>
           </formalpara>
         </listitem>
@@ -182,17 +182,17 @@
         </listitem>
         <listitem>
           <formalpara>
-            <title>PostGreSQL</title>
-              <para>You must use PostGreSQL 7.3.x or newer to upgrade OpenACS beyond 4.6.3.  See <link linkend="upgrade-postgres-7.2-to-7.3">Upgrade PostGreSQL to 7.3</link>; <xref linkend="compatibility-matrix"/>
+            <title>PostgreSQL</title>
+              <para>You must use PostgreSQL 7.3.x or newer to upgrade OpenACS beyond 4.6.3.  See <link linkend="upgrade-postgres-7.2-to-7.3">Upgrade PostgreSQL to 7.3</link>; <xref linkend="compatibility-matrix"/>
             </para>
           </formalpara>
           <orderedlist>
             <listitem>
-              <para><link linkend="snapshot-backup">Back up the database and file system.</link></para>
+              <para><link linkend="snapshot-backup">Back up the database and filesystem.</link></para>
             </listitem>
         <listitem>
           <formalpara>
-            <title>Upgrade the file system for packages/acs-kernel</title>
+            <title>Upgrade the filesystem for packages/acs-kernel</title>
             <para><xref linkend="upgrade-openacs-files"/></para>
           </formalpara>
         </listitem>
@@ -304,12 +304,12 @@ parameter::set_value -package_id [ad_acs_kernel_id] -parameter UsePasswordWidget
             <orderedlist>
               <listitem>
                 <formalpara>
-                  <title>Upgrade the file system for all packages in use</title>
+                  <title>Upgrade the filesystem for all packages in use</title>
                   <para><xref linkend="upgrade-openacs-files"/></para>
                 </formalpara>
               </listitem>
               <listitem>
-                <para>Go to <ulink url="/acs-admin/install">/acs-admin/install/</ulink> and click "Upgrade Your System" in "Install from local file system"</para>
+                <para>Go to <ulink url="/acs-admin/install">/acs-admin/install/</ulink> and click "Upgrade Your System" in "Install from local filesystem"</para>
               </listitem>
               <listitem>
                 <para>Select all of the packages you want to upgrade and proceed</para>
@@ -339,11 +339,11 @@ parameter::set_value -package_id [ad_acs_kernel_id] -parameter UsePasswordWidget
         </itemizedlist>
       </para>
 
-      <para>Upgrades work by first changing the file system (via any
+      <para>Upgrades work by first changing the filesystem (via any
         of the previous methods), and then using the APM to scan the
-        file system, find upgrade scripts, and execute them. Starting
+        filesystem, find upgrade scripts, and execute them. Starting
         with OpenACS 5.0, the last method was added, which
-        automatically changes the file system for you. If you are
+        automatically changes the filesystem for you. If you are
         using the last method, you can skip this page. This page
         describes whether or not you need to be upgrading using this
         page or not:
@@ -691,9 +691,9 @@ exit</action></screen>
       </orderedlist>
     </sect2>
     <sect2 id="upgrade-postgres-7.2-to-7.3">
-      <title>Upgrading from PostGreSQL 7.2 to 7.3</title>
-      <para>An OpenACS database created in PostGreSQL 7.2 will not
-      work correctly in PostGreSQL 7.3.  This is because 7.2 truncates
+      <title>Upgrading from PostgreSQL 7.2 to 7.3</title>
+      <para>An OpenACS database created in PostgreSQL 7.2 will not
+      work correctly in PostgreSQL 7.3.  This is because 7.2 truncates
       function names to 31 characters, but 7.3 does not.  This does
       not cause problems in 7.2, because truncation occurs both at
       function creation and at function calling, so they still match.
@@ -703,7 +703,7 @@ exit</action></screen>
       casting commands that no longer work in 7.3 and these functions
       must be recreated.</para>
       <para>
-      To upgrade an OpenACS site from PostGreSQL 7.2 to 7.3, first upgrade the kernel to 4.6.3.  Then, dump the database, run the upgrade script <computeroutput>/var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/bin/pg_7.2to7.3_upgrade_helper.pl</computeroutput> on the dump file, and reply the dump.  See <ulink url="http://openacs.org/forums/message-view?message_id=109337">Forum OpenACS Q&amp;A: PG 7.2->7.3 upgrade gotcha?</ulink>.  Example:</para>
+      To upgrade an OpenACS site from PostgreSQL 7.2 to 7.3, first upgrade the kernel to 4.6.3.  Then, dump the database, run the upgrade script <computeroutput>/var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/bin/pg_7.2to7.3_upgrade_helper.pl</computeroutput> on the dump file, and reply the dump.  See <ulink url="http://openacs.org/forums/message-view?message_id=109337">Forum OpenACS Q&amp;A: PG 7.2->7.3 upgrade gotcha?</ulink>.  Example:</para>
       <orderedlist>
         <listitem>
           <para>Back up the database as per <xref linkend="postgres-snapshot-backup"/>.</para>

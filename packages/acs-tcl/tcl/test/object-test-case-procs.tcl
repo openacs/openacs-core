@@ -11,6 +11,11 @@ aa_register_case \
         acs_object::get
         acs_object::get_element
         acs_object::set_context_id
+        db_name
+        db_nextval
+        apm_package_id_from_key
+
+        db_1row
     } acs_object_procs_test \
     {
         test the acs_object::* procs
@@ -91,36 +96,34 @@ aa_register_case \
 
             set the2_id [db_exec_plsql new_type $new_type_sql]
 
-           acs_object::get -object_id $the_id -array array
+            acs_object::get -object_id $the_id -array array
 
-           aa_true "object_id $the_id :: $array(object_id)" \
+            aa_true "object_id $the_id :: $array(object_id)" \
                 [string match $the_id $array(object_id)]
 
-           aa_true "object_type $object_type :: $array(object_type)" \
-                [string match $object_type $array(object_type)]
+            aa_true "object_type $object_type :: $array(object_type)" \
+                [string equal $object_type $array(object_type)]
 
-           aa_true "context_id $context_id :: $array(context_id)" \
-                [string match $context_id $array(context_id)]
+            aa_true "context_id $context_id :: $array(context_id)" \
+                [string equal $context_id $array(context_id)]
 
-           aa_true \
-                "creation_user $creation_user :: [acs_object::get_element -object_id $the_id -element creation_user]" \
-                [string match $creation_user [acs_object::get_element \
+            aa_true \
+                "creation_user $creation_user :: [acs_object::get -object_id $the_id -element creation_user]" \
+                [string equal $creation_user [acs_object::get_element \
                                                   -object_id $the_id \
                                                   -element creation_user]]
-           aa_true \
-                "creation_ip $creation_ip :: [acs_object::get_element -object_id $the_id -element creation_ip]" \
-           [string match $creation_ip [acs_object::get_element \
-                                            -object_id $the_id \
-                                            -element creation_ip]]
+            aa_true \
+                "creation_ip $creation_ip :: [acs_object::get -object_id $the_id -element creation_ip]" \
+                [string equal $creation_ip [acs_object::get_element \
+                                                -object_id $the_id \
+                                                -element creation_ip]]
 
             acs_object::set_context_id -object_id $the_id \
                 -context_id $context_id2
 
             aa_true \
-                "context_id $context_id2 :: [acs_object::get_element -object_id $the_id -element  context_id]" \
-            [string match $context_id2 [acs_object::get_element \
-                                            -object_id $the_id \
-                                            -element context_id]]
+                "context_id $context_id2 :: [acs_object::get_element -object_id $the_id -element context_id]" \
+                [string equal $context_id2 [acs_object::get -object_id $the_id -element context_id]]
 
 
         } -teardown_code {
@@ -130,6 +133,238 @@ aa_register_case \
         }
     }
 
+
+aa_register_case -cats {
+    api
+    smoke
+} -procs {
+    acs_object::object_p
+    package_instantiate_object
+} object_p {
+    Test the acs_object::object_p proc.
+} {
+    aa_run_with_teardown -rollback -test_code {
+        #
+        # Check with an unused object_id
+        #
+        set object_id [db_nextval acs_object_id_seq]
+        aa_false "Is $object_id an object?" [acs_object::object_p -id $object_id]
+        #
+        # Fetch an existing object
+        #
+        set object_id [db_string q {select max(object_id) from acs_objects}]
+        aa_true "Is $object_id an object?" [acs_object::object_p -id $object_id]
+        #
+        # Create an object and check
+        #
+        set object_id [package_instantiate_object acs_object]
+        aa_true "Is $object_id an object?" [acs_object::object_p -id $object_id]
+    }
+}
+
+aa_register_case -cats {
+    api
+    smoke
+} -procs {
+    acs_object::is_type_p
+    acs_object_type::supertypes
+    acs_object_type::supertype
+} is_object_type_p {
+    Test the acs_object::is_type_p proc.
+} {
+    aa_run_with_teardown -rollback -test_code {
+        aa_section "Check with an unused object_id"
+        set object_id [db_nextval acs_object_id_seq]
+        aa_false "Is $object_id an acs_object?" \
+            [acs_object::is_type_p -object_id $object_id -object_type acs_object]
+
+        aa_section "Check with an invalid object_id"
+        set object_id abc
+        aa_false "Is $object_id an acs_object?" \
+            [acs_object::is_type_p -object_id $object_id -object_type acs_object]
+
+        aa_section "Fetch an existing object"
+        set object_id [db_string q {select max(object_id) from acs_objects}]
+        aa_true "Is $object_id an acs_object?" \
+            [acs_object::is_type_p -object_id $object_id -object_type acs_object]
+
+        aa_section "Supertypes"
+        aa_true "true supertype" \
+            [acs_object_type::supertype -supertype acs_object -subtype user]
+        aa_true "equlas supertype" \
+            [acs_object_type::supertype -supertype user -subtype user]
+        aa_false "false supertype" \
+            [acs_object_type::supertype -supertype user -subtype party]
+
+        aa_section "Fetch an existing user"
+        set object_id [db_string q {select max(user_id) from users}]
+        aa_true "Is $object_id a user?" \
+            [acs_object::is_type_p -object_id $object_id -object_type user]
+        aa_true "Is $object_id a person?" \
+            [acs_object::is_type_p -object_id $object_id -object_type person]
+        aa_true "Is $object_id a party?" \
+            [acs_object::is_type_p -object_id $object_id -object_type party]
+        aa_true "Is $object_id a user (no hierarchy)?" \
+            [acs_object::is_type_p -object_id $object_id -object_type user -no_hierarchy]
+        aa_false "Is $object_id a person (no hierarchy)?" \
+            [acs_object::is_type_p -object_id $object_id -object_type person -no_hierarchy]
+        aa_false "Is $object_id a party (no hierarchy)?" \
+            [acs_object::is_type_p -object_id $object_id -object_type party -no_hierarchy]
+
+        aa_true "Is $object_id a user os a package?" \
+            [acs_object::is_type_p -object_id $object_id -object_type {apm_package user}]
+        aa_true "Is $object_id a person or a package?" \
+            [acs_object::is_type_p -object_id $object_id -object_type {apm_package person}]
+        aa_true "Is $object_id a party or a package?" \
+            [acs_object::is_type_p -object_id $object_id -object_type {apm_package party}]
+        aa_true "Is $object_id a user or a package (no hierarchy)?" \
+            [acs_object::is_type_p -object_id $object_id -object_type {apm_package user} -no_hierarchy]
+        aa_false "Is $object_id a person or a package (no hierarchy)?" \
+            [acs_object::is_type_p -object_id $object_id \
+                 -object_type {apm_package person} \
+                 -no_hierarchy]
+        aa_false "Is $object_id a party or a package (no hierarchy)?" \
+            [acs_object::is_type_p -object_id $object_id \
+                 -object_type {apm_package party} -no_hierarchy]
+
+
+        aa_section "Create an object and check"
+        set object_id [package_instantiate_object acs_object]
+        aa_true "Is $object_id an acs_object?" \
+            [acs_object::is_type_p -object_id $object_id -object_type acs_object]
+    }
+}
+
+aa_register_case -cats {
+    api
+    smoke
+} -procs {
+    acs_magic_object
+} magic_objects {
+    Test the magic objects api
+} {
+    db_foreach get_objects {
+        select object_id, name from acs_magic_objects
+    } {
+        aa_equals "Api retrieves the correct magic object_id for '$name'" \
+            [acs_magic_object $name] $object_id
+    }
+}
+
+aa_register_case -cats {
+    api
+    smoke
+} -procs {
+    acs_object_name
+} object_name {
+    Test the acs_object_name api
+} {
+    db_foreach get_objects {
+        select object_id, acs_object.name(object_id) as name
+        from acs_objects
+        order by object_id desc
+        fetch first 10 rows only
+    } {
+        aa_equals "Api retrieves the correct name '$name' for object_id '$object_id'" \
+            [acs_object_name $object_id] $name
+    }
+}
+
+aa_register_case -cats {
+    api
+    smoke
+} -procs {
+    db_table_exists
+    acs_object_type::get_table_name
+} object_type_table_name {
+    Test the acs_object_type::get_table_name api
+} {
+    db_foreach get_objects {
+        select object_type, table_name from acs_object_types
+    } {
+        aa_equals "Api retrieves the correct table name '$table_name' for object_type '$object_type'" \
+            [acs_object_type::get_table_name -object_type $object_type] $table_name
+        if {$table_name ne ""} {
+            aa_true "Table 'table_name' exists" [db_table_exists $table_name]
+        }
+    }
+}
+
+aa_register_case -cats {
+    api
+    smoke
+} -procs {
+    acs_object_type_hierarchy
+    lang::util::localize
+    acs_object_type::supertypes
+} object_type_hierarchy {
+    Test the acs_object_type_hierarchy api
+} {
+    set object_type user
+    set supertypes [list $object_type {*}[acs_object_type::supertypes -subtype $object_type]]
+
+    aa_section "When object_type is specified"
+
+    aa_equals "When object_type is not empty, indent_string, indent_width and join string have no effect" \
+        [acs_object_type_hierarchy \
+             -object_type $object_type \
+             -indent_string __test_indent_string \
+             -indent_width 3 \
+             -join_string __test_join_string \
+             -additional_html __test_additional_html] \
+        [acs_object_type_hierarchy \
+             -object_type $object_type \
+             -indent_string __test_indent_string2 \
+             -indent_width 1000 \
+             -join_string __test_join_string2 \
+             -additional_html __test_additional_html]
+
+    set hierarchy [acs_object_type_hierarchy \
+                       -object_type $object_type \
+                       -additional_html __test_additional_html]
+    #aa_log [ns_quotehtml $hierarchy]
+    aa_true "Hierarchy is HTML" \
+        [ad_looks_like_html_p $hierarchy]
+    aa_true "Additional HTML was appended at the end of the output" \
+        [regexp {^.*__test_additional_html$} $hierarchy]
+
+    foreach h $supertypes {
+        set pretty_name [db_string q {
+            select pretty_name
+            from acs_object_types
+            where object_type = :h
+        }]
+        set pretty_name [lang::util::localize $pretty_name]
+        aa_true "Pretty name '$pretty_name' is in the output" \
+            {[string first $pretty_name $hierarchy] >= 0}
+
+        set href [export_vars -base ./one {{object_type $h}}]
+        aa_true "URL '$href' is in the output" \
+            {[string first $href $hierarchy] >= 0}
+    }
+
+    aa_section "When object_type is not specified"
+
+    set n_types [db_string q {select count(*) from acs_object_types}]
+    set indent_width 97
+    set hierarchy [acs_object_type_hierarchy \
+                       -indent_string __test_indent_string \
+                       -indent_width $indent_width \
+                       -join_string __test_join_string \
+                       -additional_html __test_additional_html]
+    aa_true "Hierarchy is HTML" \
+        [ad_looks_like_html_p $hierarchy]
+
+    aa_true "Additional HTML was appended at the end of the output" \
+        [regexp {^.*__test_additional_html$} $hierarchy]
+
+    aa_true "There is a multiple of indent_width indent_strings:" \
+        {[regsub -all __test_indent_string $hierarchy {} _] % $indent_width == 0}
+
+    aa_true "There are n_object_types -1 join strings" \
+        {[regsub -all __test_join_string $hierarchy {} _] == ($n_types - 1)}
+
+}
 
 
 # Local variables:

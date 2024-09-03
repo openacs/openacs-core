@@ -83,7 +83,7 @@ ad_proc -private lang::catalog::all_messages_for_package_and_locale { package_ke
     return [db_list_of_lists get_messages {}]
 }
 
-ad_proc -private lang::catalog::package_catalog_dir { package_key } {
+ad_proc -public lang::catalog::package_catalog_dir { package_key } {
     Return the catalog directory of the given package.
 
     @author Peter Marklund (peter@collaboraid.biz)
@@ -144,15 +144,10 @@ ad_proc -private lang::catalog::package_has_files_in_locale_p {package_key local
 
     @author Peter Marklund
 } {
-    ad_try {
-        glob [package_catalog_dir $package_key]/$package_key.${locale}.*
-    } on ok {r} {
-        set has_file_in_locale_p 1
-    } on error {errorMsg} {
-        set has_file_in_locale_p 0
-    }
+    set locale_files [glob -nocomplain -- \
+                          [package_catalog_dir $package_key]/$package_key.${locale}.*]
 
-    return $has_file_in_locale_p
+    return [expr {[llength $locale_files] > 0}]
 }
 
 ad_proc -private lang::catalog::get_catalog_file_path {
@@ -183,7 +178,7 @@ ad_proc -private lang::catalog::get_catalog_file_path {
         # the en_US catalog files directly to add keys and they might mess up the
         # utf-8 encoding of the files when doing so.
         set system_charset [lang::util::charset_for_locale $locale]
-        set file_charset [ad_decode $system_charset "ISO-8859-1" $system_charset utf-8]
+        set file_charset [expr {$system_charset eq "ISO-8859-1" ? $system_charset : "utf-8"}]
     }
 
     set message_backup_prefix ""
@@ -258,7 +253,7 @@ ad_proc -private lang::catalog::last_sync_messages {
 } {
     set message_list [list]
     db_foreach last_sync_messages {} {
-        if { ![template::util::is_true $deleted_p] } {
+        if { ![string is true -strict $deleted_p] } {
             lappend message_list $message_key $message
         }
     }
@@ -495,12 +490,13 @@ ad_proc -private lang::catalog::parse { catalog_file_contents } {
     # Initialize the array to return
     array set msg_catalog_array {}
 
-    # Parse the xml document
+    # Parse the XML document
     set tree [xml_parse -persist $catalog_file_contents]
 
     # Get the message catalog root node
     set root_node [xml_doc_get_first_node $tree]
     if { [xml_node_get_name $root_node] ne $MESSAGE_CATALOG_TAG } {
+        $tree delete
         error "lang::catalog_parse: Could not find root node $MESSAGE_CATALOG_TAG"
     }
 
@@ -534,6 +530,7 @@ ad_proc -private lang::catalog::parse { catalog_file_contents } {
     # Add the keys and the texts to the descriptions array
     set msg_catalog_array(descriptions) [array get key_description_array]
 
+    $tree delete
     return [array get msg_catalog_array]
 }
 
@@ -635,7 +632,7 @@ ad_proc -private lang::catalog::import_messages {
       messages for the merge is the messages in the db from the last time
       db and catalog file were in sync for the corresponding message key. The first such sync point
       is the initial import of a message. After that, any export of messages to
-      the file system will be a sync point. Also, after an upgrade, a large number
+      the filesystem will be a sync point. Also, after an upgrade, a large number
       of the resulting messages in the db will be identical to those in the file (the
       file messages take precedence on conflict) and those messages will also be sync points.
       A message being in sync between db and file is indicated by the lang_message.sync_time
@@ -657,7 +654,7 @@ ad_proc -private lang::catalog::import_messages {
     There are three sets of keys, file, db, and base keys. For each key in
     the union of these keys there are three messages that can exist: the file message, the db message, and the base message. The
     base message serves as the base for the merge. We will distinguish all the different permutations
-    of each of the three messages existing or not, and all permutations of the messages being different from eachother.
+    of each of the three messages existing or not, and all permutations of the messages being different from each other.
     We don't distinguish how two messages are different, only whether they are different or not.
     In total that gives us 14 cases (permutations) to consider.
     </p>
@@ -1155,7 +1152,7 @@ ad_proc -private lang::catalog::translate {} {
             ad_try {
                 set translated_message [lang_babel_translate $message en_$lang]
             } on error {errorMsg} {
-                ns_log Notice "Error translating $message into $lang: $errorMsg"
+                ns_log Error "Error translating $message into $lang: $errorMsg"
             } ok ok {r} {
                 lang::message::register $lang $package_key $message_key $translated_message
             }

@@ -374,7 +374,7 @@ ad_proc -public content::type::content_type_p {
     -content_type:required
     -mime_type:required
 } {
-    Checks if the mime_type is of the content_type, e.g if application/pdf is of content_type "image" (which it should not...)
+    Checks if the mime_type is of the content_type, e.g. if application/pdf is of content_type "image" (which it should not...)
 
     Cached
 
@@ -388,7 +388,7 @@ ad_proc -private content::type::content_type_p_not_cached {
     -content_type:required
     -mime_type:required
 } {
-    Checks if the mime_type is of the content_type, e.g if application/pdf is of content_type "image" (which it should not...)
+    Checks if the mime_type is of the content_type, e.g. if application/pdf is of content_type "image" (which it should not...)
     @param content_type content type to check against
     @param mime_type mime type to check for
 } {

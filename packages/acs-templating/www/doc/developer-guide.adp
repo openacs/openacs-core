@@ -1,7 +1,11 @@
 
-<property name="context">{/doc/acs-templating {ACS Templating}} {Template System Guide}</property>
+<property name="context">{/doc/acs-templating/ {ACS Templating}} {Template System Guide}</property>
 <property name="doc(title)">Template System Guide</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h2>Programmer / Developer Guide</h2>
 <a href="">Templating System</a>
  : Developer Guide
@@ -15,7 +19,7 @@ of templating. The Tcl page should fill the data sources you
 promised in the contract, and not write to the connection. At the
 end of your Tcl page, call <code>ad_return_template</code>
 . The
-template system will look for an adp page with the file name stub
+template system will look for an adp page with the filename stub
 you indicate (defaulting to the same stub as the Tcl page), process
 that, and deliver it to the client. The adp page can use the
 datasources defined in the Tcl page.
@@ -99,5 +103,5 @@ variable; typically it will stay undefined.
 <address><a href="mailto:christian\@arsdigita.com">Christian
 Brechbühler</a></address>
 <!-- Created: Mon Aug 14 11:53:07 EDT 2000 -->
-Last modified: $&zwnj;Id: developer-guide.html,v 1.5 2017/08/07 23:48:02
-gustafn Exp $
+Last modified: $&zwnj;Id: developer-guide.html,v 1.5.2.1 2023/06/06
+09:30:30 gustafn Exp $

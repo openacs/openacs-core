@@ -1,14 +1,11 @@
-# /packages/acs-lang/www/admin/locale-make-default.tcl
-
 ad_page_contract {
 
     Makes a locale the default for its language
 
     @author Bruno Mattarollo <bruno.mattarollo@ams.greenpeace.org>
     @creation-date 19 march 2002
-    @cvs-id $Id$
 } {
-    locale
+    locale:word
 } -properties {
 }
 

@@ -75,8 +75,8 @@ ad_proc -public template::data::validate::richtext {
     upvar 2 $message_ref message $value_ref richtext_list
     lassign $richtext_list contents format
 
-    if { $contents ne "" && [lsearch -exact [template::util::richtext::formats] $format] == -1 } {
-        set message "Invalid format, '$format'."
+    if { $format ni [template::util::richtext::formats] } {
+        set message "Invalid format '[ns_quotehtml $format]'."
         return 0
     }
 
@@ -196,7 +196,7 @@ ad_proc -public template::util::richtext::get_property { what richtext_list } {
 ad_proc -public template::util::richtext::initialize_widget {
     -form_id
     -text_id
-    -editor
+    {-editor ""}
     {-options {}}
 } {
 
@@ -206,14 +206,53 @@ ad_proc -public template::util::richtext::initialize_widget {
 
     @param form_id   ID of the form containing the textarea
     @param text_id   ID of the textarea
-    @param editor    Editor, which should be used
+    @param editor    Editor, which should be used. Will default to that
+                     specified in acs-templating RichTextEditor
+                     parameter when not specified.
     @param options   Options passed in from the widget spec
 
     @return          On success, this function returns a dict with success 1
 
 } {
+    if {$editor eq ""} {
+        set package_id_templating [::apm_package_id_from_key "acs-templating"]
+        set editor [::parameter::get \
+                        -package_id $package_id_templating \
+                        -parameter "RichTextEditor" \
+                        -default "xinha"]
+    }
+
     if {![require_editor -editor $editor]} {
         return {success 0}
+    }
+
+    #
+    # The actual richtext-editor implementation may provide some
+    # use-case based presets. Examples may be a "minimal", "standard"
+    # and "advanced" configuration that are reused in various forms.
+    #
+    # Here, we check and eventually return such conf, which will be
+    # applied to the loading formfield.
+    #
+    # When no preset was specified, we will try to look for the
+    # "standard" preset. This provides a hook for site-wide
+    # customization via a tcl proc, which enables to inject
+    # e.g. information coming from the connection context or other tcl
+    # commands, not possible via parameter alone.
+    #
+    # The purpose of this feature is to have a set of logical
+    # configurations that do not depend on the specific editor and
+    # can be extended downstream.
+    #
+    if {[dict exists $options preset]} {
+        set preset [dict get $options preset]
+    } else {
+        set preset "standard"
+    }
+    if {[info commands ::richtext::${editor}::preset::${preset}] ne ""} {
+        set options [dict merge \
+                         [::richtext::${editor}::preset::${preset}] \
+                         $options]
     }
 
     set result {success 1}
@@ -253,7 +292,8 @@ ad_proc -public template::util::richtext::get_tag {
 } {
     set tag textarea
     if {[dict exists $options editor]
-        && [info commands ::richtext::[dict get $options editor]::get_tag] ne ""
+        && [namespace which ::richtext::[
+            dict get $options editor]::get_tag] ne ""
     } {
         set tag [::richtext::[dict get $options editor]::get_tag -options $options]
     }
@@ -329,7 +369,7 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
     <li> <em>height</em>: height of the xinha widget (e.g. 350px)
     <li> <em>width</em>: width of the xinha widget (e.g. 500px)
     <li> <em>plugins</em>: Tcl list of plugins to be used in xinha. There
-    is an a special plugin for the oacs file selector available, called OacsFs.
+    is a special plugin for the oacs file selector available, called OacsFs.
     If no options are specified, the following plugins will be loaded:
     <code>
     GetHtml CharacterMap ContextMenu FullScreen
@@ -371,7 +411,7 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
     Example for the use of the <strong>xinha</strong> widget with options:
     <pre>
     text:richtext(richtext),nospell,optional
-    {label #xowiki.content#}
+    {label Content}
     {options {editor xinha plugins OacsFs height 350px file_types %pdf%}}
     {html {rows 15 cols 50 style {width: 100%}}}
     </pre>
@@ -411,7 +451,7 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
     If provided with a WYSIWYG editor different than 'xinha' or 'tinymce',
     system will just collect formfield ids and supplied options for the
     richtext field and will provide them as-is to the blank-master environment.
-    When using a custom editor, funcional meaning of the options is totally up
+    When using a custom editor, functional meaning of the options is totally up
     to the user.
 
     <p>
@@ -429,15 +469,16 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
 
     #ns_log notice "widget::richtext: richtext-options? [info exists element(options)] HTML? [info exists element(html)]"
 
-    if { [info exists element(html)] } {
-        array set attributes $element(html)
-    }
-
-    array set attributes $tag_attributes
+    array set attributes \
+        [::template::widget::merge_tag_attributes element $tag_attributes]
 
     if { [info exists element(value)] } {
         set contents [template::util::richtext::get_property contents $element(value)]
         set format   [template::util::richtext::get_property format $element(value)]
+        if {$format ni [template::util::richtext::formats]} {
+            ns_log warning "Ignoring provided format '$format' for richtext widget with id $element(id)"
+            set format {}
+        }
     } else {
         set contents {}
         set format {}
@@ -449,7 +490,7 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
         set attributes(id) $element(id)
         set package_id_templating [apm_package_id_from_key "acs-templating"]
 
-        set user_agent [string tolower [ns_set get [ns_conn headers] User-Agent]]
+        set user_agent [string tolower [ns_set iget [ns_conn headers] User-Agent]]
 
         if {[string first "safari" $user_agent] != -1} {
             if {[regexp {version/([0-9]+)[.]} $user_agent _ user_agent_version]
@@ -464,7 +505,7 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
         }
 
         if { [info exists element(htmlarea_p)] && $element(htmlarea_p) ne "" } {
-            set htmlarea_p [template::util::is_true $element(htmlarea_p)]
+            set htmlarea_p [string is true -strict $element(htmlarea_p)]
         } else {
             set htmlarea_p [parameter::get \
                                 -package_id $package_id_templating \
@@ -483,10 +524,7 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
         if { $htmlarea_p } {
             # figure out, which rich text editor to use
             set richtextEditor [expr {[info exists options(editor)] ?
-                                      $options(editor) : [parameter::get \
-                                                              -package_id $package_id_templating \
-                                                              -parameter "RichTextEditor" \
-                                                              -default "xinha"]}]
+                                      $options(editor) : ""}]
             #
             # Tell the blank-master to include the special stuff
             # for the richtext widget in the page header
@@ -529,7 +567,7 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
             # off.
             #
             append output \
-                "</span>\n<script type='text/javascript' nonce='$::__csp_nonce'>\n" \
+                "</span>\n<script type='text/javascript' nonce='[security::csp::nonce]'>\n" \
                 [subst {document.write("<input name='$element(id).format' value='text/html' type='hidden'>");}] \
                 "</script>\n<noscript><div>" \
                 [subst {<span class="form-widget"><label for="$element(id).format">[_ acs-templating.Format]: </label>}] \

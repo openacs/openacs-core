@@ -3,14 +3,14 @@ ad_page_contract {
 
     @cvs-id $Id$
 } {
-    {user_id:naturalnum ""}
+    {user_id:object_type(user) ""}
     {return_url:localurl ""}
 } -properties {
     first_names:onevalue
     last_name:onevalue
     context:onevalue
     export_vars:onevalue
-    
+
 }
 
 set current_user_id [ad_conn user_id]
@@ -38,13 +38,6 @@ if {$user_id eq ""} {
 
 permission::require_permission -object_id $user_id -privilege "write"
 
-if {![person::person_p -party_id $user_id]} {
-    ad_return_error \
-        "Account Unavailable" \
-        "We can't find you (user #$user_id) in the users table.  Probably your account was deleted for some reason."
-    ad_script_abort
-}
-
 acs_user::get -user_id $user_id -array user
 set first_names $user(first_names)
 set last_name   $user(last_name)
@@ -67,7 +60,7 @@ if {$admin_p} {
 set help_text [_ acs-subsite.lt_Use_the_Browse_button]
 
 ad_form -name "portrait_upload" -html {enctype "multipart/form-data"} -export {user_id return_url} -form {
-    {upload_file:text(file)
+    {upload_file:file(file)
         {label "#acs-subsite.Filename#"}
         {help_text $help_text}
     }
@@ -92,6 +85,14 @@ if { $portrait_p } {
 
 set mime_types [parameter::get -parameter AcceptablePortraitMIMETypes -default ""]
 set max_bytes [parameter::get -parameter MaxPortraitBytes -default ""]
+set max_bytes_pretty [expr {$max_bytes eq "" ? "" : [lc_content_size_pretty -size $max_bytes]}]
+
+set file_list [lindex [template::util::file_transform upload_file] 0]
+set filename     [template::util::file::get_property filename $file_list]
+set tmp_filename [template::util::file::get_property tmp_filename $file_list]
+set mime_type    [template::util::file::get_property mime_type $file_list]
+
+set system_name [ad_system_name]
 
 ad_form -extend -name "portrait_upload" -validate {
 
@@ -103,14 +104,14 @@ ad_form -extend -name "portrait_upload" -validate {
     # generality implicit in the following if statement)
 
     {upload_file
-        
-        { $mime_types eq "" || [lsearch $mime_types [ns_guesstype $upload_file]] > -1 }
+
+        { $mime_types eq "" || $mime_type in $mime_types }
         {Your image wasn't one of the acceptable MIME types: $mime_types}
     }
     {upload_file
 
-        { $max_bytes eq "" || [file size [ns_queryget upload_file.tmpfile]] <= $max_bytes } 
-        {Your file is too large.  The publisher of [ad_system_name] has chosen to limit portraits to [util_commify_number $max_bytes] bytes.  You can use PhotoShop or the GIMP (free) to shrink your image}
+        { $max_bytes eq "" || [file size $tmp_filename] <= $max_bytes }
+        {Your file is too large.  The publisher of $system_name has chosen to limit portraits to $max_bytes_pretty.  You can use PhotoShop or the GIMP (free) to shrink your image}
     }
 
 } -on_submit {
@@ -120,9 +121,9 @@ ad_form -extend -name "portrait_upload" -validate {
         acs_user::create_portrait \
             -user_id $user_id \
             -description $portrait_comment \
-            -filename $upload_file \
-            -file [ns_queryget upload_file.tmpfile]
-        
+            -filename $filename \
+            -file $tmp_filename
+
     }
 
 } -after_submit {

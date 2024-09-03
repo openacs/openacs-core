@@ -4,7 +4,7 @@ ad_library {
     before we stub them out.
 
     This is done since the old ad_call_proc_if_exists
-    is somewhat expensive and these are called a lot in 
+    is somewhat expensive and these are called a lot in
     every request.
 
     @author Jeff Davis <davis@xarg.net>
@@ -12,16 +12,16 @@ ad_library {
     @cvs-id $Id$
 }
 
-if {[info commands ds_add] eq ""} {
+if {[namespace which ds_add] eq ""} {
     proc ds_add {args} {}
 }
-if {[info commands ds_collect_db_call] eq ""} {
+if {[namespace which ds_collect_db_call] eq ""} {
     proc ds_collect_db_call {args} {}
 }
-if {[info commands ds_collect_connection_info] eq ""} {
+if {[namespace which ds_collect_connection_info] eq ""} {
     proc ds_collect_connection_info {} {}
 }
-if {[info commands ds_init] eq ""} {
+if {[namespace which ds_init] eq ""} {
     proc ds_init {} {}
 }
 # Local variables:

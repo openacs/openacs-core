@@ -1,7 +1,11 @@
 
-<property name="context">{/doc/acs-templating {ACS Templating}} {}</property>
+<property name="context">{/doc/acs-templating/ {ACS Templating}} {}</property>
 <property name="doc(title)"></property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h2>Namespace publish</h2>
 
   <em>by Stanislav Freidin The procs in this namespace
@@ -129,7 +133,7 @@ was written to the filesystem.</td>
 <td align="right">
 <code>url_ref</code><font color="red">*</font>
 </td><td align="left">The name of the variable in the calling frame that
-will receive the relative URL of the file in the file system which
+will receive the relative URL of the file in the filesystem which
 contains the content blob</td>
 </tr><tr>
 <td align="right">
@@ -335,7 +339,7 @@ URL under each publish root listed under the PublishRoots parameter
 in the server&#39;s INI file (the value returnded by
 publish::get_page_root is used as the default). The file extension
 will be based on the revision&#39;s mime-type.<br>
-For example, an revision whose mime-type is { image/jpeg} for an
+For example, a revision whose mime-type is { image/jpeg} for an
 item at { Sitemap/foo/bar} may be written as
 /web/your_server_name/www/foo/bar.jpg</blockquote><dl>
 <dd>
@@ -427,11 +431,11 @@ stack</blockquote><dl>
 </table>
 <table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name="publish::handle_item" id="publish::handle_item"><font size="+1" weight="bold">publish::handle_item</font></a></td></tr><tr><td>
-<blockquote>Render an item either by looking it up in the
-temporary cache, or by using the appropriate mime handler. Once the
-item is rendered, it is stored in the temporary cache under a key
-which combines the item_id, any extra HTML parameters, and a flag
-which specifies whether the item was merged with its template.<br>
+<blockquote>Render an item either by looking it up in the temporary
+cache, or by using the appropriate mime handler. Once the item is
+rendered, it is stored in the temporary cache under a key which
+combines the item_id, any extra HTML parameters, and a flag which
+specifies whether the item was merged with its template.<br>
 This proc takes the same arguments as the individual mime
 handlers.</blockquote><dl>
 <dd>
@@ -475,9 +479,8 @@ handler, in format {name value name value ...}</td>
 </table>
 <table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name="publish::html_args" id="publish::html_args"><font size="+1" weight="bold">publish::html_args</font></a></td></tr><tr><td>
-<blockquote>Concatenate a list of name-value pairs as returned by
-<kbd>set_to_pairs</kbd> into a list of { name=value}
-pairs</blockquote><dl>
+<blockquote>Concatenate a list of name-value pairs as a list of {
+name=value} pairs</blockquote><dl>
 <dd>
 <strong>Parameters:</strong><table><tr>
 <td align="right">
@@ -485,8 +488,7 @@ pairs</blockquote><dl>
 </td><td align="left">The list of name-value pairs</td>
 </tr></table>
 </dd><dt><strong>Returns:</strong></dt><dd>An HTML string in format " name=value name=value
-..."</dd><dt><strong>See Also:</strong></dt><dd>proc - <a href="publish">publish::set_to_pairs</a><br>
-</dd>
+..."</dd>
 </dl>
 </td></tr>
 </table>
@@ -624,27 +626,6 @@ order to prevent infinite recursion.</td>
 </table>
 </dd><dt><strong>Returns:</strong></dt><dd>The rendered HTML for the child item</dd><dt><strong>See Also:</strong></dt><dd>proc - <a href="publish">publish::handle_item</a><br><a href="publish">publish::merge_with_template</a><br>
 </dd>
-</dl>
-</td></tr>
-</table>
-<table width="100%">
-<tr><td width="100%" bgcolor="#CCCCFF"><a name="publish::set_to_pairs" id="publish::set_to_pairs"><font size="+1" weight="bold">publish::set_to_pairs</font></a></td></tr><tr><td>
-<blockquote>Convert an ns_set into a list of name-value pairs, in
-form {name value name value ...}</blockquote><dl>
-<dd>
-<strong>Parameters:</strong><table>
-<tr>
-<td align="right">
-<code>params</code><font color="red">*</font>
-</td><td align="left">The ns_set id</td>
-</tr><tr>
-<td align="right">
-<code>exclusion_list</code><font color="red">*</font>
-</td><td align="left">{} A list of keys to be ignored</td>
-</tr>
-</table>
-</dd><dt><strong>Returns:</strong></dt><dd>A list of name-value pairs representing the data in the
-ns_set</dd>
 </dl>
 </td></tr>
 </table>

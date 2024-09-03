@@ -38,7 +38,7 @@ if { $version_name_index >= 0 } {
     set version_uri_suffix [string range $version_uri $version_name_index+[string length $version_name] end]
 
     append body [subst {
-<script type="text/javascript" nonce='$::__csp_nonce'>
+<script type="text/javascript" nonce='[security::csp::nonce]'>
 function updateVersionURL() {
     var form = document.forms\[0\];
     form.version_uri.value = "$version_uri_prefix" + form.version_name.value + "$version_uri_suffix";
@@ -48,7 +48,7 @@ function updateVersionURL() {
 }
 
 append body [subst {
-<script type="text/javascript" nonce='$::__csp_nonce'>
+<script type="text/javascript" nonce='[security::csp::nonce]'>
 function checkMailto(element) {
     // If it looks like an email address without a mailto: (contains an @ but
     // no colon) then prepend 'mailto:'.
@@ -77,22 +77,22 @@ function checkMailto(element) {
 
 <tr>
   <th style="text-align:right; white-space: nowrap">OpenACS Core:</th>
-  <td>[ad_decode $initial_install_p t Yes No]</td>
+  <td>[expr {$initial_install_p ? "Yes" : "No"}]</td>
 </tr>
 
 <tr>
   <th style="text-align:right; white-space: nowrap">Singleton:</th>
-  <td>[ad_decode $singleton_p t Yes No]</td>
+  <td>[expr {$singleton_p ? "Yes" : "No"}]</td>
 </tr>
 
 <tr>
   <th style="text-align:right; white-space: nowrap">Implements Subsite:</th>
-  <td>[ad_decode $implements_subsite_p t Yes No]</td>
+  <td>[expr {$implements_subsite_p ? "Yes" : "No"}]</td>
 </tr>
 
 <tr>
   <th style="text-align:right; white-space: nowrap">Inherit Templates:</th>
-  <td>[ad_decode $inherit_templates_p t Yes No]</td>
+  <td>[expr {$inherit_templates_p ? "Yes" : "No"}]</td>
 </tr>
 
 <tr>
@@ -127,8 +127,8 @@ edit the information regarding existing version of the package.</td>
   <th style="text-align:right"><br>Description:</th>
   <td><textarea name="description" cols="60" rows="5">[ns_quotehtml $description]</textarea><br>
 This description is <select name="description_format">
-<option value="text/html" [ad_decode $description_format "text/plain" "" "selected"]>HTML-formatted.
-<option value="text/plain" [ad_decode $description_format "text/plain" "selected" ""]>plain text.
+<option value="text/html" [expr {$description_format eq "text/plain" ? "" : "selected"}]>HTML-formatted.
+<option value="text/plain" [expr {$description_format eq "text/plain" ? "selected" : ""}]>plain text.
 </select>
 </td>
 </tr>

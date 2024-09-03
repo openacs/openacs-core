@@ -63,18 +63,6 @@ set user_id [ad_conn user_id]
 set subsite_number [db_string count_subsites {
     select count(*) from apm_packages where package_key = 'acs-subsite'
 }]
-#
-# Not sure, what the intentions was to omit all(!) subsites if there
-# are more than 100. e.g. http://openacs.org/bugtracker/openacs/bug?bug_number=3174
-# Subsite-omitting is deactivated for the time being.
-#
-if {0 && $subsite_number > 100} {
-    set too_many_subsites_p 1
-    set where_limit "where p.package_key <> 'acs-subsite'"
-} else {
-    set too_many_subsites_p 0
-    set where_limit ""
-}
 
 if {[llength $expand] == 0} {
     lappend expand $root_id
@@ -147,33 +135,41 @@ template::list::create \
                 @nodes.type;noquote@
             }
         } actions {
-            label "Action"
+            label "Actions"
             html "align left"
             display_template {
                 <if @nodes.add_folder_url@ ne "">
-                  <a href="@nodes.add_folder_url@#add">[_ acs-subsite.add_folder]</a>
+                  <a href="@nodes.add_folder_url@#add"><adp:icon name='folder-add' title='[_ acs-subsite.add_folder]'></a>
                 </if>
-                <if @nodes.new_app_url@ ne "">
-                  <a href="@nodes.new_app_url@#new">[_ acs-subsite.new_application]</a>
-                </if>
+                <else><adp:icon name='folder-add' invisible='true'></else>
                 <if @nodes.unmount_url@ ne "">
-                  <a href="@nodes.unmount_url@">[_ acs-subsite.unmount]</a>
+                  <a href="@nodes.unmount_url@"><adp:icon name='unmount' title='[_ acs-subsite.unmount]'></a>
                 </if>
-                <if @nodes.mount_url@ ne "">
-                  <a href="@nodes.mount_url@">[_ acs-subsite.mount]</a>
-                </if>
+                <else><adp:icon name='unmount' invisible='true'></else>
                 <if @nodes.rename_url@ ne "">
-                  <a href="@nodes.rename_url@#rename">[_ acs-subsite.rename]</a>
+                  <a href="@nodes.rename_url@#rename"><adp:icon name='edit' title='[_ acs-subsite.rename]'></a>
                 </if>
+                <else><adp:icon name='edit' invisible='true'></else>
                 <if @nodes.delete_url@ ne "">
-                <a href="@nodes.delete_url@" id="@nodes.delete_id;literal@">[_ acs-subsite.delete]</a>
+                <a href="@nodes.delete_url@" id="@nodes.delete_id;literal@"><adp:icon name='trash' title='[_ acs-subsite.delete]'></a>
                 </if>
+                <else><adp:icon name='trash' invisible='true'></else>
                 <if @nodes.parameters_url@ ne "">
-                  <a href="@nodes.parameters_url@">[_ acs-subsite.parameters]</a>
+                  <a href="@nodes.parameters_url@"><adp:icon name='cog' title='[_ acs-subsite.parameters]'></a>
                 </if>
+                <else><adp:icon name='trash' invisible='true'></else>
                 <if @nodes.permissions_url@ ne "">
-                  <a href="@nodes.permissions_url@">[_ acs-subsite.permissions]</a>
+                  <a href="@nodes.permissions_url@"><adp:icon name='permissions' title='[_ acs-subsite.permissions]'></a>
                 </if>
+                <else><adp:icon name='permissions' invisible='true'></else>
+                <if @nodes.new_app_url@ ne "">
+                  <a href="@nodes.new_app_url@#new"><adp:icon name='add-new-item' title='[_ acs-subsite.new_application]'></a>
+                </if>
+                <else><adp:icon name='add-new-item' invisible='true'></else>
+                <if @nodes.mount_url@ ne "">
+                  <a href="@nodes.mount_url@"><adp:icon name='mount' title='[_ acs-subsite.mount]'></a>
+                </if>
+                <else><adp:icon name='search' invisible='true'></else>
                 <if @nodes.extra_form_part@ ne "">
                   @nodes.extra_form_part;noquote@
                 </if>
@@ -205,7 +201,7 @@ db_foreach nodes_select {} {
     if {$name eq ""} {
         set name "/"
     }
-    
+
     if {$directory_p == "t"} {
         set add_folder_url [export_vars -base . {expand:multiple root_id node_id {new_parent $node_id} {new_type folder}}]
         if {$object_id eq ""} {
@@ -246,7 +242,7 @@ db_foreach nodes_select {} {
     # Values for expand_mode:
     #  0: no children
     #  1: has children, node is not open
-    #  2: has chilren, node is open
+    #  2: has children, node is open
     #
     set expand_mode 0
     if {!$root_p && $n_children > 0} {
@@ -303,7 +299,7 @@ db_foreach nodes_select {} {
     }
     set delete_id delete-$node_id
 
-    ns_log notice "append name <$name> name_url <$name_url> expand_mode $expand_mode"
+    #ns_log notice "append name <$name> name_url <$name_url> expand_mode $expand_mode"
     multirow append nodes \
         $node_id $expand_mode $expand_url $indent $name $name_url $object_name $url $package_pretty_name \
         $action_type $action_form_part $add_folder_url $new_app_url $unmount_url $mount_url \
@@ -346,7 +342,10 @@ set services ""
 db_foreach services_select {} {
     if {$parameter_count > 0} {
         set href [export_vars -base /shared/parameters { package_id { return_url {[ad_return_url]} } }]
-        append services "<li><a href=\"[ns_quotehtml $href]\">[ns_quotehtml $instance_name]</a>"
+        append services [subst {
+            <li><a href="[ns_quotehtml $href]" title="Manage [_ acs-subsite.parameters] of this service">
+            <adp:icon name="cog"> [ns_quotehtml $instance_name]</a>
+        }]
     }
 } if_no_rows {
     append services "  <li>(none)\n"

@@ -1,5 +1,3 @@
-# /packages/mbryzek-subsite/www/admin/rel-types/delete.tcl
-
 ad_page_contract {
 
     Confirms deletion of a relationship type
@@ -32,15 +30,15 @@ set subtypes_exist_p [db_string number_subtypes {}]
 if { $subtypes_exist_p } {
     set return_url "[ad_conn url]?[ad_conn query]"
 
-    # Just grab direct children... 
+    # Just grab direct children...
     template::multirow create subtypes rel_type pretty_name export_vars
 
     db_foreach select_subtypes {
-	select t.object_type as rel_type, t.pretty_name
+        select t.object_type as rel_type, t.pretty_name
           from acs_object_types t
          where t.supertype = :rel_type
     } {
-	template::multirow append subtypes $rel_type $pretty_name [export_vars {rel_type return_url}]
+        template::multirow append subtypes $rel_type $pretty_name [export_vars {rel_type return_url}]
     }
     ad_return_template "delete-subtypes-exist"
     return

@@ -50,7 +50,15 @@ set rel(object_id_two_name) [acs_object_name $rel(object_id_two)]
 if { [relation_segment_has_dependent -rel_id $rel_id] } {
     set return_url "[ad_conn url]?[ad_conn query]"
     # We can't remove this relation - display the violations
-    db_multirow -extend {export_vars} dependents select_dependents {} {
+    db_multirow -extend {export_vars} dependents select_dependents {
+	select r.viol_rel_id as rel_id,
+               (select pretty_name from acs_object_types
+                where object_type = r.viol_rel_type) as rel_type_pretty_name,
+	       acs_object.name(r.viol_object_id_one) as object_id_one_name,
+	       acs_object.name(r.viol_object_id_two) as object_id_two_name
+	  from rc_violations_by_removing_rel r
+	 where r.rel_id = :rel_id
+    } {
         set export_vars [export_vars {rel_id return_url}]
     }
     ad_return_template remove-dependents-exist

@@ -129,13 +129,12 @@ END;
 $$ LANGUAGE plpgsql stable;
 
 
--- function new
-
-select define_function_args('content_keyword__new','heading,description;null,parent_id;null,keyword_id;null,creation_date;now,creation_user;null,creation_ip;null,object_type;content_keyword,package_id');
 
 --
 -- procedure content_keyword__new/9
 --
+select define_function_args('content_keyword__new','heading,description;null,parent_id;null,keyword_id;null,creation_date;now,creation_user;null,creation_ip;null,object_type;content_keyword,package_id;null');
+
 CREATE OR REPLACE FUNCTION content_keyword__new(
    new__heading varchar,
    new__description varchar,       -- default null
@@ -179,9 +178,6 @@ BEGIN
  
 END;
 $$ LANGUAGE plpgsql;
-
-
-select define_function_args('content_keyword__new','heading,description;null,parent_id;null,keyword_id;null,creation_date;now,creation_user;null,creation_ip;null,object_type;content_keyword');
 
 --
 -- procedure content_keyword__new/8

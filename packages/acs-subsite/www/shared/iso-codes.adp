@@ -12,7 +12,7 @@
 
 <multiple name="ccodes">
 
-  <tr><td>@ccodes.country_name@<td align="center">@ccodes.iso@</tr>
+  <tr><td>@ccodes.default_name@<td align="center">@ccodes.iso@</tr>
 
 </multiple>
 

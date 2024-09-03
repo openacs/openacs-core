@@ -1,10 +1,15 @@
 
-<property name="context">{/doc/acs-content-repository {ACS Content Repository}} {ACS Content Repository Tutorial}</property>
+<property name="context">{/doc/acs-content-repository/ {ACS Content Repository}} {ACS Content Repository Tutorial}</property>
 <property name="doc(title)">ACS Content Repository Tutorial</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h2>How to use the content repository</h2>
 
-by <a href="http://rubick.com">Jade Rubick</a>
+by <a href="http://web.archive.org/web/20180809082906/http://www.rubick.com/">Jade
+Rubick</a>
 <h3>Why use the content repository?</h3>
 <p>Let&#39;s say you&#39;re a developer making a package for
 OpenACS. You&#39;ve heard statements like, "every package
@@ -537,7 +542,7 @@ content?<br>
 
 The content repository also has a very useful facility for
 organizing your data into a hierarchy, very similar to a
-file-system. Just like a file system, you can have folders to store
+file-system. Just like a filesystem, you can have folders to store
 items inside of, and organize your information. The main difference
 is that every item can also contain other items. So in our case, we
 can have tasks that contain other tasks. This is a useful way for
@@ -651,7 +656,7 @@ $$ language plpgsql;
 Note that this example is for projects rather than tasks. This is
 because for the application I&#39;m writing, projects are what
 tasks are stored inside of. A project has many component tasks. If
-you were writing another application, or if I wasn&#39;t doing
+you were writing another application, or if I was not doing
 anything with projects, then this would be creating a folder for
 just tasks.
 <p>Typically, this definition would go in your
@@ -771,13 +776,13 @@ binary object associated with the item, as well as all
 attributes.</dd>
 </dl>
 <dl>
-<dt>Content Folder</dt><dd>A folder is analogous to a folder or directory in a file
-system. It represents a level in the content item hierarchy. In the
+<dt>Content Folder</dt><dd>A folder is analogous to a folder or directory in a filesystem.
+It represents a level in the content item hierarchy. In the
 previous example, press-releases is a folder under the repository
 root, and products is folder within that.</dd>
 </dl>
 <dl>
-<dt>Symbolic Link</dt><dd>Analogous to a symlink, alias or shortcut in a file system.
+<dt>Symbolic Link</dt><dd>Analogous to a symlink, alias or shortcut in a filesystem.
 Allows an item to be accessed from multiple folders.</dd>
 </dl>
 <dl>
@@ -794,7 +799,7 @@ content_template defined wrong</a>
 <h3>Troubleshooting</h3>
 
 One problem I ran into while trying to get my SQL create and drop
-scripts working was that sometimes I wasn&#39;t able to delete a
+scripts working was that sometimes I was not able to delete a
 content type because I would get errors like these:
 <blockquote><pre>
 Referential Integrity: attempting to delete live_revision: 658

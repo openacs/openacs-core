@@ -11,6 +11,7 @@ ad_page_contract {
     {member_state:trim}
     {email_verified_p:boolean ""}
     {return_url:localurl ""}
+    {pass_through:boolean,notnull false}
 } -validate {
     valid_member_state -requires member_state {
         if {$member_state ni {approved banned deleted merged "needs approval" rejected}} {
@@ -34,11 +35,14 @@ if {![db_0or1row get_states {
     return
 }
 
-set user [acs_user::get -user_id $user_id]
-set name   [dict get $user name]
-set email  [dict get $user email]
-set rel_id [dict get $user rel_id]
+set user_info [acs_user::get -user_id $user_id]
+set name   [dict get $user_info name]
+set email  [dict get $user_info email]
+set rel_id [dict get $user_info rel_id]
 
+if {$email_verified_p ne ""} {
+    set email_verified_p [expr {[string is true -strict] ? "t" : "f"}]
+}
 #
 # This page is used for state changes in the member_state, and as well
 # on email confirm require and approve operations.
@@ -65,21 +69,19 @@ switch -- $email_verified_p {
         set email_message [group::get_member_state_pretty -component account_mail \
                                -member_state $member_state \
                                -site_name [ad_system_name] \
-                               -url [ad_url]]
+                               -url [ad_conn subsite_url]]
     }
 }
 
 ad_try {
     acs_user::change_state -user_id $user_id -state $member_state
 
-    switch -- $email_verified_p {
-        "t" {
-            db_exec_plsql approve_email {}
-        }
-        "f" {
-            db_exec_plsql unapprove_email {}
-        }
+    if {$email_verified_p ne ""} {
+        acs_user::update \
+            -user_id $user_id \
+            -email_verified_p $email_verified_p
     }
+
 } on error {errorMsg} {
     ad_return_error "Database Update Failed" "Database update failed with the following error:
     <pre>[ns_quotehtml $errorMsg]</pre>"
@@ -95,6 +97,15 @@ set message $email_message
 
 if {$return_url eq ""} {
     set return_url [acs_community_member_admin_url -user_id $user_id]
+}
+
+if {$pass_through || $member_state_old eq $member_state} {
+    #
+    # No need to ask the admin to send a state notification mail to
+    # the user.
+    #
+    ad_returnredirect $return_url
+    ad_script_abort
 }
 
 set context [list [list "./" "Users"] "$action"]

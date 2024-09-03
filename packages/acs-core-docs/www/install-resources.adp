@@ -1,7 +1,11 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Resources}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Resources}</property>
 <property name="doc(title)">Resources</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="os-security" leftLabel="Prev"
 			title="Appendix C. Credits"
@@ -24,7 +28,8 @@ and Iarerra 1998; IDG)</p></li><li class="listitem"><p><a class="ulink" href="ht
 </ul></div><div class="section">
 <div class="titlepage"><div><div><h4 class="title">
 <a name="install-resources-web" id="install-resources-web"></a>Web Sites</h4></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
-<li class="listitem"><p><a class="ulink" href="https://web.archive.org/web/19990302021704/http://www.geek-girl.com:80/unix.html" target="_top">The UNIX Reference Desk</a></p></li><li class="listitem"><p><a class="ulink" href="http://www.linuxdoc.org/" target="_top">The Linux Documentation Project</a></p></li><li class="listitem"><p>
+<li class="listitem"><p><a class="ulink" href="https://web.archive.org/web/19990302021704/http://www.geek-girl.com:80/unix.html" target="_top">The UNIX Reference Desk</a></p></li><li class="listitem"><p><a class="ulink" href="https://www.tldp.org/" target="_top">The
+Linux Documentation Project</a></p></li><li class="listitem"><p>
 <a class="ulink" href="http://www-105.ibm.com/developerworks/education.nsf/linux-onlinecourse-bytitle/4AAA4E689F774DBC86256B4500645075?OpenDocument" target="_top">LPI certification exam preps</a> - A series of
 articles from IBM developerworks on basic and intermediate Linux
 skills (requires registration)</p></li>

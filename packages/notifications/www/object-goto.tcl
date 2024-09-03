@@ -5,8 +5,8 @@ ad_page_contract {
     @creation-date 22 July 2002
     @cvs-id $Id$
 } {
-    object_id:naturalnum,notnull
-    type_id:naturalnum,notnull
+    object_id:object_type(acs_object),notnull
+    type_id:object_type(notification_type),notnull
 } 
 
 

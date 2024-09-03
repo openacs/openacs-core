@@ -33,7 +33,9 @@ Search <formwidget id="search_locale"> for <formwidget id="q"> <input type="subm
             <multiple name="messages">
               <tr style="background: #EEEEEE">
                 <td>
-                  <a href="@messages.edit_url@" title="Edit or comment on translation"><img src="/shared/images/Edit16.gif" border="0" width="16" height="16"></a>
+                  <a href="@messages.edit_url@">
+                    <adp:icon name="edit" title="Edit or comment on translation">
+                  </a>
                 </td>
                 <td><a href="@messages.package_url@">@messages.package_key@</a></td>
                 <td><a href="@messages.edit_url@" title="Edit or comment on translation">@messages.message_key_pretty@</a></td>

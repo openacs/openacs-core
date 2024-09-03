@@ -1,5 +1,3 @@
-# /www/register/logout.tcl
-
 ad_page_contract {
     Logs a user out
 
@@ -10,7 +8,10 @@ ad_page_contract {
 }
 
 if { $return_url eq "" } {
-    if { [permission::permission_p -object_id [subsite::get_element -element package_id] -party_id 0 -privilege read] } {
+    if { [permission::permission_p \
+              -object_id [subsite::get_element -element package_id] \
+              -party_id 0 \
+              -privilege read] } {
         set return_url [subsite::get_element -element url]
     } else {
         set return_url /

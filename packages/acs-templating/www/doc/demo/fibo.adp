@@ -1,5 +1,5 @@
 <master src=fibo-master>
-<property name=level>@n;noquote@</property>
+<property name=level>@n;literal@</property>
 
 <if @n@ ge 2>
   <td><include src=fibo n="@one_less;literal@"></td>

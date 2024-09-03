@@ -7,7 +7,7 @@ ad_page_contract {
     @creation-date 2003-09-09
 } {
     {authority_id:naturalnum,notnull}
-    {enabled_p:boolean}
+    {enabled_p:boolean,notnull}
 } -validate {
     authority_exists -requires {authority_id:naturalnum} {
         if {![db_0or1row dbqd...check_authority_id {select authority_id from auth_authorities where authority_id = :authority_id}]} {

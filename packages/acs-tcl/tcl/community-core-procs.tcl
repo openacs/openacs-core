@@ -92,27 +92,31 @@ ad_proc -public person::get_person_info {
     @param element if specified, only value in dict with this key will
                    be returned.
 
+    @return a dict or a single string value if <code>-element</code>
+            was specified.
+
     @see person::get
 
-    @return a dict or a single string value if <code>-element</code>
-    was specified.
 } {
-    set key [list get_person_info $person_id]
-
-    set person [ns_cache eval person_info_cache $key {
-        person::get_person_info_not_cached -person_id $person_id
-    }]
-
-    # don't cache invalid persons
-    if {[llength $person] == 0} {
-        ns_cache flush person_info_cache $key
+    while {1} {
+        set person_info [ns_cache eval person_info_cache $person_id {
+            set person_info [person::get_person_info_not_cached -person_id $person_id]
+            #
+            # Don't cache empty dicts for invalid person_ids.
+            #
+            if {[llength $person_info] == 0} {
+                break
+            }
+            return $person_info
+        }]
+        break
     }
 
     if {$element ne ""} {
-        return [expr {[dict exists $person $element] ?
-                      [dict get $person $element] : ""}]
+        return [expr {[dict exists $person_info $element] ?
+                      [dict get $person_info $element] : ""}]
     } else {
-        return $person
+        return $person_info
     }
 }
 
@@ -124,21 +128,17 @@ ad_proc -public person::get_person_info_not_cached {
 
     @see person::get
 } {
-    set person_p [db_0or1row get_person_info {
+    db_0or1row get_person_info {
         select person_id,
                first_names,
                last_name,
-               first_names, first_names || ' ' || last_name as name,
+               first_names || ' ' || last_name as name,
                bio
           from persons
          where person_id = :person_id
-    } -column_array person]
+    } -column_array person
 
-    if {$person_p} {
-        return [array get person]
-    } else {
-        return [list]
-    }
+    return [array get person]
 }
 
 ad_proc -public person::flush_person_info {
@@ -148,8 +148,7 @@ ad_proc -public person::flush_person_info {
 
     @see person::get_person_info
 } {
-    set key [list get_person_info $person_id]
-    ns_cache flush person_info_cache $key
+    acs::clusterwide ns_cache flush person_info_cache $person_id
 }
 
 ad_proc -deprecated -public person::name_flush {
@@ -239,7 +238,7 @@ ad_proc -public person::get_bio {
     Get the value of the user's bio(graphy) field.
 
     @option person_id    The person_id of the person to get the bio for. Leave blank for
-       currently logged in user.
+       currently logged-in user.
 
     @option exists_var The name of a variable in the caller's namespace, which will be set to 1
                        if the bio column is not null.  Leave blank if you're not
@@ -343,17 +342,17 @@ ad_proc -public acs_user::delete {
     @param permanent If provided the user will be deleted permanently
                        from the database. Otherwise the user
                        state will merely be set to "deleted".
-} {    
+} {
     if { ! $permanent_p } {
         change_state -user_id $user_id -state "deleted"
     } else {
         # portrait is also an entry in acs_objects with creation_user
-        # set to this user. Therefore won't be deleted by cascade and
+        # set to this user. Therefore, won't be deleted by cascade and
         # must be removed manually
         acs_user::erase_portrait -user_id $user_id
         # flush before actual deletion, so all the information is
         # there to be retrieved
-        acs_user::flush_cache -user_id $user_id        
+        acs_user::flush_cache -user_id $user_id
         db_exec_plsql permanent_delete {}
     }
 }
@@ -365,27 +364,35 @@ ad_proc -public acs_user::get_by_username {
     Returns user_id from authority and username. Returns the empty string if no user found.
 
     @param authority_id The authority. Defaults to local authority.
-
     @param username The username of the user you're trying to find.
 
     @return user_id of the user, or the empty string if no user found.
 }  {
-    # Default to local authority
+
     if { $authority_id eq "" } {
-        set authority_id [auth::authority::local]
+        #
+        # Get the default authority
+        #
+        set authority_id [auth::authority::get]
     }
 
     set key [list get_by_username \
                  -authority_id $authority_id -username $username]
-    set user_id [ns_cache eval user_info_cache $key {
-        acs_user::get_by_username_not_cached \
-            -authority_id $authority_id \
-            -username     $username
-    }]
 
-    # don't cache invalid usernames
-    if {$user_id eq ""} {
-        ns_cache flush user_info_cache $key
+    while {1} {
+        set user_id [ns_cache eval user_info_cache $key {
+            set user_id [acs_user::get_by_username_not_cached \
+                             -authority_id $authority_id \
+                             -username $username]
+            #
+            # Don't cache results from invalid usernames.
+            #
+            if {$user_id eq ""} {
+                break
+            }
+            return $user_id
+        }]
+        break
     }
 
     return $user_id
@@ -395,10 +402,10 @@ ad_proc -private acs_user::get_by_username_not_cached {
     {-authority_id:required}
     {-username:required}
 } {
-    Returns user_id from authority and username. Returns the empty string if no user found.
+    Returns user_id from authority and username. Returns the empty
+    string if no user found.
 
     @param authority_id The authority. Defaults to local authority.
-
     @param username The username of the user you're trying to find.
 
     @return user_id of the user, or the empty string if no user found.
@@ -407,9 +414,9 @@ ad_proc -private acs_user::get_by_username_not_cached {
 }
 
 ad_proc -public acs_user::get {
-    {-user_id {}}
-    {-authority_id {}}
-    {-username {}}
+    {-user_id ""}
+    {-authority_id ""}
+    {-username ""}
     {-element ""}
     {-array}
     {-include_bio:boolean}
@@ -458,7 +465,7 @@ ad_proc -public acs_user::get {
         set user_id [expr {$username ne "" ?
                            [acs_user::get_by_username \
                                 -authority_id $authority_id \
-                                -username     $username] :
+                                -username $username] :
                            [ad_conn user_id]}]
     }
 
@@ -511,20 +518,25 @@ ad_proc acs_user::get_user_info {
 } {
     set key [list get_user_info $user_id]
 
-    set user [ns_cache eval user_info_cache $key {
-        acs_user::get_user_info_not_cached -user_id $user_id
-    }]
-
-    # don't cache invalid users
-    if {[llength $user] == 0} {
-        ns_cache flush user_info_cache $key
+    while {1} {
+        set user_info [ns_cache eval user_info_cache $key {
+            set user_info [acs_user::get_user_info_not_cached -user_id $user_id]
+            #
+            # Don't cache results from lookups of invalid users.
+            #
+            if {[llength $user_info] == 0} {
+                break
+            }
+            return $user_info
+        }]
+        break
     }
 
     if {$element ne ""} {
-        return [expr {[dict exists $user $element] ?
-                      [dict get $user $element] : ""}]
+        return [expr {[dict exists $user_info $element] ?
+                      [dict get $user_info $element] : ""}]
     } else {
-        return $user
+        return $user_info
     }
 }
 
@@ -546,7 +558,6 @@ ad_proc -private acs_user::get_user_info_not_cached {
                u.priv_email,
                u.email_verified_p,
                u.email_bouncing_p,
-               u.no_alerts_until,
                u.last_visit,
                to_char(last_visit, 'YYYY-MM-DD HH24:MI:SS') as last_visit_ansi,
                u.second_to_last_visit,
@@ -560,7 +571,7 @@ ad_proc -private acs_user::get_user_info_not_cached {
                extract(day from current_timestamp - password_changed_date) as password_age_days,
                u.auth_token,
                mm.rel_id,
-               mr.member_state = 'approved' as registered_user_p,
+               case when (mr.member_state = 'approved') then 't' else 'f' end  as registered_user_p,
                mr.member_state
         from users u
              left join group_member_map mm on mm.member_id = u.user_id
@@ -588,10 +599,10 @@ ad_proc -public acs_user::flush_user_info {
     @see acs_user::get_user_info
 } {
     set user [acs_user::get_user_info -user_id $user_id]
-    ns_cache flush user_info_cache [list get_by_username \
+    acs::clusterwide ns_cache flush user_info_cache [list get_by_username \
                                         -authority_id [dict get $user authority_id] \
                                         -username [dict get $user username]]
-    ns_cache flush user_info_cache [list get_user_info $user_id]
+    acs::clusterwide ns_cache flush user_info_cache [list get_user_info $user_id]
 }
 
 ad_proc -public acs_user::flush_cache {
@@ -614,9 +625,9 @@ ad_proc -public acs_user::flush_cache {
 }
 
 ad_proc -public acs_user::get_element {
-    {-user_id {}}
-    {-authority_id {}}
-    {-username {}}
+    {-user_id ""}
+    {-authority_id ""}
+    {-username ""}
     {-element:required}
 } {
     Get a particular element from the basic information about a user returned by acs_user::get.
@@ -682,7 +693,7 @@ ad_proc -public acs_user::get_user_id_by_screen_name {
 ad_proc -public acs_user::site_wide_admin_p {
     {-user_id ""}
 } {
-    Return 1 if the specified user (defaults to logged in user)
+    Return 1 if the specified user (defaults to logged-in user)
     is site-wide administrator and 0 otherwise.
 
     @param user_id The id of the user to check for admin privilege.
@@ -694,14 +705,14 @@ ad_proc -public acs_user::site_wide_admin_p {
     }
 
     return [permission::permission_p -party_id $user_id \
-		-object_id [acs_magic_object security_context_root] \
-		-privilege "admin"]
+                -object_id [acs_magic_object security_context_root] \
+                -privilege "admin"]
 }
 
 ad_proc -public acs_user::registered_user_p {
     {-user_id ""}
 } {
-    Return 1 if the specified user (defaults to logged in user)
+    Return 1 if the specified user (defaults to logged-in user)
     is a registered user and 0 otherwise.
 
     A registered user is a user who is in the view registered_users and
@@ -723,11 +734,16 @@ ad_proc -public acs_user::registered_user_p {
 
 
 ad_proc -public acs_user::ScreenName {} {
-    Get the value of the ScreenName parameter. Checked to ensure that it only returns none, solicit, or require.
+    Get the value of the ScreenName parameter. Checked to ensure that
+    it only returns none, solicit, or require.
 } {
-    set value [parameter::get -parameter ScreenName -package_id [ad_acs_kernel_id] -default "solicit"]
+    set value [parameter::get \
+                   -parameter ScreenName \
+                   -package_id $::acs::kernel_id \
+                   -default "solicit"]
     if { $value ni {"none" "solicit" "require"} } {
-        ns_log Error "acs-kernel.ScreenName parameter invalid. Set to '$value', should be one of none, solicit, or require."
+        ns_log error "acs-kernel.ScreenName parameter invalid." \
+            "Set to '$value', should be one of none, solicit, or require."
         return "solicit"
     } else {
         return $value
@@ -771,21 +787,25 @@ ad_proc -public party::get {
         set party_id [party::get_by_email -email $email]
     }
 
-    set key [list get $party_id]
-    set data [ns_cache eval party_info_cache $key {
-        party::get_not_cached -party_id $party_id
-    }]
-
-    # don't cache invalid parties
-    if {[llength $data] == 0} {
-        ns_cache flush party_info_cache $key
+    while {1} {
+        set party_info [ns_cache eval party_info_cache $party_id {
+            set party_info [party::get_not_cached -party_id $party_id]
+            #
+            # Don't cache results form invalid parties.
+            #
+            if {[llength $party_info] == 0} {
+                break
+            }
+            return $party_info
+        }]
+        break
     }
 
     if {$element ne ""} {
-        return [expr {[dict exists $data $element] ?
-                      [dict get $data $element] : ""}]
+        return [expr {[dict exists $party_info $element] ?
+                      [dict get $party_info $element] : ""}]
     } else {
-        return $data
+        return $party_info
     }
 }
 
@@ -852,13 +872,8 @@ ad_proc -public party::flush_cache {
 } {
     set email [party::get -party_id $party_id -element email]
 
-    set keys [list]
-    lappend keys \
-        [list get $party_id] \
-        [list get_by_email $email]
-
-    foreach key $keys {
-        ns_cache flush party_info_cache $key
+    foreach key [list $party_id [list get_by_email $email]] {
+        acs::clusterwide ns_cache flush party_info_cache $key
     }
 }
 
@@ -883,7 +898,7 @@ ad_proc party::types_valid_for_rel_type_multirow {
     <ul>
     <li> object_type
     <li> object_type_enc - encoded object type
-    <li> indent          - an html indentation string
+    <li> indent          - an HTML indentation string
     <li> pretty_name     - pretty name of object type
     <li> valid_p         - 1 or 0 depending on whether the type is valid
     </ul>
@@ -1076,10 +1091,11 @@ ad_proc -public party::update {
             lappend cols "$var = :$var"
         }
     }
-    db_dml party_update {}
     if {[info exists email]} {
+        set email [string tolower $email]
         db_dml object_title_update {}
     }
+    db_dml party_update {}
     party::flush_cache -party_id $party_id
 }
 
@@ -1094,13 +1110,18 @@ ad_proc -public party::get_by_email {
     @return party_id
 } {
     set key [list get_by_email $email]
-    set party_id [ns_cache eval party_info_cache $key {
-        party::get_by_email_not_cached -email $email
-    }]
-
-    # don't cache invalid parties
-    if {$party_id eq ""} {
-        ns_cache flush party_info_cache $key
+    while {1} {
+        set party_id [ns_cache eval party_info_cache $key {
+            set party_id [party::get_by_email_not_cached -email $email]
+            #
+            # Don't cache results from invalid parties.
+            #
+            if {$party_id eq ""} {
+                break
+            }
+            return $party_id
+        }]
+        break
     }
 
     return $party_id
@@ -1176,10 +1197,13 @@ ad_proc -private acs_user::get_portrait_id_not_cached {
 
     @param user_id user_id of the user for whom we need the portrait
 } {
-    set item_id [content::item::get_id_by_name \
-                     -name "portrait-of-user-$user_id" \
-                     -parent_id $user_id]
-    return [expr {$item_id ne "" ? $item_id : 0}]
+    return [db_string get_portrait {
+        select c.item_id
+        from acs_rels a, cr_items c
+        where a.object_id_two = c.item_id
+        and a.object_id_one = :user_id
+        and a.rel_type = 'user_portrait_rel'
+    } -default 0]
 }
 
 ad_proc -private acs_user::flush_portrait {
@@ -1189,7 +1213,7 @@ ad_proc -private acs_user::flush_portrait {
 } {
     # Flush the portrait cache
     set key [list get_portrait_id -user_id $user_id]
-    ns_cache flush user_info_cache $key
+    acs::clusterwide ns_cache flush user_info_cache $key
 }
 
 ad_proc -public acs_user::create_portrait {
@@ -1261,6 +1285,236 @@ ad_proc -public acs_user::erase_portrait {
     }
 
     acs_user::flush_portrait -user_id $user_id
+}
+
+ad_proc -public acs_user::promote_person_to_user {
+    -person_id
+    {-authority_id ""}
+    {-username ""}
+    {-password ""}
+    {-locale ""}
+} {
+    Promotes a person/party to an ACS user.
+
+    @param person_id the person_id in the acs system that should be promoted to a user.
+    @param username the username to be used for this user.
+           Defaults to the person's email
+    @param password the password to be used for this user.
+           Defaults to a randomly generated password.
+    @param authority_id the authority that will be used for the user.
+    @param locale locale to be used in user preferences.
+           Defaults to the site-wide locale is taken.
+
+    @return The user_id of the person promoted to user
+
+    @error  An error is thrown
+            if the username is already in use,
+            or the person_id has no email address,
+            or if person_id is not in the persons table.
+
+    @see acs_user::get_by_username
+} {
+
+    if { $username eq "" } {
+        #
+        # Take the email as username, if no username was provided.
+        #
+        set party_info [party::get -party_id $person_id]
+        if {[llength $party_info] > 0} {
+            set username [string tolower [dict get $party_info email]]
+        }
+        if { $username eq "" } {
+            error "The party to be promoted does either not exist or has no email address"
+        }
+    }
+
+    #
+    # Make sure this username is not already in use.
+    #
+    set user_id [acs_user::get_by_username -authority_id $authority_id -username $username]
+    if {$user_id ne ""} {
+        error "The username '$username' is already in use."
+    }
+
+    #
+    # The person to be promoted has to be a valid person
+    #
+    set person_info [person::get -person_id $person_id]
+    if {[llength $party_info] == 0} {
+        error "No person with person_id $person_id defined"
+    }
+
+    #
+    # Determine locale to be used in the user preferences
+    #
+    if {$locale eq ""} {
+        set locale [lang::system::locale -site_wide]
+    }
+
+    db_transaction {
+        #
+        # Set up variables for the new user.
+        #
+        set first_names [dict get $person_info first_names]
+        set last_name [dict get $person_info last_name]
+
+        #
+        # Generate salt
+        #
+        set salt [sec_random_token]
+        #
+        # If password was not passed in, generate that too.
+        #
+        if { $password == "" } {
+            set password [sec_random_token]
+        }
+        set hashed_password [ns_sha1 "$password$salt"]
+
+        db_exec_plsql noxql {
+            SELECT acs_user__new(:person_id, --user_id
+                                 'user', --object_type
+                                 now(), --creation_date
+                                 null, --creation_user
+                                 null, --creation_ip
+                                 null, --authority_id
+                                 :username, --username
+                                 null, --email
+                                 null, --url
+                                 :first_names, --first_names
+                                 :last_name, --last_name
+                                 :hashed_password, --password
+                                 :salt, --salt
+                                 null, --screen_name
+                                 't', --email_verified_p
+                                 null --context_id
+                                 )
+        }
+        # Add user to 'registered_users' group and set permissions
+        db_exec_plsql noxql {
+            SELECT membership_rel__new (
+                            null,
+                            'membership_rel',
+                            acs__magic_object_id('registered_users'),
+                            :person_id,
+                            'approved',
+                            null,
+                            null)
+        }
+        #
+        # Update user preferences
+        #
+        db_dml noxql {
+            update user_preferences
+            set locale = :locale
+            where user_id = :person_id
+        }
+
+        #
+        # Update object type.
+        #
+        db_dml update_object_type {
+            UPDATE acs_objects
+            SET    object_type = 'user'
+            WHERE  object_id = :person_id
+        }
+
+        # A user needs read and write permissions on themselves
+        permission::grant -party_id $person_id -object_id $person_id -privilege "read"
+        permission::grant -party_id $person_id -object_id $person_id -privilege "write"
+    }
+
+    #
+    # Flush the cache. It should not be necessary to flush the
+    # person_info cache, since the "person" is still around.
+    #
+    acs_user::flush_cache -user_id $person_id
+
+    return $person_id
+}
+
+
+ad_proc -public acs_user::demote_user {
+    -user_id
+    -delete_portrait:boolean
+} {
+    Demotes an ACS user to a person/party.
+
+    This will fail if other tables have content referencing the users
+    table.  It is probably best for tables created in other packages
+    to reference persons, parties, or acs_objects instead.  This proc
+    could be extended with an option to find all referenced tables and
+    remove rows referencing this user.
+
+    @param user_id the user_id in the acs system that should be demoted.
+    @param delete_portrait Delete the portrait of the user
+
+    @error An error is thrown if user_id is not in the users table.
+} {
+    #
+    # Make sure this user exists
+    #
+    set user_info [acs_user::get -user_id $user_id]
+    if { [llength $user_info] == 0 } {
+        return -error "This user does not exist."
+    }
+
+    # revoke permissions
+    db_dml noxql {
+       DELETE FROM acs_permissions
+       WHERE grantee_id = :user_id
+    }
+
+    db_multirow -local rels noxql {
+        SELECT rel_id
+        FROM acs_rels
+        WHERE rel_type = 'membership_rel'
+          AND object_id_two = :user_id
+    }
+    template::multirow -local foreach rels {
+        if { ![relation_remove $rel_id] } {
+            # didn't delete anything - error?
+        }
+    }
+
+    db_dml noxql {
+        DELETE FROM user_preferences
+        WHERE user_id = :user_id
+    }
+    db_dml noxql {
+        DELETE FROM users
+        WHERE user_id = :user_id
+    }
+
+    #
+    # Update object type.
+    #
+    db_dml update_object_type {
+        UPDATE acs_objects
+        SET    object_type = 'person'
+        WHERE  object_id = :user_id
+    }
+
+
+    #
+    # Remove the portrait on request.
+    #
+    if {$delete_portrait_p} {
+        acs_user::erase_portrait -user_id $user_id
+    }
+
+    #
+    # Always flush the cache. It should not be necessary to flush the
+    # person_info cache, since the "person" is still around.
+    #
+    acs_user::flush_cache -user_id $user_id
+
+    #
+    # All user's direct permissions have been revoked, flush the
+    # permissions cache as well.
+    #
+    permission::cache_flush -party_id $user_id
+
+    return
 }
 
 # Local variables:

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<message_catalog package_key="acs-mail-lite" locale="tr_TR" charset="utf-8">
+
+  <msg key="Associated_files">İlişkili dosyalar:</msg>
+  <msg key="BCC">BCC</msg>
+  <msg key="Bounce_disabled">Bounce (mesajların geri sekmesi) iptal edildi. Artık e-posta alacaksınız.</msg>
+  <msg key="Bouncing_users">Bounce (mesajların geri sekmesini) kullanan üyeler</msg>
+  <msg key="CC">CC</msg>
+  <msg key="cc_help">E-postanın kopyasını birden fazla kişiye göndermek için adresleri noktalı virgülle (;) ayırarak yazın.</msg>
+  <msg key="check_uncheck">İşaretle/işareti kaldır</msg>
+  <msg key="lt_there_was_an_error_processing">İşlem sırasında hata oluştu.</msg>
+  <msg key="Message">Mesaj</msg>
+  <msg key="Queue_server">Kuyruk sunucusu</msg>
+  <msg key="Queueing_time">Kuyruk zamanı</msg>
+  <msg key="Recipients">Alıcılar</msg>
+  <msg key="Send">Gönder</msg>
+  <msg key="Sender">Gönderen</msg>
+  <msg key="Subject">Konu</msg>
+  <msg key="Unbounce">Bounce'ı (e-postaların geri sekmesini) iptal et</msg>
+  <msg key="Untitled">Başlıksız</msg>
+  <msg key="Upload_file">Dosya ekle</msg>
+  <msg key="Your_message_was_sent_to">Mesajınız bu adrese gönderildi: &amp;lt;strong&amp;gt;%recipients%&amp;lt;/strong&amp;gt;</msg>
+</message_catalog>

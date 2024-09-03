@@ -1,7 +1,11 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Security Requirements}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Security Requirements}</property>
 <property name="doc(title)">Security Requirements</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="i18n-requirements" leftLabel="Prev"
 			title="Chapter 15. Kernel
@@ -10,7 +14,10 @@ Documentation"
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="security-requirements" id="security-requirements"></a>Security
-Requirements</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">By Richard Li</span></p><span style="color: red">&lt;/authorblurb&gt;</span><div class="sect2">
+Requirements</h2></div></div></div><div class="authorblurb">
+<p>By Richard Li</p>
+OpenACS docs are written by the named authors, and may be edited by
+OpenACS documentation staff.</div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="security-requirements-intro" id="security-requirements-intro"></a>Introduction</h3></div></div></div><p>This document lists the requirements for the security system for
 the OpenACS.</p>

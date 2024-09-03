@@ -1,7 +1,11 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Diagnosing Performance Problems}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Diagnosing Performance Problems}</property>
 <property name="doc(title)">Diagnosing Performance Problems</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="uptime" leftLabel="Prev"
 			title="Chapter 6. Production
@@ -12,11 +16,11 @@ Environments"
 <a name="maint-performance" id="maint-performance"></a>Diagnosing Performance Problems</h2></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>Did performance problems happen overnight, or did they sneak up
 on you? Any clue what caused the performance problems (e.g. loading
-20K users into .LRN)</p></li><li class="listitem"><p>Is the file system out of space? Is the machine swapping to disk
+20K users into .LRN)</p></li><li class="listitem"><p>Is the filesystem out of space? Is the machine swapping to disk
 constantly?</p></li><li class="listitem">
 <p>Isolating and solving database problems.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle;">
 <li class="listitem"><p>Without daily internal maintenance, most databases slowly
-degrade in performance. For PostGreSQL, see <a class="xref" href="install-next-nightly-vacuum" title="Vacuum Postgres nightly">the section called “Vacuum Postgres
+degrade in performance. For PostgreSQL, see <a class="xref" href="install-next-nightly-vacuum" title="Vacuum Postgres nightly">the section called “Vacuum Postgres
 nightly”</a>. For Oracle, use <code class="computeroutput">exec
 dbms_stats.gather_schema_stats('SCHEMA_NAME')</code>
 (<a class="ulink" href="http://www.piskorski.com/docs/oracle.html" target="_top">Andrew Piskorski&#39;s Oracle notes</a>).</p></li><li class="listitem">
@@ -31,14 +35,14 @@ Information" at the bottom of the page.</p></li><li class="listitem">
 <p>This should return a list of database queries on the page,
 including the exact query (so it can be cut-paste into psql or
 oracle) and the time each query took.</p><div class="figure">
-<a name="idp140682193185848" id="idp140682193185848"></a><p class="title"><strong>Figure 6.8. Query Analysis
+<a name="id1405" id="id1405"></a><p class="title"><strong>Figure 6.8. Query Analysis
 example</strong></p><div class="figure-contents"><div class="mediaobject"><img src="images/query-duration.png" alt="Query Analysis example"></div></div>
 </div><br class="figure-break">
 </li>
 </ol></div>
 </li><li class="listitem">
 <p>Identify a runaway Oracle query: first, use <strong class="userinput"><code>ps aux</code></strong> or <strong class="userinput"><code>top</code></strong> to get the UNIX process ID of
-a runaway Oracle process.</p><p>Log in to SQL*Plus as the admin:</p><pre class="screen">[<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em> ~]$ svrmgrl
+a runaway Oracle process.</p><p>Log in to SQL*Plus as the admin:</p><pre class="screen">[<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span> ~]$ svrmgrl
 
 Oracle Server Manager Release 3.1.7.0.0 - Production
 
@@ -63,18 +67,16 @@ Password:</pre><p>See all of the running queries, and match the UNIX PID:</p><pr
  where sql.address    = s.sql_address
    and sql.hash_value = s.sql_hash_value
  --and upper(s.username) like 'USERNAME%'
- order by s.username ,s.sid ,s.serial# ,sql.piece ;</pre><p>To kill a troubled process:</p><pre class="programlisting">
-alter system kill session 'SID,SERIAL#';  --substitute values for SID and SERIAL#</pre><p>(See <a class="ulink" href="http://www.piskorski.com/docs/oracle.html" target="_top">Andrew
+ order by s.username ,s.sid ,s.serial# ,sql.piece ;</pre><p>To kill a troubled process:</p><pre class="programlisting">alter system kill session 'SID,SERIAL#';  --substitute values for SID and SERIAL#</pre><p>(See <a class="ulink" href="http://www.piskorski.com/docs/oracle.html" target="_top">Andrew
 Piskorski&#39;s Oracle notes</a>)</p>
 </li><li class="listitem">
 <p>Identify a runaway Postgres query. First, logging must be
 enabled in the database. This imposes a performance penalty and
 should not be done in normal operation.</p><p>Edit the file <code class="computeroutput">postgresql.conf</code> - its location depends on
-the PostGreSQL installation - and change</p><pre class="programlisting">#stats_command_string = false</pre><p>to</p><pre class="programlisting">stats_command_string = true</pre><p>Next, connect to postgres (<code class="computeroutput">psql
-<em class="replaceable"><code>service0</code></em>
-</code>) and
-<code class="computeroutput">select * from
-pg_stat_activity;</code>. Typical output should look like:</p><pre class="programlisting">
+the PostgreSQL installation - and change</p><pre class="programlisting">#stats_command_string = false</pre><p>to</p><pre class="programlisting">stats_command_string = true</pre><p>Next, connect to postgres (<code class="computeroutput">psql
+<span class="replaceable"><span class="replaceable">service0</span></span>
+</code>) and <code class="computeroutput">select * from pg_stat_activity;</code>. Typical
+output should look like:</p><pre class="programlisting">
   datid   |   datname   | procpid | usesysid | usename |  current_query
 ----------+-------------+---------+----------+---------+-----------------
  64344418 | openacs.org |   14122 |      101 | nsadmin | &lt;IDLE&gt;
@@ -111,8 +113,8 @@ about 1% per Oracle Support information.</p><p>To be able to get a overview of h
 query, install "autotrace". I usually follow the
 instructions here <a class="ulink" href="http://asktom.oracle.com/~tkyte/article1/autotrace.html" target="_top">http://asktom.oracle.com/~tkyte/article1/autotrace.html</a>.</p><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="idp140682193210376" id="idp140682193210376"></a>Make sure, that the Oracle CBO works with
-adequate statistics</h4></div></div></div><p>The Oracle Cost Based optimizer is a piece of software that
+<a name="id1360" id="id1360"></a>Make sure that
+the Oracle CBO works with adequate statistics</h4></div></div></div><p>The Oracle Cost Based optimizer is a piece of software that
 tries to find the "optimal" execution plan for a given
 SQL statement. For that it estimates the costs of running a SQL
 query in a particular way (by default up to 80.000 permutations are

@@ -57,7 +57,7 @@ apm-admin-procs.tcl</ulink> (Supports APM UI)</para></listitem>
 <title>Introduction</title>
 
 <para>
-In general terms, a <emphasis role="strong">package</emphasis> is a unit of software that
+In general, a <emphasis role="strong">package</emphasis> is a unit of software that
 serves a single well-defined purpose. That purpose may be to provide a
 service directly to one or more classes of end-user, (e.g., discussion forums
 and file storage for community members, user profiling tools for the site
@@ -923,7 +923,7 @@ information available from the <computeroutput>apm_package_types</computeroutput
 
 
 <para>The <ulink url="/acs-admin/apm">APM&#39;s user interface</ulink> is part of the
-<ulink url="/acs-admin">OpenACS Administration Service</ulink>. The UI is the primary
+<ulink url="/acs-admin">ACS Site-Wide Administration</ulink>. The UI is the primary
 point of contact with APM by developers and administrators. It is part of OpenACS
 Administration, because only the site-wide administrator should be able to
 access it. Thus in order to develop a package, the developer must be granted
@@ -977,7 +977,7 @@ this information into several files allows for flexible extensions to the APM
 architecture over time.</para>
 
 <para>APM packages currently lack provisions to verify security information.
-There are plans to add MD5 time stamps and PGP signatures to packages to
+There are plans to add MD5 timestamps and PGP signatures to packages to
 enable secure authentication of packages. These steps are necessary for APM
 to be usable as a scalable method to distribute packages on multiple
 repositories worldwide.</para>

@@ -1,4 +1,3 @@
-#/packages/lang/tcl/ad-locale.tcl
 ad_library {
 
     Localization procedures for OpenACS
@@ -33,7 +32,7 @@ ad_proc -public lang::system::use_package_level_locales_p {} {
 
 ad_proc -public lang::system::site_wide_locale {
 } {
-    Get the site wide system locale setting.
+    Get the site-wide system locale setting.
 } {
     set parameter_locale [parameter::get \
                 -package_id [apm_package_id_from_key "acs-lang"] \
@@ -81,7 +80,7 @@ ad_proc -public lang::system::locale {
         return [site_wide_locale]
     }
 
-    if { $package_id eq "" && [ad_conn isconnected] } {
+    if { $package_id eq "" && [ns_conn isconnected] } {
         set package_id [ad_conn package_id]
     }
 
@@ -153,23 +152,8 @@ ad_proc -public lang::system::timezone {} {
 
     @return  a timezone name from acs-reference package (e.g., Asia/Tokyo, America/New_York)
 } {
-    if { ![lang::system::timezone_support_p] } {
-        return ""
-    }
-
     set package_id [apm_package_id_from_key "acs-lang"]
     return [parameter::get -package_id $package_id -parameter SystemTimezone -default "Etc/UTC"]
-}
-
-ad_proc -private lang::system::timezone_support_p {} {
-    Return 1 if this installation of acs-lang offers
-    timezone services and 0 otherwise.
-
-    For the acs-lang package to offer timezone support the
-    ref-timezones and acs-reference packages need to be installed.
-    Those packages are currently not part of the OpenACS kernel.
-} {
-    return [expr {[apm_package_id_from_key ref-timezones] != 0}]
 }
 
 ad_proc -public lang::system::set_timezone {
@@ -179,10 +163,6 @@ ad_proc -public lang::system::set_timezone {
 
     @param timezone name from acs-reference package (e.g., Asia/Tokyo, America/New_York)
 } {
-    if { ![lang::system::timezone_support_p] } {
-        return ""
-    }
-
     set package_id [apm_package_id_from_key "acs-lang"]
     parameter::set_value -package_id $package_id -parameter SystemTimezone -value $timezone
 }
@@ -190,28 +170,34 @@ ad_proc -public lang::system::set_timezone {
 ad_proc -public lang::system::timezone_utc_offset { } {
     @return number of hours to subtract from local (database) time to get UTC
 } {
-    if { ![lang::system::timezone_support_p] } {
-        return ""
-    }
-
     set system_timezone [timezone]
     return [db_string system_utc_offset {}]
 }
 
-ad_proc -public lang::system::get_locales {} {
+ad_proc -public lang::system::get_locales {
+    {-all:boolean}
+} {
 
-    Return all enabled locales in the system. This value is cached per
-    thread and needs currently a server restart, when the system
-    locales are changed.
+    Return all locales defined in the system. Per default only the
+    enabled locales are returned. When the optional flag "-all" is
+    specified, all defined locales are returned.
+    
+    This value is cached per thread and needs currently a server
+    restart, when the system locales are changed.
 
     @author Peter Marklund
 } {
-    #set key ::__per_request(lang::system::get_locales_not_cached)
-    set key ::lang::system_get_locales_not_cached
-    if {![info exists $key]} {
-        set $key [util_memoize lang::system::get_locales_not_cached]
-    }
-    return [set $key]
+    return [acs::per_thread_cache eval -key acs-lang.system_get_locales-$all_p {
+        if {$all_p} {
+            db_list select_defined_system_locales { select locale from ad_locales }
+        } else {
+            db_list select_enabled_system_locales {
+                select locale
+                from   ad_locales
+                where  enabled_p = 't'
+            }
+        }
+    }]
 }
 
 ad_proc -public lang::system::get_locale_options {} {
@@ -235,23 +221,12 @@ ad_proc -public lang::system::locale_set_enabled {
     db_dml set_enabled_p { update ad_locales set enabled_p = :enabled_p where locale = :locale }
 
     # Flush caches
-    unset -nocomplain ::lang::system_get_locales_not_cached
+    acs::per_thread_cache flush -pattern acs-lang.system_get_locales-*
     util_memoize_flush_regexp {^lang::util::default_locale_from_lang_not_cached}
     util_memoize_flush_regexp {^lang::system::get_locales}
     util_memoize_flush_regexp {^lang::system::get_locale_options}
 }
 
-ad_proc -private lang::system::get_locales_not_cached {} {
-    Return all enabled locales in the system.
-
-    @author Peter Marklund
-} {
-    return [db_list select_system_locales {
-        select locale
-        from   ad_locales
-        where  enabled_p = 't'
-    }]
-}
 
 ad_proc -private lang::system::get_locale_options_not_cached {} {
     Return all enabled locales in the system in a format suitable for the options argument of a form.
@@ -303,7 +278,7 @@ ad_proc -public lang::user::package_level_locale {
 ad_proc -public lang::user::site_wide_locale {
     {-user_id ""}
 } {
-    Get the user's preferred site wide locale.
+    Get the user's preferred site-wide locale.
 } {
     # default to current user
     if { $user_id eq "" } {
@@ -322,22 +297,34 @@ ad_proc -public lang::user::site_wide_locale {
 ad_proc -private lang::user::site_wide_locale_not_cached {
     user_id
 } {
-    Get the user's preferred site wide locale.
+    Get the user's preferred site-wide locale.
 } {
     set system_locale [lang::system::site_wide_locale]
 
     if { $user_id == 0 } {
-        set locale [ad_get_cookie "ad_locale"]
-        #
-        # Check, if someone hacked the cookie
-        #
-        if {$locale ne "" && ![lang::conn::valid_locale_p $locale]} {
-            error "invalid locale cookie '$locale'"
+        set cookie_name [security::cookie_name locale]
+        set locale [ad_get_cookie $cookie_name]
+        if {$locale ne ""} {
+            #
+            # Check, if someone hacked the cookie
+            #
+            if {$locale ni [lang::system::get_locales]} {
+                ns_log warning "ignoring invalid ad_locale cookie '$locale'"
+                set locale ""
+                #
+                # The cookie was invalid, so get rid of it.
+                #
+                ad_unset_cookie $cookie_name
+            }
         }
     } else {
-        set locale [db_string get_user_site_wide_locale {} -default "$system_locale"]
+        set locale [db_string get_user_site_wide_locale {} -default ""]
     }
 
+    #
+    # When no locale cookie is set, or the locale is invalid or empty,
+    # fall back to system locale.
+    #
     if { $locale eq "" } {
         set locale $system_locale
     }
@@ -366,12 +353,21 @@ ad_proc -public lang::user::locale {
         set package_id [ad_conn package_id]
     }
 
-    # Try package level locale first
-    set locale [package_level_locale -user_id $user_id $package_id]
-
-    # If there's no package setting, then use the site-wide setting
-    if { $locale eq "" } {
+    if {$site_wide_p} {
         set locale [site_wide_locale -user_id $user_id]
+    } else {
+        #
+        # Try package level locale first unless site_wide_p was
+        # specified.
+        #
+        set locale [package_level_locale -user_id $user_id $package_id]
+        #
+        # If there's no package setting, then use the site-wide
+        # setting.
+        #
+        if { $locale eq "" } {
+            set locale [site_wide_locale -user_id $user_id]
+        }
     }
 
     return $locale
@@ -393,7 +389,8 @@ ad_proc -public lang::user::set_locale {
 
     if { $user_id == 0 } {
         # Not logged in, use a cookie-based client locale
-        ad_set_cookie -replace t -max_age inf "ad_locale" $locale
+        set cookie_name [security::cookie_name locale]
+        ad_set_cookie -replace t -max_age inf -samesite strict $cookie_name $locale
 
         # Flush the site-wide user preference cache
         util_memoize_flush [list lang::user::site_wide_locale_not_cached $user_id]
@@ -431,6 +428,7 @@ ad_proc -public lang::user::set_locale {
 
 ad_proc -public lang::user::language {
     {-package_id ""}
+    {-user_id ""}
     {-site_wide:boolean}
     {-iso6392:boolean}
 } {
@@ -438,14 +436,14 @@ ad_proc -public lang::user::language {
     This preliminary implementation only has one site-wide setting, though.
 
     @param package_id The package for which you want to get the language setting.
+    @param user_id The user we wish to get the language for, defaults to connection user.
     @param site_wide Set this if you want to get the site-wide language setting.
     @param iso6392   Set this if you want to force iso-639-2 code (3 digits)
 
     @return 3 chars language code if iso6392 is set, left part of locale otherwise
 
 } {
-
-    set locale [locale -package_id $package_id -site_wide=$site_wide_p]
+    set locale [locale -package_id $package_id -user_id $user_id -site_wide=$site_wide_p]
     set user_lang [lindex [split $locale "_"] 0]
 
     if { $iso6392_p } {
@@ -467,7 +465,7 @@ ad_proc -public lang::user::timezone {} {
     @return  a timezone name from acs-reference package (e.g., Asia/Tokyo, America/New_York)
 } {
     set user_id [ad_conn user_id]
-    if { ![lang::system::timezone_support_p] || $user_id == 0 } {
+    if { $user_id == 0 } {
         return ""
     }
 
@@ -481,10 +479,6 @@ ad_proc -public lang::user::set_timezone {
 
     @param timezone name from acs-reference package (e.g., Asia/Tokyo, America/New_York)
 } {
-    if { ![lang::system::timezone_support_p] } {
-        return ""
-    }
-
     set user_id [ad_conn user_id]
 
     if { $user_id == 0 } {
@@ -505,22 +499,33 @@ ad_proc -public lang::user::set_timezone {
 #
 #####
 
-ad_proc -public lang::conn::locale {
+ad_proc -private lang::conn::locale_not_cached {
     {-package_id ""}
     {-site_wide:boolean}
+    {-user_id ""}
 } {
     Get the locale for this request, perhaps for a given package instance.
-    This procedure will never return an error. Everything that could fail is
-    wrapped in a catch.
+
+    This is the not-cached version.
 
     @param package_id The package for which you want to get the locale.
     @param site_wide Set this if you want to get the site-wide locale.
 } {
     if { $site_wide_p } {
         set locale [lang::user::site_wide_locale]
+
         if { $locale eq "" } {
             set locale [lang::system::site_wide_locale]
         }
+
+        #
+        # Fallback to en_US when no locale is found or is not one of
+        # those we support.
+        #
+        if { $locale eq "" || $locale ni [lang::system::get_locales]} {
+            set locale en_US
+        }
+
         return $locale
     }
 
@@ -532,7 +537,7 @@ ad_proc -public lang::conn::locale {
 
     # use user's package level locale
 
-    set locale [lang::user::package_level_locale $package_id]
+    set locale [lang::user::package_level_locale -user_id $user_id $package_id]
 
     # if that does not exist use system's package level locale
 
@@ -540,32 +545,54 @@ ad_proc -public lang::conn::locale {
         set locale [lang::system::package_level_locale $package_id]
     }
 
-    # if that does not exist use user's site wide locale
+    # if that does not exist use user's site-wide locale
 
     if { $locale eq "" } {
-        set locale [lang::user::site_wide_locale]
+        set locale [lang::user::site_wide_locale -user_id $user_id]
     }
 
     # Use the accept-language browser heading
 
-    if { $locale eq "" } {
+    if { $locale eq "" && [ns_conn isconnected]} {
         set locale [lang::conn::browser_locale]
     }
 
-    # if that does not exist use system's site wide locale
+    # if that does not exist use system's site-wide locale
 
     if { $locale eq "" } {
         set locale [lang::system::site_wide_locale]
     }
 
-    # if that does not exist then we are back to just another language
-    # let's pick uhmm... en_US
+    # if that does not exist, or is not supported, then we are back to
+    # just another language let's pick uhmm... en_US
 
-    if { $locale eq "" } {
+    if { $locale eq "" || $locale ni [lang::system::get_locales]} {
         set locale en_US
     }
 
     return $locale
+}
+
+ad_proc -public lang::conn::locale {
+    {-package_id ""}
+    {-site_wide:boolean}
+    {-user_id ""}
+} {
+    Get the locale for this request, perhaps for a given package instance.
+
+    @param package_id The package for which you want to get the locale.
+    @param site_wide Set this if you want to get the site-wide locale.
+} {
+    # Notice that caching for longer than the single request would be
+    # more complex, e.g. defaults coming from ad_conn in the various
+    # procs and flushing.
+    return [acs::per_request_cache eval \
+                -key acs-lang.lang.conn.locale($package_id,$site_wide_p,$user_id) {
+                    lang::conn::locale_not_cached \
+                        -package_id $package_id \
+                        -site_wide=$site_wide_p \
+                        -user_id $user_id
+                }]
 }
 
 ad_proc -private lang::conn::browser_locale {} {
@@ -671,21 +698,26 @@ ad_proc -private lang::conn::get_accept_language_header {} {
 
 ad_proc -public lang::conn::language {
     {-package_id ""}
+    {-user_id ""}
     {-site_wide:boolean}
     {-iso6392:boolean}
     {-locale ""}
 } {
     Get the language for this request, perhaps for a given package instance.
 
-    @param package_id The package for which you want to get the language.
-    @param site_wide Set this if you want to get the site-wide language.
+    @param package_id The package for which you want to get the language
+           (used only when, no locale is provided).
+    @param user_id The user_id for whom you want to get the language
+           (used only when, no locale is provided).
+    @param site_wide Set this if you want to get the site-wide language
+               (used only when, no locale is provided).
     @param iso6392   Set this if you want to force the iso-639-2 code
-    @param locale   obtain language from provided locale
+    @param locale    obtain language from provided locale
 
     @return 3 chars language code if iso6392 is set, left part of locale otherwise
 } {
     if {$locale eq ""} {
-        set locale [locale -package_id $package_id -site_wide=$site_wide_p]
+        set locale [locale -package_id $package_id -user_id $user_id -site_wide=$site_wide_p]
     }
     set conn_lang [lindex [split $locale "_"] 0]
 
@@ -713,10 +745,6 @@ ad_proc -public lang::conn::timezone {} {
 
     @return  a timezone name from acs-reference package (e.g., Asia/Tokyo, America/New_York)
 } {
-    if { ![lang::system::timezone_support_p] } {
-        return ""
-    }
-
     set timezone {}
     if { [ad_conn isconnected] } {
         set timezone [lang::user::timezone]

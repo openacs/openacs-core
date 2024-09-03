@@ -6,6 +6,12 @@ ad_page_contract {
 } {
     version_id:naturalnum,notnull
     {section_name ""}
+    {parameter_name ""}
+    {description ""}
+    {default_value ""}
+    {scope ""}
+    {return_url ""}
+    {update_info_file:boolean true}
 }
 
 set user_id [ad_conn user_id]
@@ -20,9 +26,9 @@ db_1row apm_get_name {
 # This to filter out sections such as "all" and $package_key, which
 # have special meaning and are not supposed to be created.
 if {![db_string get_section {
-    select exists (select 1 from apm_parameters
-                   where section_name = :section_name
-                   and package_key = :package_key) from dual}]} {
+    select case when exists (select 1 from apm_parameters
+                             where section_name = :section_name
+                             and package_key = :package_key) then 1 else 0 end from dual}]} {
     set section_name ""
 }
 
@@ -33,11 +39,14 @@ set context [list \
 		 [list [export_vars -base version-parameters { version_id }] "Parameters"] \
 		 $title]
 
+#
+# GN: The code below should be replaced by ad_form
+#
 append body [subst {
 <form action="parameter-add-2" method="post">
 <blockquote>
 <table>
-[export_vars -form {package_key parameter_id version_id}]
+[export_vars -form {package_key parameter_id version_id return_url update_info_file}]
 
 <tr>
   <td></td>
@@ -49,17 +58,17 @@ plain text string that identifies the parameter.
 
 <tr>
   <th align="right" nowrap>Parameter Name:</th>
-  <td><input name="parameter_name" size="50"></td>
+  <td><input name="parameter_name" size="50" value="[ns_quotehtml $parameter_name]"></td>
 </tr>
 
 <tr>
   <td></td>
-  <td>Type a description of your parameter.
+  <td>Description of the new parameter.
 </tr>
 
-<tr valign=top>
+<tr valign="top">
   <th align="right"><br>Description:</th>
-  <td><textarea name="description" cols="60" rows="8"></textarea>
+  <td><textarea name="description" cols="60" rows="8">[ns_quotehtml $description]</textarea>
 </td>
 </tr>
 
@@ -87,7 +96,7 @@ plain text string that identifies the parameter.
 <tr>
   <th align="right" nowrap>Scope:</th>
   <td><select name="scope">
-[ad_generic_optionlist {instance global} {instance global}]
+[ad_generic_optionlist {instance global} {instance global} $scope]
       </select>
   </td>
 </tr>
@@ -100,7 +109,7 @@ plain text string that identifies the parameter.
 <tr>
   <th align="right" nowrap>Type:</th>
   <td><select name="datatype">
-[ad_generic_optionlist {number string textarea} {number string text}]
+[ad_generic_optionlist {number string textarea} {number string text} string]
       </select>
   </td>
 </tr>
@@ -114,7 +123,7 @@ plain text string that identifies the parameter.
 
 <tr>
   <th align=right nowrap>Default:</th>
-  <td><input name="default_value" size="50"></td>
+  <td><input name="default_value" size="50" value="[ns_quotehtml $default_value]"></td>
 </tr>
 
 <tr><th colspan="2"><input type="submit" value="Add Parameter"></th>

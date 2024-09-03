@@ -84,7 +84,7 @@ if { ![db_string user_exists {
     #   set user_id $creation_info(user_id)
     # }
 
-    # .. so use the low level helper
+    # .. so use the low-level helper
     set user_id [auth::create_local_account_helper \
     		     $email \
     		     $first_names \
@@ -111,7 +111,7 @@ Unable to create the site-wide administrator:
     # stub util_memoize_flush...
     rename util_memoize_flush util_memoize_flush_saved
     proc util_memoize_flush {args} {}
-    permission::grant -party_id $user_id -object_id [acs_lookup_magic_object security_context_root] -privilege "admin"
+    permission::grant -party_id $user_id -object_id [acs_magic_object security_context_root] -privilege "admin"
     # nuke stub 
     rename util_memoize_flush {}
     rename util_memoize_flush_saved util_memoize_flush
@@ -146,7 +146,7 @@ ns_write "  <p>Done.<p>"
 #############
 
 ns_write "<p>Generating secret tokens..."
-populate_secret_tokens_db
+sec_populate_secret_tokens_db
 ns_write "  <p>Done.<p>"
 
 ##############

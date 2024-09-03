@@ -1,6 +1,6 @@
 <master>
 <property name="context">@context;literal@</property>
-<property name="doc(title)">Add @role_pretty_name;noquote@ to @group_info.group_name;noquote@</property>
+<property name="doc(title)">Add @role_pretty_name;literal@ to @group_info.group_name;literal@</property>
 
 <blockquote>
 

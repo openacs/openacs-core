@@ -24,13 +24,12 @@ ad_proc -public template::widget::select_locales {
 
     upvar $element_reference element
 
-    if { [info exists element(html)] } {
-        array set attributes $element(html)
-    }
+    array set attributes \
+        [::template::widget::merge_tag_attributes element $tag_attributes]
+
     if { [info exists element(values)] } {
          template::util::list_to_lookup $element(values) values
     }
-    array set attributes $tag_attributes
 
     if { $element(mode) ne "edit" } {
         set selected_list [list]

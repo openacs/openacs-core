@@ -324,7 +324,9 @@ ad_proc -private lang::test::execute_upgrade {
 
     # Import the catalog file
     array unset message_count
-    array set message_count [lang::catalog::import -package_key $package_key -locales [list $locale]]
+    aa_silence_log_entries -severities {error} {
+        array set message_count [lang::catalog::import -package_key $package_key -locales [list $locale]]
+    }
     aa_log "Imported messages: [array get message_count]"
 
     # Check that we have the expected messages in the database
@@ -349,6 +351,18 @@ ad_proc -private lang::test::execute_upgrade {
             if { [info exists base_messages($message_key)] } {
                 # Message currently does exist in DB: Delete
                 aa_log "Deleting message $message_key"
+                lang::message::delete \
+                    -package_key $package_key \
+                    -message_key $message_key \
+                    -locale $locale
+                # Test undelete after deleting for the first time
+                aa_log "Undeleting message $message_key"
+                lang::message::undelete \
+                    -package_key $package_key \
+                    -message_key $message_key \
+                    -locale $locale
+                # Delete the message again
+                aa_log "Deleting message $message_key definitively"
                 lang::message::delete \
                     -package_key $package_key \
                     -message_key $message_key \
@@ -483,6 +497,8 @@ aa_register_case \
         lang::test::get_dir
         lang::util::get_temporary_tags_indices
         lang::util::replace_temporary_tags_with_lookups
+        aa_stub
+        aa_unstub
     } util__replace_temporary_tags_with_lookups {
 
     A test Tcl file and catalog file are created. The temporary tags in the
@@ -538,7 +554,9 @@ aa_register_case \
     "
 
     # Replace message tags in the Tcl file and insert into catalog file
-    lang::util::replace_temporary_tags_with_lookups $tcl_file
+    aa_silence_log_entries -severities warning {
+        lang::util::replace_temporary_tags_with_lookups $tcl_file
+    }
 
     aa_unstub lang::catalog::get_catalog_file_path
 
@@ -694,7 +712,9 @@ aa_register_case \
     set localized_message "The %frog% jumped across the %fence%. About 50% of the time, he stumbled, or maybe it was %%20 %times%."
     set value_list {frog frog fence fence}
 
-    set subst_message [lang::message::format $localized_message $value_list]
+    aa_silence_log_entries -severities warning {
+        set subst_message [lang::message::format $localized_message $value_list]
+    }
     set expected_message "The frog jumped across the fence. About 50% of the time, he stumbled, or maybe it was %20 %times%."
 
     aa_equals "the frog should jump across the fence" $subst_message $expected_message
@@ -709,6 +729,7 @@ aa_register_case \
 aa_register_case \
         -procs {
             lang::message::get_embedded_vars
+            lang::message::embedded_vars_regexp
             util_get_subset_missing
             util_sets_equal_p
         } message__get_embedded_vars {
@@ -758,6 +779,7 @@ aa_register_case \
             lang::system::set_locale
             lang::system::site_wide_locale
             parameter::set_value
+            parameter::get
         } locale__test_system_package_setting {
     Tests whether the system package level setting works
 
@@ -805,10 +827,11 @@ aa_register_case \
 }
 
 aa_register_case \
-        -procs {
-            lang::conn::browser_locale
-            lang::system::locale_set_enabled
-        } locale__test_lang_conn_browser_locale {
+    -procs {
+        lang::conn::browser_locale
+        lang::system::locale_set_enabled
+        lang::test::assert_browser_locale
+    } locale__test_lang_conn_browser_locale {
 
     @author Peter Marklund
     @creation-date 2003-08-13
@@ -839,22 +862,16 @@ aa_register_case \
 
 
 aa_register_case \
-        -cats db \
-        strange_oracle_problem {
-    Strange Oracle problem when selecting by language
-
-} {
-    set language "da "
-    set locale da_DK
-
-    set db_string [db_string select_default_locale {
-        select locale
-        from   ad_locales
-        where  language = :language
-    } -default "WRONG"]
-
-    aa_false "Does not return 'WRONG'" [string equal $db_string "WRONG"]
-}
+    -cats db \
+    -procs {
+        lang::util::default_locale_from_lang
+    } default_locale_from_lang {
+        Check that the retrieval of the default locale for a language
+        is working
+    } {
+        set default_locale [lang::util::default_locale_from_lang en]
+        aa_true "Retrieve the default english locale works fine" {$default_locale eq "en_US"}
+    }
 
 
 aa_register_case \
@@ -862,84 +879,80 @@ aa_register_case \
             lang::conn::timezone
             lang::system::set_timezone
             lang::system::timezone
-            lang::system::timezone_support_p
             lang::user::set_timezone
             lang::user::timezone
             lc_list_all_timezones
+            util::random_range
         } set_get_timezone {
 
     Test that setting and getting user timezone works
 } {
-    # We cannot test timezones if they are not installed
-    if { [lang::system::timezone_support_p] } {
+    # Make sure we have a logged-in user
+    set org_user_id [ad_conn user_id]
 
-        # Make sure we have a logged in user
-        set org_user_id [ad_conn user_id]
+    if { $org_user_id == 0 } {
+        set user_id [db_string user { select min(user_id) from users }]
+        ad_conn -set user_id $user_id
+    } else {
+        set user_id $org_user_id
+    }
 
-        if { $org_user_id == 0 } {
-            set user_id [db_string user { select min(user_id) from users }]
-            ad_conn -set user_id $user_id
-        } else {
-            set user_id $org_user_id
-        }
+    # Remember originals so we can restore them
+    set system_timezone [lang::system::timezone]
+    set user_timezone [lang::user::timezone]
 
-        # Remember originals so we can restore them
-        set system_timezone [lang::system::timezone]
-        set user_timezone [lang::user::timezone]
+    set timezones [lc_list_all_timezones]
+    set n [expr {[llength $timezones]-1}]
 
-        set timezones [lc_list_all_timezones]
-        set n [expr {[llength $timezones]-1}]
+    set desired_user_timezone [lindex $timezones [util::random_range $n] 0]
+    set desired_system_timezone [lindex $timezones [util::random_range $n] 0]
 
-        set desired_user_timezone [lindex $timezones [randomRange $n] 0]
-        set desired_system_timezone [lindex $timezones [randomRange $n] 0]
+    set error_p 0
+    ad_try {
+        # User timezone
+        lang::user::set_timezone $desired_user_timezone
+        aa_equals "User timezone retrieved is the same as the one set" \
+            [lang::user::timezone] \
+            $desired_user_timezone
 
-        set error_p 0
-        ad_try {
-            # User timezone
-            lang::user::set_timezone $desired_user_timezone
-            aa_equals "User timezone retrieved is the same as the one set" \
-                [lang::user::timezone] \
-                $desired_user_timezone
-
-            # Storage
-            set user_id [ad_conn user_id]
-            aa_equals "User timezone stored in user_preferences table" \
-                [db_string user_prefs { select timezone from user_preferences where user_id = :user_id }] \
-                $desired_user_timezone
+        # Storage
+        set user_id [ad_conn user_id]
+        aa_equals "User timezone stored in user_preferences table" \
+            [db_string user_prefs { select timezone from user_preferences where user_id = :user_id }] \
+            $desired_user_timezone
 
 
-            # System timezone
-            lang::system::set_timezone $desired_system_timezone
-            aa_equals "System timezone retrieved is the same as the one set" \
-                [lang::system::timezone] \
-                $desired_system_timezone
+        # System timezone
+        lang::system::set_timezone $desired_system_timezone
+        aa_equals "System timezone retrieved is the same as the one set" \
+            [lang::system::timezone] \
+            $desired_system_timezone
 
-            # Connection timezone
-            aa_equals "Using user timezone" \
-                [lang::conn::timezone] \
-                $desired_user_timezone
+        # Connection timezone
+        aa_equals "Using user timezone" \
+            [lang::conn::timezone] \
+            $desired_user_timezone
 
-            ad_conn -set isconnected 0
-            aa_equals "Fallback to system timezone when no connection" \
-                [lang::conn::timezone] \
-                $desired_system_timezone
-            ad_conn -set isconnected 1
+        ad_conn -set isconnected 0
+        aa_equals "Fallback to system timezone when no connection" \
+            [lang::conn::timezone] \
+            $desired_system_timezone
+        ad_conn -set isconnected 1
 
-            lang::user::set_timezone {}
-            aa_equals "Fallback to system timezone when no user pref" \
-                [lang::conn::timezone] \
-                $desired_system_timezone
+        lang::user::set_timezone {}
+        aa_equals "Fallback to system timezone when no user pref" \
+            [lang::conn::timezone] \
+            $desired_system_timezone
 
-        } on error {errorMsg} {
-            set error_p 1
-            # rethrow the error
-            error $errorMsg $::errorInfo
+    } on error {errorMsg} {
+        set error_p 1
+        # rethrow the error
+        error $errorMsg $::errorInfo
 
-        } finally {
-            lang::system::set_timezone $system_timezone
-            lang::user::set_timezone $user_timezone
-            ad_conn -set user_id $org_user_id
-        }
+    } finally {
+        lang::system::set_timezone $system_timezone
+        lang::user::set_timezone $user_timezone
+        ad_conn -set user_id $org_user_id
     }
 }
 
@@ -947,27 +960,22 @@ aa_register_case \
         -procs {
             lang::conn::timezone
             lang::system::timezone
-            lang::system::timezone_support_p
             lang::user::set_timezone
         } set_timezone_not_logged_in {
     Test that setting and getting user timezone throws an error when user is not logged in
 } {
-    # We cannot test timezones if they are not installed
-    if { [lang::system::timezone_support_p] } {
+    set user_id [ad_conn user_id]
 
-        set user_id [ad_conn user_id]
+    ad_conn -set user_id 0
+    aa_equals "Fallback to system timezone when no user" \
+        [lang::conn::timezone] \
+        [lang::system::timezone]
 
-        ad_conn -set user_id 0
-        aa_equals "Fallback to system timezone when no user" \
-            [lang::conn::timezone] \
-            [lang::system::timezone]
+    set error_p [catch { lang::user::set_timezone [lang::system::timezone] } errmsg]
+    aa_true "Error when setting user timezone when user not logged in" $error_p
 
-        set error_p [catch { lang::user::set_timezone [lang::system::timezone] } errmsg]
-        aa_true "Error when setting user timezone when user not logged in" $error_p
-
-        # Reset the user_id
-        ad_conn -set user_id $user_id
-    }
+    # Reset the user_id
+    ad_conn -set user_id $user_id
 }
 
 aa_register_case \
@@ -984,42 +992,82 @@ aa_register_case \
 
 aa_register_case \
     -procs {
+        lang::catalog::import
         lang::message::lookup
         lang::message::register
+        lang::system::locale_set_enabled
     } locale_language_fallback {
     Test that we fall back to 'default locale for language' when requesting a message
     which exists in default locale for language, but not in the current locale
 } {
-    # Assuming we have en_US and en_GB
+    #
+    # Check if en_GB is enabled
+    #
+    set enabled_p [nsv_array exists lang_message_en_GB]
+    #
+    # Run the test
+    #
+    aa_run_with_teardown -test_code {
+        #
+        # Enable en_GB if necessary
+        #
+        if { ! $enabled_p } {
+            lang::system::locale_set_enabled \
+                -locale en_GB \
+                -enabled_p 1
+            #
+            # GN: we see several message of the following form
+            #
+            #     Warning: Warning: No catalog files found for package acs-tcl in locales: en_GB
+            #
+            # Is this intended? However, it does not effect the
+            # outcome of the regression test.
+            #
+            aa_silence_log_entries -severities warning {
+                lang::catalog::import -locales en_GB
+            }
+        }
+        #
+        # Create messages
+        #
+        set package_key "acs-lang"
+        set message_key [ad_generate_random_string]
+        set us_message  [ad_generate_random_string]
+        set gb_message  [ad_generate_random_string]
+        #
+        # Test missing en_GB returns en_US message key
+        #
+        ns_log notice 3
 
-    set package_key "acs-lang"
-    set message_key [ad_generate_random_string]
-
-    set us_message [ad_generate_random_string]
-    set gb_message [ad_generate_random_string]
-
-    set error_p 0
-    ad_try {
         lang::message::register "en_US" $package_key $message_key $us_message
-
         aa_equals "Looking up message in GB returns US message" \
             [lang::message::lookup "en_GB" "$package_key.$message_key" "NOT FOUND"] \
             $us_message
+        #
+        # Test existing en_GB returns en_GB message key
+        #
+        ns_log notice 4
 
         lang::message::register "en_GB" $package_key $message_key $gb_message
-
         aa_equals "Looking up message in GB returns GB message" \
             [lang::message::lookup "en_GB" "$package_key.$message_key" "NOT FOUND"] \
             $gb_message
-    } on error {errorMsg} {
-        set error_p 1
-        set saved_errorInfo $::errorInfo
-        error $errorMsg $saved_errorInfo
-
-    } finally {
-        # Clean up
+    } -teardown_code {
+        #
+        # Clean up messages
+        #
         db_dml delete_msg { delete from lang_messages where package_key = :package_key and message_key = :message_key }
         db_dml delete_key { delete from lang_message_keys where package_key = :package_key and message_key = :message_key }
+        #
+        # Disable en_GB if it was disabled previously
+        #
+        if { ! $enabled_p } {
+            lang::system::locale_set_enabled \
+                -locale en_GB \
+                -enabled_p 0
+            nsv_unset lang_message_en_GB
+            db_dml delete_messages { delete from lang_messages where locale = 'en_GB' }
+        }
     }
 }
 
@@ -1033,6 +1081,17 @@ aa_register_case \
         lang::test::execute_upgrade
         lang::test::setup_test_package
         lang::test::teardown_test_package
+
+        aa_silence_log_entries
+        apm_package_info_file_path
+        apm_package_register
+        apm_package_install_version
+        apm_package_install_owners
+        apm_callback_and_log
+        apm_interface_add
+        apm_version_enable
+        apm_package_install
+        apm_package_delete
     } upgrade {
     Test that a package can be upgraded with new
     catalog files and that the resulting keys and messages
@@ -1043,7 +1102,7 @@ aa_register_case \
 
     @author Peter Marklund
 } {
-    # Create the test package in the file system
+    # Create the test package in the filesystem
     lang::test::setup_test_package
 
     # Can't run this test case with the usual rollback switch since if everything
@@ -1130,13 +1189,212 @@ aa_register_case \
     This test calls the checks to ensure a message is correct on every message in the system
 } {
     aa_run_with_teardown -rollback -test_code {
-        foreach tuple [db_list_of_lists get_message_keys {
-            select message_key, package_key, locale, message from lang_messages
-        }] {
-            lassign $tuple message_key package_key locale message
-            aa_false "Message $message_key in package $package_key for locale $locale correct" \
-                [catch {lang::message::check $locale $package_key $message_key $message}]
+        db_foreach get_message_keys {
+            select message_key, package_key, locale, message
+            from lang_messages
+            where not deleted_p
+              and locale in (select locale from ad_locales where enabled_p)
+        } {
+            set error_p [catch {lang::message::check $locale $package_key $message_key $message} errmsg]
+            set errmsg [expr {$error_p ? ": $errmsg" : ""}]
+            aa_false "Message $message_key in package $package_key for locale $locale correct$errmsg" $error_p
         }
+    }
+}
+
+aa_register_case \
+    -procs {
+        lang::catalog::package_has_files_in_locale_p
+    } lang_package_has_files_in_locale_p {
+        Check that this private interface returns the right value when
+        a catalog file for a package is available or not
+    } {
+        set locale en_US
+        foreach package_key {acs-lang acs-kernel acs-subsite} {
+            aa_true "We have message keys for '$package_key'->'$locale'" \
+                [lang::catalog::package_has_files_in_locale_p $package_key $locale]
+        }
+        set bogus_package_key [ad_generate_random_string]
+        set bogus_locale [ad_generate_random_string]
+        aa_false "We don't have message keys for bogus '$bogus_package_key'->'$locale'" \
+            [lang::catalog::package_has_files_in_locale_p $bogus_package_key $locale]
+        aa_false "We don't have message keys for bogus '$package_key'->'$bogus_locale'" \
+            [lang::catalog::package_has_files_in_locale_p $package_key $bogus_locale]
+        aa_false "We don't have message keys for bogus '$bogus_package_key'->'$bogus_locale'" \
+            [lang::catalog::package_has_files_in_locale_p $bogus_package_key $bogus_locale]
+    }
+
+aa_register_case \
+    -procs {
+        ::lang::catalog::get_catalog_paths_for_import
+    } catalog_files_are_tdom_parsable_xml {
+
+        Make sure that what is found in catalog files is parsable by
+        tDOM.  Note that the files are neither "valid XML" nor
+        "well-formed XML" due to the fact that the "msg" content might
+        contain HTML.
+
+    } {
+        set catalog_files [list]
+        foreach package_key [db_list get_packages {select distinct package_key from apm_packages}] {
+            lappend catalog_files {*}[lang::catalog::get_catalog_paths_for_import -package_key $package_key]
+        }
+
+        foreach f $catalog_files {
+            set rfd [open $f r]
+            set xml [read $rfd]
+            close $rfd
+            aa_false "Catalog file '$f' appears to be valid XML" [catch {dom parse -- $xml doc}]
+        }
+    }
+
+ad_proc -private lang::test::get_all_package_files {} {
+    Get all files on the system where some message key is expected.
+} {
+    set files [list]
+    set directories [list $::acs::rootdir/packages/]
+    while {[llength $directories] > 0} {
+        set d [lindex $directories 0]
+        set directories [lrange $directories 1 end]
+        lappend directories {*}[glob -directory $d -nocomplain -types d *]
+        lappend files {*}[glob -directory $d -nocomplain -types {f r} *.{adp,sql,tcl}]
+    }
+    return $files
+}
+
+aa_register_case \
+    -error_level warning \
+    lang_message_dependencies_are_fine {
+        Makes sure that message key usages are consistent with the
+        package dependencies.
+    } {
+        #
+        # Some packages define 'install' packages in their info files,
+        # that will be also installed, but that are not a dependency
+        # in a technical sense. For the purposes of this test, we will
+        # treat them as normal dependencies.
+        #
+        db_foreach get_packages {
+            select distinct i.package_key, a.attribute_value as install
+            from apm_package_version_info i,
+                 apm_package_version_attr a
+            where a.version_id = i.version_id
+              and a.attribute_name = 'install'
+              and i.enabled_p = 't'
+        } {
+            foreach i $install {
+                lappend installed($package_key) \
+                    $i {*}[apm_package_load_libraries_order $i]
+                set installed($package_key) [lsort -unique $installed($package_key)]
+            }
+        }
+
+        # Retrieve dependencies for every package known to the system
+        foreach package_key [db_list get_packages {
+            select distinct i.package_key, a.attribute_value as installed
+            from apm_package_version_info i
+                 left join apm_package_version_attr a
+                        on a.version_id = i.version_id
+                       and a.attribute_name = 'install'
+            where i.enabled_p = 't'
+        }] {
+            set dependencies($package_key) {}
+            foreach pk [apm_package_load_libraries_order $package_key] {
+                #
+                # 'Real' dependency
+                #
+                lappend dependencies($package_key) $pk
+                if {[info exists installed($pk)]} {
+                    #
+                    # Dependencies derived by packages that are
+                    # installed by one of my dependencies.
+                    #
+                    lappend dependencies($package_key) {*}$installed($pk)
+                }
+            }
+            set dependencies($package_key) [lsort -unique $dependencies($package_key)]
+        }
+
+        # Create a lookup array for every message key on the system to
+        # tell a real message key from rubbish
+        db_foreach get_messages {
+            select package_key, message_key
+            from lang_messages
+        } {
+            set message_keys(${package_key}.${message_key}) 1
+        }
+
+        # A theme package might override message keys from various
+        # packages, while not depending on any of them, we do not
+        # check for those occurrences.
+        set theme_folders [db_list get_theme_folders {
+            select resource_dir from subsite_themes
+            where resource_dir is not null
+        }]
+
+        # Get "all files" on the system...
+        set root_prefix [string length $::acs::rootdir/packages/]
+        set theme_regexp ^([join $theme_folders |]).*$
+        foreach f [lang::test::get_all_package_files] {
+            set package_key [lindex [file split [string range $f $root_prefix end]] 0]
+
+            if {![info exists dependencies($package_key)]} {
+                #aa_log "'$f' does not belong to a package installed on the system."
+                continue
+            }
+            if {[regexp $theme_regexp [string range $f [string length $::acs::rootdir] end]]} {
+                aa_log "'$f' is a theme file and can refer to any message key."
+                continue
+            }
+
+            if {[file extension $f] in {.sql}} {
+                continue
+            } elseif {[file extension $f] in {.adp .html .htm}} {
+                set RE [lang::util::message_key_regexp]
+            } else {
+                set RE {[-a-zA-Z0-9_]+\.[-a-zA-Z0-9_]+}
+            }
+
+            set rfd [open $f r]
+            set content [read $rfd]
+            close $rfd
+
+            # ...parse every possible message key occurrence...
+            foreach occurrence [regexp -all -inline -- $RE $content] {
+                lassign [split [string trim $occurrence "#"] .] message_package_key message_key
+                #ns_log notice [file extension $f] occurrence '$occurrence' \
+                    message_package_key $message_package_key \
+                    message_key $message_key
+                # ...make sure it is a real message key...
+                if {![info exists message_keys(${message_package_key}.${message_key})]} {
+                    #ns_log warning "$f: '${message_package_key}.${message_key}' is not a message key."
+                    continue
+                }
+                # ..leave the core out of this: its message keys can always be used...
+                if {[string match acs-* $message_package_key]} {
+                    aa_log "'${message_package_key}.${message_key}' belongs to the core and can always be used."
+                    continue
+                }
+                # ...and check that the package it belongs to is one
+                # of our dependencies.
+                aa_true \
+                    "'$f': message key #${message_package_key}.${message_key}# belongs to dependencies of '$package_key'." \
+                    {$message_package_key in $dependencies($package_key)}
+            }
+        }
+    }
+
+aa_register_case -cats {
+    smoke production_safe
+} -procs {
+    util::which
+} acs_lang_exec_dependencies {
+    Test external command dependencies for this package.
+} {
+    foreach cmd [list \
+                     [::util::which find] \
+                    ] {
+        aa_true "'$cmd' is executable" [file executable $cmd]
     }
 }
 

@@ -1,7 +1,11 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Constraint naming standard}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Constraint naming standard}</property>
 <property name="doc(title)">Constraint naming standard</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="eng-standards-versioning" leftLabel="Prev"
 			title="Chapter 12. Engineering
@@ -10,7 +14,10 @@ Standards"
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="eng-standards-constraint-naming" id="eng-standards-constraint-naming"></a>Constraint naming
-standard</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">By Michael Bryzek</span></p><span style="color: red">&lt;/authorblurb&gt;</span><div class="sect2">
+standard</h2></div></div></div><div class="authorblurb">
+<p>By Michael Bryzek</p>
+OpenACS docs are written by the named authors, and may be edited by
+OpenACS documentation staff.</div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="eng-standards-constraint-naming-big-picture" id="eng-standards-constraint-naming-big-picture"></a>The Big
 Picture</h3></div></div></div><p>Constraint naming standard is important for one reason: The
@@ -19,8 +26,8 @@ understandable. By correctly naming all constraints, we can quickly
 associate a particular constraint with our data model. This gives
 us two real advantages:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>We can quickly identify and fix any errors.</p></li><li class="listitem"><p>We can reliability modify or drop constraints</p></li>
-</ul></div><p>
-<span class="phrase">Why do we need a naming convention?</span><a class="ulink" href="https://docs.oracle.com/database/121/SQLRF/sql_elements008.htm#SQLRF00223" target="_top">Oracle limits names</a>, in general, to 30
+</ul></div><div>Why do we need a naming convention?</div><p>
+<a class="ulink" href="https://docs.oracle.com/database/121/SQLRF/sql_elements008.htm#SQLRF00223" target="_top">Oracle limits names</a>, in general, to 30
 characters, which is hardly enough for a human readable constraint
 name.</p>
 </div><div class="sect2">
@@ -108,8 +115,7 @@ Execution Plan
    0      SELECT STATEMENT Optimizer=CHOOSE
    1    0   NESTED LOOPS
    2    1     TABLE ACCESS (FULL) OF 'CONSTRAINT_NAMING_EXAMPLE'
-   3    1     INDEX (UNIQUE SCAN) OF 'EXAMPLE_TOPICS_TOPIC_ID_PK' (UNI
-          QUE)
+   3    1     INDEX (UNIQUE SCAN) OF 'EXAMPLE_TOPICS_TOPIC_ID_PK' (UNIQUE)
 </pre><p>Isn&#39;t it nice to see "EXAMPLE_TOPICS_TOPIC_ID_PK"
 in the trace and know exactly which table oracle is using at each
 step?</p>
@@ -119,13 +125,12 @@ step?</p>
 constraints is optional...</h3></div></div></div><p>People disagree on whether or not we should be naming not null
 constraints. So, if you want to name them, please do so and follow
 the above naming standard. But, naming not null constraints is not
-a requirement.</p><p><span class="phrase">About Naming the not null
-constraints</span></p><p>Though naming "not null" constraints doesn&#39;t help
-immeditately in error debugging (e.g. the error will say something
+a requirement.</p><div>About Naming the not null constraints</div><p>Though naming "not null" constraints doesn&#39;t help
+immediately in error debugging (e.g. the error will say something
 like "Cannot insert null value into column"), we
 recommend naming not null constraints to be consistent in our
-naming of all constraints.</p><p><span class="cvstag">($&zwnj;Id: constraint-naming.xml,v 1.10
-2018/03/24 00:14:57 hectorr Exp $)</span></p>
+naming of all constraints.</p><div class="cvstag">($&zwnj;Id: constraint-naming.xml,v 1.10.2.1
+2019/08/09 20:04:23 gustafn Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

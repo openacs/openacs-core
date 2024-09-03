@@ -136,7 +136,7 @@
   <msg key="lt_Inherited_Permissions">Permisiuni Moştenite</msg>
   <msg key="lt_It_would_be_a_very_ba">E o idee foarte proastă să alegeţi această opţiune dacă folosiţi un computer comun într-o bibliotecă sau o şcoală. Oricare alt utilizator care vine după dumneavoastră ar putea să se folosească de contul dumneavoastră pe serviciul nostru.</msg>
   <msg key="lt_New_registration_at_s">Înregistrare nouă pe %system_url%</msg>
-  <msg key="lt_Note_text_in_red_below">De observat că textul în roşu sub căsuţele pentru parametri, indică că valoarea acestui parametru este înlocuită de către o valoare în fişierul parametrului OpenACS. Utilizarea acestui fişier este descurajată dar anumite site-uri au nevoie de asta pentru a putea oferi valori specifice momentane pentru parametri independent de tabelele apm_parameter.</msg>
+  <msg key="lt_Note_text_in_red_below">De observat că textul în roşu sub căsuţele pentru parametri, indică că valoarea acestui parametru este înlocuită de către o valoare în fişierul parametrului NaviServer. Utilizarea acestui fişier este descurajată dar anumite site-uri au nevoie de asta pentru a putea oferi valori specifice momentane pentru parametri independent de tabelele apm_parameter.</msg>
   <msg key="lt_Note_that_you_can_era">De observat ca puteţi şterge adresa de email şi parola salvată de dumneavoastră alegând opţiunea &quot;log out&quot; din spaţiul dumneavoastră de lucru.</msg>
   <msg key="lt_num_children_Children">%num_children% Copii Ascunşi</msg>
   <msg key="lt_On_portrait_publish_d">Pe data de %portrait_publish_date%, aţi încărcat &lt;a href=&quot;%subsite_url%user/portrait/?return_url=%pvt_home_url%&quot;&gt;%portrait_title%&lt;/a&gt;</msg>

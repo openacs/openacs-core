@@ -1,7 +1,11 @@
 
-<property name="context">{/doc/acs-templating {ACS Templating}} {Using the Wizard}</property>
+<property name="context">{/doc/acs-templating/ {ACS Templating}} {Using the Wizard}</property>
 <property name="doc(title)">Using the Wizard</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h2>Overview Of How To Make A Wizard</h2>
 <ol>
 <li>Create a wizard file (ex. wizard.tcl) that contains the
@@ -155,11 +159,11 @@ preserve this you must call "template::wizard
 load_last_visited_step -key $yourkey" before
 "template::wizard get_current_step", after
 "get_current_step" call "template::wizard
-save_last_visited_step -key $yourkey"</p><p>Also the wizard params name is present across the curent wizards
-being used, so the developer has to be aware not to use the same
-names with different purpose. For example on main wizard with have
-a param called "name" for the user name. And on on sub
-wizard we have the param again called "name" but used for
-the file name.</p>
+save_last_visited_step -key $yourkey"</p><p>Also the wizard params name is present across the current
+wizards being used, so the developer has to be aware not to use the
+same names with different purpose. For example on main wizard with
+have a param called "name" for the username. And on on
+sub wizard we have the param again called "name" but used
+for the filename.</p>
 </li>
 </ul>

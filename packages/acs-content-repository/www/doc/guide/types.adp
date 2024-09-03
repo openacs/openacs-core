@@ -1,9 +1,13 @@
 
-<property name="context">{/doc/acs-content-repository {ACS Content Repository}} {Content Repository Developer Guide: Defining Content
+<property name="context">{/doc/acs-content-repository/ {ACS Content Repository}} {Content Repository Developer Guide: Defining Content
 Types}</property>
 <property name="doc(title)">Content Repository Developer Guide: Defining Content
 Types</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h2>Defining Content Types</h2>
 <strong>
 <a href="../index">Content Repository</a> : Developer
@@ -103,12 +107,12 @@ attribute table for a particular content type. The view joins the
 attribute tables in the class hierarchy of a particular content
 type. This view may be used to query attributes when serving
 content.</p>
-<h3>Creating compund items</h3>
+<h3>Creating compound items</h3>
 <p>In many cases your content items will serve as containers for
 other items. You can include the set of allowable components as
 part of a content type definition. See <a href="object-relationships">Object Relationships</a> for
 details.</p>
 <hr>
 <a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a>
-<p>Last Modified: $&zwnj;Id: types.html,v 1.2 2017/08/07 23:47:47 gustafn
-Exp $</p>
+<p>Last Modified: $&zwnj;Id: types.html,v 1.2.2.1 2019/08/10 18:09:52
+gustafn Exp $</p>

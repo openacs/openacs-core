@@ -302,7 +302,7 @@ When this SQL statement is invoked, the value for the bind variable
 <computeroutput>$some_presentation_id</computeroutput> (in the caller&#39;s environment). Note
 that bind variables are not limited to one per statement; you can use an
 arbitrary number, and each will pull from the correspondingly named Tcl
-variable. (Alternatively, you can also specify an list or <computeroutput>ns_set</computeroutput>
+variable. (Alternatively, you can also specify a list or <computeroutput>ns_set</computeroutput>
 providing bind variables&#39; values; see <emphasis>Usage</emphasis>.) 
 </para>
 
@@ -622,7 +622,7 @@ above.</para></listitem>
 
 <listitem>
 <programlisting>
-<emphasis role="strong">db_foreach</emphasis> <emphasis>statement-name sql</emphasis> [ -bind <emphasis>bind_set_id</emphasis> | -bind <emphasis>bind_value_list</emphasis> ] \
+<emphasis role="strong">db_foreach</emphasis> <emphasis> statement-name sql</emphasis> [ -bind <emphasis>bind_set_id</emphasis> | -bind <emphasis>bind_value_list</emphasis> ] \
     [ -column_array <emphasis>array_name</emphasis> | -column_set <emphasis>set_name</emphasis> ] \
     <emphasis>code_block</emphasis> [ if_no_rows <emphasis>if_no_rows_block ]</emphasis>
 </programlisting>
@@ -660,7 +660,7 @@ loop and flush the database handle) and <computeroutput>continue</computeroutput
 
 <listitem>
 <programlisting>
-<emphasis role="strong">db_1row</emphasis> <emphasis>statement-name</emphasis> <emphasis>sql</emphasis> [ -bind <emphasis>bind_set_id</emphasis> | -bind <emphasis>bind_value_list</emphasis> ] \
+<emphasis role="strong">db_1row</emphasis> <emphasis> statement-name sql</emphasis> [ -bind <emphasis>bind_set_id</emphasis> | -bind <emphasis>bind_value_list</emphasis> ] \
     [ -column_array <emphasis>array_name</emphasis> | -column_set <emphasis>set_name</emphasis> ]
 </programlisting>
 
@@ -687,7 +687,8 @@ db_1row select_foo &quot;select foo, bar from greeble where greeble_id = $greebl
 
 <listitem>
 <programlisting>
-<emphasis role="strong">db_0or1row</emphasis> <emphasis>statement-name</emphasis> <emphasis>sql</emphasis> [ -bind <emphasis>bind_set_id</emphasis> | -bind <emphasis>bind_value_list</emphasis> ] \
+<emphasis role="strong">db_0or1row</emphasis> <emphasis> statement-name
+sql</emphasis> [ -bind <emphasis>bind_set_id</emphasis> | -bind <emphasis>bind_value_list</emphasis> ] \
     [ -column_array <emphasis>array_name</emphasis> | -column_set <emphasis>set_name</emphasis> ]
 </programlisting>
 
@@ -703,7 +704,7 @@ returns 0. If more than one row is returned, throws an error. </para>
 
 <listitem>
 <programlisting>
-<emphasis role="strong">db_string</emphasis> <emphasis>statement-name</emphasis> <emphasis>sql</emphasis> [ -default <emphasis>default</emphasis> ] [ -bind <emphasis>bind_set_id</emphasis> | -bind <emphasis>bind_value_list</emphasis> ]
+<emphasis role="strong">db_string</emphasis> <emphasis> statement-name sql</emphasis> [ -default <emphasis>default</emphasis> ] [ -bind <emphasis>bind_set_id</emphasis> | -bind <emphasis>bind_value_list</emphasis> ]
 </programlisting>
 
 <para>Returns the first column of the result of SQL query
@@ -721,7 +722,7 @@ row, returns <emphasis><computeroutput>default</computeroutput></emphasis> (or t
 
 <listitem>
 <programlisting>
-<emphasis role="strong">db_nextval</emphasis> <emphasis>sequence-name</emphasis>
+<emphasis role="strong">db_nextval</emphasis> <emphasis> sequence-name</emphasis>
 </programlisting>
 
 <para>Returns the next value for the sequence <emphasis>sequence-name</emphasis> (using a
@@ -737,7 +738,7 @@ uses a value from the pool if available to save a round-trip to the database.
 
 <listitem>
 <programlisting>
-<emphasis role="strong">db_list</emphasis> <emphasis>statement-name</emphasis> <emphasis>sql</emphasis> [ -bind <emphasis>bind_set_id</emphasis> | -bind <emphasis>bind_value_list</emphasis> ]
+<emphasis role="strong">db_list</emphasis> <emphasis> statement-name sql</emphasis> [ -bind <emphasis>bind_set_id</emphasis> | -bind <emphasis>bind_value_list</emphasis> ]
 </programlisting>
 
 <para>Returns a Tcl list of the values in the first column of the result of SQL
@@ -753,7 +754,8 @@ return any rows, returns an empty list. Analogous to
 
 <listitem>
 <programlisting>
-<emphasis role="strong">db_list_of_lists</emphasis> <emphasis>statement-name</emphasis> <emphasis>sql</emphasis> [ -bind <emphasis>bind_set_id</emphasis> | -bind <emphasis>bind_value_list</emphasis> ]
+<emphasis role="strong">db_list_of_lists</emphasis> <emphasis>
+statement-name sql</emphasis> [ -bind <emphasis>bind_set_id</emphasis> | -bind <emphasis>bind_value_list</emphasis> ]
 </programlisting>
 
 <para>Returns a Tcl list, each element of which is a list of all column values
@@ -769,7 +771,8 @@ in a row of the result of SQL query <emphasis><computeroutput>sql</computeroutpu
 
 <listitem>
 <programlisting>
-<emphasis role="strong">db_list_of_ns_sets</emphasis> <emphasis>statement-name</emphasis> <emphasis>sql</emphasis> [ -bind <emphasis>bind_set_id</emphasis> | -bind <emphasis>bind_value_list</emphasis> ]
+<emphasis role="strong">db_list_of_ns_sets</emphasis> <emphasis>
+statement-name sql</emphasis> [ -bind <emphasis>bind_set_id</emphasis> | -bind <emphasis>bind_value_list</emphasis> ]
 </programlisting>
   <para>
 	Returns a list of ns_sets with the values of each column of each row
@@ -783,7 +786,7 @@ in a row of the result of SQL query <emphasis><computeroutput>sql</computeroutpu
 
 <listitem>
 <programlisting>
-<emphasis role="strong">db_dml</emphasis> <emphasis>statement-name</emphasis> <emphasis>sql</emphasis> \
+<emphasis role="strong">db_dml</emphasis> <emphasis> statement-name sql</emphasis> \
     [ -bind <emphasis>bind_set_id</emphasis> | -bind <emphasis>bind_value_list</emphasis> ] \
     [ -blobs <emphasis>blob_list</emphasis> | -clobs <emphasis>clob_list</emphasis> |
       -blob_files <emphasis>blob_file_list</emphasis> | -clob_files <emphasis>clob_file_list</emphasis> ]
@@ -835,11 +838,14 @@ of the files <computeroutput>/var/tmp/the_photo</computeroutput> and
 
 <listitem>
 <programlisting>
-<emphasis role="strong">db_write_clob</emphasis> <emphasis>statement-name</emphasis> <emphasis>sql</emphasis> [ -bind <emphasis>bind_set_id</emphasis> | -bind <emphasis>bind_value_list</emphasis> ]
+<emphasis role="strong">db_write_clob</emphasis> <emphasis>
+statement-name sql</emphasis> [ -bind <emphasis>bind_set_id</emphasis> | -bind <emphasis>bind_value_list</emphasis> ]
 
-<emphasis role="strong">db_write_blob</emphasis> <emphasis>statement-name</emphasis> <emphasis>sql</emphasis> [ -bind <emphasis>bind_set_id</emphasis> | -bind <emphasis>bind_value_list</emphasis> ]
+<emphasis role="strong">db_write_blob</emphasis> <emphasis>
+statement-name sql</emphasis> [ -bind <emphasis>bind_set_id</emphasis> | -bind <emphasis>bind_value_list</emphasis> ]
 
-<emphasis role="strong">db_blob_get_file</emphasis> <emphasis>statement-name</emphasis> <emphasis>sql</emphasis> [ -bind <emphasis>bind_set_id</emphasis> | -bind <emphasis>bind_value_list</emphasis> ]
+<emphasis role="strong">db_blob_get_file</emphasis> <emphasis>
+statement-name sql</emphasis> [ -bind <emphasis>bind_set_id</emphasis> | -bind <emphasis>bind_value_list</emphasis> ]
 </programlisting>
 
 <para>Analogous to <computeroutput>ns_ora write_clob/write_blob/blob_get_file</computeroutput>. 
@@ -865,7 +871,7 @@ of the files <computeroutput>/var/tmp/the_photo</computeroutput> and
 <listitem>
 
 <programlisting>
-<emphasis role="strong">db_transaction</emphasis> <emphasis>code_block</emphasis> [ on_error { <emphasis>code_block</emphasis> } ]
+<emphasis role="strong">db_transaction</emphasis> <emphasis> code_block</emphasis> [ on_error { <emphasis>code_block</emphasis> } ]
 </programlisting>
 
 <para>Executes <emphasis><computeroutput>code_block</computeroutput></emphasis> transactionally. Nested
@@ -938,7 +944,7 @@ several nested transactions, all of them are terminated. Use this instead of
 <listitem>
 <programlisting>
 <emphasis role="strong">db_multirow</emphasis> [ -local ] [ -append ] [ -extend <emphasis>column_list</emphasis> ] \
-    <emphasis>var-name</emphasis> <emphasis>statement-name</emphasis> <emphasis>sql</emphasis> \
+    <emphasis>var-name</emphasis> <emphasis> statement-name sql</emphasis> \
     [ -bind <emphasis>bind_set_id</emphasis> | -bind <emphasis>bind_value_list</emphasis> ] \
     <emphasis>code_block</emphasis> [ if_no_rows <emphasis>if_no_rows_block ]</emphasis>
 </programlisting>
@@ -969,7 +975,7 @@ several nested transactions, all of them are terminated. Use this instead of
     You may supply a code block, which will be executed for each row in
     the loop. This is very useful if you need to make computations that
     are better done in Tcl than in SQL, for example using ns_urlencode
-    or ad_quotehtml, etc. When the Tcl code is executed, all the columns
+    or ns_quotehtml, etc. When the Tcl code is executed, all the columns
     from the SQL query will be set as local variables in that code. Any
     changes made to these local variables will be copied back into the
     multirow.
@@ -1000,8 +1006,7 @@ several nested transactions, all of them are terminated. Use this instead of
     <para>
 
     Notice the nonstandard numbering (everything
-    else in Tcl starts at 0); the reason is that the graphics designer, a non
-    programmer, may wish to work with row numbers.
+    else in Tcl starts at 0); the reason is that the graphics designer, a non-programmer, may wish to work with row numbers.
     </para>                                                                                                                                           
 
     <para>
@@ -1038,7 +1043,7 @@ statement.
 <term><emphasis role="strong"><computeroutput><anchor id="kernel.dbapi_db_with_handle"/>db_with_handle</computeroutput></emphasis></term>
 <listitem>
 <programlisting>
-<emphasis role="strong">db_with_handle</emphasis> <emphasis>var</emphasis> <emphasis>code_block</emphasis>
+<emphasis role="strong">db_with_handle</emphasis> <emphasis> var code_block</emphasis>
 </programlisting>
 
 

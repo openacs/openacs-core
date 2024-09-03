@@ -1,5 +1,3 @@
-# /packages/mbryzek-subsite/www/admin/rel-segments/new.tcl
-
 ad_page_contract {
 
     Form to create a new relational segment
@@ -21,9 +19,9 @@ ad_page_contract {
     subsite_group_id:onevalue
 } -validate {
     group_in_scope_p -requires {group_id:notnull} {
-	if { ![application_group::contains_party_p -party_id $group_id -include_self]} {
-	    ad_complain "The group either does not exist or does not belong to this subsite."
-	}
+        if { ![application_group::contains_party_p -party_id $group_id -include_self]} {
+            ad_complain "The group either does not exist or does not belong to this subsite."
+        }
     }
 }
 
@@ -33,7 +31,7 @@ set subsite_group_id [application_group::group_id_from_package_id]
 if { $rel_type ne "" } {
     ad_returnredirect [export_vars -base new-2 {group_id rel_type return_url}]
     ad_script_abort
-} 
+}
 
 permission::require_permission -object_id $group_id -privilege "read"
 
@@ -43,7 +41,10 @@ set export_vars [export_vars -form {group_id return_url}]
 # Select out all relationship types
 db_multirow rel_types select_relation_types {}
 
-db_1row select_basic_info {}
+set group_name [db_string select_basic_info {
+    select group_name from groups
+    where group_id = :group_id
+}]
 
 ad_return_template
 

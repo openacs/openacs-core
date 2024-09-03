@@ -19,7 +19,7 @@ ad_proc -public acs_sc::msg_type::new {
     db_exec_plsql insert_msg_type {}
 }
 
-ad_proc -public acs_sc::msg_type::delete {
+ad_proc -private acs_sc::msg_type::delete {
     {-msg_type_id ""}
     {-name ""}
 } {
@@ -48,7 +48,7 @@ ad_proc -public acs_sc::msg_type::delete {
     db_exec_plsql delete_by_name {}
 }
 
-ad_proc -public acs_sc::msg_type::parse_spec {
+ad_proc -private acs_sc::msg_type::parse_spec {
     {-name:required}
     {-spec:required}
 } {

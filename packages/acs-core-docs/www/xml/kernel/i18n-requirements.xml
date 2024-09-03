@@ -334,7 +334,7 @@ NOT IMPLEMENTED for 5.0.0.</remark></para>
 
       <para><emphasis>10.40</emphasis>Administrators can upgrade their
 servers to use new locales via the APM. <remark>NOT IMPLEMENTED in
-5.0.0; current workaround is to get an xml file and load it
+5.0.0; current workaround is to get an XML file and load it
 manually.</remark></para>
 
 
@@ -364,7 +364,7 @@ priority:</para>
 </listitem>
 
 <listitem>
-<para>get locale from site wide default</para>
+<para>get locale from site-wide default</para>
 
 <para><emphasis>20.20</emphasis> An API will be provided for
 getting the current request locale from the
@@ -529,7 +529,7 @@ filesystem</para>
     <sect3 id="Submitted_Form_Data_Character_Set">
       <title>Submitted Form Data Character Set</title>
 
-      <para><emphasis>50.30</emphasis> Data which is submitted with a
+      <para><emphasis>50.30</emphasis> Data which is submitted with an
          HTTP request using a GET or POST method may be in any character
          set. The system must be able to determine the encoding of the form
          data and convert it to Unicode on demand.  </para>
@@ -655,27 +655,25 @@ search in any supported language.</para>
 
 <blockquote>
 <para><emphasis>90.10</emphasis> Provide API support for specifying
-a time zone</para>
+a timezone</para>
 
 <para><emphasis>90.20</emphasis> Provide an API for computing time
 and date operations which are aware of timezones. So for example a
 calendar module can properly synchronize items inserted into a
-calendar from users in different time zones using their own local
+calendar from users in different timezones using their own local
 times.</para>
 
 <para><emphasis>90.30</emphasis> Store all dates and times in
-universal time zone, UTC.</para>
+universal timezone, UTC.</para>
 
-<para><emphasis>90.40</emphasis> For a registered users, a time
-zone preference should be stored.</para>
+<para><emphasis>90.40</emphasis> For a registered users, a timezone preference should be stored.</para>
 
-<para><emphasis>90.50</emphasis> For a non-registered user a time
-zone preference should be attached via a session or else UTC should
+<para><emphasis>90.50</emphasis> For a non-registered user a timezone preference should be attached via a session or else UTC should
 be used to display every date and time.</para>
 
 <para><emphasis>90.60</emphasis> The default if we can&#39;t
-determine a time zone is to display all dates and times in some
-universal time zone such as GMT.</para>
+determine a timezone is to display all dates and times in some
+universal timezone such as GMT.</para>
 </blockquote>
 
 </sect2><sect2 id="VI.H_Database"><title>Database</title>

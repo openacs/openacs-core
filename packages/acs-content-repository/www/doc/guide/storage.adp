@@ -1,7 +1,11 @@
 
-<property name="context">{/doc/acs-content-repository {ACS Content Repository}} {}</property>
+<property name="context">{/doc/acs-content-repository/ {ACS Content Repository}} {}</property>
 <property name="doc(title)"></property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h2>Storing Data in the Content Repository</h2>
 <p>This document provides an introduction to using the content
 repository for storing data (binary or text files) and associated
@@ -69,7 +73,7 @@ revisions).</p>
 <h3>Define a Relationship to a Target Object</h3>
 <p>The content repository implements a flexible mechanism for
 organizing data in a hierarchical fashion in a manner similar to a
-file system. This would be useful if we ever decided to allow each
+filesystem. This would be useful if we ever decided to allow each
 user to manage an entire personal photo gallery rather than a
 single portrait.</p>
 <p>In the simple case where each user is allowed a single portrait,
@@ -110,5 +114,5 @@ portrait upload form would look like this:</p>
 <pre>  ns_ora write_blob ...</pre>
 <hr>
 <a href="mailto:karlg\@arsdigita.com">karlg\@arsdigita.com</a>
-<p>Last Modified: $&zwnj;Id: storage.html,v 1.2 2017/08/07 23:47:47
+<p>Last Modified: $&zwnj;Id: storage.html,v 1.2.2.1 2021/04/05 19:49:49
 gustafn Exp $</p>

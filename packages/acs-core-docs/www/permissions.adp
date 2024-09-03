@@ -1,7 +1,11 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Groups, Context, Permissions}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Groups, Context, Permissions}</property>
 <property name="doc(title)">Groups, Context, Permissions</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="templates" leftLabel="Prev"
 			title="Chapter 11. Development
@@ -9,13 +13,16 @@ Reference"
 			rightLink="subsites" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="permissions" id="permissions"></a>Groups, Context, Permissions</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">By Pete Su</span></p><span style="color: red">&lt;/authorblurb&gt;</span><div class="sect2">
+<a name="permissions" id="permissions"></a>Groups, Context, Permissions</h2></div></div></div><div class="authorblurb">
+<p>By Pete Su</p>
+OpenACS docs are written by the named authors, and may be edited by
+OpenACS documentation staff.</div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="permissions-overview" id="permissions-overview"></a>Overview</h3></div></div></div><p>The OpenACS 5.9.0 Permissions system allows developers and
 administrators to set access control policies at the object level,
 that is, any application or system object represented by a row in
 the <code class="computeroutput">acs_objects</code> table can be
-access-controlled via a PL/SQL or Tcl interface. The permissions
+access-controlled via a PL/SQL or Tcl interface. The permission
 system manages a data model that then allows scripts to check
 permissions using another API call.</p><p>Although object level permissions seems appropriate, no
 developer or administrator wants to <span class="emphasis"><em>explicitly</em></span> set access control rights for
@@ -26,7 +33,7 @@ flexible ways.</p></li><li class="listitem"><p>the object model defines a notion
 applications to group objects together into larger security
 domains.</p></li>
 </ol></div><p>The rest of this document discusses each of these parts, and how
-they fit together with the permissions system.</p>
+they fit together with the permission system.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="permissions-groups" id="permissions-groups"></a>Groups</h3></div></div></div><p>OpenACS 5.9.0 has an abstraction called a <span class="emphasis"><em>party</em></span>. Parties have a recursive
@@ -68,8 +75,8 @@ this tutorial. See <a class="xref" href="parties" title="Parties in OpenACS">Par
 Design</a> for more details.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="permissions-permissions" id="permissions-permissions"></a>Permissions</h3></div></div></div><p>NOTE: Much more detailed information about the permissions
-system and how to use it is available in the <a class="xref" href="permissions-tediously-explained" title="OpenACS Permissions Tediously Explained">OpenACS Permissions
+<a name="permissions-permissions" id="permissions-permissions"></a>Permissions</h3></div></div></div><p>NOTE: Much more detailed information about the permission system
+and how to use it is available in the <a class="xref" href="permissions-tediously-explained" title="OpenACS Permissions Tediously Explained">OpenACS Permissions
 Tediously Explained</a> document.</p><p>The permissions data model is a mapping between <span class="emphasis"><em>privileges</em></span>, parties and objects. Parties
 and objects have already been discussed. Now we focus on
 privileges.</p><p>In OpenACS, a privilege describes the right to perform some
@@ -106,7 +113,7 @@ read, write, create and delete privileges, because some operations
 explicitly require admin privileges. No substitutions.</p><p>To give a user permission to perform a particular operation on a
 particular object you call <code class="computeroutput">acs_permission.grant_permission</code> like
 this:</p><pre class="programlisting">
-# sql code
+# SQL code
     acs_permission.grant_permission (
       object_id =&gt; some_object_id,
       grantee_id =&gt; some_party_id,
@@ -116,7 +123,7 @@ this:</p><pre class="programlisting">
 </pre><p>Using just these mechanisms is enough for developers and
 administrators to effectively define access control for every
 object in a system.</p><p>Explicitly defining permissions to every object individually
-would become very tedious. OpenACS provides a object contexts as a
+would become very tedious. OpenACS provides object contexts as a
 means for controlling permissions of a large group of objects at
 the same time.</p>
 </div><div class="sect2">
@@ -193,8 +200,8 @@ organizations of users and groups of users.</p></li><li class="listitem"><p>The 
 user rights.</p></li><li class="listitem"><p>The Context hierarchy allows you to define organize default
 permissions in a hierarchical fashion.</p></li>
 </ol></div><p>A PL/SQL or Tcl API is then used to check permissions in
-application pages.</p><p><span class="cvstag">($&zwnj;Id: permissions.xml,v 1.18 2017/08/07
-23:47:54 gustafn Exp $)</span></p>
+application pages.</p><div class="cvstag">($&zwnj;Id: permissions.xml,v 1.18.2.4 2024/02/05
+15:35:07 gustafn Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

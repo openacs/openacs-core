@@ -12,22 +12,22 @@
 # Return a header for an installation page, suitable for ns_writing.
 # This procedure engages the installer mutex, as every installer page is a critical section.
 
-ad_proc -private install_input_widget { 
+ad_proc -private install_input_widget {
     {-type ""}
     {-size 40}
     {-extra_attributes ""}
     {-value ""}
-    param_name 
+    param_name
 } {
     Return an HTML input widget for a parameter with an
     indication of whether the param is mandatory.
 } {
-    set type_attribute [ad_decode $type "" "" "type=\"$type\""]
+    set type_attribute [expr {$type eq "" ? "" : "type=\"$type\""}]
 
     if { $value ne "" } {
         append extra_attributes " value=\"[ns_quotehtml $value]\""
     }
-    
+
     set input_widget "<input name=\"$param_name\" size=\"$size\" $type_attribute $extra_attributes>"
 
     if { [install_param_mandatory_p $param_name] } {
@@ -35,7 +35,7 @@ ad_proc -private install_input_widget {
     }
 
     return $input_widget
-} 
+}
 
 ad_proc -private install_param_mandatory_p { param_name } {
     Return 1 if the given parameter with given name is
@@ -99,36 +99,26 @@ ad_proc -private install_page_contract { mandatory_params optional_params } {
     array set mandatory_params_array $mandatory_params
     array set optional_params_array $optional_params
 
-    set form [ns_getform]
     set missing_params [list]
 
-    if { $form eq "" } {
-        # Form is empty - all mandatory params are missing
-        foreach param_name [array names mandatory_params_array] {
-            lappend missing_params $mandatory_params_array($param_name)
-        }
-    } else {
-        # Form is non-empty
+    # Loop over all params
+    set all_param_names [concat [array names mandatory_params_array] \
+                             [array names optional_params_array]]
+    foreach param_name $all_param_names {
+        set param_value [ns_queryget $param_name]
+        set mandatory_p [expr {$param_name in $mandatory_params}]
 
-        # Loop over all params
-        set all_param_names [concat [array names mandatory_params_array] \
-                                 [array names optional_params_array]]
-        foreach param_name $all_param_names {
-            set param_value [ns_set iget $form $param_name]
-            set mandatory_p [expr {$param_name in $mandatory_params}]
-
-            if { $param_value ne "" } {
-                # Param in form - set value in callers scope
-                uplevel [list set $param_name $param_value]
+        if { $param_value ne "" } {
+            # Param in form - set value in callers scope
+            uplevel [list set $param_name $param_value]
+        } else {
+            # Param not in form
+            if { $mandatory_p } {
+                # Mandatory param - complain
+                lappend missing_params $mandatory_params_array($param_name)
             } else {
-                # Param not in form
-                if { $mandatory_p } {
-                    # Mandatory param - complain
-                    lappend missing_params $mandatory_params_array($param_name)
-                } else {
-                    # Optional param - set default
-                    uplevel [list set $param_name $optional_params_array($param_name)]
-                }
+                # Optional param - set default
+                uplevel [list set $param_name $optional_params_array($param_name)]
             }
         }
     }
@@ -321,7 +311,7 @@ proc install_admin_widget {} {
 
 }
 
-proc install_back_button_widget {} {    
+proc install_back_button_widget {} {
     return [subst {Please <a id="install-back-button" href="#">try again</a>.
     <script type='text/javascript' nonce='[security::csp::nonce]'>
      var e = document.getElementById('install-back-button');
@@ -335,7 +325,7 @@ proc install_back_button_widget {} {
 proc install_redefine_ad_conn {} {
 
     # Peter Marklund
-    # We need to be able to invoke ad_conn in the installer. However
+    # We need to be able to invoke ad_conn in the installer. However,
     # We cannot use the rp_filter that sets up ad_conn
 
     # JCD: don't redefine ad_conn, just reset it and populate some things
@@ -353,7 +343,7 @@ ad_proc -public ad_windows_p {} {
     Returns 1 if the ACS is running under Windows.
     Note,  this procedure is a best guess, not sure of a better way of determining:
 } {
-    return [expr {[ns_info platform] in {win32 win64}}]
+    return [expr {$::tcl_platform(platform) in {win32 win64}}]
 }
 
 ad_proc -private install_load_errors_formatted {errorVarName} {
@@ -394,7 +384,15 @@ ad_proc -private install_do_data_model_install {} {
     "
     ns_write "\n<script>window.scrollTo(0,document.body.scrollHeight);</script>\n"
 
-    # Some APM procedures use util_memoize, so initialize the cache 
+    #
+    # At this time, the basic data model and the proc
+    # "ad_acs_kernel_id" are defined, such we can also define the
+    # global variable for bootstrap, which is already needed for the
+    # out-of-band sourcing of 20-memoize-init.tcl below.
+    #
+    set ::acs::kernel_id [ad_acs_kernel_id]
+
+    # Some APM procedures use util_memoize, so initialize the cache
     # before starting APM install
     array set errors {}
     apm_source [acs_package_root_dir acs-tcl]/tcl/20-memoize-init.tcl errors
@@ -468,7 +466,7 @@ ad_proc -private install_do_packages_install {} {
         ns_write "<p><b><i>At least one core package has an unsatisfied dependency.\
               No packages have been installed missing: [lindex $dependency_results 2]. \
               Here's what the APM has computed:</i></b>"
-        
+
         ns_write "\n<ul>"
         set deps ""
         foreach dep $pkg_list {
@@ -477,7 +475,7 @@ ad_proc -private install_do_packages_install {} {
             append deps "[lindex $_pkg 0]: $_msg\n"
         }
         ns_write "\n<script>window.scrollTo(0,document.body.scrollHeight);</script>\n"
-        
+
         ns_log Error "At least one core package has an unsatisfied dependency.\
               No packages have been installed missing: [lindex $dependency_results 2]. \
               Here's what the APM has computed:\n$deps"
@@ -492,6 +490,17 @@ ad_proc -private install_do_packages_install {} {
     if { ![ad_acs_admin_node] } {
         ns_write "  <p><li> Completing Install sequence by mounting the main site and other core packages.<p>
         <blockquote><pre>"
+
+        if {[info commands ::acs::dc] ne ""} {
+            #
+            # Initialize DB function interface, to make functions
+            # e.g. available for apm_mount_core_packages.
+            #
+            ns_log notice "Installer initializing db_function_interface"
+            ::acs::dc create_db_function_interface ;# -verbose ;# -match test.*
+        } else {
+            ns_log notice "Installer initializing db_function_interface"
+        }
 
         # Mount the main site
         cd [file join $::acs::rootdir packages acs-kernel sql [db_type]]

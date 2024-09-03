@@ -6,10 +6,10 @@ ad_page_contract {
     @author Jon Salz (jsalz@arsdigita.com)
     @cvs-id $Id$
 } {
-    { orderby:token "package_key" }
-    { owned_by:word "everyone" }
-    { supertype "all" }
-    { reload_links_p:boolean 0 }
+    { orderby:token,notnull "package_key" }
+    { owned_by:word,notnull "everyone" }
+    { supertype:notnull "all" }
+    { reload_links_p:boolean,notnull 0 }
 }
 
 set page_title "Package Manager"
@@ -17,22 +17,22 @@ set context [list [list "../developer" "Developer's Administration"] $page_title
 
 set user_id [ad_conn user_id]
 
-# Determine the user's email address.  If its not registered, put in a default.  
-set my_email [db_string email_by_user_id {
-    select email from parties where party_id = :user_id
-} -default "me"]
+# Determine the user's email address to filter packages belonging to 'me'
+set my_email [party::get -party_id $user_id -element email]
 
 set dimensional_list {
     {
         supertype "Package Type:" all {
-	    { apm_application "Applications" { where "[db_map apm_application]" } }
-	    { apm_service "Services" { where "t.package_type = 'apm_service'"} }
+	    { apm_application "Applications" { where {t.package_type = 'apm_application'} } }
+	    { apm_service "Services" { where {t.package_type = 'apm_service'}} }
 	    { all "All" {} }
 	}
     }
     {
 	owned_by "Owned by:" everyone {
-	    { me "Me" {where "[db_map everyone]"} }
+	    { me "Me" {where {exists (select 1 from apm_package_owners o
+                                      where o.version_id = v.version_id
+                                      and owner_uri='mailto:' || :my_email)}} }
 	    { everyone "Everyone" {where "1 = 1"} }
 	}
     }
@@ -82,50 +82,57 @@ template::list::create -name package_list \
         }
         action {
             label ""
+            html {style {white-space:nowrap;}}
             display_template {@packages.action_html;noquote@}
         }
     } -filters {owned_by {} supertype {} status {}}
 
-set performance_p [parameter::get -package_id [ad_acs_kernel_id] -parameter PerformanceModeP -default 1] 
-set reload_links_p [ad_decode [ns_set iget [rp_getform] reload_links_p] \
-                        "" 0 [ns_set iget [rp_getform] reload_links_p]]
+set performance_p [parameter::get -package_id [ad_acs_kernel_id] -parameter PerformanceModeP -default 1]
 
 db_multirow -extend {package_url maintained status action_html} packages apm_table {} {
     set package_url [export_vars -base version-view {version_id}]
-    set maintained [ad_decode $distribution_uri "" "Locally" "Externally"]
-    
+    set maintained [expr {$distribution_uri eq "" ? "Locally" : "Externally"}]
+
     if { $installed_p == "t" } {
-		if { $enabled_p == "t" } {
-		    set status "Enabled"
-		} else {
-		    set status "Disabled"
-		}
+        if { $enabled_p == "t" } {
+            set status "Enabled"
+        } else {
+            set status "Disabled"
+        }
     } elseif { $superseded_p } {
-		set status "Superseded"
+        set status "Superseded"
     } else {
-		set status "Uninstalled"
+        set status "Uninstalled"
     }
-    
+
     set file_link_list [list]
-    lappend file_link_list "<a href=\"version-files?version_id=$version_id\">view files</a>"
+    lappend file_link_list [subst {
+        <a href="version-files?version_id=$version_id"><adp:icon name='list' title='view files'></a>
+    }]
     if { $installed_p == "t" && $enabled_p == "t" } {
         if {!$performance_p} {
-            lappend file_link_list "<a href=\"package-watch?package_key=$package_key\">watch all files</a>"
-        } 
+            lappend file_link_list [subst {
+                <a href="package-watch?package_key=$package_key">
+                <adp:icon name='watch' title='watch all files'></a>
+            }]
+        }
         if { !$reload_links_p || [apm_version_load_status $version_id] eq "needs_reload"} {
-            lappend file_link_list "<a href=\"version-reload?version_id=$version_id\">reload changed</a>"
-        } 
-    } 
-    set action_html [join $file_link_list " | "]
+            lappend file_link_list [subst {
+                <a href="version-reload?version_id=$version_id">
+                <adp:icon name='reload' title='reload changed'</a>
+            }]
+        }
+    }
+    set action_html [join $file_link_list " "]
 }
 
 # The reload links make the page slow, so make them optional
 set page_url [export_vars -base [ad_conn url] {orderby owned_by supertype}]
 set href     [export_vars -base [ad_conn url] {orderby owned_by supertype reload_links_p}]
 if { $reload_links_p } {
-    set reload_filter "<a href=\"[ns_quotehtml $href]\">Do not check for changed files</a>"
+    set reload_filter "<a href='[ns_quotehtml $href]'>Do not check for changed files</a>"
 } else {
-    set reload_filter "<a href=\"[ns_quotehtml $href]\">Check for changed files</a>"
+    set reload_filter "<a href='[ns_quotehtml $href]'>Check for changed files</a>"
 }
 
 # Build the list of files we're watching.

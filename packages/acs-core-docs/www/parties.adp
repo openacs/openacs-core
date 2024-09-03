@@ -1,7 +1,11 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Parties in OpenACS}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Parties in OpenACS}</property>
 <property name="doc(title)">Parties in OpenACS</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="subsites" leftLabel="Prev"
 			title="Chapter 11. Development
@@ -9,9 +13,11 @@ Reference"
 			rightLink="permissions-tediously-explained" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="parties" id="parties"></a>Parties in OpenACS</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">By <a class="ulink" href="http://planitia.org" target="_top">Rafael H.
-Schloming</a>
-</span></p><span style="color: red">&lt;/authorblurb&gt;</span><div class="sect2">
+<a name="parties" id="parties"></a>Parties in OpenACS</h2></div></div></div><div class="authorblurb">
+<p>By <a class="ulink" href="http://planitia.org" target="_top">Rafael H. Schloming</a>
+</p>
+OpenACS docs are written by the named authors, and may be edited by
+OpenACS documentation staff.</div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="parties-intro" id="parties-intro"></a>Introduction</h3></div></div></div><p>While many applications must deal with individuals and many
 applications must deal with groups, most applications must deal
@@ -99,7 +105,6 @@ individual for any case.</p><pre class="programlisting"><code class="computerout
     email_bouncing_p    char(1) default 'f' not null
                 constraint users_email_bouncing_p_ck
                 check (email_bouncing_p in ('t','f')),
-    no_alerts_until     date,
     last_visit      date,
     second_to_last_visit    date,
     n_sessions      integer default 1 not null,
@@ -121,7 +126,7 @@ parties table) is the name of the group:</p><pre class="programlisting"><code cl
 relations between parties and groups.</p><p><span class="strong"><strong>Group Relations</strong></span></p><p>Two types of group relations are represented in the data model:
 membership relations and composite relations. The full range of
 sophisticated group structures that exist in the real world can be
-modelled in OpenACS by these two relationship types.</p><p>Membership relations represent direct membership relation
+modeled in OpenACS by these two relationship types.</p><p>Membership relations represent direct membership relation
 between parties and groups. A party may be a "member" of
 a group. Direct membership relations are common in administrative
 practices, and do not follow basic set theory rules. If A is a
@@ -132,7 +137,7 @@ relation is transitive. That is, it works like memberships in set
 theory. If A is a member of B, and B is a member of C, then A is a
 member of C.</p><p>For example, consider the membership relations of Greenpeace,
 and composite relations of a multinational corporation. Greenpeace,
-an organization (ie. group), can have both individuals and
+an organization (i.e. group), can have both individuals and
 organizations (other groups) as members. Hence the membership
 relation between groups and <span class="emphasis"><em>parties</em></span>. However, someone is not a
 member of Greenpeace just because they are a member of a group that
@@ -152,7 +157,7 @@ membership (membership via some composite relationship). For
 example, a person might be listed in a system as both an individual
 (direct membership) and a member of a household (indirect
 membership) at a video rental store.</p><pre class="programlisting"><code class="computeroutput">
-# sql code
+# SQL code
 create or replace package membership_rel
 as
 
@@ -201,7 +206,7 @@ component of itself either directly or indirectly. This constraint
 is maintained for you by the API. So users do not see some random
 PL/SQL error message, do not give them the option to create a
 composition relation that would result in a circular reference.</p><pre class="programlisting"><code class="computeroutput">
-# sql code
+# SQL code
 create or replace package composition_rel
 as
 
@@ -321,8 +326,8 @@ primary key in what could be thought of as a pure relation. Because
 a membership relation is an ordinary acs object with <a class="ulink" href="object-identity" target="_top">object
 identity</a>, it is as easy to extend the membership relation to
 store extra information as it is to extend the users table or the
-groups table.</p><p><span class="cvstag">($&zwnj;Id: parties.xml,v 1.9 2006/09/25 20:32:37
-byronl Exp $)</span></p>
+groups table.</p><div class="cvstag">($&zwnj;Id: parties.xml,v 1.10.2.3 2024/02/05
+15:35:07 gustafn Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

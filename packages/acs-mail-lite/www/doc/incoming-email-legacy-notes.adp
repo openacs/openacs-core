@@ -1,6 +1,6 @@
 <master>
-  <property name="title">@title;noquote@</property>
-  <property name="context">@context;noquote@</property>
+  <property name="doc(title)">@title;literal@</property>
+  <property name="context">@context;literal@</property>
   <h1>@title@</h1>
   <p><strong>The information on this page is volatile and likely changed.</strong>
     Refer to API documentation for specifics on existing system.</p>
@@ -52,7 +52,7 @@ To make things granular a separate parsing procedure should deal with loading th
   
   <p>
     The headers consists of a list with header names as keys and their corresponding values.
-    All keys are lower case.
+    All keys are lowercase.
   </p>
   
   <p>
@@ -156,7 +156,7 @@ To make things granular a separate parsing procedure should deal with loading th
     foreach part $all_parts {
 
     # Attachments have a &quot;Content-disposition&quot; part
-    # Therefore we filter out if it is an attachment here
+    # Therefore, we filter out if it is an attachment here
     if {[catch {mime::getheader $part Content-disposition}]} {
     switch [mime::getproperty $part content] {
     &quot;text/plain&quot; {
@@ -191,7 +191,7 @@ To make things granular a separate parsing procedure should deal with loading th
 </pre>
 
   <p>
-    Note that the files ie attachments are actually stored in the /tmp directory from where they can be processed further.
+    Note that the files i.e. attachments are actually stored in the /tmp directory from where they can be processed further.
     It is up to the callback to decide if to import the file into OpenACS or not.
     Once all callbacks have been fired files in /tmp will have to be deleted again though.
 </p>
@@ -241,7 +241,7 @@ To make things granular a separate parsing procedure should deal with loading th
 
     template::util::list_of_lists_to_array $email(bodies) email_body
 
-    if {[exists_and_not_null email_body(text/html)]} {
+    if {[info exists email_body(text/html)] && $email_body(text/html) ne ""} {
 
     set body $email_body(text/html)
 
@@ -362,31 +362,31 @@ To make things granular a separate parsing procedure should deal with loading th
     set to [acs_mail_lite::parse_email_address -email $email(to)]
     ns_log Debug &quot;acs_mail_lite::incoming_email -impl acs-mail-lite called. Recipient $to&quot;
 
-    util_unlist [acs_mail_lite::parse_bounce_address -bounce_address $to] user_id package_id signature
+    lassign [acs_mail_lite::parse_bounce_address -bounce_address $to] user_id package_id signature
     
     # If no user_id found or signature invalid, ignore message
     # Here we decide not to deal with the message anymore
 
 
 
-    if {[empty_string_p $user_id]} {
-    if {[empty_string_p $user_id]} {
-    ns_log Debug &quot;acs_mail_lite::incoming_email impl acs-mail-lite: No equivalent user found for $to&quot;
+    if {$user_id eq ""} {
+        #if {$user_id eq ""} {
+        ns_log Debug &quot;acs_mail_lite::incoming_email impl acs-mail-lite: No equivalent user found for $to&quot;
+        #} else {
+        #ns_log Debug &quot;acs_mail_lite::incoming_email impl acs-mail-lite: Invalid mail signature $signature&quot;
+        #}
     } else {
-    ns_log Debug &quot;acs_mail_lite::incoming_email impl acs-mail-lite: Invalid mail signature $signature&quot;
-    }
-    } else {
-    ns_log Debug &quot;acs_mail_lite::incoming_email impl acs-mail-lite: Bounce checking $to, $user_id&quot;
-    
-    if { ![acs_mail_lite::bouncing_user_p -user_id $user_id] } {
-    ns_log Debug &quot;acs_mail_lite::incoming_email impl acs-mail-lite: Bouncing email from user $user_id&quot;
-    # record the bounce in the database
-    db_dml record_bounce {}
-    
-    if {![db_resultrows]} {
-    db_dml insert_bounce {}
-    }
-    }
+        ns_log Debug &quot;acs_mail_lite::incoming_email impl acs-mail-lite: Bounce checking $to, $user_id&quot;
+
+        if { ![acs_mail_lite::bouncing_user_p -user_id $user_id] } {
+            ns_log Debug &quot;acs_mail_lite::incoming_email impl acs-mail-lite: Bouncing email from user $user_id&quot;
+            # record the bounce in the database
+            db_dml record_bounce {}
+
+            if {![db_resultrows]} {
+                db_dml insert_bounce {}
+            }
+        }
     }
     }
     
@@ -426,7 +426,7 @@ To make things granular a separate parsing procedure should deal with loading th
     # make the bodies an array
     template::util::list_of_lists_to_array $email(bodies) email_body
     
-    if {[exists_and_not_null email_body(text/html)]} {
+    if {[info exists email_body(text/html)] && $email_body(text/html) ne ""} {
     set body $email_body(text/html)
     } else {
     set body $email_body(text/plain)
@@ -487,7 +487,7 @@ To make things granular a separate parsing procedure should deal with loading th
 
   <ul>
 	<li>${component_name}-bugs@openacs.org (where component_name could be openacs or dotlrn or contacts or whatever), to store a new bug in bug-tracker.</li>
-	<li>username@openacs.org (to do mail-through using the user name, which allows you to hide the actual e-mail of the user whom you are contacting).</li>
+	<li>username@openacs.org (to do mail-through using the username, which allows you to hide the actual e-mail of the user whom you are contacting).</li>
   </ul>
 
   <h2>Cleanup</h2>

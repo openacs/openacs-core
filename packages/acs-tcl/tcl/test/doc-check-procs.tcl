@@ -4,16 +4,27 @@ ad_library {
     @author Jeff Davis
     @author Héctor Romojaro <hector.romojaro@gmail.com>
     @creation-date 2005-02-28
-    @cvs-id $Id$
 }
 
-aa_register_case -cats {smoke production_safe} documentation__check_proc_doc {
+aa_register_case -cats {smoke production_safe} -procs {
+    aa_log_result
+} documentation__check_proc_doc {
     checks if documentation exists for public procs.
 
     @author Jeff Davis davis@xarg.net
 } {
     set count 0
     set good 0
+    #
+    # Certain procs are defined outside the OpenACS installation
+    # source tree, e.g. in nsf. If they fail the test, the regular
+    # OpenACS administrator cannot do much about it, so we only
+    # generate a warning for them.
+    #
+    set ignored_namespaces {
+        nx
+        nsshell
+    }
     foreach p [lsort -dictionary [nsv_array names api_proc_doc]] {
         array set pa [nsv_get api_proc_doc $p]
         if { [info exists pa(protection)]
@@ -21,49 +32,142 @@ aa_register_case -cats {smoke production_safe} documentation__check_proc_doc {
              && !($pa(deprecated_p) || $pa(warn_p))
          } {
             incr count
-            if { [string is space $pa(main)] } {
-                aa_log_result fail "No documentation for public proc $p"
+            if { [string is space [join $pa(main)]] &&
+                 (![info exists pa(return)] || [string is space [join $pa(return)]]) &&
+                 (![info exists pa(param)] || [string is space [join $pa(param)]]) &&
+                 (![info exists pa(see)] || [string is space [join $pa(see)]])
+             } {
+                if {[regexp "^(\\s+Class ::)?([join $ignored_namespaces |])::.*\$" $p m]} {
+                    set test_result warning
+                } else {
+                    set test_result fail
+                }
+                aa_log_result $test_result "No documentation for public proc $p"
             } else {
                 incr good
             }
         }
         array unset pa
     }
-    aa_log "Found $good good of $count checked"
+    aa_log "Found $good public procs with proper documentation (out of $count checked)"
+
+    if {[::acs::icanuse "ns_parsehtml"]} {
+        set nrTags 0
+        set nrNotAllowedTags 0
+        set allowedTags {
+            h3 /h3
+            h4 /h4
+            p /p
+            a /a
+            blockquote /blockquote
+            dd /dd
+            dt /dt
+            dl /dl
+            ul /ul
+            ol /ol
+            li /li
+            table /table
+            td /td
+            th /th
+            tr /tr
+            pre /pre
+            code /code
+            tt /tt
+            strong /strong
+            b /b
+            i /i
+            em /em
+            span /span
+            br
+        }
+        foreach p [lsort -dictionary [nsv_array names api_proc_doc]] {
+            set dict [nsv_get api_proc_doc $p]
+            if {[dict exists $dict main]} {
+                set text [dict get $dict main]
+                foreach chunk [::ns_parsehtml -- $text] {
+                    lassign $chunk what chunk content
+                    if {$what eq "tag"} {
+                        incr nrTags
+                        set tag [lindex $content 0]
+                        if {$tag ni $allowedTags} {
+                            aa_error "[api_proc_link $p]: tag '$tag' not allowed '[ns_quotehtml <$content>]'"
+                            incr nrNotAllowedTags
+                        }
+                    }
+                }
+            }
+        }
+        aa_log "Found $nrTags tags in documentation, $nrNotAllowedTags not allowed"
+    }
+
+
 }
 
-aa_register_case \
-    -cats {smoke production_safe} \
-    -error_level warning \
-    documentation__check_proc_testcase {
 
-    Checks if testcases exist for public procs.
+aa_register_case -cats {smoke production_safe} -procs {
+    aa_log_result
+} naming__proc_naming {
+    Check if names of Tcl procs follow the naming conventions
+    https://openacs.org/xowiki/Naming
 
-    @author Monika Andergassen <manderga@wu.ac.at>
 } {
     set count 0
     set good 0
+    set allowedChars {^[a-zA-Z0-9_]+$}
+    set allowedToplevel {^(_|(ad|acs|aa|adp|api|apm|chat|db|doc|ds|dt|cr|export|fs|general_comments|lc|news|ns|package|pkg_info|relation|rp|rss|sec|server_cluster|content_search|util|xml)_.+|callback|exec)$}
+    set serverModuleProcs {^(h264open|h264length|h264read|h264eof|h264close|dom|bin|zip|transform|md5|base64|berkdb)$}
+    set xmlRPC {^system\.(add|listMethods|multicall|methodHelp)$}
+    set functionalOps {^f::(-|/)$}
+    set internalUse {^(_.+|AcsSc[.].+|callback::.+|install::.+|.*[-](lob|text|gridfs|file))$}
+    set prescribed {^((after|before|notifications)-([a-zA-Z0-9_]+))$}
+    set nameWarning {public error private warning}
 
     foreach p [lsort -dictionary [nsv_array names api_proc_doc]] {
-        array set pa [nsv_get api_proc_doc $p]
-        if { [info exists pa(protection)]
-            && "public" in $pa(protection)
-            && !($pa(deprecated_p) || $pa(warn_p))
-        } {
-            incr count
-            if { [info exists pa(testcase)] } {
-                incr good
-                aa_log "Testcase found for public proc $p"
-            } else {
-                aa_log_result fail "No testcase for public proc $p"
-            }
+        if {[string match "* *" $p]} continue
+        set info [nsv_get api_proc_doc $p]
+        if {![dict exists $info script]} {
+            aa_log "$p has no script (probably a referenced C-level cmd or a proc (no ad_proc)"
+        } elseif {[dict get $info script] eq ""} {
+            continue
         }
-        array unset pa
+        incr count
+        set tail [namespace tail $p]
+        set qualifiers [regsub -all -- "::" [namespace qualifiers $p] "__"]
+        if {[regexp $internalUse $p]
+            || [regexp $serverModuleProcs $p]
+            || [regexp $functionalOps $p]
+            || [regexp $xmlRPC $p]
+        } {
+            continue
+        }
+        set protection [expr {[dict exists $info protection] && "public" in [dict get $info protection]
+                          ? "public" : "private"}]
+
+        if {![regexp $allowedToplevel $p] && ![string match *::* $p]} {
+            if {[dict exists $info deprecated_p] && [dict get $info deprecated_p]} {
+                aa_log_result warning "deprecated proc '$p' ($protection) is not in a namespace"
+            } else {
+                aa_log_result fail "proc '$p' ($protection) is not in a namespace: $info"
+            }
+        } elseif { (![regexp $allowedChars $tail]
+                    || $qualifiers ne ""
+                    && ![regexp $allowedChars $qualifiers]
+                    )
+                   && ![regexp $prescribed $tail]
+               } {
+            aa_log_result [dict get $nameWarning $protection] \
+                "proc '$p' ($protection): name/namespace contains invalid characters"
+        } else {
+            incr good
+        }
     }
     aa_log "Found $good good of $count checked"
 }
 
-aa_register_case -cats {smoke production_safe} -error_level warning documentation__check_deprecated_see {
+aa_register_case -cats {smoke production_safe} -error_level warning -procs {
+    aa_log_result
+    api_proc_link
+} documentation__check_deprecated_see {
     checks if deprecated procs have an @see clause
 
     @author Jeff Davis davis@xarg.net
@@ -77,7 +181,9 @@ aa_register_case -cats {smoke production_safe} -error_level warning documentatio
          } {
             incr count
             if { ![info exists pa(see)] || [string is space $pa(see)] } {
-                aa_log_result fail "No @see for deprecated proc $p"
+                aa_silence_log_entries -severities warning {
+                    aa_log_result fail "No @see for deprecated proc [api_proc_link $p]"
+                }
             } else {
                 incr good
             }
@@ -87,7 +193,10 @@ aa_register_case -cats {smoke production_safe} -error_level warning documentatio
     aa_log "Found $good of $count procs checked"
 }
 
-aa_register_case -cats {smoke production_safe} -error_level warning documentation__check_typos {
+aa_register_case -cats {smoke production_safe} -error_level warning -procs {
+    aa_log_result
+    acs_package_root_dir
+} documentation__check_typos {
 
     Search for spelling errors in the proc documentation, using a list of common
     typos based on the one included in the lintian Debian package:
@@ -107,13 +216,15 @@ aa_register_case -cats {smoke production_safe} -error_level warning documentatio
     @creation-date 2018-07-23
 
 } {
-    set typo_list "[acs_package_root_dir "acs-tcl"]/tcl/test/doc-check-procs-common-typos.txt"
+    set typo_list "[acs_package_root_dir acs-tcl]/tcl/test/doc-check-procs-common-typos.txt"
     set typos [dict create]
 
     # Create the typo dictionary with values from the common typos file
     set f [open $typo_list "r"]
     while {[gets $f line] >= 0} {
-        dict append typos {*}[string tolower $line]
+        if {[regexp {^(.*)[\|][\|](.*)$} [string tolower $line] . word replacement]} {
+            dict set typos $word $replacement
+        }
     }
     close $f
     aa_log "Created typo dictionary using data from $typo_list ([dict size $typos] typos loaded)"
@@ -169,7 +280,9 @@ aa_register_case -cats {smoke production_safe} -error_level warning documentatio
     aa_log "Documentation seems typo free in $good of $count checked procs (total typo checks: $checks)"
 }
 
-aa_register_case -cats {smoke production_safe} -error_level warning documentation__check_parameters {
+aa_register_case -cats {smoke production_safe} -error_level warning -procs {
+    aa_log_result
+} documentation__check_parameters {
 
     Check if the parameters defined in the proc doc as '@param' are actual
     parameters.
@@ -177,7 +290,7 @@ aa_register_case -cats {smoke production_safe} -error_level warning documentatio
     Sometimes proc parameter changes are not reflected in the proc doc, this
     should take care of some of these cases.
 
-    Test is case sensitive.
+    Test is case-sensitive.
 
     @author Héctor Romojaro <hector.romojaro@gmail.com>
 
@@ -203,15 +316,20 @@ aa_register_case -cats {smoke production_safe} -error_level warning documentatio
     foreach p [lsort -dictionary [nsv_array names api_proc_doc]] {
         set param_unknown 0
         set proc_doc [nsv_get api_proc_doc $p]
-        if {[dict exists $proc_doc param]} {
+        set deprecated_p [expr {[dict exists $proc_doc deprecated_p] &&
+                                [dict get $proc_doc deprecated_p]}]
+        if {!$deprecated_p && [dict exists $proc_doc param]} {
             incr count
             set params [dict get $proc_doc param]
             #
             # Build the real parameters list
             #
+            #ns_log notice "check args for '$p'"
             set real_params [list \
-                {*}[dict get $proc_doc switches] \
-                {*}[dict get $proc_doc positionals]]
+                                 {*}[dict get $proc_doc switches0] \
+                                 {*}[dict get $proc_doc positionals] \
+                                 {*}[dict get $proc_doc switches1] \
+                                ]
             #
             # Check if the last parameter is 'args', as it is not included into
             # 'switches' or 'positionals', and add it to the real parameter list
@@ -226,8 +344,9 @@ aa_register_case -cats {smoke production_safe} -error_level warning documentatio
                 set param [lindex [string map $ignorechars $param_doc] 0]
                 # Allow boolean parameter name with appended '_p'
                 regsub -- _p$ $param "" param_trim_p
-                if {"$param" ni $real_params && "$param_trim_p" ni $real_params} {
+                if {$param ni $real_params && $param_trim_p ni $real_params} {
                     # Nonexistent @param found!
+                    #ns_log notice "param_docs '$param_doc' real_params '$real_params'"
                     incr param_unknown
                     aa_log_result fail "Unknown parameter '$param' in documentation of proc '$p'"
                 }

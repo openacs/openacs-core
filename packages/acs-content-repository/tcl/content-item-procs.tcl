@@ -62,7 +62,7 @@ ad_proc -public ::content::item::new {
     @param description of content_revision to be created
     @param text - text of content revision to be created
     @param tmp_filename file containing content to be added to new revision.
-           Caller is responsible to handle cleaning up the tmp file
+           Caller is responsible to handle cleaning up the temporary file
     @param nls_language - ???
     @param data - ???
     @param attributes A list of lists of pairs of additional attributes and
@@ -172,9 +172,26 @@ ad_proc -public ::content::item::delete {
 
     @param item_id
 } {
-    return [package_exec_plsql \
-                -var_list [list [list item_id $item_id]] \
-                content_item del]
+    set result 0
+    db_1row get_storage_type {select storage_type, storage_area_key from cr_items where item_id = :item_id}
+
+    set cleanup_data [::content::revision::collect_cleanup_data \
+                          -item_id $item_id \
+                          -storage_type $storage_type]
+    db_transaction {
+        set result [package_exec_plsql \
+                        -var_list [list [list item_id $item_id]] \
+                        content_item del]
+        #
+        # In case, everything goes well in the call above, we perform
+        # the cleanup.
+        #
+        ::content::revision::cleanup \
+            -storage_area_key $storage_area_key \
+            -storage_type $storage_type \
+            -data $cleanup_data
+    }
+    return $result
 }
 
 ad_proc -public ::content::item::rename {
@@ -278,7 +295,8 @@ ad_proc -public ::content::item::update {
 
     @param item_id item to update
 
-    @param attributes A list of pairs of additional attributes and their values to get. Each pair is a list of two elements: key => value
+    @param attributes A list of pairs of additional attributes and their values to get.
+           Each pair is a list of two elements: key => value
 
     @return
 
@@ -349,16 +367,14 @@ ad_proc -public content::item::get_content_type {
         content_item get_content_type]
 }
 
-ad_proc -public content::item::get_context {
+ad_proc -deprecated -public content::item::get_context {
     -item_id:required
 } {
     @param item_id
 
     @return NUMBER(38)
 } {
-    return [package_exec_plsql -var_list [list \
-        [list item_id $item_id ] \
-    ] content_item get_context]
+    return [acs_object::get_element -object_id $item_id -element context_id]
 }
 
 
@@ -381,6 +397,36 @@ ad_proc -public content::item::get_id {
         [list root_folder_id $root_folder_id ] \
         [list resolve_index $resolve_index ] \
     ] content_item get_id]
+}
+
+ad_proc -public content::item::get_descendants {
+    -parent_id:required
+    {-depth ""}
+} {
+    Returns the ids of every content item that is descendant of
+    supplied parent_id.
+
+    @param parent_id
+    @param depth how deep we should go in the hierarchy. 1 means
+           direct children. Returns every descendant when not
+           specified.
+
+    @return list of cr_items.item_id
+} {
+    return [db_list get_descendants {
+        with recursive descendants (item_id) as (
+           select item_id, 1 as depth
+             from cr_items
+            where parent_id = :parent_id
+
+           union all
+
+           select i.item_id, d.depth + 1
+             from cr_items i, descendants d
+            where i.parent_id = d.item_id
+              and (:depth is null or d.depth < :depth)
+        ) select * from descendants
+    }]
 }
 
 ad_proc -public content::item::get_best_revision {
@@ -457,7 +503,6 @@ ad_proc -public content::item::get_parent_folder {
         [list item_id $item_id ] \
     ] content_item get_parent_folder]
 }
-
 
 ad_proc -public content::item::get_path {
     -item_id:required
@@ -541,18 +586,21 @@ ad_proc -public content::item::get_template {
 
 ad_proc -public content::item::get_title {
     -item_id:required
-    {-is_live ""}
+    {-is_live "f"}
 } {
+
   Get the title for the item. If a live revision for the item exists,
   use the live revision. Otherwise, use the latest revision.
 
   @param item_id    The item_id of the content item
-  @param is_live
+  @param is_live    If true, return the title of the live revision, otherwise
+                    the one of the latest revision (default).
+                    Boolean, 't' or 'f'.
 
   @return The title of the item
 
   @see content::item::get_best_revision
-  @see content::item::get_title
+
 } {
     return [package_exec_plsql -var_list [list \
         [list item_id $item_id ] \
@@ -848,7 +896,7 @@ ad_proc -public content::item::upload_file {
             # extension also matches any char unless it is escaped.  Like Malte, I
             # see no reason to get rid of the extension in the title anyway ...
 
-            # regsub -all ".${extension}\$" $filename "" title
+            # regsub -all -- ".${extension}\$" $filename "" title
             set title $filename
         }
 
@@ -859,7 +907,8 @@ ad_proc -public content::item::upload_file {
                           -replace_with "_" $title]
 
         set revision_id [cr_import_content \
-                             -storage_type "file" -title $title \
+                             -storage_type "file" \
+                             -title $title \
                              -package_id $package_id \
                              $parent_id $tmp_filename $tmp_size $mime_type $filename]
 
@@ -930,7 +979,7 @@ ad_proc -public ::content::item::content_is_null { revision_id } {
   @return 1 if the content is null, 0 otherwise
 
 } {
-    set content_test [db_string cin_get_content ""]
+    set content_test [db_string cin_get_content {} -default ""]
 
     return [expr {$content_test eq ""}]
 }
@@ -1042,9 +1091,12 @@ ad_proc -public content::item::get_content {
 #
 #
 #
-ad_proc -public content::item::get_revision_content { -revision_id:required -item_id } {
+ad_proc -public content::item::get_revision_content {
+    -revision_id:required
+    -item_id
+} {
 
-  Create a onerow datasource called content in the calling frame
+  Create a one-row datasource called content in the calling frame
   which contains all attributes for the revision (including inherited
   ones).
 
@@ -1145,7 +1197,6 @@ ad_proc -public content::item::unpublish {
 
     @author Peter Marklund
 } {
-  ::content::item::set_live_revision -item_id $item_id
   ::content::item::update -item_id $item_id -attributes [list [list publish_status $publish_status]]
 }
 

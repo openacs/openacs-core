@@ -1230,7 +1230,7 @@ as
 
   function violation (
     --/** Checks to see if there a relational constraint is violated
-    --    by the precense of the specified relation. If not, returns 
+    --    by the presence of the specified relation. If not, returns 
     --    null. If so, returns an appropriate error string.
     -- 
     --    @author Oumi Mehrotra (oumi@arsdigita.com)

@@ -22,7 +22,7 @@ namespace eval site_node_apm_integration {
             foreach site_node_info_list [site_node::get_all_from_object_id -object_id $package_id] {
 
                 ns_log debug "delete_site_nodes_and_package: $site_node_info_list"
-                
+
                 array set site_node $site_node_info_list
 
                 site_node::unmount -node_id $site_node(node_id)
@@ -38,16 +38,25 @@ namespace eval site_node_apm_integration {
         {-package_id ""}
         {-package_key:required}
     } {
-        Get the package_id of package_key that is mounted directly under
-        package_id.
+
+        Get the package_id of package_key that is mounted directly
+        under package_id.
+
+        This may become either a private interface or be deprecated in
+        the future. In most cases, site_node::get_children is what you
+        want. One difference is, this API is not cached, so it will
+        always return the actual status from the database.
+
+        @see site_node::get_children
+
         @return empty string if not found.
     } {
         if {$package_id eq ""} {
-            if {[ad_conn isconnected]} { 
+            if {[ns_conn isconnected]} {
                 set package_id [ad_conn package_id]
-            } else { 
+            } else {
                 error "Not in a connection and no package_id provided"
-            } 
+            }
         }
 
         return [db_string select_child_package_id {} -default ""]
@@ -57,18 +66,24 @@ namespace eval site_node_apm_integration {
         {-package_id ""}
         {-package_key:required}
     } {
-        Returns 1 if there exists a child package with the given package_key, 
-        or 0 if not.
+        This may become either a private interface or be deprecated in
+        the future. In most cases, site_node::get_children is what you
+        want. One difference is, this API is not cached, so it will
+        always return the actual status from the database.
+
+        @see site_node::get_children
+
+        @return 1 if there exists a child package with the given
+                package_key, or 0 if not.
     } {
         set child_package_id [get_child_package_id \
             -package_id $package_id \
-            -package_key $package_key
-        ]
+            -package_key $package_key ]
 
         if {$child_package_id eq ""} {
             return 0
         } else {
-            return 1 
+            return 1
         }
     }
 

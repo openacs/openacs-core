@@ -96,10 +96,14 @@ ad_proc -public auth::driver::set_parameter_value {
     }
 }
 
-ad_proc -public auth::driver::GetParameters {
+ad_proc -deprecated -public auth::driver::GetParameters {
     {-impl_id:required}
 } {
     Returns a list of names of parameters for the driver
+
+    This proc duplicates auth::driver::get_parameters
+
+    @see auth::driver::get_parameters
 
     @author Simon Carstensen (simon@collaboraid.biz)
     @creation-date 2003-08-27

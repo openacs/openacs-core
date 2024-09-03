@@ -19,7 +19,7 @@ namespace eval notification::type {
     } {
 	return the service contract implementation key for a given notification type.
     } {
-        return [db_string select_impl_key {}]        
+        return [db_string select_impl_key {}]
     }
 
     ad_proc -public new {
@@ -33,8 +33,13 @@ namespace eval notification::type {
     } {
         create a new notification type. Must provide a service contract implementation ID.
     } {
-        set extra_vars [ns_set create]
-        oacs_util::vars_to_ns_set -ns_set $extra_vars -var_list {type_id sc_impl_id short_name pretty_name description}
+        set extra_vars [ns_set create s \
+                            type_id $type_id \
+                            sc_impl_id $sc_impl_id \
+                            short_name $short_name \
+                            pretty_name $pretty_name \
+                            description $description \
+                           ]
 
         set type_id [package_instantiate_object -extra_vars $extra_vars notification_type]
 
@@ -45,22 +50,23 @@ namespace eval notification::type {
         if { $all_delivery_methods_p } {
             db_dml enable_all_delivery_methods {}
         }
-        
+
+        acs::per_thread_cache flush -pattern notifications.get_type_id($short_name)
+
         return $type_id
     }
 
     ad_proc -public get_type_id {
         {-short_name:required}
     } {
-	return the notification type ID given a short name. Short names are unique but not primary keys.
+	return the notification type ID given a short name.
+        Short names are unique but not primary keys.
     } {
-        set key ::notification::type::get_type_id($short_name)
-        if {[info exists $key]} {
-            return [set $key]
-        }
-        return [set $key [notification::type::get_type_id_not_cached $short_name]]
+        return [acs::per_thread_cache eval -key notifications.get_type_id($short_name) {
+            notification::type::get_type_id_not_cached $short_name
+        }]
     }
-    
+
     ad_proc -private get_type_id_not_cached {
         short_name
     } {
@@ -68,13 +74,13 @@ namespace eval notification::type {
     } {
         return [db_string select_type_id {} -default {}]
     }
-    
+
     ad_proc -public delete {
         {-short_name:required}
     } {
 	Remove a notification type. This is very rare.
     } {
-        set type_id [get_type_id -short_name $short_name]
+        set type_id [notification::type::get_type_id_not_cached $short_name]
 
         db_exec_plsql delete_notification_type {}
 
@@ -90,7 +96,7 @@ namespace eval notification::type {
         #
         util_memoize_flush [list notification::type::get_type_id_not_cached $short_name]
     }
-    
+
     ad_proc -public get {
         {-short_name:required}
         {-column_array:required}
@@ -101,7 +107,7 @@ namespace eval notification::type {
         upvar $column_array row
         db_1row select_notification_type {} -column_array row
     }
-    
+
     ad_proc -public interval_enable {
         {-type_id:required}
         {-interval_id:required}
@@ -120,12 +126,12 @@ namespace eval notification::type {
     } {
 	Intervals must be enabled on a per notification type basis. For example, weekly notifications
 	may not be enabled for full forum posts, as that might be too much email (system choice)
-	This disables a given interval for a given notification type.	
+	This disables a given interval for a given notification type.
     } {
         # perform the delete if necessary
         db_dml delete_interval_map {}
     }
-    
+
     ad_proc -public delivery_method_enable {
         {-type_id:required}
         {-delivery_method_id:required}
@@ -137,11 +143,11 @@ namespace eval notification::type {
         # perform the insert if necessary
         db_dml insert_delivery_method_map {}
     }
-    
+
     ad_proc -public delivery_method_disable {
         {-type_id:required}
         {-delivery_method_id:required}
-    } { 
+    } {
 	Delivery methods must be enabled on a per notification type basis. For example, full forum posts
 	may not be enabled for SMS delivery, as that would be too long.
 	This disables a given delivery method for a given notification type.
@@ -163,7 +169,7 @@ namespace eval notification::type {
         # Dispatch to the notification type specific reply processing
         set r [acs_sc::invoke -contract NotificationType -operation ProcessReply -call_args [list $reply_id] -impl $impl_key]
     }
-    
+
 }
 
 # Local variables:

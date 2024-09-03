@@ -9,9 +9,9 @@
 --
 
 --drop view acs_object_party_method_map;
-drop view acs_object_party_privilege_map;
-drop view acs_object_grantee_priv_map;
-drop view acs_permissions_all;
+-- drop view acs_object_party_privilege_map;
+-- drop view acs_object_grantee_priv_map;
+-- drop view acs_permissions_all;
 drop view acs_privilege_descendant_map;
 \t
 select drop_package('acs_permission');

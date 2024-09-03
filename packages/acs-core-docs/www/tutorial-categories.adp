@@ -1,7 +1,11 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Categories}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Categories}</property>
 <property name="doc(title)">Categories</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="tutorial-admin-pages" leftLabel="Prev"
 			title="Chapter 10. Advanced
@@ -9,9 +13,11 @@ Topics"
 			rightLink="profile-code" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="tutorial-categories" id="tutorial-categories"></a>Categories</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">extended by <a class="ulink" href="mailto:nima.mazloumi\@gmx.de" target="_top">Nima
-Mazloumi</a>
-</span></p><span style="color: red">&lt;/authorblurb&gt;</span><p>You can associate any ACS Object with one or more categories. In
+<a name="tutorial-categories" id="tutorial-categories"></a>Categories</h2></div></div></div><div class="authorblurb">
+<p>extended by <a class="ulink" href="mailto:nima.mazloumi\@gmx.de" target="_top">Nima Mazloumi</a>
+</p>
+OpenACS docs are written by the named authors, and may be edited by
+OpenACS documentation staff.</div><p>You can associate any ACS Object with one or more categories. In
 this tutorial we&#39;ll show how to equip your application with
 user interface to take advantage of the Categories service.</p><p>We&#39;ll start by installing the Categories service. Go to
 <code class="computeroutput">/acs/admin</code> and install it. This
@@ -31,10 +37,10 @@ market segments etc. Before users of your application can take
 advantage of the Categories service there needs to be a way for
 administrators of your application to choose which category trees
 are applicable for the application.</p><p>The way to achieve this is to provide a link to the Category
-Management pages. Add the following snippet to your <code class="computeroutput">/var/lib/aolserver/<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>/packages/myfirstpackage/www/admin/index.tcl</code>
+Management pages. Add the following snippet to your <code class="computeroutput">/var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/packages/myfirstpackage/www/admin/index.tcl</code>
 file:</p><pre class="programlisting">
                   set category_map_url [export_vars -base "[site_node::get_package_url -package_key categories]cadmin/one-object" { { object_id $package_id } }]
-          </pre><p>and the following snippet to your <code class="computeroutput">/var/lib/aolserver/<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>/packages/myfirstpackage/www/admin/index.adp</code>
+          </pre><p>and the following snippet to your <code class="computeroutput">/var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/packages/myfirstpackage/www/admin/index.adp</code>
 file:</p><pre class="programlisting">
                   &lt;a href="\@category_map_url\@"&gt;#­categories.Site_wide_Categories#&lt;/a&gt;
           </pre><p>The link created by the above code (<code class="computeroutput">category_map_url</code>) will take the admin to
@@ -61,17 +67,15 @@ To achieve this we&#39;ll need to use the <code class="computeroutput">-extend</
                         # extend the form to support categories
                         set package_id [ad_conn package_id]
                             
-                        category::ad_form::add_widgets -form_name note -container_object_id $package_id -categorized_object_id [value_if_exists item_id]
+                        category::ad_form::add_widgets -form_name note -container_object_id $package_id -categorized_object_id [expr {[info exists item_id] ? $item_id : ""}]
 
                         ad_form -extend -name note -on_submit {
                                 set category_ids [category::ad_form::get_categories -container_object_id $package_id]
                         } -new_data {
                                 ....
                                         category::map_object -remove_old -object_id $item_id $category_ids
-                        db_dml insert_asc_named_object "insert into acs_named_objects (object_id, object_name, package_id) values ( :item_id, :title, :package_id)"
                         } -edit_data {
                         ....
-                                db_dml update_asc_named_object "update acs_named_objects set object_name = :title, package_id = :package_id where object_id = :item_id"
                                 category::map_object -remove_old -object_id $item_id $category_ids
                         } -after_submit {
                                         ad_returnredirect "."
@@ -80,17 +84,11 @@ To achieve this we&#39;ll need to use the <code class="computeroutput">-extend</
                         </pre><p>While the <code class="computeroutput">category::ad_form::add_widgets</code> proc is
 taking care to extend your form with associated categories you need
 to ensure that your items are mapped to the corresponding category
-object yourself. Also since the categories package knows nothing
-from your objects you have to keep the <code class="computeroutput">acs_named_objects</code> table updated with any
-changes taking place. We use the items title so that they are
-listed in the categories browser by title.</p><p>Make sure that you also delete these entries if your item is
-delete. Add this to your corresponding delete page:</p><pre class="programlisting">
-                        db_dml delete_named_object "delete from acs_named_objects where object_id = :item_id"
-                        </pre><p>
+object yourself.</p><p>
 <code class="computeroutput">note-edit.tcl</code> requires a
 <code class="computeroutput">note_id</code> to determine which
 record should be deleted. It also looks for a confirmation
-variable, which should initially be absert. If it is absent, we
+variable, which should initially be absent. If it is absent, we
 create a form to allow the user to confirm the deletion. Note that
 in <code class="computeroutput">entry-edit.tcl</code> we used
 <code class="computeroutput">ad_form</code> to access the Form
@@ -98,8 +96,7 @@ Template commands; here, we call them directly because we don&#39;t
 need the extra features of ad_form. The form calls itself, but with
 hidden variables carrying both <code class="computeroutput">note_id</code> and <code class="computeroutput">confirm_p</code>. If confirm_p is present, we
 delete the record, set redirection back to the index, and abort
-script execution.</p><p>The database commands:</p><pre class="screen">
-[$OPENACS_SERVICE_NAME\@yourserver www]$ <strong class="userinput"><code>emacs note-delete.xql</code></strong>
+script execution.</p><p>The database commands:</p><pre class="screen">[$OPENACS_SERVICE_NAME\@yourserver www]$ <strong class="userinput"><code>emacs note-delete.xql</code></strong>
 </pre><pre class="programlisting">&lt;?xml version="1.0"?&gt;
 &lt;queryset&gt;
   &lt;fullquery name="do_delete"&gt;
@@ -112,8 +109,7 @@ script execution.</p><p>The database commands:</p><pre class="screen">
       select samplenote__name(:note_id)
     &lt;/querytext&gt;
   &lt;/fullquery&gt;
-&lt;/queryset&gt;</pre><p>And the adp page:</p><pre class="screen">
-[$OPENACS_SERVICE_NAME\@yourserver www]$ <strong class="userinput"><code>emacs note-delete.adp</code></strong>
+&lt;/queryset&gt;</pre><p>And the adp page:</p><pre class="screen">[$OPENACS_SERVICE_NAME\@yourserver www]$ <strong class="userinput"><code>emacs note-delete.adp</code></strong>
 </pre><pre class="programlisting">
 &lt;master&gt;
 &lt;property name="title"&gt;\@title\@&lt;/property&gt;
@@ -197,16 +193,13 @@ format.</p><p>The first step is to define the optional parameter <code class="co
 this is the case and a category id is passed you need to extend
 your sql select query to support filtering. One way would be to
 extend the <code class="computeroutput">mfp::note::get</code> proc
-to support two more swiches <code class="computeroutput">-where_clause</code> and <code class="computeroutput">-from_clause</code>.</p><pre class="programlisting">
+to support two more switches <code class="computeroutput">-where_clause</code> and <code class="computeroutput">-from_clause</code>.</p><pre class="programlisting">
                 set use_categories_p [parameter::get -parameter "EnableCategoriesP" -default 0]
 
                 if { $use_categories_p == 1 &amp;&amp; $category_id ne "" } {
 
-                        set from_clause "category_object_map com, acs_named_objects nam"
-                        set_where_clause "com.object_id = qa.entry_id and
-                                                                nam.package_id = :package_id and
-                                                                com.object_id = nam.object_id and
-                                                                com.category_id = :category_id"
+                        set from_clause "category_object_map com"
+                        set_where_clause "com.object_id = qa.entry_id and com.category_id = :category_id"
                         
                         ...
                                                                 
@@ -263,9 +256,9 @@ your index page:</p><pre class="programlisting">
                         &lt;/group&gt;
                 &lt;/multiple&gt;
                 &lt;a href="\@package_url\@view?\@YOURPARAMS\@"&gt;All Items&lt;/if&gt;
-          </pre><p>Finally you need a an <code class="computeroutput">index.vuh</code> in your www folder to rewrite the
-URLs correctly, <a class="xref" href="tutorial-vuh" title="Using .vuh files for pretty urls">the section called “Using .vuh
-files for pretty urls”</a>:</p><pre class="programlisting">
+          </pre><p>Finally you need an <code class="computeroutput">index.vuh</code> in your www folder to rewrite the
+URLs correctly, <a class="xref" href="tutorial-vuh" title="Using .vuh files for pretty URLs">the section called “Using .vuh
+files for pretty URLs”</a>:</p><pre class="programlisting">
           set url /[ad_conn extra_url]
 
           if {[regexp {^/+cat/+([^/]+)/*} $url ignore_whole category_id]} {

@@ -6,13 +6,13 @@ ad_library {
     @creation-date 22 January 2003
 }
 
-ad_proc apm_test_callback_file_path {} {
+ad_proc -private apm_test_callback_file_path {} {
     The path of the test file used to check that the callback proc executed ok.
 } {
     return "[acs_package_root_dir acs-tcl]/tcl/test/callback_proc_test_file"
 }
 
-ad_proc apm_test_callback_proc {
+ad_proc -private apm_test_callback_proc {
     {-arg1:required}
     {-arg2:required}
 } {
@@ -57,8 +57,14 @@ aa_stub apm_arg_names_for_callback_type {
 aa_register_case \
     -cats {api db smoke} \
     -procs {
+        acs_package_root_dir
         apm_generate_package_spec
         apm_read_package_info_file
+        apm_supported_callback_types
+        db_dml
+
+        apm_attribute_value
+        db_1row
     } \
     apm__test_info_file {
         Test that the procs for interfacing with package info files -
@@ -68,7 +74,7 @@ aa_register_case \
 
         @creation-date 22 January 2003
         @author Peter Marklund
-} {
+    } {
     set test_dir "[acs_package_root_dir acs-tcl]/tcl/test"
     set spec_path "${test_dir}/tmp-test-info-file.xml"
     set allowed_type [lindex [apm_supported_callback_types] 0]
@@ -85,7 +91,7 @@ aa_register_case \
         db_dml set_test_mount {update apm_package_versions
                                set auto_mount = :auto_mount
                                where version_id = :version_id}
-        }
+    }
 
     set error_p [catch {
         # Add a few test callbacks
@@ -95,18 +101,22 @@ aa_register_case \
                                 values (:version_id, :type, :proc)}
         }
 
-        # Get the xml string
+        # Get the XML string
         set spec [apm_generate_package_spec $version_id]
 
-        # Write xml to file
+        # Write XML to file
         set spec_file_id [open $spec_path w]
         puts $spec_file_id $spec
         close $spec_file_id
 
-        # Read the xml file
-        array set spec_array [apm_read_package_info_file $spec_path]
+        # Read the XML file
+        aa_silence_log_entries -severities warning {
+            # suppress
+            # ... package info file ... contains an unsupported callback type 'unknown-type' ...
+            array set spec_array [apm_read_package_info_file $spec_path]
+        }
 
-        # Assert that info parsed from xml file is correct
+        # Assert that info parsed from XML file is correct
         array set parsed_callback_array $spec_array(callbacks)
 
         aa_true "Only one permissible callback should be returned, got array [array get parsed_callback_array]" \
@@ -131,7 +141,7 @@ aa_register_case \
                              where version_id = :version_id}
 
 
-    if { $error_p } {
+        if { $error_p } {
         error "$error - $::errorInfo"
     }
 }
@@ -144,6 +154,8 @@ aa_register_case \
         apm_package_install_callbacks
         apm_remove_callback_proc
         apm_post_instantiation_tcl_proc_from_key
+        apm_supported_callback_types
+        apm_version_id_from_package_key
     } \
     apm__test_callback_get_set {
         Test the procs apm_get_callback_proc,
@@ -186,8 +198,17 @@ aa_register_case \
 
 aa_register_case \
     -cats {db api smoke} \
-    -procs apm_invoke_callback_proc \
-    apm__test_callback_invoke {
+    -procs {
+        apm_invoke_callback_proc
+        apm_remove_callback_proc
+        apm_set_callback_proc
+        apm_supported_callback_types
+        apm_test_callback_file_path
+        apm_version_id_from_package_key
+
+        apm_callback_format_args
+        apm_test_callback_proc
+    } apm__test_callback_invoke {
         Test the proc apm_invoke_callback_proc
 
         @author Peter Marklund
@@ -225,100 +246,123 @@ aa_register_case \
 
 aa_register_case \
     -cats {api smoke} \
-    -procs xml_get_child_node_content_by_path \
+    -procs {
+        xml_doc_get_first_node
+        xml_get_child_node_content_by_path
+        xml_parse
+    } \
     xml_get_child_node_content_by_path {
         Test xml_get_child_node_content_by_path
-} {
-    set tree [xml_parse -persist {
-<enterprise>
-  <properties>
-    <datasource>Dunelm Services Limited</datasource>
-    <target>Telecommunications LMS</target>
-    <type>DATABASE UPDATE</type>
-    <datetime>2001-08-08</datetime>
-  </properties>
-  <person recstatus = "1">
-    <comments>Add a new Person record.</comments>
-    <sourcedid>
-      <source>Dunelm Services Limited</source>
-      <id>CK1</id>
-    </sourcedid>
-    <name>
-      <fn>Clark Kent</fn>
-      <sort>Kent, C</sort>
-      <nickname>Superman</nickname>
-    </name>
-    <demographics>
-      <gender>2</gender>
-    </demographics>
-    <adr>
-      <extadd>The Daily Planet</extadd>
-      <locality>Metropolis</locality>
-      <country>USA</country>
-    </adr>
-  </person>
-</enterprise>
-    }]
+    } {
+        set tree [xml_parse -persist {
+            <enterprise>
+            <properties>
+            <datasource>Dunelm Services Limited</datasource>
+            <target>Telecommunications LMS</target>
+            <type>DATABASE UPDATE</type>
+            <datetime>2001-08-08</datetime>
+            </properties>
+            <person recstatus = "1">
+            <comments>Add a new Person record.</comments>
+            <sourcedid>
+            <source>Dunelm Services Limited</source>
+            <id>CK1</id>
+            </sourcedid>
+            <name>
+            <fn>Clark Kent</fn>
+            <sort>Kent, C</sort>
+            <nickname>Superman</nickname>
+            </name>
+            <demographics>
+            <gender>2</gender>
+            </demographics>
+            <adr>
+            <extadd>The Daily Planet</extadd>
+            <locality>Metropolis</locality>
+            <country>USA</country>
+            </adr>
+            </person>
+            </enterprise>
+        }]
 
-    set root_node [xml_doc_get_first_node $tree]
+        set root_node [xml_doc_get_first_node $tree]
 
-    aa_equals "person -> name -> nickname is Superman" \
-        [xml_get_child_node_content_by_path $root_node { { person name nickname } }] "Superman"
+        aa_equals "person -> name -> nickname is Superman" \
+         [xml_get_child_node_content_by_path $root_node { { person name nickname } }] "Superman"
 
-    aa_equals "Same, but after trying a couple of non-existent paths or empty notes" \
-        [xml_get_child_node_content_by_path $root_node { { does not exist } { properties } { person name nickname } { person sourcedid id } }] "Superman"
-    aa_equals "properties -> datetime" \
-        [xml_get_child_node_content_by_path $root_node { { person comments foo } { person name first_names } { properties datetime } }] "2001-08-08"
+        aa_equals "Same, but after trying a couple of non-existent paths or empty notes" \
+         [xml_get_child_node_content_by_path $root_node { { does not exist } { properties } { person name nickname } { person sourcedid id } }] "Superman"
+        aa_equals "properties -> datetime" \
+         [xml_get_child_node_content_by_path $root_node { { person comments foo } { person name first_names } { properties datetime } }] "2001-08-08"
 
-
+        $tree delete
 }
 
 aa_register_case \
-    -cats {api} \
+    -cats {api smoke production_safe} \
     -procs {
         site_node::get_children
         site_node::get_node_id
-    } \
-    -on_error {
+
+        "::xo::SiteNode instproc get"
+        "::xo::SiteNodeUrlspaceCache instproc get_node_id"
+        "::xo::SiteNodesCache instproc get_node_id"
+        "::xo::SiteNodesCache instproc get_url"
+        "::xo::SiteNodesCache instproc get_children"
+        "::xo::SiteNode instproc get_children"
+        db_1row
+    } -on_error {
         site_node::get_children returns root node!
     } site_node_get_children {
     Test site_node::get_children
 } {
+    #
+    # Check if the number of nodes in the system is large, and avoid testing
+    # on all children if that is the case, as it can take too long
+    #
+    set max_nodes 1000
+    set current_nodes [db_string nodes_number {select count(1) from site_nodes}]
+    if {$current_nodes > $max_nodes} {
+        set all_switch {}
+        aa_log "Large number of nodes ($current_nodes > $max_nodes), testing only the root node and its direct children"
+    } else {
+        set all_switch {-all}
+    }
+    #
     # Start with a known site-map entry
-    set node_id [site_node::get_node_id -url "/"]
-
-    set child_node_ids [site_node::get_children \
-                            -all \
+    #
+    set node_id         [site_node::get_node_id -url "/"]
+    set child_node_ids  [site_node::get_children \
                             -element node_id \
+                            {*}$all_switch \
                             -node_id $node_id]
-
-    # lsearch returns '-1' if not found
+    #
+    # Check that site_node::get_children does not return the root node
+    # (lsearch returns '-1' if not found)
+    #
     aa_equals "site_node::get_children does not return root node" [lsearch -exact $child_node_ids $node_id] -1
-
-
-    # -package_key
-    set nodes [site_node::get_children -all -element node_id -node_id $node_id -filters { package_key "acs-admin" }]
-
+    #
+    # Filter by package_key should be equivalent to using -package_key
+    #
+    set nodes [site_node::get_children -element node_id {*}$all_switch -node_id $node_id -filters { package_key "acs-admin" }]
     aa_equals "package_key arg. identical to -filters" \
-        [site_node::get_children -all -element node_id -node_id $node_id -package_key "acs-admin"] \
+        [site_node::get_children -element node_id {*}$all_switch -node_id $node_id -package_key "acs-admin"] \
         $nodes
-
     aa_equals "Found exactly one acs-admin node" [llength $nodes] 1
-
-
-    # -package_type
-    set nodes [site_node::get_children -all -element node_id -node_id $node_id -filters { package_type "apm_service" }]
+    #
+    # Filtering by package_type should be equivalent to using -package_type
+    #
+    set nodes [site_node::get_children -element node_id {*}$all_switch -node_id $node_id -filters { package_type "apm_service" }]
     aa_equals "package_type arg. identical to filter_element package_type" \
-        [site_node::get_children -all -element node_id -node_id $node_id -package_type "apm_service"] \
+        [site_node::get_children -element node_id {*}$all_switch -node_id $node_id -package_type "apm_service"] \
         $nodes
 
     aa_true "Found at least one apm_service node" {[llength $nodes] > 0}
-
-    # nonexistent package_type
+    #
+    # Check for nonexistent package_type
+    #
     aa_true "No nodes with package type 'foo'" \
-        {[llength [site_node::get_children -all -element node_id -node_id $node_id -package_type "foo"]] == 0}
-
-
+        {[llength [site_node::get_children -element node_id {*}$all_switch -node_id $node_id -package_type "foo"]] == 0}
 }
 
 aa_register_case \
@@ -343,7 +387,7 @@ aa_register_case \
     # Test offending post sent by Dave Bauer
 
     set offending_post {
-I have a dynamically assigned ip address, so I use dyndns.org to
+I have a dynamically assigned IP address, so I use dyndns.org to
 change
 addresses for my acs server.
 Mail is sent to any yahoo address fine. Mail sent to aol fails. I am
@@ -413,50 +457,286 @@ anybody have any ideas?
 
 aa_register_case \
     -cats {api smoke} \
-    -procs ad_page_contract_filter_invoke \
-    ad_page_contract_filters {
+    -procs {
+        ad_page_contract_filter_invoke
+        ad_page_contract_filter_proc_allhtml
+        ad_page_contract_filter_proc_boolean
+        ad_page_contract_filter_proc_clock
+        ad_page_contract_filter_proc_date
+        ad_page_contract_filter_proc_email
+        ad_page_contract_filter_proc_float
+        ad_page_contract_filter_proc_html
+        ad_page_contract_filter_proc_integer
+        ad_page_contract_filter_proc_localurl
+        ad_page_contract_filter_proc_naturalnum
+        ad_page_contract_filter_proc_negative_float
+        ad_page_contract_filter_proc_nohtml
+        ad_page_contract_filter_proc_object_id
+        ad_page_contract_filter_proc_object_type
+        ad_page_contract_filter_proc_dbtext
+        ad_page_contract_filter_proc_oneof
+        ad_page_contract_filter_proc_path
+        ad_page_contract_filter_proc_phone
+        ad_page_contract_filter_proc_printable
+        ad_page_contract_filter_proc_range
+        ad_page_contract_filter_proc_safetclchars
+        ad_page_contract_filter_proc_sql_identifier
+        ad_page_contract_filter_proc_string_length
+        ad_page_contract_filter_proc_string_length_range
+        ad_page_contract_filter_proc_time
+        ad_page_contract_filter_proc_time24
+        ad_page_contract_filter_proc_tmpfile
+        ad_page_contract_filter_proc_token
+        ad_page_contract_filter_proc_word
+
+        ad_complain
+        ad_page_contract_filter_proc
+        ad_page_contract_set_validation_passed
+        util_complete_url_p
+        util::external_url_p
+        ad_opentmpfile
+    } ad_page_contract_filters {
         Test ad_page_contract_filters
-} {
-    set filter integer
-    foreach { value result } { "1" 1 "a" 0 "1.2" 0 "'" 0 } {
-        if { $result } {
-            aa_true "$value is $filter" [ad_page_contract_filter_invoke $filter dummy value]
-        } else {
-            aa_false "$value is NOT $filter" [ad_page_contract_filter_invoke $filter dummy value]
-        }
-    }
+    } {
+        aa_section {Filters without format spec}
 
-    set filter naturalnum
-    foreach { value result } { "1" 1 "-1" 0 "a" 0 "1.2" 0 "'" 0 } {
-        if { $result } {
-            aa_true "$value is $filter" [ad_page_contract_filter_invoke $filter dummy value]
-        } else {
-            aa_false "$value is NOT $filter" [ad_page_contract_filter_invoke $filter dummy value]
+        dict set cases integer { "1" 1 "a" 0 "1.2" 0 "'" 0 }
+        dict set cases naturalnum { "1" 1 0 1 "-1" 0 "a" 0 "1.2" 0 "'" 0 }
+        dict set cases float { "1" 1 "1.0" 1 "a" 0 "-1.0" 1 "1,0" 0 }
+        dict set cases negative_float { "1" 1 "-1.0" 1 "-a" 0 "-1,0" 0 }
+        dict set cases object_id {
+            "1" 1 "a" 0 "1.2" 0 "'" 0 -1 1 "0x0" 0
+            "-2147483648" 1 "2147483647" 1 "-2147483649" 0 "2147483648" 0
         }
-    }
+        dict set cases boolean {
+            "1" 1 "-1" 0 "a" 0 "0" 1 "true" 1 "f" 1 "TRUE" 1 "ok" 0 "nok" 0
+        }
 
-    set filter html
-    foreach { value result } { "'" 1 "<p>" 1 } {
-        if { $result } {
-            aa_true "$value is $filter" [ad_page_contract_filter_invoke $filter dummy value]
-        } else {
-            aa_false "$value is NOT $filter" [ad_page_contract_filter_invoke $filter dummy value]
-        }
-    }
+        dict set cases word {red 1 " " 0 "hello_world" 1 {$a} 0 a1 1 <p> 0 "a.b" 0 "-flag" 0 "1,2" 0 "r: -1" 0}
+        dict set cases token {red 1 " " 1 "hello_world" 1 {$a} 0 a1 1 <p> 0 "a.b" 1 "-flag" 1 "1,2" 1 "r: -1" 1}
+        dict set cases safetclchars {red 1 " " 1 "hello world" 1 {$a} 0 a1 1 <p> 1 "a.b" 1 "-flag" 1 "1,2" 1 "r: -1" 1 {a[b]c} 0 x\\y 0}
 
-    set filter nohtml
-    foreach { value result } { "a" 1 "<p>" 0 } {
-        if { $result } {
-            aa_true "$value is $filter" [ad_page_contract_filter_invoke $filter dummy value]
-        } else {
-            aa_false "$value is NOT $filter" [ad_page_contract_filter_invoke $filter dummy value]
+        dict set cases sql_identifier  {red 1 " " 0 "hello_world" 1 {$a} 0 a1 1 <p> 0 "a.b" 0 "-flag" 0 "1,2" 0 "r: -1" 0}
+        dict set cases email { {philip@mit.edu} 1 {Philip Greenspun <philip@mit.edu>} 0 }
+        dict set cases localurl { . 1 ./index 1 https://o-p-e-n-a-c-s.org/ 0 }
+
+        set nul_char \u00
+        set string_with_nul "I have '$nul_char' inside"
+
+        dict set cases html [list \
+                                 "a" 1 \
+                                 "'" 1 \
+                                 "<p>" 1 \
+                                 "<script>alert('ciao');</script>" [expr {[ad_html_security_check "<script>alert('ciao');</script>"] eq ""}] \
+                                 $string_with_nul 0]
+        dict set cases nohtml [list \
+                                   "a" 1 \
+                                   "'" 1 \
+                                   "<p>" 0 \
+                                   "<script>alert('ciao');</script>" 0 \
+                                   $string_with_nul 1]
+        dict set cases allhtml [list \
+                                    "a" 1 \
+                                    "'" 1 \
+                                    "<p>" 1 \
+                                    "<script>alert('ciao');</script>" 1 \
+                                    $string_with_nul 1]
+
+        dict set cases printable [list \
+                                      "a" 1 \
+                                      "a b" 1 \
+                                      "a\x00b" 0 \
+                                      "name\xc0\x80.jpg" 0 \
+                                      $string_with_nul 0]
+
+        dict set cases date {
+            {day 1 month 1 year 2010} 1
+            {day 60 month 1 year 2010} 0
+            {day 31 month 11 year 2010} 0
+            {day 30 month 11 year <evil>} 0
+            {day "" month "" year ""} 1
         }
+
+        dict set cases time {
+            {ampm am time 00:00:00} 0
+            {ampm am time 01:00:00} 1
+            {ampm pm time 01:00:00} 1
+            {ampm stuff time 01:00:00} 0
+            {ampm "" time 01:00:00} 0
+            {ampm am time 13:00:00} 0
+            {ampm am time 12:67:00} 0
+            {ampm am time 12:00:100} 0
+        }
+
+        dict set cases time24 {
+            {time 00:00:00} 1
+            {time 01:00:00} 1
+            {time 13:00:00} 1
+            {time 12:67:00} 0
+            {time 12:00:100} 0
+            {time 24:00:00} 0
+            {time 23:59:59} 1
+            {time 23:61:59} 0
+        }
+
+        dict set cases path {
+            $path 0
+            \\root\path 0
+            ../test/path 1
+            /my-test/path 1
+            ?wheremypath? 0
+        }
+
+        close [ad_opentmpfile tmpfilename]
+        dict set cases tmpfile [list \
+                                   $tmpfilename 1 \
+                                   /etc/passwd 0 \
+                                   /home/nsadmin/somefile.txt 0 \
+                                   bogusstring 0]
+
+        dict set cases phone {
+            "(800) 888-8888" 1
+            "800-888-8888" 1
+            "800.888.8888" 1
+            "8008888888" 1
+            "(800) 888-8888 extension 405" 1
+            "(800) 888-8888abcd" 1
+            "" 1
+            "1-800-888-8888" 0
+            "10-10-220 800.888.8888" 0
+            "abcd(800) 888-8888" 0
+        }
+
+        set nul_char \u00
+        set string_with_nul "I have '$nul_char' inside"
+        dict set cases dbtext [list \
+                                9999999999999999999999 1 \
+                                "I am text" 1 \
+                                "I am <b>HTML<b>" 1 \
+                                "select min(object_id) from acs_objects where object_type = 'user'" 1 \
+                                $string_with_nul 0 \
+                                "I also have '\u00\u00'" 0 \
+                               ]
+
+
+        foreach filter [dict keys $cases] {
+            foreach { value result } [dict get $cases $filter] {
+                if {[regexp {[^[:print:]]} $value]} {
+                    #
+                    # Use ns_urlencode to avoid error messages, when
+                    # invalid strings are added to the DB. We should
+                    # probably export NaviServer's
+                    # DStringAppendPrintable for such cases.
+                    #
+                    set print_value [ns_urlencode $value]
+                } else {
+                    set print_value $value
+                }
+                if {$filter in {"date" "time" "time24"}} {
+                    #
+                    # This filter passes an array
+                    #
+                    array set value_array $value
+                    if { $result } {
+                        aa_true "'[ns_quotehtml $print_value]' is $filter" \
+                            [ad_page_contract_filter_invoke $filter dummy value_array]
+                    } else {
+                        aa_false "'[ns_quotehtml $print_value]' is NOT $filter" \
+                            [ad_page_contract_filter_invoke $filter dummy value_array]
+                    }
+                    unset value_array
+                } else {
+                    if { $result } {
+                        aa_true "'[ns_quotehtml $print_value]' is $filter" \
+                            [ad_page_contract_filter_invoke $filter dummy value]
+                    } else {
+                        aa_silence_log_entries -severities [expr {$filter eq "tmpfile" ? "warning" : ""}] {
+                            aa_false "'[ns_quotehtml $print_value]' is NOT $filter" \
+                                [ad_page_contract_filter_invoke $filter dummy value]
+                        }
+                    }
+                }
+            }
+        }
+
+        set cases {}
+
+        aa_section {Filters with format spec}
+
+        dict set cases clock {
+             1234 "%s" 1
+             2022-01-01 "%s" 0
+             2022-01-01 "%Y-%m-%d" 1
+             2022-01-01 {"%Y-%m-%d" "%s"} 1
+        }
+
+        dict set cases object_type [list \
+                                9999999999999999999999 acs_object 0 \
+                                [db_string q {select min(object_id) from acs_objects}] acs_object 1 \
+                                [db_string q {select min(object_id) from acs_objects where object_type <> 'user'}] user 0 \
+                                [db_string q {select min(object_id) from acs_objects where object_type = 'user'}] user 1 \
+                                [db_string q {select min(object_id) from acs_objects where object_type <> 'user'}] {user acs_object} 1 \
+                                [db_string q {select min(object_id) - 1 from acs_objects}] {user acs_object} 0 \
+                               ]
+
+        dict set cases oneof {
+             1234 {1234 5} 1
+             2022-01-01 {1234 6} 0
+             "apple" {"banana" "mango" "apple"} 1
+        }
+
+        dict set cases range {
+            1 {-1 10} 1
+            1 {-2 0} 0
+            0001 {-1000 10000} 1
+            42 {0 1} 0
+        }
+
+        dict set cases string_length {
+            abcd {max 2} 0
+            abcd {min 2} 1
+            abcd {max 6} 1
+            a {min 2} 0
+        }
+
+        dict set cases string_length_range {
+            abcd {0 2} 0
+            abcd {2 100} 1
+            abcd {0 6} 1
+            a {2 5} 0
+        }
+
+        foreach filter [dict keys $cases] {
+            foreach { value formats result } [dict get $cases $filter] {
+                if {[regexp {[^[:print:]]} $value]} {
+                    #
+                    # Use ns_urlencode to avoid error messages, when
+                    # invalid strings are added to the DB. We should
+                    # probably export NaviServer's
+                    # DStringAppendPrintable for such cases.
+                    #
+                    set print_value [ns_urlencode $value]
+                } else {
+                    set print_value $value
+                }
+                if { $result } {
+                    aa_true "'[ns_quotehtml $print_value]' is $filter ($formats)" \
+                        [ad_page_contract_filter_invoke $filter dummy value [list $formats]]
+                } else {
+                    aa_false "'[ns_quotehtml $print_value]' is NOT $filter ($formats)" \
+                        [ad_page_contract_filter_invoke $filter dummy value [list $formats]]
+                }
+            }
+        }
+
     }
-}
 
 aa_register_case \
     -cats {api smoke} \
-    -procs export_vars \
+    -procs {
+        export_vars
+        ad_urlencode_url
+    } \
      export_vars {
         Testing export_vars
 } {
@@ -487,6 +767,18 @@ aa_register_case \
         [export_vars -no_empty { foo { bar "" } }] \
         "foo=1&bar="
 
+    aa_equals "base ending with '?', with vars" \
+        [export_vars -base "dummy?" { foo { bar "" } }] \
+        "dummy?foo=1&bar="
+
+    aa_equals "base ending with '?', no vars" \
+        [export_vars -base "dummy?"] \
+        "dummy"
+
+    aa_equals "base containing more than two slashes " \
+        [export_vars -base "http://dummywebsite.com/one/two" {{foo a} {bar b}}] \
+        "http://dummywebsite.com/one/two?foo=a&bar=b"
+
     # Test base with query vars
     set var1 a
     set var2 {}
@@ -501,6 +793,41 @@ aa_register_case \
     aa_equals "base without query vars" \
         [export_vars -base $base {var1 var2}] \
         "$base?$export_no_base"
+
+    # Test just ad_urlencode_url (used by export_vars)
+    set url http://example.com/example
+    aa_equals "complex URL" \
+        [ad_urlencode_url $url] \
+        $url
+
+    set url http://example.com/foo=1/bar
+    aa_equals "complex URL with char which has to be escaped" \
+        [ad_urlencode_url $url] \
+        http://example.com/foo%3d1/bar
+
+    # Test just ad_urlencode_url: location without trailing slash
+    set url http://example.com
+    aa_equals "URL with trailing slash" \
+        [ad_urlencode_url $url] \
+        $url/
+
+    # Test just ad_urlencode_url: location with trailing slash
+    set url http://example.com/
+    aa_equals "URL without trailing slash" \
+        [ad_urlencode_url $url] \
+        $url
+
+    set url http://dummywebsite.com/one/two
+    aa_equals "base with path containing more than 1 slash" \
+        [ad_urlencode_url $url] \
+        $url
+
+    # Test full qualified base without query vars
+    set base http://example.com/example
+    aa_equals "base without query vars" \
+        [export_vars -base $base] \
+        $base
+
 }
 
 aa_register_case \
@@ -511,6 +838,8 @@ aa_register_case \
         site_node::get_element
         site_node::get_node_id
         site_node::verify_folder_name
+
+        "::xo::SiteNodesCache instproc get_url"
     } \
     site_node_verify_folder_name {
     Testing site_node::verify_folder_name
@@ -552,178 +881,6 @@ aa_register_case \
 }
 
 
-aa_register_case \
-    -cats {api db smoke} \
-    -procs db_transaction \
-    db__transaction {
-        Test db_transaction
-} {
-
-    # create a temp table for testing
-    catch {db_dml remove_table {drop table tmp_db_transaction_test}}
-    db_dml new_table {create table tmp_db_transaction_test (a integer constraint tmp_db_transaction_test_pk primary key, b integer)}
-
-
-    aa_equals "Test we can insert a row in a db_transaction clause" \
-        [catch {db_transaction {db_dml test1 {insert into tmp_db_transaction_test(a,b) values (1,2)}}}] 0
-
-    aa_equals "Verify clean insert worked" \
-        [db_string check1 {select a from tmp_db_transaction_test} -default missing] 1
-
-    # verify the on_error clause is called
-    set error_called 0
-    catch {db_transaction { set foo } on_error {set error_called 1}} errMsg
-    aa_equals "error clause invoked on Tcl error" \
-        $error_called 1
-
-    # Check that the Tcl error propagates up from the code block
-    set error_p [catch {db_transaction { error "BAD CODE"}} errMsg]
-    aa_equals "Tcl error propagates to errMsg from code block" \
-        $errMsg "Transaction aborted: BAD CODE"
-
-    # Check that the Tcl error propagates up from the on_error block
-    set error_p [catch {db_transaction {set foo} on_error { error "BAD CODE"}} errMsg]
-    aa_equals "Tcl error propagates to errMsg from on_error block" \
-        $errMsg "BAD CODE"
-
-
-    # check a dup insert fails and the primary key constraint comes back in the error message.
-    set error_p [catch {db_transaction {db_dml test2 {insert into tmp_db_transaction_test(a,b) values (1,2)}}} errMsg]
-    aa_true "error thrown inserting duplicate row" $error_p
-    aa_true "error message contains constraint violated" [string match -nocase {*tmp_db_transaction_test_pk*} $errMsg]
-
-    # check a sql error calls on_error clause
-    set error_called 0
-    set error_p [catch {db_transaction {db_dml test3 {insert into tmp_db_transaction_test(a,b) values (1,2)}} on_error {set error_called 1}} errMsg]
-    aa_false "no error thrown with on_error clause" $error_p
-    aa_equals "error message empty with on_error clause" \
-        $errMsg {}
-
-    # Check on explicit aborts
-    set error_p [catch {
-        db_transaction {
-            db_dml test4 {
-                insert into tmp_db_transaction_test(a,b) values (2,3)
-            }
-            db_abort_transaction
-        }
-    } errMsg]
-    aa_true "error thrown with explicit abort" $error_p
-    aa_equals "row not inserted with explicit abort" \
-        [db_string check4 {select a from tmp_db_transaction_test where a = 2} -default missing] "missing"
-
-    # Check a failed sql command can do sql in the on_error block
-    set sqlok {}
-    set error_p [catch {
-        db_transaction {
-            db_dml test5 {
-                insert into tmp_db_transaction_test(a,b) values (1,2)
-            }
-        } on_error {
-            set sqlok [db_string check5 {select a from tmp_db_transaction_test where a = 1}]
-        }
-    } errMsg]
-    aa_false "No error thrown doing sql in on_error block" $error_p
-    aa_equals "Query succeeds in on_error block" \
-        $sqlok 1
-
-
-    # Check a failed transactions dml is rolled back in the on_error block
-    set error_p [catch {
-        db_transaction {
-            error "BAD CODE"
-        } on_error {
-            db_dml test6 {
-                insert into tmp_db_transaction_test(a,b) values (3,4)
-            }
-        }
-    } errMsg]
-    aa_false "No error thrown doing insert dml in on_error block" $error_p
-    aa_equals "Insert in on_error block rolled back, code error" \
-        [db_string check6 {select a from tmp_db_transaction_test where a = 3} -default {missing}] missing
-
-
-    # Check a failed transactions dml is rolled back in the on_error block
-    set error_p [catch {
-        db_transaction {
-            db_dml test7 {
-                insert into tmp_db_transaction_test(a,b) values (1,2)
-            }
-        } on_error {
-            db_dml test8 {
-                insert into tmp_db_transaction_test(a,b) values (3,4)
-            }
-        }
-    } errMsg]
-    aa_false "No error thrown doing insert dml in on_error block" $error_p
-    aa_equals "Insert in on_error block rolled back, sql error" \
-        [db_string check8 {select a from tmp_db_transaction_test where a = 3} -default {missing}] missing
-
-
-
-    # check nested db_transactions work properly with clean code
-    set error_p [catch {
-        db_transaction {
-            db_dml test9 {
-                insert into tmp_db_transaction_test(a,b) values (5,6)
-            }
-            db_transaction {
-                db_dml test10 {
-                    insert into tmp_db_transaction_test(a,b) values (6,7)
-                }
-            }
-        }
-    } errMsg]
-    aa_false "No error thrown doing nested db_transactions" $error_p
-    aa_equals "Data inserted in  outer db_transaction" \
-        [db_string check9 {select a from tmp_db_transaction_test where a = 5} -default {missing}] 5
-    aa_equals "Data inserted in nested db_transaction" \
-        [db_string check10 {select a from tmp_db_transaction_test where a = 6} -default {missing}] 6
-
-
-
-    # check error in outer transaction rolls back nested transaction
-    set error_p [catch {
-        db_transaction {
-            db_dml test11 {
-                insert into tmp_db_transaction_test(a,b) values (7,8)
-            }
-            db_transaction {
-                db_dml test12 {
-                    insert into tmp_db_transaction_test(a,b) values (8,9)
-                }
-            }
-            error "BAD CODE"
-        }
-    } errMsg]
-    aa_true "Error thrown doing nested db_transactions" $error_p
-    aa_equals "Data rolled back in outer db_transactions with error in outer" \
-        [db_string check11 {select a from tmp_db_transaction_test where a = 7} -default {missing}] missing
-    aa_equals "Data rolled back in nested db_transactions with error in outer" \
-        [db_string check12 {select a from tmp_db_transaction_test where a = 8} -default {missing}] missing
-
-    # check error in outer transaction rolls back nested transaction
-    set error_p [catch {
-        db_transaction {
-            db_dml test13 {
-                insert into tmp_db_transaction_test(a,b) values (9,10)
-            }
-            db_transaction {
-                db_dml test14 {
-                    insert into tmp_db_transaction_test(a,b) values (10,11)
-                }
-                error "BAD CODE"
-            }
-        }
-    } errMsg]
-    aa_true "Error thrown doing nested db_transactions: $errMsg" $error_p
-    aa_equals "Data rolled back in outer db_transactions with error in nested" \
-        [db_string check13 {select a from tmp_db_transaction_test where a = 9} -default {missing}] missing
-    aa_equals "Data rolled back in nested db_transactions with error in nested" \
-        [db_string check14 {select a from tmp_db_transaction_test where a = 10} -default {missing}] missing
-
-    db_dml drop_table {drop table tmp_db_transaction_test}
-}
 
 
 aa_register_case \
@@ -749,12 +906,15 @@ aa_register_case \
 
     aa_equals "List A {a b d d e f g} contains elements that are not in list B {a b c e g} (duplicates being ignored)" [util_get_subset_missing [list a b d d e f g] [list a b c e g]] [list d f]
     aa_equals "List A {a a a b b c} contains no elements that are not in list B {c c a b b e d a e} (duplicates being ignored) " [util_get_subset_missing [list a a a b b c] [list c c a b b e d a e]] [list]
-    
+
 }
 
 aa_register_case \
     -cats {api smoke} \
-    -procs util::randomize_list \
+    -procs {
+        util::randomize_list
+        util::random_range
+    } \
     util__randomize_list {
         Test util::randomize_list
 } {
@@ -768,7 +928,7 @@ aa_register_case \
     set randomized_list [util::randomize_list $org_list]
     aa_true "Ten-element list: $randomized_list" [util_sets_equal_p $org_list $randomized_list]
 
-    set len [randomRange 200]
+    set len [util::random_range 200]
     set org_list [list]
     for { set i 0 } { $i < $len } { incr i } {
         lappend org_list [ad_generate_random_string]
@@ -789,15 +949,15 @@ aa_register_case \
 } {
     aa_equals "Empty value" [util::trim_leading_zeros {}] {}
     aa_equals "Real value (0.31)" [util::trim_leading_zeros 0.31] {.31}
-    aa_equals "Real value with multiple leading zeroes (000.31)" [util::trim_leading_zeros 0000.31] {.31}
+    aa_equals "Real value with multiple leading zeros (000.31)" [util::trim_leading_zeros 0000.31] {.31}
     aa_equals "Real value already trimmed (.31)" [util::trim_leading_zeros .31] {.31}
     aa_equals "Natural value (031)" [util::trim_leading_zeros 031] {31}
-    aa_equals "Natural value with multiple leading zeroes (000031)" [util::trim_leading_zeros 000031] {31}
+    aa_equals "Natural value with multiple leading zeros (000031)" [util::trim_leading_zeros 000031] {31}
     aa_equals "Natural value already trimmed (31)" [util::trim_leading_zeros 31] {31}
     aa_equals "String (0asfda)" [util::trim_leading_zeros 0asfda] {asfda}
-    aa_equals "String with multiple leading zeroes (000asfda)" [util::trim_leading_zeros 000asfda] {asfda}
+    aa_equals "String with multiple leading zeros (000asfda)" [util::trim_leading_zeros 000asfda] {asfda}
     aa_equals "String already trimmed (asfda)" [util::trim_leading_zeros asfda] {asfda}
-    aa_equals "Only zeroes (000)" [util::trim_leading_zeros 000] {0}
+    aa_equals "Only zeros (000)" [util::trim_leading_zeros 000] {0}
     aa_equals "Only one zero (0)" [util::trim_leading_zeros 0] {0}
 }
 
@@ -841,6 +1001,7 @@ aa_register_case \
         ""
         "/test"
         ":/test"
+        "//bxss.me"
     } {
         aa_false $url [util_complete_url_p $url]
     }
@@ -854,31 +1015,53 @@ aa_register_case \
 
 aa_register_case \
     -cats {api smoke production_safe} \
-    -procs util_commify_number \
-    util__commify_number {
+    -procs util_external_url_p \
+    util__external_url_p {
 
-        Test util_commify_number
+        Test util_complete_url_p
+
+        @creation-date 2018-09-17
+        @author Héctor Romojaro <hector.romojaro@gmail.com>
+} {
+    foreach {url expected} {
+        "/test" 0
+        ":/test" 0
+        "//bss.me" 1
+        "http://test" 1
+        "ftp://test" 1
+    } {
+      aa_equals $url [util::external_url_p $url] $expected
+    }
+}
+
+
+aa_register_case \
+    -cats {api smoke production_safe} \
+    -procs lc_numeric \
+    lc__commify_number {
+
+        Test lc_numeric
 
         @creation-date 2018-09-18
         @author Héctor Romojaro <hector.romojaro@gmail.com>
 } {
-    aa_equals "Empty value" [util_commify_number {}] {}
-    aa_equals "0" [util_commify_number 0] {0}
-    aa_equals "0.0" [util_commify_number 0.0] {0.0}
-    aa_equals ".0" [util_commify_number .0] {.0}
-    aa_equals "100" [util_commify_number 100] {100}
-    aa_equals "1000" [util_commify_number 1000] {1,000}
-    aa_equals "1000000" [util_commify_number 1000000] {1,000,000}
-    aa_equals "1000000000" [util_commify_number 1000000000] {1,000,000,000}
-    aa_equals "1000000000.0002340" [util_commify_number 1000000000.0002340] {1,000,000,000.0002340}
-    aa_equals "-0" [util_commify_number -0] {-0}
-    aa_equals "-.0" [util_commify_number -.0] {-.0}
-    aa_equals "-.0000" [util_commify_number -.0000] {-.0000}
-    aa_equals "-100" [util_commify_number -100] {-100}
-    aa_equals "-1000" [util_commify_number -1000] {-1,000}
-    aa_equals "-1000000" [util_commify_number -1000000] {-1,000,000}
-    aa_equals "-1000000000" [util_commify_number -1000000000] {-1,000,000,000}
-    aa_equals "-1000000000.0002340" [util_commify_number -1000000000.0002340] {-1,000,000,000.0002340}
+    aa_equals "Empty value" [lc_numeric {} "" en_US] {}
+    aa_equals "0" [lc_numeric 0 "" en_US] {0}
+    aa_equals "0.0" [lc_numeric 0.0 "" en_US] {0.0}
+    aa_equals ".0" [lc_numeric .0 "" en_US] {.0}
+    aa_equals "100" [lc_numeric 100 "" en_US] {100}
+    aa_equals "1000" [lc_numeric 1000 "" en_US] {1,000}
+    aa_equals "1000000" [lc_numeric 1000000 "" en_US] {1,000,000}
+    aa_equals "1000000000" [lc_numeric 1000000000 "" en_US] {1,000,000,000}
+    aa_equals "1000000000.0002340" [lc_numeric 1000000000.0002340 "" en_US] {1,000,000,000.0002340}
+    aa_equals "-0" [lc_numeric -0 "" en_US] {-0}
+    aa_equals "-.0" [lc_numeric -.0 "" en_US] {-.0}
+    aa_equals "-.0000" [lc_numeric -.0000 "" en_US] {-.0000}
+    aa_equals "-100" [lc_numeric -100 "" en_US] {-100}
+    aa_equals "-1000" [lc_numeric -1000 "" en_US] {-1,000}
+    aa_equals "-1000000" [lc_numeric -1000000 "" en_US] {-1,000,000}
+    aa_equals "-1000000000" [lc_numeric -1000000000 "" en_US] {-1,000,000,000}
+    aa_equals "-1000000000.0002340" [lc_numeric -1000000000.0002340 "" en_US] {-1,000,000,000.0002340}
 }
 
 aa_register_case \
@@ -901,26 +1084,32 @@ aa_register_case \
 aa_register_case \
     -cats {api smoke production_safe} \
     -procs {
-        min
-        max
+        util::min
+        util::max
     } \
     min_max {
 
-        Test min and max procs
+        Test util::min and util::max procs
 
         @creation-date 2018-09-18
         @author Héctor Romojaro <hector.romojaro@gmail.com>
 } {
-    aa_equals "Empty value" [min {}] {}
-    aa_equals "Empty value" [max {}] {}
-    aa_equals "1" [min 1] {1}
-    aa_equals "1" [max 1] {1}
-    aa_equals "1 0 -1" [min 1 0 -2] {-2}
-    aa_equals "1 0 -1" [max 1 0 -2] {1}
-    aa_equals "0 0.89 -0.89 -1" [min 0 0.89 -0.89 -1] {-1}
-    aa_equals "0 0.89 -0.89 -1" [max 0 0.89 -0.89 -1] {0.89}
-    aa_equals "3 1000 0 -3 -2000" [min 3 1000 0 -3 -2000] {-2000}
-    aa_equals "3 1000 0 -3 -2000" [max 3 1000 0 -3 -2000] {1000}
+    aa_equals "Empty value" [util::min {}] {}
+    aa_equals "Empty value" [util::max {}] {}
+    aa_equals "1" [util::min 1] {1}
+    aa_equals "1" [util::max 1] {1}
+    aa_equals "1 0 -1" [util::min 1 0 -2] {-2}
+    aa_equals "1 0 -1" [util::max 1 0 -2] {1}
+    aa_equals "0 0.89 -0.89 -1" [util::min 0 0.89 -0.89 -1] {-1}
+    aa_equals "0 0.89 -0.89 -1" [util::max 0 0.89 -0.89 -1] {0.89}
+    aa_equals "3 1000 0 -3 -2000" [util::min 3 1000 0 -3 -2000] {-2000}
+    aa_equals "3 1000 0 -3 -2000" [util::max 3 1000 0 -3 -2000] {1000}
+    aa_log "List with numeric and non-numeric entries"
+    aa_equals "1 2 z a boy 6" [util::max 1 2 z a boy 6] z
+    aa_equals "1 2 z a boy 6" [util::min 1 2 z a boy 6] 1
+    aa_log "List with some weird entries"
+    aa_equals "1 -0.4 -0,4 -1000 2 @ z a b 6" [util::max 1 -0.4 -0,4 -1000 2 @ z a b 6] z
+    aa_equals "1 -0.4 -0,4 -1000 2 @ z a b 6" [util::min 1 -0.4 -0,4 -1000 2 @ z a b 6] -0,4
 }
 
 aa_register_case \
@@ -929,47 +1118,184 @@ aa_register_case \
     acs_tcl__util_url_valid_p {
     A very rudimentary test of util_url_valid_p
 
+    URL examples extended from https://mathiasbynens.be/demo/url-regex
+
     @creation-date 2004-01-10
     @author Branimir Dolicki (bdolicki@branimir.com)
 } {
+    #
+    # Valid URLs
+    #
     foreach url {
+        "http://la.la"
+        "https://la.la"
+        "https://a.a"
         "http://example.com"
         "https://example.com"
         "ftp://example.com"
         "http://example.com/"
+        "http://example.com/index.html"
         "HTTP://example.com"
         "http://example.com/foo/bar/blah"
         "http://example.com?foo=bar&bar=foo"
+        "http://foo.com/blah_blah"
+        "http://foo.com/blah_blah/"
+        "http://foo.com/blah_blah_(wikipedia)"
+        "http://foo.com/blah_blah_(wikipedia)_(again)"
+        "http://www.example.com/wpstyle/?p=364"
+        "https://www.example.com/foo/?bar=baz&inga=42&quux"
+        "http://✪df.ws/123"
+        "http://userid:password@example.com:8080"
+        "http://userid:password@example.com:8080/"
+        "http://userid@example.com"
+        "http://userid@example.com/"
+        "http://userid@example.com:8080"
+        "http://userid@example.com:8080/"
+        "http://userid:password@example.com"
+        "http://userid:password@example.com/"
+        "http://142.42.1.1/"
+        "http://142.42.1.1:8080/"
+        "http://➡.ws/䨹"
+        "http://⌘.ws"
+        "http://⌘.ws/"
+        "http://foo.com/blah_(wikipedia)#cite-1"
+        "http://foo.com/blah_(wikipedia)_blah#cite-1"
+        "http://foo.com/unicode_(✪)_in_parens"
+        "http://foo.com/(something)?after=parens"
+        "http://☺.damowmow.com/"
+        "http://code.google.com/events/#&product=browser"
+        "http://j.mp"
+        "ftp://foo.bar/baz"
+        "http://foo.bar/?q=Test%20URL-encoded%20stuff"
+        "http://مثال.إختبار"
+        "http://例子.测试"
+        "http://उदाहरण.परीक्षा"
+        "http://-.~_!$&'()*+,;=:%40:80%2f::::::@example.com"
+        "http://1337.net"
+        "http://a.b-c.de"
+        "http://223.255.255.254"
     } {
-        aa_true "Valid web URL $url" [util_url_valid_p "$url"]
+        aa_true "Valid web URL $url"                    [util_url_valid_p "$url"]
+        aa_true "Valid web URL $url (relative allowed)" [util_url_valid_p -relative "$url"]
     }
+    #
+    # Invalid URLs
+    #
     foreach url {
         "xhttp://example.com"
         "httpx://example.com"
         "wysiwyg://example.com"
         "mailto:joe@example.com"
-        "foo"
-        "/foo/bar"
+        "http://"
+        "http://."
+        "http://.."
+        "http://../"
+        "http://?"
+        "http://??"
+        "http://??/"
+        "http://#"
+        "http://##"
+        "http://##/"
+        "http://foo.bar?q=Spaces should be encoded"
+        "http:///a"
+        "rdar://1234"
+        "h://test"
+        "http:// shouldfail.com"
+        ":// should fail"
+        "http://foo.bar/foo(bar)baz quux"
+        "ftps://foo.bar/"
+        "http://.www.foo.bar/"
+        "http://.www.foo.bar./"
+        "la la la"
+        "http:// la.com"
+        {http://$la.com}
+        "http:///la.com"
+        "http://.la.com"
+        "http://?la.com"
+        "http://#la.com"
+        "http://a "
+        "http://a a"
     } {
-        aa_false "Invalid web URL $url" [util_url_valid_p "$url"]
+        aa_false "Invalid web URL $url"                     [util_url_valid_p "$url"]
+        aa_false "Invalid web URL $url (relative allowed)"   [util_url_valid_p -relative "$url"]
+    }
+    #
+    # Relative URLs
+    #
+    foreach url {
+        ""
+        "/"
+        "//"
+        "//a"
+        "///a"
+        "///"
+        "?a"
+        "a:h"
+        "./a"
+        "g?y"
+        "g?y/./x"
+        "foo"
+        "#s"
+        "g#s"
+        "g#s/./x"
+        "g?y#s"
+        ";x"
+        "g;x"
+        "g;x?y#s"
+        "."
+        "./"
+        ".."
+        "../"
+        "../g"
+        "../.."
+        "../../"
+        "../../g"
+        "../../g/"
+        "/foo/"
+        "/foo/bar"
+        "/foo/bar/"
+        "/foo/bar/lol.html"
+        "/foo.bar/?q=Test%20URL-encoded%20stuff"
+        "foo.com"
+        "foo.com/bar/lol"
+        "/foo.com/bar/lol"
+        "/مثال.إختبار"
+        "/例子.测试"
+        "/उदाहरण.परीक्षा"
+        "/-.~_!$&'()*+,;=:%40:80%2f::::::@example.com"
+        "foo.bar/?q=Test%20URL-encoded%20stuff"
+        "مثال.إختبار"
+        "例子.测试"
+        "उदाहरण.परीक्षा"
+        "-.~_!$&'()*+,;=:%40:80%2f::::::@example.com"
+        "no-protocol"
+        "/relative"
+    } {
+        aa_false "Invalid web URL $url"                 [util_url_valid_p "$url"]
+        aa_true "Valid web URL $url (relative allowed)" [util_url_valid_p -relative "$url"]
     }
 }
 
 
 aa_register_case \
     -cats {web smoke} \
-    front_page_1 {
+    -procs {
+        acs::test::http
+        acs::test::reply_has_status_code
+        site_node::get_from_url
+    } front_page_1 {
 
-} {
-    set d [acs::test::http /]
+    } {
+    set d [acs::test::http -depth 3 /]
     set main_node [site_node::get_from_url -url "/"]
-    acs::test::reply_contains $d [::lang::util::localize [dict get $main_node instance_name]]
+    acs::test::reply_has_status_code $d 200
 }
 
 aa_register_case \
     -cats {smoke api} \
-    -procs util::age_pretty \
-    util__age_pretty {
+    -procs {
+        util::age_pretty
+    } util__age_pretty {
         Test the util::age_pretty proc.
 } {
     aa_log "Forcing locale to en_US for all strings so that tests work in any locale"
@@ -1010,66 +1336,12 @@ aa_register_case \
     aa_log "100 years - we know it's wrong because of Tcl library limitations: [util::age_pretty -timestamp_ansi "1904-01-01 12:00:00" -sysdate_ansi "2004-01-01 12:00:00"]"
 }
 
-aa_register_case \
-    -procs db_get_quote_indices \
-    -cats {api} \
-    db_get_quote_indices {
-        Test the proc db_get_quote_indices.
-
-        @author Peter Marklund
-} {
-    aa_equals "" [db_get_quote_indices {'a'}] {0 2}
-    aa_equals "" [db_get_quote_indices {'a''}] {}
-    aa_equals "" [db_get_quote_indices {'a'a'a'}] {0 2 4 6}
-    aa_equals "" [db_get_quote_indices {a'b'c'd''s'}] {1 3 5 10}
-    aa_equals "" [db_get_quote_indices {'}] {}
-    aa_equals "" [db_get_quote_indices {''}] {}
-    aa_equals "" [db_get_quote_indices {a''a}] {}
-    aa_equals "" [db_get_quote_indices {a'b'a}] {1 3}
-    aa_equals "" [db_get_quote_indices {'a''b'}] {0 5}
-}
-
-aa_register_case \
-    -procs db_bind_var_substitution \
-    -cats {api} \
-    db_bind_var_substitution {
-        Test the proc db_bind_var_substitution.
-
-        @author Peter Marklund
-} {
-
-    # DRB: Not all of these test cases work for Oracle (select can't be used in
-    # db_exec_plsql) and bindvar substitution is done by Oracle, not the driver,
-    # anyway so there's not much point in testing.   These tests really test
-    # Oracle bindvar emulation, in other words...
-
-    if { [db_type] ne "oracle" } {
-        set sql {to_char(fm.posting_date, 'YYYY-MM-DD HH24:MI:SS')}
-        aa_equals "don't subst bind vars in quoted date" [db_bind_var_substitution $sql {SS 3 MI 4}] $sql
-
-        set sql {to_char(fm.posting_date, :SS)}
-        aa_equals "don't subst bind vars in quoted date" [db_bind_var_substitution $sql {SS 3 MI 4}] {to_char(fm.posting_date, '3')}
-
-        set sql {to_char(fm.posting_date, don''t subst ':SS', do subst :SS )}
-        aa_equals "don't subst bind vars in quoted date" [db_bind_var_substitution $sql {SS 3 MI 4}] {to_char(fm.posting_date, don''t subst ':SS', do subst '3' )}
-
-
-        set SS 3
-        set db_value [db_exec_plsql test_bind {
-            select ':SS'
-        }]
-        aa_equals "db_exec_plsql should not bind quoted var" $db_value ":SS"
-
-        set db_value [db_exec_plsql test_bind {
-            select :SS
-        }]
-        aa_equals "db_exec_plsql bind not quoted var" $db_value "3"
-    }
-}
 
 aa_register_case -cats {api} \
     -bugs 1450 \
-    -procs ad_enhanced_text_to_html \
+    -procs {
+        ad_enhanced_text_to_html
+    } \
     ad_enhanced_text_to_html {
 
         Process sample text correctly
@@ -1088,236 +1360,6 @@ aa_register_case -cats {api} \
 
 }
 
-aa_register_case -cats {api db} db__caching {
-    test db_* API caching
-} {
-
-    # Check db_string caching
-
-    # Check that cached and non-cached calls return the same value.  We need to
-    # check the caching API call twice, once to fill the cache and return the
-    # value, and again to see that the call returns the proper value from the
-    # cache.  This series ends by testing the flushing of db_cache_pool with an
-    # exact pattern.
-
-    set not_cached \
-        [db_string test1 {select first_names from persons where person_id = 0}]
-    aa_equals "Test that caching and non-caching db_string call return same result" \
-        [db_string -cache_key test1 test1 {select first_names from persons where person_id = 0}] \
-        $not_cached
-    aa_true "Test1 cached value found." \
-        ![catch {ns_cache get db_cache_pool test1} errmsg]
-    aa_equals "Test that cached db_string returns the right value from the cache" \
-        [db_string -cache_key test1 test1 {select first_names from persons where person_id = 0}] \
-        $not_cached
-    db_flush_cache -cache_key_pattern test1
-    aa_true "Flush of test1 from cache using the exact key" \
-        [catch {ns_cache get db_cache_pool test1} errmsg]
-
-    # Check that cached and non-cached calls return the same default if no value
-    # is returned by the query.  This series ends by testing the flushing of the
-    # entire db_cache_pool cache.
-
-    set not_cached \
-        [db_string test2 {select first_names from persons where person_id=1 and person_id=2} \
-            -default foo]
-    aa_equals "Test that caching and non-caching db_string call return same default value" \
-        [db_string -cache_key test2 test2 {select first_names from persons where person_id=1 and person_id=2} \
-            -default foo] \
-        $not_cached
-    aa_true "Test2 cached value found." \
-        ![catch {ns_cache get db_cache_pool test2} errmsg]
-    aa_equals "Test that caching and non-caching db_string call return same default value" \
-        [db_string -cache_key test2 test2 {select first_names from persons where person_id=1 and person_id=2} \
-            -default foo] \
-        $not_cached
-    db_flush_cache
-    aa_true "Flush of test2 by flushing entire pool" \
-        [catch {ns_cache get db_cache_pool test2} errmsg]
-
-    # Check that cached and non-cached calls return an error if the query returns
-    # no data and no default is supplied.  This series ends by testing cache flushing
-    # by "string match" pattern.
-
-    aa_true "Uncached db_string call returns error if query returns no data" \
-        [catch {db_string test3 "select first_names from persons where person_id=1 and person_id=2"}]
-    aa_true "Cached db_string call returns error if query returns no data" \
-        [catch {db_string -cache_key test3 test3 "select first_names from persons where person_id=1 and person_id=2"}]
-    aa_true "db_string call returns error if caching call returned error" \
-        [catch {db_string -cache_key test3 test3 "select first_names from persons where person_id=1 and person_id=2"}]
-    db_flush_cache -cache_key_pattern tes*3
-    aa_true "Flush of test3 from cache using pattern" \
-        [catch {ns_cache get db_cache_pool test3} errmsg]
-
-    # Check db_list caching
-
-    set not_cached \
-        [db_list test4 {select first_names from persons where person_id = 0}]
-    aa_equals "Test that caching and non-caching db_list call return same result" \
-        [db_list -cache_key test4 test4 {select first_names from persons where person_id = 0}] \
-        $not_cached
-    aa_true "Test4 cached value found." \
-        ![catch {ns_cache get db_cache_pool test4} errmsg]
-    aa_equals "Test that cached db_list returns the right value from the cache" \
-        [db_list -cache_key test4 test4 {select first_names from persons where person_id = 0}] \
-        $not_cached
-    db_flush_cache
-
-    # Check db_list_of_lists caching
-
-    set not_cached \
-        [db_list_of_lists test5 {select * from persons where person_id = 0}]
-    aa_equals "Test that caching and non-caching db_list_of_lists call return same result" \
-        [db_list_of_lists -cache_key test5 test5 {select * from persons where person_id = 0}] \
-        $not_cached
-    aa_true "Test5 cached value found." \
-        ![catch {ns_cache get db_cache_pool test5} errmsg]
-    aa_equals "Test that cached db_list_of_lists returns the right value from the cache" \
-        [db_list_of_lists -cache_key test5 test5 {select * from persons where person_id = 0}] \
-        $not_cached
-    db_flush_cache
-
-    # Check db_multirow caching
-
-    db_multirow test6 test6 {select * from persons where person_id = 0}
-    set not_cached \
-        [list test6:rowcount test6:columns [array get test6:1]]
-    db_multirow -cache_key test6 test6 test6 {select * from persons where person_id = 0}
-    set cached \
-        [list test6:rowcount test6:columns [array get test6:1]]
-    aa_equals "Test that caching and non-caching db_multirow call return same result" \
-        $cached $not_cached
-    aa_true "Test6 cached value found." \
-        ![catch {ns_cache get db_cache_pool test6} errmsg]
-    db_multirow -cache_key test6 test6 test6 {select * from persons where person_id = 0}
-    set cached \
-        [list test6:rowcount test6:columns [array get test6:1]]
-    aa_equals "Test that cached db_multirow returns the right value from the cache" \
-        $cached $not_cached
-    db_flush_cache
-
-    # Check db_0or1row caching
-
-    set not_cached \
-       [db_0or1row test7 {select * from persons where person_id = 0} -column_array test7]
-    lappend not_cached [array get test7]
-    set cached \
-        [db_0or1row -cache_key test7 test7 {select * from persons where person_id = 0} -column_array test7]
-    lappend cached [array get test7]
-    aa_equals "Test that caching and non-caching db_0or1row call return same result for 1 row" \
-        $cached $not_cached
-    aa_true "Test7 cached value found." \
-        ![catch {ns_cache get db_cache_pool test7} errmsg]
-    set cached \
-        [db_0or1row -cache_key test7 test7 {select * from persons where person_id = 0} -column_array test7]
-    lappend cached [array get test7]
-    aa_equals "Test that cached db_0or1row returns the right value from the cache for 1 row" \
-        $cached $not_cached
-    db_flush_cache
-
-    # Check db_0or1row caching returns 0 if query returns no values
-
-    set not_cached \
-       [db_0or1row test8 {select * from persons where person_id=1 and person_id=2} -column_array test8]
-    set cached \
-        [db_0or1row -cache_key test8 test8 {select * from persons where person_id=1 and person_id=2} -column_array test8]
-    aa_equals "Test that caching and non-caching db_0or1row call return same result for 0 rows" \
-        $cached $not_cached
-    aa_true "Test8 cached value found." \
-        ![catch {ns_cache get db_cache_pool test8} errmsg]
-    set cached \
-        [db_0or1row -cache_key test8 test8 {select * from persons where person_id=1 and person_id=2} -column_array test8]
-    aa_equals "Test that cached db_0or1row returns the right value from the cache for 0 rows" \
-        $cached $not_cached
-    db_flush_cache
-
-    # Won't check db_1row because it just calls db_0or1row
-
-}
-
-
-aa_register_case \
-    -cats {api smoke} \
-    -procs {
-        parameter::get parameter::get_from_package_key
-        parameter::set_default parameter::set_default
-        parameter::set_value parameter::set_from_package_key
-        parameter::set_global_value parameter::get_global_value
-    } \
-    parameter__check_procs {
-        Test the parameter::* procs
-
-        @author Rocael Hernandez (roc@viaro.net)
-} {
-
-    aa_run_with_teardown \
-        -rollback \
-        -test_code {
-
-            aa_log "Test global parameter functionality"
-            set parameter_id [db_nextval "acs_object_id_seq"]
-            apm_parameter_register -parameter_id $parameter_id -scope global x_test_x "" acs-tcl 0 number
-            parameter::set_global_value -package_key acs-tcl -parameter x_test_x -value 3
-            aa_equals "check global parameter value set/get" \
-                [parameter::get_global_value -package_key acs-tcl -parameter x_test_x] \
-                "3"
-            apm_parameter_unregister $parameter_id
-
-            foreach tuple [db_list_of_lists get_param {
-                select ap.parameter_name, ap.package_key, ap.default_value, ap.parameter_id
-                from apm_parameters ap, apm_package_types apt
-                where
-                ap.package_key = apt.package_key
-                and apt.singleton_p ='t'
-                and ap.package_key <> 'acs-kernel' and ap.package_key <> 'search'
-            }] {
-
-                lassign $tuple parameter_name package_key default_value parameter_id
-                set value [random]
-                if {$parameter_name ne "PasswordExpirationDays" && $value > 0.7} {
-
-                    set package_id [apm_package_id_from_key $package_key]
-                    set actual_value [db_string real_value {
-                        select apm_parameter_values.attr_value
-                        from   apm_parameter_values
-                        where apm_parameter_values.package_id = :package_id
-                        and apm_parameter_values.parameter_id = :parameter_id
-                    }]
-
-                    aa_log "$package_key $parameter_name $actual_value"
-                    aa_equals "check parameter::get" \
-                        [parameter::get -package_id $package_id -parameter $parameter_name] \
-                        $actual_value
-                    aa_equals "check parameter::get_from_package_key" \
-                        [parameter::get_from_package_key -package_key $package_key -parameter $parameter_name] \
-                        $actual_value
-
-                    parameter::set_default -package_key $package_key -parameter $parameter_name -value $value
-                    set value_db [db_string get_values {
-                        select default_value from apm_parameters
-                        where package_key = :package_key and parameter_name = :parameter_name
-                    }]
-                    aa_equals "check parameter::set_default" $value $value_db
-                    set value [expr {$value + 10}]
-
-                    parameter::set_from_package_key -package_key $package_key -parameter $parameter_name -value $value
-                    aa_equals "check parameter::set_from_package_key" \
-                        [parameter::get -package_id $package_id -parameter $parameter_name] \
-                        $value
-
-                    set value [expr {$value + 10}]
-                    parameter::set_value -package_id $package_id -parameter $parameter_name -value $value
-                    aa_equals "check parameter::set_value" \
-                        [parameter::get -package_id $package_id -parameter $parameter_name] \
-                        $value
-
-                    ad_parameter_cache -delete $package_id $parameter_name
-
-                    break
-                }
-            }
-    }
-}
 
 aa_register_case \
     -cats {api smoke} \
@@ -1335,7 +1377,13 @@ aa_register_case \
 
 aa_register_case \
     -cats {api smoke} \
-    -procs acs_user::registered_user_p \
+    -procs {
+        acs_user::registered_user_p
+        acs_user::approve
+        acs_user::ban
+
+        db_1row
+    } \
     acs_user__registered_user_p {
         Tests the acs_user::registered_user_p procedure
 
@@ -1357,6 +1405,31 @@ aa_register_case \
     aa_true "registered_user_p works correct" $works_p
 }
 
+aa_register_case \
+    -cats {api smoke} \
+    -procs {
+        acs_user::ban
+        acs_user::approve
+        acs_user::registered_user_p
+
+        db_1row
+    } \
+    acs_user__ban_approve {
+        Tests the acs_user::ban and acs_user::approve procs
+
+        @author Héctor Romojaro <hector.romojaro.gomez@wu.ac.at>
+        @creation-date 2019-09-02
+} {
+    # Retrieve a registered user
+    set user_id [db_string get_registered_id {select max(user_id) from registered_users}]
+
+    # Ban and approve the user and check
+    aa_true "User is registered" [acs_user::registered_user_p -user_id $user_id]
+    acs_user::ban -user_id $user_id
+    aa_false "User banned" [acs_user::registered_user_p -user_id $user_id]
+    acs_user::approve -user_id $user_id
+    aa_true "User approved" [acs_user::registered_user_p -user_id $user_id]
+}
 
 aa_register_case \
     -cats {api smoke} \
@@ -1411,6 +1484,192 @@ aa_register_case \
         {host openacs.org port 80 path www tail t.html}
 }
 
+aa_register_case \
+    -cats {api smoke production_safe} \
+    -procs ad_decode \
+    ad_decode {
+
+        Test the ad_decode proc
+
+        @author Hanifa Hasan
+} {
+    set cases {1 one 2 two 3 three 4 four 5 five 546356 423654 sdgvlrjnevclme sdlgtmsdgvsdf}
+    set cases_complete [concat $cases "Unknown"]
+    dict for {case result} $cases {
+        aa_equals "ad_decode $case $cases_complete return $result" "$result" [ad_decode $case {*}$cases_complete]
+    }
+    aa_equals "ad_decode gibberish $cases_complete return Unknown" "Unknown" [ad_decode gibberish {*}$cases_complete]
+
+    aa_equals "ad_decode no default, found"     [ad_decode b a 1 b 2] 2
+    aa_equals "ad_decode no default, not found" [ad_decode x a 1 b 2] ""
+    aa_equals "ad_decode no default, no alternatives" [ad_decode x] ""
+}
+
+aa_register_case \
+    -cats {api smoke production_safe} \
+    -procs util::interval_pretty \
+    util__interval_pretty {
+
+        Test the util::interval_pretty proc
+
+        @author Hanifa Hasan
+} {
+    set convert_seconds {6344 "1h 45m 44s" 433 "7m 13s" 5556 "1h 32m 36s" 234 "3m 54s" 23 "23s" 604800 "168h 0m 0s"}
+    dict for {seconds result} $convert_seconds {
+        aa_true "util::interval_pretty $seconds return $result " {[util::interval_pretty -seconds $seconds] eq $result }
+    }
+    aa_equals "Empty seconds" [util::interval_pretty -seconds ""] ""
+    aa_equals "No arguments" [util::interval_pretty] ""
+}
+
+aa_register_case \
+    -cats {api smoke production_safe} \
+    -procs {
+        ::acs::icanuse
+        ::acs::register_icanuse
+    } acs_icanuse {
+        Test the acs::icanuse interface
+
+        @author Gustaf Neumann
+    } {
+        aa_run_with_teardown \
+            -test_code {
+                set label [ad_generate_random_string]
+                #
+                # The random label should not exist
+                #
+                aa_true "can i use a random string?" {[acs::icanuse $label] == 0}
+                #
+                # Register the label
+                #
+                ::acs::register_icanuse $label 1
+                #
+                # Now we should be able to use it.
+                #
+                aa_true "can i use a random string?" [acs::icanuse $label]
+
+
+            } \
+            -teardown_code {
+                unset ::acs::caniuse($label)
+            }
+    }
+
+aa_register_case \
+    -cats {
+        smoke
+        production_safe
+    } acs_kernel__server_startup_ok {
+
+        Checks that the server has booted without errors.
+
+        This is mostly useful as part of an automated CI pipeline, as
+        executing this test at a later time, e.g. after a run of the
+        test suite, will most likely fail: every error will be
+        counted, including expected ones coming from the tests
+        themselves.
+    } {
+        set errors [nsv_dict get acs_properties logstats Error]
+        aa_log "Number of errors: $errors, warnings: [dict get [ns_logctl stats] Warning]"
+        aa_equals "No errors detected during startup sequence" $errors 0
+    }
+
+#
+# This test could be used to make sure binaries in use in the code are
+# actually available to the system.
+#
+
+ad_proc -private _acs_tcl__acs_tcl_external_dependencies_helper {} {
+} {
+    lappend required \
+        [apm_gzip_cmd] \
+        [apm_tar_cmd] \
+        [image::identify_binary] \
+        [image::convert_binary] \
+        convert \
+        curl \
+        egrep \
+        file \
+        gzip \
+        identify \
+        tar
+
+    lappend optional \
+        [parameter::get -parameter "HtmlDocBin" -default "htmldoc"] \
+        aspell \
+        clamdscan \
+        date \
+        diff \
+        dot \
+        find \
+        hostname \
+        ispell \
+        openssl \
+        pdfinfo \
+        qrencode \
+        tail \
+        tesseract \
+        tidy \
+        uptime \
+        xargs \
+        zdump
+
+    if {[db_name] eq "PostgreSQL"} {
+        #
+        # On a Posgtgres-enabled installation, we also want psql.
+        #
+        lappend required [file join [db_get_pgbin] psql]
+    }
+    return [list required $required optional $optional]
+}
+
+aa_register_case -cats {
+    smoke production_safe
+} -procs {
+    util::which
+    apm_tar_cmd
+    apm_gzip_cmd
+    db_get_pgbin
+    db_name
+    image::identify_binary
+    image::convert_binary
+} acs_tcl_exec_required_dependencies {
+    Test availability of required external commands.
+} {
+    set d [_acs_tcl__acs_tcl_external_dependencies_helper]
+
+    foreach cmd [dict get $d required] {
+        set fullCmd [::util::which $cmd]
+        aa_true "'$cmd' exists" {$fullCmd ne ""}
+        if {$fullCmd ne ""} {
+            aa_true "'$cmd' is executable" [file executable $fullCmd]
+        }
+    }
+}
+
+aa_register_case -cats {
+    smoke production_safe
+} -error_level warning -procs {
+    util::which
+    apm_tar_cmd
+    apm_gzip_cmd
+    db_get_pgbin
+    db_name
+    image::identify_binary
+    image::convert_binary
+} acs_tcl_exec_optional_dependencies {
+    Test availability of optional external commands.
+} {
+    set d [_acs_tcl__acs_tcl_external_dependencies_helper]
+
+    foreach cmd [dict get $d optional] {
+        set fullCmd [::util::which $cmd]
+        aa_true "'$cmd' exists" {$fullCmd ne ""}
+        if {$fullCmd ne ""} {
+            aa_true "'$cmd' is executable" [file executable $fullCmd]
+        }
+    }
+}
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4

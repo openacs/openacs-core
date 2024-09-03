@@ -24,17 +24,6 @@ ad_proc -public ad_restrict_to_https {conn args why} {
     return "filter_return"
 }
 
-ad_proc -public ad_approval_system_inuse_p {} {
-    Returns 1 if the system is configured to use and approval system.
-} {
-    if {[parameter::get -parameter RegistrationRequiresEmailVerification] &&
-        [parameter::get -parameter RegistrationRequiresApprovalP] } {
-        return 1
-    } else {
-        return 0
-    }
-}
-
 ad_proc -private ad_user_class_parameters {} {
     Returns the list of parameter var names used to define a user class.
 } {
@@ -51,9 +40,14 @@ ad_proc -private ad_user_class_parameters {} {
     }
 }
 
-ad_proc -private ad_user_class_description { set_id } {
+ad_proc -deprecated ad_user_class_description { set_id } {
     Takes an ns_set of key/value pairs and produces a human-readable
     description of the class of users specified.
+
+    DEPRECATED: this was a private api, used nowhere in upstream
+    code. I do not delete it for reference.
+
+    @see nothing
 } {
     set clauses [list]
     set pretty_description ""
@@ -182,7 +176,7 @@ ad_proc -private ad_user_class_description { set_id } {
 }
 
 
-ad_proc -private ad_registration_finite_state_machine_admin_links {
+ad_proc -public ad_registration_finite_state_machine_admin_links {
     -nohtml:boolean
     member_state
     email_verified_p

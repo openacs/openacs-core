@@ -13,22 +13,14 @@
     <version>7.3</version>
   </rdbms>
   
-  <fullquery name="content::revision::update_content.update_content">
+  <fullquery name="content::revision::update_content-text.update_content">
     <querytext>
       update cr_revisions set content=:content where
       revision_id=:revision_id
     </querytext>
   </fullquery>
 
-  <fullquery name="content::revision::item_id.item_id">
-    <querytext>
-      select item_id
-      from cr_revisions
-      where revision_id = :revision_id
-    </querytext>
-  </fullquery>
-
-  <fullquery name="content::revision::update_content.set_lob_content">     
+  <fullquery name="content::revision::update_content-lob.set_content">     
     <querytext>
 
 	update cr_revisions
@@ -39,7 +31,7 @@
       </querytext>
   </fullquery>
  
-  <fullquery name="content::revision::update_content.set_lob_size">      
+  <fullquery name="content::revision::update_content-lob.set_size">      
       <querytext>
 
          update cr_revisions
@@ -49,15 +41,12 @@
       </querytext>
   </fullquery>
 
-  <fullquery name="content::revision::update_content.set_file_content">
-      <querytext>
-          update cr_revisions
-          set content = :filename,
-              mime_type = :mime_type,
-              content_length = :tmp_size
-          where revision_id = :revision_id
-      </querytext>
-  </fullquery>
+  <fullquery name="content::revision::update_content-lob.update_content">
+    <querytext>
+      update cr_revisions set content=:content where
+      revision_id = :revision_id
+    </querytext>
+  </fullquery>  
 
   <fullquery name="content::revision::get_cr_file_path.get_storage_key_and_path">
     <querytext>	
@@ -69,4 +58,12 @@
         and cr.revision_id=:revision_id
     </querytext>
   </fullquery>
+
+  <fullquery name="content::revision::export_to_filesystem-lob.select_object_content">     
+    <querytext>
+      select lob
+      from cr_revisions
+      where revision_id = :revision_id
+    </querytext>
+  </fullquery>  
 </queryset>

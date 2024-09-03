@@ -12,7 +12,7 @@ namespace eval acs_mail_lite::utils {}
 
 package require mime
 
-ad_proc acs_mail_lite::utils::build_subject {
+ad_proc -private acs_mail_lite::utils::build_subject {
     {-charset "UTF-8"}
     subject
 } {
@@ -42,7 +42,7 @@ ad_proc acs_mail_lite::utils::build_subject {
     #
     set subject [string trim $subject]
 
-    if {[regsub -all {[\r\n]} $subject " " s]} {
+    if {[regsub -all -- {[\r\n]} $subject " " s]} {
         ad_log warning "subject line contains line breaks (replaced by space): '$subject' -> '$s'"
         set subject $s
     }
@@ -85,7 +85,7 @@ ad_proc acs_mail_lite::utils::build_subject {
     return $result
 }
 
-ad_proc acs_mail_lite::utils::build_date {
+ad_proc -private acs_mail_lite::utils::build_date {
     {date ""}
 } {
     Depending on the available mime package version, it uses either
@@ -130,7 +130,7 @@ ad_proc acs_mail_lite::utils::build_date {
 
 }
 
-ad_proc acs_mail_lite::utils::build_body {
+ad_proc -private acs_mail_lite::utils::build_body {
     {-mime_type "text/plain"}
     {-charset "UTF-8"}
     body
@@ -172,22 +172,18 @@ ad_proc acs_mail_lite::utils::build_body {
     return [list $message_token]
 }
 
-ad_proc -public acs_mail_lite::utils::valid_email_p {
+ad_proc -private -deprecated acs_mail_lite::utils::valid_email_p {
     email
 } {
-    Checks if the email is valid. Returns 1 if it is. Uses mime::parsemail to determine this
+    Checks if the email is valid.
+    Uses mime::parsemail to determine this
+    @return boolean success
+
+    DEPRECATED: duplicated by util_email_valid_p
+
+    @see util_email_valid_p
 } {
-    array set test [lindex [mime::parseaddress "$email"] 0]
-    if {$email ne $test(proper)} {
-        regsub "\"" $test(proper) "" proper
-        if {$email ne $proper} {
-            return 0
-        } else {
-            return 1
-        }
-    } else {
-        return 1
-    }
+    return [util_email_valid_p $email]
 }
 
 # Local variables:

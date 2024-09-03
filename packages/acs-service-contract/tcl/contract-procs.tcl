@@ -150,40 +150,35 @@ ad_proc -public acs_sc::contract::delete {
     db_transaction {
         # Need both name and ID below
         if { $name eq "" } {
-            set name [db_string get_name_by_id {}]
+            set name [db_string get_name_by_id {
+                select contract_name
+                from acs_sc_contracts
+                where contract_id = :contract_id
+            }]
         } elseif { $contract_id eq "" } {
-            set contract_id [db_string get_id_by_name {}]
+            set contract_id [db_string get_id_by_name {
+                select contract_id
+                from acs_sc_contracts
+                where contract_name = :name
+            }]
         }
 
         if { !$no_cascade_p } {
 
-            set operations [list]
-            set msg_types [list]
-
-            db_foreach select_operations {} {
-                # Put them on list of message types and operations to delete
-                lappend msg_types $operation_inputtype_id
-                lappend msg_types $operation_outputtype_id
-                lappend operations $operation_id
-            }
-
-            # Delete the operations
-            foreach operation_id $operations {
+            db_foreach select_operations {
+                select operation_id
+                from   acs_sc_operations
+                where  contract_id = :contract_id
+            } {
                 acs_sc::contract::operation::delete -operation_id $operation_id
             }
 
-            # Delete msg types
-            foreach msg_type_id $msg_types {
-                if { $msg_type_id ne "" } {
-                    acs_sc::msg_type::delete -msg_type_id $msg_type_id
-                }
-            }
         }
 
-        # LARS:
-        # It seems like delete by ID doesn't work, because our PG bind thing turns all integers into strings
-        # by wrapping them in single quotes, causing PG to invoke the function for deleting by name
-        db_exec_plsql delete_by_name {}
+        db_dml delete_contract {
+            delete from acs_sc_contracts
+            where contract_id = :contract_id
+        }
     }
 }
 
@@ -192,7 +187,13 @@ ad_proc -public acs_sc::contract::get_operations {
 } {
     Get a list of names of operations for the contract.
 } {
-    return [db_list select_operations {}]
+    return [db_list select_operations {
+        select o.operation_name
+        from   acs_sc_operations o,
+               acs_sc_contracts c
+        where  c.contract_name = :contract_name
+        and    o.contract_id = c.contract_id
+    }]
 }
 
 
@@ -254,19 +255,36 @@ ad_proc -public acs_sc::contract::operation::delete {
         error "You must supply either contract_name and operation_name, or operation_id"
     }
 
-    # LARS:
-    # It seems like delete by ID doesn't work, because our PG bind thing turns all integers into strings
-    # by wrapping them in single quotes, causing PG to invoke the function for deleting by name
-
-    if { $contract_name eq "" || $operation_name eq "" } {
-        # get contract_name and operation_name
-        db_1row select_names {}
+    db_1row get_operation {
+        select operation_id,
+               operation_inputtype_id,
+               operation_outputtype_id
+        from   acs_sc_operations
+        where operation_id = :operation_id or
+              (:operation_id is null
+               and contract_name = :contract_name
+               and operation_name = :operation_name)
     }
 
-    db_exec_plsql delete_by_name {}
+    db_dml delete_operation {
+        delete from acs_sc_operations
+        where operation_id = :operation_id
+    }
+
+    set msg_types [list \
+                       $operation_inputtype_id \
+                       $operation_outputtype_id]
+
+    # Delete msg types
+    foreach msg_type_id $msg_types {
+        if { $msg_type_id ne "" } {
+            acs_sc::msg_type::delete -msg_type_id $msg_type_id
+        }
+    }
+
 }
 
-ad_proc -public acs_sc::contract::operation::parse_operations_spec {
+ad_proc -private acs_sc::contract::operation::parse_operations_spec {
     {-name:required}
     {-spec:required}
 } {
@@ -282,7 +300,7 @@ ad_proc -public acs_sc::contract::operation::parse_operations_spec {
     }
 }
 
-ad_proc -public acs_sc::contract::operation::parse_spec {
+ad_proc -private acs_sc::contract::operation::parse_spec {
     {-contract_name:required}
     {-operation:required}
     {-spec:required}

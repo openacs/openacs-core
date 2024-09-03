@@ -1,15 +1,19 @@
 
-<property name="context">{/doc/acs-templating {ACS Templating}} {Templating System Appendix D: Parsing templates in
+<property name="context">{/doc/acs-templating/ {ACS Templating}} {Templating System Appendix D: Parsing templates in
 memory}</property>
 <property name="doc(title)">Templating System Appendix D: Parsing templates in
 memory</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h2>Parsing Templates in Memory</h2>
 <strong><a href="../index">Templating System</a></strong>
 <p>The templating system code is oriented towards parsing templates
-stored in the file system, in conjunction with a Tcl script that is
+stored in the filesystem, in conjunction with a Tcl script that is
 also stored as a file. However, when the template is not actually
-stored in the file system, you will need to parse it as a string in
+stored in the filesystem, you will need to parse it as a string in
 memory. Two common situations in which this occurs are:</p>
 <ul>
 <li>Templates are stored in the database.</li><li>Templates are generated dynamically, possibly based in turn on
@@ -98,5 +102,5 @@ first step. The templating system provides the <a href="../tagref/noparse"><kbd>
 <!-- <a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a> --><br>
 
 
-Last modified: $&zwnj;Id: memory.html,v 1.2 2017/08/07 23:48:02 gustafn
-Exp $
+Last modified: $&zwnj;Id: memory.html,v 1.2.2.1 2023/06/06 09:30:30
+gustafn Exp $

@@ -7,7 +7,6 @@
 --
 
 
-
 --
 -- procedure inline_0/0
 --
@@ -59,191 +58,29 @@ create table site_nodes (
         -- mapped to this node?
         pattern_p       boolean default false not null,
         object_id       integer constraint site_nodes_object_id_fk
-                        references acs_objects (object_id),
-        tree_sortkey    varbit
+                        references acs_objects (object_id)
 );
+
+--
+-- Avoid potential loops on site_node parent_ids. A parent_id must be
+-- different from the node_id. 
+-- Note that this constraint is not guaranteed to avoid all loops; 
+-- it is still possible to create indirect recursive
+-- loops but excludes some real-world problems.
+--
+ALTER TABLE site_nodes ADD CONSTRAINT site_nodes_parent_id_ck CHECK (node_id <> parent_id);
 
 create index site_nodes_object_id_idx on site_nodes (object_id);
 create index site_nodes_parent_object_node_id_idx on site_nodes(parent_id, object_id, node_id);
-create index site_nodes_tree_skey_idx on site_nodes (tree_sortkey);
 create index site_nodes_parent_id_idx on site_nodes(parent_id);
-
-
---
--- procedure site_node_get_tree_sortkey/1
---
-select define_function_args('site_node_get_tree_sortkey','node_id');
-
-CREATE OR REPLACE FUNCTION site_node_get_tree_sortkey(
-   p_node_id integer
-) RETURNS varbit AS $$
-DECLARE
-BEGIN
-  return tree_sortkey from site_nodes where node_id = p_node_id;
-END;
-$$ LANGUAGE plpgsql stable strict;
-
-
-
---
--- procedure site_node_insert_tr/0
---
-CREATE OR REPLACE FUNCTION site_node_insert_tr(
-
-) RETURNS trigger AS $$
-DECLARE
-        v_parent_sk     varbit default null;
-        v_max_value     integer;
-BEGIN
-        if new.parent_id is null then
-            select max(tree_leaf_key_to_int(tree_sortkey)) into v_max_value 
-              from site_nodes 
-             where parent_id is null;
-        else
-            select max(tree_leaf_key_to_int(tree_sortkey)) into v_max_value 
-              from site_nodes 
-             where parent_id = new.parent_id;
-
-            select tree_sortkey into v_parent_sk 
-              from site_nodes 
-             where node_id = new.parent_id;
-        end if;
-
-        new.tree_sortkey := tree_next_key(v_parent_sk, v_max_value);
-
-        return new;
-
-END;
-$$ LANGUAGE plpgsql;
-
-create trigger site_node_insert_tr before insert 
-on site_nodes for each row 
-execute procedure site_node_insert_tr ();
-
-
-
---
--- procedure site_node_update_tr/0
---
-CREATE OR REPLACE FUNCTION site_node_update_tr(
-
-) RETURNS trigger AS $$
-DECLARE
-        v_parent_sk     varbit default null;
-        v_max_value     integer;
-        p_id            integer;
-        v_rec           record;
-        clr_keys_p      boolean default 't';
-BEGIN
-        if new.node_id = old.node_id and 
-           ((new.parent_id = old.parent_id) or 
-            (new.parent_id is null and old.parent_id is null)) then
-
-           return new;
-
-        end if;
-
-        for v_rec in select node_id
-                       from site_nodes 
-                      where tree_sortkey between new.tree_sortkey and tree_right(new.tree_sortkey)
-                   order by tree_sortkey
-        LOOP
-            if clr_keys_p then
-               update site_nodes set tree_sortkey = null
-               where tree_sortkey between new.tree_sortkey and tree_right(new.tree_sortkey);
-               clr_keys_p := 'f';
-            end if;
-            
-            select parent_id into p_id
-              from site_nodes 
-             where node_id = v_rec.node_id;
-
-            if p_id is null then
-                select max(tree_leaf_key_to_int(tree_sortkey)) into v_max_value
-                  from site_nodes
-                 where parent_id is null;
-            else
-                select max(tree_leaf_key_to_int(tree_sortkey)) into v_max_value
-                  from site_nodes 
-                 where parent_id = p_id;
-
-                select tree_sortkey into v_parent_sk 
-                  from site_nodes 
-                 where node_id = p_id;
-            end if;
-
-            update site_nodes 
-               set tree_sortkey = tree_next_key(v_parent_sk, v_max_value)
-             where node_id = v_rec.node_id;
-
-        end LOOP;
-
-        return new;
-
-END;
-$$ LANGUAGE plpgsql;
-
-create trigger site_node_update_tr after update 
-on site_nodes
-for each row 
-execute procedure site_node_update_tr ();
-
-
--- create or replace package site_node
--- as
--- 
---   -- Create a new site node. If you set directory_p to be 'f' then you
---   -- cannot create nodes that have this node as their parent.
--- 
---   function new (
---     node_id             in site_nodes.node_id%TYPE default null,
---     parent_id           in site_nodes.node_id%TYPE default null,
---     name                in site_nodes.name%TYPE,
---     object_id           in site_nodes.object_id%TYPE default null,
---     directory_p         in site_nodes.directory_p%TYPE,
---     pattern_p           in site_nodes.pattern_p%TYPE default 'f',
---     creation_user       in acs_objects.creation_user%TYPE default null,
---     creation_ip         in acs_objects.creation_ip%TYPE default null
---   ) return site_nodes.node_id%TYPE;
--- 
---   -- Delete a site node.
--- 
---   procedure delete (
---     node_id             in site_nodes.node_id%TYPE
---   );
--- 
---   -- Return the node_id of a URL. If the url begins with '/' then the
---   -- parent_id must be null. This will raise the no_data_found
---   -- exception if there is no mathing node in the site_nodes table.
---   -- This will match directories even if no trailing slash is included
---   -- in the url.
--- 
---   function node_id (
---     url                 in varchar2,
---     parent_id   in site_nodes.node_id%TYPE default null
---   ) return site_nodes.node_id%TYPE;
--- 
---   -- Return the url of a node_id.
--- 
---   function url (
---     node_id             in site_nodes.node_id%TYPE
---   ) return varchar2;
--- 
--- end;
-
--- show errors
-
-
--- old define_function_args ('site_node__new', 'node_id,parent_id,name,object_id,directory_p,pattern_p,creation_user,creation_ip')
--- new
-select define_function_args('site_node__new','node_id;null,parent_id;null,name,object_id;null,directory_p,pattern_p;f,creation_user;null,creation_ip;null');
-
-
-
 
 --
 -- procedure site_node__new/8
 --
+
+select define_function_args('site_node__new','node_id;null,parent_id;null,name,object_id;null,directory_p,pattern_p;f,creation_user;null,creation_ip;null');
+
+
 CREATE OR REPLACE FUNCTION site_node__new(
    new__node_id integer,       -- default null
    new__parent_id integer,     -- default null
@@ -288,7 +125,7 @@ BEGIN
       new__directory_p, new__pattern_p);
 
      return v_node_id;
-   
+
 END;
 $$ LANGUAGE plpgsql;
 
@@ -312,7 +149,7 @@ BEGIN
 
     PERFORM acs_object__delete(delete__node_id);
 
-    return 0; 
+    return 0;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -347,7 +184,7 @@ BEGIN
     else
       return site_node__find_pattern(v_parent_id);
     end if;
-   
+
 END;
 $$ LANGUAGE plpgsql;
 
@@ -364,12 +201,12 @@ CREATE OR REPLACE FUNCTION site_node__node_id(
 DECLARE
   v_pos                  integer;
   v_first                site_nodes.name%TYPE;
-  v_rest                 text; 
-  v_node_id              integer;       
+  v_rest                 text;
+  v_node_id              integer;
   v_pattern_p            site_nodes.pattern_p%TYPE;
-  v_url                  text; 
+  v_url                  text;
   v_directory_p          site_nodes.directory_p%TYPE;
-  v_trailing_slash_p     boolean;       
+  v_trailing_slash_p     boolean;
 BEGIN
     v_url := p_url;
 
@@ -383,7 +220,7 @@ BEGIN
     end if;
 
     --
-    -- Split the URL on the first "/" into v_first and v_rest. 
+    -- Split the URL on the first "/" into v_first and v_rest.
     --
     select position('/' in v_url) into v_pos;
 
@@ -401,7 +238,7 @@ BEGIN
       v_rest := substr(v_url, v_pos + 1);
     end if;
 
-    if p_parent_id is not null then 
+    if p_parent_id is not null then
       select node_id, directory_p into v_node_id, v_directory_p
       from site_nodes
       where parent_id = p_parent_id
@@ -412,16 +249,16 @@ BEGIN
       --
       select node_id, directory_p into v_node_id, v_directory_p
       from site_nodes
-      where parent_id is null 
+      where parent_id is null
       and name = v_first;
     end if;
 
-    if NOT FOUND then 
+    if NOT FOUND then
         return site_node__find_pattern(p_parent_id);
     end if;
 
     --
-    -- v_first was found. 
+    -- v_first was found.
     --
     if v_rest is null then
       --
@@ -454,7 +291,7 @@ CREATE FUNCTION inline_0()
 RETURNS integer AS $inline_0$
 BEGIN
 
-    raise notice 'starting site-nodes doing the recursive part -- vguerra';
+    -- raise notice 'starting site-nodes doing the recursive part -- vguerra';
 
     IF cmp_pg_version('8.4') >= 0 THEN
         -- recursive site_nodes recursive - START
@@ -462,25 +299,24 @@ BEGIN
         CREATE OR REPLACE FUNCTION site_node__url(
            url__node_id integer
         ) RETURNS varchar AS $$
-        BEGIN
-            return ( With RECURSIVE site_nodes_recursion(parent_id, path, directory_p, node_id) as (
-            
+
+            WITH RECURSIVE site_nodes_path(parent_id, path, directory_p, node_id) as (
+
                 select parent_id, ARRAY[name || case when directory_p then '/' else ' ' end]::text[] as path, directory_p, node_id
                 from site_nodes where node_id = url__node_id
-            
-                UNION ALL
-            
-                select sn.parent_id, sn.name::text || snr.path , sn.directory_p, snr.parent_id
-                from site_nodes sn join site_nodes_recursion snr on sn.node_id = snr.parent_id 
-                where snr.parent_id is not null    
 
-            ) select array_to_string(path,'/') from site_nodes_recursion where parent_id is null
-        );
-        END; 
-        $$ LANGUAGE plpgsql; 
+                UNION ALL
+
+                select sn.parent_id, sn.name::text || snr.path , sn.directory_p, snr.parent_id
+                from site_nodes sn join site_nodes_path snr on sn.node_id = snr.parent_id
+                where snr.parent_id is not null
+
+            ) select array_to_string(path,'/') from site_nodes_path where parent_id is null
+
+        $$ LANGUAGE sql strict stable;
 
         -- recursive site_nodes END
-    
+
     ELSE
 
         CREATE OR REPLACE FUNCTION site_node__url(
@@ -505,16 +341,21 @@ BEGIN
             else
               return site_node__url(v_parent_id) || v_name;
             end if;
-           
+
         END;
         $$ LANGUAGE plpgsql;
 
     END IF;
-    
+
     return null;
-END; 
+END;
 $inline_0$ LANGUAGE plpgsql;
 
 select inline_0();
 drop function inline_0();
 
+--
+-- Local variables:
+--   mode: sql
+--   indent-tabs-mode: nil
+-- End:

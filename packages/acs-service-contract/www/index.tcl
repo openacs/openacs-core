@@ -1,10 +1,14 @@
+ad_page_contract {
+    Index page. Display the various kinds of service contracts.
+}
+
 set context [list]
 
 db_multirow defined_contracts defined_contracts {
     select contract_id,
            contract_name,
-           contract_desc 
-    from   acs_sc_contracts 
+           contract_desc
+    from   acs_sc_contracts
     order  by upper(contract_name), contract_name
 }
 
@@ -25,7 +29,23 @@ template::list::create \
 
 
 
-db_multirow valid_installed_bindings valid_installed_binding {}
+db_multirow valid_installed_bindings valid_installed_binding {
+        select q.*
+        from (select
+                  b.contract_id,
+                  b.impl_id,
+                  (select contract_name from acs_sc_contracts
+                    where contract_id = b.contract_id) as contract_name,
+                  impl.impl_name,
+                  impl.impl_owner_name,
+                  impl.impl_pretty_name
+              from
+                  acs_sc_bindings b,
+                  acs_sc_impls impl
+              where
+                  impl.impl_id = b.impl_id) q
+        order  by upper(contract_name), contract_name, upper(impl_name), impl_name
+}
 
 template::list::create \
     -name valid_installed_bindings \

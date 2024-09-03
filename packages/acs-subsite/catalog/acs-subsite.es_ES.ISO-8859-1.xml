@@ -6,6 +6,7 @@
   <msg key="403_message">No tiene los privilegios necesarios para ver esta página</msg>
   <msg key="404_message">Recurso no encontrado</msg>
   <msg key="500_message">Ocurrió un error mientras se tramitaba su solicitud</msg>
+  <msg key="500_title">Error del servidor</msg>
   <msg key="503_message">Servicio no disponible en este momento</msg>
   <msg key="_or">, o</msg>
   <msg key="_Update_Basic_Information">Actualizar Información Básica</msg>
@@ -44,7 +45,7 @@
   <msg key="Admin">Panel de control</msg>
   <msg key="admin">Admin</msg>
   <msg key="Administer_subsite">Administrar %subsite_name%</msg>
-  <msg key="Administration">Administración</msg>
+  <msg key="Administration">Subsite Administración</msg>
   <msg key="Administrative_options">Opciones de administración para este usuario</msg>
   <msg key="Advanced">Avanzado</msg>
   <msg key="Advanced_Features">Características Avanzadas</msg>
@@ -279,7 +280,9 @@ Para cambiar su contraseña, visite %reset_password_url%</msg>
   <msg key="lt_Inherited_Permissions">Permisos heredados</msg>
   <msg key="lt_It_would_be_a_very_ba">Puede ser una mala idea escoger esta opción si está usando un ordenador compartido (de una biblioteca o colegio por ejemplo). Cualquier usuario que utilice este ordenador podría hacerse pasar por usted en nuestra plataforma.</msg>
   <msg key="lt_New_registration_at_s">Nuevo registro en %system_url%</msg>
-  <msg key="lt_Note_text_in_red_below">La nota en rojo debajo de los campos de entrada de cada parámetro indica que el valor del mismo está sobreescrito por una entrada en el archivo de parámetros de OpenACS. Se aconseja el uso de dicho archivo, pero algunos sitios lo necesitan para asignar valores específicos a los parámetros, independientes de las tablas apm_parameter.</msg>
+  <msg key="lt_Note_text_in_red_below">La nota en rojo debajo de los
+  campos de entrada de cada parámetro indica que el valor del mismo
+  está sobreescrito por una entrada en el archivo de parámetros de NaviServer. Se aconseja el uso de dicho archivo, pero algunos sitios lo necesitan para asignar valores específicos a los parámetros, independientes de las tablas apm_parameter.</msg>
   <msg key="lt_Note_that_you_can_era">Tenga en cuenta que puede eliminar su dirección de correo y contraseña de la memoria de su ordenador, pulsando la opción &#34;Salir&#34; de su portal.</msg>
   <msg key="lt_num_children_Children">%num_children% Hijos ocultos</msg>
   <msg key="lt_On_portrait_publish_d">El día %portrait_publish_date%, ha subido &lt;a href=&#34;%subsite_url%user/portrait/?return_url=%pvt_home_url%&#34;&#34;&gt;%portrait_title%&lt;/a&gt;</msg>
@@ -319,7 +322,7 @@ Gracias,
 El equipo de %system_name%</msg>
   <msg key="lt_Upload_your_favorite">Suba su foto favorita, un archivo escaneado en formato JPEG o GIF de su ordenador(No puede subir una imagen desde ningún sitio de internet; tiene que estar en su disco duro).</msg>
   <msg key="lt_Uploaded_pretty_date">Subido: %pretty_date%</msg>
-  <msg key="lt_Uploaded_publish_date">Subido: %pretty_date%</msg>
+  <msg key="lt_Uploaded_publish_date">Subido: %publish_date%</msg>
   <msg key="lt_Use_the_Browse_button">Utilice el botón &#34;Examinar...&#34; para localizar su archivo, después pulse botón &#34;Abrir&#34;.</msg>
   <msg key="lt_User_has_portrait_title">Este usuario ha subido una biografia o una foto</msg>
   <msg key="lt_We_cant_find_you">No se le ha podido encontrar (usuario %user_id%) en la tabla de usuarios. Probablemente su cuenta ha sido borrada.</msg>

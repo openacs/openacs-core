@@ -41,6 +41,7 @@ declare
   v_object_id_one acs_rels.object_id_one%TYPE;
   v_object_id_two acs_rels.object_id_two%TYPE;
   v_rel_type      acs_rels.rel_type%TYPE;
+  v_composable_p  acs_rel_types.composable_p%TYPE;
   v_error varchar2(4000);
 begin
   
@@ -51,7 +52,7 @@ begin
   end if;
 
   select object_id_one, object_id_two, r.rel_type, composable_p
-  into v_object_id_one, v_object_id_two, v_rel_type
+  into v_object_id_one, v_object_id_two, v_rel_type, v_composable_p
   from acs_rels r
   join acs_rel_types t on (r.rel_type = t.rel_type)
   where rel_id = :new.rel_id;
@@ -193,7 +194,7 @@ begin
 
     -- Add rows for my composable elements
 
-    for members in (select distinct member_id, rel_type
+    for members in (select distinct m.member_id, m.rel_type
                     from group_approved_member_map m
                      join acs_rel_types t on (m.rel_type = t.rel_type)
                     where group_id = v_object_id_two
@@ -212,7 +213,7 @@ begin
       rel_type, ancestor_rel_type)
     select distinct
      map.group_id, element_id, rel_id, container_id,
-     rel_type, ancestor_rel_type
+     m.rel_type, ancestor_rel_type
     from group_element_map m
     join acs_rel_types t on (m.rel_type = t.rel_type)
     where group_id = v_object_id_two
@@ -592,6 +593,16 @@ as
   begin
     update membership_rels
     set member_state = 'needs approval'
+    where rel_id = unapprove.rel_id;
+  end;
+
+  procedure expire (
+    rel_id      in membership_rels.rel_id%TYPE
+  )
+  is
+  begin
+    update membership_rels
+    set member_state = 'expired'
     where rel_id = unapprove.rel_id;
   end;
 

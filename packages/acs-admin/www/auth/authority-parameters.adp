@@ -1,7 +1,7 @@
 <master>
   <property name="context">@context;literal@</property>
   <property name="doc(title)">@page_title;literal@</property>
-  <property name="focus">parameters.@first_param_name;noquote@</property>
+  <property name="focus">parameters.@first_param_name;literal@</property>
 
 <if @has_parameters_p;literal@ true>
   <formtemplate id="parameters"></formtemplate>

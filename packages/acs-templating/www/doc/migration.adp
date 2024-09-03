@@ -1,7 +1,11 @@
 
-<property name="context">{/doc/acs-templating {ACS Templating}} {Templating an Existing Tcl Page}</property>
+<property name="context">{/doc/acs-templating/ {ACS Templating}} {Templating an Existing Tcl Page}</property>
 <property name="doc(title)">Templating an Existing Tcl Page</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h2>Templating an Existing Tcl Page</h2>
 <a href="">Templating System</a>
  : Migration
@@ -40,7 +44,7 @@ file.</p>
 <code>ns_puts</code>, <code>ns_write</code> etc., which don&#39;t
 wait till the headers are written or the page is completed; they
 may act differently than you expect.</li><li>If you can, put code in the Tcl file, not between <code>&lt;%
-%&gt;</code> in the adp page.</li><li>Put HTML in the adp page, not int the Tcl program. Put reusable
+%&gt;</code> in the adp page.</li><li>Put HTML in the adp page, not in the Tcl program. Put reusable
 HTML fragments in a separate adp file (think of it as a widget)
 that will be <code>&lt;include&gt;</code>d from several pages.
 Prefer this to writing a Tcl proc that returns HTML.</li><li>Remember to remove backslashes where you had to escape special
@@ -184,7 +188,7 @@ ad_return_template
 
 &lt;master&gt;
 &lt;property name="doc(title)"&gt;\@title\@&lt;/property&gt;
-&lt;property name="context"&gt;\@context;noquote\@&lt;/property&gt;
+&lt;property name="context"&gt;\@context;literal\@&lt;/property&gt;
 
 &lt;hr&gt;
 
@@ -354,11 +358,11 @@ value.</p>
 <th><code>packages/acs-core-ui/www/pvt/alerts.tcl</code></th><th><code>packages/acs-core-ui/www/pvt/alerts.adp</code></th>
 </tr><tr>
 <td valign="top"><pre><font color="#999999">ad_page_contract {
-    \@cvs-id $&zwnj;Id: migration.html,v 1.4 2017/08/07 23:48:02 gustafn Exp $
+    \@cvs-id $&zwnj;Id: migration.html,v 1.4.2.2 2022/04/27 12:22:29 gustafn Exp $
 } {
 }</font></pre></td><td valign="top"><pre>
 <font color="#999999">ad_page_contract {
-    \@cvs-id $&zwnj;Id: migration.html,v 1.4 2017/08/07 23:48:02 gustafn Exp $
+    \@cvs-id $&zwnj;Id: migration.html,v 1.4.2.2 2022/04/27 12:22:29 gustafn Exp $
 } {
 } -properties {
     header:onevalue
@@ -560,5 +564,5 @@ Brechbühler</a>, <a href="mailto:iwashima\@mit.edu">Hiro
 Iwashima</a>
 </address>
 
-Last modified: $&zwnj;Id: migration.html,v 1.4 2017/08/07 23:48:02
+Last modified: $&zwnj;Id: migration.html,v 1.4.2.2 2022/04/27 12:22:29
 gustafn Exp $

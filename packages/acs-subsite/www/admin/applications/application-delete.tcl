@@ -10,7 +10,7 @@ ad_page_contract {
     {node_id:naturalnum,multiple ""}
     {package_id:naturalnum,multiple ""}
     {return_url:localurl .}
-    {confirm_p:boolean 0}
+    {confirm_p:boolean,notnull 0}
 }
 
 foreach id $package_id {
@@ -24,7 +24,7 @@ foreach id $package_id {
 ns_log notice "package_id <$package_id> node_id <$node_id>"
 
 set num [expr {[llength $node_id] + [llength $package_id]}]
-set page_title "Delete [ad_decode $num 1 "Application" "Applications"]"
+set page_title "Delete [expr {$num == 1 ? "Application" : "Applications"}]"
 set context [list [list "." "Applications"] $page_title]
 set yes_url [export_vars -base [ad_conn url] { node_id:multiple package_id:multiple return_url { confirm_p 1 } }]
 set no_url $return_url

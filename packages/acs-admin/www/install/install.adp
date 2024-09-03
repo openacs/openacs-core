@@ -10,7 +10,7 @@
   </if>
   <else>
     <if @repository_url@ nil>
-      <p> There are no un-installed applications in your file system meeting the filter criteria.</p>
+      <p> There are no un-installed applications in your filesystem meeting the filter criteria.</p>
     </if>
     <else>
       <p> There are no un-installed applications in the OpenACS repository meeting the filter criteria. </p>

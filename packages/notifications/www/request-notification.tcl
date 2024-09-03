@@ -27,17 +27,17 @@ set intervals [notification::get_intervals -type_id $type_id]
 set delivery_methods [notification::get_delivery_methods -type_id $type_id]
 
 #if group_id parameter exists then all users of this community are subscribed if they're not already subscribed
-if {$group_id ne ""} {        
-    set interval_id [notification::get_interval_id -name instant]
-    set delivery_method_id [notification::get_delivery_method_id -name email]
-        
+if {$group_id ne ""} {
+    set interval_id [notification::interval::get_id_from_name -name instant]
+    set delivery_method_id [notification::delivery::get_id -short_name email]
+
     db_foreach get_member_id {} {
-        # Add notification for this user if they're not already subscribed for an instant alert        
+        # Add notification for this user if they're not already subscribed for an instant alert
         if {[notification::request::get_request_id -user_id $user_id -type_id $type_id -object_id $object_id] eq ""} {
             notification::request::new -type_id $type_id -user_id $user_id -object_id $object_id -interval_id $interval_id \
                 -delivery_method_id $delivery_method_id
-        }        
-    }            
+        }
+    }
 }
 
 
@@ -66,7 +66,7 @@ element create notify delivery_method_id\
 
 if {[template::form is_valid notify]} {
     template::form get_values notify party_id interval_id type_id delivery_method_id
-    
+
     db_foreach get_user {} {
         if {[notification::request::get_request_id \
                  -user_id $user_id \
@@ -80,12 +80,12 @@ if {[template::form is_valid notify]} {
                 -delivery_method_id $delivery_method_id
         }
     }
-        
+
     #if party_id is a group of users then returnredirect, else we get an error
     if {![db_0or1row user_p {}]} {
         ad_returnredirect $return_url
-    }    
-    
+    }
+
     # Add the subscribe
     notification::request::new \
             -type_id $type_id \
@@ -105,31 +105,30 @@ template::list::create \
     -key request_id\
     -bulk_actions\
     {
-        "\#notifications.Unsubscribe\#" "unsubscribe" "\#notifications.unsubscribe_user\#"	
+        "\#notifications.Unsubscribe\#" "unsubscribe" "\#notifications.unsubscribe_user\#"
     }\
     -bulk_action_method post -bulk_action_export_vars {
         object_id
-	type_id
-	return_url
+        type_id
+        return_url
     }\
-    -no_data "\#notifications.there_are_no_users\#"\
-    -row_pretty_plural "notify_users"\
-    -elements {
-	name {
-	    label "[_ notifications.Subscribed_User_ID]"
-	}
-	interval_name {
-	    label "[_ notifications.lt_Notification_Interval]"
-	}
-	delivery_name {
-	    label "[_ notifications.Delivery_Method]"
-	}
+-no_data "\#notifications.there_are_no_users\#"\
+-row_pretty_plural "notify_users"\
+-elements {
+    name {
+        label "[_ notifications.Subscribed_User_ID]"
     }
-    
+    interval_name {
+        label "[_ notifications.lt_Notification_Interval]"
+    }
+    delivery_name {
+        label "[_ notifications.Delivery_Method]"
+    }
+    }
+
 db_multirow -extend {name} notify_users notify_users {} {
     set author [person::name -person_id $request_user_id]
 }
-
 
 
 # Local variables:

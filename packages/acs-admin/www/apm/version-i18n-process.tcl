@@ -21,8 +21,8 @@ set page_title "Internationalization of $pretty_name $version_name"
 set context_bar [ad_context_bar $page_title]
 
 # Figure out which actions to take on the selected adp:s
-set replace_text_p [ad_decode [lsearch -exact $file_action replace_text] "-1" "0" "1"]
-set replace_tags_p [ad_decode [lsearch -exact $file_action replace_tags] "-1" "0" "1"]
+set replace_text_p [expr {"replace_text" in $file_action}]
+set replace_tags_p [expr {"replace_tags" in $file_action}]
 
 # If no texts should be replaced we need not give the user a choice of keys to use and
 # can go straight to the processing

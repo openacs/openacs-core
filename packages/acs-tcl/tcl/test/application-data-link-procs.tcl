@@ -4,7 +4,10 @@ ad_library {
 
 aa_register_case \
     -cats api \
-    -procs {} \
+    -procs {
+        ad_url
+        application_data_link::scan_for_links
+    } \
     data_links_scan_links {
         Test scanning content for object URLs
 } {
@@ -41,7 +44,7 @@ aa_register_case \
 } {
     aa_run_with_teardown -rollback -test_code {
         # create some test objects
-        set name [ns_mktemp "cr_item__XXXXXX"]
+        set name "cr_item__[ad_generate_random_string]"
 
         for {set i 0} {$i<10} {incr i} {
             set o($i) [content::item::new \
@@ -94,6 +97,7 @@ aa_register_case \
     -cats api \
     -procs {
         application_data_link::scan_for_links
+        ad_url
     } \
     data_links_scan_links_with_tag {
 
@@ -135,7 +139,7 @@ aa_register_case \
 } {
     aa_run_with_teardown -rollback -test_code {
         # create some test objects
-        set name [ns_mktemp "cr_item__XXXXXX"]
+        set name "cr_item__[ad_generate_random_string]"
 
         for {set i 0} {$i<10} {incr i} {
         set o($i) [content::item::new \
@@ -212,7 +216,7 @@ aa_register_case \
 } {
     aa_run_with_teardown -rollback -test_code {
         # create some test objects
-        set name [ns_mktemp "cr_item__XXXXXX"]
+        set name "cr_item__[ad_generate_random_string]"
 
         for {set i 0} {$i<6} {incr i} {
         set o($i) [content::item::new \

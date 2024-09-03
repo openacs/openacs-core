@@ -1,6 +1,6 @@
 <master>
 <property name="context">@context;literal@</property>
-<property name="doc(title)">Add attribute to @object_pretty_name;noquote@</property>
+<property name="doc(title)">Add attribute to @object_pretty_name;literal@</property>
 <property name="focus">main_form.pretty_name</property>
 
 <form method="post" name="main_form" action="add-2">

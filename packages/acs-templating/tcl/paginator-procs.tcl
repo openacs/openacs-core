@@ -111,7 +111,7 @@ ad_proc -public template::paginator::create { statement_name name query args } {
     # $cache_key] It is not clear, what the intended semantic was, and
     # why not the API working on the nsv was used. See as well
     # below. In general, using a test for a cache entry and a code
-    # depening on the cached entry is NOT AN GOOD idea, since the
+    # depending on the cached entry is NOT AN GOOD idea, since the
     # operations are not atomic. Between the check and the later code,
     # the cache entry might be deleted.  refactoring of this code is
     # recommended. Unfortunately, several places in OpenACS have this
@@ -157,7 +157,7 @@ ad_proc -public template::paginator::create { statement_name name query args } {
                 #   nsv_set __template_cache_timeout $cache_key $opts(timeout)
                 #}
                 ns_write [subst {
-                    <script type="text/javascript" nonce="$::__csp_nonce">
+                    <script type="text/javascript" nonce="[security::csp::nonce]">
                     document.location.href="[ns_quotehtml $return_url]";
                     </script>
                     <noscript><a href="[ns_quotehtml $return_url]">Click here to continue.</a></noscript>
@@ -230,10 +230,7 @@ ad_proc -private template::paginator::init { statement_name name query {print_p 
             set total_so_far 1
 
             while { \[db_getrow \$db \$selection\] } {
-                set this_result \[list\]
-                for { set i 0 } { \$i < \[ns_set size \$selection\] } { incr i } {
-                    lappend this_result \[ns_set value \$selection \$i\]
-                }
+                set this_result \[ns_set values \$selection\]
                 if { $print_p } {
                     if { \$total_so_far % 250 == 0 } {
                         ns_write \"&#133;\$total_so_far \"
@@ -286,10 +283,7 @@ ad_proc -private template::paginator::init { statement_name name query {print_p 
             set total_so_far 1
 
             while { \[db_getrow \$db \$selection\] } {
-                set this_result \[list\]
-                for { set i 0 } { \$i < \[ns_set size \$selection\] } { incr i } {
-                    lappend this_result \[ns_set value \$selection \$i\]
-                }
+                set this_result \[ns_set values \$selection \]
                 if { $print_p } {
                     if { \$total_so_far % 250 == 0 } {
                         ns_write \"...\$total_so_far \"
@@ -743,18 +737,12 @@ ad_proc -public template::paginator::get_data { statement_name name datasource q
         set query [uplevel 2 "db_map ${statement_name}_partial"]
     }
 
-    # DEDS: quote the ids so that we are not
-    #       necessarily limited to integer keys
-    set quoted_ids [list]
-    foreach one_id $ids {
-        lappend quoted_ids [::ns_dbquotevalue $one_id]
-    }
-    set in_list [join $quoted_ids ","]
+    set in_list [::ns_dbquotelist $ids]
     if { ! [regsub CURRENT_PAGE_SET $query $in_list query] } {
         error "Token CURRENT_PAGE_SET not found in page data query  ${statement_name}_partial: $query"
     }
 
-    if { [llength $in_list] == 0 } {
+    if {$in_list eq ""} {
         uplevel 2 "set $datasource:rowcount 0"
         return
     }
@@ -814,18 +802,12 @@ ad_proc -public template::paginator::get_query { name id_column page } {
 
         set query "CURRENT_PAGE_SET"
 
-        # DEDS: quote the ids so that we are not
-        #       necessarily limited to integer keys
-        set quoted_ids [list]
-        foreach one_id $ids {
-            lappend quoted_ids [::ns_dbquotevalue $one_id]
-        }
-        set in_list [join $quoted_ids ","]
+        set in_list [::ns_dbquotelist $ids]
         if { ! [regsub CURRENT_PAGE_SET $query $in_list query] } {
             error "Token CURRENT_PAGE_SET not found."
         }
 
-        if { [llength $in_list] == 0 } {
+        if {$in_list eq ""} {
             uplevel 2 "set $datasource:rowcount 0"
             return
         }

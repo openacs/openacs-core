@@ -1,7 +1,11 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {External Authentication Requirements}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {External Authentication Requirements}</property>
 <property name="doc(title)">External Authentication Requirements</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="bootstrap-acs" leftLabel="Prev"
 			title="Chapter 15. Kernel
@@ -12,7 +16,7 @@ Documentation"
 <a name="ext-auth-requirements" id="ext-auth-requirements"></a>External
 Authentication Requirements</h2></div></div></div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140682194045416" id="idp140682194045416"></a>Vision</h3></div></div></div><p>People have plenty of usernames and passwords already, we
+<a name="id1391" id="id1391"></a>Vision</h3></div></div></div><p>People have plenty of usernames and passwords already, we
 don&#39;t want them to have yet another. We want people to be able
 to log in to OpenACS with the same password they use to log in to
 any other system.</p><p>Besides, administrators have better things to do than create
@@ -74,83 +78,43 @@ Pictures</h3></div></div></div><p>Authentication:</p><p><span class="inlinemedia
 <div class="titlepage"><div><div><h3 class="title">
 <a name="Requirements" id="Requirements"></a>Requirements</h3></div></div></div><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="idp140682194064456" id="idp140682194064456"></a>New API</h4></div></div></div><div class="segmentedlist">
-<div class="seglistitem">
-<div class="seg">
-<strong><span class="segtitle">New
-API:</span></strong> EXT-AUTH-01</div><div class="seg">
-<strong><span class="segtitle">:</span></strong>
-A</div><div class="seg">
-<strong><span class="segtitle">:</span></strong>
-Extend Authentication/Acct Status API</div>
-</div><div class="seglistitem">
-<div class="seg">
-<strong><span class="segtitle">New
-API:</span></strong> EXT-AUTH-03</div><div class="seg">
-<strong><span class="segtitle">:</span></strong>
-A</div><div class="seg">
-<strong><span class="segtitle">:</span></strong>
-Account Creation API</div>
-</div><div class="seglistitem">
-<div class="seg">
-<strong><span class="segtitle">New
-API:</span></strong> EXT-AUTH-05</div><div class="seg">
-<strong><span class="segtitle">:</span></strong>
-A</div><div class="seg">
-<strong><span class="segtitle">:</span></strong>
-Password Management API</div>
-</div><div class="seglistitem">
-<div class="seg">
-<strong><span class="segtitle">New
-API:</span></strong> EXT-AUTH-30</div><div class="seg">
-<strong><span class="segtitle">:</span></strong>
-A</div><div class="seg">
-<strong><span class="segtitle">:</span></strong>
-Authority Management API</div>
-</div>
-</div>
+<a name="id1392" id="id1392"></a>New API</h4></div></div></div><div class="segmentedlist"><table border="1" cellpadding="3" cellspacing="0" width="90%">
+<tr>
+<th width="15%">Feature</th><th width="8%">Status</th><th width="77%">Description</th>
+</tr><thead><tr><th>New API</th></tr></thead><tbody>
+<tr class="seglistitem">
+<td class="seg">EXT-AUTH-01</td><td class="seg">A</td><td class="seg">Extend Authentication/Acct Status API</td>
+</tr><tr class="seglistitem">
+<td class="seg">EXT-AUTH-03</td><td class="seg">A</td><td class="seg">Account Creation API</td>
+</tr><tr class="seglistitem">
+<td class="seg">EXT-AUTH-05</td><td class="seg">A</td><td class="seg">Password Management API</td>
+</tr><tr class="seglistitem">
+<td class="seg">EXT-AUTH-30</td><td class="seg">A</td><td class="seg">Authority Management API</td>
+</tr>
+</tbody>
+</table></div>
 </div><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="Login" id="Login"></a>Login</h4></div></div></div><div class="segmentedlist">
-<div class="seglistitem">
-<div class="seg">
-<strong><span class="segtitle">Login:</span></strong> EXT-AUTH-04</div><div class="seg">
-<strong><span class="segtitle">:</span></strong>
-A</div><div class="seg">
-<strong><span class="segtitle">:</span></strong>
-Rewrite login, register, and admin pages to use APIs</div>
-</div><div class="seglistitem">
-<div class="seg">
-<strong><span class="segtitle">Login:</span></strong> EXT-AUTH-38</div><div class="seg">
-<strong><span class="segtitle">:</span></strong>
-A</div><div class="seg">
-<strong><span class="segtitle">:</span></strong>
-ad_form complain feature</div>
-</div><div class="seglistitem">
-<div class="seg">
-<strong><span class="segtitle">Login:</span></strong> EXT-AUTH-19</div><div class="seg">
-<strong><span class="segtitle">:</span></strong>
-A</div><div class="seg">
-<strong><span class="segtitle">:</span></strong>
-Rewrite password recovery to use API</div>
-</div><div class="seglistitem">
-<div class="seg">
-<strong><span class="segtitle">Login:</span></strong> EXT-AUTH-21</div><div class="seg">
-<strong><span class="segtitle">:</span></strong>
-A</div><div class="seg">
-<strong><span class="segtitle">:</span></strong>
-Rewrite email verification with API</div>
-</div><div class="seglistitem">
-<div class="seg">
-<strong><span class="segtitle">Login:</span></strong> EXT-AUTH-28</div><div class="seg">
-<strong><span class="segtitle">:</span></strong>
-A</div><div class="seg">
-<strong><span class="segtitle">:</span></strong>
-Username is email switch</div>
-</div>
-</div><p>Users will log in using a username, a authority, and a password.
-The authority is the source for user/password verification. OpenACS
-can be an authority itself.</p><p>Each user in OpenACS will belong to exactly one authority, which
+<a name="Login" id="Login"></a>Login</h4></div></div></div><div class="segmentedlist"><table border="1" cellpadding="3" cellspacing="0" width="90%">
+<tr>
+<th width="15%">Feature</th><th width="8%">Status</th><th width="77%">Description</th>
+</tr><thead><tr><th>Login</th></tr></thead><tbody>
+<tr class="seglistitem">
+<td class="seg">EXT-AUTH-04</td><td class="seg">A</td><td class="seg">Rewrite login, register, and admin pages to use
+APIs</td>
+</tr><tr class="seglistitem">
+<td class="seg">EXT-AUTH-38</td><td class="seg">A</td><td class="seg">ad_form complain feature</td>
+</tr><tr class="seglistitem">
+<td class="seg">EXT-AUTH-19</td><td class="seg">A</td><td class="seg">Rewrite password recovery to use API</td>
+</tr><tr class="seglistitem">
+<td class="seg">EXT-AUTH-21</td><td class="seg">A</td><td class="seg">Rewrite email verification with API</td>
+</tr><tr class="seglistitem">
+<td class="seg">EXT-AUTH-28</td><td class="seg">A</td><td class="seg">Username is email switch</td>
+</tr>
+</tbody>
+</table></div><p>Users will log in using a username, an authority, and a
+password. The authority is the source for user/password
+verification. OpenACS can be an authority itself.</p><p>Each user in OpenACS will belong to exactly one authority, which
 can either be the "local" OpenACS users table, in which
 case the password column is used, or it can be some external
 authority, which will be communicated with using some protocol, as
@@ -176,14 +140,13 @@ Authority: [URZ   ]
 the authority drop-down element at all.</p>
 </div><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="Configuratio" id="Configuratio"></a>Configuration</h4></div></div></div><div class="segmentedlist"><div class="seglistitem">
-<div class="seg">
-<strong><span class="segtitle">Configuration:</span></strong> EXT-AUTH-07</div><div class="seg">
-<strong><span class="segtitle">:</span></strong>
-A</div><div class="seg">
-<strong><span class="segtitle">:</span></strong>
-Admin pages to control Ext-Auth parameters</div>
-</div></div><p>The site-wide systems administrator can configure the
+<a name="Configuratio" id="Configuratio"></a>Configuration</h4></div></div></div><div class="segmentedlist"><table border="1" cellpadding="3" cellspacing="0" width="90%">
+<tr>
+<th width="15%">Feature</th><th width="8%">Status</th><th width="77%">Description</th>
+</tr><thead><tr><th>Configuration</th></tr></thead><tbody><tr class="seglistitem">
+<td class="seg">EXT-AUTH-07</td><td class="seg">A</td><td class="seg">Admin pages to control Ext-Auth parameters</td>
+</tr></tbody>
+</table></div><p>The site-wide systems administrator can configure the
 authentication process from a page linked under /acs-admin.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>Authorities - ordered list of authorities defined</p></li><li class="listitem"><p>Account Registration Allowed: Yes/No. Account registration can
 be disabled altogether.</p></li><li class="listitem"><p>Registration authority - the authority in which accounts should
@@ -194,47 +157,31 @@ username and email. This is a setting that spans all authorities,
 and is primarily meant for backwards compatibility with the old
 OpenACS login process.</p></li>
 </ul></div><p>The local authority driver is an encapsulation of current
-functionality within an driver matching a service contract. The
+functionality within a driver matching a service contract. The
 other drivers call external functions. The possible functions for
 each authority are split into several drivers for convenience. One
 driver handles authentication, one account creation, and one
-changing passwords.</p><div class="segmentedlist">
-<div class="seglistitem">
-<div class="seg">
-<strong><span class="segtitle">create service
-contract:</span></strong> EXT-AUTH-16</div><div class="seg">
-<strong><span class="segtitle">:</span></strong>
-A</div><div class="seg">
-<strong><span class="segtitle">:</span></strong>
-Create service contract for Authentication</div>
-</div><div class="seglistitem">
-<div class="seg">
-<strong><span class="segtitle">create service
-contract:</span></strong> EXT-AUTH-17</div><div class="seg">
-<strong><span class="segtitle">:</span></strong>
-A</div><div class="seg">
-<strong><span class="segtitle">:</span></strong>
-Create service contract for Acct. Creation</div>
-</div><div class="seglistitem">
-<div class="seg">
-<strong><span class="segtitle">create service
-contract:</span></strong> EXT-AUTH-29</div><div class="seg">
-<strong><span class="segtitle">:</span></strong>
-A</div><div class="seg">
-<strong><span class="segtitle">:</span></strong>
-Create service contract for Passwd Management</div>
-</div>
-</div><div class="segmentedlist"><div class="seglistitem">
-<div class="seg">
-<strong><span class="segtitle">:</span></strong>
-EXT-AUTH-18</div><div class="seg">
-<strong><span class="segtitle">:</span></strong>
-A</div><div class="seg">
-<strong><span class="segtitle">:</span></strong>
-Authority configuration data model</div>
-</div></div><p>Each authority is defined like this:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
+changing passwords.</p><div class="segmentedlist"><table border="1" cellpadding="3" cellspacing="0" width="90%">
+<tr>
+<th width="15%">Feature</th><th width="8%">Status</th><th width="77%">Description</th>
+</tr><thead><tr><th>create service contract</th></tr></thead><tbody>
+<tr class="seglistitem">
+<td class="seg">EXT-AUTH-16</td><td class="seg">A</td><td class="seg">Create service contract for Authentication</td>
+</tr><tr class="seglistitem">
+<td class="seg">EXT-AUTH-17</td><td class="seg">A</td><td class="seg">Create service contract for Acct. Creation</td>
+</tr><tr class="seglistitem">
+<td class="seg">EXT-AUTH-29</td><td class="seg">A</td><td class="seg">Create service contract for Passwd Management</td>
+</tr>
+</tbody>
+</table></div><div class="segmentedlist"><table border="1" cellpadding="3" cellspacing="0" width="90%">
+<tr>
+<th width="15%">Feature</th><th width="8%">Status</th><th width="77%">Description</th>
+</tr><thead><tr><th></th></tr></thead><tbody><tr class="seglistitem">
+<td class="seg">EXT-AUTH-18</td><td class="seg">A</td><td class="seg">Authority configuration data model</td>
+</tr></tbody>
+</table></div><p>Each authority is defined like this:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>Authority pretty-name, e.g. "URZ"</p></li><li class="listitem"><p>Authentication Driver, e.g. "RADIUS". In practice,
-this would be a reference to a service contract implementation.</p></li><li class="listitem"><p>Authentication Driver configuration settings, e.g. host name,
+this would be a reference to a service contract implementation.</p></li><li class="listitem"><p>Authentication Driver configuration settings, e.g. hostname,
 port, etc., as required by the particular driver. Note that this is
 per authority, not per driver, i.e., you can have multiple
 authorities with the same driver but different configuration
@@ -248,7 +195,7 @@ features.</p></li><li class="listitem"><p>Account Creation Driver, e.g. "RADIUS"
 this would be a reference to a service contract implementation. The
 reason we have separate drivers for authentication and account
 creation is that organizations are likely to have a home-grown
-account registration process.</p></li><li class="listitem"><p>Account Creation Driver configuration settings, e.g. host name,
+account registration process.</p></li><li class="listitem"><p>Account Creation Driver configuration settings, e.g. hostname,
 port, etc., as required by the particular driver. Note that this is
 per authority, not per driver, i.e., you can have multiple
 authorities with the same driver but different configuration
@@ -264,53 +211,27 @@ options are available, a way to set these, and a way for the driver
 to access these settings.</p><p>OpenACS will come pre-configured with one authority, which is
 the "local" authority, meaning we&#39;ll authenticate as
 normal using the local users table. This will, just like any other
-authority, be implemetned using a service contract.</p>
+authority, be implemented using a service contract.</p>
 </div><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
 <a name="Synchronizing_and_Linking_User" id="Synchronizing_and_Linking_User"></a>Synchronizing and Linking
-Users</h4></div></div></div><div class="segmentedlist">
-<div class="seglistitem">
-<div class="seg">
-<strong><span class="segtitle">Synchronizing and
-linking users:</span></strong> EXT-AUTH-28</div><div class="seg">
-<strong><span class="segtitle">:</span></strong>
-A</div><div class="seg">
-<strong><span class="segtitle">:</span></strong>
-Create service contract for Batch Sync.</div>
-</div><div class="seglistitem">
-<div class="seg">
-<strong><span class="segtitle">Synchronizing and
-linking users:</span></strong> EXT-AUTH-38</div><div class="seg">
-<strong><span class="segtitle">:</span></strong>
-A</div><div class="seg">
-<strong><span class="segtitle">:</span></strong>
-Batch User Synchronization API</div>
-</div><div class="seglistitem">
-<div class="seg">
-<strong><span class="segtitle">Synchronizing and
-linking users:</span></strong> EXT-AUTH-38</div><div class="seg">
-<strong><span class="segtitle">:</span></strong>
-A</div><div class="seg">
-<strong><span class="segtitle">:</span></strong>
-IMS Synchronization driver</div>
-</div><div class="seglistitem">
-<div class="seg">
-<strong><span class="segtitle">Synchronizing and
-linking users:</span></strong> EXT-AUTH-08</div><div class="seg">
-<strong><span class="segtitle">:</span></strong>
-A</div><div class="seg">
-<strong><span class="segtitle">:</span></strong>
-Automation of batch Synchronization</div>
-</div><div class="seglistitem">
-<div class="seg">
-<strong><span class="segtitle">Synchronizing and
-linking users:</span></strong> EXT-AUTH-15</div><div class="seg">
-<strong><span class="segtitle">:</span></strong>
-B</div><div class="seg">
-<strong><span class="segtitle">:</span></strong>
-On-demand synchronization</div>
-</div>
-</div><p>Regardless of the login method, the user needs to have a row in
+Users</h4></div></div></div><div class="segmentedlist"><table border="1" cellpadding="3" cellspacing="0" width="90%">
+<tr>
+<th width="15%">Feature</th><th width="8%">Status</th><th width="77%">Description</th>
+</tr><thead><tr><th>Synchronizing and linking users</th></tr></thead><tbody>
+<tr class="seglistitem">
+<td class="seg">EXT-AUTH-28</td><td class="seg">A</td><td class="seg">Create service contract for Batch Sync.</td>
+</tr><tr class="seglistitem">
+<td class="seg">EXT-AUTH-38</td><td class="seg">A</td><td class="seg">Batch User Synchronization API</td>
+</tr><tr class="seglistitem">
+<td class="seg">EXT-AUTH-38</td><td class="seg">A</td><td class="seg">IMS Synchronization driver</td>
+</tr><tr class="seglistitem">
+<td class="seg">EXT-AUTH-08</td><td class="seg">A</td><td class="seg">Automation of batch Synchronization</td>
+</tr><tr class="seglistitem">
+<td class="seg">EXT-AUTH-15</td><td class="seg">B</td><td class="seg">On-demand synchronization</td>
+</tr>
+</tbody>
+</table></div><p>Regardless of the login method, the user needs to have a row in
 the OpenACS users table. This can happen through a batch job, in
 real-time, or both in combination. We use the <a class="ulink" href="https://www.imsglobal.org/enterprise/index.html" target="_top">IMS Enterprise 1.1</a> specification.</p><p>Batch job means that we do a synchronization (import new users,
 modify changed, purge deleted) on a regular interval, e.g. every
@@ -343,14 +264,13 @@ in two different authorities, and we can record that this is the
 same person. We&#39;d still have a problem if there was an email
 conflict between two accounts on the same authority. Hm. I
 don&#39;t think it&#39;s worth spending too much time trying to
-solve this problem through software.</p><div class="segmentedlist"><div class="seglistitem">
-<div class="seg">
-<strong><span class="segtitle">EXT-AUTH-31:</span></strong> EXT-AUTH-31</div><div class="seg">
-<strong><span class="segtitle">:</span></strong>
-A</div><div class="seg">
-<strong><span class="segtitle">:</span></strong>
-Upgrade user data model for ext-auth</div>
-</div></div><p>After having authenticated using the relevant authority driver,
+solve this problem through software.</p><div class="segmentedlist"><table border="1" cellpadding="3" cellspacing="0" width="90%">
+<tr>
+<th width="15%">Feature</th><th width="8%">Status</th><th width="77%">Description</th>
+</tr><thead><tr><th>EXT-AUTH-31</th></tr></thead><tbody><tr class="seglistitem">
+<td class="seg">EXT-AUTH-31</td><td class="seg">A</td><td class="seg">Upgrade user data model for ext-auth</td>
+</tr></tbody>
+</table></div><p>After having authenticated using the relevant authority driver,
 we&#39;ll look for the username/authority pair in the users
 table.</p><p>If we don&#39;t find any, that means that we&#39;re either not
 doing batch synchronizing, or that the user has been added since
@@ -367,7 +287,7 @@ available tomorrow. If not, contact X."</p>
 <a name="Account_Registratio" id="Account_Registratio"></a>Account Registration</h4></div></div></div><p>If a user doesn&#39;t have an account, the site-wide
 configuration can allow the user to register for one, as defined in
 the configuration discussed above. This section is about normal
-account registration through a authority driver.</p><p>The account creation service contract implementation will need
+account registration through an authority driver.</p><p>The account creation service contract implementation will need
 to tell us which information to ask the user for:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>Required Fields: A list of fields which are required.</p></li><li class="listitem"><p>Optional Fields: A list of fields which are optional.</p></li>
 </ul></div><p>The fields to choose from are these:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
@@ -394,14 +314,13 @@ redirect to in the case of forgotten passwords, or when the user
 desires to change password.</p>
 </div><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="Login_Pages_Over_HTTP" id="Login_Pages_Over_HTTP"></a>Login Pages Over HTTPS</h4></div></div></div><div class="segmentedlist"><div class="seglistitem">
-<div class="seg">
-<strong><span class="segtitle">EXT-AUTH-20:</span></strong> EXT-AUTH-20</div><div class="seg">
-<strong><span class="segtitle">:</span></strong>
-A</div><div class="seg">
-<strong><span class="segtitle">:</span></strong>
-Login over HTTPS</div>
-</div></div><p>Login pages must be able to be sent over a secure connection
+<a name="Login_Pages_Over_HTTP" id="Login_Pages_Over_HTTP"></a>Login Pages Over HTTPS</h4></div></div></div><div class="segmentedlist"><table border="1" cellpadding="3" cellspacing="0" width="90%">
+<tr>
+<th width="15%">Feature</th><th width="8%">Status</th><th width="77%">Description</th>
+</tr><thead><tr><th>EXT-AUTH-20</th></tr></thead><tbody><tr class="seglistitem">
+<td class="seg">EXT-AUTH-20</td><td class="seg">A</td><td class="seg">Login over HTTPS</td>
+</tr></tbody>
+</table></div><p>Login pages must be able to be sent over a secure connection
 (https), so your password won&#39;t get sent over the wire in
 cleartext, while leaving the rest of the site non-secure (http). I
 believe that this requires some (minor) changes to the current
@@ -428,14 +347,13 @@ important for security, or because it makes sense to fix them while
 we&#39;re messing with this part of the codebase anyway.</p><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
 <a name="Recommended__Untrusted_Logins_and_Login_Leve" id="Recommended__Untrusted_Logins_and_Login_Leve"></a>Recommended:
-Untrusted Logins and Login Levels</h4></div></div></div><div class="segmentedlist"><div class="seglistitem">
-<div class="seg">
-<strong><span class="segtitle">EXT-AUTH-33:</span></strong> EXT-AUTH-33</div><div class="seg">
-<strong><span class="segtitle">:</span></strong>
-A</div><div class="seg">
-<strong><span class="segtitle">:</span></strong>
-Untrusted Logins</div>
-</div></div><p>I like the idea of having multiple login levels:</p><div class="orderedlist"><ol class="orderedlist" type="1">
+Untrusted Logins and Login Levels</h4></div></div></div><div class="segmentedlist"><table border="1" cellpadding="3" cellspacing="0" width="90%">
+<tr>
+<th width="15%">Feature</th><th width="8%">Status</th><th width="77%">Description</th>
+</tr><thead><tr><th>EXT-AUTH-33</th></tr></thead><tbody><tr class="seglistitem">
+<td class="seg">EXT-AUTH-33</td><td class="seg">A</td><td class="seg">Untrusted Logins</td>
+</tr></tbody>
+</table></div><p>I like the idea of having multiple login levels:</p><div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem"><p>Not logged-in</p></li><li class="listitem"><p>Untrusted login: We&#39;ll show you un-sensitive personal
 content, but won&#39;t let you modify anything or see personal
 data. A normal login becomes untrusted after a certain amount of
@@ -469,20 +387,19 @@ the user_id of a user who&#39;s only logged-in in untrusted
 mode.</p><p>Similarly, <code class="literal">ad_conn user_id</code> will
 continue to return 0 (not logged-in) when the user is only
 logged-in untrusted, and we&#39;ll supply another variable,
-<code class="literal">ad_conn untrusted_user_id</code>, which wlll
+<code class="literal">ad_conn untrusted_user_id</code>, which will
 be set to the user_id for all login levels.</p><p>This should ensure that we get full access to the new feature,
 while leaving all current code just as secure as it was before.</p>
 </div><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
 <a name="Recommended__Make_Non-Persistent_Login_Wor" id="Recommended__Make_Non-Persistent_Login_Wor"></a>Recommended: Make
-Non-Persistent Login Work</h4></div></div></div><div class="segmentedlist"><div class="seglistitem">
-<div class="seg">
-<strong><span class="segtitle">EXT-AUTH-34:</span></strong> EXT-AUTH-34</div><div class="seg">
-<strong><span class="segtitle">:</span></strong>
-A</div><div class="seg">
-<strong><span class="segtitle">:</span></strong>
-Expire Logins</div>
-</div></div><p>Currently, OpenACS is unusable in practice without persistent
+Non-Persistent Login Work</h4></div></div></div><div class="segmentedlist"><table border="1" cellpadding="3" cellspacing="0" width="90%">
+<tr>
+<th width="15%">Feature</th><th width="8%">Status</th><th width="77%">Description</th>
+</tr><thead><tr><th>EXT-AUTH-34</th></tr></thead><tbody><tr class="seglistitem">
+<td class="seg">EXT-AUTH-34</td><td class="seg">A</td><td class="seg">Expire Logins</td>
+</tr></tbody>
+</table></div><p>Currently, OpenACS is unusable in practice without persistent
 login. The login will expire after just a few minutes of
 inactivity, and you&#39;ll get bounced to the login page where you
 have to enter both email and password again. Unacceptable in
@@ -496,12 +413,13 @@ like an hour or so.</p><p>This will require looking into and changing the design
 current session handling code.</p>
 </div><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="Recommended__Single-Sign-O" id="Recommended__Single-Sign-O"></a>Recommended: Single-Sign-On</h4></div></div></div><div class="segmentedlist"><div class="seglistitem">
-<div class="seg">
-<strong><span class="segtitle">EXT-AUTH-23:</span></strong> EXT-AUTH-23</div><div class="seg"><strong><span class="segtitle">:</span></strong></div><div class="seg">
-<strong><span class="segtitle">:</span></strong>
-Single sign-on</div>
-</div></div><p>Instead of redirecting to the login page, auth::require_login
+<a name="Recommended__Single-Sign-O" id="Recommended__Single-Sign-O"></a>Recommended: Single-Sign-On</h4></div></div></div><div class="segmentedlist"><table border="1" cellpadding="3" cellspacing="0" width="90%">
+<tr>
+<th width="15%">Feature</th><th width="8%">Status</th><th width="77%">Description</th>
+</tr><thead><tr><th>EXT-AUTH-23</th></tr></thead><tbody><tr class="seglistitem">
+<td class="seg">EXT-AUTH-23</td><td class="seg"></td><td class="seg">Single sign-on</td>
+</tr></tbody>
+</table></div><p>Instead of redirecting to the login page, auth::require_login
 can redirect to an authentication server, which can redirect back
 to a page that logs the user in. This should be very easy to
 implement.</p><p>Alternatively, if you want to combine this with fallback to
@@ -511,14 +429,13 @@ the redirection-based external authority.</p>
 </div><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
 <a name="Recommended__Expire_All_Login" id="Recommended__Expire_All_Login"></a>Recommended: Expire All
-Logins</h4></div></div></div><div class="segmentedlist"><div class="seglistitem">
-<div class="seg">
-<strong><span class="segtitle">EXT-AUTH-22:</span></strong> EXT-AUTH-22</div><div class="seg">
-<strong><span class="segtitle">:</span></strong>
-B</div><div class="seg">
-<strong><span class="segtitle">:</span></strong>
-rewrite cookie handling</div>
-</div></div><p>Currently, if you&#39;ve ever left a permanent login cookie on
+Logins</h4></div></div></div><div class="segmentedlist"><table border="1" cellpadding="3" cellspacing="0" width="90%">
+<tr>
+<th width="15%">Feature</th><th width="8%">Status</th><th width="77%">Description</th>
+</tr><thead><tr><th>EXT-AUTH-22</th></tr></thead><tbody><tr class="seglistitem">
+<td class="seg">EXT-AUTH-22</td><td class="seg">B</td><td class="seg">rewrite cookie handling</td>
+</tr></tbody>
+</table></div><p>Currently, if you&#39;ve ever left a permanent login cookie on
 someone elses machine, that person will be forever logged-in until
 he/she explicitly logs out. You can change your password, you can
 do anything you want, but unless a logout is requested from that
@@ -537,26 +454,24 @@ normally happens every 10 minutes or so.</p>
 </div><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
 <a name="Recommended__Email_account_owner_on_password" id="Recommended__Email_account_owner_on_password"></a>Recommended:
-Email account owner on password change</h4></div></div></div><div class="segmentedlist"><div class="seglistitem">
-<div class="seg">
-<strong><span class="segtitle">EXT-AUTH-24:</span></strong> EXT-AUTH-24</div><div class="seg">
-<strong><span class="segtitle">:</span></strong>
-A</div><div class="seg">
-<strong><span class="segtitle">:</span></strong>
-Email on password change</div>
-</div></div><p>As an additional security measure, we should email the
+Email account owner on password change</h4></div></div></div><div class="segmentedlist"><table border="1" cellpadding="3" cellspacing="0" width="90%">
+<tr>
+<th width="15%">Feature</th><th width="8%">Status</th><th width="77%">Description</th>
+</tr><thead><tr><th>EXT-AUTH-24</th></tr></thead><tbody><tr class="seglistitem">
+<td class="seg">EXT-AUTH-24</td><td class="seg">A</td><td class="seg">Email on password change</td>
+</tr></tbody>
+</table></div><p>As an additional security measure, we should email the
 account&#39;s email address whenever the password is changed, so
 that he/she is at least alerted to the fact.</p>
 </div><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="Optional__Password_polic" id="Optional__Password_polic"></a>Optional: Password policy</h4></div></div></div><div class="segmentedlist"><div class="seglistitem">
-<div class="seg">
-<strong><span class="segtitle">EXT-AUTH-25:</span></strong> EXT-AUTH-25</div><div class="seg">
-<strong><span class="segtitle">:</span></strong>
-A</div><div class="seg">
-<strong><span class="segtitle">:</span></strong>
-Implement password policy</div>
-</div></div><p>Again, to increase security, we should add password policies,
+<a name="Optional__Password_polic" id="Optional__Password_polic"></a>Optional: Password policy</h4></div></div></div><div class="segmentedlist"><table border="1" cellpadding="3" cellspacing="0" width="90%">
+<tr>
+<th width="15%">Feature</th><th width="8%">Status</th><th width="77%">Description</th>
+</tr><thead><tr><th>EXT-AUTH-25</th></tr></thead><tbody><tr class="seglistitem">
+<td class="seg">EXT-AUTH-25</td><td class="seg">A</td><td class="seg">Implement password policy</td>
+</tr></tbody>
+</table></div><p>Again, to increase security, we should add password policies,
 such as passwords needing to be changed after a certain number of
 days, change on next login (after a new random password has been
 generated), or requiring that the password satisfies certain
@@ -566,14 +481,13 @@ numbers, special chars, etc.</p><p>It would good to extend the current maximum p
 </div><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
 <a name="Optional__Login_Without_Explicit_Domai" id="Optional__Login_Without_Explicit_Domai"></a>Optional: Login
-Without Explicit Authority</h4></div></div></div><div class="segmentedlist"><div class="seglistitem">
-<div class="seg">
-<strong><span class="segtitle">EXT-AUTH-26:</span></strong> EXT-AUTH-26</div><div class="seg">
-<strong><span class="segtitle">:</span></strong>
-B</div><div class="seg">
-<strong><span class="segtitle">:</span></strong>
-Login without explicit domain</div>
-</div></div><p>In order to make it easier for people, we&#39;ve been toying
+Without Explicit Authority</h4></div></div></div><div class="segmentedlist"><table border="1" cellpadding="3" cellspacing="0" width="90%">
+<tr>
+<th width="15%">Feature</th><th width="8%">Status</th><th width="77%">Description</th>
+</tr><thead><tr><th>EXT-AUTH-26</th></tr></thead><tbody><tr class="seglistitem">
+<td class="seg">EXT-AUTH-26</td><td class="seg">B</td><td class="seg">Login without explicit domain</td>
+</tr></tbody>
+</table></div><p>In order to make it easier for people, we&#39;ve been toying
 with the idea of a functionality like this:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>If the user enters "foobar\@ix.urz.uni-heidelberg.de",
 it is translated to mean username = "foobar", authority =
@@ -596,7 +510,7 @@ fail, signaling that the user&#39;s entry was not valid.</p></li><li class="list
 in the sort order.</p></li>
 </ul></div><p>The relevant code in user-login.tcl would look like this:</p><pre class="programlisting">
 if { ![auth::split_username -username_var username -authority_var authority] } {
-    # bounce back to the form with a message saying that the login wasn&#39;t valid.
+    # bounce back to the form with a message saying that the login was not valid. 
     ad_script_abort
 }
 
@@ -605,14 +519,13 @@ if { ![auth::split_username -username_var username -authority_var authority] } {
 </pre>
 </div><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="Optional__Whois_Onlin" id="Optional__Whois_Onlin"></a>Optional: Who&#39;s Online</h4></div></div></div><div class="segmentedlist"><div class="seglistitem">
-<div class="seg">
-<strong><span class="segtitle">EXT-AUTH-27:</span></strong> EXT-AUTH-27</div><div class="seg">
-<strong><span class="segtitle">:</span></strong>
-B</div><div class="seg">
-<strong><span class="segtitle">:</span></strong>
-Who&#39;s online list</div>
-</div></div><p>While we&#39;re touching the session handling code, anyway, it
+<a name="Optional__Whois_Onlin" id="Optional__Whois_Onlin"></a>Optional: Who&#39;s Online</h4></div></div></div><div class="segmentedlist"><table border="1" cellpadding="3" cellspacing="0" width="90%">
+<tr>
+<th width="15%">Feature</th><th width="8%">Status</th><th width="77%">Description</th>
+</tr><thead><tr><th>EXT-AUTH-27</th></tr></thead><tbody><tr class="seglistitem">
+<td class="seg">EXT-AUTH-27</td><td class="seg">B</td><td class="seg">Who&#39;s online list</td>
+</tr></tbody>
+</table></div><p>While we&#39;re touching the session handling code, anyway, it
 would be nice to add a feature to show who&#39;s currently online,
 a nice real-time collaboration feature frequently requested by
 members of the community. This is particularly interesting when
@@ -630,12 +543,13 @@ tree.</p>
 </div><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
 <a name="Optional__Subsite-level_configuratio" id="Optional__Subsite-level_configuratio"></a>Optional:
-Subsite-level configuration</h4></div></div></div><div class="segmentedlist"><div class="seglistitem">
-<div class="seg">
-<strong><span class="segtitle">EXT-AUTH-28:</span></strong> EXT-AUTH-28</div><div class="seg"><strong><span class="segtitle">:</span></strong></div><div class="seg">
-<strong><span class="segtitle">:</span></strong>
-implement subsite-level config</div>
-</div></div><p>If we want to, we could let subsite administrators configure the
+Subsite-level configuration</h4></div></div></div><div class="segmentedlist"><table border="1" cellpadding="3" cellspacing="0" width="90%">
+<tr>
+<th width="15%">Feature</th><th width="8%">Status</th><th width="77%">Description</th>
+</tr><thead><tr><th>EXT-AUTH-28</th></tr></thead><tbody><tr class="seglistitem">
+<td class="seg">EXT-AUTH-28</td><td class="seg"></td><td class="seg">implement subsite-level config</td>
+</tr></tbody>
+</table></div><p>If we want to, we could let subsite administrators configure the
 login process for that particular subsite. This would probably only
 entail letting the subsite admin leave out certain authorities
 defined site-wide, and change the sort order.</p><p>I think we should leave this out until we have a use case for
@@ -643,23 +557,17 @@ it, someone who&#39;d need it.</p>
 </div><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
 <a name="Future__Making_the_Authentication_API_itself" id="Future__Making_the_Authentication_API_itself"></a>Future: Making
-the Authentication API itself a service contract</h4></div></div></div><div class="segmentedlist">
-<div class="seglistitem">
-<div class="seg">
-<strong><span class="segtitle">EXT-AUTH-32:</span></strong> EXT-AUTH-32</div><div class="seg">
-<strong><span class="segtitle">:</span></strong>
-A</div><div class="seg">
-<strong><span class="segtitle">:</span></strong>
-Parameters for Service Contract Implementation</div>
-</div><div class="seglistitem">
-<div class="seg">
-<strong><span class="segtitle">EXT-AUTH-32:</span></strong> EXT-AUTH-35</div><div class="seg">
-<strong><span class="segtitle">:</span></strong>
-A</div><div class="seg">
-<strong><span class="segtitle">:</span></strong>
-Make the Authentication API a service contract</div>
-</div>
-</div><p>For completely free-form authentication logic and mechanisms,
+the Authentication API itself a service contract</h4></div></div></div><div class="segmentedlist"><table border="1" cellpadding="3" cellspacing="0" width="90%">
+<tr>
+<th width="15%">Feature</th><th width="8%">Status</th><th width="77%">Description</th>
+</tr><thead><tr><th>EXT-AUTH-32</th></tr></thead><tbody>
+<tr class="seglistitem">
+<td class="seg">EXT-AUTH-32</td><td class="seg">A</td><td class="seg">Parameters for Service Contract Implementation</td>
+</tr><tr class="seglistitem">
+<td class="seg">EXT-AUTH-35</td><td class="seg">A</td><td class="seg">Make the Authentication API a service contract</td>
+</tr>
+</tbody>
+</table></div><p>For completely free-form authentication logic and mechanisms,
 something like Andrew Grumet&#39;s <a class="ulink" href="http://openacs.org/new-file-storage/download/oacs-pam.html?version_id=687" target="_top">Pluggable Authentication for OACS Draft</a> is
 interesting. He&#39;s proposing a scheme where the entire user
 interaction is encapsulated in, and left entirely to, a service
@@ -673,14 +581,13 @@ service contract.</p>
 </div><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
 <a name="Future__Authenticating_against_multiple_serv" id="Future__Authenticating_against_multiple_serv"></a>Future:
-Authenticating against multiple servers simultaneously</h4></div></div></div><div class="segmentedlist"><div class="seglistitem">
-<div class="seg">
-<strong><span class="segtitle">EXT-AUTH-36:</span></strong> EXT-AUTH-36</div><div class="seg">
-<strong><span class="segtitle">:</span></strong>
-A</div><div class="seg">
-<strong><span class="segtitle">:</span></strong>
-Authenticate against multiple servers</div>
-</div></div><p>Both OKI and OpenACS supports a form of stacking, where you can
+Authenticating against multiple servers simultaneously</h4></div></div></div><div class="segmentedlist"><table border="1" cellpadding="3" cellspacing="0" width="90%">
+<tr>
+<th width="15%">Feature</th><th width="8%">Status</th><th width="77%">Description</th>
+</tr><thead><tr><th>EXT-AUTH-36</th></tr></thead><tbody><tr class="seglistitem">
+<td class="seg">EXT-AUTH-36</td><td class="seg">A</td><td class="seg">Authenticate against multiple servers</td>
+</tr></tbody>
+</table></div><p>Both OKI and OpenACS supports a form of stacking, where you can
 be logged into multiple authorities at the same time. This is
 useful if, for example, you need to get login tokens such as
 Kerberos tickets for access to shared resources.</p><p>I can see the value in this, but for simplicity&#39;s sake,
@@ -696,59 +603,28 @@ that are ready. We have some who are on the steps, but let&#39;s
 wait till they&#39;re there.</p>
 </div><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="Implement_Specific_Driver" id="Implement_Specific_Driver"></a>Implement Specific Drivers</h4></div></div></div><div class="segmentedlist">
-<div class="seglistitem">
-<div class="seg">
-<strong><span class="segtitle">Implement specific
-drivers:</span></strong> EXT-AUTH-09</div><div class="seg">
-<strong><span class="segtitle">:</span></strong>
-A</div><div class="seg">
-<strong><span class="segtitle">:</span></strong>
-Create Auth. drivers for Local Authority</div>
-</div><div class="seglistitem">
-<div class="seg">
-<strong><span class="segtitle">Implement specific
-drivers:</span></strong> EXT-AUTH-10</div><div class="seg">
-<strong><span class="segtitle">:</span></strong>
-A</div><div class="seg">
-<strong><span class="segtitle">:</span></strong>
-Create Acct. Creation driver for Local Authority</div>
-</div><div class="seglistitem">
-<div class="seg">
-<strong><span class="segtitle">Implement specific
-drivers:</span></strong> EXT-AUTH-11</div><div class="seg">
-<strong><span class="segtitle">:</span></strong>
-A</div><div class="seg">
-<strong><span class="segtitle">:</span></strong>
-Create Auth. driver for PAM</div>
-</div><div class="seglistitem">
-<div class="seg">
-<strong><span class="segtitle">Implement specific
-drivers:</span></strong> EXT-AUTH-12</div><div class="seg">
-<strong><span class="segtitle">:</span></strong>
-X</div><div class="seg">
-<strong><span class="segtitle">:</span></strong><span class="emphasis"><em>Create Acct. Creation driver for PAM -
-this functionality is explicitly excluded from
-PAM</em></span>
-</div>
-</div><div class="seglistitem">
-<div class="seg">
-<strong><span class="segtitle">Implement specific
-drivers:</span></strong> EXT-AUTH-13</div><div class="seg">
-<strong><span class="segtitle">:</span></strong>
-A</div><div class="seg">
-<strong><span class="segtitle">:</span></strong>
-Create Acct. Creation driver for LDAP</div>
-</div><div class="seglistitem">
-<div class="seg">
-<strong><span class="segtitle">Implement specific
-drivers:</span></strong> EXT-AUTH-14</div><div class="seg">
-<strong><span class="segtitle">:</span></strong>
-A</div><div class="seg">
-<strong><span class="segtitle">:</span></strong>
-Create Auth. driver for LDAP</div>
-</div>
-</div><p>We&#39;ll need drivers for:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
+<a name="Implement_Specific_Driver" id="Implement_Specific_Driver"></a>Implement Specific Drivers</h4></div></div></div><div class="segmentedlist"><table border="1" cellpadding="3" cellspacing="0" width="90%">
+<tr>
+<th width="15%">Feature</th><th width="8%">Status</th><th width="77%">Description</th>
+</tr><thead><tr><th>Implement specific drivers</th></tr></thead><tbody>
+<tr class="seglistitem">
+<td class="seg">EXT-AUTH-09</td><td class="seg">A</td><td class="seg">Create Auth. drivers for Local Authority</td>
+</tr><tr class="seglistitem">
+<td class="seg">EXT-AUTH-10</td><td class="seg">A</td><td class="seg">Create Acct. Creation driver for Local
+Authority</td>
+</tr><tr class="seglistitem">
+<td class="seg">EXT-AUTH-11</td><td class="seg">A</td><td class="seg">Create Auth. driver for PAM</td>
+</tr><tr class="seglistitem">
+<td class="seg">EXT-AUTH-12</td><td class="seg">X</td><td class="seg"><span class="emphasis"><em>Create Acct. Creation
+driver for PAM - this functionality is explicitly excluded from
+PAM</em></span></td>
+</tr><tr class="seglistitem">
+<td class="seg">EXT-AUTH-13</td><td class="seg">A</td><td class="seg">Create Acct. Creation driver for LDAP</td>
+</tr><tr class="seglistitem">
+<td class="seg">EXT-AUTH-14</td><td class="seg">A</td><td class="seg">Create Auth. driver for LDAP</td>
+</tr>
+</tbody>
+</table></div><p>We&#39;ll need drivers for:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>Operating system (Linux/Solaris) PAM: Delegate to the operating
 system, which can then talk to RADIUS, LDAP, whatever. This is
 convenient because there&#39;ll be plenty of drivers for the OS PAM

@@ -170,7 +170,7 @@ namespace eval rel_types {
                 create table $table_name (
                      rel_id integer
                             constraint $fk_constraint_name
-                            references $references_table ($references_column)
+                            references $references_table ($references_column) on delete cascade
                             constraint $pk_constraint_name primary key
                    )}]} errmsg]} {
 

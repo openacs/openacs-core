@@ -8,3 +8,6 @@
 <listtemplate name="parameters_list"></listtemplate>
 </blockquote>
 
+<if @return_url@ not nil>
+<a href="@return_url@" class="button">@return_label@</a>
+</if>

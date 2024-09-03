@@ -12,7 +12,7 @@
 </authorblurb>
 
 <itemizedlist>
-<listitem><para>Tcl code: /tcl/0-acs-init.tcl and /packages/acs-kernel/bootstrap.tcl</para></listitem>
+<listitem><para>Tcl code: /tcl/0-acs-init.tcl and /packages/acs-bootstrap-installer/bootstrap.tcl</para></listitem>
 </itemizedlist>
 
 <para>This document describes the startup (bootstrapping) process for an AOLserver
@@ -57,13 +57,12 @@ startup.
 <title>The Startup Process</title>
 
 <para>
-As soon as the <computeroutput>nsd</computeroutput> daemon is executed by the <computeroutput>init</computeroutput>
-process (or otherwise), AOLserver reads its configuration file and
-<computeroutput>chroot</computeroutput>s itself if necessary. It then loads shared libraries
-indicated in the <computeroutput>.ini</computeroutput> file (e.g., the Oracle driver and
-<computeroutput>nssock</computeroutput>), and sources Tcl module files (generally in
-<computeroutput>/home/aol30/modules/tcl</computeroutput>). This step is, and has always been, the
-same for all AOLservers, regardless of whether they are running OpenACS. 
+When <computeroutput>nsd</computeroutput> is started, it reads its configuration file and
+<computeroutput>chroot</computeroutput>s itself if necessary. It then
+loads the configured modules (e.g., Database and network drivers, Tcl module files).
+This step is, and has always been, the
+same for all NaviServer/AOLservers, regardless of whether they are
+running OpenACS (see the NaviServer/AOLserver documentation for more details).
 </para>
 
 <para>Next AOLserver sources, in lexicographical order, each file in the
@@ -73,7 +72,7 @@ determine the OpenACS path root (e.g., <computeroutput>/var/lib/aolserver/</comp
 by trimming the final component from the path to the Tcl library directory
 (<computeroutput>/var/lib/aolserver/</computeroutput><emphasis><computeroutput>yourservername</computeroutput></emphasis><computeroutput>/tcl</computeroutput>). But
 <computeroutput>0-acs-init.tcl</computeroutput>&#39;s has an important function, namely sourcing
-<computeroutput>/packages/acs-core/bootstrap.tcl</computeroutput>, which does the following:</para>
+<computeroutput>/packages/acs-bootstrap-installer/bootstrap.tcl</computeroutput>, which does the following:</para>
 
 <orderedlist>
 <listitem><para><emphasis role="strong">Initialize some NSVs used by the core</emphasis>. These NSVs are
@@ -82,15 +81,9 @@ worry about them unless you&#39;re an OpenACS core hacker.
 
 </para></listitem>
 
-<listitem><para><emphasis role="strong">Verify the deletion of obsolete OpenACS files</emphasis>. The
-<computeroutput>/tcl</computeroutput> directory has evolved quite a bit over the months and
-years, and a few files have come and gone. The
-<computeroutput>/www/doc/removed-files.txt</computeroutput> file contains a list of files which
-<emphasis>must be deleted</emphasis> from the AOLserver installation, at the risk of
-causing weird conflicts, e.g., having several security filters registered.
-<computeroutput>bootstrap.tcl</computeroutput> scans through this list, logging error messages to
-the log if any of these files exist. 
-
+<listitem><para><emphasis role="strong">Verify that OpenACS is fully
+installed</emphasis>. If not (e.g. at the first installation) it
+prompts a form for providing essential information about the installation.
 </para></listitem>
 
 <listitem><para><emphasis role="strong">Source <computeroutput>*-procs.tcl</computeroutput> files in the OpenACS core</emphasis>.

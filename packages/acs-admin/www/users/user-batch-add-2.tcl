@@ -80,7 +80,7 @@ while {[regexp {(.[^\n]+)} $userlist match_fodder row] } {
     
     set sub_message $message
     foreach key $key_list value $value_list {
-	regsub -all "<$key>" $sub_message $value sub_message
+	regsub -all -- "<$key>" $sub_message $value sub_message
     }
     
     if {[catch {acs_mail_lite::send -send_immediately -to_addr $email -from_addr $from -subject $subject -body $sub_message} errmsg]} {

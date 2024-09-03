@@ -1,7 +1,11 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Request Processor Design}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Request Processor Design}</property>
 <property name="doc(title)">Request Processor Design</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="rp-requirements" leftLabel="Prev"
 			title="Chapter 15. Kernel
@@ -9,9 +13,11 @@ Documentation"
 			rightLink="tcl-doc" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="rp-design" id="rp-design"></a>Request Processor Design</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">By <a class="ulink" href="http://planitia.org" target="_top">Rafael H.
-Schloming</a>
-</span></p><span style="color: red">&lt;/authorblurb&gt;</span><div class="sect2">
+<a name="rp-design" id="rp-design"></a>Request Processor Design</h2></div></div></div><div class="authorblurb">
+<p>By <a class="ulink" href="http://planitia.org" target="_top">Rafael H. Schloming</a>
+</p>
+OpenACS docs are written by the named authors, and may be edited by
+OpenACS documentation staff.</div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="rp-design-essentials" id="rp-design-essentials"></a>Essentials</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p><a class="xref" href="rp-requirements" title="Request Processor Requirements">OpenACS 4 Request Processor
@@ -58,7 +64,7 @@ URL with no extension that doesn&#39;t directly correspond to a
 file in the filesystem.</p></li><li class="listitem"><p>
 <span class="strong"><strong>abstract file</strong></span> or
 <span class="strong"><strong>abstract path</strong></span> -- A URL
-that has been translated into a file system path (probably by
+that has been translated into a filesystem path (probably by
 prepending the appropriate pageroot), but still doesn&#39;t have
 any extension and so does not directly correspond to a file in the
 filesystem.</p></li><li class="listitem"><p>
@@ -84,7 +90,7 @@ info) file path (index). The request processor must be able to
 figure out which <span class="strong"><strong>package_id</strong></span> is associated with a
 given package_url, and package mountings must be persistent across
 server restarts and users must be able to manipulate the mountings
-on a live site, therefore this mapping is stored in the
+on a live site, therefore, this mapping is stored in the
 database.</p><p><span class="strong"><strong>Authentication and
 Authorization</strong></span></p><p>Once the request processor has located both the package_id and
 concrete file associated with the request, authentication is

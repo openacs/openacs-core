@@ -88,9 +88,7 @@ ad_proc -public content::extlink::delete {
     @param extlink_id item_id of extlink to delete
     @return 0
 } {
-    return [package_exec_plsql -var_list [list \
-        [list extlink_id $extlink_id ] \
-    ] content_extlink del]
+    content::item::delete -item_id $extlink_id
 }
 
 

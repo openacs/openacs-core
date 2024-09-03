@@ -19,20 +19,4 @@
       </querytext>
 </fullquery>
 
- 
-<fullquery name="select_violated_rels">      
-      <querytext>
-      
-	    select viol.rel_id, acs_object.name(viol.party_id) as name
-	      from rel_constraints_violated_one viol
-	     where viol.constraint_id = :constraint_id
-	    UNION ALL
-	    select viol.rel_id, acs_object.name(viol.party_id) as name
-	      from rel_constraints_violated_two viol
-	     where viol.constraint_id = :constraint_id
-	
-      </querytext>
-</fullquery>
-
- 
 </queryset>

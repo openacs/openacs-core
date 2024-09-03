@@ -13,11 +13,11 @@ ad_proc -public ref_countries::get_country_code {
 
     @param country Name of the country in English!
 } {
-    
+
     set country_code [db_string get_country_code "select iso from countries where default_name = upper(:country)" -default ""]
 
     if { $country_code eq "" } {
-        
+
         # Lets try to be smart.
         set country_list [list \
                               [list England GB] \
@@ -37,7 +37,7 @@ ad_proc -public ref_countries::get_country_code {
             set country_code $countries($country)
         }
     }
-    
+
     return $country_code
 }
 

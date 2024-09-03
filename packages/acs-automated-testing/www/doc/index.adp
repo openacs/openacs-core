@@ -1,7 +1,11 @@
 
-<property name="context">{/doc/acs-automated-testing {ACS Automated Testing}} {Automated Testing}</property>
+<property name="context">{/doc/acs-automated-testing/ {ACS Automated Testing}} {Automated Testing}</property>
 <property name="doc(title)">Automated Testing</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <div class="article" lang="en">
 <div class="titlepage"><h1 class="title">Automated Testing</h1></div><dl>
 <dt><span class="sect1"><a href="install">Installation</a></span></dt><dt><span class="sect1"><a href="usage">Usage</a></span></dt><dt><span class="sect1"><a href="requirements">Requirements</a></span></dt>

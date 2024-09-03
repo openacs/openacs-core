@@ -8,7 +8,11 @@ ad_library {
 
 aa_register_case \
     -cats {smoke production_safe} \
-    -procs {apm_get_installed_versions apm_get_package_files} \
+    -procs {
+        apm_get_installed_versions
+        apm_get_package_files
+        ad_file
+    } \
     files__tcl_file_syntax_errors {
 
         Test all known Tcl files for successful parsing "(in the [info complete] sense at least)" and other common errors.
@@ -26,7 +30,7 @@ aa_register_case \
     foreach {package_key version} [array get installed_versions] {
         lappend files {*}[lmap f [apm_get_package_files \
                                       -package_key $package_key] {
-            if {[file extension $f] ne ".tcl"} continue
+            if {[ad_file extension $f] ne ".tcl"} continue
             set f $startdir/$package_key/$f
         }]
     }
@@ -45,7 +49,10 @@ aa_register_case \
 aa_register_case \
     -cats {smoke production_safe} \
     -error_level error \
-    -procs {} \
+    -procs {
+        ad_file
+        ad_find_all_files
+    } \
     files__tcl_file_common_errors {
     Check for some common error patterns.
 
@@ -53,7 +60,7 @@ aa_register_case \
 } {
     # couple of local helper procs
     proc ::tcl_p {file} {
-        return [expr {[string match {*.tcl} $file] || [file isdirectory $file]}]
+        return [expr {[string match {*.tcl} $file] || [ad_file isdirectory $file]}]
     }
 
     # if startdir is not $::acs::rootdir/packages, then somebody checked in the wrong thing by accident
@@ -80,7 +87,11 @@ aa_register_case \
 
 aa_register_case \
     -cats {smoke production_safe} \
-    -procs {apm_read_package_info_file} \
+    -procs {
+        apm_read_package_info_file
+        aa_log_result
+        apm_package_installed_p
+    } \
     files__check_info_files {
 
         Check that all the info files parse correctly and are
@@ -94,6 +105,10 @@ aa_register_case \
             aa_log_result fail "$spec_file returned $errMsg"
             set errp 1
         } else {
+            # Skip uninstalled packages
+            if {![apm_package_installed_p $version(package.key)]} {
+                continue
+            }
             regexp {packages/([^/]*)/} $spec_file match key
             if {$version(package.key) ne $key } {
                 aa_log_result fail "MISMATCH DIRECTORY/PACKAGE KEY: $spec_file $version(package.key) != $key"
@@ -138,6 +153,7 @@ aa_register_case \
         apm_get_package_files
         apm_guess_db_type
         apm_version_sortable
+        ad_file
     } \
     files__check_upgrade_ordering {
 
@@ -165,7 +181,7 @@ aa_register_case \
                     set db [apm_guess_db_type $package $file]
                     if {[string is space $db]
                         || $db eq $db_type} {
-                        set tail [file tail $file]
+                        set tail [ad_file tail $file]
                         if {[regexp {\-(.*)-(.*).sql} $tail match v1 v2]} {
                             set v1s [apm_version_sortable $v1]
                             set v2s [apm_version_sortable $v2]
@@ -207,8 +223,9 @@ aa_register_case \
     -procs {
         apm_get_installed_versions
         apm_get_package_files
-        db_qd_internal_prepare_queryfile_content
+        db_qd_prepare_queryfile_content
         xml_parse
+        ad_file
     } \
     files__check_xql_files {
 
@@ -241,7 +258,7 @@ aa_register_case \
         set data [read $fp]
         close $fp
         ns_log debug "acs_tcl__check_xql_files: read $file"
-        set data [db_qd_internal_prepare_queryfile_content $data]
+        set data [db_qd_prepare_queryfile_content $data]
 
         set parse_failed_p [catch {set parse [xml_parse $data]} errMsg]
         aa_false "xql $file correctly parsed" $parse_failed_p
@@ -255,7 +272,7 @@ aa_register_case \
 
         regexp {(.*)[.]xql$} $file match base
 
-        if {![file exists ${base}.tcl] && ![file exists ${base}.vuh]} {
+        if {![ad_file exists ${base}.tcl] && ![ad_file exists ${base}.vuh]} {
             # the file did not exist so we must have a -db extension...
             regexp {(.*?)(-)?([A-Za-z_]*)[.]xql$} $file match base dummy db
 
@@ -294,8 +311,8 @@ aa_register_case \
 
     foreach xql [array names allxql] {
         # check there is a corresponding .tcl file
-        if {![file exists ${xql}.tcl]
-            && ![file exists ${xql}.vuh]} {
+        if {![ad_file exists ${xql}.tcl]
+            && ![ad_file exists ${xql}.vuh]} {
             # JCD: Hack to exclude calendar/www/views which is the only current file which has
             # no associated Tcl file.
             if {[string first calendar/www/views $allxql($xql)] <  0} {
@@ -324,7 +341,11 @@ aa_register_case \
 aa_register_case \
     -cats {production_safe} \
     -error_level notice \
-    -procs {} \
+    -procs {
+        ad_file
+        apm_get_installed_versions
+        apm_get_package_files
+    } \
     files__trailing_whitespace {
 
         Looks for trailing whitespace: spaces or tabs at the end of lines.
@@ -346,7 +367,7 @@ aa_register_case \
     foreach {package_key version} [array get installed_versions] {
         lappend files {*}[lmap f [apm_get_package_files \
                                       -package_key $package_key] {
-            if {[file extension $f] ne ".tcl"} continue
+            if {[ad_file extension $f] ne ".tcl"} continue
             set f $startdir/$package_key/$f
         }]
     }
@@ -383,7 +404,13 @@ aa_register_case \
         if { $whitespace_count == 0 } {
             incr good
         } else {
-            aa_log_result fail "$file: trailing whitespace in lines: $line_numbers"
+            aa_silence_log_entries -severities notice {
+                #
+                # On large installations, these might be too many,
+                # .. we have these lines in the regression log anyway.
+                #
+                aa_log_result fail "$file: trailing whitespace in lines: $line_numbers"
+            }
         }
     }
     aa_log "$good of $count tcl files checked have no trailing whitespace"
@@ -392,11 +419,18 @@ aa_register_case \
 aa_register_case \
     -cats {smoke production_safe} \
     -error_level warning \
-    -procs {} \
+    -procs {
+        ad_file
+        apm_get_installed_versions
+        apm_get_package_files
+
+        apm_ignore_file_p
+    } \
     files__page_contracts {
 
-    Checks for files without 'ad_page_contract' or 'ad_include_contract' in
-    both 'www' and 'lib' package directories.
+    Checks for files without 'ad_page_contract', 'ad_include_contract'
+    or '::xowiki::Package initialize -ad_doc' in both 'www' and 'lib'
+    package directories.
 
     There are cases, where includelets are not stored in 'lib' but 'www', or
     have 'ad_page_contract' instead of 'ad_include_contract'.
@@ -421,27 +455,13 @@ aa_register_case \
         lappend files {*}[lmap f [apm_get_package_files \
                                       -package_key $package_key \
                                       -file_types {content_page include_page}] {
-            # Ignore non .tcl files
-            if {[file extension $f] ne ".tcl"} continue
-            # Ignore docs
-            if { "$package_key" eq "acs-core-docs" } continue
+            # Ignore non .tcl files, doc, and common NaviServer modules
+            if {[ad_file extension $f] ne ".tcl"
+                || "$package_key" eq "acs-core-docs"
+                || [ad_file tail $f] eq "nsstats.tcl"
+            } continue
             set f $startdir/$package_key/$f
         }]
-    }
-
-    set ignorechars {
-        , " "
-        ( " " ) " " < " " > " "
-        \[ " " \] " "
-        \{ " " \} " "
-        < " " > " "
-        . " " : " "   ; " " ? " " ! " "
-        = " "
-        \r " "
-        \" " "
-        „ " " “ " " ” " "
-        ﻿ " "
-        ­ ""
     }
 
     #inspect every Tcl file in the directory tree starting with $startdir
@@ -451,10 +471,15 @@ aa_register_case \
         set f [open $file "r"]
         incr count
         set contract_found_p false
-        ns_log Notice "Looking for contracts in file $file"
+        #ns_log notice "Looking for contracts in file $file"
         while {[gets $f line] >= 0 && !$contract_found_p} {
-            set line_clean [string map $ignorechars $line]
-            if { "ad_page_contract" in "$line_clean" || "ad_include_contract" in "$line_clean" } {
+            # '::xowiki::Package initialize -ad_doc' idioms are not
+            # that easy to identify, as nothing prevents from writing
+            # them on multiple lines or using different flags... This
+            # simple pattern matching is based on occurrences as found
+            # in upstream code.
+            set patterns [list "::xowiki::Package initialize -ad_doc" "ad_page_contract" "ad_include_contract"]
+            if {[regexp [join $patterns |] $line]} {
                 # Found contract!
                 incr good
                 set contract_found_p true
@@ -464,10 +489,10 @@ aa_register_case \
 
         # Check results on $file
         if { !$contract_found_p } {
-            aa_log_result fail "$file: no 'ad_page_contract' or 'ad_include_contract' found"
+            aa_log_result fail "$file: no 'ad_page_contract', 'ad_include_contract', or '::xowiki::Package initialize -ad_doc' found"
         }
     }
-    aa_log "$good of $count tcl files checked have 'ad_page_contract' or 'ad_include_contract'"
+    aa_log "$good of $count tcl files checked have 'ad_page_contract', 'ad_include_contract' or ::xowiki::Package initialize -ad_doc"
 }
 
 # Local variables:

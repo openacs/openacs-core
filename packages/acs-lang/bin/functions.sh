@@ -1,4 +1,4 @@
-# Functions re-used by scripts in acs-lang/bin
+# Functions reused by scripts in acs-lang/bin
 #
 # @author Peter Marklund
 

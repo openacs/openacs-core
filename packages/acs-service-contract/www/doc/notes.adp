@@ -1,7 +1,11 @@
 
-<property name="context">{/doc/acs-service-contract {ACS Service Contracts}} {}</property>
+<property name="context">{/doc/acs-service-contract/ {ACS Service Contracts}} {}</property>
 <property name="doc(title)"></property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 
 ACS Service Contract Overview by Neophytos Demetriou
 (k2pts\@yahoo.com) and Kapil Thangavelu (k_vertigo\@yahoo.com) Goals

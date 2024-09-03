@@ -11,17 +11,20 @@ if {$::tcl_version eq "8.5"} {
     #
     package require try
 }
-if {[info commands "::try"] eq ""} {
+if {[namespace which ::try] eq ""} {
     error "This version of OpenACS requires the ::try command (built-in in 8.6+, package for 8.5"
 }
 
 ad_proc -public ad_raise {exception {value ""}} {
-    @author rhs@mit.edu
-    @creation-date 2000-09-09
-
     Raise an exception.
 
     If you use this I will kill you.
+
+    Note: despite the warning, this proc has been used in
+    acs-authentication.
+
+    @author rhs@mit.edu
+    @creation-date 2000-09-09
 } {
     return -code error -errorcode [list "AD" "EXCEPTION" $exception] $value
 }
@@ -77,14 +80,13 @@ if {$::tcl_version >= 8.6} {
         set extraTraps {}
         if {$auto_abort_p} {
             #
-            # The "subst" below is just used for resolving $body in
-            # the debug message.
+            # Add silent handling of "ad_script_abort" to
+            # the traps.
             #
             lappend extraTraps \
-                trap {AD EXCEPTION ad_script_abort} {result} [subst {
-                    ns_log notice {ad_script_abort of <$body> return value <\$result>}
-                    ::throw {AD EXCEPTION ad_script_abort} \$result
-                }]
+                trap {AD EXCEPTION ad_script_abort} {result} {
+                    ::throw {AD EXCEPTION ad_script_abort} $result
+                }
         }
         #
         # Call the Tcl 8.6 built-in/compliant ::try in the scope of the caller
@@ -127,14 +129,13 @@ if {$::tcl_version >= 8.6} {
         set extraTraps {}
         if {$auto_abort_p} {
             #
-            # The "subst" below is just used for resolving $body in
-            # the debug message.
+            # Add silent handling of "ad_script_abort" to
+            # the traps.
             #
             lappend extraTraps \
-                trap {AD EXCEPTION ad_script_abort} {result} [subst {
-                    ns_log notice {ad_script_abort of <$body> return value <\$result>}
-                    ::throw {AD EXCEPTION ad_script_abort} \$result
-                }]
+                trap {AD EXCEPTION ad_script_abort} {result} {
+                    ::throw {AD EXCEPTION ad_script_abort} $result
+                }
         }
         #
         # Call the Tcl 8.6 built-in/compliant ::try in the scope of the caller
@@ -151,6 +152,40 @@ if {$::tcl_version >= 8.6} {
         }
     }
 }
+
+ad_proc ad_unless_script_abort {
+    body
+    non_abort_action
+} {
+
+    Execute the provided body in the callers' environment. When the
+    body does not raise an "ad_script_abort" exception, the
+    "non_abort_action" is also executed. This pattern is useful when
+    handling client requests and where the "non_abort_action" is used
+    to return results to the client. When "ad_script_abort" is
+    executed, the connection is usually closed, and any attempt to
+    talk to the client over the closed connection will fail.
+
+    The handling of script_abort exceptions is done usually in the
+    request processor. The function is useful when registering own
+    request procs (e.g., via "ns_register_proc") where the OpenACS
+    request processor is not involved.
+
+    @param body script, which is always executed
+    @param non_abort_action script, which is executed unless the
+           body was aborted.
+
+    @see ad_script_abort
+} {
+    ad_try -auto_abort=false {
+        uplevel $body
+    } trap {AD EXCEPTION ad_script_abort} {r} {
+        # do nothing
+    } on ok RESULT {
+        uplevel $non_abort_action
+    }
+}
+
 
 # Local variables:
 #    mode: tcl

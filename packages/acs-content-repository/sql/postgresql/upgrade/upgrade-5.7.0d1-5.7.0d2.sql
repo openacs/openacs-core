@@ -3,10 +3,13 @@
 -- 
 
 
--- The following function get's rid of the foreign key constraint between cr_folders(folder_id) and cr_items(item_id), 
--- at somepoint ( upgrade-5.4.2d1-5.42d2 ) it was added using the statement "alter table add foreign key .. " 
--- which will add a constraint with name $1, since this is not for sure ( could have also other name assigned), we better look for the right constraint name
--- to be deleted using pg_constraint and pg_class table
+-- The following function gets rid of the foreign key constraint
+-- between cr_folders(folder_id) and cr_items(item_id), at some point
+-- ( upgrade-5.4.2d1-5.42d2 ) it was added using the statement "alter
+-- table add foreign key .. "  which will add a constraint with name
+-- $1, since this is not for sure ( could have also other name
+-- assigned), we better look for the right constraint name to be
+-- deleted using pg_constraint and pg_class table
 
 create function inline_0 ()
 returns integer as '

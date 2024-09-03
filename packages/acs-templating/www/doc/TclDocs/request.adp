@@ -1,7 +1,11 @@
 
-<property name="context">{/doc/acs-templating {ACS Templating}} {}</property>
+<property name="context">{/doc/acs-templating/ {ACS Templating}} {}</property>
 <property name="doc(title)"></property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h2>Namespace request</h2>
 <blockquote>The request commands provide a mechanism for managing
 the query parameters to a page. The request is simply a special

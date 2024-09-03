@@ -2,7 +2,7 @@
 
 # aolserver4 recommends descriptors limit (FD_SETSIZE) to be set to 1024, 
 # which is standard for most OS distributions
-# For freebsd systems, uncomment following line:
+# For FreeBSD systems, uncomment following line:
 # ulimit -n 1024
 
 export PATH=$PATH:/usr/local/pgsql/bin

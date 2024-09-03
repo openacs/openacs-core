@@ -19,15 +19,4 @@
       </querytext>
 </fullquery>
 
- 
-<fullquery name="select_basic_info">      
-      <querytext>
-      
-    select acs_group__name(:group_id) as group_name
-      
-
-      </querytext>
-</fullquery>
-
- 
 </queryset>

@@ -234,9 +234,9 @@ chmod 755 /usr/local/bin/svgroup</action></screen>
 [root qmail-1.03]#
 <action>rm -f /usr/bin/sendmail /usr/sbin/sendmail
 ln -s /var/qmail/bin/sendmail /usr/sbin/sendmail</action></screen>
-          <para>Configure qmail - specifically, run the config script to set up files in <computeroutput>/var/qmail/control</computeroutput> specifying the computer&#39;s identity and which addresses it should accept mail for.  This command will automatically set up qmail correctly if you have correctly set a valid host nome.  If not, you&#39;ll want to read <computeroutput>/var/qmail/doc/INSTALL.ctl</computeroutput> to find out how to configure qmail.</para>
+          <para>Configure qmail - specifically, run the config script to set up files in <computeroutput>/var/qmail/control</computeroutput> specifying the computer&#39;s identity and which addresses it should accept mail for.  This command will automatically set up qmail correctly if you have correctly set a valid hostname.  If not, you&#39;ll want to read <computeroutput>/var/qmail/doc/INSTALL.ctl</computeroutput> to find out how to configure qmail.</para>
             <screen>[root qmail-1.03]# <userinput>./config-fast <replaceable>yourserver.test</replaceable></userinput>
-Your fully qualified host name is yourserver.test.
+Your fully qualified hostname is yourserver.test.
 Putting yourserver.test into control/me...
 Putting yourserver.test into control/defaultdomain...
 Putting yourserver.test into control/plusdomain...
@@ -453,7 +453,7 @@ cp https.tcl /usr/local/aolserver/modules/tcl/</action></screen>
       </sect2>
       <sect2 id="install-nsopenssl-aolserver4">
         <title>Install on AOLserver4</title>
-        <para> You will need the AOLserver4 source in <computeroutput>/usr/local/src/aolserver/aolserver</computeroutput> and OpenSSL installed in <computeroutput>/usr/local/ssl</computeroutput> (or at least symlinked there). The use of <computeroutput>INST=/point/to/aolserver</computeroutput> is being replaced with <computeroutput>AOLSERVER=/point/to/aolserver</computeroutput>. We are including both here, because while this module still requires INST, if one just uses AOLSERVER, the default value would be used and could intefere with another existing installation.</para>
+        <para> You will need the AOLserver4 source in <computeroutput>/usr/local/src/aolserver/aolserver</computeroutput> and OpenSSL installed in <computeroutput>/usr/local/ssl</computeroutput> (or at least symlinked there). The use of <computeroutput>INST=/point/to/aolserver</computeroutput> is being replaced with <computeroutput>AOLSERVER=/point/to/aolserver</computeroutput>. We are including both here, because while this module still requires INST, if one just uses AOLSERVER, the default value would be used and could interfere with another existing installation.</para>
         <para>FreeBSD note: build nsopenssl with <userinput>gmake install OPENSSL=/usr/local/openssl AOLSERVER=/usr/local/aolserver4r10</userinput>
         </para>
 
@@ -534,7 +534,7 @@ ln -s /usr/local/tclwebtest/tclwebtest /usr/local/bin
 [root php-4.3.4]# <userinput> ./configure --with-aolserver=/usr/local/aolserver/ --with-pgsql=/usr/local/pgsql --without-mysql</userinput>
 [root php-4.3.4]# <userinput>make install</userinput>
       </screen>
-      <para>Once installed you can enable this by configuring your config file. Make sure your config file supports php (it should have a php section with it). Furthermore add <userinput>index.php</userinput> as the last element to your <computeroutput>directoryfile</computeroutput> directive.</para>
+      <para>Once installed you can enable this by configuring your config file. Make sure your config file supports php (it should have a php section with it). Furthermore, add <userinput>index.php</userinput> as the last element to your <computeroutput>directoryfile</computeroutput> directive.</para>
     </sect1>
     <sect1 id="install-squirrelmail">
       <title>Install Squirrelmail for use as a webmail system for OpenACS</title>
@@ -684,7 +684,7 @@ make install LDAP=/usr/local/openldap INST=/usr/local/aolserver
         <listitem id="configure-ns_ldap">
           <formalpara>
             <title>Configure ns_ldap for traditional use</title>
-          <para>Traditionally OpenACS has supported ns_ldap for authentication by storing the OpenACS password in an encrypted field within the LDAP server called "userPassword". Furthermore a CN field was used for searching for the username, usually userID or something similar. This field is identical to the <emphasis>username</emphasis>stored in OpenACS. Therefore the login will only work if you change login method to make use of the username instead.</para>  
+          <para>Traditionally OpenACS has supported ns_ldap for authentication by storing the OpenACS password in an encrypted field within the LDAP server called "userPassword". Furthermore, a CN field was used for searching for the username, usually userID or something similar. This field is identical to the <emphasis>username</emphasis>stored in OpenACS. Therefore, the login will only work if you change login method to make use of the username instead.</para>  
           </formalpara>
           <itemizedlist>
             <listitem><para>
@@ -695,7 +695,7 @@ make install LDAP=/usr/local/openldap INST=/usr/local/aolserver
         <listitem id="configure-ns_ldap-bind">
           <formalpara>
             <title>Configure ns_ldap for use with LDAP bind</title>
-          <para>LDAP authentication usually is done by trying to bind (a.k.a. login) a user with the LDAP server. The password of the user is not stored in any field of the LDAP server, but kept internally. The latest version of ns_ldap supports this method with the <emphasis>ns_ldap bind</emphasis> command. All you have to do to enable this is to configure auth_ldap to make use of the BIND authentication instead. Alternatively you can write a small script on how to calculate the username out of the given input (e.g. if the OpenACS username is malte.fb03.tu, the LDAP request can be translated into "ou=malte,ou=fb03,o=tu" (this example is encoded in auth_ldap and you just have to comment it out to make use of it).</para>
+          <para>LDAP authentication usually is done by trying to bind (aka login) a user with the LDAP server. The password of the user is not stored in any field of the LDAP server, but kept internally. The latest version of ns_ldap supports this method with the <emphasis>ns_ldap bind</emphasis> command. All you have to do to enable this is to configure auth_ldap to make use of the BIND authentication instead. Alternatively you can write a small script on how to calculate the username out of the given input (e.g. if the OpenACS username is malte.fb03.tu, the LDAP request can be translated into "ou=malte,ou=fb03,o=tu" (this example is encoded in auth_ldap and you just have to comment it out to make use of it).</para>
           </formalpara>
         </listitem>
       </orderedlist>

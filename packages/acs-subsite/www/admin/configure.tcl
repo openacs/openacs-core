@@ -1,6 +1,6 @@
 ad_page_contract {
     Configuration home page.
-    
+
     @author Lars Pind (lars@collaboraid.biz)
     @creation-date 2003-06-13
     @cvs-id $Id$
@@ -48,9 +48,8 @@ ad_form -name name -cancel_url [ad_conn url] -mode display -form {
 } -on_submit {
     apm_package_rename -instance_name $instance_name
     subsite::set_theme -theme $theme
-    set group(join_policy) $join_policy
-    set group(description) $description
-    group::update -group_id $group_id -array group
+    group::update -group_id $group_id \
+        [list join_policy $join_policy description $description]
 
     switch -- $visibility {
         any {

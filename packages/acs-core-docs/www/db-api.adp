@@ -1,7 +1,11 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {The OpenACS Database Access API}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {The OpenACS Database Access API}</property>
 <property name="doc(title)">The OpenACS Database Access API</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="request-processor" leftLabel="Prev"
 			title="Chapter 11. Development
@@ -47,9 +51,9 @@ makes the scope of a transaction clear; <code class="computeroutput">db_transact
 argument and automatically runs it in the context of a transaction.
 If you use something like db_foreach though, you need to make sure
 that there are no calls in the code block which would take a second
-db handle since the transaction is only valid for one handle (thats
-why we build up a list of returned values and call a second proc
-outside the db_foreach loop).</p></li><li class="listitem"><p>The command <code class="computeroutput">db_foreach</code>
+db handle since the transaction is only valid for one handle
+(that&#39;s why we build up a list of returned values and call a
+second proc outside the db_foreach loop).</p></li><li class="listitem"><p>The command <code class="computeroutput">db_foreach</code>
 writes our old while loop for us.</p></li><li class="listitem"><p>Every SQL query has a name, which is used in conjunction with
 .XQL files to support multiple databases.</p></li><li class="listitem"><p>Finally and most importantly, there API implements bind
 variables, which we will cover next.</p></li>
@@ -78,7 +82,7 @@ damaging - entire tables can be exposed or have their contents
 deleted, for example.</p><p>Another very important reason for using bind variables is
 performance. Oracle can cache previously parsed queries. If there
 are values in the where clause, that is how the query is cached. It
-also performs bind variable susbstitution after parsing the SQL
+also performs bind variable substitution after parsing the SQL
 statement. This means that SQL statements that use bind variables
 will always match (assuming all else is the same) while SQL
 statements that do not use bind variables will not match unless the
@@ -86,8 +90,8 @@ values in the statement are exactly the same. This will improve the
 query cache considerably, which can make the server much more
 efficient.</p>
 </li>
-</ol></div><p>What the DB API (in conjuntion with the database drivers
-implemented for aolserver) do is send the SQL statement to the
+</ol></div><p>What the DB API (in conjunction with the database drivers
+implemented for AOLserver) do is send the SQL statement to the
 server for parsing, then <span class="emphasis"><em>bind</em></span> values to the variables and sends
 those values along separately as a second step. This separate
 binding step is where the term <span class="emphasis"><em>bind
@@ -98,12 +102,12 @@ string literals are no longer in the query, no extra quoting is
 required. Third, substitution of bind variables cannot change the
 actual text of the query, only the literal values in the
 placeholders. The database API makes bind variables easy to use by
-hooking them smoothly into the Tcl runtime so you simply provide
+hooking them smoothly into the Tcl run time so you simply provide
 :tclvar and the value of $tclvar is sent to the backend to actually
 execute the query.</p><p>The database API parses the query and pulls out all the bind
 variable specifications and replaces them with generic
 placeholders. It then automatically pulls the values of the named
-Tcl vars out of the runtime environment of the script, and passes
+Tcl vars out of the run time environment of the script, and passes
 them to the database.</p><p>Note that while this looks like a simple syntactic change, it
 really is very different from how interpolated text queries work.
 You use bind variables to replace what would otherwise be a literal
@@ -252,9 +256,7 @@ and (if you want) call <code class="computeroutput">db_release_unused_handles</c
 done as a hint to release the database handle.</p><div class="variablelist"><dl class="variablelist">
 <dt><span class="term"><code class="computeroutput">
 <a name="devguide.dbapi_db_abort_transaction" id="devguide.dbapi_db_abort_transaction"></a>db_abort_transaction</code></span></dt><dd>
-<pre class="programlisting">
-db_abort_transaction
-          </pre><p>Aborts all levels of a transaction. That is if this is called
+<pre class="programlisting">db_abort_transaction</pre><p>Aborts all levels of a transaction. That is if this is called
 within several nested transactions, all of them are terminated. Use
 this instead of <code class="computeroutput">db_dml
 "abort" "abort transaction"</code>.</p>
@@ -267,13 +269,13 @@ this instead of <code class="computeroutput">db_dml
     <span class="emphasis"><em>code_block</em></span> [ if_no_rows <span class="emphasis"><em>if_no_rows_block ]</em></span>
 </pre><p>Performs the SQL query <code class="computeroutput">sql</code>,
 saving results in variables of the form <code class="computeroutput">
-<em class="replaceable"><code>var_name</code></em>:1</code>, <code class="computeroutput">
-<em class="replaceable"><code>var_name</code></em>:2</code>, etc, setting
+<span class="replaceable"><span class="replaceable">var_name</span></span>:1</code>, <code class="computeroutput">
+<span class="replaceable"><span class="replaceable">var_name</span></span>:2</code>, etc, setting
 <code class="computeroutput">
-<em class="replaceable"><code>var_name</code></em>:rowcount</code> to the
-total number of rows, and setting <code class="computeroutput">
-<em class="replaceable"><code>var_name</code></em>:columns</code> to a list
-of column names.</p><p>Each row also has a column, rownum, automatically added and set
+<span class="replaceable"><span class="replaceable">var_name</span></span>:rowcount</code> to the total
+number of rows, and setting <code class="computeroutput">
+<span class="replaceable"><span class="replaceable">var_name</span></span>:columns</code> to a list of
+column names.</p><p>Each row also has a column, rownum, automatically added and set
 to the row number, starting with 1. Note that this will override
 any column in the SQL statement named 'rownum', also if
 you&#39;re using the Oracle rownum pseudo-column.</p><p>If the <code class="computeroutput">-local</code> is passed, the
@@ -282,11 +284,11 @@ you&#39;re compiling dynamic templates in a function or similar
 situations).</p><p>You may supply a code block, which will be executed for each row
 in the loop. This is very useful if you need to make computations
 that are better done in Tcl than in SQL, for example using
-ns_urlencode or ad_quotehtml, etc. When the Tcl code is executed,
+ns_urlencode or ns_quotehtml, etc. When the Tcl code is executed,
 all the columns from the SQL query will be set as local variables
 in that code. Any changes made to these local variables will be
 copied back into the multirow.</p><p>You may also add additional, computed columns to the multirow,
-using the <code class="computeroutput">-extend { <em class="replaceable"><code>col_1</code></em><em class="replaceable"><code>col_2</code></em> ... }</code> switch. This is
+using the <code class="computeroutput">-extend { <span class="replaceable"><span class="replaceable">col_1</span></span><span class="replaceable"><span class="replaceable">col_2</span></span> ... }</code> switch. This is
 useful for things like constructing a URL for the object retrieved
 by the query.</p><p>If you&#39;re constructing your multirow through multiple
 queries with the same set of columns, but with different rows, you
@@ -297,7 +299,7 @@ as is the normal behavior. The columns must match the columns in
 the original multirow, or an error will be thrown.</p><p>Your code block may call <code class="computeroutput">continue</code> in order to skip a row and not
 include it in the multirow. Or you can call <code class="computeroutput">break</code> to skip this row and quit
 looping.</p><p>Notice the nonstandard numbering (everything else in Tcl starts
-at 0); the reason is that the graphics designer, a non programmer,
+at 0); the reason is that the graphics designer, a non-programmer,
 may wish to work with row numbers.</p><p>Example:</p><pre class="programlisting">
 db_multirow -extend { user_url } users users_query {
     select user_id first_names, last_name, email from cc_users
@@ -526,8 +528,8 @@ db_with_handle db {
 
           </pre>
 </dd>
-</dl></div><p><span class="cvstag">($&zwnj;Id: db-api.xml,v 1.14 2017/08/07 23:47:54
-gustafn Exp $)</span></p>
+</dl></div><div class="cvstag">($&zwnj;Id: db-api.xml,v 1.17.2.6 2024/02/08 18:45:01
+gustafn Exp $)</div>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="db-api-caching" id="db-api-caching"></a>Caching Database API Results</h3></div></div></div><p>The database API allows for direct caching of query results.

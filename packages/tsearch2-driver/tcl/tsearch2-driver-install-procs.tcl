@@ -10,7 +10,7 @@ ad_library {
 namespace eval tsearch2_driver::install {}
 
 
-ad_proc -public tsearch2_driver::install::preinstall_checks {
+ad_proc -private tsearch2_driver::install::preinstall_checks {
 
 } {
 
@@ -50,7 +50,7 @@ ad_proc -public tsearch2_driver::install::preinstall_checks {
                 break
             }
         }
-        # Check if we've found it, run the sql file
+        # Check if we've found it, run the SQL file
         if { [info exists sql_file_loc] && $sql_file_loc ne "" } {
             # we found tsearch2.sql let's run it
             db_source_sql_file $sql_file_loc
@@ -68,7 +68,7 @@ ad_proc -public tsearch2_driver::install::preinstall_checks {
 
 }
 
-ad_proc -public tsearch2_driver::install::package_install {
+ad_proc -private tsearch2_driver::install::package_install {
 } {
 
     Installation callback for tsearch2 search engine driver
@@ -99,7 +99,7 @@ ad_proc -private tsearch2_driver::install::register_fts_impl {
             search tsearch2::search
             index tsearch2::index
             unindex tsearch2::unindex
-            update_index tsearch2::update_index
+            update_index tsearch2::index
             summary tsearch2::summary
             info tsearch2::driver_info
         }
@@ -109,6 +109,15 @@ ad_proc -private tsearch2_driver::install::register_fts_impl {
 
     acs_sc::impl::new_from_spec -spec $spec
 
+}
+
+ad_proc -private tsearch2_driver::install::before_uninstall {
+} {
+    Remove FtsEngineDriver service contract implementation
+} {
+    acs_sc::impl::delete \
+        -contract_name "FtsEngineDriver" \
+        -impl_name "tsearch2-driver"
 }
 
 #

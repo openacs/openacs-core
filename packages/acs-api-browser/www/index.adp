@@ -7,7 +7,7 @@
 </div>
 
 <div style="float: left; width: 60%;">
-<h3>Installed Enabled Packages</h3>
+<h3>Enabled Packages</h3>
 
 <ul>
 <multiple name="installed_packages">

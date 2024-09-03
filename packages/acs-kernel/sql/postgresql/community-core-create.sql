@@ -638,12 +638,13 @@ create table users (
         priv_email              integer default 5 not null,
         email_verified_p        boolean default 't',
         email_bouncing_p        boolean default 'f' not null,
-        no_alerts_until         timestamptz,
         last_visit              timestamptz,
         second_to_last_visit    timestamptz,
         n_sessions              integer default 1 not null,
         -- local authentication information
-        password                char(40),
+        password                character varying(128),
+        password_hash_algorithm character varying(100)
+                                DEFAULT 'salted-sha1' NOT NULL,
         salt                    char(40),
         password_question       varchar(1000),
         password_answer         varchar(1000),
@@ -703,10 +704,6 @@ comment on table users is '
  constraint ("email must not be null") to the parent type?
 ';
 
-comment on column users.no_alerts_until is '
- For suppressing email alerts
-';
-
 comment on column users.last_visit is '
  Set when user reappears at site
 ';
@@ -750,11 +747,6 @@ comment on column users.n_sessions is '
 --  )
 --  return users.user_id%TYPE;
 -- 
---  function receives_alerts_p (
---   user_id	in users.user_id%TYPE
---  )
---  return char;
--- 
 --  procedure approve_email (
 --   user_id	in users.user_id%TYPE
 --  );
@@ -772,14 +764,8 @@ comment on column users.n_sessions is '
 -- show errors
 
 -- create or replace package body acs_user
--- function new
-select define_function_args('user__new','user_id,object_type;user,creation_date;now(),creation_user,creation_ip,authority_id,username,email,url,first_names,last_name,password,salt,screen_name,email_verified_p;t,context_id');
 
-
-
-
--- added
-select define_function_args('acs_user__new','user_id;null,object_type;user,creation_date;now(),creation_user;null,creation_ip;null,authority_id,username,email,url;null,first_names,last_name,password,salt,screen_name;null,email_verified_p;t,context_id;null');
+select define_function_args('acs_user__new','user_id;null,object_type;user,creation_date;now(),creation_user;null,creation_ip;null,authority_id;null,username,email,url;null,first_names,last_name,password,salt,screen_name;null,email_verified_p;t,context_id;null');
 
 --
 -- procedure acs_user__new/16
@@ -806,14 +792,13 @@ CREATE OR REPLACE FUNCTION acs_user__new(
 DECLARE
     v_user_id                  users.user_id%TYPE;
     v_authority_id             auth_authorities.authority_id%TYPE;
-    v_person_exists            varchar;			
+    v_person_exists            integer;			
 BEGIN
     v_user_id := p_user_id;
 
-    select case when count(*) = 0 then 'f' else 't' end into v_person_exists
-    from persons where person_id = v_user_id;
+    select 1 from persons into v_person_exists where person_id = v_user_id;
 
-    if v_person_exists = 'f' then
+    if NOT FOUND then
         v_user_id := person__new(
             v_user_id, 
             p_object_type,
@@ -890,32 +875,6 @@ BEGIN
 
 END;
 $$ LANGUAGE plpgsql;
-
-
--- function receives_alerts_p
-
-
--- added
-select define_function_args('acs_user__receives_alerts_p','user_id');
-
---
--- procedure acs_user__receives_alerts_p/1
---
-CREATE OR REPLACE FUNCTION acs_user__receives_alerts_p(
-   receives_alerts_p__user_id integer
-) RETURNS boolean AS $$
-DECLARE
-  counter                                   boolean;       
-BEGIN
-  select case when count(*) = 0 then 'f' else 't' end into counter
-   from users
-   where no_alerts_until >= now()
-   and user_id = receives_alerts_p__user_id;
-
-  return counter;
-  
-END;
-$$ LANGUAGE plpgsql stable;
 
 
 -- procedure approve_email

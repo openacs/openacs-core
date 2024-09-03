@@ -149,7 +149,7 @@ Her er hvordan du logger ind på %system_url%:
   <msg key="lt_Inherited_Permissions">Nedarvede Rettigheder</msg>
   <msg key="lt_It_would_be_a_very_ba">Det ville være en meget dårlig idé at vælge denne mulighed hvis du bruger en delt computer på et bibliotek eller en skole. Alle senere brugere af denne computer vil kunne udgive sig for at være dig.</msg>
   <msg key="lt_New_registration_at_s">Ny tilmelding på %system_url% </msg>
-  <msg key="lt_Note_text_in_red_below">Den røde tekst under parameterens indtastningsfelt angiver den parameterværdi som bliver tilsidesat af en linje i OpenACS's parameterfil. Brugen af parameterfilen frarådes, men visse sites behøver den for at oprette instansspecifikke værdier for parametrene uafhængigt af apm_parameter tabellerne.</msg>
+  <msg key="lt_Note_text_in_red_below">Den røde tekst under parameterens indtastningsfelt angiver den parameterværdi som bliver tilsidesat af en linje i NaviServer parameterfil. Brugen af parameterfilen frarådes, men visse sites behøver den for at oprette instansspecifikke værdier for parametrene uafhængigt af apm_parameter tabellerne.</msg>
   <msg key="lt_Note_that_you_can_era">Bemærk at du kan slette den gemte e-mail-adresse og adgangskode ved at vælge &quot;log ud&quot; fra din arbejdsplads.</msg>
   <msg key="lt_num_children_Children">%num_children% børn er skjult</msg>
   <msg key="lt_On_portrait_publish_d">Den %portrait_publish_date% indsendte du &lt;a href=&quot;%subsite_url%user/portrait/?return_url=%pvt_home_url%&quot;&gt;%portrait_title%&lt;/a&gt; </msg>

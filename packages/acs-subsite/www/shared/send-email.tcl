@@ -3,7 +3,7 @@ ad_page_contract {
     
     @author Miguel Marin (miguelmarin@viaro.net) Viaro Networks (www.viaro.net)
 } {
-    sendto:notnull
+    sendto:naturalnum,notnull
     {return_url:localurl ""}
 } -properties {
     context:onevalue

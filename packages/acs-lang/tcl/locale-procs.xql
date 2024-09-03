@@ -30,10 +30,16 @@
 
    <fullquery name="lang::user::package_level_locale_not_cached.get_user_locale">      
       <querytext>
-        select locale
-        from   ad_locale_user_prefs
-        where  user_id = :user_id
-        and    package_id = :package_id
+        select coalesce(
+                 (select locale
+                    from ad_locale_user_prefs
+                   where user_id = :user_id
+                     and package_id = :package_id),
+
+                 (select default_locale
+                   from apm_packages
+                  where package_id = :package_id)
+         ) from dual
       </querytext>
    </fullquery>
 

@@ -6,6 +6,7 @@
   <msg key="404_message">Il file richiesto non è stato trovato</msg>
   <msg key="404_title">Richiesta errata</msg>
   <msg key="500_message">Si è verificato un errore nel processare la tua richiesta</msg>
+  <msg key="500_title">Errore Server</msg>
   <msg key="503_message">Il servizio richiesto è attualmente non disponibile</msg>
   <msg key="_or">, oppure</msg>
   <msg key="_Update_Basic_Information">Aggiorna Informazione di Base</msg>
@@ -32,7 +33,7 @@
   <msg key="add_folder">aggiungi cartella</msg>
   <msg key="Add_group_type">Aggiungi tipologia gruppo</msg>
   <msg key="Add_multiple_applications">Aggiungi applicazioni multiple</msg>
-  <msg key="Add_new_app">Aggiungi una nuova application</msg>
+  <msg key="Add_new_app">Aggiungi una nuova applicazione</msg>
   <msg key="Add_Pair">Aggiungi Coppia</msg>
   <msg key="Add_permissible_relationship_type">Aggiungi una tipologia di relazione ammissibile</msg>
   <msg key="Add_relationship_for_group__group_type">Aggiungi una tipologia di relazione per %group_type%</msg>
@@ -44,7 +45,7 @@
   <msg key="Admin">Pannello di Controllo</msg>
   <msg key="admin">Admin</msg>
   <msg key="Administer_subsite">Amministra %subsite_name%</msg>
-  <msg key="Administration">Amministrazione</msg>
+  <msg key="Administration">Subsite Amministrazione</msg>
   <msg key="Administrative_options">Opzioni amministrative per questo utente</msg>
   <msg key="Advanced">Avanzate</msg>
   <msg key="Advanced_Features">Funzionalità Avanzate</msg>
@@ -97,6 +98,7 @@
   <msg key="Configuration">Configurazione</msg>
   <msg key="Configure">Configura</msg>
   <msg key="Confirm">Conferma Password:</msg>
+  <msg key="Confirm_Permissions">Conferma Impostazioni Permessi</msg>
   <msg key="confirmation_password_changed">Nuova password confermata.</msg>
   <msg key="Continue">Procedi</msg>
   <msg key="Continue_to_your_account">Procedi a %pvt_home_name%</msg>
@@ -150,7 +152,7 @@
   <msg key="Edit_this_theme">Modifica questo tema</msg>
   <msg key="Elements_not_editable">Certi elementi non sono modificabili, in quanto gestiti da %authority_name%.</msg>
   <msg key="Email">Email</msg>
-  <msg key="Email_already_exists">#acs-subsite.Email# già esistente</msg>
+  <msg key="Email_already_exists">Email già esistente</msg>
   <msg key="email_as_a_form">Permetti agli altri di contattarmi attraverso una web form</msg>
   <msg key="email_as_a_form_admin">Permetti contatto tramite form</msg>
   <msg key="email_as_image">Mostra la mia email come un&#39;immagine</msg>
@@ -181,8 +183,10 @@
   <msg key="Error_trying_to_register">Si é verificato un errore cercando di registrare il tuo account</msg>
   <msg key="Error_update_account_info">Si é verificato un errore cercando di aggiornare le tue informazioni account</msg>
   <msg key="Expires">Scade</msg>
+  <msg key="external_identity_providers_title">Provider di Identità Esterni</msg>
   <msg key="Female">Femminile</msg>
   <msg key="Filename">Nome file</msg>
+  <msg key="Filter_username_and_email">Filtra per nome utente ed email</msg>
   <msg key="First_names">Nome/i di battesimo</msg>
   <msg key="First_names_not_provided_by_authority">Il tuo nome non viene fornito dalla autority di autenticazione. Fornisci per favore il tuo nome.</msg>
   <msg key="First_select_the_supertype">Come prima cosa seleziona il supertipo per la nuova tipologia di relazione</msg>
@@ -195,6 +199,8 @@
   <msg key="go_upload_your_portrait">carica la tua immagine</msg>
   <msg key="Grant">Garantisci</msg>
   <msg key="Grant_Permission">Garantisci il permesso</msg>
+  <msg key="Grant_Permissions_to_Users">Assegna permessi agli utenti</msg>
+  <msg key="Grant_Permissions_to_Users-helptext">Seleziona utenti ai quali assegnare questi permessi</msg>
   <msg key="Group_administration">Amministrazione gruppo</msg>
   <msg key="Group_members">Membri del Gruppo: %group_name%</msg>
   <msg key="Group_type">Tipologia gruppo</msg>
@@ -214,6 +220,7 @@
   <msg key="icon_of_envelope">Icona della busta</msg>
   <msg key="If_you_were_to">Se tu dovessi </msg>
   <msg key="Information_Updated">Informazione Modificata</msg>
+  <msg key="Inherited_Permission-helptext">Questo è un permesso ereditato. Per rimuoverlo, clicca sul bottone &#34;Non ereditare...&#34; sottostante.</msg>
   <msg key="Install_locales">Installa Localizzazioni</msg>
   <msg key="Invite">Invita</msg>
   <msg key="Invite_a_user">Invita un utente</msg>
@@ -221,10 +228,10 @@
   <msg key="ISO_Code_List">Lista dei codici ISO</msg>
   <msg key="ISO_Codes_Not_Loaded">Codici ISO Non Caricati</msg>
   <msg key="ISO_Codes_not_loaded">Codici ISO non caricati</msg>
-  <msg key="Join_community">Partecipa alla comunità</msg>
-  <msg key="Join_group_name">Partecipa al gruppo %group_name%</msg>
-  <msg key="Join_policy">Policy di adesione</msg>
-  <msg key="Join_subsite">Partecipa al subsite</msg>
+  <msg key="Join_community">Iscriviti alla comunità</msg>
+  <msg key="Join_group_name">Iscriviti al gruppo %group_name%</msg>
+  <msg key="Join_policy">Politica di adesione</msg>
+  <msg key="Join_subsite">Iscriviti al subsite</msg>
   <msg key="Join_this_community">Partecipa a questa comunità</msg>
   <msg key="Join_this_subsite">Partecipa a questo subsite</msg>
   <msg key="Joined_group">Sei stato iscritto al gruppo %group_name%.</msg>
@@ -267,7 +274,7 @@
   <msg key="lt_Inherited_Permissions">Eredita i pemessi</msg>
   <msg key="lt_It_would_be_a_very_ba">Se stai usando un computer pubblico, per esempio presso una libreria o una scuola, questa è una &lt;b&gt;pessima&lt;/b&gt;scelta. Chiunque subentrasse alla tua postazione potrebbe utilizzare la tua identità su questo sito. </msg>
   <msg key="lt_New_registration_at_s">Nuova registrazione su %system_url%</msg>
-  <msg key="lt_Note_text_in_red_below">Attenzione: la presenza ti testo in rosso sotto i campi dei parametri indica che il valore di qeusto parametro è sovrascritto da un parametro nel file dei parametri di OpenAcs. L&#39;uso del file dei parametri è sconsigliato, anche se alcuni siti potrebbero necessitarne per avere valori specifici per istanza per parametri indipendetemente dalle tabelle apm_parameter*</msg>
+  <msg key="lt_Note_text_in_red_below">Attenzione: la presenza di testo in rosso sotto al campo di un parametro indica che il suo valore è attualmente sovrascritto da un parametro nel file di configurazione di NaviServer. Questo tipo di configurazione è sconsigliata, anche se alcuni siti potrebbero necessitarne per avere valori specifici per istanza per alcuni parametri, indipendetemente da quanto memozizzato nelle tabelle apm_parameter*</msg>
   <msg key="lt_Note_that_you_can_era">Nota che puoi cancellare il tuo indirizzo mail e la password registrate, scegliendo &amp;quot;log out&amp;quot; dal menu.</msg>
   <msg key="lt_num_children_Children">%num_children% Figli Nascosti</msg>
   <msg key="lt_On_portrait_publish_d">Il %portrait_publish_date%, hai caricato &lt;a href=&#34;/user/portrait/&#34;&gt;%portrait_title%&lt;/a&gt; </msg>
@@ -327,7 +334,7 @@
   <msg key="Manage_your_notifications">Gestisci le tue notifiche</msg>
   <msg key="Mem_list_not_allowed">Spiacenti, non ti è permesso vedere la lista dei membri.</msg>
   <msg key="Member">Membro</msg>
-  <msg key="Member_State">Stato del membro</msg>
+  <msg key="Member_State">Stato di iscrizione</msg>
   <msg key="Members">Membri</msg>
   <msg key="Members_only">Solo membri</msg>
   <msg key="Missing_argument">Argomento mancante</msg>
@@ -378,6 +385,7 @@
   <msg key="Permissions">Permessi</msg>
   <msg key="permissions">permessi</msg>
   <msg key="Permissions_for_name">Permessi per %name%</msg>
+  <msg key="Permissions_Updated">Permessi aggiornati.</msg>
   <msg key="Place_of_birth">Luogo di nascita</msg>
   <msg key="Place_of_residence">Luogo di residenza</msg>
   <msg key="Please_return_to_home">Devi tornare a %home_link%</msg>
@@ -445,7 +453,7 @@
   <msg key="Site_node_you_would_like_to_map_hostname_to">Nodo sito al quale vorresti mappare il nome host</msg>
   <msg key="Site_Wide_Admin">Amministrazione Globale Sito</msg>
   <msg key="Site_wide_administration">Amministrazione a livello di sito</msg>
-  <msg key="sorry_forgotten_pwd">Spiecanti, non ti possiamo aiutare riguardo alla password che hai perso/dimenticato.</msg>
+  <msg key="sorry_forgotten_pwd">Spiacenti, non possiamo aiutarti a recuperare la password che hai perso/dimenticato.</msg>
   <msg key="Status">Stato</msg>
   <msg key="Story_Behind_Photo">Storia riguardo alla foto</msg>
   <msg key="Story_behind_photo">Storia della foto</msg>
@@ -453,6 +461,7 @@
   <msg key="subcommunities">sottocomunità</msg>
   <msg key="subcommunity">sottocomunità</msg>
   <msg key="subsite">subsite</msg>
+  <msg key="Subsite_Administration">Amministrazione Subsite</msg>
   <msg key="Subsite_Configuration">Configurazione Subsite</msg>
   <msg key="Subsite_Home">%subsite_name% Home</msg>
   <msg key="Subsite_name">Nome subsite</msg>

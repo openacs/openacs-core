@@ -182,9 +182,22 @@ ad_form -extend -name register -on_request {
 } -after_submit {
 
     if { $next_url ne "" } {
-        # Add user_id and account_message to the URL
-
-        ad_returnredirect [export_vars -base $next_url {user_id password {account_message $creation_info(account_message)}}]
+        #
+        # Add user_id and account_message to the URL, but do not pass
+        # password via query parameter. We have to make sure that
+        # $next_url tries to get the password from the client property
+        # as well.
+        #
+        security::set_client_property_password $password
+        if {$::acs::pass_password_as_query_variable} {
+            ad_returnredirect [export_vars -base $next_url {
+                user_id password {account_message $creation_info(account_message)}
+            }]
+        } else {
+            ad_returnredirect [export_vars -base $next_url {
+                user_id {account_message $creation_info(account_message)}
+            }]
+        }
         ad_script_abort
     }
 
@@ -196,7 +209,7 @@ ad_form -extend -name register -on_request {
     }
 
     # If the user is self registering, then try to set the preferred
-    # locale (assuming the user has set it as a anonymous visitor
+    # locale (assuming the user has set it as an anonymous visitor
     # before registering).
     if { $self_register_p } {
         # We need to explicitly get the cookie and not use

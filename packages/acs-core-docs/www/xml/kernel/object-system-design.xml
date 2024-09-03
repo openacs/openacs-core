@@ -128,7 +128,7 @@ particular programming idioms that we wish to generalize.</para>
 
 <para><emphasis role="strong">Related Links</emphasis></para>
 
-<para>This design document should be read along with the design documents for <link linkend="groups-design">the new groups system</link>, <link linkend="subsites-design">subsites</link> and <link linkend="permissions-design">the permissions system</link></para>
+<para>This design document should be read along with the design documents for <link linkend="groups-design">the new groups system</link>, <link linkend="subsites-design">subsites</link> and <link linkend="permissions-design">the permission system</link></para>
 
 </sect2>
 
@@ -205,7 +205,7 @@ that defines this table.</para>
 <sect3 id="objects-design-obj-context" xreflabel="Object Context and Access Control">
 <title>Object Context and Access Control</title>
 
-<para>Until the implementation of the general permissions system, every OpenACS
+<para>Until the implementation of the general permission system, every OpenACS
 application had to manage access control to its data separately. Later on, a
 notion of &quot;scoping&quot; was introduced into the core data model.</para>
 
@@ -278,7 +278,7 @@ permission to perform action Y on object Z.</para>
 
 <para>The context system forms the basis for the rest of the OpenACS access control
 system, which is described in two separate documents: one for the
-<link linkend="permissions-design">permissions system</link> and another for the
+<link linkend="permissions-design">permission system</link> and another for the
 <link linkend="groups-design">party groups</link> system. The context system
 is also used to implement <link linkend="subsites-design">subsites</link>.</para>
 </sect3>
@@ -345,7 +345,7 @@ the data.</para></listitem>
 <para>Object subtypes provide a way to factor the data model while still keeping
 track of the fact that each member of a subtype (i.e. for each row in the
 subtype&#39;s table), is also a member of the parent type (i.e. there is a
-corresponding row in the parent type table). Therefore, applications an use
+corresponding row in the parent type table). Therefore, applications use
 this mechanism without worrying about this bookkeeping themselves, and we
 avoid having applications pollute the core data model with their specific
 information.</para>
@@ -384,7 +384,7 @@ of user preferences is to add a column to the <computeroutput>users_preferences<
 table (exactly the kind of data model change that has historically
 complicated the process of upgrading to a more recent OpenACS version).</para>
 
-<para>The Objet Model generalizes the scheme used in the old OpenACS 3.x user/groups
+<para>The ACS Object Model generalizes the scheme used in the old OpenACS 3.x user/groups
 system. It defines a table called <computeroutput>acs_attributes</computeroutput> that record
 what attributes belong to which object types, and how the attributes are
 stored. As before, attributes can either be stored in helper tables, or in a
@@ -474,7 +474,7 @@ use standpoint.
 alternative. Here, some notion of subtyping is embedded into an existing SQL
 or SQL-like database engine. Examples of systems like this include the new
 Informix, PostgreSQL 7, and Oracle has something like this too. The main
-problem with these systems: each one implements their own non-portable
+problem with these systems: each one implements their own nonportable
 extensions to SQL to implement subtyping. Thus, making OpenACS data models
 portable would become even more difficult. In addition, each of these object
 systems have strange limitations that make using inheritance difficult in
@@ -499,7 +499,7 @@ that applications only use the object model for metadata, it is also the case
 that the data model is not designed to scale too large type hierarchies. In
 the more limited domain of the metadata model, this is acceptable since the
 type hierarchy is fairly small. But the object system data model is not
-designed to support, for example, a huge type tree like the Java runtime
+designed to support, for example, a huge type tree like the Java run time
 libraries might define.</para>
 
 <para>This last point cannot be over-stressed: <emphasis role="strong">the object model is not

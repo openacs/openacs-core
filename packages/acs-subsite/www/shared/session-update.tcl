@@ -25,7 +25,7 @@ ad_page_contract {
     return_url:localurl
 } -validate {
     referrer_error {
-        if { $session_property(referrer) ne [get_referrer] } {
+        if { $session_property(referrer) ne [util::get_referrer] } {
             ad_complain "Expected referrer does not match actual referrer"
         }
     }

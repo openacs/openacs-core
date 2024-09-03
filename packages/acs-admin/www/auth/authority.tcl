@@ -36,7 +36,7 @@ set form_widgets_full {
     {short_name:text,optional
         {html {size 50}}
         {label "\#acs-admin.Short_Name\#"}
-        {mode {[ad_decode $local_authority_p 1 "display" ""]}}
+        {mode {[expr {$local_authority_p ? "display" : ""}]}}
         {help_text "[_ acs-admin.Authority_short_name_help_text]"}
     }
 
@@ -65,12 +65,12 @@ set form_widgets_full {
         {options {[acs_sc::impl::get_options -empty_label "--Disabled--" -contract_name auth_password]}}
     }
 
-    {forgotten_pwd_url:text,optional
+    {forgotten_pwd_url:text(url),optional
         {html {size 50}}
         {label "\#acs-admin.Recover_password_URL\#"}
         {help_text "[_ acs-admin.Recover_password_URL_help_text]"}
     }
-    {change_pwd_url:text,optional
+    {change_pwd_url:text(url),optional
         {html {size 50}}
         {label "\#acs-admin.Change_password_URL\#"}
         {help_text "[_ acs-admin.Change_password_URL_help_text]"}
@@ -83,7 +83,7 @@ set form_widgets_full {
         {options {[acs_sc::impl::get_options -empty_label "--Disabled--" -contract_name auth_registration]}}
     }
 
-    {register_url:text,optional
+    {register_url:text(url),optional
         {html {size 50}}
         {label "\#acs-admin.Account_registration_URL\#"}
         {help_text "[_ acs-admin.Account_reg_URL_help_text]"}
@@ -298,7 +298,7 @@ if { $display_batch_history_p } {
         set end_time_pretty [lc_time_fmt $end_time_ansi "%x %X"]
 
         set interactive_pretty [expr {$interactive_p eq "t" ? $yes : $no}]
-        set short_message [string_truncate -len 30 -- $message]
+        set short_message [ad_string_truncate -len 30 -- $message]
 
         set actions_per_minute {}
         if { $run_time_seconds > 0 && $num_actions > 0 } {
@@ -323,7 +323,7 @@ if { $display_batch_history_p } {
 set context [list [list "." "Authentication"] $page_title]
 
 if { [info exists authority_id] && $authority_id ne "" } {
-    set num_users [lc_numeric [db_string num_users_in_auhtority {
+    set num_users [lc_numeric [db_string num_users_in_authority {
         select count(*) from users where authority_id = :authority_id
     }]]
 } else {

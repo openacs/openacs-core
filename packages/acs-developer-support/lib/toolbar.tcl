@@ -1,3 +1,7 @@
+ad_include_contract {
+    Render the developer support menubar
+}
+
 # TODO: Handle the case when developer-support is not mounted
 set ip_address [ns_info address]:[ns_config [ns_driversection] port]
 
@@ -14,43 +18,60 @@ if { $show_p } {
     # multirow append ds_buttons COM \
         "Display comments inline" \
         [export_vars -base "${ds_url}comments-toggle" { { return_url [ad_return_url]} }] \
-        [ad_decode [ds_comments_p]  1 "on" "off"]
+        [expr {[ds_comments_p] ? "on" : "off"}]
 
     multirow append ds_buttons USR \
         "Toggle user switching" \
         [export_vars -base "${ds_url}set" { {field user} {enabled_p {[expr {![ds_user_switching_enabled_p]}]}} {return_url [ad_return_url]} }] \
-        [ad_decode [ds_user_switching_enabled_p] 1 "on" "off"]
+        [expr {[ds_user_switching_enabled_p] ? "on" : "off"}]
 
     multirow append ds_buttons DB \
         "Toggle DB data collection" \
         [export_vars -base "${ds_url}set" { {field db} {enabled_p {[expr {![ds_database_enabled_p]}]}} {return_url [ad_return_url]} }] \
-        [ad_decode [ds_database_enabled_p] 1 "on" "off"]
+        [expr {[ds_database_enabled_p] ? "on" : "off"}]
 
     multirow append ds_buttons PRO \
         "Toggle template profiling" \
         [export_vars -base "${ds_url}set" { {field prof} {enabled_p {[expr {![ds_profiling_enabled_p]}]}} {return_url [ad_return_url]} }] \
-        [ad_decode [ds_profiling_enabled_p] 1 "on" "off"]
+        [expr {[ds_profiling_enabled_p] ? "on" : "off"}]
 
     multirow append ds_buttons FRG \
         "Toggle caching page fragments" \
         [export_vars -base "${ds_url}set" { {field frag} {enabled_p {[expr {![ds_page_fragment_cache_enabled_p]}]}} {return_url [ad_return_url]} }] \
-        [ad_decode [ds_page_fragment_cache_enabled_p] 1 "on" "off"]
+        [expr {[ds_page_fragment_cache_enabled_p] ? "on" : "off"}]
 
     multirow append ds_buttons TRN \
         "Toggle translation mode" \
         [export_vars -base "/acs-lang/admin/translator-mode-toggle" { { return_url [ad_return_url]}}] \
-        [ad_decode [lang::util::translator_mode_p] 1 "on" "off"]
+        [expr {[lang::util::translator_mode_p] ? "on" : "off"}]
 
     multirow append ds_buttons ADP \
         "Toggle ADP reveal" \
         \# \
-        [ad_decode [ds_adp_reveal_enabled_p] 1 "on" "off"]
+        [expr {[ds_adp_reveal_enabled_p] ? "on" : "off"}]
 
     template::add_body_script -script {
         document.getElementById('ACS_DS_ADP').addEventListener('click', function (event) {
-            var el=document.getElementsByTagName('span');
             event.preventDefault();
-            for(i=0;i<el.length;i++){if(el[i].className=='developer-support-adp-file-on'){void(el[i].className='developer-support-adp-file-off')}else{if(el[i].className=='developer-support-adp-file-off'){void(el[i].className='developer-support-adp-file-on')}}};void(el=document.getElementsByTagName('div'));for(i=0;i<el.length;i++){if(el[i].className=='developer-support-adp-box-on'){void(el[i].className='developer-support-adp-box-off')}else{if(el[i].className=='developer-support-adp-box-off'){void(el[i].className='developer-support-adp-box-on')}};if(el[i].className=='developer-support-adp-output-on'){void(el[i].className='developer-support-adp-output-off')}else{if(el[i].className=='developer-support-adp-output-off'){void(el[i].className='developer-support-adp-output-on')}};}
+            for (e of document.getElementsByTagName('span')) {
+                if (e.className === 'developer-support-adp-file-on') {
+                    e.className = 'developer-support-adp-file-off';
+                } else if (e.className === 'developer-support-adp-file-off') {
+                    e.className = 'developer-support-adp-file-on';
+                }
+            }
+            for (e of document.getElementsByTagName('div')) {
+                if (e.className === 'developer-support-adp-box-on') {
+                    e.className = 'developer-support-adp-box-off';
+                } else if(e.className === 'developer-support-adp-box-off'){
+                    e.className = 'developer-support-adp-box-on';
+                }
+                if (e.className === 'developer-support-adp-output-on') {
+                    e.className = 'developer-support-adp-output-off';
+                } else if(e.className === 'developer-support-adp-output-off') {
+                    e.className = 'developer-support-adp-output-on';
+                }
+            }
         });
     }
 
@@ -61,9 +82,14 @@ if { $show_p } {
 
     template::add_body_script -script {
         document.getElementById('ACS_DS_FOT').addEventListener('click', function (event) {
-            var el=document.getElementsByTagName('div');
             event.preventDefault();
-            for(i=0;i<el.length;i++){if(el[i].className=='developer-support-footer'){void(el[i].className='developer-support-footer-off')}else{if(el[i].className=='developer-support-footer-off'){void(el[i].className='developer-support-footer')}}};
+            for (e of document.getElementsByTagName('div')) {
+                if(e.className === 'developer-support-footer') {
+                    e.className = 'developer-support-footer-off';
+                } else if(e.className === 'developer-support-footer-off') {
+                    e.className = 'developer-support-footer';
+                }
+            }
         });
     }
 

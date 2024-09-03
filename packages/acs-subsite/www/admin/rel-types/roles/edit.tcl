@@ -1,5 +1,3 @@
-# /packages/mbryzek-subsite/www/admin/rel-types/roles/edit.tcl
-
 ad_page_contract {
 
     Form to edit a role
@@ -9,22 +7,25 @@ ad_page_contract {
     @cvs-id $Id$
 
 } {
+    {pretty_name ""}
+    {pretty_plural ""}
     role:notnull
     { return_url:localurl "" }
 } -properties {
     context:onevalue
-    
-}
-
-db_1row select_role_props {
-    select r.pretty_name, r.pretty_plural
-      from acs_rel_roles r 
-     where r.role = :role
 }
 
 set context [list [list "../" "Relationship types"] [list [export_vars -base one role] "One role"] "Edit"]
 
 template::form create role_form
+
+if { ![template::form is_submission role_form] } {
+    db_1row select_role_props {
+        select r.pretty_name, r.pretty_plural
+          from acs_rel_roles r
+         where r.role = :role
+    }
+}
 
 template::element create role_form return_url \
 	-optional \
@@ -55,7 +56,7 @@ if { [template::form is_valid role_form] } {
 	   set r.pretty_name = :pretty_name,
 	       r.pretty_plural = :pretty_plural
 	 where r.role = :role
-    } -bind [ns_getform]
+    }
     if { $return_url eq "" } {
 	set return_url [export_vars -base one role]
     }

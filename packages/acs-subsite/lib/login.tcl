@@ -21,9 +21,9 @@ if { [security::RestrictLoginToSSLP] } {
 }
 
 set self_registration [parameter::get_from_package_key \
-                                  -package_key acs-authentication \
-                                  -parameter AllowSelfRegister \
-                                  -default 1]
+                           -package_key acs-authentication \
+                           -parameter AllowSelfRegister \
+                           -default 1]
 
 if { $subsite_id eq "" } {
     set subsite_id [subsite::get_element -element object_id]
@@ -71,6 +71,14 @@ if { $allow_persistent_login_p } {
     set default_persistent_login_p 0
 }
 
+#
+# Set the value of the autocomplete attribute on the 'password' element in the
+# login form.
+#
+set password_autocomplete [parameter::get \
+                                -parameter LoginPasswordAutocomplete  \
+                                -package_id $subsite_id \
+                                -default "current-password"]
 
 set subsite_url [subsite::get_element -element url]
 set system_name [ad_system_name]
@@ -79,9 +87,8 @@ if { $return_url eq "" } {
     set return_url [ad_pvt_home]
 }
 
-set authority_options [auth::authority::get_authority_options]
 if { $authority_id eq "" } {
-    set authority_id [lindex $authority_options 0 1]
+    set authority_id [auth::authority::get]
 }
 
 set forgotten_pwd_url [auth::password::get_forgotten_url \
@@ -108,19 +115,30 @@ ad_form \
         {hash:text(hidden)}
     } -validate {
         { token_id {$token_id < 2**31} "invalid token id"}
-    }
+    } -csrf_protection_p true
 
 set username_widget text
+if {[namespace which ::template::widget::email] ne ""} {
+    set email_widget email
+} else {
+    #
+    # Failover to avoid breaking the login page if the acs-templating package
+    # has not been updated to a version supporting the 'email' widget yet.
+    #
+    set email_widget text
+}
+
 if { [parameter::get -parameter UsePasswordWidgetForUsername -package_id $::acs::kernel_id] } {
     set username_widget password
+    set email_widget    password
 }
 
 set focus {}
 if { [auth::UseEmailForLoginP] } {
     ad_form -extend -name login \
-        -form [list [list email:text($username_widget),nospell \
+        -form [list [list email:text($email_widget),nospell \
                          [list label "[_ acs-subsite.Email]"] \
-                         {html {style "width: 150px"}}]]
+                         {html {style "width: 300px"  autocomplete "email"}}]]
     set user_id_widget_name email
     if { $email ne "" } {
         set focus "password"
@@ -128,6 +146,7 @@ if { [auth::UseEmailForLoginP] } {
         set focus "email"
     }
 } else {
+    set authority_options [auth::authority::get_authority_options]
     if { [llength $authority_options] > 1 } {
         ad_form -extend -name login -form {
             {authority_id:integer(select)
@@ -140,7 +159,7 @@ if { [auth::UseEmailForLoginP] } {
     ad_form -extend -name login \
         -form [list [list username:text($username_widget),nospell \
                          [list label "[_ acs-subsite.Username]"] \
-                         {html {style "width: 150px"}}]]
+                         {html {style "width: 300px" autocomplete "username"} }]]
     set user_id_widget_name username
     if { $username ne "" } {
         set focus "password"
@@ -153,16 +172,20 @@ set focus "login.$focus"
 ad_form -extend -name login -form {
     {password:text(password)
         {label "[_ acs-subsite.Password]"}
-        {html {style "width: 150px"}}
+        {html {style "width: 300px" autocomplete "$password_autocomplete"}}
     }
 }
 
-set options_list [list [list [_ acs-subsite.Remember_my_login] "t"]]
 if { $allow_persistent_login_p } {
+    set default_persistent_login [parameter::get \
+                                      -package_id $subsite_id \
+                                      -parameter PersistentLoginDefault \
+                                      -default 1]
+    set checkbox_default [expr {$default_persistent_login == 1 ? "t" : "f"}]
     ad_form -extend -name login -form {
         {persistent_p:text(checkbox),optional
             {label ""}
-            {options $options_list}
+            {options {{"[_ acs-subsite.Remember_my_login]" $checkbox_default}}}
         }
     }
 }
@@ -170,7 +193,7 @@ if { $allow_persistent_login_p } {
 ad_form -extend -name login -on_request {
     # Populate fields from local vars
 
-    set persistent_p [ad_decode $default_persistent_login_p 1 "t" ""]
+    set persistent_p [expr {$default_persistent_login_p == 1 ? "t" : ""}]
 
     # One common problem with login is that people can hit the back button
     # after a user logs out and relogin by using the cached password in
@@ -191,23 +214,33 @@ ad_form -extend -name login -on_request {
     set expiration_time [parameter::get \
                              -parameter LoginPageExpirationTime \
                              -package_id $::acs::kernel_id \
-                             -default 600]
-    if { $expiration_time < 30 } {
-        #
-        # Sanity check: If expiration_time is less than 30 seconds,
-        # it's practically impossible to login and you will have
-        # completely hosed login on your entire site
-        #
-        ns_log warning "login: fix invalid setting of kernel parameter LoginPageExpirationTime \
-            (value $expiration_time); must be at least 30 (secs)"
-        set expiration_time 30
-    }
+                             -default 0] ;# was 600
+    #
+    # Just check the expiration time, when the configured value is >
+    # 0.  The old trick with the expiration time of the login page is
+    # not an issue of modern browsers, since the login page takes
+    # already care of avoiding caching.
+    #
+    if { $expiration_time > 0 } {
+        if { $expiration_time < 30 } {
+            #
+            # Sanity check: If expiration_time is less than 30 seconds,
+            # it's practically impossible to login and you will have
+            # completely hosed login on your entire site
+            #
+            ns_log warning "login: fix invalid setting of kernel parameter LoginPageExpirationTime \
+                (value $expiration_time); must be at least 30 (secs)"
+            set expiration_time 30
+        }
 
-    if { $hash ne $computed_hash
-         || $time < [ns_time] - $expiration_time
-     } {
-        ad_returnredirect -message [_ acs-subsite.Login_has_expired] -- [export_vars -base [ad_conn url] { return_url }]
-        ad_script_abort
+        if { $hash ne $computed_hash
+             || $time < [ns_time] - $expiration_time
+         } {
+            ad_returnredirect \
+                -message [_ acs-subsite.Login_has_expired] -- \
+                [export_vars -base [ad_conn url] { return_url }]
+            ad_script_abort
+        }
     }
 
     if { ![info exists persistent_p] || $persistent_p eq "" } {
@@ -228,7 +261,8 @@ ad_form -extend -name login -on_request {
                              -username [string trim $username] \
                              -password $password \
                              -host_node_id $host_node_id \
-                             -persistent=[expr {$allow_persistent_login_p && [template::util::is_true $persistent_p]}]]
+                             -persistent=[expr {$allow_persistent_login_p
+                                                && [string is true -strict $persistent_p]}]]
 
     # Handle authentication problems
     switch -- $auth_info(auth_status) {
@@ -271,7 +305,7 @@ ad_form -extend -name login -on_request {
                                 set operation create
                             }
                             element $operation login email \
-                                -widget $username_widget \
+                                -widget $email_widget \
                                 -datatype text \
                                 -label [_ acs-subsite.Email]
                             if {[element error_p login email]} {

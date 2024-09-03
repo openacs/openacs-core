@@ -54,17 +54,21 @@ ad_proc -public util_memoize {script {max_age ""}} {
     @return The possibly-cached value returned by <i>script</i>.
 } {
     #
-    # The ::util_memoize_flush proc is defined in the *-init script,
-    # after the util_memoize cache was created. Therefore is save to
-    # use the util_memoize when this proc is available.
+    # When util_memoize is called before the cache is created don't
+    # raise an error but eval without caching.
     #
-    if {[info commands ::util_memoize_flush] ne ""} {
+    # The AOLserver version of the proc says "no uplevel", so do not
+    # uplevel here either.
+    #
+    # https://github.com/openacs/openacs-core/blob/master/packages/acs-tcl/tcl/memoize-procs-aolserver.tcl#L16
+    #
+    if {[ns_cache_exists util_memoize]} {
         if {$max_age ne ""} {
             set max_age "-expires $max_age"
         }
-        ns_cache_eval {*}$max_age -- util_memoize $script {*}$script
+        ns_cache_eval {*}$max_age -- util_memoize $script [list eval $script]
     } else {
-        uplevel $script
+        eval $script
     }
 }
 
@@ -89,6 +93,7 @@ ad_proc -public util_memoize_seed {script value {max_age ""}} {
 
     @param max_age Not used.
 } {
+    util_memoize_flush $script
     ns_cache_eval -force util_memoize $script [list set _ $value]
 }
 
@@ -114,14 +119,14 @@ ad_proc -public util_memoize_flush_pattern {
     pattern
 } {
 
-    Loop through all cached scripts, flushing all that match the
+    Loop through all cached entries, flushing all that match the
     pattern that was passed in.
 
     @param pattern Match pattern (glob pattern like in 'string match $pattern ...').
     @param log Whether to log keys checked and flushed (useful for debugging).
 
 } {
-    set nr_flushed [ns_cache_flush -glob util_memoize $pattern]
+    set nr_flushed [::acs::clusterwide ns_cache_flush -glob util_memoize $pattern]
     if {$log_p} {
         ad_log notice "util_memoize_flush_pattern: flushed $nr_flushed entries using the pattern: $pattern"
     }

@@ -1,7 +1,11 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Installing SSL Support for an OpenACS service}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Installing SSL Support for an OpenACS service}</property>
 <property name="doc(title)">Installing SSL Support for an OpenACS service</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="maintenance-deploy" leftLabel="Prev"
 			title="Chapter 6. Production
@@ -14,15 +18,16 @@ service</h2></div></div></div><p>Debian Users: <code class="computeroutput">apt-
 openssl</code> before proceeding.</p><div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem"><p>Make sure nsopenssl.so is <a class="link" href="install-nsopenssl" title="Install nsopenssl">installed</a>
 for AOLserver.</p></li><li class="listitem">
-<p>Uncomment this line from <code class="computeroutput">config.tcl</code>.</p><pre class="programlisting">
-#ns_param   nsopenssl       ${bindir}/nsopenssl.so
+<p>Uncomment this line from <code class="computeroutput">config.tcl</code>.</p><pre class="programlisting">#ns_param   nsopenssl       ${bindir}/nsopenssl.so
 </pre>
 </li><li class="listitem">
-<p>Prepare a certificate directory for the service.</p><pre class="screen">[$OPENACS_SERVICE_NAME etc]$ <strong class="userinput"><code>mkdir /var/lib/aolserver/<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>/etc/certs</code></strong>
-[$OPENACS_SERVICE_NAME etc]$ <strong class="userinput"><code>chmod 700 /var/lib/aolserver/<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>/etc/certs</code></strong>
+<p>
+<a name="ssl-certificates" id="ssl-certificates"></a>Prepare a
+certificate directory for the service.</p><pre class="screen">[$OPENACS_SERVICE_NAME etc]$ <strong class="userinput"><code>mkdir /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/etc/certs</code></strong>
+[$OPENACS_SERVICE_NAME etc]$ <strong class="userinput"><code>chmod 700 /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/etc/certs</code></strong>
 [$OPENACS_SERVICE_NAME etc]$ 
-<span class="action">mkdir /var/lib/aolserver/<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>/etc/certs
-chmod 700 /var/lib/aolserver/<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>/etc/certs</span>
+<span class="action"><span class="action">mkdir /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/etc/certs
+chmod 700 /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/etc/certs</span></span>
 </pre>
 </li><li class="listitem">
 <p>It takes two files to support an SSL connection. The certificate
@@ -38,9 +43,8 @@ getting a site certificate signed by a CA costs money. In this
 section, we&#39;ll generate an unsigned certificate which will work
 in most browsers, albeit with pop-up messages.</p><p>Use an OpenSSL perl script to generate a certificate and
 key.</p><p>Debian users: use /usr/lib/ssl/misc/CA.pl instead of
-/usr/share/ssl/CA</p><p>Mac OS X users: use perl /System/Library/OpenSSL/misc/CA.pl
--newcert instead of /usr/share/ssl/CA</p><pre class="screen">
-[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <strong class="userinput"><code>cd /var/lib/aolserver/$OPENACS_SERVICE_NAME/etc/certs</code></strong>
+/usr/share/ssl/CA</p><p>macOS users: use perl /System/Library/OpenSSL/misc/CA.pl
+-newcert instead of /usr/share/ssl/CA</p><pre class="screen">[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <strong class="userinput"><code>cd /var/lib/aolserver/$OPENACS_SERVICE_NAME/etc/certs</code></strong>
 [$OPENACS_SERVICE_NAME certs]$ <strong class="userinput"><code>perl /usr/share/ssl/misc/CA -newcert</code></strong>
 Using configuration from /usr/share/ssl/openssl.cnf
 Generating a 1024 bit RSA private key

@@ -1,5 +1,3 @@
-# /packages/mbryzek-subsite/www/admin/attribute-add.tcl
-
 ad_page_contract {
 
     Adds attributes
@@ -23,9 +21,9 @@ ad_page_contract {
     datatypes:multirow
 } -validate {
     dynamic_type -requires {object_type:notnull} {
-	if { ![package_type_dynamic_p $object_type] } {
-	    ad_complain "The specified object type, $object_type, is not dynamic and therefore cannot be modified."
-	}
+        if { ![package_type_dynamic_p $object_type] } {
+            ad_complain "The specified object type, $object_type, is not dynamic and therefore cannot be modified."
+        }
     }
 }
 

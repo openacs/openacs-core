@@ -7,7 +7,7 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     {return_url:localurl "" }
-    {user_id:naturalnum ""}
+    {user_id:object_type(user) ""}
 } -properties {
     first_names:onevalue
     last_name:onevalue
@@ -23,14 +23,13 @@ ad_page_contract {
     user_id:onevalue
     return_code:onevalue
 }
-   
+
 set current_user_id [ad_conn user_id]
 set subsite_url     [subsite::get_element -element url]
-set return_url      "[subsite::get_element -element url]user/portrait/"
+set return_url      ${subsite_url}user/portrait/
 
 set return_code "no_error"
 # Other possibilities:
-# no_user          : Unknown user_id, not in DB.
 # no_portrait      : No portrait uploaded yet for this user.
 # no_portrait_info : Unable to retrieve information on portrait.
 
@@ -39,6 +38,11 @@ if {$user_id eq ""} {
 }
 
 if { $current_user_id == $user_id } {
+    #
+    # When the user is myself, we will show links to administrate the
+    # portrait picture. In this case we also make sure that we have
+    # write permissions on our own user.
+    #
     set admin_p 1
     permission::require_permission -object_id $user_id -privilege "write"
 } else {
@@ -47,13 +51,6 @@ if { $current_user_id == $user_id } {
 
 set portrait_image_url [export_vars -base ${subsite_url}shared/portrait-bits.tcl {user_id}]
 set export_edit_vars   [export_vars {user_id return_url}]
-
-if {![person::person_p -party_id $user_id]} {
-    set return_code "no_user"
-    set context [list "Account Unavailable"]
-    ad_return_template
-    return
-}
 
 set person [person::get -person_id $user_id]
 set first_names [dict get $person first_names]
@@ -65,7 +62,7 @@ set portrait_p [expr {$item_id != 0}]
 if {$portrait_p} {
     set revision_id [content::item::get_live_revision -item_id $item_id]
 }
-    
+
 if { $admin_p } {
     set doc(title) [_ acs-subsite.Your_Portrait]
 } else {
@@ -82,13 +79,15 @@ if {! $portrait_p } {
 # we have revision_id now
 
 
-if {[catch {db_1row get_picture_info "
-select i.width, i.height, cr.title, cr.description, cr.publish_date
-from images i, cr_revisions cr
-where i.image_id = cr.revision_id
-and image_id = :revision_id
-"} errmsg]} {
-    # There was an error obtaining the picture information
+if {![db_0or1row get_picture_info {
+    select i.width, i.height, cr.title, cr.description, cr.publish_date
+    from images i, cr_revisions cr
+    where i.image_id = cr.revision_id
+    and image_id = :revision_id
+}]} {
+    #
+    # We found no profile picture.
+    #
     set context [list "Invalid Picture"]
     set return_code "no_portrait_info"
     ad_return_template

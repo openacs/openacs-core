@@ -1,7 +1,11 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Object Model Requirements}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Object Model Requirements}</property>
 <property name="doc(title)">Object Model Requirements</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="kernel-overview" leftLabel="Prev"
 			title="Chapter 15. Kernel
@@ -9,14 +13,17 @@ Documentation"
 			rightLink="object-system-design" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="object-system-requirements" id="object-system-requirements"></a>Object Model Requirements</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">By Pete Su</span></p><span style="color: red">&lt;/authorblurb&gt;</span><div class="sect2">
+<a name="object-system-requirements" id="object-system-requirements"></a>Object Model Requirements</h2></div></div></div><div class="authorblurb">
+<p>By Pete Su</p>
+OpenACS docs are written by the named authors, and may be edited by
+OpenACS documentation staff.</div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="object-system-requirements-" id="object-system-requirements-"></a>I. Introduction</h3></div></div></div><p>A major goal in OpenACS 4 is to unify and normalize many of the
 core services of the system into a coherent common data model and
 API. In the past, these services were provided to applications in
 an ad-hoc and irregular fashion. Examples of such services
 include:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
-<li class="listitem"><p>General Comments</p></li><li class="listitem"><p>User/groups</p></li><li class="listitem"><p>Attribute storage in user/groups</p></li><li class="listitem"><p>General Permissions</p></li><li class="listitem"><p>Site wide search</p></li><li class="listitem"><p>General Auditing</p></li>
+<li class="listitem"><p>General Comments</p></li><li class="listitem"><p>User/groups</p></li><li class="listitem"><p>Attribute storage in user/groups</p></li><li class="listitem"><p>General Permissions</p></li><li class="listitem"><p>Site-wide search</p></li><li class="listitem"><p>General Auditing</p></li>
 </ul></div><p>All of these services involve relating extra information and
 services to application data objects, examples of which
 include:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
@@ -71,7 +78,7 @@ application-independent services difficult. Therefore, the OpenACS
 for tagging application objects with unique identifiers.</p><p><span class="strong"><strong>Support for Unified Access
 Control</strong></span></p><p>Access control should be as transparent as possible to the
 application developer. Until the implementation of the general
-permissions system, every OpenACS application had to manage access
+permission system, every OpenACS application had to manage access
 control to its data separately. Later on, a notion of
 "scoping" was introduced into the core data model.</p><p>"Scope" is a term best explained by example. Consider
 some hypothetical rows in the <code class="computeroutput">address_book</code> table:</p><div class="informaltable"><table class="informaltable" cellspacing="0" border="1">
@@ -135,9 +142,9 @@ modifiable data model, or how to store information that may change
 extensively between releases or in different client installations.
 Furthermore, we want to avoid changes to an application&#39;s
 database queries in the face of any custom extensions, since such
-changes are difficult or dangerous to make at runtime, and can make
-updating the system difficult. Some example applications in OpenACS
-3.x with modifiable data models include:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
+changes are difficult or dangerous to make at run time, and can
+make updating the system difficult. Some example applications in
+OpenACS 3.x with modifiable data models include:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>User/groups: developers and users can attach custom data to
 group types, groups, and members of groups.</p></li><li class="listitem"><p>In the Ecommerce data model, the <code class="computeroutput">ec_custom_product_fields</code> table defines
 attributes for catalog products, and the <code class="computeroutput">ec_custom_product_field_values</code> table stores
@@ -217,7 +224,7 @@ relations.</p></li><li class="listitem"><p>General Comments: Comments are attach
 some kind of document.</p></li><li class="listitem"><p>General Permissions: Stores access control information on
 application data.</p></li><li class="listitem"><p>User Profiling: Maps users to pieces of content that they have
 looked at; content identifiers must be managed in a uniform
-way.</p></li><li class="listitem"><p>Site Wide Search: Stores all content in a single flat table,
+way.</p></li><li class="listitem"><p>Site-Wide Search: Stores all content in a single flat table,
 with object identifiers pointing to the object containing the
 content in the first place. This way, we can search the contents of
 many different types of objects in a uniform way.</p></li>
@@ -322,10 +329,10 @@ associate objects with particular scopes in the system, but it was
 awkward to use and limited in flexibility.</p><p>The OpenACS 4 Object Model provides a generalized notion of
 scope that allows developers to represent a hierarchy of object
 <span class="emphasis"><em>contexts</em></span>. These contexts are
-used as the basis for the permissions system. In general, if an
+used as the basis for the permission system. In general, if an
 object has no explicit permissions attached to it, then it inherits
 permissions from its context.</p><p>The context data model also forms the basis of the <a class="link" href="subsites-requirements" title="Subsites Requirements">subsites system</a>, and is a basic part of
-the <a class="link" href="permissions-requirements" title="Permissions Requirements">permissions system</a>, described in
+the <a class="link" href="permissions-requirements" title="Permissions Requirements">permission system</a>, described in
 separate documents.</p><p>The context data model should provide the following
 facilities:</p><p><span class="strong"><strong>50.10 Unique ID</strong></span></p><p>Every context should have a unique ID in the system.</p><p><span class="strong"><strong>50.20 Tree
 Structure</strong></span></p><p>The data model should support a tree structured organization of

@@ -35,9 +35,7 @@ template::list::create \
         edit {
             label {}
             sub_class narrow
-            display_template {
-                <img src="/resources/acs-subsite/Edit16.gif" width="16" height="16" border="0">
-            } 
+            display_template { <adp:icon name="edit" title="\#acs-admin.Edit_callback\#" } 
             link_url_eval {[export_vars -base "version-callback-add-edit" { version_id type }]}
             link_html { title "\#acs-admin.Edit_callback\#" }
         }
@@ -50,16 +48,14 @@ template::list::create \
         invoke {
             label "\#acs-admin.Invoke\#"
             display_template {<if @callbacks.type@ in "before-install" "after-install" "before-uninstall" "after-uninstall">\#acs-admin.Invoke\#</if><else><i style="color: gray;">N/A</i></else>}
-            link_url_eval {[ad_decode [lsearch { before-install after-install before-uninstall after-uninstall } $type] -1 {} [export_vars -base "version-callback-invoke" { version_id type }]]}
+            link_url_eval {[expr {$type in { before-install after-install before-uninstall after-uninstall } ? [export_vars -base "version-callback-invoke" { version_id type }] : ""}]}
             link_html { title "\#acs-admin.Invoke_this_callback_proc_now_Be_careful\#" }
             html { align center }
         }
         delete {
             label {}
             sub_class narrow
-            display_template {
-                <img src="/resources/acs-subsite/Delete16.gif" width="16" height="16" border="0">
-            } 
+            display_template { <adp:icon name="trash" title="#acs-admin.Delete_callback#"> } 
             link_url_eval {[export_vars -base "version-callback-delete" { version_id type }]}
             link_html { title "\#acs-admin.Delete_callback\#" }
         }

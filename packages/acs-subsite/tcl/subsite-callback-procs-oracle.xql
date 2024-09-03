@@ -2,20 +2,29 @@
 
 <queryset>
    <rdbms><type>oracle</type><version>8.1.6</version></rdbms>
+   
 
-<fullquery name="subsite_callback.select_callbacks">      
-      <querytext>
-      
-	select distinct callback, callback_type
-	  from subsite_callbacks
-	 where object_type in (select t.object_type
-	                        from acs_object_types t
-	                     connect by prior t.supertype = t.object_type
-	                       start with t.object_type = :object_type)
-	   and event_type = :event_type
-    
-      </querytext>
+<fullquery name="subsite::callback.get_callbacks">      
+<querytext>
+        with object_hierarchy(object_type, supertype) as (
+            select object_type, supertype
+              from acs_object_types
+             where object_type = coalesce(:object_type, (select object_type
+                                                         from acs_objects
+                                                         where object_id = :object_id))
+
+            union all
+
+            select t.object_type, t.supertype
+            from acs_object_types t,
+                 object_hierarchy s
+            where t.object_type = s.supertype
+        )
+        select distinct callback, callback_type as type
+          from subsite_callbacks
+        where event_type = :event_type
+          and object_type in (select object_type from object_hierarchy)
+</querytext>
 </fullquery>
 
- 
 </queryset>

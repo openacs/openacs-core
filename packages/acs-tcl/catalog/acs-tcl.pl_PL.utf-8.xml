@@ -26,7 +26,7 @@
   <msg key="lt_Invalid_date_date_ele">Błędna data: brak elementu %date_element%</msg>
   <msg key="lt_Invalid_date_The_year">Błędna data: Rok musi zawierać 4 cyfry.</msg>
   <msg key="lt_Invalid_time_time_is_">Błędny czas: nie wprowadzono czasu</msg>
-  <msg key="lt_Invalid_time_timetime">Błędny czas: %time(time)% ma błędny format</msg>
+  <msg key="lt_Invalid_time_timetime">Błędny czas: %time.time% ma błędny format</msg>
   <msg key="lt_name_does_not_appear_">%name% nie jest prawidłowym adresem email</msg>
   <msg key="lt_name_does_not_appear__1">%name% nie jest prawidłowym numerem telefonu w USA</msg>
   <msg key="lt_require_email_verific">wymagaj potwierdzenia emailem</msg>

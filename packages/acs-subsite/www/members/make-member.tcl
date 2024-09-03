@@ -9,7 +9,7 @@ set group_id [application_group::group_id_from_package_id]
 permission::require_permission -object_id $group_id -privilege "admin"
 
 # TODO:
-# Check if you're making yourself an non-admin?
+# Check if you're making yourself a non-admin?
 
 db_transaction {
     foreach one_user_id $user_id {

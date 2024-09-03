@@ -1,7 +1,11 @@
 
-<property name="context">{/doc/acs-templating {ACS Templating}} {Templating System Widget Reference: Date}</property>
+<property name="context">{/doc/acs-templating/ {ACS Templating}} {Templating System Widget Reference: Date}</property>
 <property name="doc(title)">Templating System Widget Reference: Date</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h2>The Date Widget</h2>
 <strong>
 <a href="../index">Templating System</a> : <a href="index">Widget Reference</a> : Date</strong>
@@ -71,7 +75,7 @@ below:</p>
 <td><code>short_month_name</code></td><td>Yes</td><td> </td><td>The abbreviated month name</td><td><code>Jan</code></td>
 </tr><tr>
 <td><code>days_in_month</code></td><td>Yes</td><td> </td><td>The number of days in the month stored in the Date object; will
-return an empty string if the month or the year are undefiend.
+return an empty string if the month or the year are undefined.
 Takes into account the leap years.</td><td><code>29</code></td>
 </tr><tr>
 <td><code>short_year</code></td><td>Yes</td><td>Yes</td><td>The 2-digit year. When mutating, 2000 is added to the year if

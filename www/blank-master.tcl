@@ -6,13 +6,13 @@ ad_page_contract {
   You should NEVER need to modify this file.  
   
   Most of the time your pages or master templates should not directly set this
-  file in their <master> tag.  They should instead use site-master with 
+  file in their &lt;master&gt; tag.  They should instead use site-master with 
   provides a set of standard OpenACS content.  Only pages which need to return
   raw HTML should use this template directly.
 
   When using this template directly you MUST supply the following variables:
 
-  @property doc(title)        The document title, ie. <title /> tag.
+  @property doc(title)        The document title, i.e. <title /> tag.
   @property doc(title_lang)   The language of the document title, if different
                               from the document language.
 
@@ -26,7 +26,7 @@ ad_page_contract {
   ad_conn -set language       Must be used to override the document language
                               if necessary.
 
-  To add a CSS or JavaScript files to the <head> section of the document you can 
+  To add a CSS or JavaScript files to the &lt;head&gt; section of the document you can 
   call the corresponding template::head::add_* functions within your page.
 
   @see template::head::add_css
@@ -40,7 +40,7 @@ ad_page_contract {
   @see template::head::add_link
   @see template::head::add_script
 
-  JavaScript event handlers, such as onload, an be added to the <body> tag by 
+  JavaScript event handlers, such as onload, can be added to the <body> tag by 
   calling template::add_body_handler within your page.
 
   @see template::add_body_handler
@@ -62,7 +62,7 @@ ad_page_contract {
 }
 
 if {![info exists doc(type)]} { 
-    set doc(type) {<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">}
+    set doc(type) {<!DOCTYPE HTML>}
 }
 
 #
@@ -87,7 +87,7 @@ template::add_body_script -type "text/javascript" -src "/resources/acs-subsite/c
 # e.g. the blank master is installed before the subsite definitions
 # for the page_plugin callback.  Templates are required to be very
 # robust.
-if {[info commands ::callback::subsite::page_plugin::*] ne ""} {
+if {[llength [info commands ::callback::subsite::page_plugin::*]]} {
     callback subsite::page_plugin
 }
 
@@ -195,7 +195,7 @@ template::head::add_meta \
     -content "text/html; charset=$doc(charset)" \
     -http_equiv "content-type"
 #
-# The following meta tags are unknown for HTML5, therefore discouraged
+# The following meta tags are unknown for HTML5, therefore, discouraged
 #
 # template::head::add_meta \
 #     -content "text/css" \
@@ -204,16 +204,23 @@ template::head::add_meta \
 #     -content "text/javascript" \
 #     -http_equiv "Content-Script-Type"
 
-
-# Determine if we should be displaying the translation UI
 #
-if {[lang::util::translator_mode_p]} {
+# Determine if we should be displaying the translation UI.
+#
+# We just do this when the developer support is active, but this does
+# not have to be this way. By showing the translator mode only for ds,
+# we save for large sites a large number of client properties to be
+# set via "lang::util::translator_mode_p" and
+# "ad_get_client_property".
+#
+set ds_active [expr {[namespace which ::ds_show_p] ne {} && [::ds_show_p]}]
+if {$ds_active && [lang::util::translator_mode_p]} {
     template::add_footer -src "/packages/acs-lang/lib/messages-to-translate"
 }
 
 # Determine if developer support is installed and enabled
 #
-if {[llength [info commands ::ds_show_p]] == 1 && [ds_show_p]} {
+if {$ds_active} {
     template::head::add_css \
         -href "/resources/acs-developer-support/acs-developer-support.css" \
         -media "all"
@@ -271,7 +278,7 @@ template::head::prepare_multirows
 # blocked out.
 #
 if {[parameter::get -parameter CSPEnabledP -package_id [ad_acs_kernel_id] -default 0]
-    && [info commands ::security::csp::render] ne ""
+    && [namespace which ::security::csp::render] ne ""
 } {
     set csp [::security::csp::render]
     if {$csp ne ""} {

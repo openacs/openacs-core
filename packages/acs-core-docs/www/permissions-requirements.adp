@@ -1,7 +1,11 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Permissions Requirements}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Permissions Requirements}</property>
 <property name="doc(title)">Permissions Requirements</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="object-system-design" leftLabel="Prev"
 			title="Chapter 15. Kernel
@@ -9,7 +13,10 @@ Documentation"
 			rightLink="permissions-design" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="permissions-requirements" id="permissions-requirements"></a>Permissions Requirements</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">By John McClary Prevost</span></p><span style="color: red">&lt;/authorblurb&gt;</span><div class="sect2">
+<a name="permissions-requirements" id="permissions-requirements"></a>Permissions Requirements</h2></div></div></div><div class="authorblurb">
+<p>By John McClary Prevost</p>
+OpenACS docs are written by the named authors, and may be edited by
+OpenACS documentation staff.</div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="permissions-requirements-intro" id="permissions-requirements-intro"></a>Introduction</h3></div></div></div><p>This document records requirements for the OpenACS 4 Permissions
 system, a component of the OpenACS 4 Kernel. The Permissions system
@@ -41,7 +48,7 @@ access control based simply on coded rules regarding who can act on
 a given database row based on the information in that row.</p><p>Problems resulting from this piecemeal approach to permissions
 and access control were many, the two major ones being
 inconsistency, and repeated/redundant code. Thus the drive in
-OpenACS 4 to provide a unified, consistent permissions system that
+OpenACS 4 to provide a unified, consistent permission system that
 both programmers and administrators can readily use.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">

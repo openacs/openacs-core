@@ -1,7 +1,11 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Linux Install Guides}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Linux Install Guides}</property>
 <property name="doc(title)">Linux Install Guides</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="install-origins" leftLabel="Prev"
 			title="Appendix C. Credits"

@@ -146,7 +146,7 @@ into the <computeroutput>.emacs</computeroutput> file:</para>
 
 
 <para>All SGML and XML documents that should conform to a DTD have to declare a
-doctype. For the docbook XML, all your <computeroutput>.xml</computeroutput> files whould start with
+doctype. For the docbook XML, all your <computeroutput>.xml</computeroutput> files would start with
 the line</para>
 
 <programlisting>

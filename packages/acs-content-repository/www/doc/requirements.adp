@@ -1,7 +1,11 @@
 
-<property name="context">{/doc/acs-content-repository {ACS Content Repository}} {Content Repository Requirements}</property>
+<property name="context">{/doc/acs-content-repository/ {ACS Content Repository}} {Content Repository Requirements}</property>
 <property name="doc(title)">Content Repository Requirements</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h2>Content Repository Requirements</h2>
 
 Karl Goldstein (<a href="mailto:karlg\@arsdigita.com">karlg\@arsdigita.com</a>
@@ -133,17 +137,17 @@ Organization of the Repository</strong></a></p>
 <p>
 <strong>40.10</strong>. The data model must support the
 hierarchical organization of content items in a manner similar to a
-file system.</p><p>
+filesystem.</p><p>
 <strong>40.20</strong>. The URL of a content item should reflect
 its location in the hierarchy. For example, a press release with
 the URL <kbd>/press-releases/products/new-widget</kbd> is located
 at the third level down from the root of the hierarchy.</p><p>
 <a name="folder" id="folder"><strong>40.20.5 Content
 Folder</strong></a>.</p><p>A <em>folder</em> is analogous to a folder or directory in a
-file system. It represents a level in the content item hierarchy.
-In the previous example, <kbd>press-releases</kbd> is a folder
-under the repository root, and <kbd>products</kbd> is folder within
-that. The description of a folder may include the following
+filesystem. It represents a level in the content item hierarchy. In
+the previous example, <kbd>press-releases</kbd> is a folder under
+the repository root, and <kbd>products</kbd> is folder within that.
+The description of a folder may include the following
 information:</p><blockquote>
 <p>
 <strong>40.20.5.10</strong>. A URL-encoded name for building the
@@ -160,7 +164,7 @@ more than one URL or branch of the hierarchy.</p><blockquote>
 <p><a name="folder" id="folder">
 <strong>40.30.5 Content Symbolic
 Link</strong>.</a></p><p><a name="folder" id="folder">A <em>symbolic link</em> is
-analogous to a symlink, alias or shortcut in a file system. The
+analogous to a symlink, alias or shortcut in a filesystem. The
 description of a symbolic link must include the following
 information:</a></p><p><a name="folder" id="folder">
 <strong>40.30.5.10</strong>. A
@@ -315,7 +319,7 @@ a new revision based on an older revision).</p>
 </blockquote>
 <p><strong>100.50 Content Folders</strong></p>
 <p>The repository should allow for hierarchical arrangement of
-content items in a manner similar to a file system. The API to meet
+content items in a manner similar to a filesystem. The API to meet
 this general requirement focuses primarily on <a href="#folder">content folders</a>:</p>
 <blockquote>
 <p>
@@ -398,5 +402,5 @@ other objects.</td>
 <a href="mailto:karlg\@arsdigita.com">karlg\@arsdigita.com</a>
 <br>
 
-Last Modified: $&zwnj;Id: requirements.html,v 1.3 2017/08/07 23:47:47
+Last Modified: $&zwnj;Id: requirements.html,v 1.3.2.1 2021/04/05 19:49:48
 gustafn Exp $

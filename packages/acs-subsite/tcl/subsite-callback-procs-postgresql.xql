@@ -1,22 +1,30 @@
 <?xml version="1.0"?>
 
 <queryset>
-   <rdbms><type>postgresql</type><version>7.1</version></rdbms>
+   <rdbms><type>postgresql</type><version>9.6</version></rdbms>
+   
 
-<fullquery name="subsite_callback.select_callbacks">      
-      <querytext>
+<fullquery name="subsite::callback.get_callbacks">      
+<querytext>
+        with recursive object_hierarchy(object_type, supertype) as (
+            select object_type, supertype
+              from acs_object_types
+             where object_type = coalesce(:object_type, (select object_type
+                                                         from acs_objects
+                                                         where object_id = :object_id))
 
-	select distinct callback, callback_type
-	  from subsite_callbacks
-	 where object_type in (select t2.object_type
-	                         from acs_object_types t1, acs_object_types t2
-	                        where t2.tree_sortkey <= t1.tree_sortkey
-				  and t1.tree_sortkey between t2.tree_sortkey and tree_right(t2.tree_sortkey)
-				  and t1.object_type = :object_type)
-	   and event_type = :event_type
-    
-      </querytext>
+            union all
+
+            select t.object_type, t.supertype
+            from acs_object_types t,
+                 object_hierarchy s
+            where t.object_type = s.supertype
+        )
+        select distinct callback, callback_type as type
+          from subsite_callbacks
+        where event_type = :event_type
+          and object_type in (select object_type from object_hierarchy)
+</querytext>
 </fullquery>
 
- 
 </queryset>

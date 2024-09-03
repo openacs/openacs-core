@@ -1,7 +1,11 @@
 
-<property name="context">{/doc/acs-messaging {ACS Messaging}} {ACS Messaging Requirements}</property>
+<property name="context">{/doc/acs-messaging/ {ACS Messaging}} {ACS Messaging Requirements}</property>
 <property name="doc(title)">ACS Messaging Requirements</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h1>ACS Messaging Requirements</h1>
 
 by <a href="mailto:akk\@arsdigita.com">Anukul Kapoor</a>
@@ -32,7 +36,7 @@ to support a diverse group of messaging applications through a
 single centralized facility.</p>
 <h3>III. System/Application Overview</h3>
 <p>The ACS Messaging package defines a data model and API for the
-storage and retrieval of messages. While the package standarizes
+storage and retrieval of messages. While the package standardizes
 how messages are stored, applications may use any data model they
 want for higher level organization of messages into threads,
 forums, and so on. ACS Messaging places no organizational
@@ -59,7 +63,7 @@ implemented using this package:</p>
 <li>BBoard</li><li>Webmail</li><li>General Comments</li><li>Spam</li><li>Various parts of the ticket tracker.</li>
 </ul>
 <p>Each of these applications requires a message store and each
-defines its own high level organization for messages within that
+defines its own high-level organization for messages within that
 store.</p>
 <ul>
 <li>Bboard organizes messages into forums and categories and
@@ -156,5 +160,5 @@ bboard thread could be sent to a user as a digest.</p>
 <hr>
 <address><a href="mailto:kapoor\@maya.com"></a></address>
 
-Last modified: $&zwnj;Id: requirements.html,v 1.3 2018/04/11 21:35:07
-hectorr Exp $
+Last modified: $&zwnj;Id: requirements.html,v 1.3.2.2 2024/08/01 07:38:16
+gustafn Exp $

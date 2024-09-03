@@ -7,9 +7,9 @@ ad_page_contract {
 }
 
 set user_id [ad_conn user_id]
-set user [acs_user::get -user_id $user_id]
-set user_name [dict get $user name]
-set email     [dict get $user email]
+set user_info [acs_user::get -user_id $user_id]
+set user_name [dict get $user_info name]
+set email     [dict get $user_info email]
 
 set package_id [db_nextval acs_object_id_seq]
 set version_id [db_nextval acs_object_id_seq]
@@ -23,7 +23,7 @@ set form_name "packageAdd"
 set body [subst {
 <form name='$form_name' action='package-add-2' method='post'>
 [export_vars -form {package_id version_id}] 
-<script type="text/javascript" nonce='$::__csp_nonce'>
+<script type="text/javascript" nonce='[security::csp::nonce]'>
 function updateURLs() {
     // Update the package and version URL, if the package key and/or version name change.
     var form = document.getElementsByName('$form_name')\[0\];
@@ -45,7 +45,7 @@ function checkMailto(element) {
 
 <tr>
   <td></td>
-  <td>Select a package key for your package. This is a unique, short, and lower-case identifier
+  <td>Select a package key for your package. This is a unique, short, and lowercase identifier
 for your package containing only letters, numbers, and hyphens (e.g., <tt>address-book</tt>
 for the address book package or <tt>photo-album</tt> for the Photo Album).
 Files for your package will be placed in a directory with this name.</td>

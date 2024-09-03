@@ -11,7 +11,7 @@ notify this user.
 
 <p>
 <form method="post" action="user-add-3">
-<input type="hidden" name="referer" value="@referer@"></input>
+<input type="hidden" name="referer" value="@referer@">
 @export_vars;noquote@
 Message:
 <textarea name=message rows=10 cols=70 wrap=hard>

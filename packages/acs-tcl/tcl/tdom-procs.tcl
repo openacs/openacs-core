@@ -15,7 +15,7 @@ ad_library {
     @tdom::get_tag_value
     @tdom::get_attribute_value
     @tdom::get_node_xml
-    
+
 }
 
 namespace eval tdom {}
@@ -44,10 +44,10 @@ ad_proc -public tdom::get_node_object {
     # Do a loop for the args. The first non null result is returned
     set node_object ""
     foreach node_name $args {
-	catch {set node_object [$parent_node_object getElementsByTagName "$node_name"]}
-	if {$node_object ne "" } {
-	    return $node_object
-	}
+        catch {set node_object [$parent_node_object getElementsByTagName "$node_name"]}
+        if {$node_object ne "" } {
+            return $node_object
+        }
     }
 
     return $node_object
@@ -84,10 +84,10 @@ ad_proc -public tdom::get_tag_value {
     set tag_value ""
 
     foreach tag_name $args {
-	catch {set tag_value [[$node_object getElementsByTagName "$tag_name"] text]} errormsg
-	if {[string trim $tag_value] ne "" } {
-	    return $tag_value
-	}
+        catch {set tag_value [[$node_object getElementsByTagName "$tag_name"] text]} errormsg
+        if {[string trim $tag_value] ne "" } {
+            return $tag_value
+        }
     }
 
     return $tag_value

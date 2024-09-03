@@ -1,0 +1,2810 @@
+<?xml version='1.0' ?>
+<!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+"http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd" [
+
+<!ENTITY % myvars SYSTEM "../variables.ent">
+%myvars;
+]>
+
+<sect2 id="release-notes-5-10-1">
+    <title>Release 5.10.1</title>
+
+<para>
+  The release of OpenACS 5.10.1 contains the 94 packages of the
+  oacs-5-10 branch. These packages include the OpenACS core packages,
+  the major application packages (e.g., most of the ones used on
+  OpenACS.org), and DotLRN 2.10.1. The release is probably the most
+  secure and with the most tested code since ever.
+</para>
+    <para> Altogether, OpenACS 5.10.1 differs from OpenACS 5.10.0 by the
+        following statistics
+        <programlisting>
+        3038 files changed, 1291141 insertions(+), 354533 deletions(-)</programlisting>
+
+        These changes were contributed by 8 committers (Antonio Pisano,
+  Gustaf Neumann,
+  Günter Ernst,
+  Héctor Romojaro,
+  Michael Aram,
+  Raúl Rodríguez,
+  Sebastian Scheder, and
+  Thomas Renner)
+  and additional 8 patch/bugfix providers (Felix Mödritscher,
+  Frank Bergmann,
+  Franz Penz,
+  Josue Cardona,
+  Keith Paskett,
+  Markus Moser,
+  Marty Israelsen, and
+  Monika Andergassen) - all sorted by the first names.
+    </para>
+    <para>
+        In terms of changes, the release contains the largest amount
+        of changes of the releases in the last 10 years.  The packages
+        with the most changes are <literal>acs-tcl</literal>,
+        <literal>acs-templating</literal>, <literal>xowiki</literal>,
+        <literal>xowf</literal>,
+        <literal>acs-automated-testing</literal>,
+        <literal>acs-admin</literal>, and
+        <literal>xotcl-core</literal>.
+    </para>
+    <para>Below is a summary of the most important changes, often
+    together with the commit references in Git. The summary was made
+    on subjective criteria.  For all details, consult the <ulink
+    url="http://openacs.org/changelogs/ChangeLog-5.10.1">raw
+    ChangeLog</ulink>.
+    </para>  
+
+<sect2 xml:id="changes-in-the-acs-core-packages-between-openacs-5.10.0-and-5.10.1">
+  <title>Changes in the acs-core packages between OpenACS 5.10.0 and
+  5.10.1</title>
+  <sect3 xml:id="new-features">
+    <title>New Features</title>
+    <itemizedlist>
+      <listitem>
+        <para>
+          <emphasis role="strong">Security and Privacy Posture
+          Overview</emphasis>: As expressed as a wish from OpenACS users
+          at the last OpenACS conference, a <quote>Security and Privacy
+          Posture Overview</quote> was added that offers a quick
+          overview of the state of the system and eases access to the
+          parameters scattered over different packages in the system.
+          The page offers:
+        <itemizedlist>
+          <listitem>
+              Quick overview
+          </listitem>
+          <listitem>
+              Check of security and privacy relevant package parameters
+          </listitem>
+          <listitem>
+              Permission and accessibility check of mounted packages
+          </listitem>
+          <listitem>
+              Response header check
+          </listitem>
+          <listitem>
+              External library check (CDN vs local usage, vulnerable or
+              outdated libraries) The page is linked from the
+              site-wide-admin page (<literal>/acs-admin</literal>).
+          </listitem>
+        </itemizedlist>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <emphasis role="strong">Stronger Password Hashes for
+          OpenACS</emphasis> (commit fe2bdb547, 8eee6a932, 52d2c997e,
+          62d969c85): Introduction of new password hash functions
+          alongside the pre-existing <quote>salted-sha1</quote>. The new
+          algorithms are named <quote>scram-sha-256</quote>,
+          <quote>scrypt-16384-8-1</quote>,
+          <quote>argon2-argon2-12288-3-1</quote>,
+          <quote>argon2-rfc9106-high-mem</quote>, and
+          <quote>argon2-rfc9106-low-mem</quote>. These algorithms can be
+          specified via the kernel package parameter
+          <quote>PasswordHashAlgorithm</quote>. The algorithms require a
+          recent version of NaviServer and a recent version of OpenSSL,
+          which serves as a crypto library. This feature enhances
+          security against brute-force attacks on password hashes (when
+          db is compromised). Preferences of the password hash
+          algorithms can be set via kernel package parameter
+          <quote>PasswordHashAlgorithm</quote>, the first available
+          algorithm is taken from the preference list, hash re-coding
+          happens automatically at the next login.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <emphasis role="strong">Setting of CSP rules based on MIME
+          types</emphasis> (commit 6bc253f1e, commit 94b8513ae). This is
+          necessary to mitigate certain attacks on static SVG files
+          uploaded to, e.g., the content repository. For example, set
+          the following to the <literal>ns/server/$server/acs</literal>
+          section of your NaviServer configuration file:
+        </para>
+      </listitem>
+    </itemizedlist>
+    <programlisting>
+        ns_param StaticCSP {
+            image/svg+xml "script-src 'none'"
+        }
+</programlisting>
+    <itemizedlist>
+      <listitem>
+        <para>
+          <emphasis role="strong">Support for generic icon
+          names</emphasis> Support for generic icon names, which can
+          be mapped differently depending on the installed packages
+          and themes.  The support provides a mapping from a set of
+          generic names to the names provided by different libraries
+          sich as Glyph Icons, Bootstrap Icons, Font-Awsome. The
+          provided support can be inspected on the site-wide page of
+          <literal>acs-templating</literal>.
+        </para>
+        <para>The generic names can be used via the special tag <computeroutput>&lt;adp:icon
+          name=&quot;NAME&quot; title=....&gt;</computeroutput> in .adp-files. By
+          using this feature, one can use font-based icons (like
+          e.g. glyphicons of Bootstrap5, bootstrap-icons, fa-icons,
+          ...) instead of the old-style .gif and .png images. This
+          makes the appearance more uniform, has better resizing
+          behavior, and works more efficiently (fewer requests for
+          embedded resources). Most of the occurrences of the
+          old-style images in standard core and non-core packages in
+          oacs-5-10 are already replaced. (commit c129c89ec,
+          996740672, e9cae22dc, c7705c68b, a85ea7301, 58ad43055,
+          737da5514, a05813ec7, 110b2f5d6, 7011c8fd9, 286fd9e58,
+          927d9d5ef)
+         
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <emphasis role="strong">Better Automated Site
+          Configurability</emphasis>: Support for installing themes from
+          <literal>install.xml</literal> (commit 2f9761160).
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <emphasis role="strong">Dynamic Cluster Nodes and Cluster
+          Infrastructure</emphasis> (commit 5738761db, 7cbc3e63c,
+          1a7a7656c, 3faceddc4, 5fba13c0f, 7cbc3e63c, 3faceddc4,
+          1a7a7656c): Added support for dynamically adding and removal
+          of nodes in an OpenACS cluster. In contrast to static cluster
+          nodes, the IP addresses of dynamic cluster nodes do not have
+          to be provided at startup time. The changes introduce new
+          admin pages and further configuration options.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <emphasis role="strong">Optional Caching Deactivation</emphasis>
+          (commit 75c3f2b25): It is possible to deactivate caching via
+          the <literal>ns_cache</literal> infrastructure when the
+          NaviServer configuration variable
+          <literal>cachingmode</literal> is set to
+          <literal>none</literal>. The change modifies
+          <literal>per_thread_cache</literal> to behave like a
+          <literal>per_connection_cache</literal>. This option is useful
+          for cluster configurations, when legacy components do not
+          handle cache coherency (e.g.&nbsp;via
+          <literal>acs::clusterwide</literal>)
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <emphasis role="strong">Support for Cloud Identity
+          Providers</emphasis> (commit e506dee05, fd7af8d17, 06954d83b).
+          Additional Identity providers can be added as secondary
+          registries (e.g., MS Azure via oauth2), to support e.g.&nbsp;logins
+          via the classical <literal>register</literal> page and via a
+          cloud registry (requires package xooauth for full
+          functionality)
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <emphasis role="strong">Client-side double click
+          prevention</emphasis>: This change makes it possible to
+          provide a double click prevention for HTML elements via the
+          CSS class <quote>prevent-double-click</quote>. The double
+          click prevention deactivates a button or an anchor element
+          after clicking for a short time (per default for 1s) and
+          ignores in this time window further clicks. The time window
+          can be specified via the data element oacs-timeout. (commit
+          5f2edeec2a9a831, 916d365aa11f2d)
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <emphasis role="strong">Cookie Namespaces</emphasis> (commit
+          ce1573ed8): Important, when multiple OpenACS instances are
+          served from the same domain name, but different cookies have
+          to be used.
+        </para>
+      </listitem>
+    </itemizedlist>
+  </sect3>
+  <sect3 xml:id="reforms">
+    <title>Reforms</title>
+    <itemizedlist>
+      <listitem>
+          <literal>lc_time_tz_convert</literal>: Enforce ISO format for
+          dates and other changes (commit 9a5b5cd97).
+      </listitem>
+      <listitem>
+          <literal>template::element</literal> validation reform to
+          improve validation on fields (commit 87919f923).
+      </listitem>
+      <listitem>
+          Provide timeouts for caching operations to improve liveliness
+          also when certain calls are hanging (commit 22cd530d4).
+      </listitem>
+      <listitem>
+          Form widget attributes reform consolidating logics for merging
+          tag attributes (commit 3a7fc6a8e).
+      </listitem>
+      <listitem>
+        <para>
+          Streamlined resource_info handling by adding versioning and
+          better management of external library dependencies. External
+          libraries can be used from CDN or downloaded, the versions are
+          checked for vulnerabilities, which are reported via posture
+          overview and package-specific site-wide admin pages.
+        </para>
+      </listitem>
+    </itemizedlist>
+  </sect3>
+  <sect3 xml:id="configuration-changes">
+    <title>Configuration Changes</title>
+    <itemizedlist>
+      <listitem>
+          Set the (default) theme package on the subsite upon
+          installation (commit 0ff7101b3).
+      </listitem>
+      <listitem>
+          Improved clusterwide operations with new configuration
+          parameters (commit 5738761db).
+      </listitem>
+      <listitem>
+          New configuration options <literal>CSSToolkit</literal> and
+          <literal>IconSet</literal> for <literal>acs-subsite</literal>
+          (commit fc56a275b).
+      </listitem>
+      <listitem>
+          Support specification of allowed tags/attributes/protocols via
+          global package parameters (commit 657cef99a,fc46466e3).
+      </listitem>
+      <listitem>
+          Made <literal>ad_html_security_check</literal> configurable
+          (commit bc63ee424).
+      </listitem>
+      <listitem>
+          Support for memory units as default cache sizes (commit
+          68c853abd).
+      </listitem>
+    </itemizedlist>
+  </sect3>
+  <sect3 xml:id="bug-fixes">
+    <title>Bug Fixes</title>
+    <itemizedlist>
+      <listitem>
+          Fixed missing
+          <literal>update_content-lob.set_content</literal> (commit
+          a3effac23, 4ce8e9fae).
+      </listitem>
+      <listitem>
+          Fixed incorrect HTTP status code on result page (commit
+          636226cb2).
+      </listitem>
+      <listitem>
+          Fixed signature of service contract implementation (commit
+          b9f0c541c).
+      </listitem>
+      <listitem>
+          Fixed implementation of <literal>ad_acs_admin_node</literal>
+          (commit 34a823c51).
+      </listitem>
+      <listitem>
+          Fixed reference in doc (commit e596b46f8).
+      </listitem>
+      <listitem>
+          Fixed <literal>ad_approval_system_inuse_p</literal>
+          implementation (commit bd8afdeeb).
+      </listitem>
+      <listitem>
+          Fixed self-inflicted bug in form variable specification
+          (commit 79e6df943).
+      </listitem>
+      <listitem>
+          Fixed a bug in <literal>db_multirow_group_last_row_p</literal>
+          (commit aafd1db58).
+      </listitem>
+      <listitem>
+          Fixed issue with <literal>ns_parseurl</literal> in
+          <literal>util::split_location</literal> (commit aee571ad1).
+      </listitem>
+      <listitem>
+          Various fixes for Oracle 19c compatibility issues (numerous
+          commits).
+      </listitem>
+      <listitem>
+          Fixed broken function_args definition and other issues (commit
+          83e45f9b5, d166927d2, etc.).
+      </listitem>
+      <listitem>
+          Fixed a bug in <literal>db_driverkey</literal> when OpenACS
+          connects to multiple databases, involving the removal of
+          per-thread caching (commit 18e656b00).
+      </listitem>
+      <listitem>
+          Fixed and generalized <literal>version_dir</literal> handling
+          for download of external resources (commit 8e9a6a5c8).
+      </listitem>
+      <listitem>
+          Fixed selector for click all list callback in core.js (commit
+          00b9db614).
+      </listitem>
+      <listitem>
+          Fixed a bug in <literal>db_foreach</literal> with
+          <literal>-column_set</literal> flag (commit 95e8970d7).
+      </listitem>
+      <listitem>
+          Handle null dates in core.js (commit 1dd928238).
+      </listitem>
+      <listitem>
+          Fixed issues in SQL function calling to avoid incorrect
+          function selection due to typecasting issues (commit
+          bc33e9938).
+      </listitem>
+      <listitem>
+          Corrected problems with session handling in cluster mode and
+          fixed cache coherency issues in clustered environments (commit
+          c0a1cf7b9).
+      </listitem>
+    </itemizedlist>
+  </sect3>
+  <sect3 xml:id="improvements">
+    <title>Improvements</title>
+    <itemizedlist>
+      <listitem>
+          <emphasis role="strong">Security Improvements</emphasis>
+        <itemizedlist>
+          <listitem>
+              In addition to the new security features mentioned
+              above, the new release was tested several times by
+              different vulnerability scanners, which triggered a
+              large number of changes as for example strengthening
+              the input tests in page contracts, consequent use of
+              bind variables and permission checks.
+          </listitem>
+          <listitem>
+              New API <literal>ad_mktmpdir</literal> and
+              <literal>ad_opentmpfile</literal> (commit a10b55d3d).
+          </listitem>
+          <listitem>
+              Added support for elliptic curve certificates (ecdsa) when
+              the lets-encrypt module from NaviServer is used (commit
+              2c40f1d9d).
+          </listitem>
+          <listitem>
+              Hardened page contracts, added many constraints to address
+              potential SQI and XQL etc. attacks (many commits,
+              e.g.&nbsp;8eee6a932, d4846d106)
+          </listitem>
+          <listitem>
+              Warn warning when <literal>parametersecret</literal> is
+              not set (commit 0ec8f0183).
+          </listitem>
+          <listitem>
+              Safe creation of temporary directories (commit d25ff6593).
+          </listitem>
+          <listitem>
+              Upgraded internal use of JavaScript and HTML standards to
+              improve security and performance (commit e68a73c92).
+          </listitem>
+        </itemizedlist>
+      </listitem>
+     
+      <listitem>
+          <emphasis role="strong">Performance Improvements</emphasis>
+        <itemizedlist>
+          <listitem>
+              New partial index for a common query in acs-tcl (commit
+              aaaf86adb).
+          </listitem>
+          <listitem>
+              Implemented <literal>ad_html_security_check</literal>
+              based on <literal>ns_parsehtml</literal> (commit
+              387f3de3e).
+          </listitem>
+          <listitem>
+              Added support for NaviServer built-in
+              <literal>ns_trim -prefix</literal> (commit 500099e0).
+          </listitem>
+          <listitem>
+              Change in storing and displaying util user messages
+              (commit bb0702bf3).
+          </listitem>
+        </itemizedlist>
+      </listitem>
+      <listitem>
+          <emphasis role="strong">Additional Filters for Page
+          Contracts</emphasis>
+        <itemizedlist>
+          <listitem>
+              Introduced <literal>ad_page_contract</literal> filter
+              object type (commit 2f9d127a0).
+          </listitem>
+          <listitem>
+              Introduced a new <literal>clock</literal> page contract
+              filter (commit 5544faffc).
+          </listitem>
+          <listitem>
+              Introduced new <literal>tmpfile</literal> page contract
+              filter (commit 1a179e9bc).
+          </listitem>
+          <listitem>
+              Allow more characters in argument specs (commit
+              f952d9d5e).
+          </listitem>
+        </itemizedlist>
+      </listitem>
+      <listitem>
+          <emphasis role="strong">Code Refactoring</emphasis>
+        <itemizedlist>
+          <listitem>
+              Added a new procedure <literal>ad_log_deprecated</literal>
+              for unified logging of deprecated usages (commit
+              0e03b3358).
+          </listitem>
+          <listitem>
+              Improved configurability of LockfreeCache (commit
+              9bc412576).
+          </listitem>
+          <listitem>
+              Reform of site-nodes-procs for improved clarity and ease
+              of maintenance, esp.&nbsp;Oracle (commit 3fe93032e).
+          </listitem>
+          <listitem>
+              Update of SQL function calls via API, made it callable
+              during initial bootstrap (commit ad97aa747).
+          </listitem>
+          <listitem>
+              Modernization of idioms and cleanup of deprecated code
+              (e.g., commit a5c537515, e68a73c92, 1d1ff8c4e).
+          </listitem>
+          <listitem>
+              Improved documentation, localization updates, and typo
+              fixes (e.g., commit 5c23325a3, f3590415f, 7a97e0ea0).
+          </listitem>
+          <listitem>
+              Phased out outdated procedures and functions that were
+              superseded by more efficient and secure implementations
+              (e.g., commit 6272226b6).
+          </listitem>
+          <listitem>
+              Deprecated old APIs that no longer align with modern
+              security practices or performance standards (commit
+              cd0af7373).
+          </listitem>
+          <listitem>
+              Removed legacy support for certain outdated browser
+              features and replaced them with modern alternatives
+              (commit a1a7c22a7).
+          </listitem>
+          <listitem>
+              Further reduced divergence between Oracle and Postgres
+              SQL. Target version of Oracle could be 12.*, as Extended
+              support ends in 2022 (see
+<ulink url="https://www.oracle.com/us/support/library/lifetime-support-technology-069183.pdf" target="_blank">https://www.oracle.com/us/support/library/lifetime-support-technology-069183.pdf</ulink>).
+              This change implies:
+            <itemizedlist>
+              <listitem>
+                  change <quote>limit ... rownum ...</quote> to standard
+                  <quote>fetch first ...</quote>
+              </listitem>
+              <listitem>
+                  use Postgres schemas where available for stored
+                  procedures so that they can be invoked with the same
+                  Oracle idiom
+              </listitem>
+            </itemizedlist>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+      <listitem>
+          <emphasis role="strong">Miscellaneous</emphasis>
+        <itemizedlist>
+          <listitem>
+              Message keys for content repository (commit 2f89a971a).
+          </listitem>
+          <listitem>
+              Make <literal>util::join_location</literal> usable for UDP
+              and SMTP (commit 01b5c0d61).
+          </listitem>
+          <listitem>
+              Zero-dependency implementations of Modal and Tooltip using
+              CSS and JavaScript (commit db0f52664, 02bfffbb2).
+          </listitem>
+          <listitem>
+              Deprecation of specific functions and APIs in favor of
+              modern replacements (e.g., commit 4493f07b9, 6db041083,
+              94c505b01).
+          </listitem>
+          <listitem>
+              Extended API: Introduced new API functions like
+              <literal>ad_unless_script_abort</literal>,
+              <literal>aa_silence_log_entries</literal>, and
+              <literal>util::json2dict</literal> to enhance error
+              handling and logging cleanliness (commit aeb027aeb,
+              f455d60c6, e9298cf02).
+          </listitem>
+          <listitem>
+              Expanded timezone data and improved internationalization
+              features, including better locale management and updated
+              localization data (commit 828ab0bd4, 47d478bcf).
+          </listitem>
+          <listitem>
+              Added Support for listing registered URNs (per package on
+              the site-wide admin page of a package, full set on the adm
+              page of acs-templating)
+          </listitem>
+          <listitem>
+              Added support for relative redirects (commit 867d9441e).
+          </listitem>
+        </itemizedlist>
+      </listitem>
+      <listitem>
+          <emphasis role="strong">Regression Test</emphasis>:
+        <itemizedlist>
+          <listitem>
+              The regression test was substantially extended and in part
+              overworked
+          </listitem>
+          <listitem>
+              The test includes now checks for resource leaks (tDOM
+              documents and nodes, temporary objects, etc.) and leaves less
+              garbage in the /tmp directory
+          </listitem>
+          <listitem>
+              For the major packages (core and application packages),
+              the tests run without reporting errors.
+          </listitem>
+          <listitem>
+              For the tests of the majro packages, the system.log is now free of
+              error messages (e.g., when handling cases in the test that
+              are supposed to fail)
+          </listitem>
+        </itemizedlist>
+      </listitem>
+    </itemizedlist>
+  </sect3>
+  <sect3 xml:id="version-requirements">
+    <title>Version requirements</title>
+    <itemizedlist>
+      <listitem>
+          Require NaviServer (i.e.&nbsp;drop AOLserver support). Rationale:
+          AOLserver cannot be compiled with the required modules with
+          recent Tcl versions. Trying to backport NaviServer
+          compatibility functions seems to be an overkill for the
+          OpenACS project.
+      </listitem>
+      <listitem>
+          Bootstrap 3 reached EOL in 2019, Bootstrap 4 had EOL 2022, so
+          we should migrate to Bootstrap 5 (details:
+          <ulink url="https://github.com/twbs/release" target="_blank">https://github.com/twbs/release</ulink>)
+      </listitem>
+      <listitem>
+          Require Tcl 8.6.2, XOTcl 2.1, PostgreSQL 12 (PostgreSQL 11
+          EOL: November 23), tdom 0.9
+      </listitem>
+      <listitem>
+          Support for fresh installations on Oracle 19c (for details,
+          see:
+<ulink url="https://openacs.org/xowiki/oacs-5-10-on-oracle-19c" target="_blank">oacs-5-10-on-oracle-19c</ulink>)
+      </listitem>
+    </itemizedlist>
+  </sect3>
+</sect2>
+
+<sect2 xml:id="application-packages">
+  <title>Changes in OpenACS Application Packages</title>
+
+  <sect3 xml:id="new-packages">
+    <title>New Packages in OpenACS 5.10.1</title>
+    <itemizedlist>
+      <listitem>
+          bootstrap-icons
+      </listitem>
+      <listitem>
+          caldav
+      </listitem>
+      <listitem>
+          captcha
+      </listitem>
+      <listitem>
+          fa-icons
+      </listitem>
+      <listitem>
+          highcharts
+      </listitem>
+      <listitem>
+          openacs-bootstrap5-theme
+      </listitem>
+      <listitem>
+        <para>
+          For a description of all packages, see:
+          <ulink url="https://openacs.org/repository/5-10/" target="_blank">https://openacs.org/repository/5-10/</ulink>
+          
+        </para>
+      </listitem>
+    </itemizedlist>
+  </sect3>
+  
+  <sect3 xml:id="changes-in-package-attachments">
+    <title>Changes in package "attachments"</title>
+  <sect4 xml:id="improvements-1">
+      <title>Improvements</title>
+      <itemizedlist>
+        <listitem>
+            <emphasis role="strong">Security Improvements</emphasis>
+          <itemizedlist>
+            <listitem>
+                Strengthen page contracts (3b9068ad)
+            </listitem>
+          </itemizedlist>
+        </listitem>
+        <listitem>
+            <emphasis role="strong">Code Refactoring</emphasis>
+          <itemizedlist>
+            <listitem>
+                Replace handcrafted HTML icons with new adp:icon adp tag
+                (f45e6406)
+            </listitem>
+            <listitem>
+                Replace deprecated
+                <literal>util_commify_number,</literal> with
+                <literal>lc_numeric</literal> (518e1b34)
+            </listitem>
+          </itemizedlist>
+        </listitem>
+        <listitem>
+            <emphasis role="strong">Miscellaneous</emphasis>
+          <itemizedlist>
+            <listitem>
+                Document public API (fd5b5e1c)
+            </listitem>
+            <listitem>
+                Improve test suite and cover 100% of public api
+                (3446f91c, c933a64e)
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </itemizedlist>
+  </sect4>
+  <sect4 xml:id="deprecations">
+      <title>Deprecations</title>
+      <itemizedlist>
+        <listitem>
+            <literal>attachments::root_folder_map_p</literal> -&gt;
+            duplicates functionalities of
+            <literal>attachments::root_folder_p</literal> (cc3177d1)
+        </listitem>
+      </itemizedlist>
+  </sect4>
+  </sect3>
+  <sect3 xml:id="changes-in-package-calendar">
+    <title>Changes in package "calendar"</title>
+  <sect4 xml:id="new-features-1">
+      <title>New Features</title>
+      <itemizedlist>
+        <listitem>
+            <emphasis role="strong">Inclusion of multiple
+            calendars</emphasis> (77f4db84): name calendar forms in a
+            way that multiple calendars can be embedded on the same page
+            (relevant in the context of .LRN portlets)
+        </listitem>
+      </itemizedlist>
+  </sect4>
+  <sect4 xml:id="bug-fixes-1">
+      <title>Bug Fixes</title>
+      <itemizedlist>
+        <listitem>
+            Javascript fixes (b1d49bc1)
+        </listitem>
+        <listitem>
+            Fix retrieval of a calendar item when a connection context
+            is not available (772449b4, a049d806)
+        </listitem>
+      </itemizedlist>
+  </sect4>
+  <sect4 xml:id="improvements-2">
+      <title>Improvements</title>
+      <itemizedlist>
+        <listitem>
+            <emphasis role="strong">Security Improvements</emphasis>
+          <itemizedlist>
+            <listitem>
+                Improve/harden input validation (many commits)
+            </listitem>
+            <listitem>
+                Don’t expose immutable values as hidden formfields
+                (03e3f2e7, 31955520)
+            </listitem>
+          </itemizedlist>
+        </listitem>
+        <listitem>
+            <emphasis role="strong">Code Refactoring</emphasis>
+          <itemizedlist>
+            <listitem>
+                Replace deprecated API (8e6d01a0, 9cfbf8a1)
+            </listitem>
+            <listitem>
+                Streamline idioms (50c5c2d3)
+            </listitem>
+            <listitem>
+                Replace handcrafted HTML icons with new adp:icon adp tag
+                (054c46cc, 8bb2cd6f)
+            </listitem>
+            <listitem>
+                Replace custom calendar widget implementation with
+                native HTML5 form fields and streamline input validation
+                (6bd30d58, f5118fb4)
+            </listitem>
+          </itemizedlist>
+        </listitem>
+        <listitem>
+
+            <emphasis role="strong">Miscellaneous</emphasis>
+
+          <itemizedlist>
+            <listitem>
+
+                Improve spelling in catalog files (258edac5)
+
+            </listitem>
+            <listitem>
+
+                Pass properties to master template as literal according
+                to best practices (9598e88e)
+
+            </listitem>
+            <listitem>
+
+                Improve API documentation (d924a307)
+
+            </listitem>
+            <listitem>
+
+                Cleanup vestigial features/dead code (various commits)
+
+            </listitem>
+            <listitem>
+
+                Port of downstream localization (90dbfa96)
+
+            </listitem>
+            <listitem>
+
+                Various typos and formatting improvements
+
+            </listitem>
+            <listitem>
+
+                Increase test suite of functionalities and cover 100% of
+                public api (various commits)
+
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </itemizedlist>
+  </sect4>
+  <sect4 xml:id="deprecations-1">
+      <title>Deprecations</title>
+      <itemizedlist>
+        <listitem>
+            <literal>calendar::adjust_date</literal> -&gt; inlined the
+            one occurrence (fbd97314)
+        </listitem>
+        <listitem>
+            <literal>calendar::from_sql_datetime</literal>,
+            <literal>calendar::make_datetime</literal> -&gt; not used
+            upstream, superseded by modern clock idioms and HTML5
+            features (bccd1c3a, 7264a2fe)
+        </listitem>
+        <listitem>
+            <literal>cal_outlook_gmt_sql</literal> -&gt; last usage in
+            the codebase 2002 (1ee22f96)
+        </listitem>
+        <listitem>
+            <literal>calendar::item::assign_permission</literal>.
+            <literal>calendar::assign_permissions</literal> -&gt;
+            trivial wrappers over the permission api (a1ddaed5,
+            f174fd12)
+        </listitem>
+      </itemizedlist>
+  </sect4>
+  </sect3>
+  <sect3 xml:id="changes-in-package-captcha">
+    <title>Changes in package "captcha"</title>
+  <sect4 xml:id="features">
+      <title>Features</title>
+      <itemizedlist>
+        <listitem>
+
+            <emphasis role="strong">Bot protection for your
+            form</emphasis> implements template::widget::captcha. This
+            can be used in forms exposed to the public to hinder
+            automated bots. Based on the implementation at
+            https://fossil-scm.org/
+
+        </listitem>
+        <listitem>
+
+            <emphasis role="strong">Scalable</emphasis> a new captcha is
+            generated fast, from scratch and on the fly
+
+        </listitem>
+        <listitem>
+
+            <emphasis role="strong">No external dependencies</emphasis>
+            this package does not require any external commands or
+            libraries
+
+        </listitem>
+      </itemizedlist>
+  </sect4>
+  </sect3>
+  <sect3 xml:id="changes-in-package-categories">
+    <title>Changes in package "categories"</title>
+  <sect4 xml:id="reforms-1">
+      <title>Reforms</title>
+      <itemizedlist>
+        <listitem>
+
+            Mark service contract implementations as private (efd3b8e5,
+            886068d3)
+
+        </listitem>
+      </itemizedlist>
+  </sect4>
+  <sect4 xml:id="improvements-3">
+      <title>Improvements</title>
+      <itemizedlist>
+        <listitem>
+
+            <emphasis role="strong">Performance Improvements</emphasis>
+
+          <itemizedlist>
+            <listitem>
+
+                Create indices on FK constraints (e935a857)
+
+            </listitem>
+          </itemizedlist>
+        </listitem>
+        <listitem>
+
+            <emphasis role="strong">Security Improvements</emphasis>
+
+          <itemizedlist>
+            <listitem>
+
+                Add include contracts where missing (40b5bdc3, 667d9cdf,
+                5d3fb337)
+
+            </listitem>
+            <listitem>
+
+                Strengthen page contracts (1ad80ea6)
+
+            </listitem>
+          </itemizedlist>
+        </listitem>
+        <listitem>
+
+            <emphasis role="strong">Code Refactoring</emphasis>
+
+          <itemizedlist>
+            <listitem>
+
+                Replace deprecated
+                <literal>template::util::is_true</literal> with inline
+                string idiom (f2604994)
+
+            </listitem>
+            <listitem>
+
+                Replace handcrafted HTML icons with new adp:icon adp tag
+                (035bd73b)
+
+            </listitem>
+            <listitem>
+
+                Better qualify command invocation (a693a8be)
+
+            </listitem>
+          </itemizedlist>
+        </listitem>
+        <listitem>
+
+            <emphasis role="strong">Miscellaneous</emphasis>
+
+          <itemizedlist>
+            <listitem>
+
+                Cleanup and formatting changes (various commits)
+
+            </listitem>
+            <listitem>
+
+                Increase test suite of functionalities and reach 80.82%
+                coverage of public api (various commits)
+
+            </listitem>
+            <listitem>
+
+                Improved documentation of library file and public API
+                (8da391b1)
+
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </itemizedlist>
+  </sect4>
+  </sect3>
+  <sect3 xml:id="changes-in-package-chat">
+    <title>Changes in package "chat"</title>
+  <sect4 xml:id="new-features-2">
+      <title>New Features</title>
+      <itemizedlist>
+        <listitem>
+
+            <emphasis role="strong">Anonymous chat
+            participants</emphasis> (3a73986c, 214684f3): use newly
+            introduced support for anonymous users built in xowiki to
+            support not logged-in users
+
+        </listitem>
+        <listitem>
+
+            <emphasis role="strong">Chat include</emphasis> (c2ab5967) :
+            Move the main chat rendering in an include to allow reuse in
+            other contexts
+
+        </listitem>
+      </itemizedlist>
+  </sect4>
+  <sect4 xml:id="bug-fixes-2">
+      <title>Bug Fixes</title>
+      <itemizedlist>
+        <listitem>
+
+            Fix typo in datamodel code affecting new installations
+            (98d26cfa)
+
+        </listitem>
+        <listitem>
+
+            Improve/fix Oracle compatibility (d3e0d69b, cb2e52d0,
+            04e229f2)
+
+        </listitem>
+        <listitem>
+
+            Allow for arbitrary arguments to be passed when extending
+            inherited methods (95ca0c0e)
+
+        </listitem>
+        <listitem>
+
+            Allow to persist chat messages also in the chat sweeper
+            (4bf7bd59)
+
+        </listitem>
+      </itemizedlist>
+  </sect4>
+  <sect4 xml:id="improvements-4">
+      <title>Improvements</title>
+      <itemizedlist>
+        <listitem>
+
+            <emphasis role="strong">Performance Improvements</emphasis>
+
+          <itemizedlist>
+            <listitem>
+
+                (Postgres only) Improve performances when fetching the
+                available chat rooms using recursive permission api
+                (56d47b31, 0b2cff50)
+
+            </listitem>
+          </itemizedlist>
+        </listitem>
+        <listitem>
+
+            <emphasis role="strong">Security Improvements</emphasis>
+
+          <itemizedlist>
+            <listitem>
+
+                Improve SQL quoting (e2146673)
+
+            </listitem>
+            <listitem>
+
+                Harden page contracts and use new contract features from
+                the core (43955d16, 148be6f4, 7f6b5c92)
+
+            </listitem>
+          </itemizedlist>
+        </listitem>
+        <listitem>
+
+            <emphasis role="strong">Code Refactoring</emphasis>
+
+          <itemizedlist>
+            <listitem>
+
+                Replace :xo::clusterwide -&gt; ::acs::clusterwide for
+                cluster-aware chaching (76fbfe1f)
+
+            </listitem>
+            <listitem>
+
+                Replace ::xo::db::sql -&gt; ::acs::dc as tcl abstraction
+                for db stored procedures (76fbfe1f)
+
+            </listitem>
+            <listitem>
+
+                Replace deprecated api (928793ce, cb2e52d0)
+
+            </listitem>
+            <listitem>
+
+                Replace handcrafted HTML icons with new adp:icon adp tag
+                (054c46cc)
+
+            </listitem>
+            <listitem>
+
+                Reduce layers of redirection when accessing a chat room
+                (4f57e272)
+
+            </listitem>
+          </itemizedlist>
+        </listitem>
+        <listitem>
+
+            <emphasis role="strong">Miscellaneous</emphasis>
+
+          <itemizedlist>
+            <listitem>
+
+                Prefer message keys from core packages (943daaa3)
+
+            </listitem>
+            <listitem>
+
+                Cleanup vestigial features/dead code (23fe7d3a,
+                b8d5da6d, d7434cae)
+
+            </listitem>
+            <listitem>
+
+                Pass properties to master template as literal according
+                to best practices (98a2b1ec)
+
+            </listitem>
+            <listitem>
+
+                Extend test suite to 100% public API coverage (117c66e3,
+                210e3f16, b2abc81c, fe60e3d1)
+
+            </listitem>
+            <listitem>
+
+                Improve configurability and styling of the chat
+                includelet (54bb236f, 289ddee6)
+
+            </listitem>
+            <listitem>
+
+                Streamline idioms (2b0bd209)
+
+            </listitem>
+            <listitem>
+
+                Replace legacy message keys (a465cf76)
+
+            </listitem>
+            <listitem>
+
+                Improve localization (0252ed50)
+
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </itemizedlist>
+  </sect4>
+  </sect3>
+  <sect3 xml:id="changes-in-package-dotlrn">
+    <title>Changes in package "dotlrn" and associated packages</title>
+    <para>
+    </para>
+  <sect4 xml:id="reforms-2">
+      <title>Reforms</title>
+      <itemizedlist>
+        <listitem>
+
+            <emphasis role="strong">dotlrn</emphasis>:
+
+          <itemizedlist>
+            <listitem>
+
+                Deactivate obsolete SQL function in creation script
+                (sql/postgresql/dotlrn-create.sql). This complements
+                commit 3a280c7e in acs-kernel (commit 1b845ba0).
+
+            </listitem>
+            <listitem>
+
+                Use dotlrn-bootstrap3-theme as default theme (commit
+                c6547eb8).
+
+            </listitem>
+          </itemizedlist>
+        </listitem>
+        <listitem>
+
+            <emphasis role="strong">theme-zen</emphasis>: Adapt to
+            commit 3a280c7e (acs-kernel) and c6547eb8 (dotlrn) (commit
+            6d50cb9b).
+
+        </listitem>
+      </itemizedlist>
+  </sect4>
+  <sect4 xml:id="improvements-5">
+      <title>Improvements</title>
+      <itemizedlist>
+        <listitem>
+
+            <emphasis role="strong">Performance Improvements</emphasis>
+
+          <itemizedlist>
+            <listitem>
+
+                <emphasis role="strong">dotlrn</emphasis>: Prefer APIs
+                returning cached values before querying the DB using
+                <literal>site_node::</literal> (commit 4d025e63)
+
+            </listitem>
+            <listitem>
+
+                <emphasis role="strong">dotlrn-fs</emphasis>: Prefer
+                APIs returning cached values before querying the DB
+                using <literal>site_node::</literal> (39bcaf3f)
+
+            </listitem>
+          </itemizedlist>
+        </listitem>
+        <listitem>
+
+            <emphasis role="strong">Security Improvements</emphasis>
+
+          <itemizedlist>
+            <listitem>
+
+                <emphasis role="strong">dotlrn</emphasis>: Mitigating
+                potential XSS attacks using NaviServer own
+                <literal>ns_quotehtml</literal> (commit 4476e815)
+
+            </listitem>
+          </itemizedlist>
+        </listitem>
+        <listitem>
+
+            <emphasis role="strong">Code Refactoring</emphasis>
+
+          <itemizedlist>
+            <listitem>
+
+                <emphasis role="strong">dotlrn</emphasis>:
+
+              <itemizedlist>
+                <listitem>
+
+                    Replace deprecated
+                    <literal>notification::get_interval_id</literal>
+                    with
+                    <literal>notification::interval::get_id_from_name</literal>
+                    (commit 871dd502)
+
+                </listitem>
+                <listitem>
+
+                    Replace deprecated
+                    <literal>notification::get_delivery_method_id</literal>
+                    with
+                    <literal>notification::delivery::get_id</literal>
+                    (commit a9760fc4)
+
+                </listitem>
+                <listitem>
+
+                    Replace deprecated
+                    <literal>template::util::is_true</literal> with
+                    <literal>[string is true -strict $value]</literal>
+                    (commit 38981891)
+
+                </listitem>
+                <listitem>
+
+                    Replace deprecated
+                    <literal>util_commify_number</literal> with
+                    <literal>lc_numeric</literal> (commit 7c14688e)
+
+                </listitem>
+                <listitem>
+
+                    Replace deprecated
+                    <literal>twt::user::create</literal> and
+                    <literal>twt::user::delete</literal> with the
+                    respective <literal>acs::test::user::</literal>
+                    counterparts (commit dea8673e)
+
+                </listitem>
+                <listitem>
+
+                    Cleanup usage of deprecated API
+                    <literal>template::util::nvl</literal> (commit
+                    0775f434, 73b52fba)
+
+                </listitem>
+                <listitem>
+
+                    Cleanup usage of deprecated API
+                    <literal>acs_privacy::</literal> (commit d31c3b6f,
+                    9ae5aa4a)
+
+                </listitem>
+                <listitem>
+
+                    Replace deprecated
+                    <literal>bulk_mail::parameter</literal> with
+                    <literal>parameter::get</literal> (commit b10c5f26)
+
+                </listitem>
+                <listitem>
+
+                    Replace deprecated
+                    <literal>forum::new_questions_deny</literal> and
+                    <literal>forum::new_questions_allow</literal> with
+                    <literal>permission::grant</literal> (commit
+                    4880f884)
+
+                </listitem>
+                <listitem>
+
+                    Replace custom calendar widget implementation with
+                    native HTML5 fields (commit 113b1cb4)
+
+                </listitem>
+              </itemizedlist>
+            </listitem>
+            <listitem>
+
+                <emphasis role="strong">dotlrn-bm</emphasis>: Replace
+                deprecated <literal>bulk_mail::pretty_name</literal>
+                with <literal>parameter::get</literal> (commit b6b7aec1)
+
+            </listitem>
+            <listitem>
+
+                <emphasis role="strong">dotlrn-calendar</emphasis>:
+                Reform handling of admin permissions (commit ce9e27d4,
+                6a9ada80)
+
+            </listitem>
+            <listitem>
+
+                <emphasis role="strong">dotlrn-forums</emphasis>:
+
+              <itemizedlist>
+                <listitem>
+
+                    Replace deprecated
+                    <literal>notification::get_interval_id</literal>
+                    with
+                    <literal>notification::interval::get_id_from_name</literal>
+                    (commit d77b24b7)
+
+                </listitem>
+                <listitem>
+
+                    Replace deprecated
+                    <literal>notification::get_delivery_method_id</literal>
+                    with
+                    <literal>notification::delivery::get_id</literal>
+                    (commit 075b8adc)
+
+                </listitem>
+              </itemizedlist>
+            </listitem>
+            <listitem>
+
+                <emphasis role="strong">dotlrn-fs</emphasis>: Replace
+                Naviserver <literal>ns_mktemp</literal> with
+                <literal>ad_tmpnam</literal> (commit f5fd2c96)
+
+            </listitem>
+            <listitem>
+
+                <emphasis role="strong">dotlrn-homework</emphasis>:
+
+              <itemizedlist>
+                <listitem>
+
+                    Alter reference to db-error file in acs-subsite
+                    (commit d47e5f2c)
+
+                </listitem>
+                <listitem>
+
+                    Replace deprecated
+                    <literal>util_commify_number</literal> with
+                    <literal>lc_numeric</literal> (commit 990b0b0a)
+
+                </listitem>
+                <listitem>
+
+                    Replace handcrafted HTML icons with adp:icon adp tag
+                    (commit 3f1557c2)
+
+                </listitem>
+              </itemizedlist>
+            </listitem>
+            <listitem>
+
+                <emphasis role="strong">dotlrn-news</emphasis>:
+
+              <itemizedlist>
+                <listitem>
+
+                    Replace deprecated
+                    <literal>notification::get_interval_id</literal>
+                    with
+                    <literal>notification::interval::get_id_from_name</literal>
+                    (commit 586cc6ae)
+
+                </listitem>
+                <listitem>
+
+                    Replace deprecated
+                    <literal>notification::get_delivery_method_id</literal>
+                    with
+                    <literal>notification::delivery::get_id</literal>
+                    (28661484)
+
+                </listitem>
+              </itemizedlist>
+            </listitem>
+            <listitem>
+
+                <emphasis role="strong">dotlrn-static</emphasis>: Fix
+                applet mount point (commit 233e0c6c)
+
+            </listitem>
+            <listitem>
+
+                <emphasis role="strong">new-portal</emphasis>:
+
+              <itemizedlist>
+                <listitem>
+
+                    Replace <literal>export_ns_set_vars</literal> with
+                    <literal>export_vars</literal> (commit e8ab835d)
+
+                </listitem>
+                <listitem>
+
+                    Prefer adp:icon adp tag over handcrafted HTML icons
+                    (commit 7afadf3b)
+
+                </listitem>
+              </itemizedlist>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+        <listitem>
+
+            <emphasis role="strong">Miscellaneous</emphasis>
+
+          <itemizedlist>
+            <listitem>
+
+                <emphasis role="strong">All packages</emphasis>:
+
+              <itemizedlist>
+                <listitem>
+
+                    Cleanup and formatting (various commits)
+
+                </listitem>
+                <listitem>
+
+                    Strengthen page contracts (various commits)
+
+                </listitem>
+                <listitem>
+                    Document public API, e.g., in new-portal,
+                    dotlrn-dotlrn (e.g., commit 75656f6f, 05540825)
+                </listitem>
+                <listitem>
+
+                    Improve test coverage, e.g., in
+                    <literal>dotlrn-portlet</literal> (e.g., commit
+                    dcfe916b, 712e8793, 59ec97b0)
+
+                </listitem>
+              </itemizedlist>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </itemizedlist>
+  </sect4>
+  </sect3>
+  <sect3 xml:id="changes-in-package-faq">
+    <title>Changes in package "faq"</title>
+  <sect4 xml:id="new-features-3">
+      <title>New Features</title>
+      <itemizedlist>
+        <listitem>
+
+            <emphasis role="strong">faq::new API</emphasis> (1fc77330):
+            an API to create an FAQ, also useful for testing
+
+        </listitem>
+      </itemizedlist>
+  </sect4>
+  <sect4 xml:id="bug-fixes-3">
+      <title>Bug Fixes</title>
+      <itemizedlist>
+        <listitem>
+
+            Fixes for Oracle compatibility (3e5418a3)
+
+        </listitem>
+      </itemizedlist>
+  </sect4>
+  <sect4 xml:id="reforms-3">
+      <title>Reforms</title>
+      <itemizedlist>
+        <listitem>
+
+            Mark service contract implementations as private (987ef426)
+
+        </listitem>
+        <listitem>
+
+            Mark apm callbacks as private (6861af77)
+
+        </listitem>
+      </itemizedlist>
+  </sect4>
+  <sect4 xml:id="improvements-6">
+      <title>Improvements</title>
+      <itemizedlist>
+        <listitem>
+
+            <emphasis role="strong">Security Improvements</emphasis>
+
+          <itemizedlist>
+            <listitem>
+
+                Harden page contract validation (a2904377, 87d05896,
+                a4c9fc52)
+
+            </listitem>
+          </itemizedlist>
+        </listitem>
+        <listitem>
+
+            <emphasis role="strong">Code Refactoring</emphasis>
+
+          <itemizedlist>
+            <listitem>
+
+                Replace deprecated <literal>twt::user::create</literal>
+                and <literal>twt::user::delete</literal> with their
+                acs::test::user:: counterpart (27286797)
+
+            </listitem>
+            <listitem>
+
+                Replace handcrafted HTML icons with new adp:icon adp tag
+                (17acc438, 5a7ce6b6)
+
+            </listitem>
+            <listitem>
+
+                Replace <literal>rp_form_put</literal> with plain ns_set
+                idioms (d7deda66)
+
+            </listitem>
+          </itemizedlist>
+        </listitem>
+        <listitem>
+
+            <emphasis role="strong">Miscellaneous</emphasis>
+
+          <itemizedlist>
+            <listitem>
+
+                Cleanup and formatting changes (various commits)
+
+            </listitem>
+            <listitem>
+
+                Increase test suite of functionalities and cover 100% of
+                public api (various commits)
+
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </itemizedlist>
+  </sect4>
+  </sect3>
+  <sect3 xml:id="changes-in-package-file-storage">
+    <title>Changes in package "file-storage"</title>
+  <sect4 xml:id="bug-fixes-4">
+      <title>Bug Fixes</title>
+      <itemizedlist>
+        <listitem>
+
+            Make <literal>fs::get_file_package_id</literal> more robust
+            to cases where the package_id is not set on the object
+            itself (bbbbf93b)
+
+        </listitem>
+        <listitem>
+
+            Fixes for Oracle compatibility (9a5b9cf4, 0d4331cb,
+            de75d648)
+
+        </listitem>
+        <listitem>
+
+            Fix regression when the files list is rendered in
+            <quote>list</quote> format (d0eecbe4)
+
+        </listitem>
+      </itemizedlist>
+  </sect4>
+  <sect4 xml:id="reforms-4">
+      <title>Reforms</title>
+      <itemizedlist>
+        <listitem>
+
+            Make oacs-dav an optional, uninstallable dependency
+            (c8e3b5f8)
+
+        </listitem>
+        <listitem>
+
+            Make Service Contract implementation private and use the
+            abstract api instead (81ef9be7, 6eee7dbd, 846b226b,
+            f56b331a)
+
+        </listitem>
+      </itemizedlist>
+  </sect4>
+  <sect4 xml:id="improvements-7">
+      <title>Improvements</title>
+      <itemizedlist>
+        <listitem>
+
+            <emphasis role="strong">Performance Improvements</emphasis>
+
+          <itemizedlist>
+            <listitem>
+
+                (Postgres only) Improve performances when fetching
+                folder files using recursive permission api (02f64379)
+
+            </listitem>
+          </itemizedlist>
+        </listitem>
+        <listitem>
+
+            <emphasis role="strong">Security Improvements</emphasis>
+
+          <itemizedlist>
+            <listitem>
+
+                Improve server and client-side input validation (various
+                commits)
+
+            </listitem>
+          </itemizedlist>
+        </listitem>
+        <listitem>
+
+            <emphasis role="strong">Code Refactoring</emphasis>
+
+          <itemizedlist>
+            <listitem>
+
+                Reduce divergency between Oracle and Postgres codebase
+                (55e70c4f, 2cf7bbf5)
+
+            </listitem>
+            <listitem>
+
+                Replace deprecated
+                <literal>template::util::tcl_to_sql_list</literal> with
+                NaviServer own <literal>ns_dbquotelist</literal>
+                (8b1a62d0)
+
+            </listitem>
+            <listitem>
+
+                Replace deprecated <literal>twt::user::create</literal>
+                and <literal>twt::user::delete</literal> with their
+                acs::test::user:: counterpart (cbc632d0)
+
+            </listitem>
+            <listitem>
+
+                Cleanup obsolete error catching (d99eccfb)
+
+            </listitem>
+            <listitem>
+
+                Replace handcrafted HTML icons with new adp:icon adp tag
+                (602c473d, 651ab668, 53b1248d)
+
+            </listitem>
+            <listitem>
+
+                Replace <literal>ad_tmpnam</literal> with
+                <literal>ad_opentmpfile</literal> and
+                <literal>ad_mktmpdir</literal>, safer from race
+                conditions (576d51a1, 8a9ac2b9)
+
+            </listitem>
+          </itemizedlist>
+        </listitem>
+        <listitem>
+
+            <emphasis role="strong">Miscellaneous</emphasis>
+
+          <itemizedlist>
+            <listitem>
+
+                Cleanup and formatting (various commits)
+
+            </listitem>
+            <listitem>
+
+                Improve test suite and cover 100% of public api (various
+                commits)
+
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </itemizedlist>
+  </sect4>
+  <sect4 xml:id="deprecations-2">
+      <title>Deprecations</title>
+      <itemizedlist>
+        <listitem>
+
+            <literal>fs::add_created_version</literal> -&gt; behavior
+            specific to this proc was to
+            <literal>fs::add_version</literal>, largely similar
+            (815cbaae)
+
+        </listitem>
+        <listitem>
+
+            <literal>fs::torrent::get_hashsum</literal> -&gt; superseded
+            by NaviServer <literal>ns_md</literal> command (aaf2751d)
+
+        </listitem>
+        <listitem>
+
+            <literal>fs::item_editable_p</literal>,
+            <literal>fs::item_editable_info</literal> -&gt; Unused,
+            unclear usefulness (86cd3917)
+
+        </listitem>
+        <listitem>
+
+            <literal>fs::get_archive_extension</literal> -&gt; trivial
+            wrapper over the parameter api (aa63e153)
+
+        </listitem>
+        <listitem>
+
+            <literal>fs::get_folder_contents</literal> -&gt; Not used in
+            the codebase, same result can be achieved with other api
+            (72e444b8)
+
+        </listitem>
+      </itemizedlist>
+  </sect4>
+  </sect3>
+  <sect3 xml:id="changes-in-package-forums">
+    <title>Changes in package "forums"</title>
+  <sect4 xml:id="bug-fixes-5">
+      <title>Bug Fixes</title>
+      <itemizedlist>
+        <listitem>
+
+            Fix broken message key (74cadd4f)
+
+        </listitem>
+        <listitem>
+
+            Fixes for Oracle compatibility (f5db030e)
+
+        </listitem>
+        <listitem>
+
+            Rely less on values provided by the connection (f85185af)
+
+        </listitem>
+      </itemizedlist>
+  </sect4>
+  <sect4 xml:id="reforms-5">
+      <title>Reforms</title>
+      <itemizedlist>
+        <listitem>
+
+            Adapt template::element calls after replacing
+            <literal>template::util::get_opts</literal> (16b22e9e)
+
+        </listitem>
+        <listitem>
+
+            Mark service contract implementations as private (bb6e3b3b)
+
+        </listitem>
+        <listitem>
+
+            Use UTF-8 emojis instead of actual images to render
+            supported smileys in forum posts (335f1ede)
+
+        </listitem>
+      </itemizedlist>
+  </sect4>
+  <sect4 xml:id="improvements-8">
+      <title>Improvements</title>
+      <itemizedlist>
+        <listitem>
+
+            <emphasis role="strong">Performance Improvements</emphasis>
+
+          <itemizedlist>
+            <listitem>
+
+                Avoid transaction when unnecessary (aeb4e876)
+
+            </listitem>
+            <listitem>
+
+                Use cached api when detecting if attachments are
+                supported (83b9a2e8)
+
+            </listitem>
+          </itemizedlist>
+        </listitem>
+        <listitem>
+
+            <emphasis role="strong">Security Improvements</emphasis>
+
+          <itemizedlist>
+            <listitem>
+
+                Improve server response in error situations (b2e833ab)
+
+            </listitem>
+            <listitem>
+
+                Harden page contract validation (c92794b8, 22c992f2,
+                655eea7b, 619b2580, c403e313, 189442f8, 0a4c5d1d)
+
+            </listitem>
+            <listitem>
+
+                Increase permission checking (6ddf512d)
+
+            </listitem>
+          </itemizedlist>
+        </listitem>
+        <listitem>
+
+            <emphasis role="strong">Code Refactoring</emphasis>
+
+          <itemizedlist>
+            <listitem>
+
+                Pass properties in adp consistently with @….;literal@
+                best practice (dc2b6f8f, 44d3483e)
+
+            </listitem>
+            <listitem>
+
+                Replace deprecated
+                <literal>template::util::is_true</literal> with inline
+                string idiom (88c779b5)
+
+            </listitem>
+            <listitem>
+
+                Replace handcrafted HTML icons with new adp:icon adp tag
+                (1b6adbcb, 0cf9dfe4)
+
+            </listitem>
+          </itemizedlist>
+        </listitem>
+        <listitem>
+
+            <emphasis role="strong">Miscellaneous</emphasis>
+
+          <itemizedlist>
+            <listitem>
+
+                Cleanup and formatting changes (various commits)
+
+            </listitem>
+            <listitem>
+
+                Increase test suite of functionalities and cover 100% of
+                public api (various commits)
+
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </itemizedlist>
+  </sect4>
+  <sect4 xml:id="deprecations-3">
+      <title>Deprecations</title>
+      <itemizedlist>
+        <listitem>
+
+            <literal>forum::new_questions_allowed_p</literal> -&gt;
+            Trivial shotrhand to forum::get (5e7c3e01)
+
+        </listitem>
+        <listitem>
+
+            <literal>forum::new_questions_allow</literal> and
+            <literal>forum::new_questions_deny</literal> -&gt; Trivial
+            shorthands to forum::edit
+
+        </listitem>
+        <listitem>
+
+            <literal>forum::message::get_attachments</literal> -&gt;
+            Unused and repleaceable by other API
+
+        </listitem>
+      </itemizedlist>
+  </sect4>
+  </sect3>
+  <sect3 xml:id="changes-in-package-general-comments">
+    <title>Changes in package "general-comments"</title>
+  <sect4 xml:id="bug-fixes-6">
+      <title>Bug Fixes</title>
+      <itemizedlist>
+        <listitem>
+
+            Fixes for Oracle compatibility (e6fdab8b)
+
+        </listitem>
+      </itemizedlist>
+  </sect4>
+  <sect4 xml:id="reforms-6">
+      <title>Reforms</title>
+      <itemizedlist>
+        <listitem>
+
+            Reimplement add/edit UI to use ad_form and reduce
+            duplication (0842ac32)
+
+        </listitem>
+      </itemizedlist>
+  </sect4>
+  <sect4 xml:id="improvements-9">
+      <title>Improvements</title>
+      <itemizedlist>
+        <listitem>
+
+            <emphasis role="strong">Security Improvements</emphasis>
+
+          <itemizedlist>
+            <listitem>
+
+                Harden page contract validation (a17a883b, 438b62a5,
+                150c40c4, c08961bd, 993e67b1, 026075fc, b041c11b,
+                b6e063dc, dc08e85c, c34e943b)
+
+            </listitem>
+          </itemizedlist>
+        </listitem>
+        <listitem>
+
+            <emphasis role="strong">Code Refactoring</emphasis>
+
+          <itemizedlist>
+            <listitem>
+
+                Replace deprecated <literal>export_ns_set_vars</literal>
+                with alternative idioms (4892cc8d)
+
+            </listitem>
+            <listitem>
+
+                Replace deprecated <literal>ad_convert_to_html</literal>
+                with <literal>ad_html_text_convert</literal> (e48e5624)
+
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </itemizedlist>
+  </sect4>
+  </sect3>
+  <sect3 xml:id="changes-in-package-proctoring-support">
+    <title>Changes in package "proctoring-support"</title>
+  <sect4 xml:id="new-features-4">
+      <title>New Features</title>
+      <itemizedlist>
+        <listitem>
+
+            <emphasis role="strong">Support for mock exams</emphasis>
+            (commit 114d489e): introduce parameter record_p in the main
+            proctoring include allowing to turn off artifacts
+            collection. Useful FOR mock exams.
+
+        </listitem>
+        <listitem>
+
+            <emphasis role="strong">Artifacts data model</emphasis>
+            (commit 9acb6bc8, f9206d9e): proctoring artifacts are now
+            stored in actual database tables and not only on the
+            filesystem.
+
+        </listitem>
+        <listitem>
+
+            <emphasis role="strong">Test pages</emphasis> (commit
+            30ea5f4b): the default proctoring installation provides a
+            fully-functional test environment of the admin and regular
+            user functionalities.
+
+        </listitem>
+        <listitem>
+
+            <emphasis role="strong">Push updates for new
+            artifacts</emphasis> (commit 337d8cb6): the proctoring
+            display UI now uses websockets to receive push updates from
+            the server when new artifacts are available.
+
+        </listitem>
+        <listitem>
+
+            <emphasis role="strong">Artifacts review UI</emphasis>
+            (commit 99cdda4a and various others): the proctoring display
+            UI now enables admin users to review proctoring artifacts
+            via comments or flagging.
+
+        </listitem>
+        <listitem>
+
+            <emphasis role="strong">Red border</emphasis> (commit
+            d20cb434): allow one to display an additional border around
+            the proctored window. Useful to increase the visibility of
+            the proctored session in a classroom.
+
+        </listitem>
+      </itemizedlist>
+  </sect4>
+  <sect4 xml:id="reforms-7">
+      <title>Reforms</title>
+      <itemizedlist>
+        <listitem>
+
+            Proctoring enforcing: captive-portal the proctoring session
+            using a callback mechanism, rather than via includes in the
+            master template (commit 9acb6bc8).
+
+        </listitem>
+        <listitem>
+
+            Stop the proctoring session from the client side when no
+            artifacts are sent for too long (commit 0b87b9e0).
+
+        </listitem>
+      </itemizedlist>
+  </sect4>
+  <sect4 xml:id="bug-fixes-7">
+      <title>Bug Fixes</title>
+      <itemizedlist>
+        <listitem>
+
+            Be more robust in case of client-side error conditions
+            (commit 64d4dde9, 2c7ff02a, 7dc4239a)
+
+        </listitem>
+        <listitem>
+
+            Use PiP to circumvent browser powersaving that would shut
+            down MediaStreams when a browser is out of focus. (commit
+            0b87b9e0, c0d97c91)
+
+        </listitem>
+        <listitem>
+
+            Relax enforcing of duplicated images for proctored desktops
+            (commit c72ddbb3)
+
+        </listitem>
+      </itemizedlist>
+  </sect4>
+  <sect4 xml:id="improvements-10">
+      <title>Improvements</title>
+      <itemizedlist>
+        <listitem>
+
+            <emphasis role="strong">Code Refactoring</emphasis>
+
+          <itemizedlist>
+            <listitem>
+
+                Replace deprecated api (various commits)
+
+            </listitem>
+            <listitem>
+
+                Modernize javascript idioms (various commits)
+
+            </listitem>
+            <listitem>
+
+                Maintain an adequate look and feel using both Bootstrap5
+                and Bootstrap3 (70a0f52c, f07dfc06, e913ee2b, 54d4f3cc
+                and others)
+
+            </listitem>
+            <listitem>
+
+                Drop custom implementation of <quote>lazy
+                loading</quote> for the proctoring display UI and rely
+                on modern native browser features instead (commit
+                90d2404c)
+
+            </listitem>
+          </itemizedlist>
+        </listitem>
+        <listitem>
+
+            <emphasis role="strong">Usability</emphasis>
+
+          <itemizedlist>
+            <listitem>
+
+                Improve usability of the proctoring display UI on mobile
+                and when using a keyboard (various commits)
+
+            </listitem>
+          </itemizedlist>
+        </listitem>
+        <listitem>
+
+            <emphasis role="strong">Miscellaneous</emphasis>
+
+          <itemizedlist>
+            <listitem>
+
+                Improve integration with master template (9acb6bc8,
+                44729649)
+
+            </listitem>
+            <listitem>
+
+                Streamline idioms (various commits)
+
+            </listitem>
+            <listitem>
+
+                Improved documentation
+
+            </listitem>
+            <listitem>
+
+                Increase test suite of functionalities and cover 100% of
+                public api (various commits)
+
+            </listitem>
+            <listitem>
+
+                Extend package localization. Currently English, German,
+                Italian and Spanish are supported.
+
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </itemizedlist>
+  </sect4>
+  </sect3>
+  <sect3 xml:id="changes-in-package-xotcl-core">
+    <title>Changes in package "xotcl-core"</title>
+  <sect4 xml:id="new-features-5">
+      <title>New Features</title>
+      <itemizedlist>
+        <listitem>
+
+            Added value checker <literal>signed</literal> (commit
+            1ce581a)
+
+        </listitem>
+        <listitem>
+
+            Added value checker <literal>oneof</literal> (commits
+            58bc938, 2dbadad, 65575bf, 58bc938).
+
+        </listitem>
+        <listitem>
+
+            Added value checker <literal>cr_item_of_package</literal>
+            (commit 6fc46f3)
+
+        </listitem>
+        <listitem>
+
+            Provided consistent sorting for Database and Tcl sorts
+            (commit 6effe16)
+
+        </listitem>
+      </itemizedlist>
+  </sect4>
+  <sect4 xml:id="bug-fixes-8">
+      <title>Bug Fixes</title>
+      <itemizedlist>
+        <listitem>
+
+            Avoiding double quoting (commit 08386db).
+
+        </listitem>
+        <listitem>
+
+            Fixed potential memory leaks
+
+          <itemizedlist>
+            <listitem>
+
+                Free explicitly answer <literal>ns_set</literal> in
+                database <quote>sets</quote> method (commit 158a831)
+
+            </listitem>
+            <listitem>
+
+                Free <literal>ns_set</literal> storage more eager (when
+                e.g.&nbsp;large queries are used in longer loops) (commit
+                3d6b05a)
+
+            </listitem>
+          </itemizedlist>
+        </listitem>
+        <listitem>
+
+            Compatibility Fixes for Oracle 19c (commit de4a9a5, 88f8521,
+            1408e2b)
+
+        </listitem>
+      </itemizedlist>
+  </sect4>
+  <sect4 xml:id="improvements-11">
+      <title>Improvements</title>
+      <itemizedlist>
+        <listitem>
+
+            Security improvements:
+
+          <itemizedlist>
+            <listitem>
+
+                Support for <literal>form_parameter</literal> specs with
+                value checkers added (commit 64bb847).
+
+            </listitem>
+            <listitem>
+
+                harden page contracts (commit b0c282d)
+
+            </listitem>
+          </itemizedlist>
+        </listitem>
+        <listitem>
+
+            Performance improvements:
+
+          <itemizedlist>
+            <listitem>
+
+                Improved prepared-statement handling (commit fac52ce)
+
+            </listitem>
+            <listitem>
+
+                Various other changes such as e.g.&nbsp;d22121d
+
+            </listitem>
+          </itemizedlist>
+        </listitem>
+        <listitem>
+
+            Unified package parameter handing between xo* and oacs-core
+            (commit 66ee181)
+
+        </listitem>
+        <listitem>
+
+            Reduced verbosity of logging for streamlined output (commit
+            0553811).
+
+        </listitem>
+        <listitem>
+
+            Stop sending messages to other (potentially stopped) thread
+            to avoid log messages (commit 0aa8c98).
+
+        </listitem>
+      </itemizedlist>
+  </sect4>
+  </sect3>
+  <sect3 xml:id="changes-in-package-xowiki">
+    <title>Changes in package "xowiki"</title>
+  <sect4 xml:id="new-features-6">
+      <title>New Features</title>
+      <itemizedlist>
+        <listitem>
+
+            GUI improvements
+
+          <itemizedlist>
+            <listitem>
+
+                New abstraction xowiki::CSS to provide portability
+                between different frameworks and version of frameworks
+                (commit 99e3331c)
+
+            </listitem>
+            <listitem>
+
+                Added <literal>xowiki::bootstrap::card</literal> for
+                increased configurability (commits 97685004, 4e09efa9,
+                136edcc5).
+
+            </listitem>
+            <listitem>
+
+                Use adp:icon for better cross framework compatibility
+                (commits 562e9e48, 19407b34, 71606059)
+
+            </listitem>
+            <listitem>
+
+                Support for Bootstrap5 (commits 97685004, ddae6214,
+                701612b7, a073060e, de6f0f48, 694c61b5, 48efaa9e,
+                57a7e91a, b71aacc0, 07be172b and several more)
+
+            </listitem>
+            <listitem>
+
+                Added native CSS classes for Tree renderer and made
+                TreeRenderer more configurable, reduce YUI (commit
+                83eafdcf).
+
+            </listitem>
+            <listitem>
+
+                Beautify display of CSS tree renderer for deeper trees
+                (commit ab624faa).
+
+            </listitem>
+          </itemizedlist>
+        </listitem>
+        <listitem>
+
+            Chat improvements
+
+          <itemizedlist>
+            <listitem>
+
+                Reduce server-side guessing of browser capabilities and
+                minimize mode-specific JavaScript code (commit
+                8d98e9bf).
+
+            </listitem>
+            <listitem>
+
+                Support for anonymous users in chat class, allowing
+                mixed participation of authenticated and
+                non-authenticated users (commit d929ec45).
+
+            </listitem>
+          </itemizedlist>
+        </listitem>
+        <listitem>
+
+            Drag and Drop improvements
+
+          <itemizedlist>
+            <listitem>
+
+                Support for drag &amp; drop for reordering items for
+                mobile devices (commit 4489907b).
+
+            </listitem>
+            <listitem>
+
+                Extended functionality of the DropZone widget (commit
+                d65bd411).
+
+            </listitem>
+          </itemizedlist>
+        </listitem>
+        <listitem>
+
+            Added support for archiving of items (commit 4d17aa0e).
+
+        </listitem>
+      </itemizedlist>
+  </sect4>
+  <sect4 xml:id="reforms-8">
+      <title>Reforms</title>
+      <itemizedlist>
+        <listitem>
+
+            Generalized handling of error pages in disconnected stage
+            (commit b3b677d4).
+
+        </listitem>
+      </itemizedlist>
+  </sect4>
+  <sect4 xml:id="configuration-changes-1">
+      <title>Configuration Changes</title>
+      <itemizedlist>
+        <listitem>
+
+            Update CDN sources where necessary (commit d4d0d85e).
+
+        </listitem>
+        <listitem>
+
+            Updates of external libraries and CDN providers (commits
+            d4d0d85e, f71db88b, 2986f329, f22f9b0b, e3b9f244, c63f61c9)
+
+        </listitem>
+        <listitem>
+
+            Improved Parameterization *Ability to parameterize
+            <literal>www-delete</literal> and
+            <literal>www-toggle-publish-status</literal> with
+            <literal>return_url</literal> for workflow-specific behavior
+            (commit abba6cd1).
+
+          <itemizedlist>
+            <listitem>
+
+                New package parameter:
+                <literal>PackageInitParameter</literal> for
+                instance-specific package behavior (commit cc5b9959).
+
+            </listitem>
+            <listitem>
+
+                Added support for passing parameter specs of the form
+                <literal>parameter_name:value_constraint</literal> to
+                <literal>xowiki::Package.get_parameter</literal> (commit
+                9df95cb3).
+
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </itemizedlist>
+  </sect4>
+  <sect4 xml:id="bug-fixes-9">
+      <title>Bug Fixes:</title>
+      <itemizedlist>
+        <listitem>
+
+            Test reproducing a bug in
+            <literal>acs::test::xpath::get_form_values</literal> proc
+            (commit f495cac3).
+
+        </listitem>
+        <listitem>
+
+            Fixed test case returned violation on plain instance (commit
+            78ec506d).
+
+        </listitem>
+        <listitem>
+
+            Fixed xowiki
+            <literal>create_form_with_form_instance</literal> automated
+            test (commit a9a37dcc).
+
+        </listitem>
+        <listitem>
+
+            Handle more gracefully the case of missing files on the
+            filesystem (commit 72c1aeeb).
+
+        </listitem>
+      </itemizedlist>
+  </sect4>
+  <sect4 xml:id="improvements-12">
+      <title>Improvements:</title>
+      <itemizedlist>
+        <listitem>
+
+            Improved autosave support (commit b373091c).
+
+        </listitem>
+        <listitem>
+
+            Added support to check the file types of uploaded content
+            (commit 80756c4b).
+
+        </listitem>
+        <listitem>
+
+            Improved portability
+
+          <itemizedlist>
+            <listitem>
+
+                Added missing Oracle support for Oracle 19c (commit
+                777eadbc).
+
+            </listitem>
+            <listitem>
+
+                Fix for Oracle 19c issues (commit 777eadbc).
+
+            </listitem>
+          </itemizedlist>
+        </listitem>
+        <listitem>
+
+            Improved error handling
+
+          <itemizedlist>
+            <listitem>
+
+                Improved handling of pages with
+                <literal>parent_id</literal> == 0 (commit 7637ff52).
+
+            </listitem>
+            <listitem>
+
+                Improved error message clarity and handling (multiple
+                commits).
+
+            </listitem>
+            <listitem>
+
+                Improved warning message (commit 80c69179).
+
+            </listitem>
+            <listitem>
+
+                Various small improvements in handling form pages and
+                error messages (commit 1c11ce20).
+
+            </listitem>
+          </itemizedlist>
+        </listitem>
+        <listitem>
+
+            Various API improvements:
+
+          <itemizedlist>
+            <listitem>
+
+                Updated interface for
+                <literal>Page.create_form_page_instance</literal>
+                (commit c0ee21d6).
+
+            </listitem>
+          </itemizedlist>
+        </listitem>
+        <listitem>
+
+            Security improvements:
+
+          <itemizedlist>
+            <listitem>
+
+                Enhanced form and query variable validation (commit
+                d405042d).
+
+            </listitem>
+            <listitem>
+
+                Improved safety of SQL queries (commit be15be72).
+
+            </listitem>
+          </itemizedlist>
+        </listitem>
+        <listitem>
+
+            Code Maintenance:
+
+          <itemizedlist>
+            <listitem>
+
+                Cleanup and modernization of code, removal of obsolete
+                and commented code (multiple commits).
+
+            </listitem>
+            <listitem>
+
+                Extended regression test (commit 8daa654b).
+
+            </listitem>
+            <listitem>
+
+                Improved comments (commit 9e9a99f5).
+
+            </listitem>
+            <listitem>
+
+                Improved documentation and cleanup (commit 27609be3).
+
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </itemizedlist>
+  </sect4>
+  <sect4 xml:id="deprecations-4">
+      <title>Deprecations:</title>
+      <itemizedlist>
+        <listitem>
+
+            Cleanup of deprecated API references and methods (commit
+            b0a9b875, commit fc1e48d1, commit 2c490318).
+
+        </listitem>
+        <listitem>
+
+            Logging of deprecated usages unified under
+            <literal>ad_log_deprecated</literal> (commit 56d4b9d5).
+
+        </listitem>
+        <listitem>
+
+            Removal of features and scripts no longer in use (commit
+            726cc0dd, commit c8100365).
+
+        </listitem>
+        <listitem>
+
+            Added <quote>@see</quote> to deprecated proc (commit
+            bb2fa23a).
+
+        </listitem>
+        <listitem>
+
+            Got rid of legacy message key
+            <literal>menu-Clipboard-Copy</literal> (commit ba901036).
+
+        </listitem>
+      </itemizedlist>
+  </sect4>
+  </sect3>
+  <sect3 xml:id="changes-in-package-xowf">
+    <title>Changes in package "xowf"</title>
+  <sect4 xml:id="new-features-7">
+      <title>New Features</title>
+      <itemizedlist>
+        <listitem>
+
+            Improved Support E-Learning applications (mostly inclass
+            exam)
+
+          <itemizedlist>
+            <listitem>
+
+                Support for restricting access to exams based on IP
+                addresses (7fc8473).
+
+            </listitem>
+            <listitem>
+
+                Drag and Drop interface for feedback files (fd68c22).
+
+            </listitem>
+            <listitem>
+
+                Support for pool questions in the test-item family (No
+                specific commit hash related to this feature was found
+                in the provided content).
+
+            </listitem>
+            <listitem>
+
+                Improved support for viewing and downloading exam
+                results (250d5a4).
+
+            </listitem>
+            <listitem>
+
+                Added Support for viewing/altering all configuration
+                options for inclass exams via modal dialogs (39d5063).
+
+            </listitem>
+            <listitem>
+
+                Added Parameter to allow/disallow page translation and
+                spell checker for exams (commits 97e383e, 20a2d49).
+
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </itemizedlist>
+  </sect4>
+  <sect4 xml:id="configuration-changes-2">
+      <title>Configuration Changes</title>
+      <itemizedlist>
+        <listitem>
+
+            Turn off production mode by default (363c839).
+
+        </listitem>
+      </itemizedlist>
+  </sect4>
+  <sect4 xml:id="bug-fixes-10">
+      <title>Bug Fixes</title>
+      <itemizedlist>
+        <listitem>
+
+            Fixed achieved points in exam statistics per question
+            (f05631f).
+
+        </listitem>
+        <listitem>
+
+            Fix for potential loss of statistics for auto-graded exams
+            (fc03d5f).
+
+        </listitem>
+      </itemizedlist>
+  </sect4>
+  <sect4 xml:id="improvements-13">
+      <title>Improvements</title>
+      <itemizedlist>
+        <listitem>
+
+            Improved Maintainability: Added Site-wide admin pages for
+            xowf (cbb3bc8).
+
+        </listitem>
+        <listitem>
+
+            Improved Performance: Added support for shared workflow
+            definitions (2628b6f).
+
+        </listitem>
+        <listitem>
+
+            Improved GUI:
+
+          <itemizedlist>
+            <listitem>
+
+                Improved support for Bootstrap5 (e.g.&nbsp;commits 8623ebd
+                and a5e1f6c).
+
+            </listitem>
+            <listitem>
+
+                Enhanced usability and styling for inclass exams and
+                workflows (3d33b2a).
+
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </itemizedlist>
+  </sect4>
+  </sect3>
+  <sect3 xml:id="changes-in-package-xotcl-request-monitor">
+    <title>Changes in package
+    "xotcl-request-monitor"</title>
+  <sect4 xml:id="new-features-8">
+      <title>New Features</title>
+      <itemizedlist>
+        <listitem>
+
+            Ability to order by time values in long-calls listing
+            (Commit 031ee35).
+
+        </listitem>
+        <listitem>
+
+            Support for ordering long-calls by start time or by end time
+            in long-calls listing (Commit 7c9ffe9).
+
+        </listitem>
+      </itemizedlist>
+  </sect4>
+  <sect4 xml:id="configuration-changes-3">
+      <title>Configuration Changes</title>
+      <itemizedlist>
+        <listitem>
+
+            Added configurability to watchdog with parameters like
+            <quote>-maxWaiting</quote> and <quote>-maxRunning</quote>
+            (Commit 60ba4e3).
+
+        </listitem>
+      </itemizedlist>
+  </sect4>
+  <sect4 xml:id="improvements-14">
+      <title>Improvements</title>
+      <itemizedlist>
+        <listitem>
+
+            Security Improvements
+
+          <itemizedlist>
+            <listitem>
+
+                Protect query-parameters against exceptions with empty
+                values (Commit 176a32b).
+
+            </listitem>
+            <listitem>
+
+                Added safety measures for potential DOS attacks and
+                improved request blocking (Commit ef39b79).
+
+            </listitem>
+            <listitem>
+
+                Improved strictness of tests (Commit ceb4a88).
+
+            </listitem>
+            <listitem>
+
+                Improved description of package parameters (Commit
+                ff8c44d)
+
+            </listitem>
+            <listitem>
+
+                Enhanced the initial population of request-monitor
+                counters for robustness (Commit 622d8f2).
+
+            </listitem>
+            <listitem>
+
+                Switch from <literal>xo::db::sql</literal> to
+                <literal>acs::dc</literal> interface (Commit a2d4688).
+
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </itemizedlist>
+  </sect4>
+  </sect3>
+</sect2>
+</sect2>

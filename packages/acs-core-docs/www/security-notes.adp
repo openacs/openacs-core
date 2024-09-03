@@ -1,7 +1,11 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Security Notes}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Security Notes}</property>
 <property name="doc(title)">Security Notes</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="security-design" leftLabel="Prev"
 			title="Chapter 15. Kernel
@@ -9,14 +13,17 @@ Documentation"
 			rightLink="rp-requirements" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="security-notes" id="security-notes"></a>Security Notes</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">By Richard Li</span></p><span style="color: red">&lt;/authorblurb&gt;</span><p>The security system was designed for security. Thus, decisions
+<a name="security-notes" id="security-notes"></a>Security Notes</h2></div></div></div><div class="authorblurb">
+<p>By Richard Li</p>
+OpenACS docs are written by the named authors, and may be edited by
+OpenACS documentation staff.</div><p>The security system was designed for security. Thus, decisions
 requiring trade-offs between ease-of-use and security tend to
 result in a system that may not be as easy to use but is more
 secure.</p><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="security-notes-https-sessions" id="security-notes-https-sessions"></a>HTTPS and the sessions
 system</h3></div></div></div><p>If a user switches to HTTPS after logging into the system via
-HTTP, the user must obtain a secure token. To insure security, the
+HTTP, the user must obtain a secure token. To ensure security, the
 <span class="emphasis"><em>only way</em></span> to obtain a secure
 token in the security system is to authenticate yourself via
 password over an HTTPS connection. Thus, users may need to log on
@@ -65,8 +72,8 @@ ad_proc -private ad_login_page {} {
 </pre><p>The set of string match expressions in the procedure above
 should be extended appropriately for other registration pages. This
 procedure does not use <code class="computeroutput">ad_parameter</code> or regular expressions for
-performance reasons, as it is called by the request processor.</p><p><span class="cvstag">($&zwnj;Id: security-notes.xml,v 1.7 2014/10/27
-16:39:32 victorg Exp $)</span></p>
+performance reasons, as it is called by the request processor.</p><div class="cvstag">($&zwnj;Id: security-notes.xml,v 1.7.4.1 2021/09/02
+16:56:03 gustafn Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

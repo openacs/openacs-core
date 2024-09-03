@@ -3,13 +3,13 @@ ad_page_contract {
     @creation-date September 01, 2001
     @cvs-id $Id$
 } {
-    q:trim
+    q:printable,trim
     {t:trim ""}
     {offset:naturalnum,notnull 0}
     {num:range(0|200) 0}
     {dfs:word,trim,notnull ""}
     {dts:word,trim,notnull ""}
-    {search_package_id:naturalnum ""}
+    {search_package_id:naturalnum,object_id ""}
     {scope ""}
     {object_type:token ""}
 } -validate {
@@ -34,7 +34,7 @@ ad_page_contract {
             ad_complain "dts: invalid interval"
         }
     }
-    
+
     csrf { csrf::validate }
 }
 
@@ -54,10 +54,11 @@ set user_id [ad_conn user_id]
 set driver [parameter::get -package_id $package_id -parameter FtsEngineDriver]
 if {[callback::impl_exists -impl $driver -callback search::driver_info]} {
     array set info [lindex [callback -impl $driver search::driver_info] 0]
-#    array set info [list package_key intermedia-driver version 1 automatic_and_queries_p 1  stopwords_p 1]
+    # array set info [list package_key intermedia-driver version 1 automatic_and_queries_p 1  stopwords_p 1]
 } else {
     array set info [acs_sc::invoke -contract FtsEngineDriver -operation info -call_args [list] -impl $driver]
 }
+
 
 if { [array get info] eq "" } {
     ns_return 200 text/html [_ search.lt_FtsEngineDriver_not_a]
@@ -72,7 +73,7 @@ if { $num <= 0} {
 
 
 #
-# Work out the date restriction 
+# Work out the date restriction
 #
 set df ""
 set dt ""
@@ -92,13 +93,15 @@ if { $dts ne "" } {
 set urlencoded_query [ad_urlencode $q]
 
 set params [list $q $offset $limit $user_id $df]
-if {$search_package_id eq "" && [parameter::get -package_id $package_id -parameter SubsiteSearchP -default 1]
-    && [subsite::main_site_id] != [ad_conn subsite_id]} {
+if {$search_package_id eq ""
+    && [parameter::get -package_id $package_id -parameter SubsiteSearchP -default 1]
+    && [subsite::main_site_id] != [ad_conn subsite_id]
+} {
     # We are in a subsite and SubsiteSearchP is true
     set subsite_packages [concat [ad_conn subsite_id] [subsite::util::packages -node_id [ad_conn node_id]]]
     lappend params $subsite_packages
     set search_package_id $subsite_packages
-} elseif {$search_package_id ne ""} { 
+} elseif {$search_package_id ne ""} {
   lappend params $search_package_id
 }
 
@@ -168,7 +171,7 @@ if { $num > 0 } { append url_advanced_search "&num=$num" }
 set query $q
 set nquery [llength [split $q]]
 set stopwords $result(stopwords)
-set nstopwords [llength $result(stopwords)] 
+set nstopwords [llength $result(stopwords)]
 
 template::multirow create searchresult title_summary txt_summary url_one object_id
 

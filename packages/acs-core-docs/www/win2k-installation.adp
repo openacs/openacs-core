@@ -1,7 +1,11 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {OpenACS Installation Guide for Windows}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {OpenACS Installation Guide for Windows}</property>
 <property name="doc(title)">OpenACS Installation Guide for Windows</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="openacs" leftLabel="Prev"
 			title="Chapter 3. Complete
@@ -16,8 +20,8 @@ Maurizio Martignano and is available from <a class="ulink" href="http://www.spaz
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
 			leftLink="openacs" leftLabel="Prev" leftTitle="Install OpenACS 5.9.0"
-			rightLink="mac-installation" rightLabel="Next" rightTitle="OpenACS Installation Guide for Mac OS
-X"
+			rightLink="mac-installation" rightLabel="Next" rightTitle="OpenACS Installation Guide for
+macOS"
 			homeLink="index" homeLabel="Home" 
 			upLink="complete-install" upLabel="Up"> 
 		    

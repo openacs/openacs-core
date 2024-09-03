@@ -1,7 +1,11 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Writing OpenACS Application Pages}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Writing OpenACS Application Pages}</property>
 <property name="doc(title)">Writing OpenACS Application Pages</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="permissions" leftLabel="Prev"
 			title="Chapter 11. Development
@@ -9,8 +13,10 @@ Reference"
 			rightLink="parties" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="subsites" id="subsites"></a>Writing OpenACS Application Pages</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">By Rafael H. Schloming and Pete
-Su</span></p><span style="color: red">&lt;/authorblurb&gt;</span><div class="sect2">
+<a name="subsites" id="subsites"></a>Writing OpenACS Application Pages</h2></div></div></div><div class="authorblurb">
+<p>By Rafael H. Schloming and Pete Su</p>
+OpenACS docs are written by the named authors, and may be edited by
+OpenACS documentation staff.</div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="subsites-overview" id="subsites-overview"></a>Overview</h3></div></div></div><p>In this document, we&#39;ll examine the user interface pages of
 the Notes application in more detail, covering two separate aspects
@@ -35,7 +41,7 @@ how a given URL is translated into a physical file to serve using
 the site map. We&#39;ll repeat this description here, assuming that
 you have mounted an instance of Notes at the URL <code class="computeroutput">/notes</code> as we did in the <a class="link" href="packages" title="What a Package Looks Like">packages-example</a>:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>AOLserver receives your request for the URL <code class="computeroutput">/notes/somepage</code>.</p></li><li class="listitem"><p>This URL is passed to the request processor.</p></li><li class="listitem"><p>The RP looks up the URL in the site map, and sees that the
-object mounted at that location is an instance of the <code class="computeroutput">notes</code> application.</p></li><li class="listitem"><p>The RP asks the package manager where in the file system the
+object mounted at that location is an instance of the <code class="computeroutput">notes</code> application.</p></li><li class="listitem"><p>The RP asks the package manager where in the filesystem the
 Notes package lives. In the standard case, this would be
 <code class="computeroutput">ROOT/packages/notes</code>.</p></li><li class="listitem"><p>The RP translates the URL to serve a page relative to the page
 root of the application, which is <code class="computeroutput">ROOT/packages/notes/www/</code>. Therefore, the
@@ -78,7 +84,7 @@ if {[info exists note_id]} {
 
       set context_bar [ad_context_bar "Edit Note"]
 } else {
-      permission::require_permission -object_id $note_id -privilege create
+      permission::require_permission -object_id $package_id -privilege create
 
       set context_bar [ad_context_bar "New Note"]
 }
@@ -240,8 +246,8 @@ how it makes it possible to easily turn Notes into an application
 that appears to provide each user in a system with their own
 private notes database.</p><p>We also saw how to use the templating system&#39;s forms API in
 a simple way, to create forms based pages with minimal duplication
-of code.</p><p><span class="cvstag">($&zwnj;Id: subsites.xml,v 1.10 2017/08/07
-23:47:54 gustafn Exp $)</span></p>
+of code.</p><div class="cvstag">($&zwnj;Id: subsites.xml,v 1.10.2.2 2020/07/02
+08:39:25 gustafn Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

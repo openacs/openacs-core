@@ -8,7 +8,11 @@ ad_library {
 
 aa_register_case \
     -cats {api smoke} \
-    -procs {ad_html_to_text} \
+    -procs {
+        ad_html_to_text
+
+        ad_parse_html_attributes_upvar
+    } \
     ad_html_to_text_bold {
 
     Test if it converts "b" tags correctly.
@@ -21,7 +25,11 @@ aa_register_case \
 
 aa_register_case \
     -cats {api smoke} \
-    -procs {ad_html_to_text} \
+    -procs {
+        ad_html_to_text
+
+        ad_parse_html_attributes_upvar
+    } \
     ad_html_to_text_anchor {
 
     Test if it converts "a" tags correctly.
@@ -42,14 +50,18 @@ aa_register_case \
 
 aa_register_case \
     -cats {api smoke} \
-    -procs {ad_html_to_text} \
+    -procs {
+        ad_html_to_text
+
+        ad_parse_html_attributes_upvar
+    } \
     ad_html_to_text_image {
 
     Test if it converts "img" tags correctly.
 
 } {
     set html {
-        This is a text with an regular image <img src="/images/foo.png">,
+        This is a text with a regular image <img src="/images/foo.png">,
         image with alt text <img src="/images/bar.png" alt="flower">,
         and an embedded image <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEU..."
         alt='embedded'>.
@@ -88,21 +100,70 @@ following text
         # make sure the desired text is in there and _before_ the
         # footnotes
 
-        aa_true "contains link" [regexp {linktext.*\[1\]} $result]
-        aa_true "contains following text" [regexp {following text.*\[1\]} $result]
+        aa_false "contains link" [regexp {linktext.*\[1\]} $result]
+        aa_false "contains following text" [regexp {following text.*\[1\]} $result]
     }
 }
 
 
 aa_register_case \
     -cats {api smoke} \
-    -procs {ad_html_security_check} \
+    -procs {
+        ad_html_security_check
+
+        ad_parse_html_attributes_upvar
+    } \
     ad_html_security_check_href_allowed {
-    tests is href attribute is allowed of A tags
+        Tests is href attribute is allowed
 } {
-    set html "<a href=\"http://www.example/com\">An Link</a>"
-    aa_equals "href is allowed for A tags" [ad_html_security_check $html] ""
+    set html "<a href='http://www.example/com'>An Link</a>"
+    aa_equals "href with http:// is allowed for 'a' tags" [ad_html_security_check $html] ""
+    set html "<a href='https://www.example/com'>An Link</a>"
+    aa_equals "href with https:// is allowed for 'a' tags" [ad_html_security_check $html] ""
 }
+
+aa_register_case \
+    -cats {api smoke} \
+    -procs {
+        ad_html_security_check
+
+        ad_parse_html_attributes_upvar
+    } \
+    ad_html_security_check_forbidden_protolcols {
+        Tests is href contains allowed protocols
+} {
+    set html {<a href='foo://www.example/com'>An Link</a>}
+    aa_true "protocol 'foo' is not allowed" {[ad_html_security_check $html] ne ""}
+    set html {<a href='javascript:alert("hi")'>An Link</a>}
+    aa_true "protocol 'javascript' is not allowed" {[ad_html_security_check $html] ne ""}
+    set html {<a href='javascript:alert(&quot;hi&quot;)'>An Link</a>}
+    aa_true "protocol 'javascript' is not allowed" {[ad_html_security_check $html] ne ""}
+    set html {<a href='data:alert("hi")'>An Link</a>}
+    aa_true "protocol 'data' is not allowed" {[ad_html_security_check $html] ne ""}
+    set html {<a href="blob:https://example.com/')">An Link</a>}
+    aa_true "protocol 'blob' is not allowed" {[ad_html_security_check $html] ne ""}
+    set html "<a href='blob:https://example.com/&quot;)'>An Link</a>"
+    aa_true "protocol 'blob' is not allowed" {[ad_html_security_check $html] ne ""}
+}
+
+aa_register_case \
+    -cats {api smoke} \
+    -procs {
+        ad_html_security_check
+    } \
+    ad_html_security_check_forbidden_tags {
+        tests is text contains allowed tags
+} {
+    set html "hello <a href='/foo'>An Link</a> world."
+    aa_true "Tag a is not allowed - empty tag list" {[ad_html_security_check -allowed_tags "" $html] ne {}}
+
+    set html "hello <a href='/foo'>An Link</a> world."
+    aa_true "Tag a is not allowed - nonempty tag list" {[ad_html_security_check -allowed_tags "b h1" $html] ne {}}
+
+    set html "hello <a href='/foo'>An Link</a> world."
+    aa_equals "Tag 'a' is allowed" [ad_html_security_check -allowed_tags "a b h1" $html] ""
+}
+
 
 aa_register_case \
     -cats {api smoke} \
@@ -112,15 +173,39 @@ aa_register_case \
 } {
     aa_equals "" [util_close_html_tags "<b>Foobar"] "<b>Foobar</b>"
     aa_equals "" [util_close_html_tags "<b>Foobar</b>"] "<b>Foobar</b>"
-    aa_equals "" [util_close_html_tags "<b>Foobar</b> is <i>a very long word</i>"] "<b>Foobar</b> is <i>a very long word</i>"
-    aa_equals "" [util_close_html_tags "<b>Foobar</b> is <i>a very long word</i>" 15] "<b>Foobar</b> is <i>a</i>"
-    aa_equals "" [util_close_html_tags "<b>Foobar</b> is <i>a very long word</i>" 0 20 "..."] "<b>Foobar</b> is <i>a very</i>..."
+    aa_equals "" [util_close_html_tags "<b>Foobar</b> is <i>a very long word</i>"] \
+        "<b>Foobar</b> is <i>a very long word</i>"
+    aa_equals "" [util_close_html_tags "<b>Foobar</b> is <i>a very long word</i>" 15] \
+        "<b>Foobar</b> is <i>a</i>"
+    aa_equals "" [util_close_html_tags "<b>Foobar</b> is <i>a very long word</i>" 0 20 "..."] \
+        "<b>Foobar</b> is <i>a very</i>..."
+    set result [util_close_html_tags "<div><b>Foobar</b> 'i' <i>and 'div' not closed"]
+    aa_true [ns_quotehtml $result] {$result eq "<div><b>Foobar</b> 'i' <i>and 'div' not closed</i></div>"}
+
+    #
+    # wrong nesting of tags and unclosed tags
+    #
+    set text {1 <em> 2 <b> 3 <em> 4 </em> 5 <div> 6}
+    set result [util_close_html_tags $text]
+    aa_log "Input: <pre>[ns_quotehtml $text]</pre>"
+    aa_log "Result: <pre>[ns_quotehtml $result]</pre>"
+    if {[::acs::icanuse "ns_parsehtml"]} {
+        aa_true "tags are closed:" {[string range $result end-14 end] eq "</div></b></em>"}
+    }
+
 }
 
 
 aa_register_case \
     -cats {api smoke} \
-    -procs {ad_html_text_convert ad_enhanced_text_to_html} \
+    -procs {
+        ad_html_text_convert
+        ad_enhanced_text_to_html
+
+        ad_html_text_convertible_p
+        ad_enhanced_text_to_plain_text
+        ad_parse_html_attributes_upvar
+    } \
     ad_html_text_convert {
     Testing ad_html_text_convert.
 } {
@@ -133,7 +218,8 @@ aa_register_case \
     aa_equals "" [ad_html_text_convert -from "text/enhanced" -to "text/html" -truncate_len 14 -- $string] \
         [ad_enhanced_text_to_html "What?\n<i>Never</i>..."]
 
-    # The string is longer in plaintext, because the "_" symbol to denote italics is counted as well.
+    # The string is longer in plaintext, because the "_" symbol to
+    # denote italics is counted as well.
     aa_equals "" [ad_html_text_convert -from "text/enhanced" -to "text/plain" -truncate_len 15 -- $string] "What?\n_Never..."
 
     #----------------------------------------------------------------------
@@ -201,70 +287,92 @@ aa_register_case \
 
 aa_register_case \
     -cats {api smoke} \
-    -procs {string_truncate} \
-    string_truncate {
+    -procs {ad_string_truncate} \
+    ad_string_truncate {
     Testing string truncation
 } {
-    aa_equals "" [string_truncate -len  5 -ellipsis "" -- "foo"] "foo"
-    aa_equals "" [string_truncate -len  5 -ellipsis "" -- "foobar greble"] "fooba"
-    aa_equals "" [string_truncate -len  6 -ellipsis "" -- "foobar greble"] "foobar"
-    aa_equals "" [string_truncate -len  7 -ellipsis "" -- "foobar greble"] "foobar"
-    aa_equals "" [string_truncate -len  7 -ellipsis "" -- "foobar\tgreble"] "foobar"
-    aa_equals "" [string_truncate -len  7 -ellipsis "" -- "foobar\ngreble"] "foobar"
-    aa_equals "" [string_truncate -len  7 -ellipsis "" -- "foobar\rgreble"] "foobar"
-    aa_equals "" [string_truncate -len  7 -ellipsis "" -- "foobar\fgreble"] "foobar"
-    aa_equals "" [string_truncate -len  8 -ellipsis "" -- "foobar greble"] "foobar"
-    aa_equals "" [string_truncate -len  9 -ellipsis "" -- "foobar greble"] "foobar"
-    aa_equals "" [string_truncate -len 10 -ellipsis "" -- "foobar greble"] "foobar"
-    aa_equals "" [string_truncate -len 11 -ellipsis "" -- "foobar greble"] "foobar"
-    aa_equals "" [string_truncate -len 12 -ellipsis "" -- "foobar greble"] "foobar"
-    aa_equals "" [string_truncate -len 13 -ellipsis "" -- "foobar greble"] "foobar greble"
+    aa_equals "" [ad_string_truncate -len  5 -ellipsis "" -- "foo"] "foo"
+    aa_equals "" [ad_string_truncate -len  5 -ellipsis "" -- "foobar greble"] "fooba"
+    aa_equals "" [ad_string_truncate -len  6 -ellipsis "" -- "foobar greble"] "foobar"
+    aa_equals "" [ad_string_truncate -len  7 -ellipsis "" -- "foobar greble"] "foobar"
+    aa_equals "" [ad_string_truncate -len  7 -ellipsis "" -- "foobar\tgreble"] "foobar"
+    aa_equals "" [ad_string_truncate -len  7 -ellipsis "" -- "foobar\ngreble"] "foobar"
+    aa_equals "" [ad_string_truncate -len  7 -ellipsis "" -- "foobar\rgreble"] "foobar"
+    aa_equals "" [ad_string_truncate -len  7 -ellipsis "" -- "foobar\fgreble"] "foobar"
+    aa_equals "" [ad_string_truncate -len  8 -ellipsis "" -- "foobar greble"] "foobar"
+    aa_equals "" [ad_string_truncate -len  9 -ellipsis "" -- "foobar greble"] "foobar"
+    aa_equals "" [ad_string_truncate -len 10 -ellipsis "" -- "foobar greble"] "foobar"
+    aa_equals "" [ad_string_truncate -len 11 -ellipsis "" -- "foobar greble"] "foobar"
+    aa_equals "" [ad_string_truncate -len 12 -ellipsis "" -- "foobar greble"] "foobar"
+    aa_equals "" [ad_string_truncate -len 13 -ellipsis "" -- "foobar greble"] "foobar greble"
 
-    aa_equals "" [string_truncate -len  5 -ellipsis "..." -- "foo"] "foo"
-    aa_equals "" [string_truncate -len  5 -ellipsis "..." -- "foobar greble"] "fo..."
-    aa_equals "" [string_truncate -len  6 -ellipsis "..." -- "foobar greble"] "foo..."
-    aa_equals "" [string_truncate -len  7 -ellipsis "..." -- "foobar greble"] "foob..."
-    aa_equals "" [string_truncate -len  8 -ellipsis "..." -- "foobar greble"] "fooba..."
-    aa_equals "" [string_truncate -len  9 -ellipsis "..." -- "foobar greble"] "foobar..."
-    aa_equals "" [string_truncate -len 10 -ellipsis "..." -- "foobar greble"] "foobar..."
-    aa_equals "" [string_truncate -len 11 -ellipsis "..." -- "foobar greble"] "foobar..."
-    aa_equals "" [string_truncate -len 12 -ellipsis "..." -- "foobar greble"] "foobar..."
-    aa_equals "" [string_truncate -len 13 -ellipsis "..." -- "foobar greble"] "foobar greble"
+    aa_equals "" [ad_string_truncate -len  5 -ellipsis "..." -- "foo"] "foo"
+    aa_equals "" [ad_string_truncate -len  5 -ellipsis "..." -- "foobar greble"] "fo..."
+    aa_equals "" [ad_string_truncate -len  6 -ellipsis "..." -- "foobar greble"] "foo..."
+    aa_equals "" [ad_string_truncate -len  7 -ellipsis "..." -- "foobar greble"] "foob..."
+    aa_equals "" [ad_string_truncate -len  8 -ellipsis "..." -- "foobar greble"] "fooba..."
+    aa_equals "" [ad_string_truncate -len  9 -ellipsis "..." -- "foobar greble"] "foobar..."
+    aa_equals "" [ad_string_truncate -len 10 -ellipsis "..." -- "foobar greble"] "foobar..."
+    aa_equals "" [ad_string_truncate -len 11 -ellipsis "..." -- "foobar greble"] "foobar..."
+    aa_equals "" [ad_string_truncate -len 12 -ellipsis "..." -- "foobar greble"] "foobar..."
+    aa_equals "" [ad_string_truncate -len 13 -ellipsis "..." -- "foobar greble"] "foobar greble"
 
     set long_string [string repeat "Very long text. " 100]
-    aa_equals "No truncation" [string_truncate -len [string length $long_string] -- $long_string] $long_string
+    aa_equals "No truncation" [ad_string_truncate -len [string length $long_string] -- $long_string] $long_string
 }
 
 
 aa_register_case \
     -cats {api smoke} \
-    -procs {util_convert_line_breaks_to_html} \
+    -procs {
+        util_convert_line_breaks_to_html
+    } \
     util_convert_line_breaks_to_html {
     Test if it converts spaces and line breaks correctly.
 } {
-    #Convert leading and trailing spaces or tabs
+    # Convert leading and trailing spaces or tabs
     set html "\tinter spaces  "
-    aa_log "html= \"$html\" - Contains tabs and spaces"
+    aa_log "html= '$html' - Contains tabs and spaces"
     set result [util_convert_line_breaks_to_html $html]
-    aa_false "Now html=\"$result\"" [regexp {\sinter spaces\s} $result]
+    aa_false "Now html='$result'" [regexp {\sinter spaces\s} $result]
 
-    #convert single break
+    # convert single break
     set html "\r\n inter\r\nbreaks \r\n"
-    aa_log "html= \"$html\" - Contains a single break"
+    aa_log "html= '$html' - Contains a single break"
     set result [util_convert_line_breaks_to_html $html]
-    aa_false "Now html=\"$result\"" [regexp {inter<b />\nspaces} $result]
+    aa_false "Now html='$result'" [regexp {inter<b />\nspaces} $result]
 
-    #convert paragraph break
+    # convert paragraph break
     set html "\r\n inter\r\n\r\nbreaks \r\n"
-    aa_log "html= \"$html\" - Contains a double break"
+    aa_log "html= '$html' - Contains a double break"
     set result [util_convert_line_breaks_to_html $html]
-    aa_false "Now html=\"$result\"" [regexp {inter</p><p style="margin-bottom: 0px;">spaces} $result]
+    aa_false "Now html='$result'" [regexp {inter</p><p style="margin-bottom: 0px;">spaces} $result]
 
-    #convert more than 2 breaks
+    # convert more than 2 breaks
     set html "\r\n inter\r\n\r\n\r\nbreaks \r\n"
-    aa_log "html= \"$html\" - Contains more than 2 breaks"
+    aa_log "html= '$html' - Contains more than 2 breaks"
     set result [util_convert_line_breaks_to_html $html]
-    aa_false "Now html=\"$result\"" [regexp {inter<b />\n<b />\n<b />\nspaces} $result]
+    aa_false "Now html='$result'" [regexp {inter<b />\n<b />\n<b />\nspaces} $result]
+
+    # do not trim spaces before and after some tags
+    set html "We could use a <div> instead than a <table> layout\r\nfor the list for example."
+    aa_log "html= '[ns_quotehtml $html]' - Contains more than 2 breaks"
+    set result [util_convert_line_breaks_to_html $html]
+    aa_true "Now html='[ns_quotehtml $result]'" [regexp {a <table> layout} $result]
+
+    # do not add <br> inside <pre>
+    set text "text begin\r\n<pre>\nline1\nline2\n</pre>text\nend\n"
+    aa_log "Input: <pre>[ns_quotehtml $text]</pre>"
+    set result [util_convert_line_breaks_to_html -contains_pre $text]
+    aa_log "result is <pre>[ns_quotehtml $result]</pre>"
+    set nrBr [regsub -all <br> $result <br> .]
+    aa_true "text contains some [ns_quotehtml <br>] tags" {$nrBr > 0}
+
+    if {[::acs::icanuse "ns_parsehtml"]} {
+        aa_true "text contains $nrBr [ns_quotehtml <br>] tags" {$nrBr == 2}
+    }
+
+
 }
 
 
@@ -312,10 +420,10 @@ aa_register_case \
     util_remove_html_tags {
     Test if it remove all between tags
 } {
-    set html "<p><b>some</b> text <i>to</i> probe if it <table><tr>remove all between \"<\" and \">\"<tr><table><tags>"
+    set html "<p><b>some</b> text <i>to</i> probe if it <table><tr>remove all between '<' and '>'<tr><table><tags>"
     set result [util_remove_html_tags $html]
-    aa_equals "Without all between \"<\" and \">\" html=\"$result\""\
-        "some text to probe if it remove all between \"\"" $result
+    aa_equals "Without all between '<' and '>' html='$result'"\
+        "some text to probe if it remove all between ''" $result
 }
 
 aa_register_case \
@@ -332,9 +440,9 @@ aa_register_case \
     set result [ad_parse_html_attributes $html $pos]
     aa_equals "Attributes - $result" $result {foo bar}
 
-    # One Attribute with value and one whitout value
+    # One attribute with value and one without value
     set html "<tag foo = bar tob>"
-    aa_log "A tag with one Attribute with value and one whitout value - $html"
+    aa_log "A tag with one attribute with value and one without value - $html"
     set result [ad_parse_html_attributes $html $pos]
     aa_equals "Attributes - $result" $result {{foo bar} tob}
 
@@ -477,6 +585,45 @@ aa_register_case \
 }
 
 aa_register_case \
+    -cats {api smoke} \
+    -procs {
+        ad_text_to_html
+        util_convert_line_breaks_to_html
+    } \
+    ad_text_to_html {
+    Test rendering of a more or less standard HTML text
+} {
+    set text {We could use a <div> instead than a <table> layout » <p> for the list for example.»}
+    set result [ad_text_to_html -no_quote -includes_html -- $text]
+    aa_log "Input:\n[ns_quotehtml $text]"
+    aa_log "Result:\n[ns_quotehtml $result]"
+    if {[::acs::icanuse "ns_parsehtml"]} {
+        aa_true "text contains sample code" [string match *<samp>* $result]
+    }
+    aa_true "gullimet » preserved" [string match *»* $result]
+
+    #
+    # This calls util_convert_line_breaks_to_html as well, but
+    # strangely when this is called with -includes_html" it removes
+    # newlines around <pre> although "pre" is not included in the
+    # regular expression.
+    #
+    set text "text begin\n<pre>\nline1\nline2\n</pre>text\nend\n"
+    aa_log "Input: <pre>[ns_quotehtml $text]</pre>"
+    set result [ad_text_to_html -includes_html -no_quote $text]
+    aa_log "result is <pre>[ns_quotehtml $result]</pre>"
+    set nrBr [regsub -all <br> $result <br> .]
+    aa_true "text contains [ns_quotehtml <br>] tags" {$nrBr > 0}
+
+    if {[::acs::icanuse "ns_parsehtml"]} {
+        aa_true "text contains $nrBr [ns_quotehtml <br>] tags" {$nrBr == 1}
+    }
+    #aa_equals "new: $html _version should be the same" $html_version $string_with_img
+
+}
+
+
+aa_register_case \
     -cats {api} \
     -bugs 1450 \
     -procs {ad_enhanced_text_to_html} \
@@ -490,7 +637,7 @@ aa_register_case \
         aa_log "Original string is $string_with_img"
         set html_version [ad_enhanced_text_to_html $string_with_img]
         aa_equals "new: $html_version should be the same" $html_version $string_with_img
-}
+    }
 
 aa_register_case \
     -cats {api smoke} \
@@ -515,7 +662,7 @@ aa_register_case \
     # Test offending post sent by Dave Bauer
 
     set offending_post {
-I have a dynamically assigned ip address, so I use dyndns.org to
+I have a dynamically assigned IP address, so I use dyndns.org to
 change
 addresses for my acs server.
 Mail is sent to any yahoo address fine. Mail sent to aol fails. I am

@@ -11,17 +11,35 @@ ad_library {
 # switched to using tcllib, its required for OpenACS >= 5.3
 package require mime
 
-ad_proc build_mime_message {
+ad_proc -deprecated build_mime_message args {
+    Composes multipart/alternative email containing plain text
+    and html versions of the message, parses out the headers we need,
+    constructs an array  and returns it to the caller.
+
+    This proc is based on ad_html_sendmail, written by Doug Harris at
+    the World Bank.
+
+    DEPRECATED: this proc does not comply with naming convention
+    enforced by acs-tcl.naming__proc_naming automated test
+
+    @see ad_build_mime_message
+} {
+    return [ad_build_mime_message {*}$args]
+}
+
+ad_proc ad_build_mime_message {
     text_body
     html_body
     {charset "UTF-8"}
 } {
     Composes multipart/alternative email containing plain text
     and html versions of the message, parses out the headers we need,
-    constructs an array  and returns it to the caller. 
+    constructs an array  and returns it to the caller.
 
     This proc is based on ad_html_sendmail, written by Doug Harris at
     the World Bank.
+
+    @return ns_set containing MIME-Version, Content-ID, Content-Type, and body
 
 } {
     # convert text to charset
@@ -35,7 +53,7 @@ ad_proc build_mime_message {
 
     # build body
 
-    ## JCD: I fail to see why you would want both a base64 and a quoted-printable 
+    ## JCD: I fail to see why you would want both a base64 and a quoted-printable
     ## version of html part of this email.  I am removing the base64 version.
     ## set base64_html_part [mime::initialize -canonical text/html -param [list charset $charset] -encoding base64 -string $html_body]
     set html_part [mime::initialize -canonical text/html \
@@ -86,8 +104,27 @@ ad_proc build_mime_message {
     return $message_data
 }
 
+ad_proc -deprecated parse_incoming_email {
+    message
+} {
+    Takes an incoming message and splits it into parts.  The main goal
+    of this proc is to return something that can be stuffed into the
+    database somewhere, such as a forum message.  Since we aggressively
+    filter HTML, the HTML tags are stripped out of the returned content.
 
-ad_proc parse_incoming_email {
+    The message may have only plain text, plain text and HTML, or plain
+    text and something else (Apple Mail uses text/enhanced, for example).
+    To make our lives simpler we support only text/html as a special case;
+    in all other cases the plain text is returned.
+
+    DEPRECATED: does not comply with OpenACS naming convention
+
+    @see ad_parse_incoming_email
+} {
+    return [ad_parse_incoming_email $message]
+}
+
+ad_proc -public ad_parse_incoming_email {
     message
 } {
     Takes an incoming message and splits it into parts.  The main goal
@@ -115,7 +152,7 @@ ad_proc parse_incoming_email {
     # Expand any first-level multipart/alternative children.
     set expanded_parts [list]
     foreach part $parts {
-        catch {mime::getproperty $part content} this_content 
+        catch {mime::getproperty $part content} this_content
         if { $this_content eq "multipart/alternative"} {
             foreach child_part [mime::getproperty $part parts] {
                 lappend expanded_parts $child_part
@@ -126,7 +163,7 @@ ad_proc parse_incoming_email {
     }
 
     foreach part $expanded_parts {
-        catch {mime::getproperty $part content} this_content 
+        catch {mime::getproperty $part content} this_content
         switch -- $this_content {
             "text/plain" {
                 if { ![info exists plain] } {

@@ -1,7 +1,11 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Permissions Design}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Permissions Design}</property>
 <property name="doc(title)">Permissions Design</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="permissions-requirements" leftLabel="Prev"
 			title="Chapter 15. Kernel
@@ -9,9 +13,11 @@ Documentation"
 			rightLink="groups-requirements" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="permissions-design" id="permissions-design"></a>Permissions Design</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">By John Prevost and <a class="ulink" href="http://planitia.org" target="_top">Rafael H.
-Schloming</a>
-</span></p><span style="color: red">&lt;/authorblurb&gt;</span><div class="sect2">
+<a name="permissions-design" id="permissions-design"></a>Permissions Design</h2></div></div></div><div class="authorblurb">
+<p>By John Prevost and <a class="ulink" href="http://planitia.org" target="_top">Rafael H. Schloming</a>
+</p>
+OpenACS docs are written by the named authors, and may be edited by
+OpenACS documentation staff.</div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="permissions-design-essentials" id="permissions-design-essentials"></a>Essentials</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>Tcl in <code class="computeroutput">packages/acs-kernel</code>
@@ -55,7 +61,7 @@ access control based simply on coded rules regarding who can act on
 a given database row based on the information in that row.</p><p>Problems resulting from this piecemeal approach to permissions
 and access control were many, the two major ones being
 inconsistency, and repeated/redundant code. Thus the drive in
-OpenACS 4 to provide a unified, consistent permissions system that
+OpenACS 4 to provide a unified, consistent permission system that
 both programmers and administrators can readily use.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
@@ -128,7 +134,7 @@ inherit" flag is set)</p></li>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="permissions-design-transactions" id="permissions-design-transactions"></a>Legal Transactions</h3></div></div></div><p>There are three essential areas in which all transactions in the
-permissions system fall:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
+permission system fall:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>Modification of methods and privileges</p></li><li class="listitem"><p>Modification of permissions</p></li><li class="listitem"><p>Queries on permissions</p></li>
 </ul></div><p>
 <span class="strong"><strong>"Modification of methods and
@@ -171,7 +177,7 @@ page needs to know all permissions directly granted on that object.
 This is done by querying against <code class="computeroutput">acs_permissions</code>.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="permissions-design-api" id="permissions-design-api"></a>API</h3></div></div></div><p>The API to the permissions system consists of a few well-known
+<a name="permissions-design-api" id="permissions-design-api"></a>API</h3></div></div></div><p>The API to the permission system consists of a few well-known
 tables, plus a pair of PL/SQL procedures and a pair of Tcl
 functions.</p><p><span class="strong"><strong>Tables</strong></span></p><p>
 <code class="computeroutput">acs_methods</code>, <code class="computeroutput">acs_privileges</code>, and <code class="computeroutput">acs_privilege_method_rules</code> manage the set
@@ -209,13 +215,13 @@ procedure revoke_permission (
 returns true or false, the other presents an error page.</p><p>To receive a true or false value, Tcl code should call:</p><pre class="programlisting">
 permission::permission_p -object_id $object_id -party_id $user_id -privilege $method
 </pre><p>If the <code class="computeroutput">user_id</code> argument is
-left out, then the currently logged in user is checked. To create
+left out, then the currently logged-in user is checked. To create
 an error page, Tcl code should call:</p><pre class="programlisting">
 permission::require_permission -object_id $object_id -privilege $method
 </pre><p>These procedures are defined in <code class="computeroutput">acs-permissions-procs.tcl</code>.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="permissions-design-ui" id="permissions-design-ui"></a>User Interface</h3></div></div></div><p>All users of the permissions system are the same at the
+<a name="permissions-design-ui" id="permissions-design-ui"></a>User Interface</h3></div></div></div><p>All users of the permission system are the same at the
 user-interface level. If you have the <code class="computeroutput">administer_privileges</code> method permission on
 an object, then you may edit privileges for that object with the
 UI.</p><p>The UI currently provides a list of all granted permissions on
@@ -233,7 +239,7 @@ from the object&#39;s context.</p><p>There are a number of potential future enha
 permissions UI, outlined below.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="permissions-design-configure" id="permissions-design-configure"></a>Configuration/Parameters</h3></div></div></div><p>There are no configuration options for the permissions
+<a name="permissions-design-configure" id="permissions-design-configure"></a>Configuration/Parameters</h3></div></div></div><p>There are no configuration options for the permission
 system.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">

@@ -112,6 +112,10 @@ insert into cr_mime_types (label,mime_type,file_extension) values ( 'Image - Gif
 insert into cr_mime_types (label,mime_type,file_extension) values ( 'Image - Image Exchange Format' , 'image/ief'                     , 'ief' );
 insert into cr_mime_types (label,mime_type,file_extension) values ( 'Image - Jpeg'            , 'image/jpeg'                    , 'jpg' );
 insert into cr_mime_types (label,mime_type,file_extension) values ( 'Image - PNG'             , 'image/png'                     , 'png' );
+insert into cr_mime_types (label,mime_type,file_extension) values ( 'Image - HEIC'             , 'image/heic'                     , 'heic' );
+insert into cr_mime_types (label,mime_type,file_extension) values ( 'Image - HEIC sequence'   , 'image/heic-sequence'          , 'heics' );
+insert into cr_mime_types (label,mime_type,file_extension) values ( 'Image - HEIF'             , 'image/heif'                     , 'heif' );
+insert into cr_mime_types (label,mime_type,file_extension) values ( 'Image - HEIF sequence'   , 'image/heif-sequence'          , 'heifs' );
 insert into cr_mime_types (label,mime_type,file_extension) values ( 'Image - TIFF'            , 'image/tiff'                    , 'tif' );
 insert into cr_mime_types (label,mime_type,file_extension) values ( 'Image - WAP wireless bitmap'     , 'image/vnd.wap.wbmp'            , 'wbmp');
 insert into cr_mime_types (label,mime_type,file_extension) values ( 'Image - CMU Raster'      , 'image/x-cmu-raster'            , 'ras' );
@@ -351,6 +355,7 @@ insert into cr_extension_mime_type_map (extension, mime_type) values ( 'mid','au
 insert into cr_extension_mime_type_map (extension, mime_type) values ( 'midi','audio/midi' );
 insert into cr_extension_mime_type_map (extension, mime_type) values ( 'mif','application/vnd.mif' );
 insert into cr_extension_mime_type_map (extension, mime_type) values ( 'mime','message/rfc822' );
+insert into cr_extension_mime_type_map (extension, mime_type) values ( 'mjs','application/javascript' );
 insert into cr_extension_mime_type_map (extension, mime_type) values ( 'movie','video/x-sgi-movie' );
 insert into cr_extension_mime_type_map (extension, mime_type) values ( 'mov','video/quicktime' );
 insert into cr_extension_mime_type_map (extension, mime_type) values ( 'mp2','audio/x-mpeg2' );
@@ -384,6 +389,10 @@ insert into cr_extension_mime_type_map (extension, mime_type) values ( 'pgm','im
 insert into cr_extension_mime_type_map (extension, mime_type) values ( 'pgn','application/x-chess-pgn' );
 insert into cr_extension_mime_type_map (extension, mime_type) values ( 'pict','image/x-pict' );
 insert into cr_extension_mime_type_map (extension, mime_type) values ( 'png','image/png' );
+insert into cr_extension_mime_type_map (extension, mime_type) values ( 'heic','image/heic' );
+insert into cr_extension_mime_type_map (extension, mime_type) values ( 'heics','image/heic-sequence' );
+insert into cr_extension_mime_type_map (extension, mime_type) values ( 'heif','image/heif' );
+insert into cr_extension_mime_type_map (extension, mime_type) values ( 'heifs','image/heif-sequence' );
 insert into cr_extension_mime_type_map (extension, mime_type) values ( 'pnm','image/x-portable-anymap' );
 insert into cr_extension_mime_type_map (extension, mime_type) values ( 'ppm','image/x-portable-pixmap' );
 insert into cr_extension_mime_type_map (extension, mime_type) values ( 'ppt','application/vnd.ms-powerpoint' );
@@ -564,7 +573,8 @@ insert into cr_mime_types(label, mime_type, file_extension) select 'Microsoft Of
 insert into cr_mime_types(label, mime_type, file_extension) select 'Microsoft Office PowerPoint Template macro enabled', 'application/vnd.ms-powerpoint.template.macroenabled.12', 'potm' from dual;
 insert into cr_mime_types(label, mime_type, file_extension) select 'Microsoft Office PowerPoint Slideshow macro enabled', 'application/vnd.ms-powerpoint.slideshow.macroenabled.12', 'ppsm' from dual;
 
-
+-- Video subtitles
+insert into cr_mime_types (label,mime_type,file_extension) values ( 'Web Video Text Tracks Format', 'text/vtt', 'vtt' );
 
 --  Here are some less common mime types and extensions not defined here.
 --

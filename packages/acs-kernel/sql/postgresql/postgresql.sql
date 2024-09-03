@@ -195,6 +195,8 @@ BEGIN
             raise NOTICE 'DROPPING FUNCTION: %', v_rec.proname;
             v_drop_cmd := get_func_drop_command (v_rec.proname::varchar);
             EXECUTE v_drop_cmd;
+
+            DELETE FROM acs_function_args where function = upper(v_rec.proname);
         end loop;
 
         if NOT FOUND then 

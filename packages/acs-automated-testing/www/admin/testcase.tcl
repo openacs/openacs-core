@@ -3,11 +3,10 @@ ad_page_contract {
 } {
     testcase_id:word,notnull
     package_key:token
-    {showsource:boolean 0}
-    {quiet:boolean 1}
-    {return_url ""}
+    {showsource:boolean,notnull 0}
+    {quiet:boolean,notnull 1}
+    {return_url:localurl ""}
 } -properties {
-    title:onevalue
     context_bar:onevalue
     tests:multirow
     showsource:onevalue
@@ -18,8 +17,12 @@ ad_page_contract {
     quiet:onevalue
     fails:onevalue
 }
-set title "Test case $testcase_id"
-set context [list $title]
+set doc(title) "Test case $testcase_id"
+set context [list \
+                 [list "./index?by_package_key=$package_key&view_by=testcase" "Package $package_key"] \
+                 "Test case"]
+
+template::head::add_css -href /resources/acs-automated-testing/tests.css
 
 if {$quiet} {
     set filter { and result = 'fail'}
@@ -84,12 +87,29 @@ foreach bug $testcase_bugs {
 }
 set bug_blurb [join $bug_list ", "]
 
+#
+# Split procs into direct and indirectly covered procs. These are
+# separated by an empty line. if there is no empty line, then we
+# assume all procs are directly tested.
+#
+set direct_testcase_procs ""
+set indirect_testcase_procs ""
+set var direct_testcase_procs
+foreach line [split [string trim $testcase_procs] \n] {
+    if {[string is space $line]} {
+        set var indirect_testcase_procs 
+    } else {
+        append $var $line " "
+    }
+}
+
 set proc_list [list]
-foreach p $testcase_procs {
+foreach p $direct_testcase_procs {
     set href [export_vars -base "/api-doc/proc-view" { {proc $p} }]
     lappend proc_list [subst {<a href="[ns_quotehtml $href]">$p</a>}]
 }
 set proc_blurb [join $proc_list ", "]
+set nr_indirect_test_procs [llength $indirect_testcase_procs]
 
 set url_list [list]
 foreach url $testcase_urls {
@@ -128,11 +148,6 @@ if {[llength $testcase_bodys] == 0} {
     }
 }
 
-set resource_file_url [export_vars -base init-file-resource {
-    {return_url [ad_return_url]}
-    {absolute_file_path $testcase_file}
-}]
-
 set rerun_url [export_vars -base rerun {
     testcase_id package_key quiet {return_url [ad_return_url]}
 }]
@@ -145,41 +160,7 @@ if {$return_url eq ""} {
 
 set quiet_url "[export_vars -base testcase -entire_form -exclude {quiet}]&quiet=1"
 set verbose_url "[export_vars -base testcase -entire_form -exclude {quiet}]&quiet=0"
-template::head::add_style \
-    -style {
-        .description h2 { 1.5em; }
-        .fail {
-            font-weight: bold;
-            color: red;
-        }
-        .ok {
-            font-weight: bold;
-            color: green;
-        }
-        .warn {
-            color: darkmagenta;
-        }
-        .sect {
-            font-size: large;
-            font-weight: bold;
-        }
-
-        td.log {
-            font-size: normal;
-            color: darkslateblue;
-        }
-
-        dt {
-            font-weight: bold
-        }
-        th {
-            background: #c0c0c0;
-        }
-        td pre {
-            margin: 2px;
-            font-size: smaller;
-        }
-    }
+set coverage_url [export_vars -base proc-coverage {package_key}]
 
 ad_return_template
 

@@ -45,30 +45,30 @@ ns_log notice "to_install: $to_install"
 while {[llength $to_install] > 0} {
 
     foreach package_key $to_install {
-	array unset version
-	array set version $repository($package_key)
+        array unset version
+        array set version $repository($package_key)
 
-	set satisfied_p 1
-	foreach req [concat $version(embeds) $version(extends) $version(requires)] {
-	    lassign $req pkg req_version
+        set satisfied_p 1
+        foreach req [concat $version(embeds) $version(extends) $version(requires)] {
+            lassign $req pkg req_version
 
-	    #
-	    # A package can be installed, when its requirements are
-	    # installed before the package. All other dependencies
-	    # were checked earlier.
-	    #
+            #
+            # A package can be installed, when its requirements are
+            # installed before the package. All other dependencies
+            # were checked earlier.
+            #
 
-	    if { $pkg in $to_install } {
-		set satisfied_p 0
-		#ns_log notice "we have to delay $pkg"
-		break
-	    }
-	}
-	if {$satisfied_p} {
-	    lappend install_order $package_key
-	    set pos [lsearch $to_install $package_key]
-	    set to_install [lreplace $to_install $pos $pos]
-	}
+            if { $pkg in $to_install } {
+                set satisfied_p 0
+                #ns_log notice "we have to delay $pkg"
+                break
+            }
+        }
+        if {$satisfied_p} {
+            lappend install_order $package_key
+            set pos [lsearch $to_install $package_key]
+            set to_install [lreplace $to_install $pos $pos]
+        }
     }
     #ns_log notice "iteration: \nto_install: $to_install\ninstall_order: $install_order"
 }
@@ -85,21 +85,21 @@ set success_p 1
 
 foreach package_key $install_order {
     ns_log Notice "Installing $package_key"
-    
+
     array unset version
     array set version $repository($package_key)
-    
+
     if { [info exists version(download_url)] && $version(download_url) ne "" } {
         ns_write [subst {
             <p>Transferring $version(download_url) ...
-            <script nonce='$::__csp_nonce'>window.scrollTo(0,document.body.scrollHeight);</script>
+            <script nonce='[security::csp::nonce]'>window.scrollTo(0,document.body.scrollHeight);</script>
         }]
         set spec_file [apm_load_apm_file -url $version(download_url)]
         if { $spec_file eq "" } {
             set msg "Error downloading package $package_key from $version(download_url). Installing package failed."
             ns_write [subst {
                 <p>$msg
-                <script nonce='$::__csp_nonce'>window.scrollTo(0,document.body.scrollHeight);</script>
+                <script nonce='[security::csp::nonce]'>window.scrollTo(0,document.body.scrollHeight);</script>
             }]
             ns_log Error $msg
             set success_p 0
@@ -107,7 +107,7 @@ foreach package_key $install_order {
         }
         ns_write [subst {
             Done<br>
-            <script nonce='$::__csp_nonce'>window.scrollTo(0,document.body.scrollHeight);</script>
+            <script nonce='[security::csp::nonce]'>window.scrollTo(0,document.body.scrollHeight);</script>
         }]
         set package_path "[apm_workspace_install_dir]/$package_key"
     } else {
@@ -134,7 +134,7 @@ foreach package_key $install_order {
     if { [apm_package_upgrade_p $package_key $final_version_name] == 1} {
         ns_log Debug "Upgrading package [string totitle $version(package-name)] to $final_version_name."
         set upgrade_p 1
-        
+
         set initial_version_name [apm_highest_version_name $package_key]
     } else {
         set upgrade_p 0
@@ -151,12 +151,12 @@ foreach package_key $install_order {
     ns_log Debug "Data model scripts: \nupgrade_from_version_name = $initial_version_name\nupgrade_to_version_name=$final_version_name\npackage_path=$package_path\npackage_key=$package_key\n => $data_model_files"
 
     ns_write [subst {
-	<p>Installing $package_key ...<br>
-	<script nonce='$::__csp_nonce'>window.scrollTo(0,document.body.scrollHeight);</script>
+        <p>Installing $package_key ...<br>
+        <script nonce='[security::csp::nonce]'>window.scrollTo(0,document.body.scrollHeight);</script>
     }]
-    
+
     # Install the package -- this actually copies the files into the
-    # right place in the file system and backs up any old files
+    # right place in the filesystem and backs up any old files
 
     set version_id [apm_package_install \
                         -enable \
@@ -165,14 +165,14 @@ foreach package_key $install_order {
                         -load_data_model \
                         -data_model_files $data_model_files \
                         $spec_file]
-    
+
     if { $version_id == 0 } {
         # Installation of the package failed and we shouldn't continue with installation
         # as there might be packages depending on the failed package. Ideally we should
         # probably check for such dependencies and continue if there are none.
         set success_p 0
     } else {
-	ns_write "... installation OK <br>\n"
+        ns_write "... installation OK <br>\n"
     }
 
     if {$success_p} {
@@ -189,7 +189,7 @@ foreach package_key $install_order {
         #   - run apm_package_install via "ns_eval": does not work,
         #     since "ns_eval" runs a script twice, a package can only
         #     be installed once.
-        #        
+        #
         #   - run parts of apm_package_install: e.g. loading just the
         #     procs does not work, when it depends e.g. on package
         #     parameters, which have as well be updated in the
@@ -197,11 +197,11 @@ foreach package_key $install_order {
         #
         #   - fix the behavior in AOLserver
         #
-        if {[info commands ::nstrace::statescript] ne ""} {
+        if {[namespace which ::nstrace::statescript] ne ""} {
             #
             # NaviServer variant:
             #   - nstrace::statescript produces the blueprint
-            #   - "ns_ictl  save" updates it in the server
+            #   - "ns_ictl save" updates it in the server
             #
             ns_ictl save [nstrace::statescript]
             ns_write "... blueprint updated <br>\n"
@@ -224,9 +224,19 @@ foreach package_key $install_order {
         #
         ns_ictl markfordelete
     }
-    ns_write {
-	<script nonce='$::__csp_nonce'>window.scrollTo(0,document.body.scrollHeight);</script>
+    ns_write [subst {
+        <script nonce='[security::csp::nonce]'>window.scrollTo(0,document.body.scrollHeight);</script>
+    }]
+}
+
+if {$success_p && [namespace which ::nstrace::statescript] ne ""} {
+
+    foreach package_key $install_order {
+        apm_bootstrap_load_libraries -init $package_key
+        ns_write "$package_key: loading init files done"
+        ns_log notice "$package_key: loading init files done"
     }
+    ns_ictl save [nstrace::statescript]
 }
 
 #####

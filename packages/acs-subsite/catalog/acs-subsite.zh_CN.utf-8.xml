@@ -136,7 +136,7 @@
   <msg key="lt_Inherited_Permissions">继承的许可</msg>
   <msg key="lt_It_would_be_a_very_ba">如果您使用的是公共计算机，建议不选用该项。否则，使用该计算机的其他人有可能会以您的名义使用系统。</msg>
   <msg key="lt_New_registration_at_s">新注册到%system_url%</msg>
-  <msg key="lt_Note_text_in_red_below">注意：参数域下面文本为红色标记时表示此参数的值被OpenACS参数文件拒绝。一般不建议使用参数文件，但是某些网站需要它提供特定值。</msg>
+  <msg key="lt_Note_text_in_red_below">注意：参数域下面文本为红色标记时表示此参数的值被NaviServer参数文件拒绝。一般不建议使用参数文件，但是某些网站需要它提供特定值。</msg>
   <msg key="lt_Note_that_you_can_era">注意：在你的工作空间中选择&quot;退出&quot;，取消你存储的email地址和密码。</msg>
   <msg key="lt_num_children_Children">%num_children%子隐藏</msg>
   <msg key="lt_On_portrait_publish_d">%portrait_publish_date%日，您上传了&lt;a href=&quot;%subsite_url%user/portrait/?return_url=%pvt_home_url%&quot;&gt;%portrait_title%&lt;/a&gt; </msg>

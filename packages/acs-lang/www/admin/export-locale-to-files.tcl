@@ -1,10 +1,10 @@
 ad_page_contract {
     Export all catalog messages for a given locale to 
-    the file system.
+    the filesystem.
 
     @author Lars Pind (lars@collaboraid.biz)
 } {
-    locale
+    locale:word
 }
 
 set locale_label [lang::util::get_label $locale]

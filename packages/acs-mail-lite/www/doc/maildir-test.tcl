@@ -1,5 +1,5 @@
 ad_page_contract {
-    Provies a framework for manually testing acs_mail_lite procs
+    Provides a framework for manually testing acs_mail_lite procs
     A dummy mailbox value provided to show example of what is expected.
 } {
     {mail_dir ""}
@@ -150,3 +150,9 @@ foreach msg $messages_list {
 
 
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

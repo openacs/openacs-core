@@ -75,7 +75,7 @@ row based on the information in that row.</para>
 <para>Problems resulting from this piecemeal approach to permissions and access
 control were many, the two major ones being inconsistency, and
 repeated/redundant code. Thus the drive in OpenACS 4 to provide a unified,
-consistent permissions system that both programmers and administrators can
+consistent permission system that both programmers and administrators can
 readily use.</para>
 
 </sect2>
@@ -247,7 +247,7 @@ set)</para></listitem>
 
 
 <para>There are three essential areas in which all transactions in the
-permissions system fall:</para>
+permission system fall:</para>
 
 <itemizedlist>
 <listitem><para>Modification of methods and privileges</para></listitem>
@@ -308,7 +308,7 @@ by querying against <computeroutput>acs_permissions</computeroutput>.</para>
 <title>API</title>
 
 
-<para>The API to the permissions system consists of a few well-known tables,
+<para>The API to the permission system consists of a few well-known tables,
 plus a pair of PL/SQL procedures and a pair of Tcl functions.</para>
 
 <para><emphasis role="strong">Tables</emphasis></para>
@@ -370,8 +370,7 @@ other presents an error page.</para>
 permission::permission_p -object_id $object_id -party_id $user_id -privilege $method
 </programlisting>
 
-<para>If the <computeroutput>user_id</computeroutput> argument is left out, then the currently logged in
-user is checked. To create an error page, Tcl code should call:</para>
+<para>If the <computeroutput>user_id</computeroutput> argument is left out, then the currently logged-in user is checked. To create an error page, Tcl code should call:</para>
 
 <programlisting>
 permission::require_permission -object_id $object_id -privilege $method
@@ -385,7 +384,7 @@ permission::require_permission -object_id $object_id -privilege $method
 <title>User Interface</title>
 
 
-<para>All users of the permissions system are the same at the user-interface
+<para>All users of the permission system are the same at the user-interface
 level. If you have the <computeroutput>administer_privileges</computeroutput> method permission on an
 object, then you may edit privileges for that object with the UI.</para>
 
@@ -413,7 +412,7 @@ UI, outlined below.</para>
 <title>Configuration/Parameters</title>
 
 
-<para>There are no configuration options for the permissions system.</para>
+<para>There are no configuration options for the permission system.</para>
 
 </sect2>
 

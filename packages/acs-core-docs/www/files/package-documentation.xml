@@ -48,11 +48,11 @@
       </para>
       <para>
         This package depends on the core OpenACS functionality and on
-        OpenFTS.  It is PostGreSQL-only - it has not been ported to
+        OpenFTS.  It is PostgreSQL-only - it has not been ported to
         Oracle.
       </para>
       <para>
-        OpenFTS is the third-party PostGreSQL full text search engine.
+        OpenFTS is the third-party PostgreSQL full text search engine.
       </para>
     </sect1>
     

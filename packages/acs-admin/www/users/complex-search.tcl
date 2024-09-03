@@ -37,8 +37,8 @@ ad_page_contract {
     {target ""}
     {passthrough ""}
     {limit_to_users_in_group_id:integer ""}
-    {only_authorized_p:boolean 1}
-    {only_needs_approval_p:boolean 0}
+    {only_authorized_p:boolean,notnull 1}
+    {only_needs_approval_p:boolean,notnull 0}
     {registration_before_days:integer -1}
     {registration_after_days:integer -1}
     {last_visit_before_days:integer -1}
@@ -90,7 +90,7 @@ if {$combine_method eq "any"} {
 if { ![info exists passthrough] } {
     set passthrough_parameters ""
 } else {
-    set passthrough_parameters "[export_entire_form_as_url_vars $passthrough]"
+    set passthrough_parameters [export_vars -formvars $passthrough]
 }
 
 
@@ -245,7 +245,7 @@ db_foreach user_search_admin $query {
 
 set user_search:rowcount $rowcount
 
-set export_authorize [export_ns_set_vars {url} {only_authorized_p}]
+set export_authorize [export_vars -entire_form -exclude {only_authorized_p}]
 
 # Local variables:
 #    mode: tcl

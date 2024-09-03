@@ -1,0 +1,104 @@
+/*
+
+   ACS Tooltip CSS
+
+   See also: https://www.w3schools.com/css/css_tooltip.asp
+
+*/
+
+.acs-tooltip {
+    position: relative;
+    display: inline-block;
+}
+
+.acs-tooltip .acs-tooltip-text {
+    visibility: hidden;
+    min-width: 10ch;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 0.5em 0;
+    position: absolute;
+    z-index: 2000;
+    opacity: 0;
+    transition: opacity 1s;
+}
+
+.acs-tooltip.top .acs-tooltip-text {
+    bottom: 150%;
+    left: 50%;
+    margin-left: min(-5ch, -50%);
+}
+
+.acs-tooltip.bottom .acs-tooltip-text {
+    top: 150%;
+    left: 50%;
+    margin-left: min(-5ch, -50%);
+}
+
+.acs-tooltip.left .acs-tooltip-text {
+    top: 0.75em;
+    transform: translateY(-50%);
+    right: calc(100% + 2ch);
+}
+
+.acs-tooltip.right .acs-tooltip-text {
+    top: 0.75em;
+    transform: translateY(-50%);
+    left: calc(100% + 2ch);
+}
+
+.acs-tooltip:not(.right):not(.left):not(.bottom):not(.top) .acs-tooltip-text {
+    top: 150%;
+    left: 50%;
+    margin-left: min(-5ch, -50%);
+}
+
+.acs-tooltip .acs-tooltip-text::after {
+    content: "";
+    position: absolute;
+    border-width: 0.5em;
+    border-style: solid;
+}
+
+.acs-tooltip.top .acs-tooltip-text::after {
+    top: 100%;
+    left: 50%;
+    margin-left: -0.5em;
+    border-color: black transparent transparent transparent;
+}
+
+.acs-tooltip.bottom .acs-tooltip-text::after {
+    bottom: 100%;
+    left: 50%;
+    margin-left: -0.5em;
+    border-color: transparent transparent black transparent;
+}
+
+.acs-tooltip.left .acs-tooltip-text::after {
+    top: 50%;
+    left: 100%;
+    margin-top: -0.5em;
+    border-color: transparent transparent transparent black;
+}
+
+.acs-tooltip.right .acs-tooltip-text::after {
+    top: 50%;
+    right: 100%;
+    margin-top: -0.5em;
+    border-color: transparent black transparent transparent;
+}
+
+.acs-tooltip:not(.right):not(.left):not(.bottom):not(.top) .acs-tooltip-text::after {
+    bottom: 100%;
+    left: 50%;
+    margin-left: -0.5em;
+    border-color: transparent transparent black transparent;
+}
+
+.acs-tooltip:hover .acs-tooltip-text, .acs-tooltip:active .acs-tooltip-text {
+    visibility: visible;
+    opacity: 0.9;
+}
+

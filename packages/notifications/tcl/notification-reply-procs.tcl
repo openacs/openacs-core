@@ -24,15 +24,21 @@ namespace eval notification::reply {
     } {
         store a new reply
     } {
-        set extra_vars [ns_set create]
-
         # Truncate subject to 100 chars, which is the limit in the data model (for some obscure reason)
         set subject [string range $subject 0 99]
-        
-        oacs_util::vars_to_ns_set -ns_set $extra_vars -var_list {reply_id object_id type_id from_user subject content reply_date}
-        
+
+        set extra_vars [ns_set create s \
+                            reply_id $reply_id \
+                            object_id $object_id \
+                            type_id $type_id \
+                            from_user $from_user \
+                            subject $subject \
+                            content $content \
+                            reply_date $reply_date \
+                           ]
+
         set reply_id [package_instantiate_object -extra_vars $extra_vars notification_reply]
-        
+
         return $reply_id
     }
 
@@ -54,7 +60,7 @@ namespace eval notification::reply {
     } {
         db_exec_plsql delete_reply {}
     }
-    
+
 }
 
 # Local variables:

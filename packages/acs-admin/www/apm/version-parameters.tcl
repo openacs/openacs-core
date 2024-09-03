@@ -10,6 +10,8 @@ ad_page_contract {
     {orderby:token "parameter_name"}
     {version_id:naturalnum,notnull}
     {section_name ""}
+    {return_url:localurl ""}
+    {return_label "Back"}   
 }
 
 db_1row apm_package_by_version_id {
@@ -53,7 +55,10 @@ if { $dimensional_list ne "" } {
 
 lappend elements_list actions {
     label "Actions"
-    display_template { @parameters.actions;noquote@ }
+    display_template {
+        <a href="@parameters.parameter_edit_url@"><adp:icon name="edit" title="Edit Parameter Definition"></a>&nbsp;
+        <a href="@parameters.parameter_delete_url@"><adp:icon name="trash" title="Delete Parameter"></a>
+    }
 }
 
 template::list::create -name parameters_list \
@@ -67,17 +72,18 @@ template::list::create -name parameters_list \
 set parent_package_keys [lrange [apm_one_package_inherit_order $package_key] 0 end-1]
 append sql_clauses " [template::list::orderby_clause -orderby -name parameters_list]"
 
-db_multirow -extend {actions} parameters parameter_table {} {
-    set actions [subst {\[<font size="-1">
-        <a href="[ns_quotehtml [export_vars -base parameter-delete {parameter_id version_id section_name}]]">delete</a> |
-        <a href="[ns_quotehtml [export_vars -base parameter-edit {version_id parameter_id}]]">edit</a></font>\]
-    }]
+db_multirow -extend {parameter_delete_url parameter_edit_url} parameters parameter_table {} {
+    set parameter_delete_url [export_vars -base parameter-delete {parameter_id version_id section_name}]
+    set parameter_edit_url [export_vars -base parameter-edit {version_id parameter_id}]
 }
 
 
 
 set page_title "Parameters"
-set context [list [list "." "Package Manager"] [list [export_vars -base version-view { version_id }] "$pretty_name $version_name"] $page_title]
+set context [list \
+                 [list "." "Package Manager"] \
+                 [list [export_vars -base version-view { version_id }] "$pretty_name $version_name"] \
+                 $page_title]
 
 set filter_html ""
 if { $dimensional_list ne "" } {

@@ -4,18 +4,27 @@ ad_library {
 
 aa_register_case \
     -cats {api smoke} \
-    -procs {build_mime_message} \
-    build_mime_message {
-    Basic test of build mime message
-} {
-    aa_false "Build mime message, no error" \
-        [catch {build_mime_message \
-                    "Test Message" \
-                    "<p>Test Message</p>"} errmsg]
-    aa_log err=$errmsg
-    aa_false "Package require mime package found" \
-        [catch {package require mime} errmsg]
+    -procs {ad_build_mime_message} \
+    ad_build_mime_message {
+        Basic test of build mime message
+    } {
+        try {
+            package require mime
+        } on ok {versionNumber} {
+            aa_true "MIME package in version $versionNumber loaded" 1
+        } on error {errorMsg} {
+            aa_false "could not load MIME package from tcllib: $errorMsg" 1
+        }
 
+        try {
+            ad_build_mime_message \
+                "Test Message" \
+                "<p>Test Message</p>"
+        } on ok {ns_set} {
+            aa_true "built ns_set for containing an email message" {$ns_set ne ""}
+        } on error {errorMsg} {
+            aa_false "could not build build_mime_message: $errorMsg" 1
+        }
 
 }
 # Local variables:

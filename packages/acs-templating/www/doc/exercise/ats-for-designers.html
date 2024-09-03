@@ -33,7 +33,7 @@ how to use it in building web pages.
 <p>First, perhaps an explanation of what the templating system does will help us understand
 how it works.  An ATS template itself serves as a reusable, unchanging framework that delivers
 dynamic data.  The advantage to this is something you probably already realize: you need only build 
-and edit a few pages to maintain a consistent presentation style while accommodating numerous permutaions of changing data.
+and edit a few pages to maintain a consistent presentation style while accommodating numerous permutations of changing data.
 
 <p>This training module will teach largely by exercise and example, but you should also
 refer regularly to the <a href="../index.html">ATS documents</a> provided and more specific pointers will be given to help you out along the way.
@@ -150,7 +150,7 @@ found <a href="../tags/if.html">here</a>.  Also, a few more things to keep in mi
   strings with quantitative values, so 
   conditions like less than, greater than, and (not) between can also 
   be used with text to determine alphabetical order: <em>a</em> &lt; <em>b</em> &lt; ... &lt; 
-  <em>z</em>, lower-case letters are greater than upper-case, and numbers less than letters.  
+  <em>z</em>, lowercase letters are greater than uppercase, and numbers less than letters.  
   Example: "you" are greater than "me", and "I" am less than "you"</li>
 
   <li>the "between" conditions checks inclusively, so &lt;if 2 between 2 6&gt; 
@@ -201,12 +201,12 @@ demonstration and upon examining the .adp files, and add a few pointers:
   <li>the &lt;slave&gt; tag indicates where on the master page the slave 
   section is inserted</li>
   <li>slave pages indicate the source of the master file with the &lt;master&gt;
-      tag, referring by the file name only, and not including its ".adp" extension</li>
+      tag, referring by the filename only, and not including its ".adp" extension</li>
   <li>as mentioned earlier, slave sections do not require &lt;html&gt;, 
   &lt;head&gt;, and &lt;body&gt;
       tags when contained within a master tag already formatted for HTML</li>
   <li>as the demonstration points out, pages are browsed at the .acs page 
-  sharing the same file name
+  sharing the same filename
       as the slave, not master</li>
   <li>the master page can be viewed at its own .acs page, but shows nothing in
       place of the &lt;slave&gt; tag</li>
@@ -302,7 +302,7 @@ tag, an example of which can be found under the gender formwidget.
 Now that you've confidently added the conditional &lt;if&gt; and &lt;else&gt; tags to
 your ATS toolbelt, it's time to put those tools to good use in formatting
 multirow data.  First, read the <a href="../tags/multiple.html">docs</a> to learn about
-the automatcally generated <code>@<em>your_multirow</em>.rownum@</code> column,
+the automatically generated <code>@<em>your_multirow</em>.rownum@</code> column,
 the <code>@<em>your_multirow</em>:rowcount@</code> onevalue which contains
 the total number of rows contained in your multirow, and the &lt;multiple&gt; <code>startrow</code>
 and <code>maxrows</code> attributes.  Possible point of confusion: the variable 
@@ -331,9 +331,7 @@ set of rows should not appear if the user is already viewing rows 1-5 of 5 total
 
 <hr>
 <address><a href="mailto:shuynh@arsdgita.com">shuynh@arsdigita.com</a></address>
-<!-- hhmts start -->
-Last modified: Fri Nov 17 10:14:44 EST 2000
-<!-- hhmts end -->
+<!-- hhmts start -->Last modified: Sun Sep  1 14:32:43 CEST 2024 <!-- hhmts end -->
 </body> </html>
 
 

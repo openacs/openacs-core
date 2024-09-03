@@ -1,7 +1,11 @@
 
-<property name="context">{/doc/acs-lang {ACS Localization}} {ACS 4 Globalization Detailed Design}</property>
+<property name="context">{/doc/acs-lang/ {ACS Localization}} {ACS 4 Globalization Detailed Design}</property>
 <property name="doc(title)">ACS 4 Globalization Detailed Design</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h2>ACS 4 Globalization Detailed Design</h2>
 
 by Henry Minsky
@@ -56,12 +60,12 @@ the user&#39;s native country, region, or culture.
 Java Locale API</a> there is an optional <em>variant</em> which can
 be added to a locale, which we will omit in the Tcl API.</p>
 <p>The <em>language</em> is a valid <strong>ISO Language
-Code</strong>. These codes are the lower-case two-letter codes as
+Code</strong>. These codes are the lowercase two-letter codes as
 defined by ISO-639. You can find a full list of these codes at a
 number of sites, such as:<br><a href="http://www.ics.uci.edu/pub/ietf/http/related/iso639.txt">http://www.ics.uci.edu/pub/ietf/http/related/iso639.txt</a>
 </p>
 <p>The <em>country</em> is a valid <strong>ISO Country
-Code</strong>. These codes are the upper-case two-letter codes as
+Code</strong>. These codes are the uppercase two-letter codes as
 defined by ISO-3166. You can find a full list of these codes at a
 number of sites, such as:<br><a href="http://www.chemie.fu-berlin.de/diverse/doc/ISO_3166.html">http://www.chemie.fu-berlin.de/diverse/doc/ISO_3166.html</a>
 </p>
@@ -101,7 +105,7 @@ current session.
 The request processor should use the ad_locale API to figure out
 the preferred locale for a request (perhaps combining user
 preference with subsite defaults in some way). It will make this
-information accesible via the <kbd>ad_conn</kbd>
+information accessible via the <kbd>ad_conn</kbd>
  function:
 <pre><strong>ad_conn locale</strong></pre>
 <h4>Character Sets and Encodings</h4>
@@ -165,7 +169,7 @@ which call <kbd>lang_message_lookup</kbd>, or else use the
 
 Message catalog lookups can be potentially expensive, if many of
 them are done in a page. The templating system can already
-precompile and and cache adp pages. This works fine for a page in a
+precompile and cache adp pages. This works fine for a page in a
 specific language such as <kbd>foo.en.adp</kbd>
 , but we need to
 modify the caching mechanism if we want to use a single template
@@ -307,7 +311,7 @@ generally ISO-8859-1 for AOLserver running on Unix systems in
 English.
 <p>This default can be overridden by setting the AOLserver init
 parameter for the MIME type of <kbd>.tcl</kbd> files to include an
-explcit character set. If an explicit MIME type is not found,
+explicit character set. If an explicit MIME type is not found,
 <kbd>ns_encodingfortype</kbd> will default to the AOLserver init
 parameter value <kbd>DefaultCharset</kbd> if it is set.</p>
 <p>Example AOLserver .ini configuration file to set default script
@@ -432,8 +436,8 @@ _mr fr mail_notification "Le notification du email"
 </pre>
 
 In the example above, if the catalog file was loaded from the
-bboard package, all of the keys would be prefixed autmatically with
-"<code>bboard.</code>
+bboard package, all of the keys would be prefixed automatically
+with "<code>bboard.</code>
 ".
 <h4>Loading A Message Catalog At Package Init Time</h4>
 
@@ -445,7 +449,7 @@ The API function
 Is used to load the message catalogs for a package. The catalog
 files are stored in a package subdirectory called
 <kbd>catalog</kbd>
-. Their file names have the form
+. Their filenames have the form
 <kbd>*.<em>encoding</em>.cat</kbd>
 , where <em>encoding</em>
  is the
@@ -507,7 +511,7 @@ translation is provided in the user&#39;s preferred language.</li><li>
 translated once at template compile time, rather than dynamically
 every time the page is run. This will be unneccessaru and will be
 deprecated once we have implemented <em>effective locale</em> based
-cacheing for templates.</li>
+caching for templates.</li>
 </ul>
 Example 1: Display the text string <em>Hello</em> on an ADP page
 (i.e. do nothing special):

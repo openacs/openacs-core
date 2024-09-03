@@ -95,7 +95,7 @@ connections. This means that users will need to reauthenticate themselves
 over SSL when performing some action that requires secure authentication.</para>
 
 <para>Although this makes the site less user friendly, this design significantly
-increases the security of the system because this insures that the
+increases the security of the system because this ensures that the
 authentication tokens presented to a secure section of the web site were not
 sniffed. The system is not entirely secure, since the actual authentication
 password can be sniffed from the system, after which the sniffer can apply
@@ -395,7 +395,7 @@ that are used by the authentication system.</para>
 <computeroutput>sec_setup_session</computeroutput>, which is called either to
 create a new session from <computeroutput>sec_handler</computeroutput> or from
 <computeroutput>ad_user_login</computeroutput> when there is a change in
-authorization level. The session management code must do two things: insure that
+authorization level. The session management code must do two things: ensure that
 session-level data does not float between users, and update the users table
 which has columns for <computeroutput>n_sessions</computeroutput>,
 <computeroutput>last_visit</computeroutput>, and
@@ -410,8 +410,8 @@ associated with a session to be carried over when a user logs in.</para>
 
 <para>The users table is updated by
 <computeroutput>sec_update_user_session_info</computeroutput> which is called
-when an existing session is assigned a non-zero user_id, or when a session is
-created with a non-zero user_id.</para>
+when an existing session is assigned a nonzero user_id, or when a session is
+created with a nonzero user_id.</para>
 
 </sect3>
 
@@ -455,7 +455,7 @@ db and <computeroutput>tcl_max_value</computeroutput> is incremented by
 these values are used to dynamically generate a procedure that returns a
 constant. This approach avoids (relatively) expensive calls to
 <computeroutput>ad_parameter</computeroutput> in <computeroutput>sec_handler</computeroutput>. The impact of this
-approach is that these parameters cannot be dynamically changed at runtime
+approach is that these parameters cannot be dynamically changed at run time
 and require a server restart.</para>
 
 </sect3>
@@ -777,7 +777,7 @@ Currently there are only session properties. Because sessions have a maximum
 life, properties have a maximum life. It would be nice to expand the
 interface to allow for more persistent properties. In the past, there was a
 sec_browser_properties table that held permanent properties about each unique
-visitor (for logged in users, these are just user properties). This was
+visitor (for logged-in users, these are just user properties). This was
 unscalable because there was no way to delete these properties, and the table
 tended to grow to millions of rows. It would be nice to view browser and
 session properties as two types of client properties, but with different
@@ -809,7 +809,7 @@ it into the database on every hit is too big a hammer.
 <title>Cookieless Sessions</title>
 
 <para>Two trends drive the requirement for removing cookie dependence. WAP
-browsers that do not have cookies, and publc perceptions of cookies as an
+browsers that do not have cookies, and public perceptions of cookies as an
 invasion of privacy. The rely on the cookies mechanism in HTTP to distinguish
 one request from the next, and we trust it to force requests from the same
 client to carry the same cookie headers. The same thing can be accomplished by

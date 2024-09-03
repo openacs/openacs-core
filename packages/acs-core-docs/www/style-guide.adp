@@ -1,7 +1,11 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {OpenACS Style Guide}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {OpenACS Style Guide}</property>
 <property name="doc(title)">OpenACS Style Guide</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="eng-standards" leftLabel="Prev"
 			title="Chapter 12. Engineering
@@ -14,7 +18,7 @@ Standards"
 <a name="style-guide-motivation" id="style-guide-motivation"></a>Motivation</h3></div></div></div><p>Why have coding standards for OpenACS? And if the code works why
 change it to adhere to some arbitrary rules?</p><p>Well, first lets consider the OpenACS code base (all this as of
 December 2003 and including dotLRN). There are about 390,000 lines
-of Tcl code, about 460,000 lines of sql (in datamodel scripts and
+of Tcl code, about 460,000 lines of SQL (in datamodel scripts and
 .xql files), about 80,000 lines of markup in .adp files, and about
 100,000 lines of documentation. All told, just about a million
 lines of "stuff". In terms of logical units there are
@@ -98,8 +102,8 @@ over your code and provide feedback and do the same for others.</p></li>
 </tr></thead><tbody><tr>
 <td>0.1</td><td>Creation</td><td>12/2003</td><td>Jeff Davis</td>
 </tr></tbody>
-</table></div><p><span class="cvstag">($&zwnj;Id: style-guide.xml,v 1.4 2017/08/07
-23:47:54 gustafn Exp $)</span></p>
+</table></div><div class="cvstag">($&zwnj;Id: style-guide.xml,v 1.4.2.1 2019/11/22
+16:30:46 gustafn Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

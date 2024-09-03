@@ -1,9 +1,13 @@
 
-<property name="context">{/doc/acs-templating {ACS Templating}} {Templating System User Guide: Embedding Code in
+<property name="context">{/doc/acs-templating/ {ACS Templating}} {Templating System User Guide: Embedding Code in
 Templates}</property>
 <property name="doc(title)">Templating System User Guide: Embedding Code in
 Templates</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h2>Embedding Code in Templates</h2>
 <a href="..">Templating System</a>
  : <a href="../developer-guide">Developer Guide</a>
@@ -16,6 +20,6 @@ on the <a href="../demo">demonstration page</a>.</p>
 <p>Generally, avoid putting escaped Tcl code in adp files, or
 generating HTML fragments in Tcl procedures. It subverts the
 separation of code and layout, one of the benefits of templating.
-Embedded Tcl makes templates non-portable to ACS/Java.</p>
+Embedded Tcl makes templates nonportable to ACS/Java.</p>
 <hr>
 <!-- <a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a> -->

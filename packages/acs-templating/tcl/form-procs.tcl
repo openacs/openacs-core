@@ -18,10 +18,13 @@ ad_library {
 namespace eval template {}
 namespace eval template::form {}
 
-ad_proc -public form {command args} {
+ad_proc -deprecated form {command args} {
     form is really template::form although when in
     the "template" namespace you may omit the
     template::
+
+    DEPRECATED: no, you should not omit the namespace, and this proc
+    does not comply with OpenACS naming convention.
 
     @see template::form
     @see template::element
@@ -39,7 +42,6 @@ ad_proc -public template::form { command args } {
     @see template::form::set_properties
     @see template::form::get_properties
     @see template::form::exists
-    @see template::form::export
     @see template::form::get_combined_values
     @see template::form::get_values
     @see template::form::get_elements
@@ -174,7 +176,7 @@ ad_proc -public template::form::create { id args } {
     if { [info exists opts(elements)] } {
 
     # strip carriage returns
-        regsub -all {\r} $opts(elements) {} element_data
+        regsub -all -- {\r} $opts(elements) {} element_data
 
         foreach element [split $element_data "\n"] {
             set element [string trim $element]
@@ -229,25 +231,14 @@ ad_proc -public template::form::get_button { id } {
 
     # Otherwise, find out now
 
-    set formbutton {}
-
     # If the form isn't being submitted at all, no button was clicked
-    if { $id ne [ns_queryget form:id] } {
+    if { ![ns_conn isconnected] || $id ne [ns_queryget form:id] } {
         return {}
     }
 
     # Search the submit form for the button
-    set form [ns_getform]
-
-    if { $form ne "" } {
-        set size [ns_set size $form]
-        for { set i 0 } { $i < $size } { incr i } {
-            if { [string match "formbutton:*" [ns_set key $form $i]] } {
-                set formbutton [string range [ns_set key $form $i] [string length "formbutton:"] end]
-                break
-            }
-        }
-    }
+    set formbutton [lindex [ns_set keys [ns_getform] "formbutton:*"] 0]
+    regsub {^formbutton:} $formbutton {} formbutton
 
     return $formbutton
 }
@@ -349,15 +340,14 @@ ad_proc -private template::form::template { id { style "" } } {
         set file_stub [template::resource_path -type forms -style standard]
     }
 
-    # ensure that the style template has been compiled and is up-to-date
-    template::adp_init adp $file_stub
-
-    # get result of template output procedure into __adp_output
-    # the only data source on which this template depends is the "elements"
+    #
+    # Ensure that the style template has been compiled and is
+    # up-to-date, and execute the result into __adp_output.  The only
+    # data source on which this template depends is the "elements"
     # multirow data source.  The output of this procedure will be
     # placed in __adp_output in this stack frame.
-
-    template::code::adp::$file_stub
+    #
+    [template::adp_init adp $file_stub]
 
     return $__adp_output
 }
@@ -494,13 +484,13 @@ ad_proc -private template::form::render { id tag_attributes } {
     }
 
     if { [info exists form_properties(has_submit)]
-         && [template::util::is_true $form_properties(has_submit)]
+         && [string is true -strict $form_properties(has_submit)]
     } {
         set form_properties(edit_buttons) {}
     }
 
     if { [info exists form_properties(has_edit)]
-         && [template::util::is_true $form_properties(has_edit)]
+         && [string is true -strict $form_properties(has_edit)]
     } {
         set form_properties(display_buttons) {}
     }
@@ -559,13 +549,13 @@ ad_proc -private template::form::render { id tag_attributes } {
         }
     }
 
-    # get any additional attributes developer specified to include in form tag
-    if { [info exists properties(html)] } {
-        array set attributes $properties(html)
-    }
-
-    # add on or replace with attributes specified by designer in formtemplate tag
-    array set attributes $tag_attributes
+    #
+    # Get any additional attributes developer specified to include in
+    # the form tag and merge them with attributes specified by
+    # designer in the formtemplate tag.
+    #
+    array set attributes \
+        [::template::widget::merge_tag_attributes properties $tag_attributes]
 
     # set the form to point back to itself if action is not specified
     if { ! [info exists properties(action)] } {
@@ -633,12 +623,11 @@ ad_proc -private template::form::render { id tag_attributes } {
         append output "<legend>$fieldset_legend</legend>"
     }
 
-    # Export variables specified by the export property as hidden
-    # formfields. (used e.g. by ad_form when specifying the -export
-    # flag)
-    if { [info exists form_properties(export)] } {
+    # Include exported variables created by ad_form when specifying
+    # the -export flag
+    if { [info exists form_properties(exported_vars)] } {
         append output {<!-- Exported form vars START -->}
-        append output [uplevel #$level [subst {export_vars -form {$form_properties(export)}}]]
+        append output $form_properties(exported_vars)
         append output {<!-- Exported form vars END -->}
     }
 
@@ -867,10 +856,15 @@ ad_proc -public template::form::set_values { id array_ref } {
     }
 }
 
-ad_proc -public template::form::export {} {
+ad_proc -deprecated template::form::export {} {
     Generates hidden input tags for all values in a form submission.
     Typically used to create a confirmation page following an initial
     submission.
+
+    DEPRECATED: this proc has been superseded by export_vars, which
+                also offers additional features.
+
+    @see export_vars
 
     @return A string containing hidden input tags for inclusion in a
             form.

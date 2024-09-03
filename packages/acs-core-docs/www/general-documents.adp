@@ -1,9 +1,13 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Chapter 1. High level information: What is
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Chapter 1. High level information: What is
 OpenACS?}</property>
 <property name="doc(title)">Chapter 1. High level information: What is
 OpenACS?</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="for-everyone" leftLabel="Prev"
 			title="Part I. OpenACS For

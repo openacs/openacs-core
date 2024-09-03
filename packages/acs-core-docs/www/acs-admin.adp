@@ -1,7 +1,11 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Part II. Administrator&#39;s Guide}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Part II. Administrator&#39;s Guide}</property>
 <property name="doc(title)">Part II. Administrator&#39;s Guide</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="release-notes" leftLabel="Prev"
 			title=""
@@ -23,7 +27,7 @@ PostgreSQL</a></span></dt><dt><span class="sect1"><a href="aolserver4">Install A
 4</a></span></dt><dt><span class="sect1"><a href="openacs">Install OpenACS
 5.9.0</a></span></dt><dt><span class="sect1"><a href="win2k-installation">OpenACS
 Installation Guide for Windows</a></span></dt><dt><span class="sect1"><a href="mac-installation">OpenACS
-Installation Guide for Mac OS X</a></span></dt>
+Installation Guide for macOS</a></span></dt>
 </dl></dd><dt><span class="chapter"><a href="configuring-new-site">4.
 Configuring a new OpenACS Site</a></span></dt><dd><dl>
 <dt><span class="sect1"><a href="configuring-install-packages">Installing OpenACS

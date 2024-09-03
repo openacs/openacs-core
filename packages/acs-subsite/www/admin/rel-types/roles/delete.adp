@@ -1,6 +1,6 @@
 <master>
 <property name="context">@context;literal@</property>
-<property name="doc(title)">Delete @pretty_name;noquote@</property>
+<property name="doc(title)">Delete @pretty_name;literal@</property>
 
 Are you sure you want to delete this role? 
 

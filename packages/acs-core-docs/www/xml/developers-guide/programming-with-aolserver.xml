@@ -58,7 +58,7 @@ appropriate term.</para>
 <para>
 <computeroutput>ns_schedule_proc</computeroutput> and <computeroutput>ad_schedule_proc</computeroutput> each take a
 <computeroutput>-thread</computeroutput> flag to cause a scheduled procedure to run
-asychronously, in its own thread. It almost always seems like a good idea to
+asynchronously, in its own thread. It almost always seems like a good idea to
 specify this switch, but there&#39;s a problem. 
 </para>
 

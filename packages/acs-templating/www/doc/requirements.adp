@@ -1,7 +1,11 @@
 
-<property name="context">{/doc/acs-templating {ACS Templating}} {ACS Templating Requirements}</property>
+<property name="context">{/doc/acs-templating/ {ACS Templating}} {ACS Templating Requirements}</property>
 <property name="doc(title)">ACS Templating Requirements</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h2>ACS Templating Requirements</h2>
 
 by <a href="mailto:karlg\@arsdigita.com">Karl Goldstein</a>

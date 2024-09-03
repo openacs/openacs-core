@@ -30,10 +30,16 @@ namespace eval notification::request {
 
         if {$request_id eq ""} {
             # Set up the vars
-            set extra_vars [ns_set create]
-            oacs_util::vars_to_ns_set -ns_set $extra_vars -var_list {
-                request_id type_id user_id object_id interval_id delivery_method_id format dynamic_p
-            }
+            set extra_vars [ns_set create s \
+                                request_id $request_id \
+                                type_id $type_id \
+                                user_id $user_id \
+                                object_id $object_id \
+                                interval_id $interval_id \
+                                delivery_method_id $delivery_method_id \
+                                format $format \
+                                dynamic_p $dynamic_p \
+                               ]
 
             # Create the request
             set request_id [package_instantiate_object -extra_vars $extra_vars notification_request]
@@ -61,7 +67,12 @@ namespace eval notification::request {
     } {
         returns true if at least one request exists for this object and type
     } {
-        return [expr { [db_string request_count {}] > 0 }]
+        return [db_0or1row exists {
+            select 1 from notification_requests
+            where type_id = :type_id
+            and object_id = :object_id
+            fetch first 1 rows only
+        }]
     }
 
     ad_proc -public request_count {

@@ -16,7 +16,7 @@ if {[nsv_exists rp_properties request_count] != 0} {
     #
     # This is a re-init. There is no need, to rerun the code
     # below. Setting e.g. filters multiple times might have unwanted
-    # behavor in the server
+    # behavior in the server.
     #
     ns_log notice "request-processor re-init"
     return
@@ -26,64 +26,67 @@ if {[nsv_exists rp_properties request_count] != 0} {
 # lock contention. Thanks to davis@xarg.net.
 
 if { [parameter::get -package_id $::acs::kernel_id -parameter PerformanceModeP -default 0] } {
-  ad_proc -private rp_performance_mode {} {
-    Returns 1 if the request processor is in performance mode, 0 otherwise.
-  } {
-    return 1
-  }
+    ad_proc -private rp_performance_mode {} {
+        Returns 1 if the request processor is in performance mode, 0 otherwise.
+    } {
+        return 1
+    }
 } else {
-  ad_proc -private rp_performance_mode {} {
-    Returns 1 if the request processor is in performance mode, 0 otherwise.
-  } {
-    return 0
-  }
+    ad_proc -private rp_performance_mode {} {
+        Returns 1 if the request processor is in performance mode, 0 otherwise.
+    } {
+        return 0
+    }
 }
 
 if { [parameter::get -package_id $::acs::kernel_id -parameter DebugP -default 0] ||
      [parameter::get -package_id $::acs::kernel_id -parameter LogDebugP -default 0]
- } { 
+ } {
 
     ad_proc -private rp_debug { { -debug f } { -ns_log_level notice } string } {
 
-	Logs a debugging message, including a high-resolution (millisecond)
-	timestamp. 
-	
+        Logs a debugging message, including a high-resolution (millisecond)
+        timestamp.
+
     } {
-	if { [parameter::get -package_id $::acs::kernel_id -parameter DebugP -default 0] } { 
-	    set clicks [clock clicks -milliseconds]
-	    ds_add rp [list debug $string $clicks $clicks]
-	}
-	if { [parameter::get -package_id $::acs::kernel_id -parameter LogDebugP -default 0]
-	     || [string is true -strict $debug]
-	 } {
-	    if { [info exists ::ad_conn(start_clicks)] } {
-		set timing " ([expr {[clock clicks -milliseconds] - $::ad_conn(start_clicks)}] ms)"
-	    } else {
-		set timing ""
-	    }
-	    ns_log $ns_log_level "RP$timing: $string"
-	}
+        if { [parameter::get -package_id $::acs::kernel_id -parameter DebugP -default 0] } {
+            set clicks [clock clicks -milliseconds]
+            ds_add rp [list debug $string $clicks $clicks]
+        }
+        if { [parameter::get -package_id $::acs::kernel_id -parameter LogDebugP -default 0]
+             || [string is true -strict $debug]
+         } {
+            if { [info exists ::ad_conn(start_clicks)] } {
+                set timing " ([expr {[clock clicks -milliseconds] - $::ad_conn(start_clicks)}] ms)"
+            } else {
+                set timing ""
+            }
+            ns_log $ns_log_level "RP$timing: $string"
+        }
     }
 } else {
     ad_proc -private rp_debug { { -debug f } { -ns_log_level notice } string } {
-	dummy placeholder
+        dummy placeholder
     } {
-	return
+        return
     }
 }
 
-if {[nsv_exists rp_properties request_count] == 0} {
-    #
-    # Run this only once at startup, and not on re-inits
-    #
-    nsv_set rp_properties request_count 0
+#
+# Traditionally, the filters are registered for OpenACS just for GET,
+# HEAD, and POST methods. Some applications might want to extend this
+# like (e.g. for REST interfaces)
+#
+#    set httpMethods {GET HEAD POST PUT}
+#
+set httpMethods {GET HEAD POST}
 
-    foreach httpMethod {GET HEAD POST} {
-        ns_register_filter preauth $httpMethod /resources/* rp_resources_filter
-        ns_register_filter preauth $httpMethod * rp_filter
-        ns_register_proc $httpMethod / rp_handler
-    }
+foreach httpMethod $httpMethods {
+    ns_register_filter preauth $httpMethod /resources/* rp_resources_filter
+    ns_register_filter preauth $httpMethod * rp_filter
+    ns_register_proc $httpMethod / rp_handler
 }
+
 
 set unreg_cmd [expr {$::acs::useNaviServer ? "ns_unregister_op" : "ns_unregister_proc"}]
 
@@ -98,9 +101,9 @@ $unreg_cmd POST /*.tcl
 
 set listings [ns_config "ns/server/[ns_info server]" "directorylisting" "none"]
 if { $listings eq "fancy" || $listings eq "simple" } {
-  nsv_set rp_directory_listing_p . 1
+    nsv_set rp_directory_listing_p . 1
 } else {
-  nsv_set rp_directory_listing_p . 0
+    nsv_set rp_directory_listing_p . 0
 }
 
 # this initialization must be in a package alphabetically before
@@ -127,31 +130,31 @@ ad_after_server_initialization filters_register {
 
     set filter_index 0
     foreach filter_info $filters {
-	lassign $filter_info priority kind method path \
-		proc arg debug critical description script
+        lassign $filter_info priority kind method path \
+            proc arg debug critical description script
 
-	# Figure out how to invoke the filter, based on the number of arguments.
-	if { [llength [info procs $proc]] == 0 } {
-	    # [info procs $proc] returns nothing when the procedure has been
-	    # registered by C code (e.g., ns_returnredirect). Assume that neither
-	    # "conn" nor "why" is present in this case.
-	    set arg_count 1
-	} else {
-	    set arg_count [llength [info args $proc]]
-	}
+        # Figure out how to invoke the filter, based on the number of arguments.
+        if { [llength [info procs $proc]] == 0 } {
+            # [info procs $proc] returns nothing when the procedure has been
+            # registered by C code (e.g., ns_returnredirect). Assume that neither
+            # "conn" nor "why" is present in this case.
+            set arg_count 1
+        } else {
+            set arg_count [llength [info args $proc]]
+        }
 
-	if { $debug == "t" } {
-	    set debug_p 1
-	} else {
-	    set debug_p 0
-	}
+        if { $debug == "t" } {
+            set debug_p 1
+        } else {
+            set debug_p 0
+        }
 
         ns_log Notice "ns_register_filter $kind $method $path rp_invoke_filter \
-		[list $filter_index $debug_p $arg_count $proc $arg]"
+                [list $filter_index $debug_p $arg_count $proc $arg]"
         ns_register_filter $kind $method $path rp_invoke_filter \
-		[list $filter_index $debug_p $arg_count $proc $arg]
+            [list $filter_index $debug_p $arg_count $proc $arg]
 
-	incr filter_index
+        incr filter_index
     }
 }
 
@@ -164,35 +167,41 @@ ad_after_server_initialization procs_register {
 
     set proc_index 0
     foreach proc_info $procs {
-	lassign $proc_info method path proc arg debug noinherit description script
+        lassign $proc_info method path proc arg debug noinherit description script
 
-	if { $noinherit == "t" } {
-	    set noinherit_switch "-noinherit"
-	} else {
-	    set noinherit_switch ""
-	}
+        if { $noinherit == "t" } {
+            set noinherit_switch "-noinherit"
+        } else {
+            set noinherit_switch ""
+        }
 
-	# Figure out how to invoke the filter, based on the number of arguments.
-	if { [llength [info procs $proc]] == 0 } {
-	    # [info procs $proc] returns nothing when the procedure has been
-	    # registered by C code (e.g., ns_returnredirect). Assume that neither
-	    # "conn" nor "why" is present in this case.
-	    set arg_count 1
-	} else {
-	    set arg_count [llength [info args $proc]]
-	}
+        # Figure out how to invoke the filter, based on the number of arguments.
+        if { [llength [info procs $proc]] == 0 } {
+            # [info procs $proc] returns nothing when the procedure has been
+            # registered by C code (e.g., ns_returnredirect). Assume that neither
+            # "conn" nor "why" is present in this case.
+            set arg_count 1
+        } else {
+            set arg_count [llength [info args $proc]]
+        }
 
-	if { $debug == "t" } {
-	    set debug_p 1
-	} else {
-	    set debug_p 0
-	}
+        if { $debug == "t" } {
+            set debug_p 1
+        } else {
+            set debug_p 0
+        }
 
-	ns_log Notice "ns_register_proc $noinherit_switch [list $method $path rp_invoke_proc [list $proc_index $debug_p $arg_count $proc $arg]]"
-	ns_register_proc {*}$noinherit_switch \
-	    $method $path rp_invoke_proc [list $proc_index $debug_p $arg_count $proc $arg]
+        ns_log Notice "ns_register_proc $noinherit_switch [list $method $path rp_invoke_proc [list $proc_index $debug_p $arg_count $proc $arg]]"
+        ns_register_proc {*}$noinherit_switch \
+            $method $path rp_invoke_proc [list $proc_index $debug_p $arg_count $proc $arg]
     }
 }
+
+#
+# Set a flag for bootststrap that at least, the request processor has
+# done all essential initialization
+#
+nsv_set rp_properties request_count 0
 
 # Local variables:
 #    mode: tcl

@@ -1,7 +1,11 @@
 
-<property name="context">{/doc/acs-templating {ACS Templating}} {Template Markup Tag Reference}</property>
+<property name="context">{/doc/acs-templating/ {ACS Templating}} {Template Markup Tag Reference}</property>
 <property name="doc(title)">Template Markup Tag Reference</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h2>Template Markup Tag Reference</h2>
 <a href="..">Templating System</a>
  : <a href="../designer-guide">Designer Guide</a>

@@ -150,7 +150,7 @@ parts. Each has a section below.</para>
           <seg>Username is email switch</seg>
         </seglistitem>
       </segmentedlist>
-      <para>Users will log in using a username, a authority, and a
+      <para>Users will log in using a username, an authority, and a
       password.  The authority is the source for user/password
       verification.  OpenACS can be an authority itself. </para>
       
@@ -214,7 +214,7 @@ authentication process from a page linked under /acs-admin.</para>
           login process.</para></listitem>
       </itemizedlist>
       <para>The local authority driver is an encapsulation of current
-      functionality within an driver matching a service contract.  The
+      functionality within a driver matching a service contract.  The
       other drivers call external functions.  The possible functions
       for each authority are split into several drivers for convenience.
       One driver handles authentication, one account creation, and one
@@ -256,8 +256,7 @@ authentication process from a page linked under /acs-admin.</para>
         <listitem><para>Authentication Driver, e.g. "RADIUS". In practice, this
           would be a reference to a service contract
           implementation.</para></listitem>
-        <listitem><para>Authentication Driver configuration settings, e.g. host
-          name, port, etc., as required by the particular driver. Note that
+        <listitem><para>Authentication Driver configuration settings, e.g. hostname, port, etc., as required by the particular driver. Note that
           this is per authority, not per driver, i.e., you can have multiple
           authorities with the same driver but different configuration
           options.</para></listitem>
@@ -275,8 +274,7 @@ authentication process from a page linked under /acs-admin.</para>
           reason we have separate drivers for authentication and account
           creation is that organizations are likely to have a home-grown
           account registration process.</para></listitem>
-        <listitem><para>Account Creation Driver configuration settings, e.g. host
-          name, port, etc., as required by the particular driver. Note that
+        <listitem><para>Account Creation Driver configuration settings, e.g. hostname, port, etc., as required by the particular driver. Note that
           this is per authority, not per driver, i.e., you can have multiple
           authorities with the same driver but different configuration
           options.</para></listitem>
@@ -298,7 +296,7 @@ to access these settings.</para>
       <para>OpenACS will come pre-configured with one authority, which is
 the "local" authority, meaning we&#39;ll authenticate as normal using the
 local users table. This will, just like any other authority, be
-implemetned using a service contract.</para>
+implemented using a service contract.</para>
     </sect3>
 
     <sect3 id="Synchronizing_and_Linking_User"><title>Synchronizing
@@ -403,7 +401,7 @@ Registration</title>
       <para>If a user doesn&#39;t have an account, the site-wide
 configuration can allow the user to register for one, as defined in
 the configuration discussed above. This section is about normal
-account registration through a authority driver.</para>
+account registration through an authority driver.</para>
       <para>The account creation service contract implementation will
 need to tell us which information to ask the user for:</para>
       <itemizedlist>
@@ -552,7 +550,7 @@ mode.</para>
       <para>Similarly, <literal>ad_conn user_id</literal> will continue
 to return 0 (not logged-in) when the user is only logged-in
 untrusted, and we&#39;ll supply another variable, <literal>ad_conn
-untrusted_user_id</literal>, which wlll be set to the user_id for
+untrusted_user_id</literal>, which will be set to the user_id for
 all login levels.</para>
       <para>This should ensure that we get full access to the new
 feature, while leaving all current code just as secure as it was
@@ -716,7 +714,7 @@ through these settings:</para>
 this:</para>
       <programlisting>
 if { ![auth::split_username -username_var username -authority_var authority] } {
-    # bounce back to the form with a message saying that the login wasn&#39;t valid.
+    # bounce back to the form with a message saying that the login was not valid. 
     ad_script_abort
 }
 

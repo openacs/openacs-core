@@ -1,6 +1,6 @@
 ad_page_contract {
     Parameters page.
-    
+
     @author Lars Pind (lars@collaboraid.biz)
     @creation-date 2003-06-13
     @cvs-id $Id$
@@ -10,15 +10,23 @@ ad_page_contract {
     {scope "instance"}
     {return_url:localurl,optional "[ad_conn url]?[ad_conn query]"}
     {section ""}
+    {scroll_to:word ""}
+}
+
+if {$scroll_to ne ""} {
+    add_body_handler -event load -script [subst -nocommands {        
+        const scrollTarget = document.querySelectorAll('#$scroll_to')[0];
+        window.scrollTo(0, scrollTarget.offsetTop - 90);
+    }]
 }
 
 if { $scope eq "global" } {
     permission::require_permission \
-        -object_id [acs_lookup_magic_object security_context_root] \
+        -object_id [acs_magic_object security_context_root] \
         -privilege admin
     db_1row select_pretty_name {}
 
-    set page_title "$instance_name Global Parameters"
+    set page_title "Global Parameters of: $instance_name"
     set package_url [site_node::get_url_from_object_id -object_id $package_id]
 
     if { $package_url eq [subsite::get_element -element url] } {
@@ -33,7 +41,7 @@ if { $scope eq "global" } {
     permission::require_permission -object_id $package_id -privilege admin
     db_1row select_instance_name {}
 
-    set page_title "$instance_name Instance Parameters"
+    set page_title "Instance Parameters of: $instance_name"
     set package_url [site_node::get_url_from_object_id -object_id $package_id]
 }
 
@@ -48,17 +56,17 @@ if { $package_url eq [subsite::get_element -element url] } {
 if { $scope ne "global" } {
 
     if {![info exists package_key] || $package_key eq ""} {
-	set package_key [apm_package_key_from_id $package_id]
+        set package_key [apm_package_key_from_id $package_id]
     }
     set global_parameters [db_list get_global_parameters {
-	select parameter_name from apm_parameters where package_key = :package_key and scope = 'global'
-    }] 
+        select parameter_name from apm_parameters where package_key = :package_key and scope = 'global'
+    }]
     if {[llength $global_parameters] > 0} {
-	#
-	# Just provide a link to the global parameters in case these exist
-	#
-	set global_parameter_label [join [lsort $global_parameters] ", "]
-	set global_param_url [export_vars -base /shared/parameters {package_key return_url package_id {scope global}}]
+        #
+        # Just provide a link to the global parameters in case these exist
+        #
+        set global_parameter_label [join [lsort $global_parameters] ", "]
+        set global_param_url [export_vars -base /shared/parameters {package_key return_url package_id {scope global}}]
     }
 }
 
@@ -110,22 +118,38 @@ db_foreach select_params {} {
                  {help_text {$description}} \
                  [list html $html]]
 
-    set file_val [ad_parameter_from_file $parameter_name $package_key]
-    if { $file_val ne "" } { 
-        set display_warning_p 1 
-        lappend elm [list after_html "<br><span style=\"color: red; font-weight: bold;\">$file_val (*)</span>"]
+    set file_val [ad_parameter_from_configuration_file $parameter_name $package_key]
+    if { $file_val ne "" } {
+        set display_warning_p 1
+        lappend elm [list after_html [subst {
+            <br><span style="color: red; font-weight: bold;">$file_val (*)</span>
+        }]]
     }
-    
+
     ad_form -extend -name parameters -form [list $elm]
 
     set param($parameter_name) $attr_value
-    
+
     incr counter
 }
 
-set focus "parameters.$focus_elm"
+#set focus "parameters.$focus_elm"
+set sections_header ""
 
 if { $counter > 0 } {
+    #
+    # "Main" is always the first section
+    #
+    if { [info exists sections(main)] } {
+        set section_list "<a href='#main'>[ns_quotehtml $sections(main)]</a>"
+    }
+    foreach section_name [lsort [array names sections]] {
+        if {$section_name ne "main"} {
+            lappend section_list "<a href='#$section_name'>[ns_quotehtml $sections($section_name)]</a>"
+        }
+    }
+    set sections_header "<p>Sections: <small>[join $section_list { - } ]</small></p>"
+
     # Close last section
     ad_form -extend -name parameters -form [list "-section"]
     ad_form -extend -name parameters -on_request {
@@ -137,16 +161,14 @@ if { $counter > 0 } {
             if { [info exists $c__parameter_name] } {
                 if { $scope eq "instance" } {
                     parameter::set_value \
-	                -package_id $package_id \
-	                -parameter $c__parameter_name \
-	                -value [set $c__parameter_name]
-                    callback subsite::parameter_changed -package_id $package_id -parameter $c__parameter_name -value [set $c__parameter_name]
+                        -package_id $package_id \
+                        -parameter $c__parameter_name \
+                        -value [set $c__parameter_name]
                 } else {
                     parameter::set_global_value \
                         -package_key $package_key \
                         -parameter $c__parameter_name \
                         -value [set $c__parameter_name]
-                    callback subsite::global_parameter_changed -package_key $package_key -parameter $c__parameter_name -value [set $c__parameter_name]
                 }
             }
         }

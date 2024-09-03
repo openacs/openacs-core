@@ -1,7 +1,11 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {ACS File Naming and Formatting Standards}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {ACS File Naming and Formatting Standards}</property>
 <property name="doc(title)">ACS File Naming and Formatting Standards</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="eng-standards-constraint-naming" leftLabel="Prev"
 			title="Chapter 12. Engineering
@@ -10,13 +14,15 @@ Standards"
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="eng-standards-filenaming" id="eng-standards-filenaming"></a>ACS
-File Naming and Formatting Standards</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">By Michael Yoon and Aurelius
-Prochazka</span></p><span style="color: red">&lt;/authorblurb&gt;</span><p>To ensure consistency (and its collateral benefit,
+File Naming and Formatting Standards</h2></div></div></div><div class="authorblurb">
+<p>By Michael Yoon and Aurelius Prochazka</p>
+OpenACS docs are written by the named authors, and may be edited by
+OpenACS documentation staff.</div><p>To ensure consistency (and its collateral benefit,
 maintainability), we define and adhere to standards in the
 following areas:</p><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="eng-standards-filenaming-nomenclature" id="eng-standards-filenaming-nomenclature"></a>File
-Nomenclature</h3></div></div></div><p>Usually we organize our files so that they mainly serve one of
+Nomenclature</h3></div></div></div><p>Usually, we organize our files so that they mainly serve one of
 the following three purposes:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>displaying objects and their properties</p></li><li class="listitem"><p>manipulating or acting on objects in some way (by creating,
 editing, linking, etc)</p></li><li class="listitem"><p>housing procedures, packages, data models and other prerequisite
@@ -101,7 +107,7 @@ take the form of a line like this:</p><pre class="programlisting">
 &lt;p&gt;
 Last Modified: file-standards.html,v 1.2 2000/09/19 07:22:45 ron Exp
 &lt;/p&gt;
-</pre><p>This can be at the top or bottom of the file.</p><p><span class="phrase">Using ad_page_contract</span></p><p>For non-library Tcl files (those not in the private Tcl
+</pre><p>This can be at the top or bottom of the file.</p><div>Using ad_page_contract</div><p>For non-library Tcl files (those not in the private Tcl
 directory), use <a class="link" href="tcl-doc" title="ad_page_contract"><code class="computeroutput">ad_page_contract</code></a> after the file path
 comment (this supersedes set_the_usual_form_variables and
 ad_return_complaint). Here is an example of using ad_page_contract,
@@ -148,7 +154,7 @@ string.</p></li><li class="listitem"><p>Note that <code class="computeroutput">a
 does not generate QQvariables, which were automatically created by
 ad_page_variables and set_the_usual_form_variables. The use of bind
 variables makes such previous variable syntax obsolete.</p></li>
-</ul></div><p><span class="phrase">Using ad_library</span></p><p>For shared Tcl library files, use <a class="link" href="tcl-doc" title="ad_library"><code class="computeroutput">ad_library</code></a> after the file path comment.
+</ul></div><div>Using ad_library</div><p>For shared Tcl library files, use <a class="link" href="tcl-doc" title="ad_library"><code class="computeroutput">ad_library</code></a> after the file path comment.
 Its only argument is a doc_string in the standard (javadoc-style)
 format, like <code class="computeroutput">ad_page_contract</code>.
 Don&#39;t forget to put the \@cvs-id in there. Here is an example of
@@ -161,7 +167,7 @@ ad_library {
     \@author John Doe (jdoe\@example.com)
     \@cvs-id file-standards.html,v 1.2 2000/09/19 07:22:45 ron Exp
 }
-</pre><p><span class="phrase">Non-Tcl Files</span></p><p>For SQL and other non-Tcl source files, the following file
+</pre><div>Non-Tcl Files</div><p>For SQL and other non-Tcl source files, the following file
 header structure is recommended:</p><pre class="programlisting">
 -- <span class="emphasis"><em>path relative to the ACS root directory</em></span>
 --
@@ -200,7 +206,7 @@ append page_content "&lt;/ul&gt;
 [ad_footer]"
 
 doc_return 200 text/html $page_content
-</pre><p>The old convention was to call <code class="computeroutput">ReturnHeaders</code> and then <code class="computeroutput">ns_write</code> for each distinct chunk of the
+</pre><p>The old convention was to call <code class="computeroutput">util_return_headers</code> and then <code class="computeroutput">ns_write</code> for each distinct chunk of the
 page. This approach has the disadvantage of tying up a scarce and
 valuable resource (namely, a database handle) for an unpredictable
 amount of time while sending packets back to the browser, and so it
@@ -214,8 +220,8 @@ used rarely, only when they are exceedingly useful.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="eng-standards-filenaming-tcllib" id="eng-standards-filenaming-tcllib"></a>Tcl Library Files</h3></div></div></div><p>Further standards for Tcl library files are under discussion; we
-plan to include naming conventions for procs.</p><p><span class="cvstag">($&zwnj;Id: filenaming.xml,v 1.8 2017/08/07
-23:47:54 gustafn Exp $)</span></p>
+plan to include naming conventions for procs.</p><div class="cvstag">($&zwnj;Id: filenaming.xml,v 1.8.2.2 2021/09/02
+16:56:02 gustafn Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

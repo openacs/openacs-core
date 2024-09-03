@@ -1,7 +1,7 @@
 This is OpenACS - the Open Architecture Community System.
 
-Version 5.9.1
--------------
+Version 5.10.1
+--------------
 
 Full documentation is located in the tarball at
 packages/acs-core-docs/www/index.html

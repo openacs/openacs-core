@@ -1,8 +1,7 @@
-
 ad_library {
 
     Procs to manage extensions to user data.
-    This calls the UserData service contract for allowing packages to be notified 
+    This calls the UserData service contract for allowing packages to be notified
     of changes in user information.
 
     @author ben@openforce.net
@@ -12,16 +11,16 @@ ad_library {
 }
 
 namespace eval acs_user_extension {
-    
+
     ad_proc -private dispatch {
         {-op:required}
         {-list_of_args:required}
         {-impl ""}
     } {
-    
-    	Dispatches (calls the service contract routines) the requested
-	method so that the operation gets executed, and packages are
-	notified of changes in user information.
+
+        Dispatches (calls the service contract routines) the requested
+        method so that the operation gets executed, and packages are
+        notified of changes in user information.
 
     } {
         if {$impl eq ""} {
@@ -47,7 +46,7 @@ namespace eval acs_user_extension {
     } {
         Notifies packages when a new user is added to the system.
 
-	@see dispatch
+        @see dispatch
     } {
         dispatch -op UserNew -list_of_args [list $user_id]
     }
@@ -56,8 +55,8 @@ namespace eval acs_user_extension {
         {-user_id:required}
     } {
         Notifies packages when a user is approved.
-	
-	@see dispatch
+
+        @see dispatch
     } {
         dispatch -op UserApprove -list_of_args [list $user_id]
     }
@@ -66,8 +65,8 @@ namespace eval acs_user_extension {
         {-user_id:required}
     } {
         Notifies packages when a user is deapproved.
-	
-	@see dispatch
+
+        @see dispatch
     } {
         dispatch -op UserDeapprove -list_of_args [list $user_id]
     }
@@ -75,9 +74,9 @@ namespace eval acs_user_extension {
     ad_proc -public user_modify {
         {-user_id:required}
     } {
-        Notifies packages when a user is modified. 
-	
-	@see dispatch
+        Notifies packages when a user is modified.
+
+        @see dispatch
     } {
         dispatch -op UserModify -list_of_args [list $user_id]
     }
@@ -87,7 +86,7 @@ namespace eval acs_user_extension {
     } {
         Notifies packages when a user is deleted.
 
-	@see dispatch
+        @see dispatch
     } {
         dispatch -op UserDelete -list_of_args [list $user_id]
     }

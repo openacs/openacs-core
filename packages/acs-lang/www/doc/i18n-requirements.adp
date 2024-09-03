@@ -1,7 +1,11 @@
 
-<property name="context">{/doc/acs-lang {ACS Localization}} {ACS 4 Globalization Requirements}</property>
+<property name="context">{/doc/acs-lang/ {ACS Localization}} {ACS 4 Globalization Requirements}</property>
 <property name="doc(title)">ACS 4 Globalization Requirements</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h2>ACS 4 Globalization Requirements</h2>
 <p>by Henry Minsky, Yon Feldman, Lars Pind, others</p>
 <h3>I. Introduction</h3>
@@ -279,7 +283,7 @@ filename.</p><p>
 <strong>50.20</strong> Tcl page script files can be authored in
 any character set. The system must have a way to determine the
 character set before loading the files, probably from the
-filename.</p><h4>Submitted Form Data Character Set</h4><strong>50.30</strong> Data which is submitted with a HTTP request
+filename.</p><h4>Submitted Form Data Character Set</h4><strong>50.30</strong> Data which is submitted with an HTTP request
 using a GET or POST method may be in any character set. The system
 must be able to determine the encoding of the form data and convert
 it to Unicode on demand.
@@ -363,23 +367,23 @@ in any supported language.</p>
 <h3>VI.G Time Zones</h3>
 <blockquote>
 <strong>90.10</strong> Provide API support for
-specifying a time zone
+specifying a timezone
 <p>
 <strong>90.20</strong> Provide an API for computing time and
 date operations which are aware of timezones. So for example a
 calendar module can properly synchronize items inserted into a
-calendar from users in different time zones using their own local
+calendar from users in different timezones using their own local
 times.</p><p>
 <strong>90.30</strong> Store all dates and times in universal
-time zone, UTC.</p><p>
-<strong>90.40</strong> For a registered users, a time zone
+timezone, UTC.</p><p>
+<strong>90.40</strong> For a registered users, a timezone
 preference should be stored.</p><p>
-<strong>90.50</strong> For a non-registered user a time zone
+<strong>90.50</strong> For a non-registered user a timezone
 preference should be attached via a session or else UTC should be
 used to display every date and time.</p><p>
 <strong>90.60</strong> The default if we can&#39;t determine a
-time zone is to display all dates and times in some universal time
-zone such as GMT.</p>
+timezone is to display all dates and times in some universal
+timezone such as GMT.</p>
 </blockquote>
 <h3>VI.H Database</h3>
 <blockquote><p>

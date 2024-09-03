@@ -9,7 +9,7 @@ ad_library {
 ad_proc -public -callback user::workspace {
     -user_id
 } {
-    used to generate html fragments for display on the /pvt/home page.
+    used to generate HTML fragments for display on the /pvt/home page.
 
     The HTML fragment should have an h2 header for sectioning.
 

@@ -43,37 +43,127 @@ Beta Release
    5.8.0 Brian.Fenton@quest.ie helped
 
  - bump version numbers to e.g. 5.8.0b1
+    ~/scripts/change-info-files.tcl
 
  - produce raw change summary of core packages
 
-     cvs -qz6 log -d "2014/10/25<2015/12/31" > /tmp/changes-core
-     cvs -1z6 log -d "2013/08/30<2014/11/01" > /tmp/changes-core
+     #cvs -qz6 log -d "2014/10/25<2015/12/31" > /tmp/changes-core
+     #cvs -1z6 log -d "2013/08/30<2014/11/01" > /tmp/changes-core
     
-     ~/scripts/log2changelog <  /tmp/changes-core > ~/oacs-changes-5.9.0 
+     #~/scripts/log2changelog <  /tmp/changes-core > ~/oacs-changes-5.9.0 
 
-     cvs -qz9 log -d "2015/12/01<2017/08/07" > /tmp/changes-core
-     ~/scripts/log2changelog <  /tmp/changes-core > ~/ChangeLog-5.9.1
+     #cvs -qz9 log -d "2015/12/01<2017/08/07" > /tmp/changes-core
+     #~/scripts/log2changelog <  /tmp/changes-core > ~/ChangeLog-5.9.1
+
+     cd /usr/local/oacs-5-10/openacs-4
+     # cvs -qz9 log -d "2017/08/09<2021/09/07" > ~/tmp/changes-oacs-5-10
+     cvs -qz9 log -d "2021/09/08<2025/07/20" > ~/tmp/changes-oacs-5-10.1
+     #cvs -qz9 log -d "2024/01/26<2024/07/20" > ~/tmp/changes-oacs-5-10.1-2
+
+     ~/scripts/log2changelog < ~/tmp/changes-oacs-5-10.1 > ~/tmp/ChangeLog-5.10.1
+
+     sed 's| - |\n\t - |' < ~/tmp/ChangeLog-5.10.1 > ~/tmp/ChangeLog-5.10.1.breaks
+     sed -i -e  's| - |\n\t- |' ~/tmp/ChangeLog-5.10.1.breaks
+     sed -e '/\t *$/d' < ~/tmp/ChangeLog-5.10.1.breaks > ~/tmp/ChangeLog-5.10.1-final
+
+     (cd ~/tmp/; rm -rf *-original; tclsh ~/scripts/fix-typos.tcl -name ChangeLog-5.10.1-final)
+     scp ~/tmp/ChangeLog-5.10.1 gustafn@openacs.org:/var/www/openacs.org/www/changelogs/
+
+     --- git variant ---
+     package=openacs-core
+     git clone https://github.com/openacs/${package}.git
+     cd ${package}
+     git checkout oacs-5-10
+     git log --date-order --name-status --date=short --abbrev-commit --since="Jan 21 2024" > ~/tmp/$fn
+     
+     fn=$package-changes-5-10-1-2
+     git log --date-order --name-status --date=short --abbrev-commit --since="Jan 21 2024" > ~/tmp/$fn
+     git log --date-order --name-status --date=short --abbrev-commit --since="Jan 21 2024" 
+     (cd ~/tmp/; rm -f $fn-original; tclsh ~/scripts/fix-typos.tcl -name $fn)
+     wc -l ~/tmp/$fn
+     tclsh ~/scripts/shorten-changelog -stem ~/tmp/${fn} < ~/tmp/${fn} > ~/tmp/${fn}.shortened
+
+
+
+ - full changelog
+     cd /usr/local/oacs-5-10/openacs-4
+     cvs -qz9 log > ~/tmp/changes-oacs
+     ~/scripts/log2changelog < ~/tmp/changes-oacs > ~/tmp/ChangeLog-oacs-full
+
+     sed 's| - |\n\t - |' < ~/tmp/ChangeLog-oacs-full > ~/tmp/ChangeLog-oacs-full.breaks
+     sed -i -e  's| - |\n\t- |' ~/tmp/ChangeLog-oacs-full.breaks
+     sed -e '/\t *$/d' < ~/tmp/ChangeLog-oacs-full.breaks > ~/tmp/ChangeLog-oacs-full-final
+
+     (cd ~/tmp/; rm -rf *-original; tclsh ~/scripts/fix-typos.tcl -name ChangeLog-oacs-full-final)
+     cp ~/tmp/ChangeLog-oacs-full-final /usr/local/oacs-5-10/openacs-4/ChangeLog
 
 
  - produce diffstats
      cvs -q diff -u -D "2013-08-30"  |diffstat
      cvs -q diff -u -D "2014-10-25"  |diffstat
      cvs -qz9 diff -u -D "2015/12/01" |diffstat
-     
+
      3340 files changed, 106491 insertions(+), 85942 deletions(-)
 
- - update release notes
+
+     cvs -qz9 diff -u -D "2017/08/30" |diffstat > ~/tmp/diffstat
+     3432 files changed, 119830 insertions(+), 91960 deletions(-)
+
+     cvs -qz9 diff -u -D "2021/09/08" |diffstat > ~/tmp/diffstat
+     2886 files changed, 197060 insertions(+), 182613 deletions(-)
+
+     version=oacs-5-10-1
+     cvs -qz9 diff -u -D "2021/09/15" |diffstat  > ~/tmp/$version.diffstat
+     3027 files changed, 428212 insertions(+), 219697 deletions(-)
+     3038 files changed, 1291141 insertions(+), 354533 deletions(-)
+
+     sort -nr +2 -3 ~/tmp/$version.diffstat|less
+ packages/xowf/tcl/test-item-procs.tcl                                                                         | 8135 
+ packages/xowiki/tcl/form-field-procs.tcl                                                                      | 5995 
+ packages/acs-tcl/tcl/utilities-procs.tcl                                                                      | 3004 
+ packages/acs-tcl/tcl/text-html-procs.tcl                                                                      | 2588 
+ packages/acs-templating/tcl/date-procs.tcl                                                                    | 2387 
+ packages/acs-tcl/tcl/site-nodes-procs.tcl                                                                     | 2373 
+ packages/acs-core-docs/www/release-notes.html                                                                 | 2286 
+ packages/acs-tcl/tcl/xml-1-dom-procs.tcl                                                                      | 1954 
+ packages/acs-tcl/tcl/deprecated-procs.tcl                                                                     | 1900 
+ packages/acs-subsite/www/resources/core.js                                                                    | 1866 
+ packages/xowiki/tcl/package-procs.tcl                                                                         | 1854 
+ packages/xowiki/tcl/xowiki-www-procs.tcl                                                                      | 1824 
+ packages/xowiki/tcl/xowiki-procs.tcl                                                                          | 1748 
+ packages/acs-tcl/tcl/security-procs.tcl                                                                       | 1742 
+ packages/xowiki/tcl/includelet-procs.tcl                                                                      | 1682 
+ packages/acs-core-docs/www/release-notes.adp                                                                  | 1579 
+ packages/acs-tcl/tcl/test/acs-tcl-test-procs.tcl                                                              | 1501 
+ packages/acs-tcl/tcl/xml-0-sgml-procs.tcl                                                                     | 1456 
+ packages/evaluation-portlet/tcl/test/evaluation-portlet-procs.tcl                                             | 1349 
+ packages/acs-tcl/tcl/http-client-procs.tcl                                                                    | 1339 
+ packages/xowf/tcl/xowf-procs.tcl                                                                              | 1210 
+ packages/acs-automated-testing/tcl/aa-test-procs.tcl                                                          | 1180 
+ packages/acs-templating/tcl/tag-init.tcl                                                                      | 1151 
+ packages/acs-admin/tcl/apm-admin-procs.tcl                                                                    | 1077 
+ packages/acs-developer-support/tcl/acs-developer-support-procs.tcl                                            | 1059 
+ packages/acs-kernel/sql/postgresql/apm-create.sql                                                             | 1025 
+ packages/categories/tcl/test/categories-procs.tcl                                                             | 1022 
+ packages/xotcl-core/tcl/05-db-procs.tcl                                                                       | 1013 
+ packages/ref-timezones/sql/common/timezones.dat                                                               | 1012 
+ packages/acs-templating/tcl/element-procs.tcl                                                                 |  981 
+ packages/acs-core-docs/www/oracle.html                                                                        |  966 
+
+
+ - update release notes (add a new file for the release and include it in)
     packages/acs-core-docs/www/xml/for-everyone/release-notes.xml
 
  - regenerate xml documentation
     cd openacs-4/packages/acs-core-docs/www/xml
     make
     # unsolved changelog-latest
-    cd openacs-4
-    /usr/local/ns/bin/tclsh /Users/neumann/scripts/change-html-files.tcl 
 
     cd openacs-4
-    /usr/local/ns/bin/tclsh ~/scripts/change-html-files.tcl 
+    /usr/local/ns/bin/tclsh ~/scripts/change-html-files.tcl
+
+    (cd packages/acs-core-docs/www/xml; make) && /usr/local/ns/bin/tclsh ~/scripts/change-html-files.tcl  2>&1
+
 
  - update version number in readme.txt
 
@@ -81,28 +171,107 @@ Beta Release
    cvs -qz6 tag -F openacs-5-9-compat
    cvs -qz6 tag -F openacs-5-9-1b3
 
+   cd openacs-4
+   cvs -qz6 tag -F openacs-5-10-0b1
+   cvs -qz6 tag -F openacs-5-10-compat
+   cvs -qz6 tag -F openacs-5-10-1-final
+
 
  - produce tar
-   * cd /usr/local
-   * 10MB: cvs -z9 -d:ext:gustafn@cvs.openacs.org:/cvsroot checkout -r oacs-5-9 acs-core
-   * 30MB: cvs -z9 -d:ext:gustafn@cvs.openacs.org:/cvsroot checkout -r oacs-5-9 openacs-4
-   * sudo chown -R nsadmin:nsadmin openacs-4; sudo chmod -R g+w openacs-4
-   * mv openacs-4 openacs-5.9.1b3
-   * tar zcvf openacs-5.9.1b3.tar.gz --disable-copyfile --exclude CVS openacs-5.9.1b3
+   * cd /usr/local/openacs
+     version=5.10.0b
+     branch=oacs-5-10
 
-Software Name OpenACS 5.9.1 Beta 3 core
+     version=5.10.1
+     branch=oacs-5-10
+     
+   * 13MB:
+          rm -rf openacs-4 openacs-core-$version
+          cvs -z9 -d:ext:gustafn@cvs.openacs.org:/cvsroot checkout -r $branch acs-core
+          mkdir openacs-4/log
+          sudo chown -R nsadmin:nsadmin openacs-4; sudo chmod -R g+w openacs-4
+          
+          mv openacs-4 openacs-core-$version
+          tar zcvf openacs-core-$version.tar.gz --disable-copyfile --exclude CVS openacs-core-$version
+          ls -l openacs-core-$version.tar.gz
+          tar ztvf openacs-core-$version.tar.gz| sort  +4 -5 -nr |less
+          
+          
+   * 55MB:
+          rm -rf openacs-4  openacs-full-$version
+          cvs -z9 -d:ext:gustafn@cvs.openacs.org:/cvsroot checkout -r $branch openacs-4
+          mkdir openacs-4/log
+          sudo chown -R nsadmin:nsadmin openacs-4; sudo chmod -R g+w openacs-4 
+
+          mv openacs-4 openacs-full-$version 
+          tar zcvf openacs-full-$version.tar.gz --disable-copyfile --exclude CVS openacs-full-$version   
+          ls -l openacs-full-$version.tar.gz
+          tar ztvf openacs-full-$version.tar.gz| sort  +4 -5 -nr |less
+
+U openacs-4/Announce-OpenACS-5.10.0
+U openacs-4/Announce-OpenACS-5.10.1
+U openacs-4/Announce-OpenACS-5.8.0
+U openacs-4/Announce-OpenACS-5.8.1
+U openacs-4/Announce-OpenACS-5.9.0
+U openacs-4/Announce-OpenACS-5.9.1
+
+
+Software Name: OpenACS 5.10.1 Final core
+summary: OpenACS Core Packages
+Description: The tar file contains the OpenACS Core Packages of the OpenACS 5.10.0 final release
+
+Software Name: OpenACS 5.10.1 Final full
+summary: OpenACS Core and Application Packages
+Description: The tar file contains all packages from the oacs-5-10 branch of the OpenACS 5.10.1 final release
+
+Warning: SockParse: request too large, length=115305992, maxinput=104857600 --> increased to 12MB
+
+Software Name: OpenACS 5.10.0 Beta 1 core
 summary: OpenACS Core Packages
 Description; oacs-core
 
-Software Name OpenACS 5.9.1 Beta 3 full
+Software Name: OpenACS 5.10.9 Beta 1 full
 summary: OpenACS Core and Application Packages
-Description The tar file contains all packages from the oacs-5-9 branch
+Description The tar file contains all packages from the oacs-5-10 branch
 
 
+on openacs.org:
+vi /var/www/openacs.org/packages/openacs-bootstrap3-theme/resources/widgets/download.adp 
 
+ - test
+   DB=oacs-5-10-0
+   sudo -u postgres $PGBIN/dropdb -U nsadmin $DB
+   sudo -u postgres $PGBIN/createdb -U nsadmin $DB
+   sudo -u postgres ${PGBIN}/psql -U nsadmin $DB -tAc "create extension hstore"
+
+   adapt /usr/local/ns/oacs-5-10.tcl
+   set server "oacs-5-10-0"
+   set siteroot	/usr/local/openacs/oacs-5-10/openacs-core-$version/
+   
+   /usr/local/ns/bin/nsd -f -t /usr/local/ns/oacs-5-10.tcl -u nsadmin -g nsadmin 
+
+ - upgrade test
+   DB=oacs-5-9-1
+   sudo -u postgres $PGBIN/dropdb -U nsadmin $DB
+   sudo -u postgres $PGBIN/createdb -U nsadmin $DB
+   sudo -u postgres ${PGBIN}/psql -U nsadmin $DB -tAc "create extension hstore"
+
+   adapt /usr/local/ns/oacs-5-9-1.tcl
+
+   # we cannot use the tar file for installs with PG11 or newer
+   cd /usr/local/openacs/
+   tar zxvf ~/Downloads/openacs-5.9.1.tar.gz
+
+   cvs -d:pserver:anonymous@cvs.openacs.org:/cvsroot checkout -r oacs-5-9 acs-core 
+   mv openacs-4 openacs-5.9.1
+    
+   /usr/local/ns/bin/nsd -f -t /usr/local/ns/oacs-5-9-1.tcl -u nsadmin -g nsadmin 
+    cvs -q up  -r oacs-5-10 -Pd
+    
 Final Release
    
  - bump version numbers to e.g. 5.8.0
+    ~/scripts/change-info-files.tcl
 
     - make sure, no requires or provides with *d version numbers
       (except ajaxhelper and oacs-dav)
@@ -140,19 +309,22 @@ Final Release
  - regenerate xml documentation
 
  - raw changelogs on openacs.org:
-       www/Announce-5.9.*
-       www/changelogs/ChangeLog-5.9.*
+       scp /usr/local/oacs-head/openacs-4/Announce-OpenACS-5.10.0 gustafn@openacs.org:/var/www/openacs.org/www/changelogs/
+       cp /usr/local/oacs-head/openacs-4/Announce-OpenACS-5.10.0 /usr/local/oacs-5-10/openacs-4
+       www/Announce-5.*
+       www/changelogs/ChangeLog-5.*
        www/ChangeLog
 
-- rerun: 
-    cvs -qz9 tag -F openacs-5-9-compat
+- rerun:
+   cd openacs-4
+   cvs -qz9 tag -F openacs-5-10-compat
 
  - tag with final:
-   cvs -qz9 tag -F openacs-5-9-1-final
+   cvs -qz9 tag -F openacs-5-10-0-final
 
  - produce tar
-    cd /usr/local
-    version=openacs-5.9.1
+    cd /usr/local/openacs
+    #version=openacs-5.10.0
     
     * 10MB: cvs -z9 -d:ext:gustafn@cvs.openacs.org:/cvsroot checkout -r oacs-5-9 acs-core
     * 30MB: cvs -z9 -d:ext:gustafn@cvs.openacs.org:/cvsroot checkout -r oacs-5-9 openacs-4
@@ -160,15 +332,38 @@ Final Release
     sudo mv openacs-4 $version
     tar zcvf $version.tar.gz --disable-copyfile --exclude CVS $version
 
+   cd /usr/local/openacs/
+   sudo bash
+   version=5.10.0
+   * 13MB:
+          rm -rf openacs-4 openacs-core-$version
+          cvs -z9 -d:ext:gustafn@cvs.openacs.org:/cvsroot checkout -r oacs-5-10 acs-core
+          mkdir openacs-4/log
+          chown -R nsadmin:nsadmin openacs-4; sudo chmod -R g+w openacs-4
+          mv openacs-4 openacs-core-$version
+          tar zcvf openacs-core-$version.tar.gz --disable-copyfile --exclude CVS openacs-core-$version
+
+   * 55MB:
+          rm -rf openacs-4 openacs-full-$version  
+          cvs -z9 -d:ext:gustafn@cvs.openacs.org:/cvsroot checkout -r oacs-5-10 openacs-4
+          mkdir openacs-4/log
+          chown -R nsadmin:nsadmin openacs-4; sudo chmod -R g+w openacs-4 
+          mv openacs-4 openacs-full-$version 
+          tar zcvf openacs-full-$version.tar.gz --disable-copyfile --exclude CVS openacs-full-$version
+
+
  - update web site (tar, announce, links on start page)
 
-Software Name: OpenACS 5.9.1 Final core
-summary: OpenACS Core Packages
-Description: The tar file contains the OpenACS Core Packages of the OpenACS 5.9.1 Final release
+  fix download hack for version number
+    /var/www/openacs.org/packages/download/www/index-postgresql.xql 
 
-Software Name: OpenACS 5.9.1 Final full
+Software Name: OpenACS 5.10.0 Final core
+summary: OpenACS Core Packages
+Description: The tar file contains the OpenACS Core Packages of the OpenACS 5.10.0 final release
+
+Software Name: OpenACS 5.10.0 Final full
 summary: OpenACS Core and Application Packages
-Description: The tar file contains all packages from the oacs-5-9 branch of the OpenACS 5.9.1 Final release
+Description: The tar file contains all packages from the oacs-5-10 branch of the OpenACS 5.10.0 final release
 
  - upadate install-ns and http://openacs.org/xowiki/naviserver-openacs
 

@@ -134,12 +134,12 @@ ad_proc -deprecated -public template::util::multirow_foreach { name code_text } 
 	foreach column_name $columns {
 
 	    # first change all references to a column to the proper
-	    # rownum-dependent identifier, ie the array value identified
+	    # rownum-dependent identifier, i.e. the array value identified
 	    # by $<multirow_name>:<rownum>(<column_name>)
-	    regsub -all "($name).($column_name)" $running_code "$name:${i}($column_name)" running_code
+	    regsub -all -- "($name).($column_name)" $running_code "$name:${i}($column_name)" running_code
 	}
 
-	regsub -all {@([a-zA-Z0-9_:\(\)]+)@} $running_code {${\1}} running_code
+	regsub -all -- {@([a-zA-Z0-9_:\(\)]+)@} $running_code {${\1}} running_code
 
 	uplevel {
 	    eval $running_code
@@ -251,7 +251,7 @@ ad_proc -public -deprecated template::widget::richtext_htmlarea { element_refere
       set attributes(id) "richtext__$element(form_id)__$element(id)"
       
       if { [info exists element(htmlarea_p)] && $element(htmlarea_p) ne "" } {
-          set htmlarea_p [template::util::is_true $element(htmlarea_p)]
+          set htmlarea_p [string is true -strict $element(htmlarea_p)]
       } else {
           set htmlarea_p [parameter::get \
                               -package_id [apm_package_id_from_key "acs-templating"] \
@@ -262,7 +262,7 @@ ad_proc -public -deprecated template::widget::richtext_htmlarea { element_refere
       # Check browser's User-Agent header for compatibility with htmlArea
       ad_return_complaint 1 "use htmlareap = $htmlarea_p"
       if { $htmlarea_p } {
-          set user_agent [string tolower [ns_set get [ns_conn headers] User-Agent]]
+          set user_agent [string tolower [ns_set iget [ns_conn headers] User-Agent]]
           if { [string first "opera" $user_agent] != -1 } { 
               # Opera - doesn't work, even though Opera claims to be IE
               set htmlarea_p 0
@@ -442,7 +442,108 @@ ad_proc -private -deprecated template::get_enclosing_tag { tag } {
     return $name
 }
 
+ad_proc -deprecated template::util::set_to_list { set args } {
+    Turns an ns_set into a key-value list, excluding any number of
+    specified keys.  Useful for turning the contents on an ns_set into
+    a form that may be cached or manipulated as a native Tcl data structure.
 
+    DEPRECATED: this proc can be replaced with trivial ns_set and
+                plain tcl idioms
+
+    @see ns_set
+
+    @param set  A reference to an ns_set.
+    @param args Any number of key names to exclude from the list.
+
+    @return A list in the form { key value key value key value ... }
+} {
+
+    set result [list]
+
+    for { set i 0 } { $i < [ns_set size $set] } { incr i } {
+
+        set key [ns_set key $set $i]
+        if { $key in $args } { continue }
+
+        lappend result $key [ns_set value $set $i]
+    }
+
+    return $result
+}
+
+ad_proc -deprecated template::util::set_to_vars { set args } {
+    Declare local variables for set values
+
+    DEPRECATED: this proc can be replaced with trivial ns_set and
+                plain tcl idioms
+
+    @see ns_set
+
+    @param set  A reference to an ns_set.
+    @param args Any number of keys to declare as local variables.
+} {
+
+    if { [llength $args] == 0 } {
+
+        for { set i 0 } { $i < [ns_set size $set] } { incr i } {
+            set key [ns_set key $set $i]
+            upvar $key value
+            set value [ns_set get $set $key]
+        }
+
+    } else {
+
+        foreach key $args {
+            upvar $key value
+            set value [ns_set get $set $key]
+        }
+    }
+}
+
+ad_proc -deprecated template::util::list_opts { {array_ref opts} } {
+    Converts an array to an option list
+
+    DEPRECATED: this proc can be replaced by simple tcl idioms
+
+    @see plain tcl
+
+    @param  array_ref  The name of the array in the calling frame containing
+    option-value pairs.  Defaults to "opts".
+
+    @return A list of option-value pairs suitable for appending to a command.
+} {
+
+    upvar $array_ref arr
+
+    set ret [list]
+    foreach {key value} [array get arr] {
+        lappend ret "-$key" $value
+    }
+
+    return $ret
+}
+
+ad_proc -deprecated template::util::tcl_to_sql_list { lst } {
+    Convert a Tcl list to a SQL list, for use with the "in" statement.
+    Uses double single quotes to escape single quotes in values.
+
+    DEPRECATED: NaviServer now provides a native API ns_dbquotelist for this; a
+    tcl-implemented fallback for older NaviServer versions exists in current OpenACS code.
+
+    @see ns_dbquotelist
+} {
+
+    if { [llength $lst] > 0 } {
+        # replace single quotes by two single quotes
+        regsub -all -- ' "$lst" '' lst2
+        set sql "'"
+        append sql [join $lst2 "', '"]
+        append sql "'"
+        return $sql
+    } else {
+        return ""
+    }
+}
 
 # Local variables:
 #    mode: tcl

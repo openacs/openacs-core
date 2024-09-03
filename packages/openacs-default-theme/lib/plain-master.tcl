@@ -144,6 +144,7 @@ if {[info exists context]} {
 } else {
     set context_tmp {}
 }
+# ns_log notice "context_tmp <$context_tmp>"
 
 ad_context_bar_multirow -- $context_tmp
 

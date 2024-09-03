@@ -1,6 +1,6 @@
 <master>
-  <property name="title">@title;noquote@</property>
-  <property name="context">@context;noquote@</property>
+  <property name="doc(title)">@title;literal@</property>
+  <property name="context">@context;literal@</property>
   <h1>@title@</h1>
 
   <p>
@@ -12,7 +12,7 @@
  <a href="/api-doc/proc-view?proc=acs_mail_lite::maildir_check_incoming&amp;source_p=1">acs_mail_lite::maildir_check_incoming</a> 
    for MailDir.
 </p><p>
-    Both schedules procs can be run simultaneously without intefering with
+    Both schedules procs can be run simultaneously without interfering with
     each other.
     In both cases, email is added to the same queue for processing via callbacks.
   </p>
@@ -52,7 +52,7 @@
     with the bounced email address.
   </p><p>
     A separate process checks if an email account
-    needs to inactivate notifications due to chronic bounce errors:
+    needs to deactivate notifications due to chronic bounce errors:
   </p>
   <ul>
     <li>If a user's last mail bounced more than

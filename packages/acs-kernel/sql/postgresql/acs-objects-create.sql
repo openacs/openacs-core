@@ -249,16 +249,27 @@ create table acs_objects (
 	unique (context_id, object_id)
 );
 
+--
+-- Avoid potential loops on context_ids. A context_id must be
+-- different from the object_id. If no context_id should be checked, its
+-- value must be NULL. Note that this constraint is not guaranteed to
+-- avoid all loops; it is still possible to create indirect recursive
+-- loops but excludes some real-world problems.
+ALTER TABLE acs_objects ADD CONSTRAINT acs_objects_context_id_ck CHECK (context_id != object_id);
+
 -- The unique constraint above will force create of this index...
 -- create index acs_objects_context_object_idx onacs_objects (context_id, object_id);
 
 create index acs_objects_creation_user_idx on acs_objects (creation_user);
+create index acs_objects_creation_date_idx on acs_objects (creation_date);
 create index acs_objects_modify_user_idx on acs_objects (modifying_user);
+create index acs_objects_last_modified_idx on acs_objects (last_modified);
 
 create index acs_objects_package_idx on acs_objects (package_id);
 create index acs_objects_title_idx on acs_objects(title);
 
 create index acs_objects_object_type_idx on acs_objects (object_type);
+
 
 CREATE OR REPLACE FUNCTION acs_objects_mod_ip_insert_tr () RETURNS trigger AS $$
 BEGIN
@@ -326,158 +337,6 @@ comment on column acs_objects.title is '
  titles or object_names of package specific tables.
 ';
 
------------------------
--- CONTEXT HIERARCHY --
------------------------
-
-create table acs_object_context_index (
-	object_id	integer not null
-			CONSTRAINT acs_obj_context_idx_obj_id_fk
-			REFERENCES acs_objects(object_id) ON DELETE CASCADE,
-	ancestor_id	integer not null
-			CONSTRAINT acs_obj_context_idx_anc_id_fk
-			REFERENCES acs_objects(object_id) ON DELETE CASCADE,
-	n_generations	integer not null
-			constraint acs_obj_context_idx_n_gen_ck
-			check (n_generations >= 0),
-        constraint acs_object_context_index_pk
-	primary key (object_id, ancestor_id)
-);
-
-create index acs_obj_ctx_idx_ancestor_idx on acs_object_context_index (ancestor_id);
-create index acs_obj_ctx_idx_object_id_idx on acs_object_context_index (object_id);
-
-create view acs_object_paths
-as select object_id, ancestor_id, n_generations
-   from acs_object_context_index;
-
-create view acs_object_contexts
-as select object_id, ancestor_id, n_generations
-   from acs_object_context_index
-   where object_id != ancestor_id;
-
-
-
---
--- procedure acs_objects_context_id_in_tr/0
---
-CREATE OR REPLACE FUNCTION acs_objects_context_id_in_tr(
-
-) RETURNS trigger AS $$
-DECLARE
-        security_context_root integer;
-BEGIN
-  insert into acs_object_context_index
-   (object_id, ancestor_id, n_generations)
-  values
-   (new.object_id, new.object_id, 0);
-
-  if new.context_id is not null and new.security_inherit_p = 't' then
-    insert into acs_object_context_index
-     (object_id, ancestor_id, n_generations)
-    select
-     new.object_id as object_id, ancestor_id,
-     n_generations + 1 as n_generations
-    from acs_object_context_index
-    where object_id = new.context_id;
-  else
-    security_context_root = acs__magic_object_id('security_context_root');
-    if new.object_id != security_context_root then
-      insert into acs_object_context_index
-        (object_id, ancestor_id, n_generations)
-      values
-        (new.object_id, security_context_root, 1);
-    end if;
-  end if;
-
-  return new;
-
-END;
-$$ LANGUAGE plpgsql;
-
-create trigger acs_objects_context_id_in_tr after insert on acs_objects
-for each row execute procedure acs_objects_context_id_in_tr ();
-
-
-
---
--- procedure acs_objects_context_id_up_tr/0
---
-CREATE OR REPLACE FUNCTION acs_objects_context_id_up_tr(
-
-) RETURNS trigger AS $$
-DECLARE
-        pair    record;
-        outer_record record;
-        inner_record record;
-        security_context_root integer;
-BEGIN
-  if new.object_id = old.object_id
-     and ((new.context_id = old.context_id)
-	  or (new.context_id is null and old.context_id is null))
-     and new.security_inherit_p = old.security_inherit_p then
-    return new;
-  end if;
-
-  -- Remove my old ancestors from my descendants.
-  for outer_record in select object_id from acs_object_context_index where 
-               ancestor_id = old.object_id and object_id <> old.object_id loop
-    for inner_record in select ancestor_id from acs_object_context_index where
-                 object_id = old.object_id and ancestor_id <> old.object_id loop
-      delete from acs_object_context_index
-      where object_id = outer_record.object_id
-        and ancestor_id = inner_record.ancestor_id;
-    end loop;
-  end loop;
-
-  -- Kill all my old ancestors.
-  delete from acs_object_context_index
-  where object_id = old.object_id;
-
-  insert into acs_object_context_index
-   (object_id, ancestor_id, n_generations)
-  values
-   (new.object_id, new.object_id, 0);
-
-  if new.context_id is not null and new.security_inherit_p = 't' then
-     -- Now insert my new ancestors for my descendants.
-    for pair in select *
-		 from acs_object_context_index
-		 where ancestor_id = new.object_id 
-    LOOP
-      insert into acs_object_context_index
-       (object_id, ancestor_id, n_generations)
-      select
-       pair.object_id, ancestor_id,
-       n_generations + pair.n_generations + 1 as n_generations
-      from acs_object_context_index
-      where object_id = new.context_id;
-    end loop;
-  else
-    security_context_root = acs__magic_object_id('security_context_root');
-    if new.object_id != security_context_root then
-    -- We need to make sure that new.OBJECT_ID and all of its
-    -- children have security_context_root as an ancestor.
-    for pair in  select *
-		 from acs_object_context_index
-		 where ancestor_id = new.object_id 
-      LOOP
-        insert into acs_object_context_index
-         (object_id, ancestor_id, n_generations)
-        values
-         (pair.object_id, security_context_root, pair.n_generations + 1);
-      end loop;
-    end if;
-  end if;
-
-  return new;
-
-END;
-$$ LANGUAGE plpgsql;
-
-create trigger acs_objects_context_id_up_tr after update on acs_objects
-for each row execute procedure acs_objects_context_id_up_tr ();
-
 ----------------------
 -- ATTRIBUTE VALUES --
 ----------------------
@@ -528,6 +387,19 @@ comment on table acs_static_attr_values is '
 ------------------------
 -- ACS_OBJECT PACKAGE --
 ------------------------
+
+--
+-- Create an SQL schema to allow the same dot notation as in
+-- Oracle. The advantage of this notation is that the function can be
+-- called identically for PostgreSQL and Oracle, so much duplicated
+-- code can be removed.
+--
+--
+-- TODO: handling of schema names in define_function_args, port all
+-- acs_object api to the dot notation.
+--
+CREATE SCHEMA acs_object;
+
 
 select define_function_args('acs_object__initialize_attributes','object_id');
 
@@ -868,15 +740,10 @@ END;
 $$ LANGUAGE plpgsql;
 
 
--- function name
-select define_function_args('acs_object__name','object_id');
-
-
-
 --
 -- procedure acs_object__name/1
 --
-CREATE OR REPLACE FUNCTION acs_object__name(
+CREATE OR REPLACE FUNCTION acs_object.name(
    name__object_id integer
 ) RETURNS varchar AS $$
 DECLARE
@@ -935,6 +802,18 @@ BEGIN
   
 END;
 $$ LANGUAGE plpgsql stable strict;
+
+-- Backward compatibility definition for acs_object.name
+select define_function_args('acs_object__name','object_id');
+
+CREATE OR REPLACE FUNCTION acs_object__name(
+   name__object_id integer
+) RETURNS varchar AS $$
+BEGIN
+  RETURN acs_object.name(name__object_id);
+END;
+$$ LANGUAGE plpgsql stable strict;
+
 
 
 -- function default_name
@@ -1283,80 +1162,19 @@ DECLARE
   v_return               text; 
   v_storage              text;
 BEGIN
-   if value_in is null then 
-	-- this will fail more cryptically in the execute so catch now. 
-	raise exception 'acs_object__set_attribute: attempt to set % to null for object_id %',attribute_name_in, object_id_in;
-   end if;
 
-   v_storage := acs_object__get_attribute_storage(object_id_in, attribute_name_in);
-
+   v_storage    := acs_object__get_attribute_storage(object_id_in, attribute_name_in);
    v_column     := acs_object__get_attr_storage_column(v_storage);
    v_table_name := acs_object__get_attr_storage_table(v_storage);
    v_key_sql    := acs_object__get_attr_storage_sql(v_storage);
 
-   execute 'update ' || v_table_name || ' set ' || quote_ident(v_column) || ' = ' || quote_literal(value_in) || ' where ' || v_key_sql;
-
-   return 0; 
-END;
-$$ LANGUAGE plpgsql;
-
-
--- function check_context_index
-
-select define_function_args('acs_object__check_context_index','object_id,ancestor_id,n_generations');
-
-
-
---
--- procedure acs_object__check_context_index/3
---
-CREATE OR REPLACE FUNCTION acs_object__check_context_index(
-   check_context_index__object_id integer,
-   check_context_index__ancestor_id integer,
-   check_context_index__n_generations integer
-) RETURNS boolean AS $$
-DECLARE
-  n_rows                                      integer;       
-  n_gens                                      integer;       
-BEGIN
-   -- Verify that this row exists in the index.
-   if check_context_index__object_id is null or check_context_index__ancestor_id is null then
-	raise exception 'object_id or ancestor_id is null in acs_object__check_context_index';
-   end if;	
-   select case when count(*) = 0 then 0 else 1 end into n_rows
-   from acs_object_context_index
-   where object_id = check_context_index__object_id
-   and ancestor_id = check_context_index__ancestor_id;
-
-   if n_rows = 1 then
-     -- Verify that the count is correct.
-     select n_generations into n_gens
-     from acs_object_context_index
-     where object_id = check_context_index__object_id
-     and ancestor_id = check_context_index__ancestor_id;
-
-     if n_gens != check_context_index__n_generations then
-       PERFORM acs_log__error('acs_object.check_representation', 
-                              'Ancestor ' ||
-                     check_context_index__ancestor_id || ' of object ' || 
-                     check_context_index__object_id ||
-		     ' reports being generation ' || n_gens ||
-		     ' when it is actually generation ' || 
-                     check_context_index__n_generations ||
-		     '.');
-       return 'f';
-     else
-       return 't';
-     end if;
+   if value_in is null then
+      execute 'update ' || v_table_name || ' set ' || v_column || ' = NULL where ' || v_key_sql;   
    else
-     PERFORM acs_log__error('acs_object.check_representation', 
-                            'Ancestor ' ||
-                            check_context_index__ancestor_id || 
-                            ' of object ' || check_context_index__object_id 
-                            || ' is missing an entry in acs_object_context_index.');
-     return 'f';
+      execute 'update ' || v_table_name || ' set ' || quote_ident(v_column) || ' = ' || quote_literal(value_in) || ' where ' || v_key_sql;
    end if;
-  
+   
+   return 0; 
 END;
 $$ LANGUAGE plpgsql;
 
@@ -1460,7 +1278,7 @@ BEGIN
    -- N_GENERATIONS is how far the current DESCENDANT_ID is from
    -- OBJECT_ID.
 
-   -- This function will verfy that each actually descendant of
+   -- This function will verify that each actually descendant of
    -- OBJECT_ID has a row in the index table. It does not check that
    -- there aren't extraneous rows or that the ancestors of OBJECT_ID
    -- are maintained correctly.
@@ -1537,108 +1355,6 @@ BEGIN
   
 END;
 $$ LANGUAGE plpgsql stable;
-
-
--- function check_representation
-
-select define_function_args('acs_object__check_representation','object_id');
-
-
-
---
--- procedure acs_object__check_representation/1
---
-CREATE OR REPLACE FUNCTION acs_object__check_representation(
-   check_representation__object_id integer
-) RETURNS boolean AS $$
-DECLARE
-  result                                       boolean;       
-  check_representation__object_type            acs_objects.object_type%TYPE;
-  n_rows                                       integer;    
-  v_rec                                        record;  
-  row                                          record; 
-BEGIN
-   if check_representation__object_id is null then 
-	raise exception 'acs_object__check_representation called for null object_id';
-   end if;
-
-   result := 't';
-   PERFORM acs_log__notice('acs_object.check_representation',
-                  'Running acs_object.check_representation on object_id = ' 
-                  || check_representation__object_id || '.');
-
-   select object_type into check_representation__object_type
-   from acs_objects
-   where object_id = check_representation__object_id;
-
-   PERFORM acs_log__notice('acs_object.check_representation',
-                  'OBJECT STORAGE INTEGRITY TEST');
-
-   for v_rec in  select t.object_type, t.table_name, t.id_column
-             from acs_object_type_supertype_map m, acs_object_types t
-	     where m.ancestor_type = t.object_type
-	     and m.object_type = check_representation__object_type
-	     union
-	     select object_type, table_name, id_column
-	     from acs_object_types
-	     where object_type = check_representation__object_type 
-     LOOP
-
-        for row in execute 'select case when count(*) = 0 then 0 else 1 end as n_rows from ' || quote_ident(v_rec.table_name) || ' where ' || quote_ident(v_rec.id_column) || ' = ' || check_representation__object_id
-        LOOP
-            n_rows := row.n_rows;
-            exit;
-        end LOOP;
-
-        if n_rows = 0 then
-           result := 'f';
-           PERFORM acs_log__error('acs_object.check_representation',
-                     'Table ' || v_rec.table_name || 
-                     ' (primary storage for ' ||
-		     v_rec.object_type || 
-                     ') doesn''t have a row for object ' ||
-		     check_representation__object_id || ' of type ' || 
-                     check_representation__object_type || '.');
-        end if;
-
-   end loop;
-
-   PERFORM acs_log__notice('acs_object.check_representation',
-                  'OBJECT CONTEXT INTEGRITY TEST');
-
-   if acs_object__check_object_ancestors(check_representation__object_id, 
-                                         check_representation__object_id, 0) = 'f' then
-     result := 'f';
-   end if;
-
-   if acs_object__check_object_descendants(check_representation__object_id, 
-                                           check_representation__object_id, 0) = 'f' then
-     result := 'f';
-   end if;
-   for row in  select object_id, ancestor_id, n_generations
-	       from acs_object_context_index
-	       where object_id = check_representation__object_id
-	       or ancestor_id = check_representation__object_id 
-   LOOP
-     if acs_object__check_path(row.object_id, row.ancestor_id) = 'f' then
-       PERFORM acs_log__error('acs_object.check_representation',
-		     'acs_object_context_index contains an extraneous row: '
-                     || 'object_id = ' || row.object_id || 
-                     ', ancestor_id = ' || row.ancestor_id || 
-                     ', n_generations = ' || row.n_generations || '.');
-       result := 'f';
-     end if;
-   end loop;
-
-   PERFORM acs_log__notice('acs_object.check_representation',
-		  'Done running acs_object.check_representation ' || 
-		  'on object_id = ' || check_representation__object_id || '.');
-
-   return result;
-  
-END;
-$$ LANGUAGE plpgsql;
-
 
 
 --

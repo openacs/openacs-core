@@ -27,21 +27,30 @@ namespace eval membership_rel {
                     -user_id $rel_user_id
             }
 
-            switch -exact $state {
-                "approved" { db_exec_plsql approve {} }
-                "banned" { db_exec_plsql ban {} }
-                "rejected" { db_exec_plsql reject {} }
-                "deleted" {
-                    db_exec_plsql delete {}
+            set valid_states {
+                "approved"
+                "banned"
+                "rejected"
+                "deleted"
+                "needs approval"
+                "merged"
+                "expired"
+            }
 
+            if {$state in $valid_states} {
+                db_dml update_state {
+                    update membership_rels set
+                      member_state = :state
+                    where rel_id = :rel_id
+                }
+
+                if {$state eq "deleted"} {
                     # Add user to public group - see bug 1468
                     group::add_member \
                         -no_perm_check \
                         -group_id [acs_magic_object the_public] \
                         -user_id $rel_user_id
                 }
-                "needs approval" { db_exec_plsql unapprove {} }
-                "merged" { db_exec_plsql merge {} }
             }
 
             # Record who changed the state
@@ -50,7 +59,7 @@ namespace eval membership_rel {
             # bumped back to needs_approval right after an administrator has approved them,
             # even if the user doesn't log in the meantime.
 
-            if { [ad_conn isconnected] } {
+            if { [ns_conn isconnected] } {
                 set user_id [ad_conn user_id]
             } else {
                 set user_id ""
@@ -103,10 +112,18 @@ namespace eval membership_rel {
         change_state -rel_id $rel_id -state "needs approval"
     }
 
+    ad_proc -public expire {
+        {-rel_id:required}
+    } {
+       Expire a membership relation
+    } {
+        change_state -rel_id $rel_id -state "expired"
+    }
+
     ad_proc -public get {
         {-rel_id:required}
     } {
-        Return user_id and group_id of a rel_id as dict.
+        Return the user_id of a rel_id
     } {
         db_1row select_rel_id {
             select u.user_id, r.object_id_one as group_id

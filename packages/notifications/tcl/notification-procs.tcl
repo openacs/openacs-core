@@ -24,20 +24,30 @@ namespace eval notification {
         return "notifications"
     }
 
-    ad_proc -public get_interval_id {
+    ad_proc -deprecated get_interval_id {
         {-name:required}
     } {
         obtain the interval ID for an interval with the given name.
         Interval names are unique, but are not the primary key.
+
+        DEPRECATED: an API doing the exact same thing was moved into
+        an own namespace
+
+        @see notification::interval::get_id_from_name
     } {
         return [db_string select_interval_id {} -default ""]
     }
 
-    ad_proc -public get_delivery_method_id {
+    ad_proc -deprecated get_delivery_method_id {
         {-name:required}
     } {
         obtain the delivery method ID with the given name.
         Delivery method names are unique, but are not the primary key.
+
+        DEPRECATED: an API doing the exact same thing was moved into
+        an own namespace
+
+        @see notification::get_delivery_method_id
     } {
         return [db_string select_delivery_method_id {} -default ""]
     }
@@ -178,7 +188,7 @@ namespace eval notification {
         set requests_p [notification::request::request_exists -object_id $object_id -type_id $type_id]
 
         # We're only going to do anything if there are people who have requests,
-        # or if we have a non-empty subset and a force flag.
+        # or if we have a nonempty subset and a force flag.
 
         set subset_arg_p [expr {[llength $subset] > 0}]
         set already_notified_arg_p [expr {[llength $already_notified] > 0}]
@@ -214,8 +224,8 @@ namespace eval notification {
 
                 if { $default_request_data eq "" } {
                     set default_request_data [list \
-                            interval_id [get_interval_id -name "instant"] \
-                            delivery_method_id [get_delivery_method_id -name "email"] \
+                            interval_id [notification::interval::get_id_from_name -name "instant"] \
+                            delivery_method_id [notification::delivery::get_id -short_name "email"] \
                             format "text"]
                 }
                 array set default_request $default_request_data
@@ -281,7 +291,7 @@ namespace eval notification {
                 }
             }
 
-            if { $notif_user eq "" && [ad_conn isconnected] } {
+            if { $notif_user eq "" && [ns_conn isconnected] } {
                 set notif_user [ad_conn user_id]
             }
 
@@ -310,18 +320,23 @@ namespace eval notification {
                 }
 
                 # Truncate notif_subject to the max len of 100
-                set notif_subject [string_truncate -len 100 -- $notif_subject]
+                set notif_subject [ad_string_truncate -len 100 -- $notif_subject]
 
                 # Set up the vars
-                set extra_vars [ns_set create]
-                oacs_util::vars_to_ns_set \
-                    -ns_set $extra_vars \
-                    -var_list {notification_id type_id object_id response_id notif_subject notif_text notif_html notif_user file_ids}
+                set extra_vars [ns_set create s \
+                                    notification_id $notification_id \
+                                    type_id $type_id \
+                                    object_id $object_id \
+                                    response_id $response_id \
+                                    notif_subject $notif_subject \
+                                    notif_text $notif_text \
+                                    notif_html $notif_html \
+                                    notif_user $notif_user\
+                                    file_ids $file_ids \
+                                   ]
 
                 if { $notif_date ne "" } {
-                    oacs_util::vars_to_ns_set \
-                        -ns_set $extra_vars \
-                        -var_list {notif_date}
+                    ns_set put $extra_vars notif_date $notif_date
                 }
 
                 # Create the notification

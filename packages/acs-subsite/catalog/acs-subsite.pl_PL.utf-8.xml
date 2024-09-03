@@ -174,7 +174,7 @@
   <msg key="lt_Inherited_Permissions">Dziedziczone Prawa</msg>
   <msg key="lt_It_would_be_a_very_ba">Jest to zupełnie zły pomysł, jeśli używasz publicznego komputera - jak w bibliotece lub szkole. Ktokolwiek, kto użyje tej maszyny po Tobie, bedzie mógł się pod Ciebie podszyć w tym systemie.</msg>
   <msg key="lt_New_registration_at_s">Nowa rejestracja w %system_url%</msg>
-  <msg key="lt_Note_text_in_red_below">Tekst czerwoną czcionką poniżej pola parametru wskazuje, że wartość tego parametru jest nadpisana przez wpis w pliku konfiguracyjnym OpenACS. Używanie pliku z parametrami jest nie jest zalecane, ale niektóre instalacje wymagają specyficznych wartości dla każdej instancji niezależnie od tabeli parametrów apm_parameter.</msg>
+  <msg key="lt_Note_text_in_red_below">Tekst czerwoną czcionką poniżej pola parametru wskazuje, że wartość tego parametru jest nadpisana przez wpis w pliku konfiguracyjnym NaviServer. Używanie pliku z parametrami jest nie jest zalecane, ale niektóre instalacje wymagają specyficznych wartości dla każdej instancji niezależnie od tabeli parametrów apm_parameter.</msg>
   <msg key="lt_Note_that_you_can_era">Możesz wymazać swoje zapisane email i hasło wybierając &quot;wyloguj się&quot; na Twoim Pulpicie.</msg>
   <msg key="lt_num_children_Children">%num_children% Ukrytych Dzieci</msg>
   <msg key="lt_On_portrait_publish_d">%portrait_publish_date% wgrano &lt;a href=&quot;%subsite_url%user/portrait/?return_url=%pvt_home_url%&quot;&gt;%portrait_title%&lt;/a&gt;</msg>

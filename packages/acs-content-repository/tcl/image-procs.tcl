@@ -171,7 +171,7 @@ ad_proc -public image::get_info {
     it in the future. One important difference is this proc won't fail
     in case of error.
 
-    @param filename Name of the image file in the file system.
+    @param filename Name of the image file in the filesystem.
     @param array   Name of an array where you want the information returned.
 
     @see image::imagemagick_identify
@@ -183,7 +183,7 @@ ad_proc -public image::get_info {
     }
 
     catch {
-        set identify_string [exec identify $filename]
+        set identify_string [exec [image::identify_binary] $filename]
         regexp {[ ]+([0-9]+)[x]([0-9]+)[\+]*} $identify_string x width height
         set row(width) $width
         set row(height) $height
@@ -251,10 +251,10 @@ ad_proc -public image::identify_binary {
     @author Dave Bauer (dave@solutiongrove.com)
     @creation-date 2006-08-27
 } {
-    return [parameter::get \
-                -parameter ImageMagickIdentifyBinary \
-                -package_id [apm_package_id_from_key acs-content-repository] \
-                -default "/usr/bin/identify"]
+    return [::util::which [parameter::get \
+                               -parameter ImageMagickIdentifyBinary \
+                               -package_id [apm_package_id_from_key acs-content-repository] \
+                               -default "identify"]]
 }
 
 ad_proc -public image::convert_binary {
@@ -264,10 +264,10 @@ ad_proc -public image::convert_binary {
     @author Dave Bauer (dave@solutiongrove.com)
     @creation-date 2006-08-27
 } {
-    return [parameter::get \
-                -parameter ImageMagickConvertBinary \
-                -package_id [apm_package_id_from_key acs-content-repository] \
-                -default "/usr/bin/convert"]
+    return [::util::which [parameter::get \
+                               -parameter ImageMagickConvertBinary \
+                               -package_id [apm_package_id_from_key acs-content-repository] \
+                               -default "convert"]]
 }
 
 if {[ns_info name] eq "NaviServer"} {
@@ -325,7 +325,7 @@ ad_proc -public image::mime_type {
 
     @param filename Filename of image file
 } {
-    if {[info commands ns_imgmime] ne ""} {
+    if {[namespace which ns_imgmime] ne ""} {
         set mime_type [ns_imgmime $filename]
         if {$mime_type ne "image/unknown"} {
             return $mime_type
@@ -383,7 +383,7 @@ ad_proc -public image::resize {
         set revision_id [content::item::get_best_revision -item_id $item_id]
     }
     set original_filename [content::revision::get_cr_file_path -revision_id $revision_id]
-    set tmp_filename [ns_mktemp "/tmp/XXXXXX"]
+    set tmp_filename [ad_tmpnam "[ad_tmpdir]/XXXXXX"]
     array set sizes [image::get_convert_to_sizes]
 
     if {[catch {exec [image::convert_binary] -resize $sizes($size_name) $original_filename $tmp_filename} errmsg]} {
@@ -412,7 +412,7 @@ ad_proc -public image::resize {
     return $resize_item_id
 }
 
-ad_proc -public image::get_size_item_id {
+ad_proc -private image::get_size_item_id {
     -item_id
     -size_name
 } {

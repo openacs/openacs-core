@@ -1,9 +1,13 @@
 
-<property name="context">{/doc/tsearch2-driver {Tsearch2 Driver}} {Tsearch2 Full-text Search Engine Driver for OpenACS
+<property name="context">{/doc/tsearch2-driver/ {Tsearch2 Driver}} {Tsearch2 Full-text Search Engine Driver for OpenACS
 5.x}</property>
 <property name="doc(title)">Tsearch2 Full-text Search Engine Driver for OpenACS
 5.x</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h1>Tsearch2 Full-text Search Engine Driver for OpenACS 5.x</h1>
 <p>Tsearch2 Driver provides full-text searching of a PostgreSQL
 database by using PostgreSQL&#39;s tsearch2 FtsEngineDriver</p>

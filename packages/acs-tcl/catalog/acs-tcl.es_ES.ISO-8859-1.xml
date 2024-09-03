@@ -28,15 +28,15 @@
   <msg key="lt_Flag_names_must_be_al">Los nombres de indicadores debe estar en minúsculas</msg>
   <msg key="lt_Invalid_date_date_ele">Fecha inválida: falta %date_element%</msg>
   <msg key="lt_Invalid_date_date_ele_1">Fecha inválida: %date_element% no es un número natural</msg>
-  <msg key="lt_Invalid_date_datemont">Fecha inválida: %date(month)% %date(day)% %date(year)%</msg>
+  <msg key="lt_Invalid_date_datemont">Fecha inválida: %date.month% %date.day% %date.year%</msg>
   <msg key="lt_Invalid_date_The_year">Fecha inválida: el año debe contener 4 dígitos</msg>
   <msg key="lt_Invalid_number_of_arg">Número inválido de argumentos declarados para el procedimiento: el nombre del argumento, su valor y posibles parámetros</msg>
   <msg key="lt_Invalid_number_of_par">Número inválido de parámetros pasados al filtro</msg>
   <msg key="lt_Invalid_time_time_ele">Hora inválida: falta %time_element%</msg>
   <msg key="lt_Invalid_time_time_is_">Hora inválida: falta la hora</msg>
-  <msg key="lt_Invalid_time_timetime">Hora inválida: %time(time)% no está en un formato válido</msg>
-  <msg key="lt_Invalid_time_timetime_1">Hora inválida: %time(time)% %time(ampm)%</msg>
-  <msg key="lt_Invalid_time_timetime_2">Hora inválida: %time(time)%</msg>
+  <msg key="lt_Invalid_time_timetime">Hora inválida: %time.time% no está en un formato válido</msg>
+  <msg key="lt_Invalid_time_timetime_1">Hora inválida: %time.time% %time.ampm%</msg>
+  <msg key="lt_Invalid_time_timetime_2">Hora inválida: %time.time%</msg>
   <msg key="lt_Multiple_definitions_">Definiciones múltiples del filtro &#34;%name%&#34; en ad_page_contract de %script% y %prior_script%</msg>
   <msg key="lt_name_contains_invalid">%name% contiene caracteres inválidos</msg>
   <msg key="lt_name_does_not_appear_">%name% no es una dirección de correo válida</msg>
@@ -46,6 +46,7 @@
   <msg key="lt_name_is_not_a_valid_S">%name% no es un identificador SQL válido</msg>
   <msg key="lt_name_is_not_a_word">%name% contiene caracteres que no son de palabra</msg>
   <msg key="lt_name_is_not_an_intege">%name% no es un entero</msg>
+  <msg key="lt_name_is_not_an_oid">%name% no es un object_id</msg>
   <msg key="lt_name_is_not_in_the_ra">%name% no está en el rango \[%min%, %max%\]</msg>
   <msg key="lt_name_is_not_valid">%name% no válido</msg>
   <msg key="lt_name_is_too_long__Ple">%name% es demasiado largo. Por favor, introduzca un valor no superior a %max_length% caracteres. El valor introducido contiene %actual_length% caracteres.</msg>
@@ -89,7 +90,7 @@
   <msg key="Page">Página con error:</msg>
   <msg key="Page_current_of_total">Página %current% de %total%</msg>
   <msg key="Percentage_complete">Porcentaje completado</msg>
-  <msg key="Previus">Página anterior:</msg>
+  <msg key="Previous">Página anterior:</msg>
   <msg key="Public_User">Público</msg>
   <msg key="reject">rechazar</msg>
   <msg key="Report">Informe de Error</msg>

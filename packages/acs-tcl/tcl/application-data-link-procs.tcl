@@ -246,7 +246,7 @@ ad_proc -public application_data_link::get_links_from {
 
     if {[info exists to_type] && $to_type ne ""} {
         set to_type_clause [db_map to_type_where_clause]
-            if {[content::type::is_content_type -object_type $to_type]} {
+        if {[content::type::is_content_type -object_type $to_type]} {
             set to_type_clause [db_map content_type_where_clause]
             set content_type_from_clause [db_map content_type_from_clause]
         }
@@ -272,7 +272,7 @@ ad_proc -public application_data_link::get_links_to {
 
     if {[info exists from_type] && $from_type ne ""} {
         set from_type_clause [db_map from_type_where_clause]
-            if {[content::type::is_content_type -content_type $from_type]} {
+        if {[content::type::is_content_type -content_type $from_type]} {
             set from_type_clause [db_map content_type_where_clause]
             set content_type_from_clause [db_map content_type_from_clause]
         }
@@ -297,7 +297,7 @@ ad_proc -public application_data_link::scan_for_links {
     set refs [list]
     set http_url [string trimright [ad_url] /]/
     set https_url [string map {http https} $http_url]
-    set re "(?:\")(?:$http_url|$https_url|/)(?:o|image|file)/(\\d{1,8})"
+    set re "(?:\")(?:$http_url|$https_url|/)(?:o|image|file)/(\\d+)"
     set ref_data [regexp -inline -all $re $text]
     foreach {discard ref} $ref_data {
             lappend refs $ref
@@ -364,7 +364,7 @@ ad_proc -public application_data_link::link_exists {
     -to_object_id
     {-relation_tag ""}
 } {
-    Check if a link exists, only checks in the directon requested.
+    Check if a link exists, only checks in the direction requested.
     Optionally check if the link has the given tag.
 
     @param from_object_id

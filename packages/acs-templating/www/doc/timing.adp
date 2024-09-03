@@ -1,7 +1,11 @@
 
-<property name="context">{/doc/acs-templating {ACS Templating}} {Timing a Templated Page}</property>
+<property name="context">{/doc/acs-templating/ {ACS Templating}} {Timing a Templated Page}</property>
 <property name="doc(title)">Timing a Templated Page</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h2>Timing a Templated Page</h2>
 
 by <a href="mailto:christian\@arsdigita.com">Christian
@@ -40,7 +44,7 @@ version on disk is out of date. ADP pages are compiled to TCL, and
 both ADP and Tcl pages are cached as Tcl procs. The parameter
 <code>RefreshCache</code> in section <code>template</code> can be
 set to <code>always</code> or <code>never</code> to affect the
-cacheing strategy; the latter may be useful for a production site.
+caching strategy; the latter may be useful for a production site.
 All timing is carried out for the three settings
 <code>always</code>, <code>normal</code>, and <code>never</code>;
 the associated variable is called <code>check</code>.</p>

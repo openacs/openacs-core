@@ -12,4 +12,4 @@ parameters</a> of the currently selected theme and save it under a new
 name. </p>
 
 <p>When a theme originating from a theming package is deleted, it might
-ne recreated via the after_install callback of that package.</p>
+be recreated via the <code>after_install</code> callback of that package.</p>

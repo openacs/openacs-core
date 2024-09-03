@@ -1,7 +1,11 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Detailed Design Documentation Template}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Detailed Design Documentation Template}</property>
 <property name="doc(title)">Detailed Design Documentation Template</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="nxml-mode" leftLabel="Prev"
 			title="Chapter 13. Documentation
@@ -194,8 +198,8 @@ document.</em></span></p><div class="informaltable"><table class="informaltable"
 <td>0.1</td><td>Creation</td><td>8/21/2000</td><td>Josh Finkler, Audrey McLoghlin</td>
 </tr>
 </tbody>
-</table></div><p><span class="cvstag">($&zwnj;Id: design-template.xml,v 1.9 2017/08/07
-23:47:54 gustafn Exp $)</span></p>
+</table></div><div class="cvstag">($&zwnj;Id: design-template.xml,v 1.9 2017/08/07
+23:47:54 gustafn Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

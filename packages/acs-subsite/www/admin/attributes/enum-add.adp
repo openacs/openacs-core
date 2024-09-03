@@ -1,6 +1,6 @@
 <master>
 <property name="context">@context;literal@</property>
-<property name="doc(title)">Specify values for @attribute_pretty_name;noquote@</property>
+<property name="doc(title)">Specify values for @attribute_pretty_name;literal@</property>
 
 Note: Every value must have a unique name. Duplicate names will be ignored.
 

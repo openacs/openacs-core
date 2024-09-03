@@ -1,7 +1,11 @@
 
-<property name="context">{/doc/acs-automated-testing {ACS Automated Testing}} {Requirements}</property>
+<property name="context">{/doc/acs-automated-testing/ {ACS Automated Testing}} {Requirements}</property>
 <property name="doc(title)">Requirements</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="usage" leftLabel="Prev"
 			title=""
@@ -76,10 +80,10 @@ scripts in some format other than tcl procs.)</td>
 <span class="strong">Test scripts can be imported and
 exported</span>. It should be possible to import a test into the
 database from a file, and to export it to a file. These files
-should be sharable by different OpenACS installations. It should be
-possible to import/export directly between running OpenACS sites.
-(We should look at what did and didn&#39;t work in acs-lang catalog
-files and work from there.)</td>
+should be shareable by different OpenACS installations. It should
+be possible to import/export directly between running OpenACS
+sites. (We should look at what did and didn&#39;t work in acs-lang
+catalog files and work from there.)</td>
 </tr><tr>
 <td>5</td><td> </td><td>B</td><td>
 <span class="strong">Macro Recording</span>. End users can
@@ -97,7 +101,7 @@ whenever this test fails" and "notify me whenever a test
 in this category fails"</td>
 </tr><tr>
 <td>7</td><td> </td><td>A</td><td>The results of an automated test are optionally written to an
-xml file.</td>
+XML file.</td>
 </tr>
 </tbody>
 </table></div><p>Because the current test package uses in-memory variables

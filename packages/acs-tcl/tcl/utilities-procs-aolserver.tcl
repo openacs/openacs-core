@@ -65,6 +65,7 @@ ad_proc -public ad_unset_cookie {
     {-secure f}
     {-domain ""}
     {-path "/"}
+    {-samesite lax}
     name
 } {
     Un-sets a cookie.
@@ -74,7 +75,7 @@ ad_proc -public ad_unset_cookie {
 } {
     ad_set_cookie -replace t -expire t -max_age 0 \
         -secure $secure -domain $domain -path $path \
-        $name ""
+        -samesite $samesite $name ""
 }
 
 #
@@ -132,6 +133,7 @@ ad_proc -public ad_set_cookie {
     {-path "/"}
     {-discard f}
     {-scriptable t}
+    {-samesite none}
     name
     {value ""}
 } {
@@ -174,7 +176,7 @@ ad_proc -public ad_set_cookie {
     with earlier versions, OpenACS 5.8 has the default set to
     "true". OpenACS 5.9 will have the flag per default set to "false".
 
-    @param value is autmatically URL encoded.
+    @param value is automatically URL encoded.
 
     @see ad_get_cookie
     @see ad_unset_cookie
@@ -249,7 +251,7 @@ ad_proc -public ad_set_cookie {
 
 #-------------------------------------------------------------------------
 # Provide a clean way of handling exceptions in mutexed regions
-# (between locking and unlocking of an mutex). Should be used probably
+# (between locking and unlocking of a mutex). Should be used probably
 # on more places in OpenACS.
 #-------------------------------------------------------------------------
 
@@ -352,8 +354,7 @@ nsf::proc ns_getcontent {{-as_file true} {-binary true}} {
         # If the file was not spooled, obtainit via [ns_conn content]
         # as write it to a file.
         #
-        set result [ad_tmpnam]
-        set F [open $result w]
+        set F [file tempfile result [ad_tmpdir]/nsspool-XXXXXX]
         if {$binary} {
             fconfigure $F -translation binary -encoding binary
         }

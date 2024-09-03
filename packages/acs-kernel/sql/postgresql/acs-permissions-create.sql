@@ -2,7 +2,7 @@
 -- acs-kernel/sql/acs-permissions-create.sql
 --
 -- The ACS core permission system. The knowledge level of system
--- allows you to define a hierarchichal system of privileges.  The
+-- allows you to define a hierarchical system of privileges.  The
 -- operational level allows you to grant to any party a privilege on
 -- any object.
 --
@@ -18,14 +18,21 @@
 -- KNOWLEDGE LEVEL: PRIVILEGES AND ACTIONS --
 ---------------------------------------------
 
-create table acs_privileges (
+CREATE TABLE acs_privileges (
     privilege	    varchar(100) not null constraint acs_privileges_privilege_pk
     		    primary key,
     pretty_name	    varchar(100),
     pretty_plural   varchar(100)
 );
 
-create table acs_privilege_hierarchy (
+COMMENT ON TABLE acs_privileges is '
+ Privileges share a global namespace. This is to avoid a
+ situation where granting the foo privilege on one type of object can
+ have an entirely different meaning than granting the foo privilege on
+ another type of object.
+';
+
+CREATE TABLE acs_privilege_hierarchy (
     privilege	    varchar(100) not null 
                     constraint acs_priv_hier_priv_fk
     		    references acs_privileges (privilege),
@@ -36,46 +43,27 @@ create table acs_privilege_hierarchy (
     primary key (privilege, child_privilege)
 );
 
-create index acs_priv_hier_child_priv_idx on acs_privilege_hierarchy (child_privilege);
+comment on table acs_privilege_hierarchy is '
+ The acs_privilege_hierarchy gives us an easy way to say: The foo
+ privilege is a superset of the bar privilege.
+';
 
-create table acs_privilege_hierarchy_index (
-    privilege       varchar(100) not null 
-                    constraint acs_priv_hier_priv_fk
-    		    references acs_privileges (privilege),
-    child_privilege varchar(100) not null 
-                    constraint acs_priv_hier_child_priv_fk
-    		    references acs_privileges (privilege),
-    tree_sortkey    varbit
-);
+CREATE INDEX acs_priv_hier_child_priv_idx ON acs_privilege_hierarchy (child_privilege);
 
-create index priv_hier_sortkey_idx on 
-acs_privilege_hierarchy_index (tree_sortkey);
 
--- Added table to materialize view that previously used 
--- acs_privilege_descendant_map name
---
--- DanW (dcwickstrom@earthlink.net) 30 Jan, 2003
-
-create table acs_privilege_descendant_map (
-    privilege       varchar(100) not null 
-                    constraint acs_priv_hier_priv_fk
-    		    references acs_privileges (privilege),
-    descendant      varchar(100) not null 
-                    constraint acs_priv_hier_child_priv_fk
-    		    references acs_privileges (privilege)
-);
-
--- DRB: Empirical testing showed that even with just 61 entries in the new table
--- this index sped things up by roughly 15%
-
-create index acs_priv_desc_map_idx on acs_privilege_descendant_map(descendant);
-
--- Gustaf (Jan 2009): interesting enough, the index above is never
--- used on openacs.org and can be most likely dropped. The index below
--- (together with acs_obj_ctx_idx_object_id_idx) makes real-world
--- applications more than a factor of 10 faster (openacs/download and
--- openacs/download/one-revision?revision_id=2089636)
-create index acs_priv_desc_map_privilege_idx on acs_privilege_descendant_map (privilege);
+CREATE OR REPLACE VIEW acs_privilege_descendant_map AS
+WITH RECURSIVE privilege_desc(parent, child) AS (
+   SELECT child_privilege as parent, child_privilege as child FROM acs_privilege_hierarchy
+UNION ALL
+   SELECT privilege as parent, privilege as child FROM
+   (SELECT privilege FROM acs_privilege_hierarchy
+    EXCEPT
+    SELECT child_privilege FROM acs_privilege_hierarchy) identity
+UNION ALL
+   SELECT h.privilege as parent, pd.child
+   FROM acs_privilege_hierarchy h, privilege_desc pd
+   WHERE pd.parent = h.child_privilege
+) SELECT privilege_desc.parent, privilege_desc.child FROM privilege_desc;
 
 -- This trigger is used to create a pseudo-tree hierarchy that
 -- can be used to emulate tree queries on the acs_privilege_hierarchy table.
@@ -117,177 +105,6 @@ create index acs_priv_desc_map_privilege_idx on acs_privilege_descendant_map (pr
 
 -- This would be better, since the same query could be used for both oracle
 -- and PostgreSQL.
-
-
-
---
--- procedure acs_priv_hier_ins_del_tr/0
---
-CREATE OR REPLACE FUNCTION acs_priv_hier_ins_del_tr(
-
-) RETURNS trigger AS $$
-DECLARE
-        new_value       integer;
-        new_key         varbit default null;
-        v_rec           record;
-        deleted_p       boolean;
-BEGIN
-
-        -- if more than one node was deleted the second trigger call
-        -- will error out.  This check avoids that problem.
-
-        if TG_OP = 'DELETE' then 
-            select count(*) = 0 into deleted_p
-              from acs_privilege_hierarchy_index 
-             where old.privilege = privilege
-               and old.child_privilege = child_privilege;     
-       
-            if deleted_p then
-
-                return new;
-
-            end if;
-        end if;
-
-        -- recalculate the table from scratch.
-
-        delete from acs_privilege_hierarchy_index;
-
-        -- first find the top nodes of the tree
-
-        for v_rec in select privilege, child_privilege
-                       from acs_privilege_hierarchy
-                      where privilege 
-                            NOT in (select distinct child_privilege
-                                      from acs_privilege_hierarchy)
-                                           
-        LOOP
-
-            -- top level node, so find the next key at this level.
-
-            select max(tree_leaf_key_to_int(tree_sortkey)) into new_value 
-              from acs_privilege_hierarchy_index
-             where tree_level(tree_sortkey) = 1;
-
-             -- insert the new node
-
-            insert into acs_privilege_hierarchy_index 
-                        (privilege, child_privilege, tree_sortkey)
-                        values
-                        (v_rec.privilege, v_rec.child_privilege, tree_next_key(null, new_value));
-
-            -- now recurse down from this node
-
-            PERFORM priv_recurse_subtree(tree_next_key(null, new_value), v_rec.child_privilege);
-
-        end LOOP;
-
-        -- materialize the map view to speed up queries
-        -- DanW (dcwickstrom@earthlink.net) 30 Jan, 2003
-        delete from acs_privilege_descendant_map;
-
-        insert into acs_privilege_descendant_map (privilege, descendant) 
-        select privilege, descendant from acs_privilege_descendant_map_view;
-
-        return new;
-
-END;
-$$ LANGUAGE plpgsql;
-
-create trigger acs_priv_hier_ins_del_tr after insert or delete
-on acs_privilege_hierarchy for each row
-execute procedure acs_priv_hier_ins_del_tr ();
-
-CREATE OR REPLACE FUNCTION acs_priv_del_tr () RETURNS trigger AS $$
-BEGIN
-
-  delete from acs_privilege_descendant_map
-  where privilege = old.privilege;
-
-  return old;
-
-END;
-$$ LANGUAGE plpgsql;
-
-create trigger acs_priv_del_tr before delete
-on acs_privileges for each row
-execute procedure acs_priv_del_tr ();
-
-
-
-select define_function_args('priv_recurse_subtree','nkey,child_priv');
-
---
--- procedure priv_recurse_subtree/2
---
-CREATE OR REPLACE FUNCTION priv_recurse_subtree(
-   nkey varbit,
-   child_priv varchar
-) RETURNS integer AS $$
-DECLARE
-        new_value       integer;
-        v_rec           record;
-        new_key         varbit;
-BEGIN
-
-        -- now iterate over all of the children of the 
-        -- previous node.
-        
-        for v_rec in select privilege, child_privilege
-                       from acs_privilege_hierarchy
-                      where privilege = child_priv
-
-        LOOP
-
-            -- calculate the next key for this level and parent
-
-            select max(tree_leaf_key_to_int(tree_sortkey)) into new_value
-              from acs_privilege_hierarchy_index
-             where tree_sortkey between nkey and tree_right(nkey)
-               and tree_level(tree_sortkey) = tree_level(nkey) + 1;
-
-            new_key := tree_next_key(nkey, new_value);
-
-            -- insert the new child node.
-
-            insert into acs_privilege_hierarchy_index
-                        (privilege, child_privilege, tree_sortkey)
-                        values
-                        (v_rec.privilege, v_rec.child_privilege, new_key);
-
-            -- keep recursing down until no more children are found
-
-            PERFORM priv_recurse_subtree(new_key, v_rec.child_privilege);
-
-        end LOOP;
-
-        -- no children found, so insert the child node as its own separate 
-        -- node.
-
-        if NOT FOUND then
-           insert into acs_privilege_hierarchy_index
-                       (privilege, child_privilege, tree_sortkey)
-                       values 
-                       (child_priv, child_priv, tree_next_key(nkey, null));
-        end if;
-
-        return null;
-
-END;
-$$ LANGUAGE plpgsql;
-
-comment on table acs_privileges is '
- Privileges share a global namespace. This is to avoid a
- situation where granting the foo privilege on one type of object can
- have an entirely different meaning than granting the foo privilege on
- another type of object.
-';
-
-comment on table acs_privilege_hierarchy is '
- The acs_privilege_hierarchy gives us an easy way to say: The foo
- privilege is a superset of the bar privilege.
-';
-
 
 
 select define_function_args('acs_privilege__create_privilege','privilege,pretty_name;null,pretty_plural;null');
@@ -417,50 +234,25 @@ create index acs_permissions_grantee_idx on acs_permissions (grantee_id);
 create index acs_permissions_privilege_idx on acs_permissions (privilege);
 create index acs_permissions_object_id_idx on acs_permissions(object_id);
 
--- Added table to materialize view that previously used 
--- acs_privilege_descendant_map name
 --
--- DanW (dcwickstrom@earthlink.net) 30 Jan, 2003
+-- The following view was replaced by acs_permission.permissions_all()
+-- in Jul 6, 2016
+--
+-- create view acs_permissions_all
+-- as select op.object_id, p.grantee_id, p.privilege
+--   from acs_object_paths op, acs_permissions p
+--   where op.ancestor_id = p.object_id;
 
--- DRB: I switched this to UNION form because the old view was incredibly
--- slow and caused installation of packages to take exponentially increasing
--- time.   No code should be querying against this view other than the
--- trigger that recreates the denormalized map anyway ...
-
-create view acs_privilege_descendant_map_view
-as select distinct h1.privilege, h2.child_privilege as descendant
-   from acs_privilege_hierarchy_index h1, acs_privilege_hierarchy_index h2
-   where h2.tree_sortkey between h1.tree_sortkey and tree_right(h1.tree_sortkey)
-   union
-   select privilege, privilege
-   from acs_privileges;
-
-create view acs_permissions_all
-as select op.object_id, p.grantee_id, p.privilege
-   from acs_object_paths op, acs_permissions p
-   where op.ancestor_id = p.object_id;
-
-create view acs_object_grantee_priv_map
-as select a.object_id, a.grantee_id, m.descendant as privilege
-   from acs_permissions_all a, acs_privilege_descendant_map m
-   where a.privilege = m.privilege;
-
--- New fast version of acs_object_party_privilege_map
-
-create view acs_object_party_privilege_map as
-select c.object_id, pdm.descendant as privilege, pamm.member_id as party_id
-from acs_object_context_index c, acs_permissions p, acs_privilege_descendant_map pdm,
-  party_approved_member_map pamm
-where c.ancestor_id = p.object_id
-  and pdm.privilege = p.privilege
-  and pamm.party_id = p.grantee_id;
-
+-- create view acs_object_grantee_priv_map
+-- as select a.object_id, a.grantee_id, m.descendant as privilege
+--    from acs_permissions_all a, acs_privilege_descendant_map m
+--    where a.privilege = m.privilege;
 
 --
 -- Obsolete and deprecated view.
 --
-create view all_object_party_privilege_map as
-select * from acs_object_party_privilege_map;
+-- create view all_object_party_privilege_map as
+-- select * from acs_object_party_privilege_map;
 
 
 -- This table acts as a mutex for inserts/deletes from acs_permissions.
@@ -745,7 +537,7 @@ $$ LANGUAGE plpgsql;
 --- Functions for backwards compatibility
 ---
 select define_function_args('acs_permission__permission_p','object_id,party_id,privilege');
-DROP FUNCTION IF EXISTS acs_permission__permission_p(integer, integer, varchar);
+--DROP FUNCTION IF EXISTS acs_permission__permission_p(integer, integer, varchar);
 CREATE OR REPLACE FUNCTION acs_permission__permission_p(
        p_object_id integer,
        p_party_id  integer,
@@ -758,7 +550,7 @@ $$ LANGUAGE plpgsql stable;
 
 
 select define_function_args('acs_permission__permission_p_recursive_array','objects,party_id,privilege');
-DROP FUNCTION IF EXISTS acs_permission__permission_p_recursive_array(integer[], integer, varchar);
+--DROP FUNCTION IF EXISTS acs_permission__permission_p_recursive_array(integer[], integer, varchar);
 CREATE OR REPLACE FUNCTION acs_permission__permission_p_recursive_array(
        p_objects   integer[],
        p_party_id  integer, 
@@ -769,7 +561,7 @@ $$ LANGUAGE sql stable;
 
 
 select define_function_args('acs_permission__grant_permission','object_id,grantee_id,privilege');
-DROP FUNCTION IF EXISTS acs_permission__grant_permission(integer, integer, varchar);
+--DROP FUNCTION IF EXISTS acs_permission__grant_permission(integer, integer, varchar);
 CREATE OR REPLACE FUNCTION acs_permission__grant_permission(
    p_object_id integer,
    p_grantee_id integer,
@@ -783,7 +575,7 @@ $$ LANGUAGE plpgsql;
 
 
 select define_function_args('acs_permission__revoke_permission','object_id,grantee_id,privilege');
-DROP FUNCTION IF EXISTS acs_permission__revoke_permission(integer, integer, varchar);
+-- DROP FUNCTION IF EXISTS acs_permission__revoke_permission(integer, integer, varchar);
 CREATE OR REPLACE FUNCTION acs_permission__revoke_permission(
    p_object_id integer,
    p_grantee_id integer,

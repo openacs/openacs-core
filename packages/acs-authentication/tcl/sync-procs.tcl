@@ -162,7 +162,7 @@ ad_proc -public auth::sync::job::end {
                      -package_key "acs-authentication" \
                      -default 0]
 
-    if { ![template::util::is_true $job(interactive_p)] && $email_p } {
+    if { ![string is true -strict $job(interactive_p)] && $email_p } {
         # Only send out email if not an interactive job
 
         ad_try {
@@ -234,7 +234,7 @@ ad_proc -public auth::sync::job::create_entry {
     @param message Any error message to stick into the log.
     @return entry_id
 } {
-    set success_p_db [ad_decode $success_p 1 "t" "f"]
+    set success_p_db [expr {$success_p ? "t" : "f"}]
 
     set entry_id [db_nextval "auth_batch_job_entry_id_seq"]
 
@@ -431,7 +431,7 @@ ad_proc -public auth::sync::job::action {
                 }
             } on error {errorMsg} {
                 # Get errorInfo and log it
-                ad_log Error "Error during batch syncrhonization job: $errorMsg"
+                ad_log Error "Error during batch synchronization job: $errorMsg"
                 set success_p 0
                 set result(message) $::errorInfo
             }
@@ -522,7 +522,7 @@ ad_proc -private auth::sync::get_sync_elements {
     # but these will issue an exception below.
     #
     # TODO: using a different error-code could make the code saver, by
-    # just ingnoring such cases.
+    # just ignoring such cases.
     #
     set elms [list]
     ad_try  {
@@ -777,7 +777,7 @@ ad_proc -private auth::sync::get_doc::file::GetParameters {} {
 ad_proc -private auth::sync::get_doc::file::GetDocument {
     parameters
 } {
-    Retrieve the document from local file system
+    Retrieve the document from local filesystem
 } {
     array set result {
         doc_status failed_to_conntect
@@ -870,10 +870,10 @@ ad_proc -private auth::sync::process_doc::ims::ProcessDocument {
     Process IMS Enterprise 1.1 document.
 } {
     set tree [xml_parse -persist $document]
-
     set root_node [xml_doc_get_first_node $tree]
 
     if { [xml_node_get_name $root_node] ne "enterprise" } {
+        $tree delete
         error "Root node was not <enterprise>"
     }
 
@@ -920,10 +920,11 @@ ad_proc -private auth::sync::process_doc::ims::ProcessDocument {
             -username $username \
             -array user_info
     }
+    $tree delete
 }
 
 
-ad_proc -public auth::sync::process_doc::ims::GetAcknowledgementDocument {
+ad_proc -private auth::sync::process_doc::ims::GetAcknowledgementDocument {
     job_id
     document
     parameters
@@ -932,12 +933,15 @@ ad_proc -public auth::sync::process_doc::ims::GetAcknowledgementDocument {
     adaptation of the IMS Enterprise v 1.1 spec.
 } {
     set tree [xml_parse -persist $document]
+
     set root_node [xml_doc_get_first_node $tree]
     if { [xml_node_get_name $root_node] ne "enterprise" } {
+        $tree delete
         error "Root node was not <enterprise>"
     }
 
     set timestamp [xml_get_child_node_content_by_path $root_node { { properties datetime } }]
+    $tree delete
 
     append doc {<?xml version="1.0" encoding="} [ns_config "ns/parameters" OutputCharset] {"?>} \n
     append doc {<enterprise>} \n

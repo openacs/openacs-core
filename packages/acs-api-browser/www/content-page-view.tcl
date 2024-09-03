@@ -83,7 +83,7 @@ if {![file readable $::acs::rootdir/$path] || [file isdirectory $::acs::rootdir/
 } else {
 
     set mime_type [ns_guesstype $path]
-    if {![string match "text/*" $mime_type] && [file extension $path] ne ".xql"} {
+    if {![string match "text/*" $mime_type] && [ad_file extension $path] ni {.xql .wf}} {
         set source_p 0
         set source_link 0
     } else {
@@ -93,8 +93,8 @@ if {![file readable $::acs::rootdir/$path] || [file isdirectory $::acs::rootdir/
         set contents_title "File Contents"
         set file_contents [template::util::read_file $::acs::rootdir/$path]
         set compiled_file_contents ""
-        switch [file extension $path] {
-            ".tcl" {
+        switch [ad_file extension $path] {
+            ".tcl" - ".wf" {
                 set file_contents [apidoc::tclcode_to_html $file_contents]
             }
             ".adp" {

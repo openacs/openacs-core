@@ -26,7 +26,7 @@
     <if @message_2@ not nil>
       <p>@message_2@</p>
     </if>
-  </table>
+  </div>
 
   <div style="clear: both;"></div>
   </div>

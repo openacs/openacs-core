@@ -1,7 +1,11 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {ACS Installation: Welcome}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {ACS Installation: Welcome}</property>
 <property name="doc(title)">ACS Installation: Welcome</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h2>ACS Installation: Welcome</h2>
 
 Thank you for installing the ArsDigita Community System, a suite of

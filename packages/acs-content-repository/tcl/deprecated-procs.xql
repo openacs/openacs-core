@@ -81,7 +81,7 @@
     where
       r.mime_type = m.mime_type
     and
-      r.revision_id = $revision_id
+      r.revision_id = :revision_id
   
       </querytext>
 </fullquery>

@@ -1,5 +1,3 @@
-# /packages/acs-subsite/www/admin/groups/one.tcl
-
 ad_page_contract {
     Change default join policy for a group type.
 
@@ -23,8 +21,8 @@ ad_page_contract {
 
 set context [list \
         [list "[ad_conn package_url]admin/group-types/" "Group types"] \
-	[list [export_vars -base one group_type] "One type"] \
-	"Edit default join policy"]
+        [list [export_vars -base one group_type] "One type"] \
+        "Edit default join policy"]
 
 if { ![db_0or1row select_pretty_name {}] } {
     ad_return_error "Group type doesn't exist" "Group type \"$group_type\" doesn't exist"

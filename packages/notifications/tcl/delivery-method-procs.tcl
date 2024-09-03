@@ -1,7 +1,7 @@
 ad_library {
 
     Notification Delivery Methods
-    
+
     Functions to support notification delivery methods. A delivery method is a means by which
     a notification is sent to a user. "Email" is a common one, but others, like "sms", may exist.
 
@@ -60,7 +60,7 @@ ad_proc -public notification::delivery::scan_replies {
     {-delivery_method_id:required}
 } {
     scan for replies.
-    
+
     Every delivery method allows for replies. This is the wrapper proc that
     indicates to the delivery method service contract implementation that it's time to
     scan for replies.
@@ -85,12 +85,13 @@ ad_proc -public notification::delivery::new {
 } {
     Register a new delivery method with the notification service.
 } {
-    set extra_vars [ns_set create]
+    set extra_vars [ns_set create s \
+                        delivery_method_id $delivery_method_id \
+                        sc_impl_id $sc_impl_id \
+                        short_name $short_name \
+                        pretty_name $pretty_name \
+                       ]
 
-    oacs_util::vars_to_ns_set \
-        -ns_set $extra_vars \
-        -var_list {delivery_method_id sc_impl_id short_name pretty_name}
-    
     return [package_instantiate_object \
                 -extra_vars $extra_vars \
                 "notification_delivery_method"]
@@ -104,7 +105,7 @@ ad_proc -public notification::delivery::delete {
     db_exec_plsql delete {}
 }
 
-ad_proc -public notification::delivery::update_sc_impl_id {
+ad_proc -private notification::delivery::update_sc_impl_id {
     {-delivery_method_id ""}
     {-sc_impl_id:required}
 } {

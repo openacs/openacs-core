@@ -25,7 +25,7 @@ case $PATH in
 esac
 
 #
-# Loop for every entry in oratab file and and try to start
+# Loop for every entry in oratab file and try to start
 # that ORACLE
 #
 

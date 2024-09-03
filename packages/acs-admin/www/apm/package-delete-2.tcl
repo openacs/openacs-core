@@ -6,8 +6,8 @@ ad_page_contract {
     @creation-date Fri Oct 13 08:42:50 2000
     @cvs-id $Id$
 } {
-    version_id:naturalnum
-    {remove_files:boolean 0}
+    version_id:naturalnum,notnull
+    {remove_files:boolean,notnull 0}
     {sql_drop_scripts:multiple ""}
 }
 
@@ -28,6 +28,7 @@ if {![apm_version_installed_p $version_id]} {
     if { [catch {apm_package_delete \
 		     -sql_drop_scripts $sql_drop_scripts \
 		     -remove_files=0 \
+                     -delete_site_nodes \
 		     -callback apm_body_callback $package_key} errmsg] } {
 	append body [subst {
 	    We encountered the following error when deleting package "$package_key":

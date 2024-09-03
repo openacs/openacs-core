@@ -1,7 +1,7 @@
 ad_library {
-    
+
     Tests for content folders
-    
+
     @author Dave Bauer (dave@thedesignexperience.org)
     @creation-date 2005-01-13
     @cvs-id $Id$
@@ -35,7 +35,7 @@ aa_register_case \
                 content::folder::register_content_type \
                     -folder_id $first_folder_id \
                     -content_type content_folder
-                
+
 
                 #########################################################
                 # Update the folder
@@ -47,7 +47,7 @@ aa_register_case \
                     -item_id $first_folder_id \
                     -array_name first_folder
                 aa_true "Folder updated" {($first_folder(label) eq "new_label") && ($first_folder(description) eq "new_description")}
-                
+
                 #########################################################
                 # create a child folder
                 #########################################################
@@ -63,7 +63,7 @@ aa_register_case \
                                       -folder_id $first_folder_id \
                                       -target_folder_id $child_folder_id]
                 aa_true "Child is subfolder" $is_subfolder
-                
+
                 #########################################################
                 # make sure parent is not a subfolder of child
                 #########################################################
@@ -71,7 +71,7 @@ aa_register_case \
                                       -folder_id $child_folder_id \
                                       -target_folder_id $first_folder_id]
                 aa_false "Parent is not subfolder of child" $is_subfolder
-                
+
             }
     }
 # Local variables:

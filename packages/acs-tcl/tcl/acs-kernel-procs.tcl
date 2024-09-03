@@ -5,7 +5,7 @@ ad_library {
   @cvs-id $Id$
 }
 
-ad_proc -public ad_acs_administrator_exists_p {} {
+ad_proc -private ad_acs_administrator_exists_p {} {
 
     @return 1 if a user with admin privileges exists, 0 otherwise.
 
@@ -25,7 +25,7 @@ ad_proc -public ad_acs_administrator_exists_p {} {
              and p.object_id = amo.object_id
              and p.grantee_id = m.party_id
              and u.user_id = m.member_id
-             and acs_permission.permission_p(amo.object_id, u.user_id, 'admin')
+             and acs_permission.permission_p(amo.object_id, u.user_id, 'admin') = 't'
          )
     } -default 0]
 }
@@ -43,8 +43,8 @@ ad_proc -private ad_acs_require_basic_schemata {} {
         set files "upgrade-5.9.1d10-5.9.1d11.sql"
         foreach file $files {
             set fn $kernelSqlDir/$file
-            if {[file readable $fn]} {
-                ns_log notice "bootstrap: upgrading sql file $fn"
+            if {[ad_file readable $fn]} {
+                ns_log notice "bootstrap: upgrading SQL file $fn"
                 db_source_sql_file -callback apm_dummy_callback $fn
             }
         }
@@ -52,21 +52,18 @@ ad_proc -private ad_acs_require_basic_schemata {} {
 }
 
 ad_proc -public ad_acs_admin_node {} {
-
-    @return The node id of the ACS administration service if it is mounted, 0 otherwise.
-
+    @return The node id of the ACS administration service if it is
+            mounted, 0 otherwise.
 } {
-    # Obtain the id of the ACS Administration node.
-
-    # DRB: this used to say "and rownum = 1" but I've changed it to an SQL92 form
-    # that's ummm...portable!
-
-    return [db_string acs_admin_node_p {
-        select case when count(object_id) = 0 then 0 else 1 end
-        from site_nodes
-        where object_id = (select package_id
-                           from apm_packages
-                           where package_key = 'acs-admin')
+    #
+    # acs-admin is a singleton, so there is no chance that we have
+    # multiple instances of it. If we do, something is wrong with our
+    # setup.
+    #
+    return [db_string acs_admin_node {
+        select node_id from site_nodes n, apm_packages p
+        where n.object_id = p.package_id
+        and p.package_key = 'acs-admin'
     } -default 0]
 }
 

@@ -1,13 +1,13 @@
 ad_page_contract {
-    Install from local file system
+    Install from local filesystem
 } {
-    {package_type ""}
-    {upgrade_p:boolean 0}
+    {package_type:token ""}
+    {upgrade_p:boolean,notnull 0}
     {repository_url "https://openacs.org/repository/"}
-    {channel ""}
+    {channel:token ""}
     {maturity:naturalnum ""}
-    {current_channel ""}
-    {head_channel ""}
+    {current_channel:token ""}
+    {head_channel:token ""}
 }
 
 
@@ -35,7 +35,7 @@ if {$maturity eq ""} {
 }
 
 #
-# Set page title to reflect install from repository or from file system
+# Set page title to reflect install from repository or from filesystem
 #
 
 if { $repository_url ne "" } {
@@ -91,35 +91,40 @@ foreach package_key [array names repository] {
     #  - don't offer packages of HEAD, when these are included in the current channel
     #
     if {[dict get $version maturity] < $maturity
-	|| [dict get $version maturity] == 4
-	|| ![apm_package_supports_rdbms_p -package_key $package_key]
-	|| [string match "*-portlet" $package_key]
+        || [dict get $version maturity] == 4
+        || ![apm_package_supports_rdbms_p -package_key $package_key]
+        || [string match "*-portlet" $package_key]
         || ($channel ne $current_channel && [info exists current_repository($package_key)])
-    } continue
+    } {
+        if {[dict get $version maturity] == 0} {
+            ns_log notice "install: do not offer to install $package_key with maturity 0"
+        }
+        continue
+    }
 
     if { $package_type eq "" || [dict get $version package.type] eq $package_type } {
-	#
+        #
         # If in upgrade mode, only add to list if it's an upgrade, in
         # install-mode list only installs.
-	#
+        #
         if { (!$upgrade_p && [dict get $version install_type] eq "install")
-	     || ($upgrade_p && [dict get $version install_type] eq "upgrade")
-	 } {
+             || ($upgrade_p && [dict get $version install_type] eq "upgrade")
+         } {
             set package([string toupper [dict get $version package-name]]) \
                 [list $package_key \
                      [dict get $version package-name] \
                      [dict get $version name] \
                      [dict get $version package.type] \
                      [dict get $version install_type] \
-		     [dict get $version summary] \
-		     [::apm::package_version::attributes::maturity_int_to_text [dict get $version maturity]] \
+                     [dict get $version summary] \
+                     [::apm::package_version::attributes::maturity_int_to_text [dict get $version maturity]] \
                      [dict get $version vendor] \
                      [dict get $version vendor.url] \
                      [dict get $version owner] \
                      [dict get $version owner.url] \
                      [dict get $version release-date] \
                      [dict get $version license] \
-		    ]
+                    ]
         }
     }
 }
@@ -133,7 +138,7 @@ foreach package_key [array names repository] {
 
 # Sort the list alphabetically (in case package_name and package_key doesn't sort the same)
 multirow create packages package_key package_name version_name package_type install_type summary \
-    maturity vendor vendor_url owner owner_url release_date license 
+    maturity vendor vendor_url owner owner_url release_date license
 
 if {[catch {set maturity_label [apm::package_version::attributes::get_pretty_name maturity]} errmsg]} {
     set maturity_label "Maturity"
@@ -156,9 +161,9 @@ template::list::create \
     -multirow packages \
     -key package_key \
     -bulk_actions [list \
-                       "$operation_label checked applications" \
+                       "$operation_label selected applications" \
                        "install-2" \
-                       "$operation_label checked applications" ] \
+                       "$operation_label selected applications" ] \
     -bulk_action_export_vars {
         {repository_url $fetch_url}
     } \
@@ -170,28 +175,28 @@ template::list::create \
         }
         summary {
             label "Summary"
-	    display_template {@packages.summary@<br>
-		Vendor: <if @packages.vendor_url@ nil>@packages.vendor@</if>
-		        <else><a href=" @packages.vendor_url@">@packages.vendor@</a></else>
-		        <if @packages.release_date@ not nil> (released on @packages.release_date@<if @packages.license@ not nil>, license: @packages.license@</if>)</if>
-		<br>
-		Details: <a href="https://openacs.org/xowiki/@packages.package_key@">@packages.package_key@</a>
-	    }
-        }   
+            display_template {@packages.summary@<br>
+                Vendor: <if @packages.vendor_url@ nil>@packages.vendor@</if>
+                        <else><a href=" @packages.vendor_url@">@packages.vendor@</a></else>
+                        <if @packages.release_date@ not nil> (released on @packages.release_date@<if @packages.license@ not nil>, license: @packages.license@</if>)</if>
+                <br>
+                Details: <a href="https://openacs.org/xowiki/@packages.package_key@">@packages.package_key@</a>
+            }
+        }
         maturity {
-	    label "$maturity_label"
+            label "$maturity_label"
         }
         version_name {
             label "Version"
         }
         package_type {
             label "Type"
-            display_eval {[ad_decode $package_type "apm_application" "Application" "Service"]}
+            display_eval {[expr {$package_type eq "apm_application" ? "[_ acs-subsite.Application]" : "[_ acs-admin.Service]"}]}
         }
         upgrade {
             label "Upgrade"
-            hide_p {[ad_decode $upgrades_p 1 0 1]}
-            display_eval {[ad_decode $install_type "upgrade" "Upgrade" ""]}
+            hide_p {[expr {!$upgrades_p}]}
+            display_eval {[expr {$install_type eq "upgrade" ? "Upgrade" : ""}]}
         }
     } -filters {
         channel {
@@ -211,14 +216,14 @@ template::list::create \
                 {"[_ acs-tcl.maturity_mature]" 2}
                 {"[_ acs-tcl.maturity_mature_and_standard]" 3}
             }
-	    default_value default_maturity
+            default_value default_maturity
         }
 
         package_type {
             label "Type"
             values {
-                {Application apm_application}
-                {Service apm_service}
+                {"[_ acs-subsite.Application]" apm_application}
+                {"[_ acs-admin.Service]" apm_service}
             }
         }
         upgrade_p {

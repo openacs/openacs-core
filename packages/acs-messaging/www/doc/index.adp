@@ -1,7 +1,11 @@
 
-<property name="context">{/doc/acs-messaging {ACS Messaging}} {ACS Messaging Documentation}</property>
+<property name="context">{/doc/acs-messaging/ {ACS Messaging}} {ACS Messaging Documentation}</property>
 <property name="doc(title)">ACS Messaging Documentation</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h1>ACS Messaging Documentation</h1>
 <h2>Engineering Documentation</h2>
 <ul>

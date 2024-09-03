@@ -10,13 +10,14 @@ package <strong>@package_key@</strong>
 </else>
 and
 <if @locale@ nil>
-  <strong>all locales</strong>
+  <strong>all locales</strong>.
 </if>
 <else>
-locale <strong>@locale@</strong>
-</else>.
+locale <strong>@locale@</strong>.
+</else>
 
 <p>
+  <adp:icon name="check">
   Import finished. Number of messages processed: @message_count.processed@, added: @message_count.added@, updated: @message_count.updated@, 
   deleted: @message_count.deleted@.
 </p>

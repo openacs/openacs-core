@@ -43,7 +43,7 @@ if { ![db_0or1row select_segment_properties {
              where role = r.role_two) as role_pretty_plural
       from rel_segments s, acs_rel_types r
      where s.segment_id = :segment_id
-       and s.rel_type = r.rel_type    
+       and s.rel_type = r.rel_type
 } -column_array props] } {
     ad_return_error \
         "Segment does not exist" \
@@ -70,8 +70,13 @@ db_multirow constraints constraints_select {
      where c.rel_segment = :segment_id
 }
 
-db_1row select_segment_info {}
-set number_elements [util_commify_number $number_elements]
+db_1row select_segment_info {
+    select count(*) as number_elements
+      from rel_segment_party_map map
+    where map.segment_id = :segment_id
+    and acs_permission.permission_p(map.party_id, :user_id, 'read')
+}
+set number_elements [lc_numeric $number_elements]
 
 set admin_p [permission::permission_p -object_id $segment_id -privilege "admin"]
 

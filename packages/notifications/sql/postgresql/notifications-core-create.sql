@@ -141,6 +141,8 @@ create table notification_requests (
 );
 
 create index notification_requests_t_o_idx on notification_requests(type_id, object_id);
+create index notification_requests_user_id_idx on notification_requests(user_id);
+create index notification_requests_object_id_idx on notification_requests(object_id);
 
 -- preferences
 --

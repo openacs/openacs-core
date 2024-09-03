@@ -1,7 +1,11 @@
 
-<property name="context">{/doc/acs-subsite {ACS Subsite}} {Group Admin Pages - Design}</property>
+<property name="context">{/doc/acs-subsite/ {ACS Subsite}} {Group Admin Pages - Design}</property>
 <property name="doc(title)">Group Admin Pages - Design</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h2>Group Admin Pages - Design</h2>
 <a href="">ACS subsite docs</a>
  : Group Admin Pages - Design

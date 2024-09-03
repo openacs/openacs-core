@@ -355,7 +355,6 @@ ad_proc -private auth::local::password::ResetPassword {
     username
     parameters
     {authority_id {}}
-    {new_password {}}
 } {
     Implements the ResetPassword operation of the auth_password
     service contract for the local account implementation.
@@ -372,11 +371,7 @@ ad_proc -private auth::local::password::ResetPassword {
     }
 
     # Reset the password
-    if { $new_password ne "" } {
-        set password $new_password
-    } else {
-        set password [ad_generate_random_string]
-    }
+    set password [ad_generate_random_string]
 
     ad_change_password $user_id $password
 
@@ -486,12 +481,14 @@ ad_proc -private auth::local::registration::Register {
     # We don't create anything here, so creation always succeeds
     # And we don't check local account, either
 
+    set subsite_id [ad_conn subsite_id]
+
     # LARS TODO: Move this out of the local driver and into the auth framework
     # Generate random password?
     set generated_pwd_p 0
     if { $password eq ""
          || [parameter::get \
-                 -package_id [ad_conn subsite_id] \
+                 -package_id $subsite_id \
                  -parameter RegistrationProvidesRandomPasswordP \
                  -default 0]
      } {
@@ -511,41 +508,36 @@ ad_proc -private auth::local::registration::Register {
 
     # LARS TODO: Move this out of the local driver and into the auth framework
     # Send password confirmation email to user
-    if { [set email_reg_confirm_p [parameter::get \
-                                       -parameter EmailRegistrationConfirmationToUserP \
-                                       -package_id [ad_conn subsite_id] -default 1]] != 0
-     } {
-        if { $generated_pwd_p
-             || [parameter::get \
-                     -parameter RegistrationProvidesRandomPasswordP \
-                     -package_id [ad_conn subsite_id] -default 0]
-             || $email_reg_confirm_p
-         } {
-            ad_try {
-                auth::password::email_password \
-                    -username $username \
-                    -authority_id $authority_id \
-                    -password $password \
-                    -from [parameter::get \
-                               -parameter NewRegistrationEmailAddress \
-                               -package_id [ad_conn subsite_id] \
-                               -default [ad_system_owner]] \
-                    -subject_msg_key "acs-subsite.email_subject_Registration_password" \
-                    -body_msg_key "acs-subsite.email_body_Registration_password"
-            } on error {errorMsg} {
-                # We don't fail hard here, just log an error
-                ad_log Error "Error sending registration confirmation to $email: $errorMsg"
-            }
+    if { [parameter::get \
+              -parameter EmailRegistrationConfirmationToUserP \
+              -package_id $subsite_id -default 1] } {
+        ad_try {
+            auth::password::email_password \
+                -username $username \
+                -authority_id $authority_id \
+                -password $password \
+                -from [parameter::get \
+                           -parameter NewRegistrationEmailAddress \
+                           -package_id $subsite_id \
+                           -default [ad_system_owner]] \
+                -subject_msg_key "acs-subsite.email_subject_Registration_password" \
+                -body_msg_key "acs-subsite.email_body_Registration_password"
+        } on error {errorMsg} {
+            # We don't fail hard here, just log an error
+            ad_log Error "Error sending registration confirmation to $email: $errorMsg"
         }
     }
 
     # LARS TODO: Move this out of the local driver and into the auth framework
     # Notify admin on new registration
-    if { [parameter::get -parameter  NotifyAdminOfNewRegistrationsP -default 0] } {
+    if { [parameter::get \
+              -parameter NotifyAdminOfNewRegistrationsP \
+              -package_id $subsite_id \
+              -default 0] } {
         ad_try {
             set admin_email [parameter::get \
                                  -parameter NewRegistrationEmailAddress \
-                                 -package_id [ad_conn subsite_id] \
+                                 -package_id $subsite_id \
                                  -default [ad_system_owner]]
             set admin_id [party::get_by_email -email $admin_email]
             if { $admin_id eq "" } {
@@ -639,14 +631,18 @@ ad_proc -private auth::local::search::Search {
     Implements the Search operation of the auth_search
     service contract for the local account implementation.
 } {
-
-    set results [list]
-    db_foreach user_search {} {
-        lappend results $user_id
-    }
-
-    return $results
-
+    set authority_id [auth::authority::local]
+    return [db_list user_search {
+        select distinct username
+        from   cc_users u
+        where  authority_id = :authority_id
+               and upper(coalesce(u.first_names || ' ', '')  ||
+                         coalesce(u.last_name || ' ', '') ||
+                         u.email || ' ' ||
+                         u.username || ' ' ||
+                         coalesce(u.screen_name, '')) like upper('%'||:search_text||'%')
+        order  by username
+    }]
 }
 
 ad_proc -private auth::local::search::GetParameters {} {

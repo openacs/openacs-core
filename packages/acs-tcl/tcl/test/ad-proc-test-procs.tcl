@@ -11,7 +11,7 @@ aa_register_case \
     -procs {ad_proc callback} \
     ad_proc_create_callback {
 
-    Tests the creation of a callback and an implementation with 
+    Tests the creation of a callback and an implementation with
     some forced error cases.
 
 } {
@@ -25,12 +25,29 @@ aa_register_case \
             ad_proc -callback contract { arg1 arg2 } { docs } -
         } error]
 
-    ad_proc -callback a_callback { -arg1 arg2 } { this is a test callback } -
+    aa_silence_log_entries -severities warning {
+        #
+        # In this situation, [info script] returns empty, and no
+        # package_key can be determined
+        #
+        #     Warning: cannot determine package key from script ''
+        #
+        ad_proc -callback a_callback { -arg1 arg2 } { this is a test callback } -
+    }
+
     set callback_procs [info commands ::callback::a_callback::*]
     aa_true "creation of a valid callback contract with '-' body" \
         {"::callback::a_callback::contract" in $callback_procs}
 
-    ad_proc -callback a_callback_2 { arg1 arg2 } { this is a test callback } {}
+    aa_silence_log_entries -severities warning {
+        #
+        # In this situation, [info script] returns empty, and no
+        # package_key can be determined
+        #
+        #     Warning: cannot determine package key from script ''
+        #
+        ad_proc -callback a_callback_2 { arg1 arg2 } { this is a test callback } {}
+    }
     set callback_procs [info commands ::callback::a_callback_2::*]
     aa_true "creation of a valid callback contract with no body" \
         {"::callback::a_callback_2::contract" in $callback_procs}
@@ -45,11 +62,21 @@ aa_register_case \
             ad_proc -callback a_callback -impl impl {} { docs } { body }
         } error]
 
-    ad_proc -callback a_callback -impl an_impl {} { 
-        this is a test callback implementation 
-    } {
+    aa_silence_log_entries -severities warning {
+        #
+        # In this situation, [info script] returns empty, and no
+        # package_key can be determined
+        #
+        #     Warning: cannot determine package key from script ''
+        #
+        ad_proc -callback a_callback -impl an_impl {} {
+            this is a test callback implementation
+        } {
+        }
     }
+
     set impl_procs [info commands ::callback::a_callback::impl::*]
+
     aa_true "creation of a valid callback implementation" \
         {"::callback::a_callback::impl::an_impl" in $impl_procs}
 }
@@ -94,7 +121,8 @@ ad_proc -callback a_callback -impl fail_impl {} {
         error "should fail"
 }
 
-ad_proc -private EvilCallback {} {
+
+ad_proc -private aa_test_EvilCallback {} {
     This is a test callback implementation that should not be invoked.
 } {
         error "Should not be invoked"
@@ -115,9 +143,10 @@ aa_register_case \
         {[llength [callback b_callback -arg1 foo bar]] == 0}
 
     set foo(test) 2
-
-    aa_true "callback returns value for each defined callback and catches the error callback" \
-        {[llength [callback -catch a_callback -arg1 foo bar]] == 2}
+    aa_silence_log_entries -severities warning {
+        aa_true "callback returns value for each defined callback and catches the error callback" \
+            {[llength [callback -catch a_callback -arg1 foo bar]] == 2}
+    }
 
     aa_true "callback returns correct value for specified implementation" \
         {[callback -impl an_impl1 a_callback -arg1 foo bar] == 1}
@@ -130,7 +159,6 @@ aa_register_case \
 
     aa_true "callback errors with missing arg" \
         {[catch {callback -impl an_impl2 a_callback -arg1 foo} err] == 1}
-
     aa_true "throws error for invalid arguments with implementations" \
         [catch {callback a_callback bar} error]
 
@@ -140,13 +168,11 @@ aa_register_case \
     aa_true "throws error without -catch when an error occurs in a callback" \
         [catch {callback a_callback -arg1 foo bar} error]
 
-    set x [catch {callback -impl an_impl2 a_callback -arg1 foo {[EvilCallback]}} error]
+    set x [catch {callback -impl an_impl2 a_callback -arg1 foo {[aa_test_EvilCallback]}} error]
     aa_false "EvilCallback not invoked returned $error" $x
 
-    set x [catch {callback -impl an_impl2 a_callback -arg1 {[EvilCallback]} bar} error]
+    set x [catch {callback -impl an_impl2 a_callback -arg1 {[aa_test_EvilCallback]} bar} error]
     aa_false "EvilCallback not invoked returned $error" $x
-
-
 }
 
 # Local variables:

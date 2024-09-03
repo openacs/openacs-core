@@ -11,7 +11,7 @@ ad_page_contract {
 } {
     version_id:naturalnum,notnull
     { public_p:boolean "" }
-    { kind:word "procs_files" }
+    { kind:word,notnull "procs_files" }
     { about_package_key:token ""}
 } -properties {
     title:onevalue
@@ -61,7 +61,11 @@ set dimensional_list {
 set title "$pretty_name $version_name"
 set context [list $title]
 set dimensional_slider [ad_dimensional $dimensional_list "" \
-                            [ad_tcl_vars_to_ns_set version_id kind public_p about_package_key]]
+                            [ns_set create s \
+                                 version_id $version_id \
+                                 kind $kind \
+                                 public_p $public_p \
+                                 about_package_key $about_package_key]]
 
 set doc_pages [lindex [glob -nocomplain "[acs_package_root_dir $package_key]/www/doc/index.*"] 0]
 
@@ -120,14 +124,14 @@ switch $kind {
         set file_types [list data_model data_model_create data_model_drop data_model_upgrade]
         foreach path [apm_get_package_files -include_data_model_files -package_key $package_key -file_types $file_types] {
            # Set relative path to everything after sql/ (just using
-           # file tail breaks when you've got subdirs of sql)
+           # "file tail" breaks when you've got subdirs of "sql")
            regexp {^sql/(.*)} $path match relative_path
 
            multirow append sql_files $path $relative_path
         }
     }
     content {
-        multirow create content_pages indentation full_path content_type name type first_sentence
+        multirow create content_pages indentation full_path content_type name first_sentence
         set last_components [list]
         foreach path [apm_get_package_files -package_key $package_key -file_types content_page] {
             set components [split $path "/"]
@@ -153,13 +157,9 @@ switch $kind {
                         append indentation "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
                     }
                     set name [lindex $components $i]
-                    set type ""
                     set first_sentence ""
                     if { $i == [llength $components] - 1 } {
                         set content_type page
-                        if { [info exists doc_elements(type)] } {
-                            set type $doc_elements(type)
-                        }
                         if { [info exists doc_elements(main)] } {
                             set first_sentence [::apidoc::first_sentence [lindex $doc_elements(main) 0]]
                         }
@@ -167,7 +167,7 @@ switch $kind {
                         set content_type directory
                     }
                     multirow append content_pages \
-                        $indentation $full_path $content_type $name $type $first_sentence
+                        $indentation $full_path $content_type $name $first_sentence
                 }
                 set last_components $components
             } on error {errorMsg} {

@@ -103,14 +103,14 @@ ad_proc -public template::wizard::create { args } {
 
     set columns [list label rownum id link url]
 
-    # lets add the visited step param
+    # let's add the visited step param
     lappend opts(params) wizard_visitedstep${wizard_name}
 
     # add steps specified at the time the wizard is created
     if { [info exists opts(steps)] } {
 
         # strip carriage returns
-        regsub -all {\r} $opts(steps) {} step_data
+        regsub -all -- {\r} $opts(steps) {} step_data
 
         foreach step [split $step_data "\n"] {
 
@@ -175,8 +175,9 @@ ad_proc -public template::wizard::set_param { name value } {
 
 
 ad_proc -public template::wizard::set_finish_url { finish_url } {
-    <p>if the finish url is set, when a the finish button is pressed
-    it will redirect to this url</p>
+
+    Set the URL to be used for redirection, when the finish button is
+    pressed.
 
     @see template::wizard
 } {
@@ -256,7 +257,7 @@ ad_proc -public template::wizard::get_current_step {
 
     upvar #$level wizard:current_url current_url
 
-    # lets see if this step exists, if not we are finished with wizard and pass the steps
+    # let's see if this step exists, if not we are finished with wizard and pass the steps
     if {[info exists step(url)]} {
         set current_url $step(url)
     } else {
@@ -266,7 +267,7 @@ ad_proc -public template::wizard::get_current_step {
             template::forward $wizard_finish_url
         } else {
 
-            # lets set the current wizard name to the parent wizard
+            # let's set the current wizard name to the parent wizard
             set parent_wizard [lindex $wizards 0]
             set wizard_name $parent_wizard
 
@@ -313,8 +314,8 @@ ad_proc -public template::wizard::get_visited_step {} {
 
     get_reference
 
-    # lets create the visited steps for the current
-    # lets see if the current step is greater what we have visited
+    # let's create the visited steps for the current
+    # let's see if the current step is greater what we have visited
     # otherwise we keep the current value
     set last_visitedstep [get_param wizard_visitedstep${wizard_name}]
     set current_step [current_step]

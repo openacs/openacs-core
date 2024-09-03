@@ -63,7 +63,8 @@ ad_proc -private ::auth::login_attempts::get {
 ad_proc -private ::auth::login_attempts::all_entries {}  {
     Get all login attempts
 
-    @return list {key number_of_attempts timeout ... }
+    @return list of triples in the form {key1 timeout1
+            number_of_attempts1 key2 ...}
 } {
 
     set result [list]
@@ -83,13 +84,14 @@ ad_proc -private ::auth::login_attempts::all_entries {}  {
         }
 
         #
-        # In general we face here a race condition. The entry for the
-        # keys might have timed out before the collection of the
-        # content and now. So, the cache lookup might fail. So, we
-        # preset the "value" with a default in case the "ns_cache_get" fails.
+        # In general, we face here a race condition. The entry for the
+        # keys might have timed out. So, the cache lookup might
+        # fail. So, we provide a "value" with an empty string as
+        # default.
         #
-        set value ""
-        ns_cache_get ns:memoize $key value
+        if {![ns_cache_get ns:memoize $key value]} {
+            set value ""
+        }
 
         lappend result [string range $key 14 end] [ns_time seconds $expire] $value
     }

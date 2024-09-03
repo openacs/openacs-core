@@ -1,7 +1,11 @@
 
-<property name="context">{/doc/search {Search}} {Search}</property>
+<property name="context">{/doc/search/ {Search}} {Search}</property>
 <property name="doc(title)">Search</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h1>Search</h1>
 <a href="../">OpenACS documentation</a>
 <ul><li><a href="./guidelines">How to make an object

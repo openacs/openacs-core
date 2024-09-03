@@ -20,7 +20,7 @@
 
     <p>
       This text is written as a result of our efforts to make the ACS
-      installation for the German Bank project work, therefore it is
+      installation for the German Bank project work, therefore, it is
       based on field experience rather than academic discussion.  We
       hope you will find it useful.
 
@@ -40,7 +40,7 @@
 that is required. Actually, the variables are subject to
 HTML-quoting and internationalization. The suffix <kbd>;noquote</kbd>
 means that the variable's content will be internationalized, but not
-HTML-quoted, while <kbd>;no18n</kbd> means quote, but don't
+HTML-quoted, while <kbd>;noi18n</kbd> means quote, but don't
     internationalize. Finally <kbd>;literal</kbd> means: don't quote and
     don't internationalize.
 
@@ -124,7 +124,7 @@ set form_vars [export_vars -form {var1 var2}]
     </blockquote>
 
     <p>
-      <strong>Snippets of HTML produced by Tcl code, a.k.a.
+      <strong>Snippets of HTML produced by Tcl code, aka
       <em>widgets</em></strong>.
       <br>
       Normally we try to fit all HTML code into the ADP template and
@@ -199,7 +199,7 @@ set form_vars [export_vars -form {var1 var2}]
       the slave template, and once by the master template.  This is
       the result of how the templating system works: <em>every</em>
       occurrence of <kbd>@<var>variable</var>@</kbd> is converted to
-      <kbd>[ad_quotehtml&nbsp;$<var>variable</var>]</kbd>, even when it
+      <kbd>[ns_quotehtml&nbsp;$<var>variable</var>]</kbd>, even when it
       is used only to set a property and you would expect the quoting
       to be suppressed.
 
@@ -393,6 +393,6 @@ set form_vars [export_vars -form {var1 var2}]
     <hr>
     <address><a href="mailto:hniksic@xemacs.org">Hrvoje Niksic</a></address>
 <!-- Created: Mon Feb 26 12:12:00 CET 2001 -->
-<!-- hhmts start -->Last modified: Thu Aug 20 18:38:05 CEST 2015 <!-- hhmts end -->
+<!-- hhmts start -->Last modified: Fri Nov  1 14:11:00 CET 2019 <!-- hhmts end -->
   </body>
 </html>

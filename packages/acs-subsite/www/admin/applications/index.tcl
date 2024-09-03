@@ -22,11 +22,11 @@ ad_form \
     -has_submit 1 \
     -html { style "float:right;" } \
     -form {
-	{search:text,optional
+        {search:text,optional
             {label ""}
-	    {html {length 20 placeholder "[_ acs-kernel.common_Search]"} }
-	    {value $search}
-	}
+            {html {length 20 placeholder "[_ acs-kernel.common_Search]"} }
+            {value $search}
+        }
     } -on_submit {}
 
 list::create \
@@ -36,7 +36,7 @@ list::create \
     -page_flush_p 1 \
     -page_size 250 \
     -page_query_name select_applications \
-    -actions { 
+    -actions {
         "#acs-subsite.Add_application#" application-add "#acs-subsite.Add_new_app#"
     } \
     -bulk_actions {
@@ -46,10 +46,9 @@ list::create \
         edit {
             sub_class narrow
             display_template {
-                <img src="/shared/images/Edit16.gif" height="16" width="16" alt="#acs-subsite.Edit_application_name_and_path#" style="border:0">
+                <adp:icon name="edit" title="#acs-subsite.Edit_application_name_and_path#">
             }
             link_url_eval {[export_vars -base application-add { node_id }]}
-            link_html { title "#acs-subsite.Edit_application_name_and_path#" }
         }
         instance_name {
             label "[_ acs-subsite.Name]"
@@ -61,39 +60,41 @@ list::create \
         package_pretty_name {
             label "[_ acs-subsite.Application]"
         }
-        permissions {
-            label "[_ acs-subsite.Permissions]"
-            link_url_eval {[export_vars -base permissions { package_id }]}
-            display_template { #acs-subsite.Permissions# }
-            sub_class narrow
-        }
-        parameters {
-            label "[_ acs-subsite.Parameters]"
-            link_url_col parameter_url
-            display_template {<if @applications.parameter_url@ not nil>[_ acs-subsite.Parameters]</if>}
-            sub_class narrow
-        }
-        delete {
-            sub_class narrow
+        actions {
+            label "Actions"
+            html "align left"
             display_template {
-                <img src="/shared/images/Delete16.gif" height="16" width="16" alt="#acs-subsite.Delete_this_application#" style="border:0">
+                <if @applications.permissions_url@ ne "">
+                  <a href="@applications.permissions_url@"><adp:icon name='permissions' title='[_ acs-subsite.permissions]'></a>
+                </if>
+                <else><adp:icon name='permissions' invisible='true'></else>
+
+                <if @applications.parameter_url@ ne "">
+                  <a href="@applications.parameter_url@"><adp:icon name='cog' title='[_ acs-subsite.parameters]'></a>
+                </if>
+                <else><adp:icon name='cog' invisible='true'></else>
+
+                <a href="@applications.delete_url@"><adp:icon name="trash" title="#acs-subsite.Delete_this_application#"></a>
             }
-            link_url_eval {[export_vars -base application-delete { node_id }]}
-            link_html { title "#acs-subsite.Delete_this_application#" }
         }
+
     } -filters {
-	search {
-	    hide_p 1
-            where_clause {(:search is null or upper(coalesce(coalesce(m.message, md.message), p.instance_name) || n.name || pt.pretty_name) like '%' || upper(:search) || '%')}
+        search {
+            hide_p 1
+            where_clause {
+                (:search is null or n.name || ' ' || p.instance_name || ' ' || pt.pretty_name || ' ' || coalesce(m.message, '') || ' ' || coalesce(md.message, '') ilike '%' || :search || '%')
+            }
         }
     }
 
 
-db_multirow -extend { parameter_url } applications select_applications_page {} {
+db_multirow -extend { parameter_url permissions_url delete_url} applications select_applications_page {} {
     set instance_name [string repeat "- " $treelevel]$instance_name
     if { $parameters_p } {
         set parameter_url [export_vars -base ../../shared/parameters { package_id { return_url [ad_return_url] } }]
     }
+    set delete_url [export_vars -base application-delete { node_id }]
+    set permissions_url [export_vars -base permissions { package_id }]
 }
 
 # Local variables:

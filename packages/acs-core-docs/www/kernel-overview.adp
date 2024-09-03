@@ -1,7 +1,11 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Overview}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Overview}</property>
 <property name="doc(title)">Overview</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="kernel-doc" leftLabel="Prev"
 			title="Chapter 15. Kernel
@@ -22,7 +26,7 @@ packages</em></span>, which typically provide user-level web
 services built on top of the Kernel and Core. Application packages
 are developed separately from the Kernel, and are typically
 released independently of it.</p></li>
-</ul></div><p>This document provides a high level overview of the kernel
+</ul></div><p>This document provides a high-level overview of the kernel
 package. <a class="ulink" href="index" target="_top">Documentation for other packages on this server</a>
 </p>
 </div>

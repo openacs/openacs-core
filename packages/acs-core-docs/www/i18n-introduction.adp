@@ -1,9 +1,13 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {How Internationalization/Localization works in
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {How Internationalization/Localization works in
 OpenACS}</property>
 <property name="doc(title)">How Internationalization/Localization works in
 OpenACS</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="i18n-overview" leftLabel="Prev"
 			title="
@@ -36,7 +40,7 @@ in APM Parameters. OpenACS provides two approaches, message keys
 and localized ADP files. For ADP pages which are mostly code,
 replacing the message text with message key placeholders is
 simpler. This approach also allows new translation in the database,
-without affecting the file system. For ADP pages which are static
+without affecting the filesystem. For ADP pages which are static
 and mostly text, it may be easier to create a new ADP page for each
 language. In this case, the pages are distinguished by a file
 naming convention.</p><div class="sect2">
@@ -76,15 +80,16 @@ useful while developing, because it allows default text so that the
 page is usable before you have done localization.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem">
 <p>The <span class="strong"><strong>short</strong></span>:
-<code class="computeroutput">#<em class="replaceable"><code>package_key.message_key</code></em>#</code>
+<code class="computeroutput">#<span class="replaceable"><span class="replaceable">package_key.message_key</span></span>#</code>
 </p><p>The advantage of the short syntax is that it&#39;s short.
 It&#39;s as simple as inserting the value of a variable. Example:
-<code class="computeroutput">#<em class="replaceable"><code>forum.title</code></em>#</code>
+<code class="computeroutput">#<span class="replaceable"><span class="replaceable">forum.title</span></span>#</code>
 </p>
 </li><li class="listitem">
 <p>The <span class="strong"><strong>verbose</strong></span>:
-<code class="computeroutput">&lt;trn key="<em class="replaceable"><code>package_key.message_key</code></em>"
-locale="<em class="replaceable"><code>locale</code></em>"&gt;<em class="replaceable"><code>default text</code></em>&lt;/trn&gt;</code>
+<code class="computeroutput">&lt;trn key="<span class="replaceable"><span class="replaceable">package_key.message_key</span></span>"
+locale="<span class="replaceable"><span class="replaceable">locale</span></span>"&gt;<span class="replaceable"><span class="replaceable">default
+text</span></span>&lt;/trn&gt;</code>
 </p><p>The verbose syntax allows you to specify a default text in a
 certain language. This syntax is not recommended anymore, but it
 can be convenient for development, because it still works even if
@@ -96,7 +101,8 @@ locale="en_US"&gt;Title&lt;/trn&gt;</em></span>
 </p>
 </li><li class="listitem">
 <p>The <span class="strong"><strong>temporary</strong></span>:
-<code class="computeroutput">&lt;#<em class="replaceable"><code>message_key</code></em><em class="replaceable"><code>original text</code></em>#&gt;</code>
+<code class="computeroutput">&lt;#<span class="replaceable"><span class="replaceable">message_key</span></span><span class="replaceable"><span class="replaceable">original
+text</span></span>#&gt;</code>
 </p><p>This syntax has been designed to make it easy to
 internationalize existing pages. This is not a syntax that stays in
 the page. As you&#39;ll see later, it&#39;ll be replaced with the
@@ -116,7 +122,7 @@ formats:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style
 <li class="listitem"><p>Typical static key lookup: <code class="computeroutput">[_
 package_key.message_key]</code> - The message key and package key
 used here must be string literals, they can&#39;t result from
-variable evaluation.</p></li><li class="listitem"><p>Static key lookup with non-default locale: <code class="computeroutput">[lang::message::lookup $locale
+variable evaluation.</p></li><li class="listitem"><p>Static key lookup with nondefault locale: <code class="computeroutput">[lang::message::lookup $locale
 package_key.message_key]</code> - The message key and package key
 used here must be string literals, they can&#39;t result from
 variable evaluation.</p></li><li class="listitem"><p>Dynamic key lookup: <code class="computeroutput">[lang::util::localize
@@ -156,7 +162,7 @@ replace the procedure call with a variable lookup on the syntax
 %var_name%. Remember to initialize a Tcl variable with the same
 name on some line above the text.</p></li><li class="listitem"><p>If the text is in a Tcl file you must replace variable lookups
 (occurrences of $var_name or ${var_name}) with %var_name%</p></li><li class="listitem"><p>You are now ready to follow the normal procedure and mark up the
-text using a tempoarary message tag (&lt;#_
+text using a temporary message tag (&lt;#_
 text_with_percentage_vars#&gt;) and run the action replace tags
 with keys in the APM.</p></li>
 </ul></div><p>The variable values in the message are usually fetched with
@@ -187,7 +193,7 @@ following commands to check for mistakes:</p><pre class="screen">
 
 # Review the list of Tcl files with no message lookups
 <strong class="userinput"><code>for tcl_file in $(find -iname '*.tcl'); do egrep -L '(&lt;#|\[_)' $tcl_file; done</code></strong>
-</pre><p>When you feel ready you may vist your package in the <a class="ulink" href="/acs-admin/apm" target="_top">package manager</a> and
+</pre><p>When you feel ready you may visit your package in the <a class="ulink" href="/acs-admin/apm" target="_top">package manager</a> and
 run the action "Replace tags with keys and insert into
 catalog" on the Tcl files that you&#39;ve edited to replace
 the temporary tags with calls to the message lookup procedure.</p><div class="sect4">
@@ -217,12 +223,12 @@ parameters, taken directly from the dotlrn package.</p><div class="informaltable
 </tr></thead><tbody>
 <tr>
 <td>class_instance_pages_csv</td><td>
-<code class="computeroutput">#<em class="replaceable"><code>dotlrn.class_page_home_title</code></em>#</code>,Simple
-2-Column;<code class="computeroutput">#<em class="replaceable"><code>dotlrn.class_page_calendar_title</code></em>#</code>,Simple
-1-Column;<code class="computeroutput">#<em class="replaceable"><code>dotlrn.class_page_file_storage_title</code></em>#</code>,Simple
+<code class="computeroutput">#<span class="replaceable"><span class="replaceable">dotlrn.class_page_home_title</span></span>#</code>,Simple
+2-Column;<code class="computeroutput">#<span class="replaceable"><span class="replaceable">dotlrn.class_page_calendar_title</span></span>#</code>,Simple
+1-Column;<code class="computeroutput">#<span class="replaceable"><span class="replaceable">dotlrn.class_page_file_storage_title</span></span>#</code>,Simple
 1-Column</td>
 </tr><tr>
-<td>departments_pretty_name</td><td><code class="computeroutput">#<em class="replaceable"><code>departments_pretty_name</code></em>#</code></td>
+<td>departments_pretty_name</td><td><code class="computeroutput">#<span class="replaceable"><span class="replaceable">departments_pretty_name</span></span>#</code></td>
 </tr>
 </tbody>
 </table></div><p>Then, depending on how we retrieve the value, here&#39;s what we
@@ -240,7 +246,7 @@ class_instances_pages_csv</td><td>Kurs Startseite,Simple 2-Column;Kalender,Simpl
 <td>parameter::get <span class="strong"><strong>-localize</strong></span> -parameter
 departments_pretty_name</td><td>Abteilung</td>
 </tr><tr>
-<td>parameter::get -parameter departments_pretty_name</td><td><code class="computeroutput">#<em class="replaceable"><code>departments_pretty_name</code></em>#</code></td>
+<td>parameter::get -parameter departments_pretty_name</td><td><code class="computeroutput">#<span class="replaceable"><span class="replaceable">departments_pretty_name</span></span>#</code></td>
 </tr>
 </tbody>
 </table></div><p>The value in the rightmost column in the table above is the

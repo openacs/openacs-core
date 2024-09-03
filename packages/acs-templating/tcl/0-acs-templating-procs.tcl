@@ -15,8 +15,21 @@ ad_library {
 # License.  Full text of the license is available from the GNU Project:
 # http://www.fsf.org/copyleft/gpl.html
 
+ad_proc -deprecated template_tag args {
+    Generic wrapper for registered tag handlers.
 
-ad_proc -public template_tag { name arglist body } {
+    DEPRECATED: does not comply with OpenACS naming convention
+
+    @see template::tag
+} {
+    return [template::tag {*}$args]
+}
+
+ad_proc -public template::tag {
+    name
+    arglist
+    body
+} {
     Generic wrapper for registered tag handlers.
 } {
 
@@ -25,46 +38,45 @@ ad_proc -public template_tag { name arglist body } {
   # (if the proc doesn't exist).
   # This makes debugging templating tags so much easier, because you don't have
   # to restart the server each time.
-  set exists_p [llength [info commands template_tag_$name]]
+  set exists_p [expr {[namespace which template_tag_$name] ne {}}]
 
   switch [llength $arglist] {
 
-    1 { 
+    1 {
 
       # empty tag
       eval "proc template_tag_$name { params } {
-	
+
 	template::adp_tag_init $name
-	
+
 	$body
 
         return \"\"
       }"
 
       if { !$exists_p } {
-        ns_adp_registerscript $name template_tag_$name 
+        ns_adp_registerscript $name template_tag_$name
       }
     }
 
-    2 { 
+    2 {
 
       # balanced tag so push on/pop off tag name and parameters on a stack
       eval "proc template_tag_$name { chunk params } {
-	
+
 	template::adp_tag_init $name
 
-	variable template::tag_stack
-	lappend tag_stack \[list $name \$params\]
-	
+	lappend ::template::tag_stack \[list $name \$params\]
+
 	$body
 
-	template::util::lpop tag_stack
+	template::util::lpop ::template::tag_stack
 
         return \"\"
       }"
 
       if { !$exists_p } {
-        ns_adp_registerscript $name /$name template_tag_$name 
+        ns_adp_registerscript $name /$name template_tag_$name
       }
     }
 

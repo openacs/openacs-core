@@ -76,7 +76,7 @@ ad_proc -public apm_guess_file_type { package_key path } {
     } else {
         set components_lesser $components
     }
-    set extension [file extension $path]
+    set extension [ad_file extension $path]
     set type ""
 
 
@@ -94,7 +94,7 @@ ad_proc -public apm_guess_file_type { package_key path } {
     if {$extension eq ".sql"} {
         if { [lsearch -glob $components "*upgrade-*-*"] >= 0 } {
             set type "data_model_upgrade"
-        } elseif { [regexp -- "^$package_key-(create|drop)\.sql\$" [file tail $path] "" kind] } {
+        } elseif { [regexp -- "^$package_key-(create|drop)\.sql\$" [ad_file tail $path] "" kind] } {
             set type "data_model_$kind"
         } else {
             set type "data_model"
@@ -121,11 +121,15 @@ ad_proc -public apm_guess_file_type { package_key path } {
         set type "template"
     } elseif { [llength $components] == 1 &&
                ($extension eq ".html" || $extension eq ".adp") } {
-        # HTML or ADP file in the top level of a package - assume it's documentation.
+        #
+        # HTML or ADP file in the top level of a package - assume it
+        # is documentation.
+        #
         set type "documentation"
 
-        # RBM: Changed the next elseif to check for 'www' or 'admin-www' only n levels down
-        # the path, since that'd be the minimum in a path counting from the pageroot
+        # RBM: Changed the next elseif to check for 'www' or
+        # 'admin-www' only n levels down the path, since that'd be the
+        # minimum in a path counting from the pageroot
 
     } elseif { "www" in $components_lesser || "admin-www" in $components_lesser } {
         set type "content_page"
@@ -133,7 +137,7 @@ ad_proc -public apm_guess_file_type { package_key path } {
         set type "include_page"
     } elseif { $extension eq ".tcl" && [lindex $components_lesser 0] eq "tcl" } {
         # A .tcl file residing under dir .../package_key/tcl/
-        if { [regexp -- {-(procs|init)(-[0-9a-zA-Z]*)?\.tcl$} [file tail $path] "" kind] } {
+        if { [regexp -- {-(procs|init)(-[0-9a-zA-Z]*)?\.tcl$} [ad_file tail $path] "" kind] } {
             if {[lindex $components end-1] eq "test"} {
                 set type "test_$kind"
             } else {
@@ -158,10 +162,11 @@ ad_proc -public apm_get_package_files {
     {-file_types {}}
 } {
     <p>
-    Returns all files, or files of a certain types, belonging to an APM
-    package. Ignores files based on proc apm_include_file_p and determines file type
-    of files with proc apm_guess_file_type. Only returns file with no db type or a
-    db type matching that of the system.
+    Returns all files, or files of a certain types, belonging to an
+    APM package. Ignores files based on proc apm_include_file_p and
+    determines file type of files with proc apm_guess_file_type. Only
+    returns file with no db type or a db type matching that of the
+    system, unless '-all' is specified.
     </p>
 
     <p>
@@ -170,10 +175,13 @@ ad_proc -public apm_get_package_files {
     </p>
 
     @param package_key    The key of the package to return file paths for
-    @param file_types     The type of files to return. If not provided files of all types
-    recognized by the APM are returned.
-    @param package_path   The full path of the root directory of the package. Defaults to
-    acs_package_root_dir.
+    @param file_types     The type of files to return. If not provided
+                          files of all types recognized by the APM are
+                          returned.
+    @param package_path   The full path of the root directory of the
+                          package. Defaults to acs_package_root_dir.
+    @param all            When specified, return all files in the package,
+                          regardless of their file or database type.
 
     @return The paths, relative to the root dir of the package, of matching files.
 
@@ -190,7 +198,9 @@ ad_proc -public apm_get_package_files {
     if {$all_p} {
         set file_function ""
     } else {
-        set file_function [expr {$include_data_model_files_p ? "apm_include_data_model_file_p" : "apm_include_file_p"}]
+        set file_function [expr {$include_data_model_files_p
+                                 ? "apm_include_data_model_file_p"
+                                 : "apm_include_file_p"}]
     }
     set files [lsort [ad_find_all_files -check_file_func $file_function $package_path]]
     # We don't assume db_type proc is defined yet
@@ -204,7 +214,7 @@ ad_proc -public apm_get_package_files {
 
         set type_match_p [expr {$file_types eq "" || $file_type in $file_types}]
 
-        if { $all_db_types_p } {
+        if { $all_p || $all_db_types_p } {
             set db_match_p 1
         } else {
             set db_match_p [expr {$file_db_type eq "" || $file_db_type eq $system_db_type}]
@@ -218,7 +228,7 @@ ad_proc -public apm_get_package_files {
     return $matching_files
 }
 
-ad_proc -private apm_parse_catalog_path { file_path } {
+ad_proc -public apm_parse_catalog_path { file_path } {
     Given the path of a file attempt to extract package_key,
     prefix, charset and locale
     information from the path assuming the path is on valid format
@@ -249,8 +259,9 @@ ad_proc -private apm_parse_catalog_path { file_path } {
 }
 
 ad_proc -public apm_is_catalog_file { file_path } {
-    Given a file path return 1 if
-    the path represents a message catalog file and 0 otherwise.
+    
+    Given a file path return 1 if the path represents a message
+    catalog file and 0 otherwise.
 
     @param file_path Should be absolute or relative to OpenACS /packages dir
     or one of its parent dirs.
@@ -303,7 +314,7 @@ ad_proc -public apm_guess_db_type { package_key path } {
 
     2. Other files.
 
-    If it is a tcl, xql, or sqlj file not under the sql dir and whose name
+    If it is a .tcl, .xql, or .sqlj file not under the "sql" dir and whose name
     ends in a dash and database type, the file is assumed to be specific to
     that database type.
 
@@ -330,8 +341,8 @@ ad_proc -public apm_guess_db_type { package_key path } {
         }
         return "oracle"
     }
-
-    set file_name [file tail $path]
+    
+    set file_name [ad_file tail $path]
     foreach known_database_type $::acs::known_database_types {
         if { [regexp -- "\-[lindex $known_database_type 0]\.(xql|tcl|sqlj)\$" $file_name match] } {
             return [lindex $known_database_type 0]
@@ -357,7 +368,7 @@ ad_proc apm_package_supports_rdbms_p {
     # We need to add that information back into the .info files.
 
     set package_path [acs_package_root_dir $package_key]
-    return [expr {![file exists "${package_path}/sql"] || [file exists "${package_path}/sql/[db_type]"]}]
+    return [expr {![ad_file exists "${package_path}/sql"] || [ad_file exists "${package_path}/sql/[db_type]"]}]
 }
 
 ad_proc -public apm_source { __file {errorVarName ""}} {
@@ -371,7 +382,7 @@ ad_proc -public apm_source { __file {errorVarName ""}} {
         array set errors [list]
     }
 
-    if { ![file exists $__file] } {
+    if { ![ad_file exists $__file] } {
         ns_log "Error" "Unable to source $__file: file does not exist."
         return 0
     }
@@ -388,7 +399,7 @@ ad_proc -public apm_source { __file {errorVarName ""}} {
         return 0
     }
 
-    nsv_set apm_library_mtime $r_file [file mtime $__file]
+    nsv_set apm_library_mtime $r_file [ad_file mtime $__file]
 
     return 1
 }
@@ -398,7 +409,7 @@ ad_proc -public apm_source { __file {errorVarName ""}} {
 ad_proc -private apm_bootstrap_load_file { root_directory file {errorVarName ""}} {
     Source a single file during initial bootstrapping and set APM data.
 } {
-    ns_log "Notice" "Loading [file tail $root_directory]/$file"
+    ns_log "Notice" "Loading [ad_file tail $root_directory]/$file"
     if {$errorVarName ne ""} {upvar $errorVarName errors}
     apm_source ${root_directory}/${file} errors
 }
@@ -448,7 +459,7 @@ ad_proc -private apm_bootstrap_load_libraries {
 
         # Call db_release_unused_handles, only if the library defining it
         # (10-database-procs.tcl) has been sourced yet.
-        if { [info commands db_release_unused_handles] ne ""} {
+        if { [namespace which db_release_unused_handles] ne ""} {
             db_release_unused_handles
         }
     }
@@ -493,11 +504,11 @@ ad_proc -private apm_load_install_xml_file {} {
 } {
     set fn [apm_install_xml_file_path]
     # Abort if there is no install.xml file
-    if { ![file exists $fn] } {
+    if { ![ad_file exists $fn] } {
         return ""
     }
 
-    #ns_log notice "==== LOADING xml file: $fn"
+    #ns_log notice "==== LOADING XML file: $fn"
     set file [open $fn]
     set root_node [xml_doc_get_first_node [xml_parse -persist [read $file]]]
     close $file
@@ -513,7 +524,7 @@ ad_proc -private apm_install_xml_file_path {} {
     return "$::acs::rootdir/install.xml"
 }
 
-ad_proc -private apm_ignore_file_p {
+ad_proc -public apm_ignore_file_p {
     {-data_model_files:boolean}
     path
 } {
@@ -522,11 +533,11 @@ ad_proc -private apm_ignore_file_p {
     Currently, a file is ignored if it is a backup file or a CVS directory.
 
 } {
-    if {[file isdirectory $path]} {
+    if {[ad_file isdirectory $path]} {
         #
         # ignored directories
         #
-        set parts [file split $path]
+        set parts [ad_file split $path]
         if {[lindex $parts end] eq "resources" && [lindex $parts end-1] eq "www"} {
             return 1
         }
@@ -547,11 +558,14 @@ ad_proc -private apm_ignore_file_p {
     if {!$data_model_files_p} {
         lappend extension_list ".sql"
     }
-    if {[file extension $path] in $extension_list} {
+    if {[ad_file extension $path] in $extension_list} {
         return 1
     }
-
-    if { [apm_backup_file_p [file tail $path]] } {
+    
+    if { [string index $path 0] eq "~"} {
+        set path ./$path
+    }
+    if { [apm_backup_file_p [ad_file tail $path]] } {
         return 1
     }
 
@@ -560,8 +574,8 @@ ad_proc -private apm_ignore_file_p {
 
 ad_proc -private apm_backup_file_p { path } {
 
-    Returns 1 if $path is a backup file, or 0 if not. We consider it a backup file if
-    any of the following apply:
+    Returns 1 if $path is a backup file, or 0 if not. We consider it a
+    backup file if any of the following apply:
 
     <ul>
     <li>its name begins with <code>#</code>
@@ -601,7 +615,7 @@ ad_proc apm_bootstrap_upgrade {
     Tcl files in the acs root directory. This makes it possible to
     incorporate changes to these files by only updating the
     acs-bootstrap-installer package (rather than a full tar file
-    install as in eralier versions).
+    install as in earlier versions).
 
     Caveat: don't modify these files in your local installation, adding
     extra files to $::acs::rootdir/tcl is fine.
@@ -614,7 +628,7 @@ ad_proc apm_bootstrap_upgrade {
         # that, e.g. 0-acs-tcl has to be split up into two parts: (a)
         # setup of variables, and (b) sourcing everything.
         #
-        # source $::acs::rootdir/tcl/[file tail $file]
+        # source $::acs::rootdir/tcl/[ad_file tail $file]
     }
     set source $::acs::rootdir/packages/acs-bootstrap-installer/installer/www
     foreach file [glob -nocomplain $source/*tcl $source/*adp] {

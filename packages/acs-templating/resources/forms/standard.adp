@@ -1,7 +1,7 @@
 <multiple name=elements>
 	<if @elements.section@ not nil>
 		<fieldset id="@elements.form_id;noi18n@:@elements.section;noi18n@" @elements.sec_fieldset;noquote@><!-- section fieldset -->
-        <legend @elements.sec_legend;noquote@><span>@elements.sec_legendtext@</span></legend>
+        <a name='@elements.section;noi18n@'><legend @elements.sec_legend;noquote@><span>@elements.sec_legendtext@</span></legend></a>
 	</if>
 	
 	<group column="section">

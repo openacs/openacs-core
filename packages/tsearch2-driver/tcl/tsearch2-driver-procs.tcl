@@ -1,5 +1,5 @@
 ad_library {
-    Procedures for tsearch full text enginge driver
+    Procedures for tsearch full text engine driver
 
     @author Dave Bauer (dave@thedesignexperience.org)
     @creation-date 2004-06-05
@@ -16,11 +16,10 @@ ad_proc -private tsearch2::trunc_to_max {txt} {
 
     https://www.postgresql.org/docs/current/static/textsearch-limitations.html
 } {
-    set max_size_to_index [db_string get_max_size_to_index {
-        select min(default_value) from apm_parameters
-        where package_key = 'tsearch2-driver' and
-        parameter_name = 'max_size_to_index'
-    } -default "1048575"]
+    set max_size_to_index [parameter::get \
+                               -package_id [apm_package_id_from_key tsearch2-driver] \
+                               -parameter max_size_to_index \
+                               -default 1048575]
     if {$max_size_to_index == 0} {
         set max_size_to_index 1048575
     }
@@ -37,7 +36,7 @@ ad_proc -public tsearch2::index {
     title
     keywords
 } {
-    add object to full text index
+    Add or update an object in the full text index.
 
     @author Dave Bauer (dave@thedesignexperience.org)
     @creation-date 2004-06-05
@@ -49,13 +48,8 @@ ad_proc -public tsearch2::index {
 
     @return nothing
 } {
-    set index_exists_p [db_0or1row object_exists "select 1 from txt where object_id=:object_id"]
-    if {!$index_exists_p} {
-        set txt [tsearch2::trunc_to_max $txt]
-        db_dml index {}
-    } else {
-        tsearch2::update_index $object_id $txt $title $keywords
-    }
+    set txt [tsearch2::trunc_to_max $txt]
+    db_dml index {}
 }
 
 ad_proc -public tsearch2::unindex {
@@ -73,13 +67,12 @@ ad_proc -public tsearch2::unindex {
     db_dml unindex "delete from txt where object_id=:object_id"
 }
 
-ad_proc -public tsearch2::update_index {
-    object_id
-    txt
-    title
-    keywords
-} {
+ad_proc -deprecated tsearch2::update_index args {
     update full text index
+
+    DEPRECATED: modern SQL supports upsert idioms
+
+    @see tsearch2::index
 
     @author Dave Bauer (dave@thedesignexperience.org)
     @creation-date 2004-06-05
@@ -91,13 +84,7 @@ ad_proc -public tsearch2::update_index {
 
     @return nothing
 } {
-    set index_exists_p [db_0or1row object_exists "select 1 from txt where object_id=:object_id"]
-    if {!$index_exists_p} {
-        tsearch2::index $object_id $txt $title $keywords
-    } else {
-        set txt [tsearch2::trunc_to_max $txt]
-        db_dml update_index ""
-    }
+    tsearch2::index {*}$args
 }
 
 ad_proc -callback search::search -impl tsearch2-driver {
@@ -135,6 +122,7 @@ ad_proc -callback search::search -impl tsearch2-driver {
     # Clean up query for tsearch2
     #
     set query [tsearch2::build_query -query $query]
+    # ns_log notice "-----build_query returned: $query"
 
     set where_clauses ""
     set from_clauses ""
@@ -181,7 +169,7 @@ ad_proc -callback search::search -impl tsearch2-driver {
     }
     if {$ids ne ""} {
         set need_acs_objects 1
-        lappend where_clauses "o.package_id in ([join $ids ,])"
+        lappend where_clauses "o.package_id in ([ns_dbquotelist $ids])"
     }
     if {$need_acs_objects} {
         lappend from_clauses "txt" "acs_objects o"
@@ -227,20 +215,14 @@ ad_proc -callback search::driver_info -impl tsearch2-driver {
     return [tsearch2::driver_info]
 }
 
-ad_proc -public tsearch2::driver_info {
-} {
-
+ad_proc -private tsearch2::driver_info {} {
     @author Dave Bauer (dave@thedesignexperience.org)
     @creation-date 2004-06-05
-
-    @return
-
-    @error
 } {
     return [list package_key tsearch2-driver version 2 automatic_and_queries_p 0  stopwords_p 1]
 }
 
-ad_proc tsearch2::build_query { -query } {
+ad_proc tsearch2::build_query_tcl { -query } {
     Convert conjunctions to query characters for tsearch2
     and => &
     not => !
@@ -255,21 +237,16 @@ ad_proc tsearch2::build_query { -query } {
     regsub -all {[^-/@.\d\w\s\(\)]+} $query { } query
 
     # match parens, if they don't match just throw them away
-    # set p 0
-    # for {set i 0} {$i < [string length $query]} {incr i} {
-    #     if {[string index $query $i] eq "("} {
-    #         incr p
-    #     }
-    #     if {[string index $query $i] eq ")"} {
-    #         incr p -1
-    #     }
-    # }
-    # if {$p != 0} {
-    #     regsub -all {\(|\)} $query {} query
-    # }
-
-    # remove all parens
-    regsub -all {\(|\)} $query {} query
+    set p 0
+    for {set i 0} {$i < [string length $query]} {incr i} {
+        switch [string index $query $i] {
+            "(" {incr p}
+            ")" {incr p -1}
+        }
+    }
+    if {$p != 0} {
+        regsub -all {\(|\)} $query {} query
+    }
 
     # remove empty ()
     regsub -all {\(\s*\)} $query {} query
@@ -280,9 +257,12 @@ ad_proc tsearch2::build_query { -query } {
     # remove "not" at end of query
     regsub -nocase " not$" $query {} query
 
+    # remove "not" alone
+    regsub -nocase "^not$" $query {} query
+
     # replace boolean words with boolean operators
     regsub -nocase "^not " $query {!} query
-    set query [string map {" and " " & " " or " " | " " not " " ! "} " $query "]
+    set query [string map {" and " " & " " or " " | " " not " " ! "} $query]
 
     # remove leading and trailing spaces so they aren't turned into &
     set query [string trim $query]
@@ -304,7 +284,62 @@ ad_proc tsearch2::build_query { -query } {
     return $query
 }
 
-ad_proc -public tsearch2::separate_query_and_operators {
+ad_proc -private tsearch2::build_query_postgres { -query } {
+    Convert conjunctions to query characters for tsearch2
+    use websearch_to_tsquery which is integrated in postgres &gt;= 11
+
+    websearch_to_tsquery creates a tsquery value from querytext using
+    an alternative syntax in which simple unformatted text is a valid
+    query. Unlike plainto_tsquery and phraseto_tsquery, it also
+    recognizes certain operators. Moreover, this function should never
+    raise syntax errors, which makes it possible to use raw user-supplied
+    input for search. The following syntax is supported:
+
+    <ul>
+        <li>unquoted text: text not inside quote marks will be converted
+        to terms separated by &amp; operators, as if processed by plainto_tsquery.</li>
+        <li>"quoted text": text inside quote marks will be converted to terms
+        separated by &lt;-&gt; operators, as if processed by phraseto_tsquery.</li>
+        <li>OR: logical or will be converted to the | operator.</li>
+        <li>-: the logical not operator, converted to the ! operator.</li>
+    </ul>
+    For further documentation see also:
+    https://www.postgresql.org/docs/11/textsearch-controls.html#TEXTSEARCH-PARSING-QUERIES
+
+    @param query string to convert
+    @return returns formatted query string for tsearch2 tsquery
+} {
+    ad_try {
+        db_1row build_querystring {select websearch_to_tsquery(:query) as query from dual}
+    } on error {errorMsg} {
+        ns_log warning "tsearch2 websearch_to_tsquery failed," \
+            "fall back to tcl query builder query was: $query errorMsg: $errorMsg"
+        set query [tsearch2::build_query_tcl -query $query]
+    }
+    return $query
+}
+
+ad_proc -private tsearch2::build_query {
+    -query
+} {
+    Build query string for tsearch2
+
+    @param query string to convert
+    @return returns formatted query string for tsearch2 tsquery
+} {
+    if {$::tsearch2_driver::use_web_search_p
+        && [db_compatible_rdbms_p postgresql]
+        && [lindex [split [db_version] .] 0] >= 11
+    } {
+        set query [tsearch2::build_query_postgres -query $query]
+    } else {
+        set query [tsearch2::build_query_tcl -query $query]
+    }
+
+    return $query
+}
+
+ad_proc -private tsearch2::separate_query_and_operators {
     -query
 } {
     Separates special operators from full text query

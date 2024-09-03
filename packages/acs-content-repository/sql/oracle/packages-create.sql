@@ -340,7 +340,7 @@ function new (
   --    @param description   A short description for the item (4000 characters maximum)
   --    @param mime_type     The file type of the item, defaults to 'text/plain'
   --    @param nls_language  The language for the item, used for Intermedia search
-  --    @param text          The text content of the new revision, 4000 charcters maximum.
+  --    @param text          The text content of the new revision, 4000 characters maximum.
   --                         Cannot be specified simultaneously with the <tt>data</tt>
   --                         parameter
   --    @param data          The blob content of the new revision. Cannot be specified 
@@ -383,7 +383,8 @@ function new (
   is_live       in char default 'f',
   storage_type  in cr_items.storage_type%TYPE default 'lob',
   security_inherit_p in acs_objects.security_inherit_p%TYPE default 't',
-  package_id    in acs_objects.package_id%TYPE default null
+  package_id    in acs_objects.package_id%TYPE default null,
+  with_child_rels in char default 't'
 ) return cr_items.item_id%TYPE;
 
 
@@ -577,8 +578,10 @@ procedure set_live_revision (
   --                       for its corresponding item
   --    @see {content_item.get_live_revision}
   --*/
-  revision_id   in cr_revisions.revision_id%TYPE,
-  publish_status in cr_items.publish_status%TYPE default 'ready'
+  revision_id    in cr_revisions.revision_id%TYPE,
+  publish_status in cr_items.publish_status%TYPE default 'ready',
+  publish_date   in cr_revisions.publish_date%TYPE default sysdate,
+  is_latest      in char default 'f'
 );
 
 
@@ -815,7 +818,6 @@ end content_item;
 /
 show errors
 
-	
 create or replace package content_revision
 as
 
@@ -1270,7 +1272,8 @@ procedure copy (
   target_folder_id	in cr_folders.folder_id%TYPE,
   creation_user		in acs_objects.creation_user%TYPE,
   creation_ip		in acs_objects.creation_ip%TYPE default null,
-  name                  in cr_items.name%TYPE default null
+  name                  in cr_items.name%TYPE default null,
+  label                 in cr_folders.label%TYPE default null  
 );
 
 function is_folder (

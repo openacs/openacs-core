@@ -1,0 +1,1 @@
+select define_function_args('content_keyword__new','heading,description;null,parent_id;null,keyword_id;null,creation_date;now,creation_user;null,creation_ip;null,object_type;content_keyword,package_id;null');

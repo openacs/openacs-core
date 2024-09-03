@@ -1,11 +1,12 @@
 ad_include_contract {
     Include for notification chunk
 } {
-    {type:token}
-    {object_id:naturalnum}
+    type:token,notnull
+    object_id:object_type(acs_object),notnull
     {pretty_name:allhtml}
-    {url ""}
-    {user_id:naturalnum ""}
+    {url:localurl ""}
+    {user_id:object_type(user) ""}
+    {show_subscribers_p:boolean true}
 }
 
 if {$user_id eq ""} {
@@ -16,23 +17,29 @@ if {$url eq ""} {
 }
 
 set type_id [notification::type::get_type_id -short_name $type]
-set request_id [notification::request::get_request_id -type_id $type_id -object_id $object_id -user_id $user_id]
-    
+set request_id [notification::request::get_request_id \
+                    -type_id $type_id \
+                    -object_id $object_id \
+                    -user_id $user_id]
+
 if {$request_id ne ""} {
-    set icon /resources/acs-subsite/email_delete.gif
-    set icon_alt [_ acs-subsite.icon_of_envelope]
-    set sub_url [notification::display::unsubscribe_url -request_id $request_id -url $url]
+    set sub_url [notification::display::unsubscribe_url \
+                     -request_id $request_id \
+                     -url $url]
     set title [_ notifications.lt_Ubsubscribe_Notification_]
     set sub_chunk [_ notifications.lt_You_have_requested_no]
 } else {
-    set icon /resources/acs-subsite/email_add.gif
-    set icon_alt [_ acs-subsite.icon_of_envelope]
-    set sub_url [notification::display::subscribe_url -type $type -object_id $object_id -url $url -user_id $user_id -pretty_name $pretty_name]
+    set sub_url [notification::display::subscribe_url \
+                     -type $type \
+                     -object_id $object_id \
+                     -url $url \
+                     -user_id $user_id \
+                     -pretty_name $pretty_name]
     set title [_ notifications.lt_Request_Notification_]
     set sub_chunk [_ notifications.lt_You_may_a_hrefsub_url]
 }
 
-if { [permission::permission_p -object_id $object_id -privilege admin] } {
+if { $show_subscribers_p && [permission::permission_p -object_id $object_id -privilege admin] } {
     set subscribers_url [export_vars -base /notifications/subscribers -url {object_id}]
 }
 
@@ -41,4 +48,3 @@ if { [permission::permission_p -object_id $object_id -privilege admin] } {
 #    tcl-indent-level: 4
 #    indent-tabs-mode: nil
 # End:
-

@@ -4,7 +4,7 @@ ad_library {
     @author Don Baccus (dhogaza@pacifier.com)
 }
 
-# These are modelled somewhat after the date procs.
+# These are modeled somewhat after the date procs.
 
 # DRB: This was totally non-functional in ACS 4.2 Classic.  It's now partly
 # functional in that we accept and process currency values.  We really need
@@ -192,7 +192,7 @@ ad_proc -public template::util::currency::set_property {
 
 } {
 
-    # Erase leading zeroes from the value, but make sure that 00
+    # Erase leading zeros from the value, but make sure that 00
     # is not completely erased
     set value [util::trim_leading_zeros $value]
 

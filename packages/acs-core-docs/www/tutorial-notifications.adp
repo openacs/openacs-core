@@ -1,7 +1,11 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Notifications}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Notifications}</property>
 <property name="doc(title)">Notifications</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="tutorial-upgrades" leftLabel="Prev"
 			title="Chapter 10. Advanced
@@ -9,16 +13,19 @@ Topics"
 			rightLink="tutorial-hierarchical" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="tutorial-notifications" id="tutorial-notifications"></a>Notifications</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">by <a class="ulink" href="mailto:dave\@student.usyd.edu.au" target="_top">David Bell</a> and
-<a class="ulink" href="mailto:simon\@collaboraid.net" target="_top">Simon Carstensen</a>
-</span></p><span style="color: red">&lt;/authorblurb&gt;</span><p>The notifications package allows you to send notifications
+<a name="tutorial-notifications" id="tutorial-notifications"></a>Notifications</h2></div></div></div><div class="authorblurb">
+<p>by <a class="ulink" href="mailto:dave\@student.usyd.edu.au" target="_top">David Bell</a> and <a class="ulink" href="mailto:simon\@collaboraid.net" target="_top">Simon
+Carstensen</a>
+</p>
+OpenACS docs are written by the named authors, and may be edited by
+OpenACS documentation staff.</div><p>The notifications package allows you to send notifications
 through any defined communications medium (e.g. email, sms) upon
 some event occurring within the system.</p><p>This tutorial steps through the process of integrating the
 notifications package with your package.</p><p>First step is to create the notification types. To do this a
-script similar to the one below needs to be loaded into Postgresql.
+script similar to the one below needs to be loaded into PostgreSQL.
 I create this script in a
 package-name/sql/postgresql/package-name-notifications-init.sql
-file. I then load this file from my create sql file. The following
+file. I then load this file from my create SQL file. The following
 code snippet is taken from Weblogger. It creates a
 lars_blogger_notif notification type (which was created above).</p><pre class="programlisting">
     create function inline_0() returns integer as $$

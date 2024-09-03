@@ -150,7 +150,7 @@ select define_function_args('content_type__rotate_template','template_id,v_conte
 
 -- new changes: documenting defaults for the arguments
 --
--- note, that i changed the default value in function_args from  "lob" to null,
+-- note that i changed the default value in function_args from  "lob" to null,
 -- since apprarently the default in cr_items is "text" (therefore, "lob" was incorrect). 
 -- However, the default in Oracle is "lob", i changed this here to "null"
 

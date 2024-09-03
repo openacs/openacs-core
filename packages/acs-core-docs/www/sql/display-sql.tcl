@@ -49,7 +49,7 @@ if {$db eq ""} {
 	}]
     }
     if {$files eq ""} { 
-        append text "<li> No sql file found."
+        append text "<li> No SQL file found."
     }
     append text {</ul>}
     set context [list [list ../$package_key $package_key] "SQL Display"]

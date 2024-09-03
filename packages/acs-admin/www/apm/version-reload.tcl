@@ -6,7 +6,7 @@ ad_page_contract {
     @creation-date 9 May 2000
     @cvs-id $Id$
 } {
-    {version_id:naturalnum,notnull}
+    {version_id:naturalnum,object_id,notnull}
     {return_url:localurl "index"}
 }
 
@@ -27,9 +27,9 @@ set files [apm_mark_version_for_reload $version_id]
 set files_to_watch [list]
 
 if { [llength $files] == 0 } {
-    append body "There are no changed files to reload in this package.<p>"
+    append body "<adp:icon name='form-info-sign'> There are no changed files to reload in this package.<p>"
 } else {
-    append body "Marked the following file[ad_decode [llength $files] 1 "" "s"] for reloading:<ul id='files'>\n"
+    append body "Marked the following file[expr {[llength $files] == 1 ? "" : "s"}] for reloading:<ul id='files'>\n"
 
     #
     # Source all of the marked files using the current interpreter,
@@ -81,7 +81,7 @@ if { [llength $files] == 0 } {
             set local_path [file join {*}[lrange [file split $file] 2 end]]
             set href [export_vars -base file-watch { version_id { paths $local_path } }]
             append body [subst {
-                (<a href="[ns_quotehtml $href]">watch this file</a>)
+                (<a href="[ns_quotehtml $href]"><adp:icon name="watch" alt="watch"> Watch this file</a>)
             }]
             lappend files_to_watch $local_path
         }
@@ -120,10 +120,10 @@ if { [info exists files_to_watch_p] } {
         select the "watch this file" link next to a filename to cause the interpreters to
         reload the file immediately whenever it is changed.<p>
         <ul class="action-links">
-        <li><a href="[ns_quotehtml $href]">Watch all above files</a></li>
+        <li><a href="[ns_quotehtml $href]"><adp:icon name="watch" alt="watch">  Watch all above files</a></li>
     }]
 } else {
-    append body "<ul class=\"action-links\">"
+    append body "<ul class='action-links'>"
 }
 
 append body [subst {

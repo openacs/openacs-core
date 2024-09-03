@@ -1,7 +1,11 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Database Access API}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Database Access API}</property>
 <property name="doc(title)">Database Access API</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="apm-design" leftLabel="Prev"
 			title="Chapter 15. Kernel
@@ -9,9 +13,11 @@ Documentation"
 			rightLink="i18n-requirements" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="db-api-detailed" id="db-api-detailed"></a>Database Access API</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">By <a class="ulink" href="mailto:jsalz\@mit.edu" target="_top">Jon Salz</a>. Revised and
-expanded by Roberto Mello (rmello at fslc dot usu dot edu), July
-2002.</span></p><span style="color: red">&lt;/authorblurb&gt;</span><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
+<a name="db-api-detailed" id="db-api-detailed"></a>Database Access API</h2></div></div></div><div class="authorblurb">
+<p>By <a class="ulink" href="mailto:jsalz\@mit.edu" target="_top">Jon Salz</a>. Revised and expanded by Roberto Mello (rmello
+at fslc dot usu dot edu), July 2002.</p>
+OpenACS docs are written by the named authors, and may be edited by
+OpenACS documentation staff.</div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>Tcl procedures: /packages/acs-kernel/10-database-procs.tcl</p></li><li class="listitem"><p>Tcl initialization: /packages/acs-kernel/database-init.tcl</p></li>
 </ul></div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
@@ -193,7 +199,7 @@ is pulled from the Tcl variable <code class="computeroutput">$some_presentation_
 environment). Note that bind variables are not limited to one per
 statement; you can use an arbitrary number, and each will pull from
 the correspondingly named Tcl variable. (Alternatively, you can
-also specify an list or <code class="computeroutput">ns_set</code>
+also specify a list or <code class="computeroutput">ns_set</code>
 providing bind variables' values; see <span class="emphasis"><em>Usage</em></span>.)</p><p>The value of a bind variable is taken literally by the database
 driver, so there is never any need to put single-quotes around the
 value for a bind variable, or to use <code class="computeroutput">db_quote</code> to escape single-quotes contained
@@ -384,7 +390,7 @@ above.</p>
 </dd><dt><span class="term"><span class="strong"><strong><code class="computeroutput">
 <a name="kernel.dbapi_db_foreach" id="kernel.dbapi_db_foreach"></a>db_foreach</code></strong></span></span></dt><dd>
 <pre class="programlisting">
-<span class="strong"><strong>db_foreach</strong></span><span class="emphasis"><em>statement-name sql</em></span> [ -bind <span class="emphasis"><em>bind_set_id</em></span> | -bind <span class="emphasis"><em>bind_value_list</em></span> ] \
+<span class="strong"><strong>db_foreach</strong></span><span class="emphasis"><em> statement-name sql</em></span> [ -bind <span class="emphasis"><em>bind_set_id</em></span> | -bind <span class="emphasis"><em>bind_value_list</em></span> ] \
     [ -column_array <span class="emphasis"><em>array_name</em></span> | -column_set <span class="emphasis"><em>set_name</em></span> ] \
     <span class="emphasis"><em>code_block</em></span> [ if_no_rows <span class="emphasis"><em>if_no_rows_block ]</em></span>
 </pre><p>Performs the SQL query <span class="emphasis"><em><code class="computeroutput">sql</code></em></span>, executing <span class="emphasis"><em><code class="computeroutput">code_block</code></em></span> once for each row
@@ -405,7 +411,7 @@ next row of the loop).</p>
 </dd><dt><span class="term"><span class="strong"><strong><code class="computeroutput">
 <a name="kernel.dbapi_db_1row" id="kernel.dbapi_db_1row"></a>db_1row</code></strong></span></span></dt><dd>
 <pre class="programlisting">
-<span class="strong"><strong>db_1row</strong></span><span class="emphasis"><em>statement-name</em></span><span class="emphasis"><em>sql</em></span> [ -bind <span class="emphasis"><em>bind_set_id</em></span> | -bind <span class="emphasis"><em>bind_value_list</em></span> ] \
+<span class="strong"><strong>db_1row</strong></span><span class="emphasis"><em> statement-name sql</em></span> [ -bind <span class="emphasis"><em>bind_set_id</em></span> | -bind <span class="emphasis"><em>bind_value_list</em></span> ] \
     [ -column_array <span class="emphasis"><em>array_name</em></span> | -column_set <span class="emphasis"><em>set_name</em></span> ]
 </pre><p>Performs the SQL query <span class="emphasis"><em><code class="computeroutput">sql</code></em></span>, setting variables to
 column values. Raises an error if the query does not return exactly
@@ -419,7 +425,8 @@ db_1row select_foo "select foo, bar from greeble where greeble_id = $greeble_id"
 </dd><dt><span class="term"><span class="strong"><strong><code class="computeroutput">
 <a name="kernel.dbapi_db_0or1row" id="kernel.dbapi_db_0or1row"></a>db_0or1row</code></strong></span></span></dt><dd>
 <pre class="programlisting">
-<span class="strong"><strong>db_0or1row</strong></span><span class="emphasis"><em>statement-name</em></span><span class="emphasis"><em>sql</em></span> [ -bind <span class="emphasis"><em>bind_set_id</em></span> | -bind <span class="emphasis"><em>bind_value_list</em></span> ] \
+<span class="strong"><strong>db_0or1row</strong></span><span class="emphasis"><em> statement-name
+sql</em></span> [ -bind <span class="emphasis"><em>bind_set_id</em></span> | -bind <span class="emphasis"><em>bind_value_list</em></span> ] \
     [ -column_array <span class="emphasis"><em>array_name</em></span> | -column_set <span class="emphasis"><em>set_name</em></span> ]
 </pre><p>Performs the SQL query <span class="emphasis"><em><code class="computeroutput">sql</code></em></span>. If a row is returned, sets
 variables to column values and returns 1. If no rows are returned,
@@ -427,7 +434,7 @@ returns 0. If more than one row is returned, throws an error.</p>
 </dd><dt><span class="term"><span class="strong"><strong><code class="computeroutput">
 <a name="kernel.dbapi_db_string" id="kernel.dbapi_db_string"></a>db_string</code></strong></span></span></dt><dd>
 <pre class="programlisting">
-<span class="strong"><strong>db_string</strong></span><span class="emphasis"><em>statement-name</em></span><span class="emphasis"><em>sql</em></span> [ -default <span class="emphasis"><em>default</em></span> ] [ -bind <span class="emphasis"><em>bind_set_id</em></span> | -bind <span class="emphasis"><em>bind_value_list</em></span> ]
+<span class="strong"><strong>db_string</strong></span><span class="emphasis"><em> statement-name sql</em></span> [ -default <span class="emphasis"><em>default</em></span> ] [ -bind <span class="emphasis"><em>bind_set_id</em></span> | -bind <span class="emphasis"><em>bind_value_list</em></span> ]
 </pre><p>Returns the first column of the result of SQL query <span class="emphasis"><em><code class="computeroutput">sql</code></em></span>.
 If <span class="emphasis"><em><code class="computeroutput">sql</code></em></span> doesn&#39;t return a row,
 returns <span class="emphasis"><em><code class="computeroutput">default</code></em></span> (or throws an error if
@@ -436,7 +443,7 @@ Analogous to <code class="computeroutput">database_to_tcl_string</code> and <cod
 </dd><dt><span class="term"><span class="strong"><strong><code class="computeroutput">
 <a name="kernel.dbapi_db_nextval" id="kernel.dbapi_db_nextval"></a>db_nextval</code></strong></span></span></dt><dd>
 <pre class="programlisting">
-<span class="strong"><strong>db_nextval</strong></span><span class="emphasis"><em>sequence-name</em></span>
+<span class="strong"><strong>db_nextval</strong></span><span class="emphasis"><em> sequence-name</em></span>
 </pre><p>Returns the next value for the sequence <span class="emphasis"><em>sequence-name</em></span> (using a SQL statement
 like <code class="computeroutput">SELECT</code><span class="emphasis"><em><code class="computeroutput">sequence-name</code></em></span><code class="computeroutput">.nextval FROM DUAL</code>). If sequence pooling is
 enabled for the sequence, transparently uses a value from the pool
@@ -444,7 +451,7 @@ if available to save a round-trip to the database.</p>
 </dd><dt><span class="term"><span class="strong"><strong><code class="computeroutput">
 <a name="kernel.dbapi_db_list" id="kernel.dbapi_db_list"></a>db_list</code></strong></span></span></dt><dd>
 <pre class="programlisting">
-<span class="strong"><strong>db_list</strong></span><span class="emphasis"><em>statement-name</em></span><span class="emphasis"><em>sql</em></span> [ -bind <span class="emphasis"><em>bind_set_id</em></span> | -bind <span class="emphasis"><em>bind_value_list</em></span> ]
+<span class="strong"><strong>db_list</strong></span><span class="emphasis"><em> statement-name sql</em></span> [ -bind <span class="emphasis"><em>bind_set_id</em></span> | -bind <span class="emphasis"><em>bind_value_list</em></span> ]
 </pre><p>Returns a Tcl list of the values in the first column of the
 result of SQL query <span class="emphasis"><em><code class="computeroutput">sql</code></em></span>. If <span class="emphasis"><em><code class="computeroutput">sql</code></em></span>
 doesn&#39;t return any rows, returns an empty list. Analogous to
@@ -452,7 +459,8 @@ doesn&#39;t return any rows, returns an empty list. Analogous to
 </dd><dt><span class="term"><span class="strong"><strong><code class="computeroutput">
 <a name="kernel.dbapi_db_list_of_lists" id="kernel.dbapi_db_list_of_lists"></a>db_list_of_lists</code></strong></span></span></dt><dd>
 <pre class="programlisting">
-<span class="strong"><strong>db_list_of_lists</strong></span><span class="emphasis"><em>statement-name</em></span><span class="emphasis"><em>sql</em></span> [ -bind <span class="emphasis"><em>bind_set_id</em></span> | -bind <span class="emphasis"><em>bind_value_list</em></span> ]
+<span class="strong"><strong>db_list_of_lists</strong></span><span class="emphasis"><em>
+statement-name sql</em></span> [ -bind <span class="emphasis"><em>bind_set_id</em></span> | -bind <span class="emphasis"><em>bind_value_list</em></span> ]
 </pre><p>Returns a Tcl list, each element of which is a list of all
 column values in a row of the result of SQL query <span class="emphasis"><em><code class="computeroutput">sql</code></em></span>.
 If <span class="emphasis"><em><code class="computeroutput">sql</code></em></span> doesn&#39;t return any
@@ -460,14 +468,15 @@ rows, returns an empty list. (Analogous to <code class="computeroutput">database
 </dd><dt><span class="term"><span class="strong"><strong><code class="computeroutput">
 <a name="kernel.dbapi_db_list_of_ns_sets" id="kernel.dbapi_db_list_of_ns_sets"></a>db_list_of_ns_sets</code></strong></span></span></dt><dd>
 <pre class="programlisting">
-<span class="strong"><strong>db_list_of_ns_sets</strong></span><span class="emphasis"><em>statement-name</em></span><span class="emphasis"><em>sql</em></span> [ -bind <span class="emphasis"><em>bind_set_id</em></span> | -bind <span class="emphasis"><em>bind_value_list</em></span> ]
+<span class="strong"><strong>db_list_of_ns_sets</strong></span><span class="emphasis"><em>
+statement-name sql</em></span> [ -bind <span class="emphasis"><em>bind_set_id</em></span> | -bind <span class="emphasis"><em>bind_value_list</em></span> ]
 </pre><p>Returns a list of ns_sets with the values of each column of each
 row returned by the <code class="computeroutput">sql</code> query
 specified.</p>
 </dd><dt><span class="term"><span class="strong"><strong><code class="computeroutput">
 <a name="kernel.dbapi_db_dml" id="kernel.dbapi_db_dml"></a>db_dml</code></strong></span></span></dt><dd>
 <pre class="programlisting">
-<span class="strong"><strong>db_dml</strong></span><span class="emphasis"><em>statement-name</em></span><span class="emphasis"><em>sql</em></span> \
+<span class="strong"><strong>db_dml</strong></span><span class="emphasis"><em> statement-name sql</em></span> \
     [ -bind <span class="emphasis"><em>bind_set_id</em></span> | -bind <span class="emphasis"><em>bind_value_list</em></span> ] \
     [ -blobs <span class="emphasis"><em>blob_list</em></span> | -clobs <span class="emphasis"><em>clob_list</em></span> |
       -blob_files <span class="emphasis"><em>blob_file_list</em></span> | -clob_files <span class="emphasis"><em>clob_file_list</em></span> ]
@@ -499,11 +508,14 @@ files <code class="computeroutput">/var/tmp/the_photo</code> and
 <a name="kernel.dbapi_db_blob_get_file" id="kernel.dbapi_db_blob_get_file"></a>db_blob_get_file</code></strong></span>
 </span></dt><dd>
 <pre class="programlisting">
-<span class="strong"><strong>db_write_clob</strong></span><span class="emphasis"><em>statement-name</em></span><span class="emphasis"><em>sql</em></span> [ -bind <span class="emphasis"><em>bind_set_id</em></span> | -bind <span class="emphasis"><em>bind_value_list</em></span> ]
+<span class="strong"><strong>db_write_clob</strong></span><span class="emphasis"><em>
+statement-name sql</em></span> [ -bind <span class="emphasis"><em>bind_set_id</em></span> | -bind <span class="emphasis"><em>bind_value_list</em></span> ]
 
-<span class="strong"><strong>db_write_blob</strong></span><span class="emphasis"><em>statement-name</em></span><span class="emphasis"><em>sql</em></span> [ -bind <span class="emphasis"><em>bind_set_id</em></span> | -bind <span class="emphasis"><em>bind_value_list</em></span> ]
+<span class="strong"><strong>db_write_blob</strong></span><span class="emphasis"><em>
+statement-name sql</em></span> [ -bind <span class="emphasis"><em>bind_set_id</em></span> | -bind <span class="emphasis"><em>bind_value_list</em></span> ]
 
-<span class="strong"><strong>db_blob_get_file</strong></span><span class="emphasis"><em>statement-name</em></span><span class="emphasis"><em>sql</em></span> [ -bind <span class="emphasis"><em>bind_set_id</em></span> | -bind <span class="emphasis"><em>bind_value_list</em></span> ]
+<span class="strong"><strong>db_blob_get_file</strong></span><span class="emphasis"><em>
+statement-name sql</em></span> [ -bind <span class="emphasis"><em>bind_set_id</em></span> | -bind <span class="emphasis"><em>bind_value_list</em></span> ]
 </pre><p>Analogous to <code class="computeroutput">ns_ora
 write_clob/write_blob/blob_get_file</code>.</p>
 </dd><dt><span class="term"><span class="strong"><strong><code class="computeroutput">
@@ -512,7 +524,7 @@ write_clob/write_blob/blob_get_file</code>.</p>
 </dd><dt><span class="term"><span class="strong"><strong><code class="computeroutput">
 <a name="kernel.dbapi_db_transaction" id="kernel.dbapi_db_transaction"></a>db_transaction</code></strong></span></span></dt><dd>
 <pre class="programlisting">
-<span class="strong"><strong>db_transaction</strong></span><span class="emphasis"><em>code_block</em></span> [ on_error { <span class="emphasis"><em>code_block</em></span> } ]
+<span class="strong"><strong>db_transaction</strong></span><span class="emphasis"><em> code_block</em></span> [ on_error { <span class="emphasis"><em>code_block</em></span> } ]
 </pre><p>Executes <span class="emphasis"><em><code class="computeroutput">code_block</code></em></span> transactionally.
 Nested transactions are supported (<code class="computeroutput">end
 transaction</code> is transparently <code class="computeroutput">ns_db dml</code>'ed when the outermost
@@ -562,18 +574,18 @@ this instead of <code class="computeroutput">db_dml
 <a name="kernel.dbapi_db_multirow" id="kernel.dbapi_db_multirow"></a>db_multirow</code></strong></span></span></dt><dd>
 <pre class="programlisting">
 <span class="strong"><strong>db_multirow</strong></span> [ -local ] [ -append ] [ -extend <span class="emphasis"><em>column_list</em></span> ] \
-    <span class="emphasis"><em>var-name</em></span><span class="emphasis"><em>statement-name</em></span><span class="emphasis"><em>sql</em></span> \
+    <span class="emphasis"><em>var-name</em></span><span class="emphasis"><em> statement-name sql</em></span> \
     [ -bind <span class="emphasis"><em>bind_set_id</em></span> | -bind <span class="emphasis"><em>bind_value_list</em></span> ] \
     <span class="emphasis"><em>code_block</em></span> [ if_no_rows <span class="emphasis"><em>if_no_rows_block ]</em></span>
 </pre><p>Performs the SQL query <code class="computeroutput">sql</code>,
 saving results in variables of the form <code class="computeroutput">
-<em class="replaceable"><code>var_name</code></em>:1</code>, <code class="computeroutput">
-<em class="replaceable"><code>var_name</code></em>:2</code>, etc, setting
+<span class="replaceable"><span class="replaceable">var_name</span></span>:1</code>, <code class="computeroutput">
+<span class="replaceable"><span class="replaceable">var_name</span></span>:2</code>, etc, setting
 <code class="computeroutput">
-<em class="replaceable"><code>var_name</code></em>:rowcount</code> to the
-total number of rows, and setting <code class="computeroutput">
-<em class="replaceable"><code>var_name</code></em>:columns</code> to a list
-of column names.</p><p>Each row also has a column, rownum, automatically added and set
+<span class="replaceable"><span class="replaceable">var_name</span></span>:rowcount</code> to the total
+number of rows, and setting <code class="computeroutput">
+<span class="replaceable"><span class="replaceable">var_name</span></span>:columns</code> to a list of
+column names.</p><p>Each row also has a column, rownum, automatically added and set
 to the row number, starting with 1. Note that this will override
 any column in the SQL statement named 'rownum', also if
 you&#39;re using the Oracle rownum pseudo-column.</p><p>If the <code class="computeroutput">-local</code> is passed, the
@@ -582,11 +594,11 @@ you&#39;re compiling dynamic templates in a function or similar
 situations).</p><p>You may supply a code block, which will be executed for each row
 in the loop. This is very useful if you need to make computations
 that are better done in Tcl than in SQL, for example using
-ns_urlencode or ad_quotehtml, etc. When the Tcl code is executed,
+ns_urlencode or ns_quotehtml, etc. When the Tcl code is executed,
 all the columns from the SQL query will be set as local variables
 in that code. Any changes made to these local variables will be
 copied back into the multirow.</p><p>You may also add additional, computed columns to the multirow,
-using the <code class="computeroutput">-extend { <em class="replaceable"><code>col_1</code></em><em class="replaceable"><code>col_2</code></em> ... }</code> switch. This is
+using the <code class="computeroutput">-extend { <span class="replaceable"><span class="replaceable">col_1</span></span><span class="replaceable"><span class="replaceable">col_2</span></span> ... }</code> switch. This is
 useful for things like constructing a URL for the object retrieved
 by the query.</p><p>If you&#39;re constructing your multirow through multiple
 queries with the same set of columns, but with different rows, you
@@ -597,7 +609,7 @@ as is the normal behavior. The columns must match the columns in
 the original multirow, or an error will be thrown.</p><p>Your code block may call <code class="computeroutput">continue</code> in order to skip a row and not
 include it in the multirow. Or you can call <code class="computeroutput">break</code> to skip this row and quit
 looping.</p><p>Notice the nonstandard numbering (everything else in Tcl starts
-at 0); the reason is that the graphics designer, a non programmer,
+at 0); the reason is that the graphics designer, a non-programmer,
 may wish to work with row numbers.</p><p>Example:</p><pre class="programlisting">
 db_multirow -extend { user_url } users users_query {
     select user_id first_names, last_name, email from cc_users
@@ -612,7 +624,7 @@ statement.</p>
 </dd><dt><span class="term"><span class="strong"><strong><code class="computeroutput">
 <a name="kernel.dbapi_db_with_handle" id="kernel.dbapi_db_with_handle"></a>db_with_handle</code></strong></span></span></dt><dd>
 <pre class="programlisting">
-<span class="strong"><strong>db_with_handle</strong></span><span class="emphasis"><em>var</em></span><span class="emphasis"><em>code_block</em></span>
+<span class="strong"><strong>db_with_handle</strong></span><span class="emphasis"><em> var code_block</em></span>
 </pre><p>Places a database handle into the variable <span class="emphasis"><em><code class="computeroutput">var</code></em></span>
 and executes <span class="emphasis"><em><code class="computeroutput">code_block</code></em></span>. This is useful when
 you don&#39;t want to have to use the new API (<code class="computeroutput">db_foreach</code>, <code class="computeroutput">db_1row</code>, etc.), but need to use database
@@ -681,8 +693,8 @@ the user.</p><p>The nsv containing the list is initialized by the bootstrap
 script and should never be referenced directly by user code.
 Returns the current rdbms type and version.</p>
 </dd>
-</dl></div><p><span class="cvstag">($&zwnj;Id: db-api.xml,v 1.12 2017/08/07 23:47:55
-gustafn Exp $)</span></p>
+</dl></div><div class="cvstag">($&zwnj;Id: db-api.xml,v 1.12.2.5 2024/02/05 15:35:07
+gustafn Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

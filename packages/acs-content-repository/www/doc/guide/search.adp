@@ -1,7 +1,11 @@
 
-<property name="context">{/doc/acs-content-repository {ACS Content Repository}} {Content Repository Developer Guide: Search}</property>
+<property name="context">{/doc/acs-content-repository/ {ACS Content Repository}} {Content Repository Developer Guide: Search}</property>
 <property name="doc(title)">Content Repository Developer Guide: Search</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h2>Search</h2>
 <strong>
 <a href="../index">Content Repository</a> : Developer
@@ -113,5 +117,5 @@ method, which a dispatch method can call by reflection.</li>
 <a href="mailto:karlg\@arsdigita.com">karlg\@arsdigita.com</a>
 <br>
 
-Last Modified: $&zwnj;Id: search.html,v 1.2 2017/08/07 23:47:47 gustafn
+Last Modified: $&zwnj;Id: search.html,v 1.3 2018/07/03 18:19:14 hectorr
 Exp $

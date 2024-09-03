@@ -44,7 +44,20 @@ acs_object_type::get -object_type $group_type -array type_info
 # Pull out the first 25 groups of this type. If there are more, we'll
 # offer a link to display them all. Alphabetize the first 25 groups
 
-db_multirow groups groups_select {}
+db_multirow groups groups_select {
+    select my_view.group_name, my_view.group_id
+    from (select DISTINCT g.group_name, g.group_id
+           from acs_objects o, groups g,
+                application_group_element_map app_group
+          where g.group_id = o.object_id
+            and o.object_type = :group_type
+            and (app_group.package_id = :package_id
+                 and app_group.element_id = g.group_id
+                 or o.object_id = -2)
+	    and acs_permission.permission_p(g.group_id, :user_id, 'read') = 't'
+          order by g.group_name, g.group_id) my_view
+    fetch first 26 rows only
+}
 
 # Select out all the attributes for groups of this type
 db_multirow -extend {one_attribute_url} attributes attributes_select {} {

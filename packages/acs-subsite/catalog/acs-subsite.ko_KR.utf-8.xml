@@ -133,7 +133,7 @@
   <msg key="lt_Inherited_Permissions">상속받은 사용권한</msg>
   <msg key="lt_It_would_be_a_very_ba">도서관이나 학교에서 공동으로 사용하는 컴퓨터를 이용한다면 이 옵션을 선택하는 것은 좋지않습니다. 이 컴퓨터의 다음 사용자가 우리 서비스에 당신인 것처럼 가장할 수 있습니다.</msg>
   <msg key="lt_New_registration_at_s">%system_url%에 새롭게 등록</msg>
-  <msg key="lt_Note_text_in_red_below">매개변수 입력 필드 밑에 있는 빨간 색으로 된 텍스트는 매개변수의 내용이 OpenACS 매개변수 파일에 있는 항목으로 대치되는 것을 의미한다. 이 매개변수 파일은 사용하지 않는 것이 좋으나 일부 사이트는 apm_parameter 테이블과 무관하게 인스턴스에 고유한 매개변수의 값을 제공하여야 하기 때문에 이것을 필요로 한다.  </msg>
+  <msg key="lt_Note_text_in_red_below">매개변수 입력 필드 밑에 있는 빨간 색으로 된 텍스트는 매개변수의 내용이 NaviServer 매개변수 파일에 있는 항목으로 대치되는 것을 의미한다. 이 매개변수 파일은 사용하지 않는 것이 좋으나 일부 사이트는 apm_parameter 테이블과 무관하게 인스턴스에 고유한 매개변수의 값을 제공하여야 하기 때문에 이것을 필요로 한다.  </msg>
   <msg key="lt_Note_that_you_can_era">작업영역에서 &quot;로그 아웃&quot;옵션을 선택함으로써 저장되었던 전자우편주소와 비밀번호를 삭제할 수 있습니다.</msg>
   <msg key="lt_num_children_Children">%num_children% 숨겨진 아이들</msg>
   <msg key="lt_On_portrait_publish_d">%portrait_publish_date%에 업로드했습니다&lt;a href=&quot;%subsite_url%user/portrait/?return_url=%pvt_home_url%&quot;&gt;%portrait_title%&lt;/a&gt; </msg>

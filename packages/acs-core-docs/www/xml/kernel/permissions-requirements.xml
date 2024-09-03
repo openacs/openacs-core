@@ -51,7 +51,7 @@ row based on the information in that row.</para>
 <para>Problems resulting from this piecemeal approach to permissions and access
 control were many, the two major ones being inconsistency, and
 repeated/redundant code. Thus the drive in OpenACS 4 to provide a unified,
-consistent permissions system that both programmers and administrators can
+consistent permission system that both programmers and administrators can
 readily use.</para>
 
 </sect2>

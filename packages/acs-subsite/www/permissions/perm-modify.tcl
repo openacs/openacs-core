@@ -1,30 +1,58 @@
-ad_page_contract {} {
-    object_id:naturalnum,notnull
-    {perm:multiple {[list]}}
-    {privs:optional}
+ad_page_contract {
+
+    Modify permissions on an object.
+
+} {
+    object_id:object_id,notnull
+    {perm:token,multiple {[list]}}
+    {privs:token,notnull}
     return_url:localurl
+} -validate {
+    privs_exists_p -requires {privs} {
+        foreach priv $privs {
+            if {![db_0or1row get_priv {select 1 from acs_privileges where privilege = :priv}]} {
+                ad_complain "privilege [ns_quotehtml $priv] doesn't exist"
+            }
+        }
+    }
+    perm_is_valid -requires {perm} {
+        foreach elm $perm {
+            lassign [split $elm ","] party_id priv
+            if {![string is integer -strict $party_id] ||
+                ![db_0or1row party_exists {select 1 from parties where party_id = :party_id}] ||
+                ($priv ne "remove" && ![db_0or1row priv_exists {select 1 from acs_privileges where privilege = :priv}])
+            } {
+                ad_complain "perm [ns_quotehtml $elm] is not valid"
+            }
+        }
+    }
 }
 
 
 permission::require_permission -object_id $object_id -privilege admin
 
-# entried in 'perm' have the form "${party_id}_${privilege}"
+set mainsite_p [expr {$object_id eq [subsite::main_site_id]}]
 
+#
+# Entries in 'perm' have the form "${party_id}_${privilege}"
+#
 foreach elm $perm {
-    set elmv [split $elm ","]
-    lassign $elmv party_id priv
+    lassign [split $elm ","] party_id priv
     if { $priv ne "remove" } {
         set perm_array($elm) add
     }
 }
 
 foreach elm $perm {
-    set elmv [split $elm ","]
-    lassign $elmv party_id priv
+    lassign [split $elm ","] party_id priv
     if {$priv eq "remove"} {
         foreach priv $privs {
             if { [info exists perm_array(${party_id},${priv})] } {
-                unset perm_array(${party_id},${priv})
+                if {$mainsite_p && $party_id == "-1"} {
+                    util_user_message "#acs-kernel.The_Public# $priv: #acs-subsite.perm_cannot_be_removed#"
+                } else {
+                    unset perm_array(${party_id},${priv})
+                }
             }
         }
     }
@@ -53,8 +81,7 @@ db_transaction {
     #  nothing: Do nothing
     #  add:     Add the privilege
     foreach elm [array names perm_array] {
-        set elmv [split $elm ","]
-        lassign $elmv party_id privilege
+        lassign [split $elm ","] party_id privilege
 
         switch -- $perm_array($elm) {
             remove {
@@ -72,7 +99,7 @@ db_transaction {
     ad_script_abort
 }
 
-set message [expr {$changes_p ? [_ acs-subsite.Information_Updated] : ""}]
+set message [expr {$changes_p ? [_ acs-subsite.Permissions_Updated] : ""}]
 
 ad_returnredirect -message $message $return_url
 ad_script_abort

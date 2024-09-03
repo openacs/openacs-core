@@ -60,14 +60,14 @@ comment on column subsite_callbacks.object_type is '
 
 comment on column subsite_callbacks.callback_type is ' 
 	The type of the callback. This determines how the callback is
-	executed. Currenlty only a tcl type is supported but other
+	executed. Currently only a tcl type is supported but other
 	types may be added in the future. 
 ';
 
 
 comment on column subsite_callbacks.callback is '
 	The actual callback. This can be the name of a plsql function
-	or procedure, a url stub relative to the node at which package
+	or procedure, a URL stub relative to the node at which package
 	id is mounted, or the name of a tcl function.
 ';
 

@@ -1,7 +1,11 @@
 
-<property name="context">{/doc/acs-templating {ACS Templating}} {Template Timing Results}</property>
+<property name="context">{/doc/acs-templating/ {ACS Templating}} {Template Timing Results}</property>
 <property name="doc(title)">Template Timing Results</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h3>Results</h3>
 <p>The measurements were taken on <code>reusia.boston</code> on 17
 October 2000, with tarball acs-3-4-6-R20001008. Templating under
@@ -12,7 +16,7 @@ more entries, these lack from templated pages, and hence I
 suppressed them. The log message that marks the beginning of each
 phase is written in the lower right of the graphs. Each curve curve
 plots 288 page requests. As I didn&#39;t back port of the
-configurable cache refreshing stragegy ('never' or
+configurable cache refreshing strategy ('never' or
 'always'), I show all graphs in the 'normal'
 colors. The label is 'do', though.</p>
 <h4>Individual Stages</h4>

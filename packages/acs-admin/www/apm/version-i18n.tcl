@@ -4,13 +4,13 @@ ad_page_contract {
 
     @author Peter Marklund (peter@collaboraid.biz)
     @creation-date 8 October 2002
-    @cvs-id $Id$  
+    @cvs-id $Id$
 } {
-    version_id:naturalnum,notnull    
-    {pre_select_files_p:boolean "1"}
-    {show_status_p:boolean "0"}
-    {only_text_p:boolean "0"}
-    {file_type adp}
+    version_id:naturalnum,notnull
+    {pre_select_files_p:boolean,notnull 1}
+    {show_status_p:boolean,notnull 0}
+    {only_text_p:boolean,notnull 0}
+    {file_type:word,notnull adp}
 }
 
 db_1row package_version_info {
@@ -25,10 +25,10 @@ set context_bar [ad_context_bar $page_title]
 set file_option_list [list]
 set adp_preselect_list [list]
 set package_key [apm_package_key_from_version_id $version_id]
-foreach file [lsort [ad_find_all_files [acs_package_root_dir $package_key]]] {	
+foreach file [lsort [ad_find_all_files [acs_package_root_dir $package_key]]] {
 
     set file_regexp ".${file_type}\$"
-    
+
     if { [regexp $file_regexp $file match] } {
         set relative_path [ad_make_relative_path $file]
 
@@ -45,7 +45,7 @@ foreach file [lsort [ad_find_all_files [acs_package_root_dir $package_key]]] {
                     set number_of_message_keys [llength [lang::util::get_hash_indices $file_contents]]
                     set adp_text_result_list [lang::util::replace_adp_text_with_message_tags $file report]
                     set number_of_text_snippets [llength [lindex $adp_text_result_list 0]]
-                
+
                     set status_string "$number_of_text_snippets texts, $number_of_message_tags tags, $number_of_message_keys keys"
                 }
                 tcl {
@@ -84,7 +84,7 @@ foreach file [lsort [ad_find_all_files [acs_package_root_dir $package_key]]] {
     }
 }
 
-form create file_list_form -action [ad_decode $file_type adp "version-i18n-process" "version-i18n-process-2"]
+form create file_list_form -action [expr {$file_type eq "adp" ? "version-i18n-process" : "version-i18n-process-2"}]
 
 element create file_list_form version_id \
         -datatype integer \
@@ -123,7 +123,7 @@ if {$file_type eq "adp"} {
 
 if { $pre_select_files_p } {
     set href [export_vars -base version-i18n -override {{pre_select_files_p 0}} {version_id file_type show_status_p only_text_p}]
-    set pre_select_filter [subst {<a href="[ns_quotehtml $href]">Unselect all checkboxes</a>}]
+    set pre_select_filter [subst {<a href="[ns_quotehtml $href]">Deselect all checkboxes</a>}]
 } else {
     set href [export_vars -base version-i18n -override {{pre_select_files_p 1}} {version_id file_type show_status_p only_text_p}]
     set pre_select_filter [subst {<a href="[ns_quotehtml $href]">Select all checkboxes</a>}]
@@ -152,7 +152,7 @@ switch -- $file_type {
         set file_type_filter [subst {
 	    <b>Show adp files</b>: $text_only_filter |
 	    <a href="[ns_quotehtml $href1]">Show Tcl files</a> |
-	    <a href="[ns_quotehtml $href2]">Show sql files</a>
+	    <a href="[ns_quotehtml $href2]">Show SQL files</a>
 	}]
     }
     tcl {
@@ -161,17 +161,17 @@ switch -- $file_type {
         set file_type_filter [subst {
 	    <a href="[ns_quotehtml $href1]">Show adp files</a> |
 	    <b>Show Tcl files</b> |
-	    <a href="[ns_quotehtml $href2]">Show sql files</a>
+	    <a href="[ns_quotehtml $href2]">Show SQL files</a>
 	}]
     }
     sql {
 	set href1 [export_vars -base version-i18n -override {{file_type adp}} {version_id pre_select_files_p show_status_p only_text_p}]
 	set href2 [export_vars -base version-i18n -override {{file_type tcl}} {version_id pre_select_files_p show_status_p only_text_p}]
-	
+
         set file_type_filter [subst {
 	    <a href="[ns_quotehtml $href1]">Show adp files</a> |
 	    <a href="[ns_quotehtml $href2]">Show Tcl files</a> |
-	    <b>Show sql files</b>
+	    <b>Show SQL files</b>
 	}]
     }
 }

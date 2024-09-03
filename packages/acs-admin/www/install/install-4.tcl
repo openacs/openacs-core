@@ -1,8 +1,8 @@
 ad_page_contract {
-    Install from local file system
+    Install from local filesystem
 } {
     {repository_url ""}
-    {success_p:boolean 0}
+    {success_p:boolean,notnull 0}
 }
 
 if { $repository_url ne "" } {

@@ -20,20 +20,20 @@
 --                              'Application Group', 'Application Group');
 
 --     acs_rel_type.create_type(
---       rel_type			=> 'user_profile',
+--       rel_type		=> 'user_profile',
 --       pretty_name		=> 'User Profile',
 --       pretty_plural		=> 'User Profiles',
---       supertype			=> 'membership_rel',
+--       supertype		=> 'membership_rel',
 --       table_name		=> 'user_profiles',
---       id_column			=> 'profile_id',
+--       id_column		=> 'profile_id',
 --       package_name		=> 'user_profile',
 --       abstract_p		=> 'f',
---       object_type_one		=> 'application_group',
---       role_one			=> 'application',
+--       object_type_one	=> 'application_group',
+--       role_one		=> 'application',
 --       min_n_rels_one		=> 0,
 --       max_n_rels_one		=> null,
---       object_type_two		=> 'user',
---       role_two			=> 'user',
+--       object_type_two	=> 'user',
+--       role_two		=> 'user',
 --       min_n_rels_two		=> 0,
 --       max_n_rels_two		=> null
 --     );
@@ -61,12 +61,12 @@ BEGIN
 	'application_group',
 	'application',
 	0,
-	null,
+	null::integer,
 	'user',
 	'user',
 	0,
-	null,
-	'f'
+	null::integer,
+        'f'
     );
 
     return 0;

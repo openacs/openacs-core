@@ -1,7 +1,11 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Install Oracle 8.1.7}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Install Oracle 8.1.7}</property>
 <property name="doc(title)">Install Oracle 8.1.7</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="unix-installation" leftLabel="Prev"
 			title="Chapter 3. Complete
@@ -9,8 +13,11 @@ Installation"
 			rightLink="postgres" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="oracle" id="oracle"></a>Install Oracle 8.1.7</h2></div></div></div><span style="color: red">&lt;authorblurb&gt;</span><p><span style="color: red">By <a class="ulink" href="mailto:vinod\@kurup.com" target="_top">Vinod Kurup</a>
-</span></p><span style="color: red">&lt;/authorblurb&gt;</span><p>If you are installing PostGreSQL instead of Oracle, skip this
+<a name="oracle" id="oracle"></a>Install Oracle 8.1.7</h2></div></div></div><div class="authorblurb">
+<p>By <a class="ulink" href="mailto:vinod\@kurup.com" target="_top">Vinod Kurup</a>
+</p>
+OpenACS docs are written by the named authors, and may be edited by
+OpenACS documentation staff.</div><p>If you are installing PostgreSQL instead of Oracle, skip this
 section.</p><p>OpenACS 5.9.0 will install with Oracle 9i but has not been
 extensively tested so may still have bugs or tuning issues. See
 <a class="ulink" href="http://www.piskorski.com/docs/oracle.html" target="_top">Andrew Piskorski&#39;s Oracle 9i notes</a> for
@@ -107,7 +114,7 @@ product, as well as starting and stopping the database.</p><pre class="programli
 that password.</p>
 </li><li class="listitem">
 <p>Setup the installation location for Oracle. While Oracle can
-reside in a variety of places in the file system, OpenACS has
+reside in a variety of places in the filesystem, OpenACS has
 adopted <code class="computeroutput">/ora8</code> as the base
 directory.</p><p>
 <span class="strong"><strong>Note:</strong></span> the Oracle
@@ -400,7 +407,7 @@ disappeared!</p></li>
 </li>
 </ul></div><p>Congratulations, you have just installed Oracle 8.1.7 Server!
 However, you still need to create a database which can take about
-an hour of non-interactive time, so don&#39;t quit yet.</p>
+an hour of noninteractive time, so don&#39;t quit yet.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="install-oracle-create" id="install-oracle-create"></a>Creating the First Database</h3></div></div></div><p>This step will take you through the steps of creating a
@@ -447,7 +454,7 @@ information to a shell script</code>" and click
 going to examine the contents of this file before creating our
 database.)</p></li><li class="listitem"><p>Click the "<code class="computeroutput">Save</code>"
 button. Oracle will automatically save it to the correct directory
-and with the correct file name. This will likely be <code class="computeroutput">/ora8/m01/app/oracle/product/8.1.7/assistants/dbca/jlib/sqlora8.sh</code>
+and with the correct filename. This will likely be <code class="computeroutput">/ora8/m01/app/oracle/product/8.1.7/assistants/dbca/jlib/sqlora8.sh</code>
 </p></li><li class="listitem"><p>It will alert you that the script has been saved
 successfully.</p></li><li class="listitem">
 <p>Now we need to customize the database configuration a bit. While
@@ -895,8 +902,8 @@ to do a <code class="computeroutput">connect internal</code> within
 access to the Oracle system.</td>
 </tr>
 </tbody>
-</table></div><p><span class="cvstag">($&zwnj;Id: oracle.xml,v 1.22 2017/08/07 23:47:55
-gustafn Exp $)</span></p>
+</table></div><div class="cvstag">($&zwnj;Id: oracle.xml,v 1.22.2.2 2021/10/05 07:01:21
+gustafn Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

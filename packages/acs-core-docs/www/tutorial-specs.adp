@@ -1,7 +1,11 @@
 
-<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Write the Requirements and Design Specs}</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Write the Requirements and Design Specs}</property>
 <property name="doc(title)">Write the Requirements and Design Specs</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="tutorial-advanced" leftLabel="Prev"
 			title="Chapter 10. Advanced
@@ -20,21 +24,20 @@ design sections, generate the html, and start coding. Store any
 supporting files, like page maps or schema diagrams, in the
 <code class="computeroutput">www/doc/xml</code> directory, and
 store png or jpg versions of supporting files in the <code class="computeroutput">www/doc</code> directory.</p><p>For this tutorial, you should instead install the pre-written
-documentation files for the tutorial app. Log in as <em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>, create the
-standard directories, and copy the prepared documentation:</p><pre class="screen">
-[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <strong class="userinput"><code>cd /var/lib/aolserver/<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>/packages/myfirstpackage/</code></strong>
+documentation files for the tutorial app. Log in as <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>, create the
+standard directories, and copy the prepared documentation:</p><pre class="screen">[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <strong class="userinput"><code>cd /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/packages/myfirstpackage/</code></strong>
 [$OPENACS_SERVICE_NAME myfirstpackage]$ <strong class="userinput"><code>mkdir -p www/doc/xml</code></strong>
 [$OPENACS_SERVICE_NAME myfirstpackage]$ <strong class="userinput"><code>cd www/doc/xml</code></strong>
-[$OPENACS_SERVICE_NAME xml]$ <strong class="userinput"><code>cp /var/lib/aolserver/<em class="replaceable"><code>$OPENACS_SERVICE_NAME</code></em>/packages/acs-core-docs/www/files/myfirstpackage/* .</code></strong>
+[$OPENACS_SERVICE_NAME xml]$ <strong class="userinput"><code>cp /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/packages/acs-core-docs/www/files/myfirstpackage/* .</code></strong>
 [$OPENACS_SERVICE_NAME xml]$</pre><p>OpenACS uses DocBook for documentation. DocBook is an XML
 standard for semantic markup of documentation. That means that the
 tags you use indicate meaning, not intended appearance. The style
-sheet will determine appearance. You will edit the text in an xml
+sheet will determine appearance. You will edit the text in an XML
 file, and then process the file into html for reading.</p><p>Open the file <code class="computeroutput">index.xml</code> in
 emacs. Examine the file. Find the version history (look for the tag
 <code class="computeroutput">&lt;revhistory&gt;</code>). Add a new
 record to the document version history. Look for the <code class="computeroutput">&lt;authorgroup&gt;</code> tag and add yourself as
-a second author. Save and exit.</p><p>Process the xml file to create html documentation. The html
+a second author. Save and exit.</p><p>Process the XML file to create HTML documentation. The HTML
 documentation, including supporting files such as pictures, is
 stored in the <code class="computeroutput">www/docs/</code>
 directory. A Makefile is provided to generate html from the xml,
@@ -56,7 +59,7 @@ Writing admin-guide.html for chapter(admin-guide)
 Writing bi01.html for bibliography
 Writing index.html for book
 [$OPENACS_SERVICE_NAME xml]$</pre><p>Verify that the documentation was generated and reflects your
-changes by browsing to <code class="computeroutput">http://<em class="replaceable"><code>yoursite</code></em>:8000/myfirstpackage/doc</code>
+changes by browsing to <code class="computeroutput">http://<span class="replaceable"><span class="replaceable">yoursite</span></span>:8000/myfirstpackage/doc</code>
 </p>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

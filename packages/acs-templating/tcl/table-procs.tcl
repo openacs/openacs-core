@@ -155,7 +155,7 @@ ad_proc -public template::widget::table::prepare {
             # Append to the row html
             if { $presentation ne "" } {
             # Debug !
-                regsub -all {"} $presentation {\\"} presentation
+                regsub -all -- {"} $presentation {\\"} presentation
                 append eval_code "set row($row_key) \"$presentation\"\n"
             } else {
                 append eval_code "set row($row_key) <td>\$$column_name</td>\n"
@@ -192,17 +192,12 @@ ad_proc -public template::widget::table::prepare {
         upvar $level "tw_${name}_columns:rowcount" rowcount
 
         # Get the base url for the page
-        set url [ns_conn url]
-        set the_form [ns_getform]
-        set the_joiner "?"
-        if { ![template::util::is_nil $the_form] } {
-            foreach key [ns_set keys $the_form] {
-                if { $key ne "tablewidget:${name}_orderby" } {
-                    append url "${the_joiner}${key}\=[ns_set get $the_form $key]"
-                    set the_joiner "&"
-                }
-            }
-        }
+        set url [export_vars \
+                     -base [ns_conn url] \
+                     -entire_form \
+                     -exclude [list "tablewidget:${name}_orderby"]]
+
+        set the_joiner [expr {[string first ? $url] >= 0 ? "&" : "?"}]
 
         # Convert the column def into a multirow datasource
         set rowcount 0
@@ -238,7 +233,7 @@ ad_proc -public template::widget::table::prepare {
 
 # Register the tag that actually renders the widget
 
-template_tag tablewidget { chunk params } {
+template::tag tablewidget { chunk params } {
 
     set name [ns_set iget $params name]
     set style [ns_set iget $params style]

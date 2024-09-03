@@ -30,14 +30,21 @@ template::list::create \
     }
 
 set users [list]
-
 foreach user_id [whos_online::user_ids] {
-    acs_user::get -user_id $user_id -array user
+    set user [acs_user::get -user_id $user_id]
+    if {$user eq ""} {
+        #
+        # This user was online but now does not exist anymore. This
+        # can happen e.g. when a test user has issued requests to the
+        # system and was then deleted.
+        #
+        continue
+    }
 
     set first_request_minutes [expr {[whos_online::seconds_since_first_request $user_id] / 60}]
 
     lappend users [list \
-                       "$user(first_names) $user(last_name)" \
+                       "[dict get $user first_names] [dict get $user last_name]" \
                        [acs_community_member_url -user_id $user_id] \
                        "$first_request_minutes minutes"]
 
