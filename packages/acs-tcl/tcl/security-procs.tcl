@@ -213,6 +213,9 @@ ad_proc -private sec_handler {} {
                 } else {
                     set login_cookie_exists_p 1
                     set persistent_login_p [dict get $login_info forever_p]
+                    if {$persistent_login_p eq ""} {
+                        set persistent_login_p 0
+                    }
                 }
             }
         }
