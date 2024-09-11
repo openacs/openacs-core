@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<message_catalog package_key="acs-content-repository" locale="ko_KR" charset="utf-8">
+
+  <msg key="Last_Modified">마지막 수정</msg>
+</message_catalog>

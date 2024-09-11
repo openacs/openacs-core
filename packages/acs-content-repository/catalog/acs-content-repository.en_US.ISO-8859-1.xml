@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<message_catalog package_key="acs-content-repository" locale="en_US" charset="ISO-8859-1">
+
+  <msg key="Last_Modified">Last Modified</msg>
+  <msg key="Name">Name</msg>
+  <msg key="Size">Size</msg>
+  <msg key="Type">Type</msg>
+  <msg key="Creation_User">Creation User</msg>
+  <msg key="Modification_User">Modification User</msg>
+  <msg key="Description">Description</msg>
+  <msg key="Delete_Revision">Delete Version</msg>
+  <msg key="No_Revisions">No Versions Available</msg>
+</message_catalog>

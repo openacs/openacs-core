@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<message_catalog package_key="acs-content-repository" locale="tr_TR" charset="utf-8">
+
+  <msg key="Last_Modified">Son degistirme</msg>
+  <msg key="Name">Isim</msg>
+  <msg key="Size">Boyut</msg>
+  <msg key="Type">Tur</msg>
+</message_catalog>
