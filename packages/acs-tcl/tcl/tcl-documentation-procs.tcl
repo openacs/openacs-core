@@ -1324,7 +1324,9 @@ ad_proc -public ad_page_contract {
                     set context $::ad_page_contract_context
                     set prev_url [util::get_referrer -trusted]
                     set html [ad_parse_template \
-                                  -params { context prev_url} \
+                                  -params [list \
+                                               complaints [list context $context] \
+                                               prev_url] \
                                   [template::themed_template "/packages/acs-tcl/lib/complain"]]
                 } else {
                     #
