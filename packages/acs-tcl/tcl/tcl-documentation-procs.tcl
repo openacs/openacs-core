@@ -2506,20 +2506,25 @@ ad_page_contract_filter localurl { name value } {
     @author Gustaf Neumann
     @creation-date 19 Mai 2016
 } {
+    set valid_p 1
 
     if { $value eq "" || [util::external_url_p $value]} {
+        set valid_p 0
+    } else {
+        try {
+            ns_parseurl $value
+        } on error {errMsg} {
+            set valid_p 0
+        } on ok {d} {
+            set valid_p [expr {![dict exists $d proto] || [dict get $d proto] in {http https}}]
+        }
+    }
+
+    if {!$valid_p} {
         ad_complain [_ acs-tcl.lt_name_is_not_valid]
-        return 0
     }
 
-    try {
-        ns_parseurl $value
-    } on error {errMsg} {
-        return 0
-    } on ok {d} {
-        return [expr {![dict exists $d proto] || [dict get $d proto] in {http https}}]
-    }
-
+    return $valid_p
 }
 
 
