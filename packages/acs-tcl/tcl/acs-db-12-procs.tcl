@@ -220,7 +220,7 @@ namespace eval ::acs::db {
         # grounds here.
         #
         set result {}
-        #ns_log notice "build_function_argument_list $dict"
+        #ns_log notice "build_function_argument_list $dict"        
         foreach \
             argument_name [dict get $dict argument_names] \
             type [dict get $dict types] \
@@ -236,7 +236,7 @@ namespace eval ::acs::db {
                 }
                 lappend result $arg
             }
-        #ns_log notice "build_function_argument_list: $result"
+        # ns_log notice "build_function_argument_list: $result"
         return $result
     }
 
@@ -492,7 +492,7 @@ namespace eval ::acs::db {
         # sufficient, and we do not need definitions based on the
         # driver as well.
         #
-        set body_prefix "\n # Automatically generated method\n\n"
+        set body_prefix "\n # Automatically generated method\n"
         set cmd [list ::acs::db::${:driver}-${:backend} public method \
                      "call ${package_name} $object_name" \
                      $nonposarg_list \
@@ -689,7 +689,7 @@ namespace eval ::acs::db {
         }
 
         set arg_info [:sql_function_argument_list $sql_info]
-        set type_comment [subst {\# TYPES: [dict get $sql_info types]\n}]
+        set type_comment [subst { \# TYPES: [dict get $sql_info types]\n}]
         return $type_comment[:build_psql_body \
                     [dict get $arg_info tcl] \
                     "${sql_function_name}([dict get $arg_info sql_arguments])" \
