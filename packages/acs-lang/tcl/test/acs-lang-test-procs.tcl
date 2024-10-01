@@ -1241,9 +1241,7 @@ aa_register_case \
         }
 
         foreach f $catalog_files {
-            set rfd [open $f r]
-            set xml [read $rfd]
-            close $rfd
+            set xml [lang::catalog::read_file $f]
             aa_false "Catalog file '$f' appears to be valid XML" [catch {dom parse -- $xml doc}]
         }
     }
