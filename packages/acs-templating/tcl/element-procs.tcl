@@ -692,7 +692,12 @@ ad_proc -private template::element::validate { form_id element_id } {
             # A maximum length was specified for this element. Make
             # sure it is respected first.
             #
-            set value_bytelength [string bytelength $value]
+            
+            # Tcl9 does not include "string bytelength". Use idiom
+            # from Rolf Ade's Tcl9 migration guide instead.            
+            #set value_bytelength [string bytelength $value]            
+            set value_bytelength [string length [encoding convertto utf-8 $value]]
+            
             if {  $value_bytelength > $element(maxlength) } {
                 #
                 # The element is too long.

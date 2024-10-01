@@ -15,8 +15,7 @@ aa_register_case \
 
     } {
         aa_section "Test a plain Tcl command"
-        set flags {
-            bytelength
+        set subcmds {
             compare
             equal
             first
@@ -40,23 +39,23 @@ aa_register_case \
             wordstart
         }
 
-        foreach flag $flags {
-            aa_true "string subcommand '$flag' is recognized" [acs::cmd_has_subcommand string $flag]
+        foreach subcmd $subcmds {
+            aa_true "string subcommand '$subcmd' is recognized" [acs::cmd_has_subcommand string $subcmd]
         }
 
-        set flag [ad_generate_random_string]
-        aa_false "string has no subcommand called '$flag'" [acs::cmd_has_subcommand string $flag]
+        set subcmd [ad_generate_random_string]
+        aa_false "string has no subcommand called '$subcmd'" [acs::cmd_has_subcommand string $subcmd]
 
         aa_section "Test NaviServer subcommands"
-        set flags {
+        set subcmds {
             get
             set
         }
-        foreach flag $flags {
-            aa_true "nsv_array subcommand '$flag' is recognized" \
-                [acs::cmd_has_subcommand nsv_array $flag]
+        foreach subcmd $subcmds {
+            aa_true "nsv_array subcommand '$subcmd' is recognized" \
+                [acs::cmd_has_subcommand nsv_array $subcmd]
         }
-        set flag [ad_generate_random_string]
-        aa_false "nsv_array has no subcommand called '$flag'" \
-            [acs::cmd_has_subcommand nsv_array $flag]
+        set subcmd [ad_generate_random_string]
+        aa_false "nsv_array has no subcommand called '$subcmd'" \
+            [acs::cmd_has_subcommand nsv_array $subcmd]
     }
