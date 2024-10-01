@@ -37,6 +37,7 @@ aa_register_case \
         aa_log "Will execute test on URL: '$url'"
 
         aa_run_with_teardown -test_code {
+            set tcl9 [string match 9* $::tcl_version]
             foreach m $methods {
                 aa_section "$m requests"
                 foreach impl $impls {
@@ -91,49 +92,53 @@ aa_register_case \
                     aa_true "Content-type '$content_type' is text/plain" [string match "*text/plain*" $content_type]
                     aa_equals "Response from server is encoded as expected" [dict get $r page] $response
 
-                    aa_log "Request with text/plain mime_type and iso8859-2 charset"
-                    ns_register_proc $m $endpoint_name [subst {
-                        ns_return 200 "text/plain; charset=iso8859-2" {$response}
-                    }]
+                    if {!$tcl9} {
+                        aa_log "Request with text/plain mime_type and iso8859-2 charset"
+                        ns_register_proc $m $endpoint_name [subst {
+                            ns_return 200 "text/plain; charset=iso8859-2" {$response}
+                        }]
 
-                    set r [util::http::[string tolower $m] -preference $impls -url $url]
-                    set headers [dict get $r headers]
-                    set content_type [expr {[dict exists $headers content-type] ?
-                                            [dict get $headers content-type] : [dict get $headers Content-Type]}]
-                    aa_true "Content-type is text/plain" [string match "*text/plain*" $content_type]
-                    aa_true "Charset is iso8859-2" [string match "*iso8859-2*" $content_type]
-                    aa_equals "Response from server is encoded as expected" [dict get $r page] $response
+                        set r [util::http::[string tolower $m] -preference $impls -url $url]
+                        set headers [dict get $r headers]
+                        set content_type [expr {[dict exists $headers content-type] ?
+                                                [dict get $headers content-type] : [dict get $headers Content-Type]}]
+                        aa_true "Content-type is text/plain" [string match "*text/plain*" $content_type]
+                        aa_true "Charset is iso8859-2" [string match "*iso8859-2*" $content_type]
+                        aa_equals "Response from server is encoded as expected" [dict get $r page] $response
 
-                    # Collect a sample of what is returned when we set
-                    # encoding of the response to iso8859-2
-                    if {$m eq "GET"} {
-                        set F_iso8859_2 [ad_opentmpfile tmpfile_iso8859_2]
+                        # Collect a sample of what is returned when we set
+                        # encoding of the response to iso8859-2
+                        if {$m eq "GET"} {
+                            set F_iso8859_2 [ad_opentmpfile tmpfile_iso8859_2]
 
-                        if {$impl eq "curl"} {
-                            puts $F_iso8859_2 [exec -ignorestderr [::util::which curl] $url -s -k -o -]
-                        } else {
-                            ns_http run -method GET -spoolsize 0 -outputchan $F_iso8859_2 $url
+                            if {$impl eq "curl"} {
+                                puts $F_iso8859_2 [exec -ignorestderr [::util::which curl] $url -s -k -o -]
+                            } else {
+                                ns_http run -method GET -spoolsize 0 -outputchan $F_iso8859_2 $url
+                            }
                         }
-                    }
 
-                    # Here we expose that, when one uses the "naked"
-                    # HTTP tool util::http is wrapping, response would
-                    # not be automatically translated to the system
-                    # encoding.
-                    if {[info exists tmpfile_app_json] &&
-                        [info exists tmpfile_iso8859_2] &&
-                        [file exists $tmpfile_app_json] &&
-                        [file exists $tmpfile_iso8859_2]} {
-                        set rfd [open $tmpfile_app_json r]
-                        set app_json_text [read $rfd]
-                        close $rfd
+                        # Here we expose that, when one uses the "naked"
+                        # HTTP tool util::http is wrapping, response would
+                        # not be automatically translated to the system
+                        # encoding.
+                        if {[info exists tmpfile_app_json] &&
+                            [info exists tmpfile_iso8859_2] &&
+                            [file exists $tmpfile_app_json] &&
+                            [file exists $tmpfile_iso8859_2]} {
+                            set rfd [open $tmpfile_app_json r]
+                            set app_json_text [read $rfd]
+                            close $rfd
 
-                        set rfd [open $tmpfile_iso8859_2 r]
-                        set iso8859_2_text [read $rfd]
-                        close $rfd
+                            set rfd [open $tmpfile_iso8859_2 r]
+                            set iso8859_2_text [read $rfd]
+                            close $rfd
 
-                        aa_true "Setting the charset actually brings to different content in the response" {$app_json_text ne $iso8859_2_text}
-                        file delete -- $tmpfile_app_json $tmpfile_iso8859_2
+                            aa_true "Setting the charset actually brings to different content in the response" {$app_json_text ne $iso8859_2_text}
+                            file delete -- $tmpfile_app_json $tmpfile_iso8859_2
+                        }
+                    } else {
+                        aa_log "skip test with iso8859 for tcl9"
                     }
                 }
             }
