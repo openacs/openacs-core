@@ -10,16 +10,19 @@ aa_register_case \
     } {
         set non_existing_user "openacstestuser2352rfwef432fg543wf3asdf32rdddsfs65"
         set tilde_filename ~$non_existing_user
+        set tcl9 [string match 9* $::tcl_version]
 
         aa_false "'file tail' works as expected without a tilde character" [catch {
             file tail $non_existing_user
         } errorMsg]
 
-        set failure [catch {
-            file tail $tilde_filename
-        } errorMsg]
-        aa_true "'file tail' raises an error with leading tilde character, revealing existing users! -> '$errorMsg'" \
-            $failure
+        if {!$tcl9} {
+            set failure [catch {
+                file tail $tilde_filename
+            } errorMsg]
+            aa_true "'file tail' raises an error with leading tilde character, revealing existing users! -> '$errorMsg'" \
+                $failure
+        }
 
         aa_false "ad_file raises no error with leading tilde character" [catch {
             ad_file tail $tilde_filename
@@ -36,11 +39,13 @@ aa_register_case \
         aa_true "file exists $fresh_fn-$i" [file exists $fresh_fn-$i]
         aa_true "ad_file exists $fresh_fn-$i" [ad_file exists $fresh_fn-$i]
 
-        aa_false "file exists $fresh_fn-$i" [file exists ~$fresh_fn-$i]
         aa_false "ad_file exists $fresh_fn-$i" [ad_file exists ~$fresh_fn-$i]
+        aa_false "file exists $fresh_fn-$i" [file exists ~$fresh_fn-$i]
 
-        aa_false "file tail ~$fresh_fn-$i" {[catch {file tail ~$fresh_fn-$i}] == 0}
-        aa_true "ad_file tail ~$fresh_fn-$i" {[ad_file tail ~$fresh_fn-$i] eq "./~$fresh_fn-$i"}
+        if {!$tcl9} {
+            aa_false "file tail ~$fresh_fn-$i" {[catch {file tail ~$fresh_fn-$i}] == 0}
+            aa_true "ad_file tail ~$fresh_fn-$i" {[ad_file tail ~$fresh_fn-$i] eq "./~$fresh_fn-$i"}
+        }
 
         file delete $fresh_fn-$i
 
@@ -57,8 +62,10 @@ aa_register_case \
         aa_true "ad_file exists ./~$fresh_fn-$j" [ad_file exists ./~$fresh_fn-$j]
         aa_true "ad_file exists ~$fresh_fn-$j" [ad_file exists ~$fresh_fn-$j]
 
-        aa_false "file tail ~$fresh_fn-$j" {[catch {file tail ~$fresh_fn-$j}] == 0}
-        aa_true "ad_file tail ~$fresh_fn-$j" {[ad_file tail ~$fresh_fn-$j] eq "./~$fresh_fn-$j"}
+        if {!$tcl9} {
+            aa_false "file tail ~$fresh_fn-$j" {[catch {file tail ~$fresh_fn-$j}] == 0}
+            aa_true "ad_file tail ~$fresh_fn-$j" {[ad_file tail ~$fresh_fn-$j] eq "./~$fresh_fn-$j"}
+        }
 
         file delete ./~$fresh_fn-$j
     }
