@@ -140,7 +140,7 @@ aa_register_case \
         behavior.
 
     } {
-
+        set tcl9 [string match 9* $::tcl_version]
         aa_section "From and to the same timezone"
 
         set time [lc_time_tz_convert -from Europe/Vienna -to Europe/Vienna -time_value "2021-02-18 15:04:59"]
@@ -155,8 +155,13 @@ aa_register_case \
         set time [lc_time_tz_convert -from Europe/Vienna -to Europe/Vienna -time_value "1583-01-01 00:00:00"]
         aa_equals "lc_time_tz_convert from and to Europe/Vienna (1583-01-01 00:00:00)" $time "1583-01-01 00:00:00"
 
-        set time [lc_time_tz_convert -from Europe/Vienna -to Europe/Vienna -time_value "2000-00-00 00:00:00"]
-        aa_equals "lc_time_tz_convert from and to Europe/Vienna (2000-00-00 00:00:00)" $time "1999-11-30 00:00:00"
+        if {!$tcl9} {
+            #
+            # In Tcl9 "2000-00-00 00:00:00" is an invalid date
+            #
+            set time [lc_time_tz_convert -from Europe/Vienna -to Europe/Vienna -time_value "2000-00-00 00:00:00"]
+            aa_equals "lc_time_tz_convert from and to Europe/Vienna (2000-00-00 00:00:00)" $time "1999-11-30 00:00:00"
+        }
 
         aa_silence_log_entries -severities warning {
             aa_equals "lc_time_tz_convert from and to Europe/Vienna ('Broken!', invalid date)" \
@@ -181,8 +186,10 @@ aa_register_case \
         set time [lc_time_tz_convert -from Europe/Vienna -to America/New_York -time_value "1893-11-19 00:00:00"]
         aa_equals "lc_time_tz_convert from Europe/Vienna to America/New_York (1893-11-19 00:00:00, after USA Timezones 1893-11-18)" $time "1893-11-18 18:00:00"
 
-        set time [lc_time_tz_convert -from Europe/Vienna -to America/New_York -time_value "2000-00-00 00:00:00"]
-        aa_equals "lc_time_tz_convert from Europe/Vienna to America/New_York (2000-00-00 00:00:00)" $time "1999-11-29 18:00:00"
+        if {!$tcl9} {
+            set time [lc_time_tz_convert -from Europe/Vienna -to America/New_York -time_value "2000-00-00 00:00:00"]
+            aa_equals "lc_time_tz_convert from Europe/Vienna to America/New_York (2000-00-00 00:00:00)" $time "1999-11-29 18:00:00"
+        }
 
         set time [lc_time_tz_convert -from Europe/Vienna -to America/New_York -time_value "1900-01-01 00:00:00"]
         aa_equals "lc_time_tz_convert from Europe/Vienna to America/New_York (1900-01-01 00:00:00)" $time "1899-12-31 18:00:00"
@@ -258,8 +265,10 @@ aa_register_case \
         set time [lc_time_local_to_utc "1583-01-01 00:00:00" $tz]
         aa_equals "lc_time_local_to_utc from Europe/Vienna (1583-01-01 00:00:00)" $time "1582-12-31 22:54:39"
 
-        set time [lc_time_local_to_utc "2000-00-00 00:00:00" $tz]
-        aa_equals "lc_time_local_to_utc from Europe/Vienna (2000-00-00 00:00:00)" $time "1999-11-29 23:00:00"
+        if {!$tcl9} {
+            set time [lc_time_local_to_utc "2000-00-00 00:00:00" $tz]
+            aa_equals "lc_time_local_to_utc from Europe/Vienna (2000-00-00 00:00:00)" $time "1999-11-29 23:00:00"
+        }
 
         aa_silence_log_entries -severities warning {
             aa_equals "lc_time_local_to_utc from Europe/Vienna ('Broken!', invalid date)" \
