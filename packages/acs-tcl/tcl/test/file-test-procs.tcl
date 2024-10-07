@@ -99,16 +99,29 @@ aa_register_case \
 
         @author Jeff Davis davis@xarg.net
 } {
+    set installed_packages [db_list get_installed {
+        select distinct package_key
+        from apm_package_versions
+        where installed_p = 't'
+        order by 1
+    }]
+
     foreach spec_file [glob -nocomplain "$::acs::rootdir/packages/*/*.info"] {
+        #
+        # Skip uninstalled packages
+        #
+        regexp {/packages/([^/]+)/} $spec_file _ package_key
+        if {![apm_package_installed_p $package_key]} {
+            continue
+        }
+
+        lappend package_keys $package_key
+
         set errp 0
         if {  [catch {array set version [apm_read_package_info_file $spec_file]} errMsg] } {
             aa_log_result fail "$spec_file returned $errMsg"
             set errp 1
         } else {
-            # Skip uninstalled packages
-            if {![apm_package_installed_p $version(package.key)]} {
-                continue
-            }
             regexp {packages/([^/]*)/} $spec_file match key
             if {$version(package.key) ne $key } {
                 aa_log_result fail "MISMATCH DIRECTORY/PACKAGE KEY: $spec_file $version(package.key) != $key"
@@ -145,6 +158,9 @@ aa_register_case \
             aa_log_result pass "$spec_file no errors"
         }
     }
+
+    aa_equals "All installed packages have one info file." \
+        [lsort $package_keys] $installed_packages
 }
 
 aa_register_case \
