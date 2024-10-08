@@ -119,7 +119,7 @@ ad_proc -private db_bootstrap_set_db_type { errors } {
     set all_pools [ns_db pools]
 
     # unset namespaced array of database pools
-    array unset -nocomplain ::acs::db_pools
+    unset -nocomplain ::acs::db_pools
 
     set database_names [ns_config $config_path {database_names}]
 

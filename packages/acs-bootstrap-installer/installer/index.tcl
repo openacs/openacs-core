@@ -115,7 +115,7 @@ Once you're sure everything is installed and configured correctly, restart AOLse
 #
 # Unset array errors, in case it exists
 #
-if {[array exists errors]} {array unset errors}
+unset -nocomplain errors
 
 # Perform database-specific checks
 db_installer_checks errors error_p

@@ -895,7 +895,7 @@ ad_proc -private auth::sync::process_doc::ims::ProcessDocument {
         }
 
         # Initialize this record
-        array unset user_info
+        unset -nocomplain user_info
 
         set username [xml_get_child_node_content_by_path $person_node { { userid } { sourcedid id } }]
 

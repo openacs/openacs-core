@@ -136,7 +136,7 @@ ad_proc -private publish::push_id { item_id {revision_id ""}} {
     } else {
       # This is the first id pushed - also clear the cache
       set item_id_stack [list $pair]
-      array unset revision_html
+      unset -nocomplain revision_html
     }
   } else {
     set item_id_stack [list]
@@ -174,7 +174,7 @@ ad_proc -private publish::pop_id {} {
 
   # If the stack is now empty, clear the cache
   if { [template::util::is_nil item_id_stack] } {
-    array unset revision_html
+      unset -nocomplain revision_html
   }
 
   lassign $pair ::content::item_id ::content::revision_id
