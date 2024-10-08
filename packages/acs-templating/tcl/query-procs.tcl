@@ -642,9 +642,7 @@ ad_proc -public template::multirow {
 
         extend {
             upvar $multirow_level_up $name:columns columns
-            foreach column_name $args {
-                lappend columns $column_name
-            }
+            lappend columns {*}$args
         }
 
         pop {
@@ -652,8 +650,7 @@ ad_proc -public template::multirow {
             set r_list [list]
             if {$rowcount > 0} {
                 upvar $multirow_level_up $name:$rowcount row
-                for { set i 0 } { $i < [llength $columns] } { incr i } {
-                    set key [lindex $columns $i]
+                foreach key $columns {
                     if {[info exists row($key)]} {
                         set value $row($key)
                         lappend r_list $key $value
@@ -670,10 +667,10 @@ ad_proc -public template::multirow {
             incr rowcount
             upvar $multirow_level_up $name:$rowcount row
 
-            for { set i 0 } { $i < [llength $columns] } { incr i } {
-
-                set key [lindex $columns $i]
-                set value [lindex $args $i];    #(!) missing columns are silently empty
+            #
+            # Note: missing columns are silently empty
+            #
+            foreach key $columns value $args {
                 set row($key) $value
             }
             set row(rownum) $rowcount
