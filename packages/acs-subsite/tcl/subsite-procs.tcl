@@ -247,7 +247,7 @@ ad_proc -public subsite::get {
     set info [site_node::get_from_object_id -object_id $subsite_id]
     if {[info exists array]} {
         upvar $array subsite_info
-        array unset subsite_info
+        unset -nocomplain subsite_info
         array set subsite_info $info
     }
     return $info
