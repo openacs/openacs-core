@@ -19,10 +19,10 @@ ad_proc -private template::reset_request_vars {} {
     handled by the templating system.
 } {
     #ns_log notice "----- template::reset_request_vars [ad_conn url]"
-    array unset ::template::head::scripts
-    array unset ::template::head::links
-    array unset ::template::head::metas
-    array unset ::template::body_handlers
+    unset -nocomplain ::template::head::scripts
+    unset -nocomplain ::template::head::links
+    unset -nocomplain ::template::head::metas
+    unset -nocomplain ::template::body_handlers
 
     set ::template::body_scripts {}
     set ::template::headers {}
@@ -850,7 +850,7 @@ ad_proc -private template::head::prepare_multirows {} {
                 }
             }
         }
-        array unset links
+        unset -nocomplain links
     }
 
     # Generate the <style /> tag multirow
@@ -867,7 +867,7 @@ ad_proc -private template::head::prepare_multirows {} {
                     $style
             }
         }
-        array unset styles
+        unset -nocomplain styles
     }
 
     # Generate the head <script /> tag multirow
@@ -900,7 +900,7 @@ ad_proc -private template::head::prepare_multirows {} {
             }
         }
         template::multirow sort headscript order
-        array unset scripts
+        unset -nocomplain scripts
     }
     template::prepare_body_script_multirow
 }

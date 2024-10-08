@@ -659,7 +659,7 @@ ad_proc -public template::multirow {
                         lappend r_list $key $value
                     }
                 }
-                array unset row
+                unset -nocomplain row
             }
             incr rowcount -1
             return $r_list

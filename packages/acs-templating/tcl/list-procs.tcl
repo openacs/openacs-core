@@ -3412,7 +3412,7 @@ ad_proc -private template::list::prepare_filter_form {
 
             set filter_properties(widget) $form_element(widget)
             set filter_properties(selected_p) t
-            array unset form_element
+            unset -nocomplain form_element
         }
     }
 
