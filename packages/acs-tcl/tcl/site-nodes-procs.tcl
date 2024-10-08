@@ -657,19 +657,18 @@ namespace eval ::acs {
             if { [llength $filters] > 0 } {
                 set return_val [list]
                 foreach child_url $child_urls {
-                    array unset site_node
-                    if {![catch {array set site_node [:get -url $child_url]}]} {
+                    if {![catch {set site_node [:get -url $child_url]}]} {
 
                         set passed_p 1
                         foreach { elm val } $filters {
-                            if { $site_node($elm) ne $val } {
+                            if { [dict get $site_node $elm] ne $val } {
                                 set passed_p 0
                                 break
                             }
                         }
                         if { $passed_p } {
                             if { $element ne "" } {
-                                lappend return_val $site_node($element)
+                                lappend return_val [dict get $site_node $element]
                             } else {
                                 lappend return_val $child_url
                             }
@@ -679,9 +678,8 @@ namespace eval ::acs {
             } elseif { $element ne "" } {
                 set return_val [list]
                 foreach child_url $child_urls {
-                    array unset site_node
-                    if {![catch {array set site_node [:get -url $child_url]}]} {
-                        lappend return_val $site_node($element)
+                    if {![catch {set site_node [:get -url $child_url]}]} {
+                        lappend return_val [dict get $site_node $element]
                     }
                 }
             } else {
@@ -954,7 +952,7 @@ namespace eval ::acs {
         }
 
         :method flush_per_request_cache {} {
-            array unset ::__node_id
+            unset -nocomplain ::__node_id
         }
 
         :public method flush_pattern {{-partition_key ""} pattern} {

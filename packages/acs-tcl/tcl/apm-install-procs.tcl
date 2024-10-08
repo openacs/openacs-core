@@ -495,11 +495,13 @@ ad_proc -public apm_dependency_check_new {
 
                 if {![info exists repository($package_key)]} continue
 
-                array unset version
-                array set version $repository($package_key)
+                set version $repository($package_key)
 
                 set satisfied_p 1
-                foreach req [concat $version(embeds) $version(extends) $version(requires)] {
+                foreach req [concat \
+                                 [dict get $version embeds] \
+                                 [dict get $version extends] \
+                                 [dict get $version requires]] {
                     lassign $req req_uri req_version
 
                     if { ![info exists provided($req_uri)]
@@ -533,7 +535,7 @@ ad_proc -public apm_dependency_check_new {
                     lappend result(packages) $package_key
 
                     # Record what this package provides, and remove it from the required list, if appropriate
-                    foreach prov $version(provides) {
+                    foreach prov [dict get $version provides] {
                         lassign $prov prov_uri prov_version
                         # If what we provide is not already provided, or the alredady provided version is
                         # less than what we provide, record this new provision

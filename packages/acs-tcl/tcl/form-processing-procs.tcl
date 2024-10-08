@@ -1153,7 +1153,7 @@ ad_proc -public ad_form {
             ad_script_abort
         }
         if { $__refreshing_p } {
-            uplevel array unset ${form_name}:error
+            uplevel unset -nocomplain -- ${form_name}:error
 
             if { [info exists on_refresh] } {
                 ad_page_contract_eval uplevel #$level $on_refresh

@@ -2015,7 +2015,7 @@ ad_proc -public ad_html_to_text {
         } else {
 
             # Reset/create attribute array
-            array unset attribute_array
+            unset -nocomplain attribute_array
 
             # Parse the attributes
             ad_parse_html_attributes -attribute_array attribute_array $attributes

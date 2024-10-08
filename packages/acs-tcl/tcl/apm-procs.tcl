@@ -293,22 +293,22 @@ ad_proc apm_build_one_package_relationships {
 
 } {
 
-    array unset ::apm_visited_package_keys
+    unset -nocomplain ::apm_visited_package_keys
     set ::apm_package_url_resolution [list]
     apm_package_list_url_resolution $package_key
     nsv_set apm_package_url_resolution $package_key $::apm_package_url_resolution
 
-    array unset ::apm_visited_package_keys
+    unset -nocomplain ::apm_visited_package_keys
     set ::apm_package_inherit_order [list]
     apm_one_package_inherit_order $package_key
     nsv_set apm_package_inherit_order $package_key $::apm_package_inherit_order
 
-    array unset ::apm_visited_package_keys
+    unset -nocomplain ::apm_visited_package_keys
     set ::apm_package_load_libraries_order [list]
     apm_one_package_load_libraries_dependencies $package_key
     nsv_set apm_package_load_libraries_order $package_key $::apm_package_load_libraries_order
 
-    array unset ::apm_visited_package_keys
+    unset -nocomplain ::apm_visited_package_keys
     set ::apm_package_descendents [list]
     apm_one_package_descendents $package_key
     nsv_set apm_package_descendents $package_key $::apm_package_descendents
