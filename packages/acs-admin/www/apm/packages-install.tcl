@@ -55,7 +55,12 @@ set already_installed_list [list]
 set not_compatible_list [list]
 
 foreach spec_file $all_spec_files {
-    array set version [apm_read_package_info_file $spec_file]
+    try {
+        array set version [apm_read_package_info_file $spec_file]
+    } trap {POSIX EILSEQ} {} {
+        ns_log warning "File '$spec_file' cannot be read:" $::errorInfo
+        continue
+    }
     set version_name $version(name)
     set package_name $version(package-name)
     set package_key $version(package.key)
