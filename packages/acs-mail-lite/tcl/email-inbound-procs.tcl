@@ -1264,8 +1264,8 @@ ad_proc -private acs_mail_lite::inbound_queue_pull {
         }
         set i 0
         while { $i < $chunk_len && $pull_p && [clock seconds ] < $stop_cs } {
-            array unset h_arr
-            array unset p_arr
+            unset -nocomplain h_arr
+            unset -nocomplain p_arr
             set error_p 0
             set aml_email_id [lindex $chunk_ols $i]
             acs_mail_lite::inbound_queue_pull_one \

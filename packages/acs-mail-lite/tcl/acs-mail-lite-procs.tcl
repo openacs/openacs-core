@@ -246,7 +246,7 @@ namespace eval acs_mail_lite {
                 lappend address_list [string tolower [parse_email_address -email $email]]
             }
 
-            array unset address_array
+            unset address_array
             # now get the user_names and user_ids
             foreach email $address_list {
                 set email [string tolower $email]
