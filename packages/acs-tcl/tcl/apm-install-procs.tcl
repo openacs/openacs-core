@@ -549,7 +549,7 @@ ad_proc -public apm_dependency_check_new {
                         if { [info exists required($prov_uri)]
                              && [apm_version_names_compare $required($prov_uri) $prov_version] <= 0
                          } {
-                            array unset required($prov_uri)
+                            unset required($prov_uri)
                         }
                     }
 
@@ -584,7 +584,7 @@ ad_proc -public apm_dependency_check_new {
                     break
                 }
 
-                array unset version
+                unset -nocomplain version
                 array set version $repository($package_key)
 
                 ns_log Debug "apm_dependency_check_new: Considering $package_key: [array get version]"
@@ -638,7 +638,7 @@ ad_proc -public apm_dependency_check_new {
                 continue
             }
 
-            array unset version
+            unset -nocomplain version
             array set version $repository($package_key)
 
             # Find unsatisfied requirements
@@ -2091,7 +2091,7 @@ ad_proc -public apm_get_package_repository {
         set root_node [xml_doc_get_first_node $tree]
 
         foreach package_node [xml_node_get_children_by_name $root_node "package"] {
-            array unset version
+            unset -nocomplain version
             set version(package.key)  [xml_node_get_content [xml_node_get_first_child_by_name $package_node "package-key"]]
             set version(name)         [xml_node_get_content [xml_node_get_first_child_by_name $package_node "version"]]
             set version(package-name) [xml_node_get_content [xml_node_get_first_child_by_name $package_node "pretty-name"]]
@@ -2165,7 +2165,7 @@ ad_proc -public apm_get_package_repository {
         lappend spec_files {*}[apm_scan_packages]
         foreach spec_file $spec_files {
             ad_try {
-                array unset version
+                unset -nocomplain version
                 array set version [apm_read_package_info_file $spec_file]
 
                 # If the package doesn't support this RDBMS, it's not really available for install
@@ -2293,9 +2293,7 @@ ad_proc -public apm::process_install_xml {
     # If it's not a nested call then initialize the ids array.
     # If it is nested we will typically need id's from the parent
     if {!$nested_p} {
-        array unset ids
-        array set ids [list]
-
+        unset -nocomplain ids
         # set default ids for the main site and core packages
         set ids(ACS_KERNEL) [apm_package_id_from_key acs-kernel]
         set ids(ACS_TEMPLATING) [apm_package_id_from_key acs-templating]
