@@ -925,21 +925,22 @@ ad_proc -private lang::catalog::import_messages {
 
             # If we are doing nothing, the only property of the message we might want to update in the db
             # is the sync_time as we might have discovered that db and file are in sync
-            array unset edit_array
+            set edit_array [list]
             if { $upgrade_status ne "no_upgrade" } {
-                set edit_array(upgrade_status) $upgrade_status
-                set edit_array(deleted_p) [string equal $upgrade_status "deleted"]
-                set edit_array(conflict_p) $conflict_p
+                lappend edit_array \
+                    "upgrade_status" $upgrade_status \
+                    "deleted_p"      [string equal $upgrade_status "deleted"] \
+                    "conflict_p"     $conflict_p
             }
 
-            ns_log Debug "lang::catalog::import_messages - invoking lang::message::edit with import_case=\"$import_case\" -update_sync=$update_sync_p $message_key [array get edit_array]"
+            ns_log Debug "lang::catalog::import_messages - invoking lang::message::edit with import_case=\"$import_case\" -update_sync=$update_sync_p $message_key $edit_array"
             ad_try {
                 lang::message::edit \
                     -update_sync=$update_sync_p \
                     $package_key \
                     $message_key \
                     $locale \
-                    [array get edit_array]
+                    $edit_array
             } on error {errorMsg} {
                 lappend message_count(errors) $errorMsg
                 set error_p 1
@@ -1024,18 +1025,17 @@ ad_proc -public lang::catalog::import {
         foreach file_path $catalog_files {
             # Use an ad_try so that parse failure of one file doesn't
             # cause the import of all files to fail
-            array unset loop_message_count
             ad_try {
-                array set loop_message_count [lang::catalog::import_from_file $file_path]
+                set loop_message_count [lang::catalog::import_from_file $file_path]
             } on error {errorMsg} {
                 ad_log Error "The import of file $file_path failed, error message is: $errorMsg"
             } on ok {r} {
-                foreach action [array names loop_message_count] {
+                foreach {action count} $loop_message_count {
                     if { $action ne "errors" } {
-                        set message_count($action) [expr {$message_count($action) + $loop_message_count($action)}]
+                        set message_count($action) [expr {$message_count($action) + $count}]
                     }
                 }
-                lappend message_count(errors) {*}$loop_message_count(errors)
+                lappend message_count(errors) {*}[dict get $loop_message_count errors]
             }
         }
     }
