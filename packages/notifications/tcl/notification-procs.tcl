@@ -257,7 +257,7 @@ namespace eval notification {
                         set user_id [lindex $entry 0]
 
                         if { ![info exists subset_member_p($user_id)] || [info exists already_notified_p($entry)] } {
-                            array unset request $entry
+                            unset request($entry)
                         }
                     }
 
@@ -275,9 +275,7 @@ namespace eval notification {
                     foreach entry $already_notified {
                         # If user has already received a notification with the same
                         # interval and delivery method, don't send again
-                        if { [info exists request($entry)] } {
-                            array unset request $entry
-                        }
+                        unset -nocomplain request($entry)
                     }
                 }
 
