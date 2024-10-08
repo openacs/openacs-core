@@ -131,7 +131,7 @@ ad_proc -private search::indexer {} {
         }
 
         lassign $row object_id event_date event
-        array unset datasource
+        unset -nocomplain datasource
         switch -- $event {
             UPDATE -
             INSERT {
