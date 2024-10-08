@@ -58,6 +58,12 @@ aa_register_case \
 
     @author Jeff Davis davis@xarg.net
 } {
+    set installed_packages [db_list get_installed {
+        select distinct package_key
+        from apm_package_versions
+        where installed_p = 't'
+    }]
+
     # couple of local helper procs
     proc ::tcl_p {file} {
         return [expr {[string match {*.tcl} $file] || [ad_file isdirectory $file]}]
@@ -70,10 +76,15 @@ aa_register_case \
     set count 0
     #inspect every Tcl file in the directory tree starting with $startdir
     foreach file [ad_find_all_files -check_file_func ::tcl_p $startdir] {
-
+        if {![regexp ^.*/packages/([join $installed_packages |])/.*\$ $file]} {
+            continue
+        }
         if {[string match "*/acs-tcl/tcl/test/file-test-procs.tcl" $file]} {
             continue
         }
+
+        incr count
+
         set fp [open $file "r"]
         set data [read $fp]
         close $fp
