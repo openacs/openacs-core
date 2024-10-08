@@ -416,12 +416,7 @@ ad_proc -private apm_build_repository {
                     continue
                 }
 
-                if { [array exists pkg_info] } {
-                    array unset pkg_info
-                }
-                if { [info exists pkg_info] } {
-                    unset pkg_info
-                }
+                unset -nocomplain pkg_info
 
                 ad_try {
                     array set pkg_info [apm_read_package_info_file $spec_file]

@@ -45,7 +45,7 @@ ns_log notice "to_install: $to_install"
 while {[llength $to_install] > 0} {
 
     foreach package_key $to_install {
-        array unset version
+        unset -nocomplain version
         array set version $repository($package_key)
 
         set satisfied_p 1
@@ -86,7 +86,7 @@ set success_p 1
 foreach package_key $install_order {
     ns_log Notice "Installing $package_key"
 
-    array unset version
+    unset -nocomplain version
     array set version $repository($package_key)
 
     if { [info exists version(download_url)] && $version(download_url) ne "" } {

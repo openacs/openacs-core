@@ -55,11 +55,10 @@ while 1 {
 	if {$pkg ni $install_pkgs} {
 	    lappend install_pkgs $pkg
 	}
-	
-	array unset version
-	array set version $repository($pkg)
 
-	foreach p $version(install) {
+        set version $repository($key)
+
+	foreach p [dict get $version install] {
 	    if {$p ni $install_pkgs} {
 		lappend install_pkgs $p
 		set fixpoint_p 0
@@ -105,13 +104,12 @@ foreach key $install_pkgs {
         set comment {}
     }
 
-    array unset version
-    array set version $repository($key)
+    set version $repository($key)
 
     multirow append install \
         $key \
-        $version(name) \
-        $version(package-name) \
+        [dict get $version name] \
+        [dict get $version package-name] \
         $comment \
         $extra_p
 }
