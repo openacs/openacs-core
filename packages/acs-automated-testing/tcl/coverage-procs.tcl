@@ -58,6 +58,7 @@ ad_proc -public aa::coverage::proc_list {
             set package_name [lindex [split $path "/"] 1]
             if { $package_key eq "" || $package_key eq $package_name } {
                 foreach proc_name [nsv_get api_proc_doc_scripts $path] {
+                    unset -nocomplain proc_doc
                     array set proc_doc [nsv_get api_proc_doc $proc_name]
                     if { [info exists proc_doc(protection)]
                          && "public" in $proc_doc(protection)
@@ -77,7 +78,6 @@ ad_proc -public aa::coverage::proc_list {
                         dict set proc_data covered_p [info exists proc_doc(testcase)]
                         lappend procs "$proc_data"
                     }
-                    array unset proc_doc
                 }
             }
         }
