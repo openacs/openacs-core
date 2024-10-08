@@ -295,10 +295,10 @@ ad_proc -public application_group::closest_ancestor_application_group_site_node 
     while {$group_id eq "" && $url ne ""} {
 
         if { $include_self_p } {
-            array set node_array [site_node::get -url $url]
+            set node [site_node::get -url $url]
             set group_id [application_group::group_id_from_package_id \
-                             -package_id $node_array(package_id) \
-                             -no_complain]
+                              -package_id [dict get $node package_id] \
+                              -no_complain]
         }
 
         set include_self_p 1
@@ -307,12 +307,13 @@ ad_proc -public application_group::closest_ancestor_application_group_site_node 
         set url [string trimright $url /]
         set url [string range $url 0 [string last / $url]]
     }
-    if {$group_id eq ""} {
-        array unset -no_complain node_array
-    }
-    set node_array(application_group_id) $group_id
 
-    return [array get node_array]
+    if {$group_id eq ""} {
+        unset -nocomplain node
+    }
+    dict set node application_group_id $group_id
+
+    return $node
 }
 
 ad_proc -public application_group::closest_ancestor_element {
