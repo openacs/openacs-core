@@ -20,8 +20,7 @@ ad_proc -public aa::coverage::proc_covered_p {
 
     @return 'true' if the proc is covered, 'false' otherwise.
 } {
-    array set proc_doc [nsv_get api_proc_doc $proc_name]
-    if {[info exists proc_doc(testcase)]} {
+    if {[dict exists [nsv_get api_proc_doc $proc_name] testcase]} {
         return true
     } else {
         return false
