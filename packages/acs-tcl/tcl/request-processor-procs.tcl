@@ -1556,9 +1556,7 @@ ad_proc -public ad_conn {args} {
         }
 
         -reset {
-            if {[info exists ad_conn]} {
-                unset ad_conn
-            }
+            unset -nocomplain ad_conn
             array set ad_conn {
                 request ""
                 sec_validated ""
@@ -1586,8 +1584,6 @@ ad_proc -public ad_conn {args} {
                 recursion_count 0
                 form_count -1
             }
-            array unset ad_conn subsite_id
-            array unset ad_conn locale
         }
 
         -get {
