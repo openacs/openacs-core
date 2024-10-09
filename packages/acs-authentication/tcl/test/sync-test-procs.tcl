@@ -137,7 +137,7 @@ aa_register_case \
             #
             #####
 
-            array unset user_info
+            unset -nocomplain user_info
             set username1 [ad_generate_random_string]
             set email1 "[ad_generate_random_string]@foo.bar"
             set screen_name1 [ad_generate_random_string]
@@ -153,7 +153,7 @@ aa_register_case \
                               -username $username1 \
                               -array user_info]
 
-            array unset entry
+            unset -nocomplain entry
             auth::sync::job::get_entry \
                 -entry_id $entry_id \
                 -array entry
@@ -184,7 +184,7 @@ aa_register_case \
             #####
 
             aa_log "--- Invalid insert: reusing username, email --- auth::sync::job::action -opration insert -username $username1 -email $email1"
-            array unset user_info
+            unset -nocomplain user_info
             set user_info(first_names) [ad_generate_random_string]
             set user_info(last_name) [ad_generate_random_string]
             set user_info(email) $email1
@@ -195,7 +195,7 @@ aa_register_case \
                               -username $username1 \
                               -array user_info]
 
-            array unset entry
+            unset -nocomplain entry
             auth::sync::job::get_entry \
                 -entry_id $entry_id \
                 -array entry
@@ -215,7 +215,7 @@ aa_register_case \
             #####
 
             set email2 "[ad_generate_random_string]@foo.bar"
-            array unset user_info
+            unset -nocomplain user_info
             set user_info(first_names) [ad_generate_random_string]
             set user_info(last_name) [ad_generate_random_string]
             set user_info(url) "http://[ad_generate_random_string].com"
@@ -227,7 +227,7 @@ aa_register_case \
                               -username $username1 \
                               -array user_info]
 
-            array unset entry
+            unset -nocomplain entry
             auth::sync::job::get_entry \
                 -entry_id $entry_id \
                 -array entry
@@ -258,7 +258,7 @@ aa_register_case \
 
             # copy the old user_info array
             array set user_info2 [array get user_info]
-            array unset user_info
+            unset -nocomplain user_info
             aa_log "--- Valid update, no changes --- auth::sync::job::action -opration update -username $username1"
             set entry_id [auth::sync::job::action \
                               -job_id $job_id \
@@ -266,7 +266,7 @@ aa_register_case \
                               -username $username1 \
                               -array user_info]
 
-            array unset entry
+            unset -nocomplain entry
             auth::sync::job::get_entry \
                 -entry_id $entry_id \
                 -array entry
@@ -296,7 +296,7 @@ aa_register_case \
             #####
 
             set username2 [ad_generate_random_string]
-            array unset user_info
+            unset -nocomplain user_info
             set user_info(last_name) {<b>Foobar</b>}
             set user_info(email) "not_an_email"
             set user_info(url) "NotAURL"
@@ -307,7 +307,7 @@ aa_register_case \
                               -username $username2 \
                               -array user_info]
 
-            array unset entry
+            unset -nocomplain entry
             auth::sync::job::get_entry \
                 -entry_id $entry_id \
                 -array entry
@@ -317,10 +317,9 @@ aa_register_case \
             if { [aa_true "entry.element_messages not empty" \
               {[info exists entry(element_messages)] && $entry(element_messages) ne ""}] } {
                 aa_log "entry.element_messages = '$entry(element_messages)'"
-                array unset elm_msgs
-                array set elm_msgs $entry(element_messages)
-                aa_log "array names elm_msgs = '[array names elm_msgs]'"
-                aa_true "first_names, last_name, email, url have problems" [util_sets_equal_p { first_names last_name email url } [array names elm_msgs]]
+                set elm_msgs $entry(element_messages)
+                aa_log "dict keys elm_msgs = '[dict keys $elm_msgs]'"
+                aa_true "first_names, last_name, email, url have problems" [util_sets_equal_p { first_names last_name email url } [dict keys $elm_msgs]]
             }
 
             #####
@@ -335,7 +334,7 @@ aa_register_case \
                               -operation "delete" \
                               -username $username1]
 
-            array unset entry
+            unset -nocomplain entry
             auth::sync::job::get_entry \
                 -entry_id $entry_id \
                 -array entry
@@ -406,7 +405,7 @@ aa_register_case \
 
             set username1 [ad_generate_random_string]
             set email1 "[ad_generate_random_string]@foo.bar"
-            array unset user_info
+            unset -nocomplain user_info
             set user_info(email) $email1
             set user_info(first_names) [ad_generate_random_string]
             set user_info(last_name) [ad_generate_random_string]
@@ -418,7 +417,7 @@ aa_register_case \
                               -username $username1 \
                               -array user_info]
 
-            array unset entry
+            unset -nocomplain entry
             auth::sync::job::get_entry \
                 -entry_id $entry_id \
                 -array entry
@@ -448,7 +447,7 @@ aa_register_case \
             #
             #####
 
-            array unset user_info
+            unset -nocomplain user_info
             set user_info(email) "[ad_generate_random_string]@foo.bar"
             set user_info(first_names) [ad_generate_random_string]
             set user_info(last_name) [ad_generate_random_string]
@@ -460,7 +459,7 @@ aa_register_case \
                               -username $username1 \
                               -array user_info]
 
-            array unset entry
+            unset -nocomplain entry
             auth::sync::job::get_entry \
                 -entry_id $entry_id \
                 -array entry
@@ -710,24 +709,23 @@ aa_register_case \
             aa_equals "Number of problems" $job(num_problems) 3
 
             foreach entry_id [auth::sync::job::get_entries -job_id $job_id] {
-                array unset entry
+                unset -nocomplain entry
                 auth::sync::job::get_entry \
                     -entry_id $entry_id \
                     -array entry
 
                 aa_false "Success_p is false" [string is true -strict $entry(success_p)]
 
-                array unset elm_msgs
-                array set elm_msgs $entry(element_messages)
+                set elm_msgs $entry(element_messages)
 
                 aa_log "entry.operation = '$entry(operation)'"
                 aa_log "entry.username = '$entry(username)'"
                 aa_log "entry.message = '$entry(message)'"
-                aa_log "array names elm_msgs = '[array names elm_msgs]'"
+                aa_log "dict keys elm_msgs = '[dict keys $elm_msgs]'"
 
                 switch $entry(operation) {
                     insert {
-                        aa_true "email has a problem (email missing)" [util_sets_equal_p { email } [array names elm_msgs]]
+                        aa_true "email has a problem (email missing)" [util_sets_equal_p { email } [dict keys $elm_msgs]]
                     }
                     update {
                         aa_true "User does not exist" {$entry(message) ne ""}
@@ -863,7 +861,7 @@ aa_register_case \
             set entry_id [auth::sync::job::get_entries -job_id $job_id]
             aa_equals "One entry" [llength $entry_id] 1
 
-            array unset entry
+            unset -nocomplain entry
             auth::sync::job::get_entry -entry_id $entry_id -array entry
 
             aa_log "entry.message = '$entry(message)'"
@@ -909,7 +907,7 @@ aa_register_case \
             set entry_id [auth::sync::job::get_entries -job_id $job_id]
             aa_equals "One entry" [llength $entry_id] 1
 
-            array unset entry
+            unset -nocomplain entry
             auth::sync::job::get_entry -entry_id $entry_id -array entry
 
             aa_log "entry.message = '$entry(message)'"
@@ -946,7 +944,7 @@ aa_register_case \
             set entry_id [auth::sync::job::get_entries -job_id $job_id]
             aa_equals "One entry" [llength $entry_id] 1
 
-            array unset entry
+            unset -nocomplain entry
             auth::sync::job::get_entry -entry_id $entry_id -array entry
 
             aa_log "entry.message = '$entry(message)'"
@@ -991,7 +989,7 @@ aa_register_case \
             set entry_id [auth::sync::job::get_entries -job_id $job_id]
             aa_equals "One entry" [llength $entry_id] 1
 
-            array unset entry
+            unset -nocomplain entry
             auth::sync::job::get_entry -entry_id $entry_id -array entry
 
             aa_log "entry.message = '$entry(message)'"

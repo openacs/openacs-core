@@ -75,18 +75,18 @@ aa_register_case \
         -rollback \
         -test_code {
 
-            array set result [acs::test::user::create]
-            set password $result(password)
+            set result [acs::test::user::create]
+            set password [dict get $result password]
 
-            if { ![aa_equals "creation_status for successful creation" $result(creation_status) "ok"] } {
-                aa_log "Creation result: [array get result]"
+            if { ![aa_equals "creation_status for successful creation" [dict get $result creation_status] "ok"] } {
+                aa_log "Creation result: $result"
             }
 
-            set user [acs_user::get_user_info -user_id $result(user_id)]
+            set user [acs_user::get_user_info -user_id [dict get $result user_id]]
             set authority_id [dict get $user authority_id]
             set username     [dict get $user username]
             set user_id [acs_user::get_by_username -authority_id $authority_id -username $username]
-            aa_equals "Username from apis matches" $result(user_id) $user_id
+            aa_equals "Username from apis matches" [dict get $result user_id] $user_id
 
             ## Portrait api test
             set old_portrait_id [acs_user::get_portrait_id -user_id $user_id]
@@ -109,79 +109,68 @@ aa_register_case \
             ###
 
             # Successful authentication
-            array unset result
-            array set result [auth::authenticate \
-                                  -authority_id $authority_id \
-                                  -no_cookie \
-                                  -username $username \
-                                  -password $password]
+            set result [auth::authenticate \
+                            -authority_id $authority_id \
+                            -no_cookie \
+                            -username $username \
+                            -password $password]
 
-            aa_log "Result: [array get result]"
+            aa_log "Result: $result"
 
-            aa_equals "auth_status for successful authentication" $result(auth_status) "ok"
+            aa_equals "auth_status for successful authentication" [dict get $result auth_status] "ok"
 
             # Failed authentications
             # Incorrect password
-            array unset auth_info
-            array set auth_info \
-                [auth::authenticate \
-                     -authority_id $authority_id \
-                     -no_cookie \
-                     -username $username \
-                     -password "blabla"]
+            set auth_info [auth::authenticate \
+                               -authority_id $authority_id \
+                               -no_cookie \
+                               -username $username \
+                               -password "blabla"]
 
-            aa_equals "auth_status for bad password authentication" $auth_info(auth_status) "bad_password"
-            aa_true "auth_message for bad password authentication" {$auth_info(auth_message) ne ""}
+            aa_equals "auth_status for bad password authentication" [dict get $auth_info auth_status] "bad_password"
+            aa_true "auth_message for bad password authentication" {[dict get $auth_info auth_message] ne ""}
 
             # Blank password
-            array unset auth_info
-            array set auth_info \
-                [auth::authenticate \
-                     -authority_id $authority_id \
-                     -no_cookie \
-                     -username $username \
-                     -password ""]
+            set auth_info [auth::authenticate \
+                               -authority_id $authority_id \
+                               -no_cookie \
+                               -username $username \
+                               -password ""]
 
-            aa_equals "auth_status for blank password authentication" $auth_info(auth_status) "bad_password"
-            aa_true "auth_message for blank password authentication" {$auth_info(auth_message) ne ""}
+            aa_equals "auth_status for blank password authentication" [dict get $auth_info auth_status] "bad_password"
+            aa_true "auth_message for blank password authentication" {[dict get $auth_info auth_message] ne ""}
 
             # Incorrect username
-            array unset auth_info
-            array set auth_info \
-                [auth::authenticate \
-                     -authority_id $authority_id \
-                     -no_cookie \
-                     -username "blabla" \
-                     -password $password]
+            set auth_info [auth::authenticate \
+                               -authority_id $authority_id \
+                               -no_cookie \
+                               -username "blabla" \
+                               -password $password]
 
-            aa_equals "auth_status for bad username authentication" $auth_info(auth_status) "no_account"
-            aa_true "auth_message for bad username authentication" {$auth_info(auth_message) ne ""}
+            aa_equals "auth_status for bad username authentication" [dict get $auth_info auth_status] "no_account"
+            aa_true "auth_message for bad username authentication" {[dict get $auth_info auth_message] ne ""}
 
             # Blank username
-            array unset auth_info
-            array set auth_info \
-                [auth::authenticate \
-                     -authority_id $authority_id \
-                     -no_cookie \
-                     -username "" \
-                     -password $password]
+            set auth_info [auth::authenticate \
+                               -authority_id $authority_id \
+                               -no_cookie \
+                               -username "" \
+                               -password $password]
 
-            aa_equals "auth_status for blank username authentication" $auth_info(auth_status) "auth_error"
-            aa_true "auth_message for blank username authentication" {$auth_info(auth_message) ne ""}
+            aa_equals "auth_status for blank username authentication" [dict get $auth_info auth_status] "auth_error"
+            aa_true "auth_message for blank username authentication" {[dict get $auth_info auth_message] ne ""}
 
             # Authority bogus
-            array unset auth_info
             aa_silence_log_entries -severities error {
-                array set auth_info \
-                    [auth::authenticate \
-                         -no_cookie \
-                         -authority_id -123 \
-                         -username $username \
-                         -password $password]
+                set auth_info [auth::authenticate \
+                                   -no_cookie \
+                                   -authority_id -123 \
+                                   -username $username \
+                                   -password $password]
             }
 
-            aa_equals "auth_status for bad authority_id authentication" $auth_info(auth_status) "failed_to_connect"
-            aa_true "auth_message for bad authority_id authentication" {$auth_info(auth_message) ne ""}
+            aa_equals "auth_status for bad authority_id authentication" [dict get $auth_info auth_status] "failed_to_connect"
+            aa_true "auth_message for bad authority_id authentication" {[dict get $auth_info auth_message] ne ""}
 
             # Closed account status
             set closed_states {banned rejected "needs approval" deleted}
@@ -189,18 +178,16 @@ aa_register_case \
                 acs_user::change_state -user_id $user_id -state $closed_state
 
                 # Successful authentication
-                array unset auth_info
-                array set auth_info \
-                    [auth::authenticate \
-                         -authority_id $authority_id \
-                         -no_cookie \
-                         -username $username \
-                         -password $password]
+                set auth_info [auth::authenticate \
+                                   -authority_id $authority_id \
+                                   -no_cookie \
+                                   -username $username \
+                                   -password $password]
 
-                aa_equals "auth_status for '$closed_state' user" $auth_info(auth_status) "ok"
-                if {$auth_info(auth_status) eq "ok"} {
+                aa_equals "auth_status for '$closed_state' user" [dict get $auth_info auth_status] "ok"
+                if {[dict get $auth_info auth_status] eq "ok"} {
                     # Only perform this test if auth_status is ok, otherwise account_status won't be set
-                    aa_equals "account_status for '$closed_state' user" $auth_info(account_status) "closed"
+                    aa_equals "account_status for '$closed_state' user" [dict get $auth_info account_status] "closed"
                 }
             }
 
@@ -237,53 +224,48 @@ aa_register_case -cats {api} -procs {
         -test_code {
 
             # Successful creation
-            array set user_info [acs::test::user::create]
-            set user [acs_user::get -user_id $user_info(user_id)]
+            set user_info [acs::test::user::create]
+            set user [acs_user::get -user_id [dict get $user_info user_id]]
             set username     [dict get $user username]
             set email        [dict get $user email]
             set authority_id [dict get $user authority_id]
 
-            aa_true "returns creation_status" [info exists user_info(creation_status)]
+            aa_true "returns creation_status" [dict exists $user_info creation_status]
 
-            if { [info exists user_info(creation_status)] } {
-                aa_equals "creation_status for successful creation" $user_info(creation_status) "ok"
+            if { [dict exists $user_info creation_status] } {
+                aa_equals "creation_status for successful creation" [dict get $user_info creation_status] "ok"
 
-                if { $user_info(creation_status) ne "ok" } {
-                    aa_log "Element messages: '$user_info(element_messages)'"
-                    aa_log "Element messages: '$user_info(creation_message)'"
+                if { [dict get $user_info creation_status] ne "ok" } {
+                    aa_log "Element messages:  '[dict get $user_info element_messages]'"
+                    aa_log "Creation messages: '[dict get $user_info creation_message]'"
                 }
             }
 
             aa_false "No creation_message for successful creation" \
-                {[info exists user_info(creation_message)] && $user_info(creation_message) ne ""}
-            aa_true "returns user_id" [info exists user_info(user_id)]
+                {[dict exists $user_info creation_message] && [dict get $user_info creation_message] ne ""}
 
-            if { [info exists user_info(user_id)] } {
-                aa_true "returns integer user_id ([array get user_info])" [regexp {[1-9][0-9]*} $user_info(user_id)]
-            }
+            aa_true "returns integer user_id ($user_info)" [regexp {[1-9][0-9]*} [dict get $user_info user_id]]
 
             # Duplicate email and username
-            array unset user_info
-            array set user_info [auth::create_user \
-                                     -username $username \
-                                     -email $email \
-                                     -authority_id $authority_id \
-                                     -first_names "Test3" \
-                                     -last_name "User" \
-                                     -password "changeme" \
-                                     -secret_question "no_question" \
-                                     -secret_answer "no_answer"]
+            set user_info [auth::create_user \
+                               -username $username \
+                               -email $email \
+                               -authority_id $authority_id \
+                               -first_names "Test3" \
+                               -last_name "User" \
+                               -password "changeme" \
+                               -secret_question "no_question" \
+                               -secret_answer "no_answer"]
 
-            aa_equals "creation_status for duplicate email and username" $user_info(creation_status) "data_error"
+            aa_equals "creation_status for duplicate email and username" [dict get $user_info creation_status] "data_error"
 
-            aa_true "element_messages exists" [info exists user_info(element_messages)]
-            if { [info exists user_info(element_messages)] && $user_info(element_messages) ne "" } {
-                array unset elm_msgs
-                array set elm_msgs $user_info(element_messages)
+            aa_true "element_messages exists" [dict exists $user_info element_messages]
+            if { [dict exists $user_info element_messages] && [dict get $user_info element_messages] ne "" } {
+                set elm_msgs [dict get $user_info element_messages]
                 aa_true "element_message for username exists" \
-                    {[info exists elm_msgs(username)] && $elm_msgs(username) ne ""}
+                    {[dict exists $elm_msgs username] && [dict exists $elm_msgs username] ne ""}
                 aa_true "element_message for email exists" \
-                    {[info exists elm_msgs(email)] && $elm_msgs(email) ne ""}
+                    {[dict exists $elm_msgs email] && [dict exists $elm_msgs email] ne ""}
             }
             set user_id [acs_user::get_by_username -authority_id $authority_id -username $username]
             if { $user_id ne "" } {
@@ -291,33 +273,31 @@ aa_register_case -cats {api} -procs {
             }
 
             # Missing first_names, last_name, email
-            array unset user_info
-            array set user_info [auth::create_user \
-                                     -authority_id $authority_id \
-                                     -username "auth_create_user2" \
-                                     -email "" \
-                                     -first_names "" \
-                                     -last_name "" \
-                                     -password "changeme" \
-                                     -secret_question "no_question" \
-                                     -secret_answer "no_answer"]
+            set user_info [auth::create_user \
+                               -authority_id $authority_id \
+                               -username "auth_create_user2" \
+                               -email "" \
+                               -first_names "" \
+                               -last_name "" \
+                               -password "changeme" \
+                               -secret_question "no_question" \
+                               -secret_answer "no_answer"]
 
-            aa_equals "creation_status is data_error" $user_info(creation_status) "data_error"
+            aa_equals "creation_status is data_error" [dict get $user_info creation_status] "data_error"
 
-            aa_true "element_messages exists" [info exists user_info(element_messages)]
-            if { [info exists user_info(element_messages)] && $user_info(element_messages) ne "" } {
-                array unset elm_msgs
-                array set elm_msgs $user_info(element_messages)
+            aa_true "element_messages exists" [dict exists $user_info element_messages]
+            if { [dict exists $user_info element_messages] && [dict get $user_info element_messages] ne "" } {
+                set elm_msgs [dict get $user_info element_messages]
 
                 if { [aa_true "element_message(email) exists" \
-                          {[info exists elm_msgs(email)] && $elm_msgs(email) ne ""} ]} {
-                    aa_log "element_message(email) = $elm_msgs(email)"
+                          {[dict exists $elm_msgs email] && [dict get $elm_msgs email] ne ""} ]} {
+                    aa_log "element_message(email) = [dict get $elm_msgs email]"
                 }
-                if { [aa_true "element_message(first_names) exists" [info exists elm_msgs(first_names)] ]} {
-                    aa_log "element_message(first_names) = $elm_msgs(first_names)"
+                if { [aa_true "element_message(first_names) exists" [dict exists $elm_msgs first_names] ]} {
+                    aa_log "element_message(first_names) = [dict get $elm_msgs first_names]"
                 }
-                if { [aa_true "element_message(last_name) exists" [info exists elm_msgs(last_name)] ]} {
-                    aa_log "element_message(last_name) = $elm_msgs(last_name)"
+                if { [aa_true "element_message(last_name) exists" [dict exists $elm_msgs last_name] ]} {
+                    aa_log "element_message(last_name) = [dict get $elm_msgs last_name]"
                 }
             }
             set user_id [acs_user::get_by_username -authority_id $authority_id -username auth_create_user2]
@@ -326,32 +306,30 @@ aa_register_case -cats {api} -procs {
             }
 
             # Malformed email
-            array unset user_info
-            array set user_info [auth::create_user \
-                                     -authority_id $authority_id \
-                                     -username [ad_generate_random_string] \
-                                     -email "not an email" \
-                                     -first_names "[ad_generate_random_string]<[ad_generate_random_string]" \
-                                     -last_name "[ad_generate_random_string]<[ad_generate_random_string]" \
-                                     -password [ad_generate_random_string] \
-                                     -secret_question [ad_generate_random_string] \
-                                     -secret_answer [ad_generate_random_string]]
+            set user_info [auth::create_user \
+                               -authority_id $authority_id \
+                               -username [ad_generate_random_string] \
+                               -email "not an email" \
+                               -first_names "[ad_generate_random_string]<[ad_generate_random_string]" \
+                               -last_name "[ad_generate_random_string]<[ad_generate_random_string]" \
+                               -password [ad_generate_random_string] \
+                               -secret_question [ad_generate_random_string] \
+                               -secret_answer [ad_generate_random_string]]
 
-            aa_equals "creation_status is data_error" $user_info(creation_status) "data_error"
+            aa_equals "creation_status is data_error" [dict get $user_info creation_status] "data_error"
 
-            aa_true "element_messages exists" [info exists user_info(element_messages)]
-            if { [info exists user_info(element_messages)] && $user_info(element_messages) ne "" } {
-                array unset elm_msgs
-                array set elm_msgs $user_info(element_messages)
+            aa_true "element_messages exists" [dict exists $user_info element_messages]
+            if { [dict exists $user_info element_messages] && [dict get $user_info element_messages] ne "" } {
+                set elm_msgs [dict get $user_info element_messages]
 
-                if { [aa_true "element_message(email) exists" [info exists elm_msgs(email)]] } {
-                    aa_log "element_message(email) = $elm_msgs(email)"
+                if { [aa_true "element_message(email) exists" [dict exists $elm_msgs email]] } {
+                    aa_log "element_message(email) = [dict get $elm_msgs email]"
                 }
-                if { [aa_true "element_message(first_names) exists" [info exists elm_msgs(first_names)]] } {
-                    aa_log "element_message(first_names) = $elm_msgs(first_names)"
+                if { [aa_true "element_message(first_names) exists" [dict exists $elm_msgs first_names]] } {
+                    aa_log "element_message(first_names) = [dict get $elm_msgs first_names]"
                 }
-                if { [aa_true "element_message(last_name) exists" [info exists elm_msgs(last_name)]] } {
-                    aa_log "element_message(last_name) = $elm_msgs(last_name)"
+                if { [aa_true "element_message(last_name) exists" [dict exists $elm_msgs last_name]] } {
+                    aa_log "element_message(last_name) = [dict get $elm_msgs last_name]"
                 }
             }
 
@@ -395,12 +373,12 @@ aa_register_case \
     auth_get_registration_elements {
     Test the auth::get_registration_elements proc
 } {
-    array set element_array [auth::get_registration_elements]
+    set elements [auth::get_registration_elements]
 
-    aa_log "Elements array: '[array get element_array]'"
+    aa_log "Elements: '$elements'"
 
-    aa_true "there is more than one required element" {[llength $element_array(required)] > 0}
-    aa_true "there is more than one optional element" {[llength $element_array(optional)] > 0}
+    aa_true "there is more than one required element" {[llength [dict get $elements required]] > 0}
+    aa_true "there is more than one optional element" {[llength [dict get $elements optional]] > 0}
 }
 
 aa_register_case  \
@@ -496,10 +474,10 @@ aa_register_case  \
         -rollback \
         -test_code {
 
-            array set user_info [acs::test::user::create]
-            set email    $user_info(email)
-            set password $user_info(password)
-            set user_id  $user_info(user_id)
+            set user_info [acs::test::user::create]
+            set email    [dict get $user_info email]
+            set password [dict get $user_info password]
+            set user_id  [dict get $user_info user_id]
 
             set ::ns_sendmail_to {ns_sendmail_UNCALLED}
 
@@ -509,12 +487,12 @@ aa_register_case  \
             # password_status "ok"
             set old_password $password
             set new_password "changedyou"
-            array set auth_info [auth::password::change \
-                                     -user_id $user_id \
-                                     -old_password $old_password \
-                                     -new_password $new_password]
+            set auth_info [auth::password::change \
+                               -user_id $user_id \
+                               -old_password $old_password \
+                               -new_password $new_password]
             aa_equals "Should return 'ok'" \
-                $auth_info(password_status) \
+                [dict get $auth_info password_status] \
                 "ok"
 
             # Check that user gets email about changed password
@@ -569,17 +547,17 @@ aa_register_case  \
                 #
                 # Handle case without errors, when mail is not configured.
                 #
-                array set password_result [auth::password::recover_password \
-                                               -authority_id $test_vars(authority_id) \
-                                               -username $test_vars(username)]
+                set password_result [auth::password::recover_password \
+                                         -authority_id $test_vars(authority_id) \
+                                         -username $test_vars(username)]
             }
             if {[::acs_mail_lite::configured_p]} {
-                aa_equals "status ok" $password_result(password_status) "ok"
+                aa_equals "status ok" [dict get $password_result password_status] "ok"
             } else {
-                aa_equals "SMTP host not configured" $password_result(password_status) "failed_to_connect"
+                aa_equals "SMTP host not configured" [dict get $password_result password_status] "failed_to_connect"
             }
 
-            aa_true "nonempty message" {$password_result(password_message) ne ""}
+            aa_true "nonempty message" {[dict get $password_result password_message] ne ""}
         }
 }
 
@@ -628,17 +606,17 @@ aa_register_case  \
         #
         # Handle case without errors, when mail is not configured.
         #
-        array set result [auth::password::retrieve \
-                              -authority_id $test_vars(authority_id) \
-                              -username $test_vars(username)]
+        set result [auth::password::retrieve \
+                        -authority_id $test_vars(authority_id) \
+                        -username $test_vars(username)]
     }
     if {[::acs_mail_lite::configured_p]} {
-        aa_equals "retrieve pwd from local auth" $result(password_status) "ok"
+        aa_equals "retrieve pwd from local auth" [dict get $result password_status] "ok"
     } else {
-        aa_equals "SMTP host not configured" $result(password_status) "failed_to_connect"
+        aa_equals "SMTP host not configured" [dict get $result password_status] "failed_to_connect"
     }
 
-    aa_true "must have message on failure" {$result(password_message) ne ""}
+    aa_true "must have message on failure" {[dict get $result password_message] ne ""}
 }
 
 aa_register_case  \
@@ -668,39 +646,38 @@ aa_register_case  \
         -rollback \
         -test_code {
 
-            array set create_result [acs::test::user::create]
-            array set test_user [acs_user::get -user_id $create_result(user_id)]
-            set test_user(email)    $create_result(email)
-            set test_user(password) $create_result(password)
+            set create_result [acs::test::user::create]
+            set test_user [acs_user::get -user_id [dict get $create_result user_id]]
+            dict set test_user email    [dict get $create_result email]
+            dict set test_user password [dict get $create_result password]
 
-            aa_equals "status should be ok for creating user" $create_result(creation_status) "ok"
-            if { $create_result(creation_status) ne "ok" } {
-                aa_log "Create-result: '[array get create_result]'"
+            aa_equals "status should be ok for creating user" [dict get $create_result creation_status]  "ok"
+            if { [dict get $create_result creation_status] ne "ok" } {
+                aa_log "Create-result: '$create_result'"
             }
 
-            array set reset_result [auth::password::reset \
-                                        -authority_id $test_user(authority_id) \
-                                        -username $test_user(username)]
-            aa_equals "status should be ok for resetting password" $reset_result(password_status) "ok"
-            aa_true "Result contains new password" [info exists reset_result(password)]
+            set reset_result [auth::password::reset \
+                                  -authority_id [dict get $test_user authority_id] \
+                                  -username [dict get $test_user username]]
+            aa_equals "status should be ok for resetting password" [dict get $reset_result password_status] "ok"
+            aa_true "Result contains new password" [dict exists $reset_result password]
 
-            if { [info exists reset_result(password)] } {
-                array set auth_result [auth::authentication::authenticate \
-                                           -username $test_user(username) \
-                                           -authority_id $test_user(authority_id) \
-                                           -password $reset_result(password)]
-                aa_equals "can authenticate with new password" $auth_result(auth_status) "ok"
+            if { [dict exists $reset_result password] } {
+                set auth_result [auth::authentication::authenticate \
+                                     -username [dict get $test_user username] \
+                                     -authority_id [dict get $test_user authority_id] \
+                                     -password [dict get $reset_result password]]
+                aa_equals "can authenticate with new password" [dict get $auth_result auth_status] "ok"
 
-                array unset auth_result
-                array set auth_result [auth::authentication::authenticate \
-                                           -username $test_user(username) \
-                                           -authority_id $test_user(authority_id) \
-                                           -password $test_user(password)]
-                aa_false "cannot authenticate with old password" [string equal $auth_result(auth_status) "ok"]
+                set auth_result [auth::authentication::authenticate \
+                                     -username [dict get $test_user username] \
+                                     -authority_id [dict get $test_user authority_id] \
+                                     -password [dict get $test_user password]]
+                aa_false "cannot authenticate with old password" {[dict get $auth_result auth_status] eq "ok"}
             }
             set user_id [acs_user::get_by_username \
-                             -authority_id $test_user(authority_id) \
-                             -username     $test_user(username)]
+                             -authority_id [dict get $test_user authority_id] \
+                             -username     [dict get $test_user username]]
             if { $user_id ne "" } {
                 acs_user::delete -user_id $user_id
             }
@@ -870,9 +847,7 @@ aa_register_case  \
 
             set sync_retrieve_impl_id [acs_sc::impl::get_id -owner acs-authentication -name HTTPGet]
 
-            array set parameters_array [auth::driver::get_parameters -impl_id $sync_retrieve_impl_id]
-
-            set parameters [array names parameters_array]
+            set parameters [dict keys [auth::driver::get_parameters -impl_id $sync_retrieve_impl_id]]
 
             aa_true "List of parameters is not empty" {[llength $parameters] != 0}
 
@@ -892,17 +867,17 @@ aa_register_case  \
 
             # Get and verify values
 
-            array set retrieved_value [auth::driver::get_parameter_values \
-                                            -authority_id $authority(authority_id) \
-                                            -impl_id $sync_retrieve_impl_id]
+            set retrieved_value [auth::driver::get_parameter_values \
+                                     -authority_id $authority(authority_id) \
+                                     -impl_id $sync_retrieve_impl_id]
 
             foreach parameter $parameters {
-                if { [aa_true "Parameter $parameter exists" [info exists retrieved_value($parameter)]] } {
-                    aa_equals "Parameter value retrieved is the one we set" $retrieved_value($parameter) $value($parameter)
+                if { [aa_true "Parameter $parameter exists" [dict exists $retrieved_value $parameter]] } {
+                    aa_equals "Parameter value retrieved is the one we set" [dict get $retrieved_value $parameter] $value($parameter)
                 }
-                array unset retrieved_value $parameter
+                dict unset retrieved_value $parameter
             }
-            aa_true "Only the right parameters were retrieved" {[array size retrieved_value] == 0}
+            aa_true "Only the right parameters were retrieved" {[llength $retrieved_value] == 0}
         }
 }
 
@@ -939,8 +914,8 @@ aa_register_case  \
             parameter::set_value -parameter UseEmailForLoginP -package_id [ad_acs_kernel_id] -value 0
             aa_false "Param UseEmailForLoginP 0 -> false" [auth::UseEmailForLoginP]
 
-            array set elms [auth::get_registration_elements]
-            aa_false "Registration elements do contain username" {"username" ni [concat $elms(required) $elms(optional)]}
+            set elms [auth::get_registration_elements]
+            aa_false "Registration elements do contain username" {"username" ni [concat [dict get $elms required] [dict get $elms optional]]}
 
             parameter::set_value -parameter UseEmailForLoginP -package_id [ad_acs_kernel_id] -value {}
             aa_true "Param UseEmailForLoginP {} -> true" [auth::UseEmailForLoginP]
@@ -955,8 +930,8 @@ aa_register_case  \
             aa_true "Param UseEmailForLoginP 1 -> true" [auth::UseEmailForLoginP]
 
             # GetElements
-            array set elms [auth::get_registration_elements]
-            aa_true "Registration elements do NOT contain username" {"username" ni [concat $elms(required) $elms(optional)]}
+            set elms [auth::get_registration_elements]
+            aa_true "Registration elements do NOT contain username" {"username" ni [concat [dict get $elms required] [dict get $elms optional]]}
 
             set authority_id [auth::authority::get_id -short_name "acs_testing"]
 
@@ -965,33 +940,32 @@ aa_register_case  \
             set password [ad_generate_random_string]
 
             ad_try {
-                array set result [auth::create_user \
-                                      -authority_id $authority_id \
-                                      -email $email \
-                                      -password $password \
-                                      -first_names [ad_generate_random_string] \
-                                      -last_name [ad_generate_random_string] \
-                                      -secret_question [ad_generate_random_string] \
-                                      -secret_answer [ad_generate_random_string] \
-                                      -screen_name [ad_generate_random_string]]
+                set result [auth::create_user \
+                                -authority_id $authority_id \
+                                -email $email \
+                                -password $password \
+                                -first_names [ad_generate_random_string] \
+                                -last_name [ad_generate_random_string] \
+                                -secret_question [ad_generate_random_string] \
+                                -secret_answer [ad_generate_random_string] \
+                                -screen_name [ad_generate_random_string]]
             } on ok {r} {
                 aa_true "auth::create_user with no username succeeded" 1
             } on error {errorMsg} {
                 aa_false  "auth::create_user with no username failed: '$errorMsg'" 1
-                set result(creation_status) "NOT OK"
+                dict set result creation_status "NOT OK"
             }
 
-            aa_equals "Registration OK" $result(creation_status) "ok"
+            aa_equals "Registration OK" [dict get $result creation_status] "ok"
 
             # Authenticate as that user
-            array unset result
-            array set result [auth::authenticate \
-                                  -authority_id $authority_id \
-                                  -email $email \
-                                  -password $password \
-                                  -no_cookie]
+            set result [auth::authenticate \
+                            -authority_id $authority_id \
+                            -email $email \
+                            -password $password \
+                            -no_cookie]
 
-            aa_equals "Authentication OK" $result(auth_status) "ok"
+            aa_equals "Authentication OK" [dict get $result auth_status] "ok"
 
         } -teardown_code {
             ad_parameter_cache -delete [ad_acs_kernel_id] UseEmailForLoginP
@@ -1027,28 +1001,26 @@ aa_register_case  \
 
             set ::ns_sendmail_to {}
 
-            array set result [acs::test::user::create]
-            set user [acs_user::get_user_info -user_id $result(user_id)]
+            set result [acs::test::user::create]
+            set user_id [dict get $result user_id]
+            set user [acs_user::get_user_info -user_id $user_id]
             set authority_id [dict get $user authority_id]
             set username     [dict get $user username]
-            set email        $result(email)
-            set password     $result(password)
+            set email        [dict get $result email]
+            set password     [dict get $result password]
 
-            aa_equals "Create user OK" $result(creation_status) "ok"
-
-            set user_id $result(user_id)
+            aa_equals "Create user OK" [dict get $result creation_status] "ok"
 
             aa_equals "Authority from api is correct" [db_string sel { select authority_id from users where user_id = :user_id }] $authority_id
 
             # Change password
-            array unset result
             set new_password [ad_generate_random_string]
-            array set result [auth::password::change \
-                                  -user_id $user_id \
-                                  -old_password $password \
-                                  -new_password $new_password]
-            if { ![aa_equals "Password change OK" $result(password_status) "ok"] } {
-                aa_log "Message was: $result(password_message)"
+            set result [auth::password::change \
+                            -user_id $user_id \
+                            -old_password $password \
+                            -new_password $new_password]
+            if { ![aa_equals "Password change OK" [dict get $result password_status] "ok"] } {
+                aa_log "Message was: [dict get $result password_message]"
             }
 
             # Check that we get email
@@ -1059,13 +1031,12 @@ aa_register_case  \
             parameter::set_value -parameter EmailAccountOwnerOnPasswordChangeP -package_id [ad_acs_kernel_id] -value 0
 
             # Change password
-            array unset result
             set new_new_password [ad_generate_random_string]
-            array set result [auth::password::change \
-                                  -user_id $user_id \
-                                  -old_password $new_password \
-                                  -new_password $new_new_password]
-            aa_equals "Password change OK" $result(password_status) "ok"
+            set result [auth::password::change \
+                            -user_id $user_id \
+                            -old_password $new_password \
+                            -new_password $new_new_password]
+            aa_equals "Password change OK" [dict get $result password_status] "ok"
 
             # Check that we do not get an email
             aa_equals "Email NOT sent to user" $::ns_sendmail_to {ns_sendmail_UNCALLED}
@@ -1127,17 +1098,17 @@ aa_register_case  \
             array set values $broken_values
             aa_true "Trying to update non-existing columns returns an error" \
                 [catch {auth::authority::edit -authority_id $authority_id -array values}]
-            array unset values
+            unset values
 
             array set values $illegal_values
             aa_true "Trying to update illegal columns columns returns an error" \
                 [catch {auth::authority::edit -authority_id $authority_id -array values}]
-            array unset values
+            unset values
 
             array set values $valid_values
             aa_false "Update valid columns and values is fine" \
                 [catch {auth::authority::edit -authority_id $authority_id -array values}]
-            array unset values
+            unset values
 
             auth::authority::get -authority_id $authority_id -array updated_values
             foreach {key value} $valid_values {
