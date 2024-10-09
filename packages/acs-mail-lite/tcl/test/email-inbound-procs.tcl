@@ -36,7 +36,7 @@ aa_register_case \
            ns_log Notice "aa_register_case:acs_mail_lite_inbound_procs_check"
 
            set a_list [acs_mail_lite::sched_parameters]
-           array set params_def $a_list
+           set params_def $a_list
 
            set bools_list [list reprocess_old_p]
            set integer_list [list sredpcs_override max_concurrent \
@@ -52,7 +52,7 @@ aa_register_case \
                                       b_unscored "b nother value in quotes" ] \
                                  [list a-dash {a val in parens} \
                                       b_underscore {value in parens} ] ]
-            foreach p [array names params_def] {
+           foreach p [dict keys $params_def] {
                 # test setting of each parameter separately
                 set param "-"
                 append param $p
@@ -73,50 +73,49 @@ aa_register_case \
                     set val [lindex $nv_list_list $val_idx]
                 }
                 aa_log "r41. Testing change of parameter '${p}' from \
- '$params_def(${p})' to '${val}'"
+ '[dict get $params_def $p]' to '${val}'"
 
                 set b_list [acs_mail_lite::sched_parameters $param $val]
                 aa_log "param $param val $val b_list $b_list"
-                array unset params_new
-                array set params_new $b_list
-                foreach pp [array names params_def] {
+                set params_new $b_list
+                foreach pp [dict keys $params_def] {
                     if { $pp eq $p } {
                         if { $pp in $bools_list } {
                             aa_equals "r48 Changed sched_parameter '${pp}' \
-  value '$params_def(${pp})' to '${val}' set" \
-                                [string is true -strict $params_new(${pp})] \
+  value '[dict get $params_def $pp]' to '${val}' set" \
+                                [string is true -strict [dict get $params_new $pp]] \
                                 [string is true -strict $val]
                         } else {
-                            if { $params_new(${pp}) eq $params_def(${pp}) } {
+                            if { [dict get $params_new $pp] eq [dict get $params_def $pp] } {
                                 if { $pp eq "mpri_max" \
-                                         && $val < $params_def(mpri_min) } {
+                                         && $val < [dict get $params_def mpri_min] } {
                                     aa_log "r54a mpri_max<mpri_min no change"
                                 } elseif { $pp eq "mpri_min" \
-                                               && $val > $params_def(mpri_max) } {
+                                               && $val > [dict get $params_def mpri_max] } {
                                     aa_log "r54b mpri_min>mpri_max no change."
                                 } else {
                                     aa_log "r55 '${pp}' no change."
                                 }
                             } else {
                                 aa_equals "r56 Changed sched_parameter \
- '${pp}' value '$params_def(${pp})' to '${val}' set" $params_new(${pp}) $val
+ '${pp}' value '[dict get $params_def $pp]' to '${val}' set" [dict get $params_new $pp] $val
 
                             }
                         }
                     } else {
                         if { $pp in $bools_list } {
                             aa_equals "r62 Unchanged sched_parameter '${pp}' \
-  value '$params_def(${pp})' to '$params_new(${pp})' set" \
-                                [string is true -strict $params_new(${pp})] \
-                                [string is true -strict $params_def(${pp})]
+  value '[dict get $params_def $pp]' to '[dict get $params_new $pp]' set" \
+                                [string is true -strict [dict get $params_new $pp]] \
+                                [string is true -strict [dict get $params_def $pp]]
                         } else {
                             aa_equals "r67 Unchanged sched_parameter '${pp}' \
-  value '$params_def(${pp})' to '$params_new(${pp})' set" \
-                                $params_new(${pp}) $params_def(${pp})
+  value '[dict get $params_def $pp]' to '[dict get $params_new $pp]' set" \
+                                [dict get $params_new $pp] [dict get $params_def $pp]
                         }
                     }
                 }
-                array set params_def $b_list
+                set params_def $b_list
             }
 
             set instance_id [ad_conn package_id]
@@ -166,9 +165,8 @@ aa_register_case \
                 set c_list [acs_mail_lite::sched_parameters \
                                 -mpri_min $p_min \
                                 -mpri_max $p_max]
-                array set c_arr $c_list
-                set p_min $c_arr(mpri_min)
-                set p_max $c_arr(mpri_max)
+                set p_min [dict get $c_list mpri_min]
+                set p_max [dict get $c_list mpri_max]
 
                 aa_log "r115 p_min '${p_min}' p_max '${p_max}'"
 
@@ -727,15 +725,12 @@ aa_register_case \
                                            -other $other ]
            }
            for {set i 0} {$i < 12} {incr i } {
-               array unset e_arr
                aa_log "r701 test message-id '$m_arr(msg_id,${i})'"
                set e_list [acs_mail_lite::unique_id_parse \
                                -message_id $m_arr(msg_id,${i}) ]
-               array set e_arr $e_list
                foreach field $fields_list {
-                       aa_equals "r703 test acs_mail_lite::unique_id \
- i '${i}' field '${field}'" $e_arr(${field}) $m_arr(${field},${i})
-
+                   aa_equals "r703 test acs_mail_lite::unique_id i '${i}' field '${field}'" \
+                       [dict get $e_list $field] $m_arr(${field},${i})
                }
 
            }
