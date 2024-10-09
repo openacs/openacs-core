@@ -26,16 +26,16 @@ aa_register_case -cats {smoke production_safe} -procs {
         nsshell
     }
     foreach p [lsort -dictionary [nsv_array names api_proc_doc]] {
-        array set pa [nsv_get api_proc_doc $p]
-        if { [info exists pa(protection)]
-             && "public" in $pa(protection)
-             && !($pa(deprecated_p) || $pa(warn_p))
+        set pa [nsv_get api_proc_doc $p]
+        if { [dict exists $pa protection]
+             && "public" in [dict get $pa protection]
+             && !([dict get $pa deprecated_p] || [dict get $pa warn_p])
          } {
             incr count
-            if { [string is space [join $pa(main)]] &&
-                 (![info exists pa(return)] || [string is space [join $pa(return)]]) &&
-                 (![info exists pa(param)] || [string is space [join $pa(param)]]) &&
-                 (![info exists pa(see)] || [string is space [join $pa(see)]])
+            if { [string is space [join [dict get $pa main]]] &&
+                 (![dict exists $pa return] || [string is space [join [dict get $pa return]]]) &&
+                 (![dict exists $pa param] || [string is space [join [dict get $pa param]]]) &&
+                 (![dict exists $pa see] || [string is space [join [dict get $pa see]]])
              } {
                 if {[regexp "^(\\s+Class ::)?([join $ignored_namespaces |])::.*\$" $p m]} {
                     set test_result warning
@@ -47,7 +47,6 @@ aa_register_case -cats {smoke production_safe} -procs {
                 incr good
             }
         }
-        array unset pa
     }
     aa_log "Found $good public procs with proper documentation (out of $count checked)"
 
@@ -175,12 +174,12 @@ aa_register_case -cats {smoke production_safe} -error_level warning -procs {
     set count 0
     set good 0
     foreach p [lsort -dictionary [nsv_array names api_proc_doc]] {
-        array set pa [nsv_get api_proc_doc $p]
-        if { ([info exists pa(deprecated_p)] && $pa(deprecated_p))
-             || ([info exists pa(warn_p)] && $pa(warn_p))
+        set pa [nsv_get api_proc_doc $p]
+        if { ([dict exists $pa deprecated_p] && [dict get $pa deprecated_p])
+             || ([dict exists $pa warn_p] && [dict get $pa warn_p])
          } {
             incr count
-            if { ![info exists pa(see)] || [string is space $pa(see)] } {
+            if { ![dict exists $pa see] || [string is space [dict get $pa see]] } {
                 aa_silence_log_entries -severities warning {
                     aa_log_result fail "No @see for deprecated proc [api_proc_link $p]"
                 }
@@ -188,7 +187,6 @@ aa_register_case -cats {smoke production_safe} -error_level warning -procs {
                 incr good
             }
         }
-        array unset pa
     }
     aa_log "Found $good of $count procs checked"
 }

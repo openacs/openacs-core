@@ -129,34 +129,36 @@ aa_register_case \
         lappend package_keys $package_key
 
         set errp 0
-        if {  [catch {array set version [apm_read_package_info_file $spec_file]} errMsg] } {
+        if {  [catch {
+            set version [apm_read_package_info_file $spec_file]
+        } errMsg] } {
             aa_log_result fail "$spec_file returned $errMsg"
             set errp 1
         } else {
             regexp {packages/([^/]*)/} $spec_file match key
-            if {$version(package.key) ne $key } {
-                aa_log_result fail "MISMATCH DIRECTORY/PACKAGE KEY: $spec_file $version(package.key) != $key"
+            if {[dict get $version package.key] ne $key } {
+                aa_log_result fail "MISMATCH DIRECTORY/PACKAGE KEY: $spec_file [dict get $version package.key] != $key"
                 set errp 1
             }
             # check on the requires, provides, etc stuff.
-            if {$version(provides) eq ""
-                && [string equal $version(package.type) apm_service] } {
+            if {[dict get $version provides] eq ""
+                && [dict get $version package.type] eq "apm_service" } {
                 aa_log_result fail "$spec_file SERVICE MISSING PROVIDES: $key"
                 set errp 1
-            } elseif { $version(provides) ne ""} {
-                if { $version(name) ne [lindex $version(provides) 0 1] } {
-                    aa_log_result fail "$spec_file: MISMATCH PROVIDES VERSION: $version(provides) $version(name)"
+            } elseif { [dict get $version provides] ne ""} {
+                if { [dict get $version name] ne [lindex [dict get $version provides] 0 1] } {
+                    aa_log_result fail "$spec_file: MISMATCH PROVIDES VERSION: [dict get $version provides] [dict get $version name]"
                     set errp 1
                 }
-                if { $key ne [lindex $version(provides) 0 0] } {
-                    aa_log_result fail "$spec_file MISMATCH PROVIDES KEY: $key $version(provides)"
+                if { $key ne [lindex [dict get $version provides] 0 0] } {
+                    aa_log_result fail "$spec_file MISMATCH PROVIDES KEY: $key [dict get $version provides]"
                     set errp 1
                 }
             }
 
             # check for duplicate parameters
-            array unset params
-            foreach param $version(parameters) {
+            unset -nocomplain params
+            foreach param [dict get $version parameters] {
                 set name [lindex $param 0]
                 if {[info exists params($name)]} {
                     aa_log_result fail "$spec_file: DUPLICATE PARAMETER: $name"
