@@ -88,8 +88,8 @@ ad_proc -private lang::test::check_import_result {
 
     # Check that we have the expected message properties in the database after upgrade
     foreach message_key [lsort [array names upgrade_expect]] {
-        array set expect_property $upgrade_expect($message_key)
-        switch $expect_property(message) {
+        set expected_property $upgrade_expect($message_key)
+        switch [dict get $expected_property message] {
             db {
                 set expect_message $db_messages($message_key)
             }
@@ -101,7 +101,7 @@ ad_proc -private lang::test::check_import_result {
             }
         }
 
-        array unset message_actual
+        unset -nocomplain message_actual
         lang::message::get \
             -package_key $package_key \
             -message_key $message_key \
@@ -114,15 +114,15 @@ ad_proc -private lang::test::check_import_result {
             $expect_message
         aa_equals "Import check: $message_key - lang_messages.deleted_p" \
             $message_actual(deleted_p) \
-            $expect_property(deleted_p)
+            [dict get $expected_property deleted_p]
         aa_equals "Import check: $message_key - lang_messages.conflict_p" \
             $message_actual(conflict_p) \
-            $expect_property(conflict_p)
+            [dict get $expected_property conflict_p]
         aa_equals "Import check: $message_key - lang_messages.upgrade_status" \
             $message_actual(upgrade_status) \
-            $expect_property(upgrade_status)
+            [dict get $expected_property upgrade_status]
 
-        if {$expect_property(sync_time) eq "not_null"} {
+        if {[dict get $expected_property sync_time] eq "not_null"} {
             aa_true "Import check: $message_key - lang_messages.sync_time not null" \
                 {$message_actual(sync_time) ne ""}
         } else {
@@ -323,18 +323,16 @@ ad_proc -private lang::test::execute_upgrade {
     aa_log [template::util::read_file $catalog_file_path]
 
     # Import the catalog file
-    array unset message_count
     aa_silence_log_entries -severities {error} {
-        array set message_count [lang::catalog::import -package_key $package_key -locales [list $locale]]
+        set message_count [lang::catalog::import -package_key $package_key -locales [list $locale]]
     }
-    aa_log "Imported messages: [array get message_count]"
+    aa_log "Imported messages: $message_count"
 
     # Check that we have the expected messages in the database
-    array unset actual_db_messages
-    array set actual_db_messages [lang::catalog::messages_in_db -package_key $package_key -locale $locale]
+    set actual_db_messages [lang::catalog::messages_in_db -package_key $package_key -locale $locale]
     foreach message_key [lsort [array names base_messages]] {
         aa_equals "Initial import: message for key $message_key in db same as in file" \
-            $actual_db_messages($message_key) $base_messages($message_key)
+            [dict get $actual_db_messages $message_key] $base_messages($message_key)
     }
 
     #----------------------------------------------------------------------
@@ -473,7 +471,7 @@ ad_proc -private lang::test::execute_upgrade {
     aa_log "locale=$locale ----------9. Check results of third upgrade (that resolutions are sticky)----------"
     foreach message_key [array names conflict_resolutions] {
 
-        array unset message_array
+        unset -nocomplain message_array
         lang::message::get \
             -package_key $package_key \
             -message_key $message_key \
@@ -523,7 +521,7 @@ aa_register_case \
     set tcl_backup_file "${tcl_file}${backup_file_suffix}"
 
     # The test messages to use for the catalog file
-    array set messages_array [list key_1 text_1 key_2 text_2 key_3 text_3]
+    set messages_array [list key_1 text_1 key_2 text_2 key_3 text_3]
     # NOTE: must be kept up-to-date for teardown to work
     set expected_new_keys [list Auto_Key key_1_1]
 
@@ -534,7 +532,7 @@ aa_register_case \
     set new_key_2 "key_1"
     set new_text_2 "text_1_different"
     set new_key_3 "key_1"
-    set new_text_3 "$messages_array(key_1)"
+    set new_text_3 [dict get $messages_array key_1]
     puts $tcl_file_id "# The following key should be auto-generated and inserted
     # <#  ${new_key_1} ${new_text_1} #>
     #
@@ -546,7 +544,7 @@ aa_register_case \
     close $tcl_file_id
 
     # Write the catalog file
-    lang::catalog::export_to_file $catalog_file [array get messages_array]
+    lang::catalog::export_to_file $catalog_file $messages_array
 
     # We need to force the API to export to the test catalog file
     aa_stub lang::catalog::get_catalog_file_path "
@@ -561,26 +559,26 @@ aa_register_case \
     aa_unstub lang::catalog::get_catalog_file_path
 
     # Read the contents of the catalog file
-    array set catalog_array [lang::catalog::parse [lang::catalog::read_file $catalog_file]]
-    array set updated_messages_array $catalog_array(messages)
+    set catalog_array [lang::catalog::parse [lang::catalog::read_file $catalog_file]]
+    set updated_messages_array [dict get $catalog_array messages]
 
     # Assert that the old messages are unchanged
-    foreach old_message_key [array names messages_array] {
+    foreach old_message_key [dict keys $messages_array] {
         aa_equals "old key $old_message_key should be unchanged" \
-            $messages_array($old_message_key) \
-            $updated_messages_array($old_message_key)
+            [dict get $messages_array $old_message_key] \
+            [dict get $updated_messages_array $old_message_key]
     }
 
     # Check that the first new key was autogenerated
-    aa_equals "check autogenerated key" $updated_messages_array(Auto_Key) $new_text_1
+    aa_equals "check autogenerated key" [dict get $updated_messages_array Auto_Key] $new_text_1
 
     # Check that the second new key was made unique and inserted
-    aa_equals "check key made unique" $updated_messages_array(${new_key_2}_1) $new_text_2
+    aa_equals "check key made unique" [dict get $updated_messages_array ${new_key_2}_1] $new_text_2
 
     # Check that the third key was not inserted
     aa_equals "third key not inserted"  \
-        [lindex [array get updated_messages_array $new_key_3] 1] \
-        $messages_array($new_key_3)
+        [expr {[dict exists $updated_messages_array $new_key_3] ? [dict get $updated_messages_array $new_key_3] : ""}] \
+        [dict get $messages_array $new_key_3]
 
     # Check that there are no tags left in the Tcl file
     set tcl_file_id [open "$::acs::rootdir/$tcl_file" r]
@@ -591,7 +589,7 @@ aa_register_case \
         0
 
     # Delete the test message keys
-    foreach message_key [concat [array names messages_array] $expected_new_keys] {
+    foreach message_key [concat [dict keys $messages_array] $expected_new_keys] {
         lang::message::unregister $package_key $message_key
     }
     # Delete the catalog files
