@@ -584,13 +584,12 @@ ad_proc -public apm_dependency_check_new {
                     break
                 }
 
-                unset -nocomplain version
-                array set version $repository($package_key)
+                set version $repository($package_key)
 
-                ns_log Debug "apm_dependency_check_new: Considering $package_key: [array get version]"
+                ns_log Debug "apm_dependency_check_new: Considering $package_key: $version"
 
                 # Let's see if this package provides anything we need
-                foreach prov $version(provides) {
+                foreach prov [dict get $version provides] {
                     lassign $prov prov_uri prov_version
 
                     if { [info exists required($prov_uri)]
@@ -638,11 +637,13 @@ ad_proc -public apm_dependency_check_new {
                 continue
             }
 
-            unset -nocomplain version
-            array set version $repository($package_key)
+            set version $repository($package_key)
 
             # Find unsatisfied requirements
-            foreach req [concat $version(embeds) $version(extends) $version(requires)] {
+            foreach req [concat \
+                             [dict get $version embeds] \
+                             [dict get $version extends] \
+                             [dict get $version requires]] {
                 lassign $req req_uri req_version
                 if { ![info exists provided($req_uri)]
                      || [apm_version_names_compare $provided($req_uri) $req_version] == -1 } {
