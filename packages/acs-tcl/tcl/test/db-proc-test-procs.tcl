@@ -843,7 +843,7 @@ aa_register_case \
         aa_true "$cmd returns column_array" {[array exists arr]}
         aa_equals "$cmd returns column_array value" [array get arr] "object_id -1"
         aa_false "$cmd returns variable" {[info exists object_id]}
-        array unset arr
+        unset -nocomplain arr
 
         set s [ns_set create binds b -1]
         set r [$cmd x {select object_id from acs_objects where object_id = :b} -bind $s -column_set n]
@@ -892,7 +892,7 @@ aa_register_case \
         aa_true "$cmd returns column_array" {[array exists arr]}
         aa_equals "$cmd returns column_array value" [array get arr] "object_id -1"
         aa_false "$cmd returns variable" {[info exists object_id]}
-        array unset arr
+        unset -nocomplain arr
 
         set s [ns_set create binds b -1]
         set r [$cmd x {select object_id from acs_objects where object_id = :b} -bind $s -column_set n]
