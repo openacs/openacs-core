@@ -126,13 +126,12 @@ aa_register_case \
             aa_true "first item exists" {[content::item::get -item_id $first_item_id] == 1}
 
             content::item::get -item_id $first_item_id -array item_info
-            set revision_id [dict get [array get item_info] revision_id]
 
             aa_equals "content_revision is latest" \
-                [content::revision::is_latest -revision_id $revision_id] \
+                [content::revision::is_latest -revision_id $item_info(revision_id)] \
                 t
             aa_equals "content_revision is live" \
-                [content::revision::is_live -revision_id $revision_id] \
+                [content::revision::is_live -revision_id $item_info(revision_id)] \
                 t
 
             aa_true "First item's revision exists" \
@@ -236,7 +235,7 @@ aa_register_case \
             # see if the item exists or not
 
             content::item::delete -item_id $evil_item_id
-            array unset evil_name
+            unset evil_name
             aa_true "evil_name item no longer exists" {
                 [content::item::get \
                      -item_id $evil_item_id \
@@ -315,7 +314,7 @@ aa_register_case \
             content::item::update \
                 -item_id $new_type_item_id \
                 -attributes {{name new_name} {publish_status live}}
-            array unset new_type_item
+            unset new_type_item
             content::item::get \
                 -item_id $new_type_item_id \
                 -revision "latest" \
