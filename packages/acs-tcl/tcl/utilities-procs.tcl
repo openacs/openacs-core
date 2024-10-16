@@ -849,11 +849,29 @@ ad_proc -public export_vars {
 
     # Prepend with the base URL
     if { [info exists base] && $base ne "" } {
-        set base [string trimright $base "?"]
-        if { [string first ? $base] > -1 } {
+        set parsedURL [ns_parseurl $base]
+        if {[dict exists $parsedURL query]} {
             # The base already has query vars; assume that the
             # path up to this point is already correctly encoded.
-            set export_string $base[expr {$export_string ne "" ? "&$export_string" : ""}]
+            set newQuery [::util::skip_suspicious_query_vars [dict get $parsedURL query]]
+            append newQuery [expr {$export_string ne "" ? "&$export_string" : ""}]
+            set URL {}
+            if {[dict exists $parsedURL host]} {
+                set URL \
+                    [util::join_location \
+                         {*}[expr {[dict exists $parsedURL proto] ? [list -proto [dict get $parsedURL proto]] : {}}] \
+                         {*}[expr {[dict exists $parsedURL host] ? [list -hostname [dict get $parsedURL host]] : {}}] \
+                         {*}[expr {[dict exists $parsedURL port] ? [list -port [dict get $parsedURL port]] : {}}] \
+                        ]
+            }
+            append URL /
+            if {[dict exists $parsedURL path] && [dict get $parsedURL path] ne ""} {
+                append URL [dict get $parsedURL path]/
+            }
+            if {[dict exists $parsedURL tail] && [dict get $parsedURL tail] ne ""} {
+                append URL [dict get $parsedURL tail]
+            }
+            set export_string $URL?$newQuery
         } else {
             # The base has no query vars: encode URL part if not
             # explicitly said otherwise. Include also as exception
@@ -871,6 +889,40 @@ ad_proc -public export_vars {
     }
 
     return $export_string
+}
+
+ad_proc ::util::suspicious_query_variable {{-proc {}} key {value ""}} {
+    Guess if a query variable was encoded twice
+    @return boolean result
+} {
+    set result 0
+    if {[string match "*amp;*" $key]} {
+        ns_log notice $proc \
+            "ignore suspect query variable with key <$key> value <$value>\n" \
+            [util::request_info]
+        set result 1
+    }
+    return $result
+}
+
+ad_proc -private ::util::skip_suspicious_query_vars {query} {
+
+    Skip in a URL query suspicious looking variables (probably double
+    encoded)
+
+    @return encoded HTTP query
+} {
+    set pairs {}
+    if {$query ne ""} {
+        set encodeCmd {ns_urlencode --}
+        foreach {key value} [ns_set array [ns_parsequery $query]] {
+            if {[::util::suspicious_query_variable -proc suspicious_query_variable $key $value]} {
+                continue
+            }
+            lappend pairs [{*}$encodeCmd $key]=[{*}$encodeCmd $value]
+        }
+    }
+    return [join $pairs &]
 }
 
 

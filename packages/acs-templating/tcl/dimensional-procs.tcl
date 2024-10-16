@@ -56,6 +56,13 @@ ad_proc ad_dimensional {
 
     if {$options_set eq ""} {
         set options_set [ns_getform]
+
+        # Process the set from the end to avoid shifted indices
+        for { set i [expr {[ns_set size $options_set]-1}]} { $i > -1 } { incr i -1 } {
+            if {[::util::suspicious_query_variable -proc ad_dimensional  [ns_set key $options_set $i]]} {
+                ns_set delete $options_set $i
+            }
+        }
     }
 
     if {$url eq ""} {
