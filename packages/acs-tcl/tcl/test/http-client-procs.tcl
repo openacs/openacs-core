@@ -138,7 +138,7 @@ aa_register_case \
                             file delete -- $tmpfile_app_json $tmpfile_iso8859_2
                         }
                     } else {
-                        aa_log "skip test with iso8859 for tcl9"
+                        aa_log "skip test iso8859-2 for tcl9 (unclear semantics)"
                     }
                 }
             }
