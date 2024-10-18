@@ -851,10 +851,18 @@ ad_proc -public export_vars {
     if { [info exists base] && $base ne "" } {
         set parsedURL [ns_parseurl $base]
         if {[dict exists $parsedURL query]} {
-            # The base already has query vars; assume that the
-            # path up to this point is already correctly encoded.
+            #
+            # The base already has query variables - but it might be
+            # empty; however, in this case, the trailing question mark
+            # is not regarded as part of the path, which has to be
+            # encoded; the code assumes that the path up to this point
+            # is already correctly encoded.
+            #
             set newQuery [::util::skip_suspicious_query_vars [dict get $parsedURL query]]
-            append newQuery [expr {$export_string ne "" ? "&$export_string" : ""}]
+            set fullQuery [expr {$newQuery eq "" || $export_string eq ""
+                                 ? [string cat $newQuery $export_string]
+                                 : [string cat $newQuery & $export_string] }]
+
             set URL {}
             if {[dict exists $parsedURL host]} {
                 set URL \
@@ -863,15 +871,19 @@ ad_proc -public export_vars {
                          {*}[expr {[dict exists $parsedURL host] ? [list -hostname [dict get $parsedURL host]] : {}}] \
                          {*}[expr {[dict exists $parsedURL port] ? [list -port [dict get $parsedURL port]] : {}}] \
                         ]
+                append URL /
             }
-            append URL /
             if {[dict exists $parsedURL path] && [dict get $parsedURL path] ne ""} {
                 append URL [dict get $parsedURL path]/
             }
             if {[dict exists $parsedURL tail] && [dict get $parsedURL tail] ne ""} {
                 append URL [dict get $parsedURL tail]
             }
-            set export_string $URL?$newQuery
+
+            set export_string $URL
+            if {$fullQuery ne ""} {
+                append export_string ?$fullQuery
+            }
         } else {
             # The base has no query vars: encode URL part if not
             # explicitly said otherwise. Include also as exception
@@ -925,6 +937,24 @@ ad_proc -private ::util::skip_suspicious_query_vars {query} {
     return [join $pairs &]
 }
 
+ad_proc ::util::block_request {-condition:required {-target you}} {
+
+    Block a request for certain kind of requests. This proc can be
+    used to disallow, e.g., requests from bots in login pages or similar.
+
+    Example: <pre>::util::block_request -condition {[ns_conn pool] eq "bots"} -target bots</pre>
+
+    The proc either terminates the requests by responding a blocking message to the
+    client, or it continues and returns nothing.
+
+} {
+    if {[ns_conn isconnected] && [uplevel 1 [list expr $condition]]} {
+        ns_log notice "blocking request for condition $condition\n" \
+            [util::request_info]
+        ad_return_complaint 1 "page is not allowed for $target"
+        ad_script_abort
+    }
+}
 
 ad_proc -private export_vars_sign {
     {-params ""}
