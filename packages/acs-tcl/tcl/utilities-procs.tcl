@@ -400,8 +400,10 @@ ad_proc -public export_vars {
     prohibit this.
 
     <p>
-    Example usage: <code>set html [export_vars -form { foo bar baz }]</code><br>
-    <code>set url [export_vars { foo bar baz }]</code>
+    Example usages:
+    <pre>
+    set html [export_vars -form { foo bar baz }]
+    set url [export_vars { foo bar baz }]</pre>
 
     <p>
     This will export the three variables <code>foo</code>,
@@ -410,7 +412,8 @@ ad_proc -public export_vars {
     bar baz}]</code>.
 
     <p>
-    Example usage: <code>[export_vars -sign -override {{foo "new value"}} -exclude { bar } { foo bar baz }]</code>
+    Example usage: <pre>
+    export_vars -sign -override {{foo "new value"}} -exclude { bar } { foo bar baz }</pre>
 
     <p>
 
@@ -544,6 +547,8 @@ ad_proc -public export_vars {
     "form\:id". Sorry.
 
     @param sign Sign all variables.
+    @param anchor fragment component that will be preceded by a hash (#) in the result URL
+    @param exclude list of variables that will not be exported
 
     @param url Export in URL format. This is the default.
 
@@ -557,18 +562,18 @@ ad_proc -public export_vars {
     @param entire_form Export the entire form from the GET query
     string or the POST.
 
-    @option no_empty If specified, variables with an empty string
+    @param no_empty If specified, variables with an empty string
     value will be suppressed from being exported.  This avoids
     cluttering up the URLs with lots of unnecessary variables.
 
-    @option base The base URL to make a link to. The provided value
+    @param base The base URL to make a link to. The provided value
     should be a plain value (i.e. urldecoded). In case the provided
     value is urlencoded, use the flag "-no_base_encode". The value of
     this parameter will be prepended to the query string along with a
     question mark (?), if the query is nonempty. The returned string
     can be used directly in a link (when output is in URL format).
 
-    @option no_base_encode Decides whether argument passed as
+    @param no_base_encode Decides whether argument passed as
                            <code>base</code> option will be encoded by
                            ad_urlencode_url proc
 
@@ -583,6 +588,9 @@ ad_proc -public export_vars {
                     and will otherwise behave as if the current
                     request form data was a subset of the whole form
                     containing only the selected variables.
+
+    @param override variable specs, overriding the specs in 'vars'
+    @param vars variable specs for export
 
     @author Lars Pind (lars@pinds.com)
     @creation-date December 7, 2000
@@ -942,7 +950,8 @@ ad_proc ::util::block_request {-condition:required {-target you}} {
     Block a request for certain kind of requests. This proc can be
     used to disallow, e.g., requests from bots in login pages or similar.
 
-    Example: <pre>::util::block_request -condition {[ns_conn pool] eq "bots"} -target bots</pre>
+    Example: <pre>
+    ::util::block_request -condition {[ns_conn pool] eq "bots"} -target bots</pre>
 
     The proc either terminates the requests by responding a blocking message to the
     client, or it continues and returns nothing.
@@ -2225,7 +2234,7 @@ ad_proc -public ad_get_tcl_call_stack {
     at the expense of truncating args.
 
     @param level The level to start from, relative to this
-    proc. Defaults to -2, meaning the proc that called this proc's
+    proc. The value -2 refers to the proc that called this proc's
     caller. Per default, don't show "ad_log", when this calls
     ad_get_tcl_call_stack.
 
@@ -2289,8 +2298,8 @@ ad_proc -deprecated ad_ns_set_to_tcl_vars {
     @see for
     @see ns_set
 
-    @param duplicates This optional switch argument defines what happens if the
-    Tcl var already exists, or if there are duplicate entries for the same key.
+    @param duplicates This argument defines what happens when the
+    Tcl variable already exists, or if there are duplicate entries for the same key.
     <code>overwrites</code> just overwrites the var, which amounts to letting the
     ns_set win over pre-defined vars, and later entries in the ns_set win over
     earlier ones. <code>ignore</code> means the variable isn't overwritten.
@@ -3763,7 +3772,7 @@ ad_proc -public ad_job {
 } {
 
     Convenience wrapper for simple usages of ns_job provided by
-    AOLServer and NaviServer. The provided command (args) is executed
+    NaviServer. The provided command (args) is executed
     in a separate thread of the specified job queue. On success the
     function returns the result of the provided command.
 
@@ -3775,7 +3784,7 @@ ad_proc -public ad_job {
     @author Gustaf Neumann
 
     @param queue Name of job queue
-    @param timeout timeout for job, might be 1:0 for 1 sec
+    @param timeout timeout for job, specified in seconds or as a number with a time unit (e.g., 10ms)
     @param args the command to be executed
     @return result of the specified command
 } {

@@ -1443,8 +1443,8 @@ ad_proc -public db_list_of_ns_sets {
     @return a list of ns_sets with the values of each column of each row
     returned by the SQL query specified.
 
-    @param statement_name The name of the query.
-    @param sql The SQL to be executed.
+    @param statement_name name of the query.
+    @param sql SQL to be executed.
     @param bind bind variables, passed either as an ns_set id, or via bind value list
 
     @return list of ns_sets, one per each row return by the SQL query
@@ -2330,8 +2330,7 @@ ad_proc -public db_0or1row {
     -column_set
 } {
 
-
-    <p>Performs the SQL query sql. If a row is returned, sets variables
+    Performs the SQL query sql. If a row is returned, sets variables
     to column values (or a set or array populated if -column_array
                       or column_set is specified) and returns 1. If no rows are returned,
     returns 0.
@@ -2346,7 +2345,8 @@ ad_proc -public db_0or1row {
     @param bind bind variables, passed either as an ns_set id, or via bind value list
     @param column_array array to be populated with values
     @param column_set ns_set to be populated with values
-
+    @param statement_name name of the query
+    @param sql SQL query to be executed
 } {
     # Query Dispatcher (OpenACS - ben)
     set full_statement_name [db_qd_get_fullname $statement_name]
