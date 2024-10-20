@@ -552,25 +552,27 @@ ad_proc -public api_proc_documentation {
 
     set switches [concat $doc_elements(switches0) $doc_elements(switches1)]
     if { [llength $switches] > 0 } {
-        append blocks_out "<dt>Switches:</dt><dd><dl>\n"
+        append blocks_out "<dt>Switches:</dt><dd><dl class='api-doc-parameter-list'>\n"
         foreach switch $switches {
-            append blocks_out "<dt>-$switch</dt>"
+            set param_details ""
+            if {"required" in $flags($switch)} {
+                lappend param_details required
+            } else {
+                lappend param_details optional
+            }
             if {"boolean" in $flags($switch)} {
-                append blocks_out " (boolean)"
+                lappend param_details boolean
             }
 
             if { [info exists default_values($switch)]
                  && $default_values($switch) ne ""
              } {
-                append blocks_out " (defaults to <code>\"[ns_quotehtml $default_values($switch)]\"</code>)"
+                lappend param_details "defaults to <code>\"[ns_quotehtml $default_values($switch)]\"</code>"
             }
-
-            if {"required" in $flags($switch)} {
-                append blocks_out " (required)"
-            } else {
-                append blocks_out " (optional)"
-            }
-            append blocks_out "</dt>"
+            append blocks_out \
+                "<dt>-$switch <i style='font-weight: normal;'>" \
+                ([join $param_details {, }]) \
+                "</i></dt>"
             if { [info exists params($switch)] } {
                 append blocks_out "<dd>$params($switch)</dd>"
             }
@@ -579,22 +581,26 @@ ad_proc -public api_proc_documentation {
     }
 
     if { [llength $doc_elements(positionals)] > 0 } {
-        append blocks_out "<dt>Parameters:</dt><dd>\n"
+        append blocks_out "<dt>Parameters:</dt><dd><dl class='api-doc-parameter-list'>\n"
         foreach positional $doc_elements(positionals) {
-            append blocks_out "<b>$positional</b>"
+            set param_details ""
             if { [info exists default_values($positional)] } {
                 if { $default_values($positional) eq "" } {
-                    append blocks_out " (optional)"
+                    lappend param_details "optional"
                 } else {
-                    append blocks_out " (defaults to <code>\"$default_values($positional)\"</code>)"
+                    lappend param_details "defaults to <code>\"$default_values($positional)\"</code>"
                 }
             }
+            append blocks_out \
+                "<dt>$positional <i style='font-weight: normal;'>" \
+                ([join $param_details {, }]) \
+                "</i></dt><dd>"
             if { [info exists params($positional)] } {
-                append blocks_out " - $params($positional)"
+                append blocks_out $params($positional)
             }
-            append blocks_out "<br>\n"
+            append blocks_out "</dd>\n"
         }
-        append blocks_out "</dd>\n"
+        append blocks_out "</dl></dd>\n"
     }
 
 
