@@ -394,6 +394,31 @@ ad_proc -private api_proc_format_switch {xotclArgs flags switch} {
     return $result
 }
 
+ad_proc -private api_proc_pretty_param_details {-flags:required -default_value} {
+    @return string with details about a parameter
+} {
+    set param_details {}
+    if {"required" in $flags} {
+        lappend param_details required
+    } else {
+        lappend param_details optional
+    }
+    if {"boolean" in $flags} {
+        lappend param_details boolean
+    } elseif {"int" in $flags || "integer" in $flags} {
+        lappend param_details integer
+    }
+    if {"0..1" in $flags} {
+        lappend param_details "accept empty"
+    }
+
+    if { [info exists default_value] && $default_value ne ""} {
+        lappend param_details "defaults to <code>\"[ns_quotehtml $default_value]\"</code>"
+    }
+    return [expr {[llength $param_details]>0 ? "([join $param_details {, }])" : ""}]
+}
+
+
 ad_proc -public api_proc_documentation {
     -format
     -script:boolean
@@ -554,25 +579,15 @@ ad_proc -public api_proc_documentation {
     if { [llength $switches] > 0 } {
         append blocks_out "<dt>Switches:</dt><dd><dl class='api-doc-parameter-list'>\n"
         foreach switch $switches {
-            set param_details ""
-            if {"required" in $flags($switch)} {
-                lappend param_details required
-            } else {
-                lappend param_details optional
-            }
-            if {"boolean" in $flags($switch)} {
-                lappend param_details boolean
-            }
+            set details [api_proc_pretty_param_details \
+                             -flags $flags($switch) \
+                             {*}[expr {[info exists default_values($switch)]
+                                       ? [list -default_value $default_values($switch)]
+                                       : {}}] \
 
-            if { [info exists default_values($switch)]
-                 && $default_values($switch) ne ""
-             } {
-                lappend param_details "defaults to <code>\"[ns_quotehtml $default_values($switch)]\"</code>"
-            }
+                        ]
             append blocks_out \
-                "<dt>-$switch <i style='font-weight: normal;'>" \
-                ([join $param_details {, }]) \
-                "</i></dt>"
+                "<dt>-$switch <i style='font-weight: normal;'>$details</i></dt>"
             if { [info exists params($switch)] } {
                 append blocks_out "<dd>$params($switch)</dd>"
             }
@@ -583,18 +598,18 @@ ad_proc -public api_proc_documentation {
     if { [llength $doc_elements(positionals)] > 0 } {
         append blocks_out "<dt>Parameters:</dt><dd><dl class='api-doc-parameter-list'>\n"
         foreach positional $doc_elements(positionals) {
-            set param_details ""
-            if { [info exists default_values($positional)] } {
-                if { $default_values($positional) eq "" } {
-                    lappend param_details "optional"
-                } else {
-                    lappend param_details "defaults to <code>\"$default_values($positional)\"</code>"
-                }
+            set pflags $flags($positional)
+            if {![info exists default_values($positional)]} {
+                lappend pflags required
             }
+            set details [api_proc_pretty_param_details \
+                             -flags $pflags \
+                             {*}[expr {[info exists default_values($positional)]
+                                       ? [list -default_value $default_values($positional)]
+                                       : {}}] \
+                            ]
             append blocks_out \
-                "<dt>$positional <i style='font-weight: normal;'>" \
-                [expr {[llength $param_details]>0 ? "([join $param_details {, }])" : ""}] \
-                "</i></dt><dd>"
+                "<dt>$positional <i style='font-weight: normal;'>$details</i></dt><dd>"
             if { [info exists params($positional)] } {
                 append blocks_out $params($positional)
             }
