@@ -593,7 +593,7 @@ ad_proc -public api_proc_documentation {
             }
             append blocks_out \
                 "<dt>$positional <i style='font-weight: normal;'>" \
-                ([join $param_details {, }]) \
+                [expr {[llength $param_details]>0 ? "([join $param_details {, }])" : ""}] \
                 "</i></dt><dd>"
             if { [info exists params($positional)] } {
                 append blocks_out $params($positional)
