@@ -956,6 +956,9 @@ ad_proc ::util::block_request {-condition:required {-target you}} {
     The proc either terminates the requests by responding a blocking message to the
     client, or it continues and returns nothing.
 
+    @param condition Tcl expression, blocking condition
+    @param target part of the message string presented to the blocked user
+
 } {
     if {[ns_conn isconnected] && [uplevel 1 [list expr $condition]]} {
         ns_log notice "blocking request for condition $condition\n" \

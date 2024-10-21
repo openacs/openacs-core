@@ -1365,6 +1365,10 @@ ad_proc -public db_string {
     @param subst Perform Tcl substitution in xql-files. Possible values: all, none, vars, commands
     @param default Return value in case the SQL query returns no value
     @param bind bind variables, passed either as an ns_set id, or via bind value list
+    
+    @param statement_name name of the SQL query
+    @param sql SQL query to be executed
+
 } {
     # Query Dispatcher (OpenACS - ben)
     set full_name [db_qd_get_fullname $statement_name]
@@ -1401,13 +1405,16 @@ ad_proc -public db_list {
 } {
 
     @return a Tcl list of the values in the first column of the result of SQL query <tt>sql</tt>.
-    If <tt>sql</tt> doesn't return any rows, returns an empty list.
+    If the SQL query doesn't return any rows, returns an empty list.
 
     @param dbn The database name to use.  If empty_string, uses the default database.
     @param cache_key Cache the result using given value as the key.  Default is to not cache.
     @param cache_pool Override the default db_cache_pool
     @param subst Perform Tcl substitution in xql-files. Possible values: all, none, vars, commands
     @param bind bind variables, passed either as an ns_set id, or via bind value list
+
+    @param statement_name name of the SQL query.
+    @param sql SQL query to be executed.
 } {
 
     # Query Dispatcher (OpenACS - SDW)
@@ -1443,13 +1450,13 @@ ad_proc -public db_list_of_ns_sets {
     @return a list of ns_sets with the values of each column of each row
     returned by the SQL query specified.
 
-    @param statement_name name of the query.
-    @param sql SQL to be executed.
     @param bind bind variables, passed either as an ns_set id, or via bind value list
+    @param dbn The database name to use.  If empty_string, uses the default database.
+    @param statement_name name of the SQL query.
+    @param sql SQL query to be executed.
 
     @return list of ns_sets, one per each row return by the SQL query
 
-    @param dbn The database name to use.  If empty_string, uses the default database.
 } {
     set full_statement_name [db_qd_get_fullname $statement_name]
 
@@ -1516,6 +1523,9 @@ ad_proc -public db_list_of_lists {
     @param cache_pool Override the default db_cache_pool
     @param subst Perform Tcl substitution in xql-files. Possible values: all, none, vars, commands
     @param bind bind variables, passed either as an ns_set id, or via bind value list
+    @param statement_name name of the SQL query.
+    @param sql SQL query to be executed.
+
 } {
     set full_statement_name [db_qd_get_fullname $statement_name]
 
@@ -1930,16 +1940,15 @@ ad_proc -public db_multirow {
     sql
     args
 } {
-    @param dbn The database name to use.  If empty_string, uses the default database.
-    @param cache_key Cache the result using given value as the key.  Default is to not cache.
-    @param cache_pool Override the default db_cache_pool
-    @param subst Perform Tcl substitution in xql-files. Possible values: all, none, vars, commands
-
-    @param unclobber If set, will cause the proc to not overwrite local variables. Actually, what happens
-    is that the local variables will be overwritten, so you can access them within the code block. However,
-    if you specify -unclobber, we will revert them to their original state after execution of this proc.
+    <p>Performs the SQL query <code>sql</code>, saving results in variables
+    of the form
+    <code><i>var_name</i>:1</code>, <code><i>var_name</i>:2</code>, etc,
+    setting <code><i>var_name</i>:rowcount</code> to the total number
+    of rows, and setting <code><i>var_name</i>:columns</code> to a
+    list of column names.
 
     Usage:
+    
     <blockquote>
     db_multirow [ -local ] [ -upvar_level <em><i>n_levels_up</i></em> ] [ -append ] [ -extend <em><i>column_list</i></em> ] \
         <em><i>var-name statement-name sql</i></em> [ -bind <em><i>bind_set_id</i></em> | -bind <em><i>bind_value_list</i></em> ] \
@@ -1947,12 +1956,6 @@ ad_proc -public db_multirow {
 
     </blockquote>
 
-    <p>Performs the SQL query <code>sql</code>, saving results in variables
-    of the form
-    <code><i>var_name</i>:1</code>, <code><i>var_name</i>:2</code>, etc,
-    setting <code><i>var_name</i>:rowcount</code> to the total number
-    of rows, and setting <code><i>var_name</i>:columns</code> to a
-    list of column names.
 
     <p>
 
@@ -2033,6 +2036,20 @@ ad_proc -public db_multirow {
     } {
         set user_url [acs_community_member_url -user_id $user_id]
     }</pre>
+
+    @param dbn The database name to use.  If empty_string, uses the default database.
+    @param cache_key Cache the result using given value as the key.  Default is to not cache.
+    @param cache_pool Override the default db_cache_pool
+    @param subst Perform Tcl substitution in xql-files. Possible values: all, none, vars, commands
+
+    @param unclobber If set, will cause the proc to not overwrite local variables. Actually, what happens
+    is that the local variables will be overwritten, so you can access them within the code block. However,
+    if you specify -unclobber, we will revert them to their original state after execution of this proc.
+
+    @param statement_name name of the SQL query
+    @param sql SQL query to be executed
+    @param var_name name of the Tcl multirow array
+    @param code_block code block to be executed for every tuple reurned
 
     @see template::multirow
 } {
@@ -2330,10 +2347,9 @@ ad_proc -public db_0or1row {
     -column_set
 } {
 
-    Performs the SQL query sql. If a row is returned, sets variables
+    Performs the specified SQL query. If a row is returned, sets variables
     to column values (or a set or array populated if -column_array
-                      or column_set is specified) and returns 1. If no rows are returned,
-    returns 0.
+                      or column_set is specified) and returns 1. 
 
     @return 1 if variables are set, 0 if no rows are returned.
               If more than one row is returned, throws an error.
@@ -2345,7 +2361,7 @@ ad_proc -public db_0or1row {
     @param bind bind variables, passed either as an ns_set id, or via bind value list
     @param column_array array to be populated with values
     @param column_set ns_set to be populated with values
-    @param statement_name name of the query
+    @param statement_name name of the SQL query
     @param sql SQL query to be executed
 } {
     # Query Dispatcher (OpenACS - ben)
@@ -2415,7 +2431,7 @@ ad_proc -public db_1row { {-subst all} args } {
 
     @see db_0or1row
 
-    @return 1 if variables are set.
+    @return 1 if variables are set, otherwise an exception is thrown.
 
 } {
     if { ![uplevel ::db_0or1row -subst $subst $args] } {
