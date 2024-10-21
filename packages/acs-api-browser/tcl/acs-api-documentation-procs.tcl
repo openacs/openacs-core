@@ -598,7 +598,7 @@ ad_proc -public api_proc_documentation {
     if { [llength $doc_elements(positionals)] > 0 } {
         append blocks_out "<dt>Parameters:</dt><dd><dl class='api-doc-parameter-list'>\n"
         foreach positional $doc_elements(positionals) {
-            set pflags $flags($positional)
+            set pflags [expr {[info exists flags($positional)] ? $flags($positional) : {}}]
             if {![info exists default_values($positional)]} {
                 lappend pflags required
             }
