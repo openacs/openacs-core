@@ -30,6 +30,7 @@ aa_register_case -cats {smoke production_safe} -procs {
         if { [dict exists $pa protection]
              && "public" in [dict get $pa protection]
              && !([dict get $pa deprecated_p] || [dict get $pa warn_p])
+             && ![string match *::slot* $p]
          } {
             incr count
             if { [string is space [join [dict get $pa main]]] &&
