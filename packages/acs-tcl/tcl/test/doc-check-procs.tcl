@@ -30,6 +30,9 @@ aa_register_case -cats {smoke production_safe} -procs {
         { Class ::ns_hmac}
         { Class ::ns_md}
         { Class ::ns_crypto::HashFunctions}
+        { Class ::xotcl::Attribute}
+        { Class ::xotcl::MetaSlot}
+        { Class ::xotcl::RelationSlot}
     }
     foreach p [lsort -dictionary [nsv_array names api_proc_doc]] {
         set pa [nsv_get api_proc_doc $p]
