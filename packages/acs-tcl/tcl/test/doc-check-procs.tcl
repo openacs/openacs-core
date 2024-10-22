@@ -33,6 +33,17 @@ aa_register_case -cats {smoke production_safe} -procs {
         { Class ::xotcl::Attribute}
         { Class ::xotcl::MetaSlot}
         { Class ::xotcl::RelationSlot}
+        { Class ::xotcl::package}
+        {xotcl::Attribute instproc __object_configureparameter}
+        {xotcl::Attribute instproc createForwarder}
+        {xotcl::Attribute instproc exists}
+        {xotcl::Attribute instproc istype}
+        {xotcl::package proc contains}
+        {xotcl::package proc create}
+        {xotcl::package proc extend}
+        {xotcl::package proc import}
+        {xotcl::package proc present}
+        {xotcl::package proc verbose}
     }
     foreach p [lsort -dictionary [nsv_array names api_proc_doc]] {
         set pa [nsv_get api_proc_doc $p]
@@ -48,7 +59,7 @@ aa_register_case -cats {smoke production_safe} -procs {
                  (![dict exists $pa return] || [string is space [join [dict get $pa return]]]) &&
                  (![dict exists $pa param] || [string is space [join [dict get $pa param]]]) &&
                  (![dict exists $pa see] || [string is space [join [dict get $pa see]]])
-             } {                
+             } {
                 if {[regexp "^(\\s+Class ::)?([join $ignored_namespaces |])::.*\$" $p m]} {
                     set test_result warning
                 } else {
