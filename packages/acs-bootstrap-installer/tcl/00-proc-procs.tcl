@@ -6,6 +6,57 @@ nsv_array set api_library_doc [list]
 nsv_array set proc_doc [list]
 nsv_array set proc_source_file [list]
 
+if {[info commands ::nx::Class] ne ""} {
+    nx::Class create xo::DocHelper {
+        #
+        # Helper class to determine the sourcefile, where some "public",
+        # "private", or plain "methods" is defined. The mixin is just
+        # active during initial bootstrap of the server. The definition
+        # assumes, that all definitions for a class are from the same
+        # file.
+        #
+        :method register_filename {} {
+            nsv_set proc_source_file " Class [self]" [info script]
+            #ns_log notice "INIT registered epoch [ns_ictl epoch] [self] script [info script]"
+        }
+        :public method method {args} {
+                                      :register_filename
+                                      return [next]
+                                  }
+        :public method public {what name args} {
+            :register_filename
+            return [next]
+        }
+        :public method private {what name args} {
+            :register_filename
+            return [next]
+        }
+        #
+        # Alternate approach, would require a small change in NX.
+        #
+        # :public method create {name args} {
+        #     #ns_log notice "INIT create [self] $name (epoch [ns_ictl epoch])"
+        #     set r [next]
+        #     if {[self] eq "::nx::Class" && [ns_ictl epoch] < 2} {
+        #         set key " Class $name"
+        #         nsv_set proc_source_file $key [info script]
+        #         ns_log notice "INIT nsv_set proc_source_file $key [info script]"
+        #         #
+        #         # Problem with
+        #         #    ::nx::Class create ::acs::SiteNode {
+        #         #        ... :create site_node
+        #         #    }
+        #     }
+        #     return $r
+        # }
+    }
+    if {[ns_ictl epoch] == 0} {
+        nx::Class mixins add xo::DocHelper
+        #ns_log notice "REGISTER xo::DocHelper INIT epoch [ns_ictl epoch]"
+    }
+} else {
+    ns_log error "no NSD/NX available. Installation is apprently incomplete or misconfigured"
+}
 
 #
 # Safety belt for ::acs::useNsfProc for upgrade phase to oacs-5-9

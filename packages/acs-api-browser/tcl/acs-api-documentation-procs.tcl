@@ -43,16 +43,6 @@ namespace eval ::apidoc {
 
     set tcl_api_html_index "https://www.tcl-lang.org/man/tcl$::tcl_version/TclCmd/contents.htm"
 
-    # set style {
-    #     .code .comment  {color: #006600; font-weight: normal; font-style: italic;}
-    #     .code .keyword  {color: #0000AA; font-weight: bold;   font-style: normal;}
-    #     .code .string   {color: #990000; font-weight: normal; font-style: italic;}
-    #     .code .var      {color: #660066; font-weight: normal; font-style: normal;}
-    #     .code .proc     {color: #0000CC; font-weight: normal; font-style: normal;}
-    #     .code .object   {color: #000066; font-weight: bold;   font-style: normal;}
-    #     .code .helper   {color: #0000CC; font-weight: bold;   font-style: normal;}
-    #     pre.code a      {text-decoration: none;}
-    # }
     set style {
         .code .comment  {color: #717ab3; font-weight: normal; font-style: italic;}
         .code .keyword  {color: #7f0055; font-weight: normal; font-style: normal;}
@@ -407,6 +397,8 @@ ad_proc -private api_proc_pretty_param_details {-flags:required -default_value} 
         lappend param_details boolean
     } elseif {"int" in $flags || "integer" in $flags} {
         lappend param_details integer
+    } elseif {"object" in $flags} {
+        lappend param_details object
     }
     if {"0..1" in $flags} {
         lappend param_details "accept empty"
@@ -513,6 +505,10 @@ ad_proc -public api_proc_documentation {
         } else {
             set pretty_proc_name [subst {<i>&lt;instance of [::xo::api object_link $scope $cl]&gt;</i> $method}]
         }
+        #
+        # Make sure we have the newest update in the nsv
+        #
+        ::xo::api update_object_doc $scope $cl ""
     } else {
         set xotclArgs 0
         if {[namespace which ::xo::api] ne "" && [::xo::api isclass "" [lindex $proc_name 1]]} {
@@ -579,6 +575,7 @@ ad_proc -public api_proc_documentation {
     if { [llength $switches] > 0 } {
         append blocks_out "<dt>Switches:</dt><dd><dl class='api-doc-parameter-list'>\n"
         foreach switch $switches {
+            #ns_log notice "==== switch '$switch': flags <$flags($switch)>"
             set details [api_proc_pretty_param_details \
                              -flags $flags($switch) \
                              {*}[expr {[info exists default_values($switch)]
@@ -598,6 +595,7 @@ ad_proc -public api_proc_documentation {
     if { [llength $doc_elements(positionals)] > 0 } {
         append blocks_out "<dt>Parameters:</dt><dd><dl class='api-doc-parameter-list'>\n"
         foreach positional $doc_elements(positionals) {
+            #ns_log notice "==== parameter '$positional': info exists flags($positional): [info exists flags($positional)]"
             set pflags [expr {[info exists flags($positional)] ? $flags($positional) : {}}]
             if {![info exists default_values($positional)]} {
                 lappend pflags required
