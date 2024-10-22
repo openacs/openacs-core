@@ -442,7 +442,7 @@ namespace eval ::acs {
     ##########################################################################
     nx::Class create ::acs::LockfreeCache {
         #
-        # Lockfree cache are provided either as per-thread caches or
+        # Lockfree caches are provided either as per-thread caches or
         # per-request caches, sharing the property that accessing these
         # values does not require locks.
         #
