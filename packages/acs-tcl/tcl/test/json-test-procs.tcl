@@ -8,7 +8,6 @@ aa_register_case \
     -cats {api smoke} \
     -procs {
         util::json2dict
-        util::tdomNodes2dict
     } \
     json_to_dict {
 

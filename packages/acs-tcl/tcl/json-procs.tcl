@@ -653,58 +653,62 @@ ad_proc util::json::indent {
     return [join $output \n]
 }
 
+if {![::acs::icanuse "domDoc asTclValue"]} {
+
+    ad_proc -private util::tdomNodes2dict { nodes parentType } {
+
+        Helper proc for util::json2dict, which returns the tDOM structure
+        in the form of a Tcl dict.
+
+        Use this proc only on dom structures created with "porse -json",
+        since it depends on the internal node structure of tDOM. It would
+        be certainly better to have this function built-in in tDOM (call
+                                                                    like "asDict", similar to "asXML")
+
+        @return dict
+        @author Gustaf Neumann
+    } {
+        set result ""
+        foreach n $nodes {
+            set children [$n childNodes]
+            set jsonType [$n jsonType]
+            set childrendValue [util::tdomNodes2dict $children $jsonType]
+
+            switch $jsonType {
+                OBJECT {
+                    if {[$n nodeName] ne "objectcontainer" || $parentType eq "OBJECT"} {
+                        lappend result [$n nodeName]
+                    }
+                    lappend result $childrendValue
+                }
+                NONE {
+                    lappend result [$n nodeName] $childrendValue
+                }
+                ARRAY {
+                    if {[$n nodeName] ne "arraycontainer" || $parentType eq "OBJECT"} {
+                        lappend result [$n nodeName]
+                    }
+                    lappend result $childrendValue
+                }
+                default {
+                    set op [expr {[llength $nodes] > 1 ? "lappend" : "set"} ]
+                    $op result [$n nodeValue]
+                }
+            }
+        }
+        return $result
+    }
+}
+
 ad_proc util::tdomDoc2dict {doc} {
 
     Helper proc for util::json2dict, which outputsreturns the provided
     tDOM document in the form of a Tcl dict.
 
 } {
-    return [util::tdomNodes2dict [$doc childNodes] [$doc jsonType]]
-}
-
-
-ad_proc -private util::tdomNodes2dict { nodes parentType } {
-
-    Helper proc for util::json2dict, which returns the tDOM structure
-    in the form of a Tcl dict.
-
-    Use this proc only on dom structures created with "porse -json",
-    since it depends on the internal node structure of tDOM. It would
-    be certainly better to have this function built-in in tDOM (call
-                                                                like "asDict", similar to "asXML")
-
-    @return dict
-    @author Gustaf Neumann
-} {
-    set result ""
-    foreach n $nodes {
-        set children [$n childNodes]
-        set jsonType [$n jsonType]
-        set childrendValue [util::tdomNodes2dict $children $jsonType]
-
-        switch $jsonType {
-            OBJECT {
-                if {[$n nodeName] ne "objectcontainer" || $parentType eq "OBJECT"} {
-                    lappend result [$n nodeName]
-                }
-                lappend result $childrendValue
-            }
-            NONE {
-                lappend result [$n nodeName] $childrendValue
-            }
-            ARRAY {
-               if {[$n nodeName] ne "arraycontainer" || $parentType eq "OBJECT"} {
-                   lappend result [$n nodeName]
-               }
-                lappend result $childrendValue
-            }
-            default {
-                set op [expr {[llength $nodes] > 1 ? "lappend" : "set"} ]
-                $op result [$n nodeValue]
-            }
-        }
-    }
-    return $result
+    expr {[::acs::icanuse "domDoc asTclValue"]
+          ? [$doc asTclValue]
+          : [util::tdomNodes2dict [$doc childNodes] [$doc jsonType]] }
 }
 
 ad_proc util::json2dict { jsonText } {
@@ -722,7 +726,9 @@ ad_proc util::json2dict { jsonText } {
 } {
     #ns_log notice "PARSE\n$jsonText"
     set doc [dom parse -json -- $jsonText]
-    set result [util::tdomDoc2dict $doc]
+    set result [expr {[::acs::icanuse "domDoc asTclValue"]
+                      ? [$doc asTclValue]
+                      : [util::tdomDoc2dict $doc]}]
     $doc delete
     return $result
 }
