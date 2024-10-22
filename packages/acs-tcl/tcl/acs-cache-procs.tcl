@@ -28,8 +28,7 @@ namespace eval ::acs {
 
     nx::Class create ::acs::Cache {
         #
-        # Provide a base class to generalize cache management to
-        # extend cache primitives like e.g. for cache partitioning.
+        # Base class for cache management
         #
         :property name
         :property parameter:required
@@ -64,6 +63,9 @@ namespace eval ::acs {
         }
 
         :public method flush {{-partition_key} key} {
+            #
+            # Flush a single entry in the cache
+            #
             if {![info exists partition_key]} {
                 set partition_key $key
             }
@@ -124,7 +126,7 @@ namespace eval ::acs {
 
             :public method set {-partition_key key value} {
                 #
-                # Set some value in the cache. This code uses
+                # Set a single value in the cache. This code uses
                 # ns_cache_eval to achieve this behavior, which is
                 # typically an AOLserver idiom and should be avoided.
                 #
@@ -178,6 +180,11 @@ namespace eval ::acs {
                 }
             }
             :public method set {-partition_key key value} {
+                #
+                # Set a single value in the cache. This code uses
+                # ns_cache_eval to achieve this behavior, which is
+                # typically an AOLserver idiom and should be avoided.
+                #
                 if {![info exists partition_key]} {set partition_key $key}
                 :uplevel [list ns_cache set [:cache_name $partition_key] $key $value]
             }
@@ -209,6 +216,10 @@ namespace eval ::acs {
         }
 
         :public method show_all {} {
+            #
+            # Log all cache keys to the system log. The primary usage
+            # is for debugging.
+            #
             ns_log notice "content of ${:name}: [ns_cache_keys ${:name}]"
         }
 
@@ -253,6 +264,11 @@ namespace eval ::acs {
     ##########################################################################
 
     nx::Class create ::acs::PartitionedCache -superclasses ::acs::Cache {
+        #
+        # Partitioned cache infrastructure. Partition numbers are
+        # computed via a modulo function from the numeric keys.
+        #
+
         :property {partitions:integer 1}
 
         :protected method cache_name {key:integer} {
@@ -332,6 +348,10 @@ namespace eval ::acs {
         }
 
         :public method show_all {} {
+            #
+            # Log all cache keys of all partitions to the system
+            # log. The primary usage is for debugging.
+            #
             for {set i 0} {$i < ${:partitions}} {incr i} {
                 ns_log notice "content of ${:name}-$i: [ns_cache_keys ${:name}-$i]"
             }
@@ -344,17 +364,18 @@ namespace eval ::acs {
     #
     # Class for key-partitioned caches
     #
-    # Key-partitioning is based on a modulo function using a special
-    # partition_key, which has to be numeric - at least for the time being.
-    #
     ##########################################################################
-
     nx::Class create ::acs::KeyPartitionedCache -superclasses ::acs::PartitionedCache {
+        #
+        # Partitioned cache, where the partition numbers are computed
+        # via a modulo function from the numeric keys.
+        #
+
         :property {partitions:integer 1}
 
         :public method flush_pattern {{-partition_key:integer,required} pattern} {
             #
-            # flush just in the determined partition
+            # Flush just in the determined partition
             #
             next
         }
@@ -364,6 +385,11 @@ namespace eval ::acs {
         #}
 
         :public method set {{-partition_key:integer,required} key value} {
+            #
+            # Set a single value in the cache. This code uses
+            # ns_cache_eval to achieve this behavior, which is
+            # typically an AOLserver idiom and should be avoided.
+            #
             next
         }
     }
@@ -372,12 +398,16 @@ namespace eval ::acs {
     #
     # Class for hash-key-partitioned caches
     #
-    # Key-partitioning is based on a modulo function using a special
-    # partition_key, which has to be numeric - at least for the time being.
-    #
     ##########################################################################
-
     nx::Class create ::acs::HashKeyPartitionedCache -superclasses ::acs::KeyPartitionedCache {
+        #
+        # Partitioned cache, where the partition numbers are computed
+        # via a hash function.
+        #
+        # Key-partitioning is based on a modulo function using a special
+        # partition_key, which has to be numeric
+        #
+
         :property {partitions:integer 2}
 
         :public method flush_pattern {{-partition_key:required} pattern} {
@@ -388,6 +418,12 @@ namespace eval ::acs {
         }
 
         :public method set {{-partition_key:required} key value} {
+            #
+            # Set a single value in the cache. It transforms the
+            # partition key into a hash value. This code uses
+            # ns_cache_eval to achieve this behavior, which is
+            # typically an AOLserver idiom and should be avoided.
+            #
             next [list -partition_key [ns_hash $partition_key] $pattern]
         }
 
@@ -403,31 +439,18 @@ namespace eval ::acs {
     #
     # ::acs::LockfreeCache: Per-thread and per-request Cache
     #
-    # Lockfree cache are provided either as per-thread caches or
-    # per-request caches, sharing the property that accessing these
-    # values does not require locks.
-    #
-    # The per-thread caches use namespaced variables, which are not
-    # touched by the automatic cleanup routines of the server. So, the
-    # values cached in one requests can be used by some later request
-    # in the same thread. The entries are kept in per-thread caches as
-    # long as the thread lives, there is so far no automatic mechanism
-    # to flush these. So, per-thread caches are typically used for
-    # values fetched from the database, which do not change, unless
-    # the server is restarted.
-    #
-    # Per-request caches have very short-lived entries. Some values
-    # are needed multiple times per request, and/or they should show
-    # consistently the same value during the same request, no matter,
-    # if concurrently, a value is changed (e.g. permissions).
-    #
-    # Note: the usage of per-thread caches is only recommended for
-    # static values, which do no change during the life time of the
-    # server, since there is so far no automatic measure in place to
-    # the flush values in every thread.
-    #
     ##########################################################################
     nx::Class create ::acs::LockfreeCache {
+        #
+        # Lockfree cache are provided either as per-thread caches or
+        # per-request caches, sharing the property that accessing these
+        # values does not require locks.
+        #
+        # Typical applications of these caches are the per_request_cache and per_thread_cache.
+        #
+        # @see Object ::acs::per_request_cache
+        # @see Object ::acs::per_thread_cache
+        #
         :property {prefix}
 
         :public method get {
@@ -550,22 +573,55 @@ namespace eval ::acs {
             }
         }
 
-        #
-        # The per-request cache uses Tcl variables in the global
-        # namespace, such they are automatically reclaimed after the
-        # request. These use the prefix "::__acs_cache"
-        #
-        :create per_request_cache -prefix ::__acs_cache
+        :create per_request_cache -prefix ::__acs_cache {
+            #
+            # Lockfree cache with per-request live time of the
+            # entries.
+            #
+            # The purpose of the per-request cache is to cache
+            # computaion results of a single request.  The entries of
+            # this cache are therefore very short-lived. Some values
+            # are needed multiple times per request, and/or they
+            # should show consistently the same value during the same
+            # request, no matter, if concurrently, a value is changed
+            # (e.g. permissions).
+            #
+            # The per-request cache uses Tcl variables in the global
+            # Tcl namespace, such they are automatically reclaimed
+            # after the request. These use the prefix "::__acs_cache"
+            #
+        }
 
         #
         # Define the "per_thread_cache"
         #
+        set docString {
+            #
+            # Lockfree cache with per-thread live time of the entries.
+            #
+            # The per-thread caches use namespaced variables,
+            # which are not touched by the automatic per-request
+            # cleanup routines of the server. So, the values
+            # cached in one requests can be used by some later
+            # request in the same thread. The entries are kept in
+            # per-thread caches as long as the thread lives, there
+            # is so far no automatic mechanism to flush these. So,
+            # per-thread caches are typically used for values
+            # fetched from the database, which do not change,
+            # unless the server is restarted.
+            #
+            # Note: the usage of per-thread caches is only
+            # recommended for static values, which do no change
+            # during the life time of the server, since there is
+            # so far no automatic measure in place to the flush
+            # values in every thread.
+        }
         if {[ns_config "ns/parameters" cachingmode "per-node"] eq "none"} {
             #
             # If caching mode is "none", let the "per_thread_cache" behave
             # like the "per_request_cache".
             #
-            :create per_thread_cache -prefix ::__acs_cache
+            :create per_thread_cache -prefix ::__acs_cache $docString
             ns_log notice "cachingmode [ns_config "ns/parameters" cachingmode singlenode]" \
                 "-> per_thread_cache behaves like per-request_cache"
 
@@ -574,7 +630,7 @@ namespace eval ::acs {
             # The per-thread cache uses namespaced Tcl variables, identified
             # by the prefix "::acs:cache"
             #
-            :create per_thread_cache -prefix ::acs::cache
+            :create per_thread_cache -prefix ::acs::cache $docString
         }
     }
     namespace eval ::acs::cache {}
