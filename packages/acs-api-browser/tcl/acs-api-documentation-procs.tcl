@@ -467,6 +467,7 @@ ad_proc -public api_proc_documentation {
             set label $proc_name
         }
     }
+
     if { $script_p } {
         set pretty_name [api_proc_pretty_name \
                              -include_debug_controls \
@@ -511,7 +512,7 @@ ad_proc -public api_proc_documentation {
         ::xo::api update_object_doc $scope $cl ""
     } else {
         set xotclArgs 0
-        if {[namespace which ::xo::api] ne "" && [::xo::api isclass "" [lindex $proc_name 1]]} {
+        if {[namespace which ::xo::api] ne "" && [::xo::api isobject "" [lindex $proc_name 1]]} {
             set name [lindex $proc_name 1]
             set pretty_proc_name "[$name info class] [::xo::api object_link {} $name]"
         } else {
@@ -1297,8 +1298,16 @@ namespace eval ::apidoc {
         @param see a string expected to contain the resource to format
         @return the html string representing the resource
     } {
-        #regsub -all -- {proc *} $see {} see
-        set see [string trim $see]
+        #set see [string trim $see]
+
+        #
+        # The leading space is of a scope-less object or class is
+        # trimmed already via package contract. Reconstruct it again.
+        #
+        if {[regexp {^(Class|Object) (.*)$} $see . what obj]} {
+            set see " $see"
+        }
+
         if {[nsv_exists api_proc_doc $see]} {
             set href [export_vars -base /api-doc/proc-view {{proc $see}}]
             return [subst {<a href="[ns_quotehtml $href]">$see</a>}]
