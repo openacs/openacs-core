@@ -25,26 +25,33 @@ aa_register_case -cats {smoke production_safe} -procs {
         nx
         nsshell
     }
+    set skip {
+        { Object ::ns_cache}
+        { Class ::ns_hmac}
+        { Class ::ns_md}
+        { Class ::ns_crypto::HashFunctions}
+    }
     foreach p [lsort -dictionary [nsv_array names api_proc_doc]] {
         set pa [nsv_get api_proc_doc $p]
         if { [dict exists $pa protection]
              && "public" in [dict get $pa protection]
              && !([dict get $pa deprecated_p] || [dict get $pa warn_p])
              && ![string match *::slot* $p]
-             && ![string match ns_* $p]
+             && ![string match "ns_*" $p]
+             && $p ni $skip
          } {
             incr count
             if { [string is space [join [dict get $pa main]]] &&
                  (![dict exists $pa return] || [string is space [join [dict get $pa return]]]) &&
                  (![dict exists $pa param] || [string is space [join [dict get $pa param]]]) &&
                  (![dict exists $pa see] || [string is space [join [dict get $pa see]]])
-             } {
+             } {                
                 if {[regexp "^(\\s+Class ::)?([join $ignored_namespaces |])::.*\$" $p m]} {
                     set test_result warning
                 } else {
                     set test_result fail
                 }
-                aa_log_result $test_result "No documentation for public proc $p"
+                aa_log_result $test_result "No documentation for public proc <a href='/api-doc/proc-view?proc=[ns_urlencode $p]'>$p</a>"
             } else {
                 incr good
             }
