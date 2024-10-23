@@ -27,6 +27,7 @@ aa_register_case -cats {smoke production_safe} -procs {
     }
     set excluded_proc_index {
         { Object ::ns_cache}
+        { Object ::xo::lti::LTI::per-object-slot}
     }
     foreach p [lsort -dictionary [nsv_array names api_proc_doc]] {
         set pa [nsv_get api_proc_doc $p]

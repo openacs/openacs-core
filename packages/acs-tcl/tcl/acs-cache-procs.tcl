@@ -590,9 +590,10 @@ namespace eval ::acs {
             # request, no matter, if concurrently, a value is changed
             # (e.g. permissions).
             #
-            # The per-request cache uses Tcl variables in the global
-            # Tcl namespace, such they are automatically reclaimed
-            # after the request. These use the prefix "::__acs_cache"
+            # The per-request cache uses a Tcl variable in the global
+            # Tcl namespace, such it will be automatically reclaimed
+            # after the request. The per-request cache uses the prefix
+            # "::__acs_cache".
             #
         }
 
