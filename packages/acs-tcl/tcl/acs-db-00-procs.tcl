@@ -15,7 +15,11 @@ namespace eval ::acs::db {
     # driver and by the backend, which implies a different SQL dialect
     # (PostgreSQL or Oracle).
     #
-    ::nx::Class create ::acs::db::SQL
+    ::nx::Class create ::acs::db::SQL {
+        #
+        # Generic superclass for all SQL dialects.
+        #
+    }
 
     ##########################################################################
     #
@@ -23,7 +27,13 @@ namespace eval ::acs::db {
     #
     ##########################################################################
 
-    ::nx::Class create ::acs::db::postgresql -superclass ::acs::db::SQL
+    ::nx::Class create ::acs::db::postgresql -superclass ::acs::db::SQL {
+        #
+        # Support class for backend based on PostgreSQL, i.e., the
+        # PostgreSQL dialect of SQL). This class can be used with the
+        # nsdb and the nsdbi drivers of NaviServer.
+        #
+    }
 
     ##########################################################################
     #
@@ -31,7 +41,13 @@ namespace eval ::acs::db {
     #
     ##########################################################################
 
-    ::nx::Class create ::acs::db::oracle -superclass ::acs::db::SQL
+    ::nx::Class create ::acs::db::oracle -superclass ::acs::db::SQL {
+        #
+        # Support class for backend based on Oracle, i.e., the Oracle
+        # dialect of SQL).. This class can be used with the nsdb and
+        # the nsdbi drivers of NaviServer.
+        #
+    }
 
     ##########################################################################
     #
@@ -42,6 +58,9 @@ namespace eval ::acs::db {
     #
 
     ::nx::Class create ::acs::db::Driver {
+        #
+        # Abstract class of the database interface
+        #
         :property backend
         :property driver
         :property {dbn ""}
@@ -88,7 +107,11 @@ namespace eval ::acs::db {
     #
     # Driver specific and Driver/backend specific hooks
     #
-    ::nx::Class create ::acs::db::nsdb             -superclasses ::acs::db::Driver
+    ::nx::Class create ::acs::db::nsdb             -superclasses ::acs::db::Driver {
+        #
+        # Database interface based on the nsdb driver of NaviServer
+        #
+    }
     ::nx::Class create ::acs::db::nsdb-postgresql  -superclasses {::acs::db::nsdb ::acs::db::postgresql} {
         #
         # PostgreSQL backend for nsdb driver
@@ -100,7 +123,11 @@ namespace eval ::acs::db {
         #
     }
 
-    ::nx::Class create ::acs::db::nsdbi            -superclasses ::acs::db::Driver
+    ::nx::Class create ::acs::db::nsdbi            -superclasses ::acs::db::Driver {
+        #
+        # Database interface based on the nsdbi driver of NaviServer
+        #
+    }
     ::nx::Class create ::acs::db::nsdbi-postgresql -superclasses {::acs::db::nsdbi ::acs::db::postgresql} {
         #
         # PostgreSQL backend for nsdbi driver
@@ -110,6 +137,17 @@ namespace eval ::acs::db {
     # Preliminary list of functions (to be extended/refined)
     #
     ::acs::db::nsdb public method list_of_lists {{-dbn ""} {-bind ""} -prepare qn sql} {
+        #
+        # Return a Tcl list, where each element consists of a list of
+        # the column values corresponding to the values of the tuples
+        # returned by the provided SQL query.
+        #
+        # @param dbn database identifier
+        # @param bind optional bind variables for the SQL query
+        # @param prepare type information for the bind variables in the prepared statement
+        # @param qn name of the SQL query
+        # @param sql SQL query
+        #
         set bindOpt [expr {$bind ne "" ? [list -bind $bind] : ""}]
         if {$sql eq ""} {
             set qn [uplevel [list [self] qn $qn]]
@@ -118,6 +156,16 @@ namespace eval ::acs::db {
     }
 
     ::acs::db::nsdb public method list {{-dbn ""} {-bind ""} -prepare qn sql} {
+        #
+        # Return a Tcl list, where each element contains just the first
+        # the column values of the tuples returned by the provided SQL query.
+        #
+        # @param dbn database identifier
+        # @param bind optional bind variables for the SQL query
+        # @param prepare type information for the bind variables in the prepared statement
+        # @param qn name of the SQL query
+        # @param sql SQL query
+        #
         set bindOpt [expr {$bind ne "" ? [list -bind $bind] : ""}]
         if {$sql eq ""} {
             set qn [uplevel [list [self] qn $qn]]
@@ -126,6 +174,17 @@ namespace eval ::acs::db {
     }
 
     ::acs::db::nsdbi public method list_of_lists {{-dbn ""} {-bind ""} -prepare qn sql} {
+        #
+        # Return a Tcl list, where each element consists of a list of
+        # the column values corresponding to the values of the tuples
+        # returned by the provided SQL query.
+        #
+        # @param dbn database identifier
+        # @param bind optional bind variables for the SQL query
+        # @param prepare not used for NSDBI, providing interface compatibility with NSDB
+        # @param qn name of the SQL query
+        # @param sql SQL query
+        #
         if {$sql eq ""} {
             set sql [:get_sql $qn]
         }
@@ -137,6 +196,16 @@ namespace eval ::acs::db {
     }
 
     ::acs::db::nsdbi public method list {{-dbn ""} {-bind ""} -prepare qn sql} {
+        #
+        # Return a Tcl list, where each element contains just the first
+        # the column values of the tuples returned by the provided SQL query.
+        #
+        # @param dbn database identifier
+        # @param bind optional bind variables for the SQL query
+        # @param prepare not used for NSDBI, providing interface compatibility with NSDB
+        # @param qn name of the SQL query
+        # @param sql SQL query
+        #
         if {$sql eq ""} {
             set sql [:get_sql $qn]
         }
@@ -193,7 +262,21 @@ namespace eval ::acs::db {
 
         return [::acs::db::$driver-$backend create $name \
                     -backend $backend \
-                    -driver $driver]
+                    -driver $driver {
+                        #
+                        # Database connection object, configured via
+                        # ::acs::db::require_dc.  For definiting
+                        # connections to multiple databases forover
+                        # potentially different drivers, define
+                        # multiple database base connection objects.
+                        #
+                        # the column values corresponding to the values of the tuples
+                        # returned by the provided SQL query.
+                        #
+                        # @see ::acs::db::require_dc
+                        # @see Class ::acs::db::nsdb-postgresql
+                        # @see Class ::acs::db::nsdb-oracle
+                    }]
     }
 
     #
