@@ -17,7 +17,7 @@ if {![info exists ::acs::rootdir]} {
 # the segment of the error log corresponding to server initialization (between
 # "AOLserver/xxx starting" and "AOLserver/xxx running").
 #
-# GN: not used anymore, but could be reactivated in the future. Note, that
+# GN: not used anymore, but could be reactivated in the future. Note that
 #     the system log might be spooled to stderr or the like.
 #catch { nsv_set acs_properties initial_error_log_length [file size [ns_info log]] }
 

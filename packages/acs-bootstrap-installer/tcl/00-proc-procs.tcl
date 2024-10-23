@@ -7,7 +7,7 @@ nsv_array set proc_doc [list]
 nsv_array set proc_source_file [list]
 
 if {[info commands ::nx::Class] ne ""} {
-    nx::Class create xo::DocHelper {
+    nx::Class create acs::DocHelper {
         #
         # Helper class to determine the sourcefile, where some "public",
         # "private", or plain "methods" is defined. The mixin is just
@@ -20,14 +20,26 @@ if {[info commands ::nx::Class] ne ""} {
             #ns_log notice "INIT registered epoch [ns_ictl epoch] [self] script [info script]"
         }
         :public method method {args} {
-                                      :register_filename
-                                      return [next]
-                                  }
-        :public method public {what name args} {
+            #
+            # Intercept "method" definitions to record the current
+            # filename for the API browser.
+            #
             :register_filename
             return [next]
         }
-        :public method private {what name args} {
+        :public method public {what name args} {
+            #
+            # Intercept "public method" definitions to record the
+            # current filename for the API browser.
+            #
+            :register_filename
+            return [next]
+        }
+        :public method protected {what name args} {
+            #
+            # Intercept "protected method" definitions to record the
+            # current filename for the API browser.
+            #
             :register_filename
             return [next]
         }
@@ -51,11 +63,11 @@ if {[info commands ::nx::Class] ne ""} {
         # }
     }
     if {[ns_ictl epoch] == 0} {
-        nx::Class mixins add xo::DocHelper
+        nx::Class mixins add acs::DocHelper
         #ns_log notice "REGISTER xo::DocHelper INIT epoch [ns_ictl epoch]"
     }
 } else {
-    ns_log error "no NSD/NX available. Installation is apprently incomplete or misconfigured"
+    ns_log error "no NSD/NX available. Installation is apparently incomplete or misconfigured"
 }
 
 #
