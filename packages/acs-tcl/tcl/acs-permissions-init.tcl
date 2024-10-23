@@ -1,6 +1,6 @@
 #
 # Create permission caches. The sizes can be tailored in the config
-            # file like the following:
+# file like the following:
 #
 # ns_section ns/server/${server}/acs/acs-tcl
 #   ns_param PermissionCacheSize        100KB
@@ -10,7 +10,12 @@
     -package_key acs-tcl \
     -parameter PermissionCache \
     -default_size 100KB \
-    -partitions 2
+    -partitions 2 {
+        #
+        # Permission cache. This partitioned cache manages partition caching.
+        # In case of bottlenecks, increase the number of partitions and the cache size.
+        #
+    }
 
 
 # Local variables:
