@@ -66,6 +66,9 @@ namespace eval ::acs {
     #::nsf::method::property nx::Class method debug on
 
     nx::Class create Cluster {
+        #
+        # Class for managing a cluster of OpenACS nodes
+        #
         :property {url /acs-cluster-do}
         :property {myLocation ""}
 
@@ -1112,10 +1115,18 @@ namespace eval ::acs {
     }
 
     #
-    # Define the acs::cluster object, since this is used e.g. in
+    # Define the acs::cluster object, since this is used, e.g., in
     # "acs::clusterwide", which is used quite early during boot.
     #
-    acs::Cluster create ::acs::cluster
+    acs::Cluster create ::acs::cluster {
+        #
+        # Configured cluster object, keeping the state of the cluster
+        # configuration. The interaction with the cluster is performed
+        # over this object.
+        #
+        # @see Class ::acs:Cluster
+        
+    }
     #
     # Refetch setup on reload operations of this file.
     #
