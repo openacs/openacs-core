@@ -2,66 +2,55 @@
   <property name="context">@context;literal@</property>
   <property name="doc(title)">@subsite_name;literal@</property>
 
-
-<table width="100%">
-  <tr>
-    <td valign="top" width="30%">
-      <div class="portlet-wrapper">
-        <div class="portlet-header">
-          <div class="portlet-title">
-            <h1>#acs-subsite.Applications#</h1>
-          </div>
-        </div>
-        <div class="portlet">
-          <include src="/packages/acs-subsite/lib/applications">
+  <div style="display:flex; flex-wrap: wrap; margin-bottom: 1em;">
+    <div class="portlet-wrapper">
+      <div class="portlet-header">
+        <div class="portlet-title">
+          <h1>#acs-subsite.Applications#</h1>
         </div>
       </div>
-    </td>
-    <td valign="top">
-      <div class="portlet-wrapper">
-        <div class="portlet-header">
-          <div class="portlet-title">
-            <h1>#acs-subsite.Subsites#</h1>
-          </div>
-        </div>
-        <div class="portlet">
-          <include src="/packages/acs-subsite/lib/subsites">
+      <div class="portlet">
+        <include src="/packages/acs-subsite/lib/applications">
+      </div>
+    </div>
+    <div class="portlet-wrapper">
+      <div class="portlet-header">
+        <div class="portlet-title">
+          <h1>#acs-subsite.Subsites#</h1>
         </div>
       </div>
-    </td>
-  </tr>
+      <div class="portlet">
+        <include src="/packages/acs-subsite/lib/subsites">
+      </div>
+    </div>
+  </div>
 
-  <tr>
-    <td valign="top" colspan="2">
-      <ul class="compact">
-          <if @show_members_page_link_p;literal@ true>
-            <li><a href="members/" class="button">#acs-subsite.Members#</a></li>
-          </if>
-  	  <li><a href="site-map/" class="button">#acs-subsite.UserSiteMap#</a></li>
-          <if @untrusted_user_id@ ne 0>
-            <if @main_site_p;literal@ false>  
-              <if @group_member_p;literal@ true>
-               <li><a href="group-leave" class="button" title="#acs-subsite.Leave_this_subsite#">#acs-subsite.Leave_subsite#</a></li>
-              </if>
-              <else>
-                <if @can_join_p;literal@ true>
-                  <if @group_join_policy;literal@ eq "open">
-                    <li><a href="register/user-join" class="button" title="#acs-subsite.Join_this_subsite">#acs-subsite.Join_subsite#</a></li>
-                  </if>
-                  <else>
-                    <li><a href="register/user-join" class="button" title="#acs-subsite.Req_membership_subs#">#acs-subsite.Request_membership#</a></li>
-                  </else>
-                </if>
-              </else>
+  <ul class="compact">
+    <if @show_members_page_link_p;literal@ true>
+      <li><a href="members/" class="button">#acs-subsite.Members#</a></li>
+    </if>
+    <li><a href="site-map/" class="button">#acs-subsite.UserSiteMap#</a></li>
+    <if @untrusted_user_id@ ne 0>
+      <if @main_site_p;literal@ false>  
+        <if @group_member_p;literal@ true>
+          <li><a href="group-leave" class="button" title="#acs-subsite.Leave_this_subsite#">#acs-subsite.Leave_subsite#</a></li>
+        </if>
+        <else>
+          <if @can_join_p;literal@ true>
+            <if @group_join_policy;literal@ eq "open">
+              <li><a href="register/user-join" class="button" title="#acs-subsite.Join_this_subsite">#acs-subsite.Join_subsite#</a></li>
             </if>
+            <else>
+              <li><a href="register/user-join" class="button" title="#acs-subsite.Req_membership_subs#">#acs-subsite.Request_membership#</a></li>
+            </else>
           </if>
-          <if @admin_p;literal@ true> 
-            <li><a href="admin/" class="button" title="#acs-subsite.Administer_subsite#">#acs-kernel.common_Administration#</a></li>
-          </if>
-      </ul>
-    </td>
-  </tr>
-</table>
+        </else>
+      </if>
+    </if>
+    <if @admin_p;literal@ true> 
+      <li><a href="admin/" class="button" title="#acs-subsite.Administer_subsite#">#acs-kernel.common_Administration#</a></li>
+    </if>
+  </ul>
 
 <if @admin_p;literal@ true>
     <div class="portlet">
