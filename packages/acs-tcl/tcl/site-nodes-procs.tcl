@@ -35,9 +35,6 @@ ad_library {
 # The code was tested on installations with NaviServer under
 # PostgreSQL and Oracle, including new installs under PostgreSQL.
 #
-# Still missing: test on fresh new install with Oracle
-# Still missing: tests for AOLserver
-#
 #####################################################################
 
 namespace eval site_node {}
@@ -529,14 +526,13 @@ namespace eval ::acs {
     #####################################################
     # @class acs::SiteNode
     #####################################################
-    #
-    #    This class capsulates access to site-nodes stored in the
-    #    database.  It is written in a style to support the needs
-    #    of the Tcl-based API above.
-    #
-    # @author Gustaf Neumann
-
     ::nx::Class create ::acs::SiteNode {
+        #
+        #    This class capsulates access to site-nodes stored in the
+        #    database.  It is written in a style to support the needs
+        #    of the traditional Tcl-based API.
+        #
+        # @author Gustaf Neumann
 
         :public method get {
             {-url ""}
@@ -709,17 +705,17 @@ namespace eval ::acs {
         #
         # @method get_urls_from_object_id
         #
-        #    returns a list of URLs for site_nodes that have the given
-        #    object mounted or the empty list if there are none. The URLs
-        #    will be returned in descending order meaning any children
-        #    will come before their parents. This ordering is useful when
-        #    deleting site nodes as we must delete child site nodes before
-        #    their parents.
-        #
-
         :public method get_urls_from_object_id {
-            -object_id:required
+            -object_id:required,integer
         } {
+            #
+            # Return a list of URLs for site_nodes that have the given
+            # object mounted or the empty list if there are none. The
+            # URLs are returned in descending order meaning any
+            # children will come before their parents. This ordering
+            # is useful when deleting site nodes as we must delete
+            # child site nodes before their parents.
+            #
             set child_urls [::acs::dc list -prepare integer dbqd..[current method]-all [subst {
                 select [acs::dc map_function_name site_node__url(node_id)] as url
                 from site_nodes
@@ -786,9 +782,15 @@ namespace eval ::acs {
             #
         }
 
-        # Create an object "acs::site_node" to provide a
-        # user-interface close to the classical one.
-        :create site_node
+        :create site_node {
+            #
+            # Object to interact with the ::acs::SiteNode class.  The
+            # intention is to provide an API interface highly
+            # compatible with the classical OpenACS interface.
+            #
+            # @see Class ::acs::SiteNode
+            #
+        }
     }
 
     #
@@ -805,6 +807,12 @@ namespace eval ::acs {
     #####################################################
     variable createCache
 
+    #
+    # Determine, whether the cache has already been created. Support
+    # for now also code before ::ns_cache_names was provided. The
+    # "ns_cache_names" command was introduced in NaviServer 4.99.18,
+    # which was released in June 2022.
+    #
     if {[namespace which ::ns_cache_names] ne ""} {
         set createCache [expr {"site_nodes_cache" ni [::ns_cache_names]}]
     } else {
@@ -825,38 +833,70 @@ namespace eval ::acs {
         ::acs::KeyPartitionedCache create ::acs::site_nodes_cache \
             -package_key acs-tcl \
             -parameter SiteNodesCache \
-            -default_size 2MB
+            -default_size 2MB {
+                #
+                # Partitioned Cache for handling generic site node
+                # information.  Site node caching is implemented using
+                # three different caches.
+                #
+                # @see Object ::acs::site_nodes_id_cache
+                # @see Object ::acs::site_nodes_children_cache
+            }
         #
         # In case we have "ns_hash" defined, we can use the
         # "HashKeyPartitionedCache". Otherwise fall back to the
         # plain cache.
         #
+        set cache_doc {
+            #
+            # Partitioned Cache for handling site node IDs.
+            # Site node caching is implemented using
+            # three different caches.
+            #
+            # @see Object ::acs::site_nodes_cache
+            # @see Object ::acs::site_nodes_children_cache
+        }
         if {[::acs::icanuse "ns_hash"]} {
             ::acs::HashKeyPartitionedCache create ::acs::site_nodes_id_cache \
                 -package_key acs-tcl \
                 -parameter SiteNodesIdCache \
-                -default_size 100KB
+                -default_size 100KB \
+                $cache_doc
         } else {
             ::acs::Cache create ::acs::site_nodes_id_cache \
                 -package_key acs-tcl \
                 -parameter SiteNodesIdCache \
-                -default_size 100KB
+                -default_size 100KB \
+                $cache_doc                
         }
 
         ::acs::KeyPartitionedCache create ::acs::site_nodes_children_cache \
             -package_key acs-tcl \
             -parameter SiteNodesChildenCache \
-            -default_size 100KB
+            -default_size 100KB {
+                #
+                # Partitioned Cache for handling site node children.
+                # Site node caching is implemented using
+                # three different caches.
+                #
+                # @see Object ::acs::site_nodes_cache
+                # @see Object ::acs::site_nodes_id_cache
+            }
     }
 
-    #
-    # acs::SiteNodesCache is a mixin class for caching the SiteNode objects.
-    # Add/remove caching methods as wanted. Removing the registry of
-    # the object mixin deactivates caching for these methods
-    # completely.
-    #
-    ::nx::Class create ::acs::SiteNodesCache {
 
+    #####################################################
+    # Class ::acs::SiteNodesCache
+    #####################################################
+    ::nx::Class create ::acs::SiteNodesCache {
+        #
+        # acs::SiteNodesCache is a mixin class implementing caching
+        # of SiteNode objects.  Add/remove extra caching methods as when
+        # more operations should be cached.
+        #
+        # Removing the registry of the object mixin
+        # deactivates caching for these methods completely.
+        #
         :public method get_children {
             -node_id:required,integer,1..1
             {-all:switch}
