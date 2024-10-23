@@ -25,25 +25,8 @@ aa_register_case -cats {smoke production_safe} -procs {
         nx
         nsshell
     }
-    set skip {
+    set excluded_proc_index {
         { Object ::ns_cache}
-        { Class ::ns_hmac}
-        { Class ::ns_md}
-        { Class ::ns_crypto::HashFunctions}
-        { Class ::xotcl::Attribute}
-        { Class ::xotcl::MetaSlot}
-        { Class ::xotcl::RelationSlot}
-        { Class ::xotcl::package}
-        {xotcl::Attribute instproc __object_configureparameter}
-        {xotcl::Attribute instproc createForwarder}
-        {xotcl::Attribute instproc exists}
-        {xotcl::Attribute instproc istype}
-        {xotcl::package proc contains}
-        {xotcl::package proc create}
-        {xotcl::package proc extend}
-        {xotcl::package proc import}
-        {xotcl::package proc present}
-        {xotcl::package proc verbose}
     }
     foreach p [lsort -dictionary [nsv_array names api_proc_doc]] {
         set pa [nsv_get api_proc_doc $p]
@@ -52,8 +35,32 @@ aa_register_case -cats {smoke production_safe} -procs {
              && !([dict get $pa deprecated_p] || [dict get $pa warn_p])
              && ![string match *::slot* $p]
              && ![string match "ns_*" $p]
-             && $p ni $skip
+             && $p ni $excluded_proc_index
          } {
+            #
+            # For nx objects and classes, we check, if we find the
+            # place where it was defined (script_name). If thiswe
+            # cannot determine the location this indicates that it
+            # might not be defined by OpenACS, or it might hint a bug.
+            #
+            set obj [::xo::api object_from_proc_index $p]
+            if {$obj ne "" && [nsf::is object,type=::nx::Object $obj]} {
+                set obj [namespace which $obj]
+                set skip [::acs::per_request_cache eval -key script-name-$obj {
+                    set script_name [::xo::api script_name -obj $obj {}]
+                    if {$script_name eq ""} {
+                        aa_log "Cannot determine script name for object '$obj' (proc_index: $p)"
+                        set result 1
+                    } else {
+                        set result 0
+                    }
+                }]
+                #ns_log notice "SKIP '$skip' for <$obj> // $p"
+                if {$skip} {
+                    continue
+                }
+            }
+
             incr count
             if { [string is space [join [dict get $pa main]]] &&
                  (![dict exists $pa return] || [string is space [join [dict get $pa return]]]) &&
