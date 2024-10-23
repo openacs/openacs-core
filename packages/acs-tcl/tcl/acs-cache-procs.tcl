@@ -495,11 +495,15 @@ namespace eval ::acs {
             #
             # @return return the last value set (don't use "return").
             #
-            #set cache_key ${:prefix}$key
-            #ns_log notice "### exists $cache_key => [dict exists ${:prefix} $key]"
             if {[info exists from_cache_indicator]} {
                 :upvar $from_cache_indicator from_cache
             }
+
+            #if {![info exists ${:prefix}]} {
+            #    ns_log notice "### exists ${:prefix} ==> 0"
+            #} else {
+            #    ns_log notice "### [list dict exists [set ${:prefix}] $key] ==>  [dict exists [set ${:prefix}] $key]"
+            #}
 
             if {![info exists ${:prefix}] || ![dict exists [set ${:prefix}] $key]} {
                 #ns_log notice "### call cmd <$cmd>"
@@ -579,7 +583,7 @@ namespace eval ::acs {
             # entries.
             #
             # The purpose of the per-request cache is to cache
-            # computaion results of a single request.  The entries of
+            # computation results of a single request.  The entries of
             # this cache are therefore very short-lived. Some values
             # are needed multiple times per request, and/or they
             # should show consistently the same value during the same
