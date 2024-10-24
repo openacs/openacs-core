@@ -9,7 +9,7 @@
     <implements-subsite-p>f</implements-subsite-p>
     <inherit-templates-p>t</inherit-templates-p>
 
-    <version name="6.0.0d1" url="http://openacs.org/repository/download/apm/acs-templating-6.0.0d1.apm">
+    <version name="6.0.0d2" url="http://openacs.org/repository/download/apm/acs-templating-6.0.0d2.apm">
         <owner url="http://openacs.org">OpenACS</owner>
         <summary>Templating library.</summary>
         <release-date>2024-09-02</release-date>
@@ -27,7 +27,7 @@ layout of a site can be more easily administered.
         <license>GPL version 2</license>
         <maturity>3</maturity>
 
-        <provides url="acs-templating" version="6.0.0d1"/>
+        <provides url="acs-templating" version="6.0.0d2"/>
         <requires url="acs-kernel" version="6.0.0d1"/>
         <requires url="acs-tcl" version="5.10.1"/>
 
@@ -52,6 +52,7 @@ layout of a site can be more easily administered.
             <parameter scope="instance" datatype="text"  min_n_values="1"  max_n_values="1"  name="TinyMCEDefaultConfig"  default="" description="Legacy placeholder. Configure this parameter in the richtext-tinymce package, not here."/>
             <parameter scope="instance" datatype="number"  min_n_values="1"  max_n_values="1"  name="UseHtmlAreaForRichtextP"  default="0" description="Should the richtext widget use the htmlArea widget for richtext editing. 1 = yes, 0 = no. We will also check the browser's User-Agent header to find out if htmlArea works with the given browser."/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="XinhaDefaultPlugins"  default="" description="Legacy placeholder. Configure this parameter in the richtext-xinha package, not here."/>
+	    <parameter scope="global" datatype="string"  min_n_values="1"  max_n_values="1"  name="PreferredCSSToolkit"  default="default" description="Use either &quot;yui&quot;, or &quot;bootstrap&quot;, or &quot;default&quot;. The latter one lets the value according to the theme. yui is just for legacy reasons."/>
         </parameters>
 
     </version>

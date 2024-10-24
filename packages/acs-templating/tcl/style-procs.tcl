@@ -23,9 +23,267 @@ ad_proc -private template::toolkit {-subsite_id} {
             set toolkit bootstrap5
         } elseif {[string match *bootstrap3* $theme]} {
             set toolkit bootstrap
+        } elseif {[string match *w3css-theme* $theme]} {
+            set toolkit w3css            
         }
     }
     return $toolkit
+}
+
+namespace eval ::template {
+    nx::Object create ::template::CSS {
+        #
+        # CSS property manager. This class is used for agnostic handling
+        # of icons, CSS class names, or styling preferences of a
+        # subsite/instance.
+        #
+        :public object method clear {} {
+            #
+            # Clear the cached toolkit name, such that it is reloads the
+            # settings on the next initialize call.
+            #
+            unset -nocomplain :preferredCSSToolkit
+        }
+        :public object method toolkit {} {
+            #
+            # Return the preferred CSS toolkit
+            #
+            return ${:preferredCSSToolkit}
+        }
+
+        :public object method icon_name {filename} {
+            #
+            # Return an icon name for the proved filename
+            #
+            # Default icon name
+            set iconName file
+            if {${:iconset} eq "bootstrap-icons"} {
+                switch [ad_file extension $filename] {
+                    .doc  -
+                    .docx -
+                    .odt  -
+                    .txt  {set iconName "file-earmark-text"}
+
+                    .csv  -
+                    .ods  -
+                    .xls  -
+                    .xlsx {set iconName "file-earmark-spreadsheet"}
+
+                    .odp  -
+                    .ppt  -
+                    .pptx {set iconName "file-earmark-spreadsheet"}
+
+                    .pdf  {set iconName "file-earmark-pdf"}
+
+                    .c    -
+                    .h    -
+                    .tcl {set iconName "file-earmark-code"}
+
+                    .css  -
+                    .html -
+                    .java -
+                    .js   -
+                    .json -
+                    .py   -
+                    .sql {set iconName "filetype-[string range [ad_file extension $filename] 1 end]"}
+
+                    default {
+                        switch -glob [ns_guesstype $filename] {
+                            image/* {set iconName "file-earmark-image"}
+                            video/* {set iconName "file-earmark-play"}
+                            audio/* {set iconName "file-earmark-slides"}
+                            default {
+                                ns_log notice "not handled '[ad_file extension $filename] / [ns_guesstype $filename] of <$filename>"
+                            }
+                        }
+                    }
+                }
+            }
+            return $iconName
+        }
+
+        :public object method require_toolkit {{-css:switch} {-js:switch}} {
+            #
+            # Make sure that the preferred toolkit is loaded. Note that some
+            # combination won't match nicely, since e.g. the toolbar of a
+            # theme based on bootstrap5 is messed up, when the preferred
+            # toolkit is bootstrap3. .... so, we should have some default
+            # setting or fallbacks to handle such situations.
+            #
+            if {${:preferredCSSToolkit} eq "bootstrap5"} {
+                if {$css} {::template::head::add_css -href urn:ad:css:bootstrap5}
+                if {$js}  {::template::head::add_javascript -src urn:ad:js:bootstrap5}
+            } elseif {${:preferredCSSToolkit} eq "bootstrap"} {
+                if {$css} {::template::head::add_css -href urn:ad:css:bootstrap3}
+                if {$js}  {::template::head::add_javascript -src urn:ad:js:bootstrap3}
+            } else {
+                # YUI has many simple files, let the application decide what
+                # to be loaded.
+            }
+        }
+
+        :public object method initialize {} {
+            #
+            # Initialize tailorization for CSS toolkits. The function reads
+            # the global apm package parameter and sets/resets accordingly
+            # (a) the default values (actually parameters) for the form
+            # field and (b) defines the toolkit specific CSS class name
+            # mapping.
+            #
+            #
+            # Loading optional, but universally present header files has do
+            # be performed per request... not sure this is the best place,
+            # since packages are as well initialized in the background.
+            #
+            if {[ns_conn isconnected] && [apm_package_enabled_p "bootstrap-icons"]} {
+                template::head::add_css -href urn:ad:css:bootstrap-icons
+            }
+
+            set paramValue [parameter::get_global_value -package_key acs-templating \
+                                -parameter PreferredCSSToolkit \
+                                -default [parameter::get_global_value -package_key xowiki \
+                                              -parameter PreferredCSSToolkit \
+                                              -default default]]
+            #
+            # Check, if parameter value is compatible with the theme. In
+            # particular, a preferred toolkit of "bootstrap3" does not work
+            # when the theme is based on Bootstrap 5 and vice versa. When necessary,
+            # align the value.
+            #
+            if {$paramValue in {default bootstrap bootstrap5} && [ns_conn isconnected]} {
+                set theme [subsite::get_theme]
+                if {$paramValue in {bootstrap default} && [string match *bootstrap5* $theme]} {
+                    set paramValue bootstrap5
+                } elseif {$paramValue in {bootstrap5 default} && [string match *bootstrap3* $theme]} {
+                    set paramValue bootstrap
+                }
+                if {$paramValue eq "default"} {
+                    # For the time being, YUI is the default (deriving default
+                    # toolkit from theme did not work, we have to assume that
+                    # the fonts for Bootstrap 3 or 5 are not loaded for edit
+                    # buttons, etc.
+                    set paramValue yui
+                }
+            }
+
+            #
+            # Just do initialization once
+            #
+            if {[info exists :preferredCSSToolkit]
+                && ${:preferredCSSToolkit} eq $paramValue
+            } {
+                return
+            }
+            #
+            # The code below is executed only on first initialization of the
+            # object or on changes of the preferredCSSToolkit.
+            #
+            set :preferredCSSToolkit $paramValue
+            set :iconset [template::iconset]
+
+            if {${:preferredCSSToolkit} eq "bootstrap"} {
+                set :cssClasses {
+                    btn-default btn-default
+                    bulk-action "btn btn-default"
+                    form-action "btn btn-default"
+                    action "btn btn-default"
+                    margin-form ""
+                    card "panel panel-default"
+                    card-header panel-heading
+                    card-body panel-body
+                    d-none hidden
+                    text-warning text-warn
+                }
+                if {[info commands ::xowiki::formfield::FormField] ne ""} {
+                    ::xowiki::formfield::FormField parameter [subst {
+                        {CSSclass form-control}
+                        {form_item_wrapper_CSSclass form-group}
+                        {form_label_CSSclass ""}
+                        {form_widget_CSSclass ""}
+                        {form_button_CSSclass "[template::CSS class form-action]"}
+                        {form_button_wrapper_CSSclass ""}
+                        {form_help_text_CSSclass help-block}
+                    }]
+                }
+            } elseif {${:preferredCSSToolkit} eq "bootstrap5"} {
+                set :cssClasses {
+                    btn-default btn-outline-secondary
+                    bulk-action "btn btn-outline-secondary btn-sm"
+                    form-action "btn btn-outline-secondary btn-sm m-1"
+                    action "btn btn-outline-secondary btn-sm m-1"
+                    navbar-default navbar-light
+                    navbar-right ms-auto
+                    margin-form ""
+                    cog gear
+                    print printer
+                    close btn-close
+                    checkbox-inline form-check-inline
+                    radio-inline form-check-inline
+                }
+                if {[info commands ::xowiki::formfield::FormField] ne ""} {
+                    ::xowiki::formfield::FormField parameter [subst {
+                        {CSSclass form-control}
+                        {form_item_wrapper_CSSclass mb-3}
+                        {form_label_CSSclass "form-label me-1"}
+                        {form_widget_CSSclass ""}
+                        {form_button_CSSclass "[template::CSS class form-action]"}
+                        {form_button_wrapper_CSSclass ""}
+                        {form_help_text_CSSclass form-text}
+                    }]
+                    ::xowiki::formfield::select parameter {
+                        {CSSclass form-select}
+                    }
+                    ::xowiki::formfield::checkbox parameter {
+                        {CSSclass form-check}
+                    }
+                    ::xowiki::formfield::radio parameter {
+                        {CSSclass form-check}
+                    }
+                    ::xowiki::formfield::range parameter {
+                        {CSSclass form-range}
+                    }
+                }
+            } else {
+                set :cssClasses {
+                    btn-default ""
+                    margin-form margin-form
+                }
+                if {[info commands ::xowiki::formfield::FormField] ne ""} {
+                    
+                    ::xowiki::formfield::FormField parameter {
+                        {CSSclass}
+                        {form_label_CSSclass ""}
+                        {form_widget_CSSclass form-widget}
+                        {form_item_wrapper_CSSclass form-item-wrapper}
+                        {form_button_CSSclass ""}
+                        {form_button_wrapper_CSSclass form-button}
+                        {form_help_text_CSSclass form-help-text}
+                    }
+                    ::xowiki::Form requireFormCSS
+                }
+            }
+        }
+
+        :public object method class {name} {
+            #
+            # In case, a mapping for CSS classes is defined, return the
+            # mapping for the provided class name. Otherwise return the
+            # provided class name.
+            #
+            if {[dict exists ${:cssClasses} $name]} {
+                return [dict get ${:cssClasses} $name]
+            } else {
+                return $name
+            }
+        }
+
+        :public object method classes {classNames} {
+            #
+            # Map a list of CSS class names
+            #
+            return [join [lmap class $classNames {:class $class}] " "]
+        }
+    }
 }
 
 ad_proc ::template::icon::name {-iconset name} {
@@ -35,8 +293,8 @@ ad_proc ::template::icon::name {-iconset name} {
     boundary cases, where e.g. a display_template passes the generic
     name of the icon via template variables which have to be
     @-substituted before adp-tag resolution, which performs the
-    regular icon name mapping (otherwise, the tag resolver receives
-    e.g. ...name=@icon@...)
+    regular icon name mapping. Otherwise, the tag resolver receives,
+    e.g., ...name=@icon@...
 
     @param iconset
     @param name
@@ -54,8 +312,8 @@ ad_proc ::template::icon::name {-iconset name} {
 ad_proc -private template::iconset {-subsite_id} {
 
     Return the configured or derived icon set.  Potential results are
-    "classic" (old-style gif/png images), "glyphicons" (Part of
-    Bootstrap 3), "fa-icons" (usable for all themes), and
+    "classic" (old-style gif/png images), "glyphicons"
+    (Part of Bootstrap 3), "fa-icons" (usable for all themes), and
     "bootstrap-icons" (usable for all themes).
 
 } {
