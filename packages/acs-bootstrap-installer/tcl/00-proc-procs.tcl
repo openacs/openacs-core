@@ -565,6 +565,9 @@ proc ad_proc args {
         set script $::ad_conn(file)
         ns_log notice "ad_proc: get script name for proc '$proc_name' from ad_conn(file): $script"
     }
+    if {$script eq "" && [info exists ::xotcl::currentScript]} {
+        set script $::xotcl::currentScript
+    }
     set root_length [string length $::acs::rootdir]
     if { $::acs::rootdir eq [string range $script 0 $root_length-1] } {
         set script [string range $script $root_length+1 end]
