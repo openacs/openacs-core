@@ -867,31 +867,10 @@ ad_proc -public export_vars {
             # is already correctly encoded.
             #
             set newQuery [::util::skip_suspicious_query_vars [dict get $parsedURL query]]
-            set fullQuery [expr {$newQuery eq "" || $export_string eq ""
-                                 ? [string cat $newQuery $export_string]
-                                 : [string cat $newQuery & $export_string] }]
-
-            set URL {}
-            if {[dict exists $parsedURL host]} {
-                set URL \
-                    [util::join_location \
-                         {*}[expr {[dict exists $parsedURL proto] ? [list -proto [dict get $parsedURL proto]] : {}}] \
-                         {*}[expr {[dict exists $parsedURL host] ? [list -hostname [dict get $parsedURL host]] : {}}] \
-                         {*}[expr {[dict exists $parsedURL port] ? [list -port [dict get $parsedURL port]] : {}}] \
-                        ]
-                append URL /
-            }
-            if {[dict exists $parsedURL path] && [dict get $parsedURL path] ne ""} {
-                append URL [dict get $parsedURL path]/
-            }
-            if {[dict exists $parsedURL tail] && [dict get $parsedURL tail] ne ""} {
-                append URL [dict get $parsedURL tail]
-            }
-
-            set export_string $URL
-            if {$fullQuery ne ""} {
-                append export_string ?$fullQuery
-            }
+            dict set parsedURL query [expr {$newQuery eq "" || $export_string eq ""
+                                            ? [string cat $newQuery $export_string]
+                                            : [string cat $newQuery & $export_string] }]
+            set export_string [ns_joinurl $parsedURL]
         } else {
             # The base has no query vars: encode URL part if not
             # explicitly said otherwise. Include also as exception
