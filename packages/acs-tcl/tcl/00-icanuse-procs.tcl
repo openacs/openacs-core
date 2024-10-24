@@ -101,7 +101,15 @@ namespace eval ::acs {
 # loading order. The commands are executed very early, this means
 # that, e.g., util::which is not yet available.
 #
-::acs::register_icanuse "domDoc asTclValue"         [expr {[apm_version_names_compare [package require tdom] 0.9.5] >= 0}]
+
+#
+# Unfortunately, we cannot use for tDOM version comparison simply
+#
+#   [apm_version_names_compare [package require tdom] 0.9.5]
+#
+# during startup. Therefore, we parse a minimal json expression and try the command on it
+::acs::register_icanuse "domDoc asTclValue"         [expr {[catch {[dom parse -json -- 1 doc] asTclValue}] == 0}]
+
 ::acs::register_icanuse "gnugrep"                   [acs::cmd_error_contains [list exec grep -V] GNU]
 ::acs::register_icanuse "ns_asynclogfile"           {[info commands ::ns_asynclogfile] ne ""}
 ::acs::register_icanuse "ns_baseunit"               {[info commands ::ns_baseunit] ne ""}
