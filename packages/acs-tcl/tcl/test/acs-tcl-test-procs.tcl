@@ -779,6 +779,13 @@ aa_register_case \
         [export_vars -base "http://dummywebsite.com/one/two" {{foo a} {bar b}}] \
         "http://dummywebsite.com/one/two?foo=a&bar=b"
 
+    aa_equals "absolute base URL with query vars + exported vars" \
+        [export_vars \
+            -no_base_encode \
+            -base /absolute/url?param1=one&param2=two \
+            {{exported_param exported}}] \
+        "/absolute/url?param1=one&param2=two&exported_param=exported"
+
     # Test base with query vars
     set var1 a
     set var2 {}
