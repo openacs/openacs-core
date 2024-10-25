@@ -5,7 +5,6 @@ ad_library {
     @author Jon Salz (jsalz@mit.edu)
     @author Lars Pind (lars@arsdigita.com)
     @creation-date 21 Jun 2000
-    @cvs-id $Id$
 
 }
 
@@ -651,10 +650,33 @@ ad_proc -public api_proc_documentation {
         svg g g polygon {fill: #f4f4e4;}
     }
 
-    set callgraph [util::inline_svg_from_dot -css $css \
-                       [api_call_graph_snippet -proc_name $proc_name -maxnodes 5]]
-    if {$callgraph ne ""} {
-        append blocks_out "<p><dt>Partial Call Graph (max 5 caller/called nodes):</dt><dd>$callgraph</dd>\n"
+    if {![regexp { (Class|Object) } $proc_name]} {
+        if {![regexp { (inst)?proc } $proc_name]} {
+            #ns_log notice "Compute call graph from <$proc_name>"
+            set callgraph [util::inline_svg_from_dot -css $css \
+                               [api_call_graph_snippet -proc_name $proc_name] -maxnodes 5]
+            if {$callgraph ne ""} {
+                append blocks_out "<p><dt>Partial Call Graph (max 5 caller/called nodes):</dt><dd>$callgraph</dd>\n"
+            }
+        }
+    } else {
+        set objName [::xo::api object_from_proc_index $proc_name]
+        if {[nsf::is object,type=::nx::Object $objName] && ![nsf::is object,type=::nx::Class $objName]} {
+            append blocks_out <blockquote><ul>
+            foreach m [$objName info lookup methods -callprotection public -source application] {
+                set methodSyntax "$objName $m [$objName info lookup syntax $m]"
+                set definition [nx::Object info method definition [$objName info lookup method $m]]
+                set containerObject [lindex $definition 0]
+                if {$containerObject ne $objName} {
+                    #
+                    # The method is defined on a class
+                    #
+                    set methodSyntax [xo::api method_link -label $methodSyntax $containerObject instproc $m]
+                }
+                append blocks_out "<li><i>$methodSyntax</i></li>\n"
+            }
+            append blocks_out </ul></blockquote>
+        }
     }
 
     append blocks_out "<p><dt>Testcases:</dt><dd>\n"
