@@ -24,7 +24,7 @@ ad_proc -private template::toolkit {-subsite_id} {
         } elseif {[string match *bootstrap3* $theme]} {
             set toolkit bootstrap
         } elseif {[string match *w3css-theme* $theme]} {
-            set toolkit w3css            
+            set toolkit w3css
         }
     }
     return $toolkit
@@ -37,6 +37,43 @@ namespace eval ::template {
         # of icons, CSS class names, or styling preferences of a
         # subsite/instance.
         #
+
+        dict set :cssClasses w3css {
+            btn-default ""
+            btn-outline-secondary "w3-btn w3-white w3-border w3-border-grey w3-round"
+            margin-form margin-form
+        }
+        dict set :cssClasses bootstrap5 {
+            action "btn btn-outline-secondary btn-sm m-1"
+            btn-default btn-outline-secondary
+            bulk-action "btn btn-outline-secondary btn-sm"
+            checkbox-inline form-check-inline
+            close btn-close
+            cog gear
+            form-action "btn btn-outline-secondary btn-sm m-1"
+            margin-form ""
+            navbar-default navbar-light
+            navbar-right ms-auto
+            print printer
+            radio-inline form-check-inline
+        }
+        dict set :cssClasses bootstrap {
+            action "btn btn-default"
+            btn-default btn-default
+            bulk-action "btn btn-default"
+            card "panel panel-default"
+            card-body panel-body
+            card-header panel-heading
+            d-none hidden
+            form-action "btn btn-default"
+            margin-form ""
+            text-warning text-warn
+        }
+        dict set :cssClasses default {
+            btn-default ""
+            margin-form margin-form
+        }
+
         :public object method clear {} {
             #
             # Clear the cached toolkit name, such that it is reloads the
@@ -44,6 +81,7 @@ namespace eval ::template {
             #
             unset -nocomplain :preferredCSSToolkit
         }
+
         :public object method toolkit {} {
             #
             # Return the preferred CSS toolkit
@@ -138,7 +176,6 @@ namespace eval ::template {
             if {[ns_conn isconnected] && [apm_package_enabled_p "bootstrap-icons"]} {
                 template::head::add_css -href urn:ad:css:bootstrap-icons
             }
-
             set paramValue [parameter::get_global_value -package_key acs-templating \
                                 -parameter PreferredCSSToolkit \
                                 -default [parameter::get_global_value -package_key xowiki \
@@ -174,6 +211,7 @@ namespace eval ::template {
             } {
                 return
             }
+            #ns_log notice "template::CSS: initialize to <$paramValue>"
             #
             # The code below is executed only on first initialization of the
             # object or on changes of the preferredCSSToolkit.
@@ -182,18 +220,6 @@ namespace eval ::template {
             set :iconset [template::iconset]
 
             if {${:preferredCSSToolkit} eq "bootstrap"} {
-                set :cssClasses {
-                    btn-default btn-default
-                    bulk-action "btn btn-default"
-                    form-action "btn btn-default"
-                    action "btn btn-default"
-                    margin-form ""
-                    card "panel panel-default"
-                    card-header panel-heading
-                    card-body panel-body
-                    d-none hidden
-                    text-warning text-warn
-                }
                 if {[info commands ::xowiki::formfield::FormField] ne ""} {
                     ::xowiki::formfield::FormField parameter [subst {
                         {CSSclass form-control}
@@ -206,20 +232,6 @@ namespace eval ::template {
                     }]
                 }
             } elseif {${:preferredCSSToolkit} eq "bootstrap5"} {
-                set :cssClasses {
-                    btn-default btn-outline-secondary
-                    bulk-action "btn btn-outline-secondary btn-sm"
-                    form-action "btn btn-outline-secondary btn-sm m-1"
-                    action "btn btn-outline-secondary btn-sm m-1"
-                    navbar-default navbar-light
-                    navbar-right ms-auto
-                    margin-form ""
-                    cog gear
-                    print printer
-                    close btn-close
-                    checkbox-inline form-check-inline
-                    radio-inline form-check-inline
-                }
                 if {[info commands ::xowiki::formfield::FormField] ne ""} {
                     ::xowiki::formfield::FormField parameter [subst {
                         {CSSclass form-control}
@@ -244,12 +256,8 @@ namespace eval ::template {
                     }
                 }
             } else {
-                set :cssClasses {
-                    btn-default ""
-                    margin-form margin-form
-                }
                 if {[info commands ::xowiki::formfield::FormField] ne ""} {
-                    
+
                     ::xowiki::formfield::FormField parameter {
                         {CSSclass}
                         {form_label_CSSclass ""}
@@ -264,14 +272,19 @@ namespace eval ::template {
             }
         }
 
-        :public object method class {name} {
+        :public object method class {-toolkit name} {
             #
             # In case, a mapping for CSS classes is defined, return the
             # mapping for the provided class name. Otherwise return the
             # provided class name.
             #
-            if {[dict exists ${:cssClasses} $name]} {
-                return [dict get ${:cssClasses} $name]
+            if {![info exists toolkit]} {
+                set toolkit ${:preferredCSSToolkit}
+            }
+            #ns_log notice "CSS CLASS <$name> get from toolkit $toolkit exists [dict exists ${:cssClasses} $toolkit $name]"
+
+            if {[dict exists ${:cssClasses} $toolkit $name]} {
+                return [dict get ${:cssClasses} $toolkit $name]
             } else {
                 return $name
             }
@@ -493,7 +506,7 @@ namespace eval ::template::icon {
             link                 "fa-solid fa-link"
             list                 "fa-solid fa-list"
             list-alt             "fa-regular fa-rectangle-list"
-            mount                "fa-regular fa-circle-up"         
+            mount                "fa-regular fa-circle-up"
             next                 "fa-solid fa-chevron-right"
             paperclip            "fa-light fa-paperclip"
             permissions          "fa-solid fa-lock"

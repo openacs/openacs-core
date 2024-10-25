@@ -1046,6 +1046,18 @@ template::tag adp:icon { params } {
     }
 }
 
+template::tag adp:class { params } {
+    #
+    # not sure, we need toolkit switching, but it is useful for testing purposes
+    #
+    set toolkit [ns_set iget $params toolkit ""]    
+    if {$toolkit ne ""} {
+        template::adp_append_string [::template::CSS class -toolkit $toolkit [ns_set iget $params name]]
+    } else {
+        template::adp_append_string [::template::CSS class [ns_set iget $params name]]
+    }
+}
+
 template::tag adp:toggle_button { chunk params } {
     #
     # Implementation of dropdown-toggles:
