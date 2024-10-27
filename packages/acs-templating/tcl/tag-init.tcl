@@ -1046,21 +1046,57 @@ template::tag adp:icon { params } {
     }
 }
 
-template::tag adp:class { params } {
+# template::tag adp:class { params } {
+#     #
+#     # Not sure, we need toolkit switching, but it is useful for
+#     # testing purposes
+#     #
+#     set toolkit [ns_set iget $params toolkit ""]
+#     if {$toolkit ne ""} {
+#         template::adp_append_string [::template::CSS class -toolkit $toolkit [ns_set iget $params name]]
+#     } else {
+#         template::adp_append_string [::template::CSS class [ns_set iget $params name]]
+#     }
+# }
+
+template::tag adp:button { chunk params } {
     #
-    # not sure, we need toolkit switching, but it is useful for testing purposes
+    # Implementation of value added <button> with specialized
+    # attribute handling:
     #
-    set toolkit [ns_set iget $params toolkit ""]    
-    if {$toolkit ne ""} {
-        template::adp_append_string [::template::CSS class -toolkit $toolkit [ns_set iget $params name]]
-    } else {
-        template::adp_append_string [::template::CSS class [ns_set iget $params name]]
+    #    <adp:button ...>...</adp:button>
+    #
+    # Specially handled attributes for <adp:button ...> are:
+    #    - "data-*" use potentially the bootsrap5 prefix
+    #    - "class"  map provided class names to tooklit specific class names
+    #
+    set data [expr {[template::toolkit] eq "bootstrap5" ? "data-bs" : "data"}]
+    set attributes ""
+    foreach {key value} [ns_set array $params] {
+        switch -glob $key {
+            data-*   {
+                if {$data ne "data" && ![string match "$data*" $key]} {
+                    set suffix [string range $key 5 end]
+                    append attributes " $data-[string range $key 5 end]='$value'"
+                } else {
+                    append attributes " $key='$value'"
+                }
+            }
+            class   { append attributes " $key='[::template::CSS classes $value]'" }
+            default { append attributes " $key='$value'" }
+        }
     }
+    template::adp_append_string "<button $attributes>"
+    template::adp_compile_chunk $chunk
+    template::adp_append_string "</button>"
 }
+
 
 template::tag adp:toggle_button { chunk params } {
     #
-    # Implementation of dropdown-toggles:
+    # Implementation of dropdown-toggles, which have to be - depending
+    # on the toolkit - realized sometimes as "<a ....>" and sometimes
+    # "<button>" markups.
     #
     #    <adp:toggle_button>....</adp:toggle_button>
     #
