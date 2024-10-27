@@ -382,7 +382,7 @@ namespace eval ::acs {
             #
             # Update cluster configuration when the when the
             # configuration variables changed, or when nodes become
-            # available/unvavailable after some time.
+            # available/unavailable after some time.
             #
             # Typically, this method is called via scheduled procedure
             # every couple of seconds when clustering is enabled.
