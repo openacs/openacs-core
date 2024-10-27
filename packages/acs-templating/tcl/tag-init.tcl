@@ -1067,15 +1067,18 @@ template::tag adp:button { chunk params } {
     #    <adp:button ...>...</adp:button>
     #
     # Specially handled attributes for <adp:button ...> are:
-    #    - "data-*" use potentially the bootsrap5 prefix
-    #    - "class"  map provided class names to tooklit specific class names
+    #    - "data-*" use potentially the bootstrap5 prefix
+    #               (we still want to be able to use other data-* attributes without the prefix)
+    #    - "class"  map provided CSS class names to tooklit specific class names
     #
     set data [expr {[template::toolkit] eq "bootstrap5" ? "data-bs" : "data"}]
     set attributes ""
     foreach {key value} [ns_set array $params] {
         switch -glob $key {
-            data-*   {
-                if {$data ne "data" && ![string match "$data*" $key]} {
+            data-dismiss -
+            data-toggle -
+            data-target {
+                if {$data ne "data"} {
                     set suffix [string range $key 5 end]
                     append attributes " $data-[string range $key 5 end]='$value'"
                 } else {
