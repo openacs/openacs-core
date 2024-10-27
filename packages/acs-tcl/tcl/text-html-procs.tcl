@@ -2525,7 +2525,7 @@ ad_proc -public ad_html_text_convertible_p {
 } {
     Returns true of ad_html_text_convert can handle the given from and to mime types.
 } {
-    set valid_froms { text/enhanced text/markdown text/plain text/fixed-width text/html text/xml }
+    set valid_froms { text/enhanced text/markdown text/plain text/fixed-width text/html text/xml application/docbook+xml }
     set valid_tos { text/plain text/html }
     # Validate procedure input
     switch $from {
@@ -2767,6 +2767,17 @@ ad_proc -public ad_html_text_convert {
                 }
             }
         }
+        application/docbook+xml {
+            switch -- $to {
+                text/html {
+                    set text [ad_docbook_xml_to_html $text]
+                }
+                text/plain {
+                    set text [ad_docbook_xml_to_html $text]
+                    set text [ad_html_to_text -maxlen $maxlen -- $text]
+                }
+            }
+        }
     }
 
     # Handle closing of HTML tags, truncation
@@ -2786,6 +2797,152 @@ ad_proc -public ad_html_text_convert {
 
     return $text
 }
+
+ad_proc -private ad_docbook_xml_to_html {
+    text
+} {
+
+    Converts DocBook XML as used in the OpenACS documentation to HTML.
+    This is not a full implementation of all possible DocBook markup,
+    but just a subset sufficient for rendering a substantial subset of
+    the OpenACS documentation.
+
+    @param text input text
+    @author Gustaf Neumann
+    @creation-date 2024-10-27
+} {
+    #
+    # Strip XML declaration and doctype without looking into its
+    # content.
+    #
+    regexp {^<[?]xml\s+version='1.0'\s+[?]>\n(.*)$} $text . text
+    regexp {^<!DOCTYPE\s[^\]]+\n\]>\n(.*)$} $text . text
+
+    set parsedList [ns_parsehtml $text]
+    set tagstack {}
+
+    #
+    # "::__doc_parsed_text" is used just for development/debugging
+    # purposes.
+    #
+    set ::__doc_parsed_text $parsedList
+
+    set silentlyIgnoredTags {
+        authorblurb /authorblurb
+        /ulink
+    }
+    set parsedPage ""
+    foreach parseListElement $parsedList {
+        #append parsedPage START $parseListElement END \n
+        lassign $parseListElement kind chunk parsed
+        if {$kind eq "tag"} {
+            set tag [string tolower [lindex $parsed 0]]
+            set dict [lindex $parsed 1]
+            switch $tag {
+                sect1 {
+                    dict set ::properties section 2
+                    append parsedPage [subst {<div class="title $tag">}] \n
+                }
+                sect2 {
+                    dict set ::properties section 3
+                    append parsedPage [subst {<div class="title $tag">}] \n
+                }
+                sect3 {
+                    dict set ::properties section 4
+                    append parsedPage [subst {<div class="title $tag">}] \n
+                }
+                /sect1 -
+                /sect2 -
+                /sect3 {
+                    append parsedPage </div> \n
+                }
+                title  { append parsedPage <h[dict get $::properties section]> }
+                /title { append parsedPage </h[dict get $::properties section]> }
+
+                ulink {dict set ::properties ulink $parsed}
+
+                para            { append parsedPage <p>}
+                /para           { append parsedPage </p>}
+
+                emphasis        { append parsedPage {<span class="emphasis"><em>}}
+                /emphasis       { append parsedPage </em></span>}
+
+                term            { append parsedPage [subst {<span class="$tag">}] }
+                /term           { append parsedPage </span>}
+
+                replaceable     { append parsedPage [subst {<span class="$tag">}] }
+                /replaceable    { append parsedPage </span>}
+
+                phrase          { append parsedPage [subst {<div class="[dict get $dict role]">}] }
+                /phrase         { append parsedPage </div>}
+
+                programlisting  { append parsedPage [subst {<pre class="$tag">}] }
+                /programlisting { append parsedPage </pre> \n}
+
+                computeroutput  { append parsedPage [subst {<samp class="$tag">}] }
+                /computeroutput { append parsedPage {</samp>} }
+
+                itemizedlist    { append parsedPage [subst {<div class="$tag"><ul class="$tag">}]}
+                /itemizedlist   { append parsedPage </ul></div> \n}
+
+                orderedlist     { append parsedPage [subst {<ol class="$tag">}]}
+                /orderedlist    { append parsedPage </ol>}
+
+                listitem        {
+                    set item [expr {[lindex $tagstack end] eq "varlistentry" ? "dd" : "li" }]
+                    #ns_log notice "listitem sees '[lindex $tagstack end]' -- $tagstack"
+                    append parsedPage [subst {<$item class="$tag">}]
+                }
+                /listitem       {
+                    set item [expr {[lindex $tagstack end] eq "varlistentry" ? "dd" : "li" }]
+                    append parsedPage </$item>
+                }
+
+                variablelist    { append parsedPage [subst {<div class="$tag"><dl class="$tag">}] }
+                /variablelist   { append parsedPage </dl></div> \n}
+
+                varlistentry    { append parsedPage [subst {<dt class="$tag">}] }
+                /varlistentry   { append parsedPage </dt> \n}
+
+                anchor          { append parsedPage [subst {<a class="$tag" id="[dict get $dict id]" name="[dict get $dict id]"></a> }] }
+                xref            {
+                    #
+                    # We should actually get the page name of the
+                    # target page
+                    #
+                    set target [dict get $dict linkend]
+                    set name $target
+                    append parsedPage [subst {<a class="$tag" href="$target" title="$name">$name</a> }]
+                }
+
+                default {
+                    #append parsedPage "ignore '$tag'\n"
+                    if {$tag ni $silentlyIgnoredTags} {
+                        append parsedPage "ignore '$parseListElement'\n"
+                        ns_log notice "ignore '$parseListElement'"
+                    }
+                }
+            }
+            if {[string range $tag 0 0] eq "/"} {
+                #ns_log notice "old tagstack <$tagstack> (closing $tag)"
+                set tagstack [lreplace $tagstack end end]
+                #ns_log notice "new tagstack <$tagstack>"
+            } elseif {$tag ni {anchor xref} } {
+                lappend tagstack $tag
+            }
+        } elseif {$kind eq "text"} {
+            set context [lindex $tagstack end]
+            #append parsedPage CONTEXT=$context:
+            if {$context eq "ulink"} {
+                append parsedPage [subst {<a class="ulink" href="[dict get [lindex [dict get $::properties ulink] 1] url]">$chunk</a>}]
+            } else {
+                append parsedPage $chunk
+            }
+        }
+    }
+    return $parsedPage
+}
+
 
 ad_proc -public ad_enhanced_text_to_html {
     text
