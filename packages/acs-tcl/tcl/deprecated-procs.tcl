@@ -26,6 +26,106 @@ if {![ad_with_deprecated_code_p]} {
 }
 ns_log notice "deprecated-procs: load deprecated code"
 
+ad_proc -deprecated rp_getform {} {
+
+    This proc is a simple wrapper around AOLserver's standard ns_getform
+    proc, that will create the form if it doesn't exist, so that you
+    can then add values to that form. This is useful in conjunction
+    with rp_internal_redirect to redirect to a different page with
+    certain query variables set.
+
+    DEPRECATED: modern ns_getform from NaviServer will never return
+    the empty string, assuming that we are in a connection. When we
+    are not in a connection, it makes little sense that we set request
+    variables.
+
+    @see ns_getform
+
+    @author Lars Pind (lars@pinds.com)
+    @creation-date August 20, 2002
+
+    @return the form ns_set, just like ns_getform, except it will
+    always be nonempty.
+
+} {
+    # The form may not exist, if there's nothing in it
+    if { [ns_getform] ne "" } {
+        # It's there
+        return [ns_getform]
+    } {
+        # It doesn't exist, create a new one
+
+        # This is the magic global Tcl variable that AOLserver uses
+        # to store the ns_set that contains the query args or form.
+        global _ns_form
+
+        # Simply create a new ns_set and store it in the global _ns_set variable
+        set _ns_form [ns_set create]
+        return $_ns_form
+    }
+}
+
+ad_proc -deprecated rp_form_put { name value } {
+
+    This proc adds a query variable to AOLserver's internal ns_getform
+    form, so that it'll be picked up by ad_page_contract and other procs
+    that look at the query variables or form supplied. This is useful
+    when you do an rp_internal_redirect to a new page, and you want to
+    feed that page with certain query variables.
+
+    Note that the variable will just be appended to the form ns_set
+    which may not be what you want, if it exists already you will
+    now have two entries in the ns_set which may cause ad_page_contract to
+    break.  Also, only simple variables may be added, not arrays.
+
+    DEPRECATED: this proc is a trivial wrapper over NaviServer
+    functionalities. One should use the native api directly.
+
+    @see ns_getform
+    @see ns_set
+
+    @author Lars Pind (lars@pinds.com)
+    @creation-date August 20, 2002
+
+    @return the form ns_set, in case you're interested. Mostly you will want to discard the result.
+
+} {
+    set form [ns_getform]
+    ns_set put $form $name $value
+    return $form
+}
+
+
+ad_proc -deprecated rp_form_update { name value } {
+
+    Identical to rp_form_put, but uses ns_set update instead.
+
+    DEPRECATED: this proc is a trivial wrapper over NaviServer
+    functionalities. One should use the native api directly.
+
+    @see ns_getform
+    @see ns_set
+
+    @return the form ns_set, in case you're interested. Mostly you will want to discard the result.
+
+} {
+    set form [ns_getform]
+    ns_set update $form $name $value
+    return $form
+}
+
+ad_proc -deprecated root_of_host {host} {
+
+    Maps a hostname to the corresponding subdirectory.
+
+    DEPRECATED: this proc does not comply with OpenACS naming
+    convention.
+
+    @see acs::root_of_host
+
+} {
+    return [acs::root_of_host $host]
+}
 
 ad_proc -deprecated ad_approval_system_inuse_p {} {
     Returns 1 if the system is configured to use and approval system.

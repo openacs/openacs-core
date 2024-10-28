@@ -174,7 +174,7 @@ set errno [catch {
     # packages have had their Tcl libraries loaded.
     apm_load_packages -load_libraries_p 0 -load_queries_p 0 -packages acs-tcl
 
-    if { ![nsv_exists rp_properties request_count] } {
+    if { ![nsv_exists rp_properties rp_initialized] } {
         # security-init.tcl has not been invoked, so it's safe to say that the
         # core has not been properly initialized and the server will probably
         # fail catastrophically.

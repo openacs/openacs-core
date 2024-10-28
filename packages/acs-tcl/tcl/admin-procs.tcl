@@ -8,7 +8,7 @@ ad_library {
 
 }
 
-ad_proc -public ad_restrict_to_https {conn args why} {
+ad_proc -public ad_restrict_to_https {args why} {
     Redirects user to HTTPS.
 
     @author Allen Pulsifer (pulsifer@mediaone.net)

@@ -402,7 +402,7 @@ ad_proc -public ds_add { name args } {
         }
 
         if { ![info exists ::ad_conn(request)] } {
-            set ::ad_conn(request) [nsv_incr rp_properties request_count]
+            set ::ad_conn(request) [ns_conn id]
         }
         nsv_lappend ds_request $::ad_conn(request).$name {*}$args
     }
@@ -450,7 +450,7 @@ ad_proc -private ds_sweep_data {} {
     ns_log "Debug" "Swept developer support information for [array size kill_requests] requests ($kill_count nsv elements)"
 }
 
-ad_proc -private ds_trace_filter { conn args why } {
+ad_proc -private ds_trace_filter { why args } {
     Adds developer-support information about the end of sessions.
 } {
     if { [ds_enabled_p] && [ds_collection_enabled_p] } {

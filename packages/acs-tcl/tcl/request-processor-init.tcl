@@ -12,7 +12,7 @@ ad_library {
 #
 set ::acs::kernel_id [ad_acs_kernel_id]
 
-if {[nsv_exists rp_properties request_count] != 0} {
+if {[ns_ictl epoch] > 0} {
     #
     # This is a re-init. There is no need, to rerun the code
     # below. Setting e.g. filters multiple times might have unwanted
@@ -201,7 +201,7 @@ ad_after_server_initialization procs_register {
 # Set a flag for bootststrap that at least, the request processor has
 # done all essential initialization
 #
-nsv_set rp_properties request_count 0
+nsv_set rp_properties rp_initialized 1
 
 # Local variables:
 #    mode: tcl

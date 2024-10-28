@@ -80,93 +80,6 @@ ad_proc -public rp_internal_redirect {
     ad_conn -set file $saved_file
 }
 
-ad_proc -deprecated rp_getform {} {
-
-    This proc is a simple wrapper around AOLserver's standard ns_getform
-    proc, that will create the form if it doesn't exist, so that you
-    can then add values to that form. This is useful in conjunction
-    with rp_internal_redirect to redirect to a different page with
-    certain query variables set.
-
-    DEPRECATED: modern ns_getform from NaviServer will never return
-    the empty string, assuming that we are in a connection. When we
-    are not in a connection, it makes little sense that we set request
-    variables.
-
-    @see ns_getform
-
-    @author Lars Pind (lars@pinds.com)
-    @creation-date August 20, 2002
-
-    @return the form ns_set, just like ns_getform, except it will
-    always be nonempty.
-
-} {
-    # The form may not exist, if there's nothing in it
-    if { [ns_getform] ne "" } {
-        # It's there
-        return [ns_getform]
-    } {
-        # It doesn't exist, create a new one
-
-        # This is the magic global Tcl variable that AOLserver uses
-        # to store the ns_set that contains the query args or form.
-        global _ns_form
-
-        # Simply create a new ns_set and store it in the global _ns_set variable
-        set _ns_form [ns_set create]
-        return $_ns_form
-    }
-}
-
-ad_proc -deprecated rp_form_put { name value } {
-
-    This proc adds a query variable to AOLserver's internal ns_getform
-    form, so that it'll be picked up by ad_page_contract and other procs
-    that look at the query variables or form supplied. This is useful
-    when you do an rp_internal_redirect to a new page, and you want to
-    feed that page with certain query variables.
-
-    Note that the variable will just be appended to the form ns_set
-    which may not be what you want, if it exists already you will
-    now have two entries in the ns_set which may cause ad_page_contract to
-    break.  Also, only simple variables may be added, not arrays.
-
-    DEPRECATED: this proc is a trivial wrapper over NaviServer
-    functionalities. One should use the native api directly.
-
-    @see ns_getform
-    @see ns_set
-
-    @author Lars Pind (lars@pinds.com)
-    @creation-date August 20, 2002
-
-    @return the form ns_set, in case you're interested. Mostly you will want to discard the result.
-
-} {
-    set form [ns_getform]
-    ns_set put $form $name $value
-    return $form
-}
-
-ad_proc -deprecated rp_form_update { name value } {
-
-    Identical to rp_form_put, but uses ns_set update instead.
-
-    DEPRECATED: this proc is a trivial wrapper over NaviServer
-    functionalities. One should use the native api directly.
-
-    @see ns_getform
-    @see ns_set
-
-    @return the form ns_set, in case you're interested. Mostly you will want to discard the result.
-
-} {
-    set form [ns_getform]
-    ns_set update $form $name $value
-    return $form
-}
-
 ad_proc -private rp_registered_proc_info_compare { info1 info2 } {
 
     A comparison predicate for registered procedures, returning -1, 0,
@@ -225,7 +138,7 @@ ad_proc -public ad_register_proc {
     nsv_lappend rp_registered_procs . $proc_info
 }
 
-ad_proc -private rp_invoke_filter { conn filter_info why } {
+ad_proc -private rp_invoke_filter { why filter_info } {
 
     Invokes the filter described in $argv, writing an error message to
     the browser if it fails (unless <i>kind</i> is <code>trace</code>).
@@ -235,12 +148,12 @@ ad_proc -private rp_invoke_filter { conn filter_info why } {
     lassign $filter_info filter_index debug_p arg_count proc arg
 
     rp_debug -debug $debug_p "Invoking $why filter $proc"
+    #ns_log notice "RP_INVOKE_FILTER " filter_info <$filter_info> why <$why> proc <$proc> arg_count $arg_count
 
     switch -- $arg_count {
         0 { set cmd $proc }
-        1 { set cmd [list $proc $why] }
-        2 { set cmd [list $proc $conn $why] }
-        default { set cmd [list $proc $conn $arg $why] }
+        1 { set cmd [list $proc $why ] }
+        default { set cmd [list $proc $arg $why ] }
     }
 
     set errno 0
@@ -286,7 +199,7 @@ ad_proc -private rp_invoke_filter { conn filter_info why } {
     return $result
 }
 
-ad_proc -private rp_invoke_proc { conn argv } {
+ad_proc -private rp_invoke_proc { argv } {
 
     Invokes a registered procedure.
 
@@ -300,7 +213,7 @@ ad_proc -private rp_invoke_proc { conn argv } {
     switch -- $arg_count {
         0 { set cmd $proc }
         1 { set cmd [list $proc {*}$arg] }
-        default { set cmd [list $proc $conn {*}$arg] }
+        default { set cmd [list $proc {*}$arg] }
     }
 
     ad_try -auto_abort=false {
@@ -566,15 +479,7 @@ ad_proc -private rp_filter { why } {
 
     sec_handler_reset
     ad_conn -reset
-    if {[ns_info name] eq "NaviServer"} {
-        # ns_conn id the internal counter by AOLserver 4.5 and
-        # NaviServer. The semantics of the counter were different in
-        # AOLserver 4.0, when we require at least AOLserver 4.5 the
-        # server test could go away.
-        ad_conn -set request [ns_conn id]
-    } else {
-        ad_conn -set request [nsv_incr rp_properties request_count]
-    }
+    ad_conn -set request [ns_conn id]
     ad_conn -set user_id 0
     ad_conn -set start_clicks [clock clicks -microseconds]
 
@@ -1977,19 +1882,6 @@ ad_proc -private ad_port {} {
 
 namespace eval ::acs {}
 
-ad_proc -deprecated root_of_host {host} {
-
-    Maps a hostname to the corresponding subdirectory.
-
-    DEPRECATED: this proc does not comply with OpenACS naming
-    convention.
-
-    @see acs::root_of_host
-
-} {
-    return [acs::root_of_host $host]
-}
-
 ad_proc acs::root_of_host {host} {
 
     Maps a hostname to the corresponding subdirectory.
@@ -2062,27 +1954,6 @@ ad_proc -private rp_request_denied_filter { why } {
     return filter_return
 }
 
-
-
-if {[ns_info name] eq "NaviServer"} {
-    # this is written for NaviServer 4.99.1 or newer
-    foreach filter {rp_filter rp_resources_filter rp_request_denied_filter} {
-        set cmd ${filter}_aolserver
-        if {[namespace which $cmd] ne ""} {rename $cmd ""}
-        rename $filter $cmd
-        proc $filter {why} "$cmd \$why"
-    }
-
-    set cmd rp_invoke_filter_conn
-    if {[namespace which $cmd] ne ""} {rename $cmd ""}
-    rename rp_invoke_filter $cmd
-    proc   rp_invoke_filter { why filter_info} "$cmd _ \$filter_info \$why"
-
-    set cmd rp_invoke_proc_conn
-    if {[namespace which $cmd] ne ""} {rename $cmd ""}
-    rename rp_invoke_proc   $cmd
-    proc   rp_invoke_proc   { argv } "$cmd _ \$argv"
-}
 
 #ad_proc -private rp_debug { { -debug f } { -ns_log_level notice } string } { ns_log notice "RP: $string"}
 
