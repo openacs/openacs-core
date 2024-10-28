@@ -66,7 +66,8 @@ aa_register_case -cats {smoke production_safe} -procs {
             if { [string is space [join [dict get $pa main]]] &&
                  (![dict exists $pa return] || [string is space [join [dict get $pa return]]]) &&
                  (![dict exists $pa param] || [string is space [join [dict get $pa param]]]) &&
-                 (![dict exists $pa see] || [string is space [join [dict get $pa see]]])
+                 (![dict exists $pa see] || [string is space [join [dict get $pa see]]]) &&
+                 (![dict exists $pa author] || [string is space [join [dict get $pa author]]])
              } {
                 if {[regexp "^(\\s+Class ::)?([join $ignored_namespaces |])::.*\$" $p m]} {
                     set test_result warning
