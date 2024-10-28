@@ -72,133 +72,93 @@ namespace eval ::acs {
             ::acs::clusterwide ns_cache flush [:cache_name $partition_key] $key
         }
 
-        if {[namespace which ns_cache_eval] ne ""} {
+        :public method eval {{-partition_key} {-expires} {-timeout} {-per_request:switch} key command} {
             #
-            # NaviServer variant
+            # Evaluate the command unless the result was already computed before and cached.
             #
-            :public method eval {{-partition_key} {-expires} {-timeout} {-per_request:switch} key command} {
-                #
-                # Evaluate the command unless it is cached.
-                #
-                # @param expires (passed straight through to NaviServer)
-                # @param partition_key Used for determining the cache
-                #        name in partitioned caches
-                # @param per_request when set, cache the result per
-                #        request. So far, no attempt is made to flush
-                #        the result inside the request.
-                #
-                if {![info exists partition_key]} {
-                    set partition_key $key
+            # @param expires Lifetime of the cache entry.
+            #        The entry will be purged automatically when the time is reached. The time is in seconds
+            #        unless a time unit is specified (e.g., 5m)
+            # @param timeout Maximum time to wait for the command to complete. The time is in seconds
+            #        unless a time unit is specified (e.g., 2.5m)
+            # @param partition_key Used for determining the cache
+            #        name in partitioned caches. The partition key is computed typically
+            #        automatically depending on the cache type.
+            # @param per_request When set, cache the result per
+            #        request. So far, no attempt is made to flush
+            #        the result during the lifetime of the request.
+            # @param key The cache key
+            # @param command The command to be executed when the result is not yet cached.
+            #
+            if {![info exists partition_key]} {
+                set partition_key $key
+            }
+            foreach optional_parameter {expires timeout} {
+                if {[info exists $optional_parameter]} {
+                    set ${optional_parameter}_flag [list -$optional_parameter [set $optional_parameter]]
+                } else {
+                    set ${optional_parameter}_flag ""
                 }
-                foreach optional_parameter {expires timeout} {
-                    if {[info exists $optional_parameter]} {
-                        set ${optional_parameter}_flag [list -$optional_parameter [set $optional_parameter]]
-                    } else {
-                        set ${optional_parameter}_flag ""
-                    }
-                }
-                set cache_name [:cache_name $partition_key]
-                try {
-                    if {$per_request} {
-                        acs::per_request_cache eval -key ::acs-${cache_name}($key) {
-                            :uplevel [list ns_cache_eval \
-                                          {*}$expires_flag {*}$timeout_flag -- \
-                                          $cache_name $key $command]
-                        }
-                    } else {
-                        :uplevel [list ns_cache_eval {*}$expires_flag {*}$timeout_flag -- \
+            }
+            set cache_name [:cache_name $partition_key]
+            try {
+                if {$per_request} {
+                    acs::per_request_cache eval -key ::acs-${cache_name}($key) {
+                        :uplevel [list ns_cache_eval \
+                                      {*}$expires_flag {*}$timeout_flag -- \
                                       $cache_name $key $command]
                     }
-
-                } on break {r} {
-                    #
-                    # When the command ends with "break", it means:
-                    # "don't cache". We return in this case always a
-                    # 0.
-                    #
-                    #ns_log notice "====================== [self] $key -> break -> <$r>"
-                    return 0
-
-                } on ok {r} {
-                    return $r
+                } else {
+                    :uplevel [list ns_cache_eval {*}$expires_flag {*}$timeout_flag -- \
+                                  $cache_name $key $command]
                 }
-            }
 
-            :public method set {-partition_key key value} {
+            } on break {r} {
                 #
-                # Set a single value in the cache. This code uses
-                # ns_cache_eval to achieve this behavior, which is
-                # typically an AOLserver idiom and should be avoided.
+                # When the command ends with "break", it means:
+                # "don't cache". We return in this case always a
+                # 0.
                 #
-                if {![info exists partition_key]} {
-                    set partition_key $key
-                }
-                :uplevel [list ns_cache_eval -force -- [:cache_name $partition_key] $key [list set _ $value]]
-            }
+                #ns_log notice "====================== [self] $key -> break -> <$r>"
+                return 0
 
-            :public method flush_pattern {{-partition_key ""} pattern} {
-                #
-                # Flush in the cache a value based on a pattern
-                # operation. Use this function rarely, since on large
-                # caches (e.g. 100k entries or more) the glob
-                # operation will cause long locks, which should be
-                # avoided. The partitioned variants can help to reduce
-                # the lock times.
-                #
-                return [::acs::clusterwide ns_cache_flush -glob [:cache_name $partition_key] $pattern]
+            } on ok {r} {
+                return $r
             }
+        }
 
-            :method cache_create {name size} {
-                #
-                # Create a cache.
-                #
-                ns_cache_create \
-                    -timeout ${:timeout} \
-                    {*}[expr {[info exists :maxentry] ? "-maxentry ${:maxentry}" : ""}] \
-                    $name $size
-            }
-
-        } else {
+        :public method set {-partition_key key value} {
             #
-            # AOLserver variant
+            # Set a single value in the cache. This code uses
+            # ns_cache_eval to achieve this behavior, which is
+            # typically an AOLserver idiom and should be avoided.
             #
-            :public method eval {{-partition_key} {-expires}  {-timeout} {-per_request:switch} key command} {
-                #
-                # ignore "-expires", since not supported by AOLserver
-                # ignore "-timeout", since not supported by AOLserver
-                # ignore "-per_request" optimization so far
-                #
-                if {![info exists partition_key]} {
-                    set partition_key $key
-                }
-                try {
-                    :uplevel [list ns_cache eval [:cache_name $partition_key] $key $command]
-                } on break {r} {
-                    return 0
-                } on ok {r} {
-                    return $r
-                }
+            if {![info exists partition_key]} {
+                set partition_key $key
             }
-            :public method set {-partition_key key value} {
-                #
-                # Set a single value in the cache. This code uses
-                # ns_cache_eval to achieve this behavior, which is
-                # typically an AOLserver idiom and should be avoided.
-                #
-                if {![info exists partition_key]} {set partition_key $key}
-                :uplevel [list ns_cache set [:cache_name $partition_key] $key $value]
-            }
-            :public method flush_pattern {{-partition_key ""} pattern} {
-                foreach name [ns_cache names [:cache_name $partition_key] $pattern] {
-                    :flush -partition_key $partition_key $name
-                }
-            }
-            :public method flush_cache {{-partition_key ""}} {
-                ns_cache_flush [:cache_name $partition_key]
-            }
-            :method cache_create {name size} {
-                ns_cache create $name -size $size
-            }
+            :uplevel [list ns_cache_eval -force -- [:cache_name $partition_key] $key [list set _ $value]]
+        }
+
+        :public method flush_pattern {{-partition_key ""} pattern} {
+            #
+            # Flush in the cache a value based on a pattern
+            # operation. Use this function rarely, since on large
+            # caches (e.g. 100k entries or more) the glob
+            # operation will cause long locks, which should be
+            # avoided. The partitioned variants can help to reduce
+            # the lock times.
+            #
+            return [::acs::clusterwide ns_cache_flush -glob [:cache_name $partition_key] $pattern]
+        }
+
+        :method cache_create {name size} {
+            #
+            # Create a cache.
+            #
+            ns_cache_create \
+                -timeout ${:timeout} \
+                {*}[expr {[info exists :maxentry] ? "-maxentry ${:maxentry}" : ""}] \
+                $name $size
         }
 
         :public method get {-partition_key key} {
@@ -206,8 +166,7 @@ namespace eval ::acs {
             # The "get" method retrieves data from the cache. It
             # should not be used for new applications due to likely
             # race conditions, but legacy applications use this.  As
-            # implementation, we use in the case of NaviServer the
-            # AOLserver API emulation.
+            # implementation, we use the AOLserver API emulation.
             #
             if {![info exists partition_key]} {
                 set partition_key $key
@@ -225,8 +184,7 @@ namespace eval ::acs {
 
         :public method flush_cache {{-partition_key ""}} {
             #
-            # Flush all entries in a cache. Both, NaviServer and
-            # AOLserver support "ns_cache_flush".
+            # Flush all entries in a cache.
             #
             ::acs::clusterwide ns_cache_flush [:cache_name $partition_key]
             #ns_log notice "flush_all -> ns_cache_flush [:cache_name $partition_key]"
@@ -309,8 +267,7 @@ namespace eval ::acs {
 
         :public method flush_all {{-partition_key ""}} {
             #
-            # Flush all entries in all partitions of a cache. Both,
-            # NaviServer and AOLserver support "ns_cache_flush".
+            # Flush all entries in all partitions of a cache.
             #
             for {set i 0} {$i < ${:partitions}} {incr i} {
                 ::acs::clusterwide ns_cache_flush ${:name}-$i
@@ -319,31 +276,15 @@ namespace eval ::acs {
             }
         }
 
-        if {[namespace which ns_cache_eval] ne ""} {
+        :method flush_pattern_in_all_partitions {pattern} {
             #
-            # NaviServer variant
+            # Flush matching entries in all partitions of a cache based on
+            # a pattern.
             #
-            :method flush_pattern_in_all_partitions {pattern} {
-                #
-                # Flush matching entries in all partitions of a cache based on
-                # a pattern.
-                #
-                for {set i 0} {$i < ${:partitions}} {incr i} {
-                    ::acs::clusterwide ns_cache_flush -glob ${:name}-$i $pattern
-                    ns_log notice "flush_pattern_in_all_partitions: ns_cache_flush ${:name}-$i $pattern"
-                    #ns_log notice "... content of ${:name}-$i: [ns_cache_keys ${:name}-$i]"
-                }
-            }
-        } else {
-            #
-            # AOLserver variant
-            #
-            :method flush_pattern_in_all_partitions {pattern} {
-                for {set i 0} {$i < ${:partitions}} {incr i} {
-                    foreach name [ns_cache names ${:name}-$i $pattern] {
-                        :flush -partition_key $partition_key $name
-                    }
-                }
+            for {set i 0} {$i < ${:partitions}} {incr i} {
+                ::acs::clusterwide ns_cache_flush -glob ${:name}-$i $pattern
+                ns_log notice "flush_pattern_in_all_partitions: ns_cache_flush ${:name}-$i $pattern"
+                #ns_log notice "... content of ${:name}-$i: [ns_cache_keys ${:name}-$i]"
             }
         }
 
