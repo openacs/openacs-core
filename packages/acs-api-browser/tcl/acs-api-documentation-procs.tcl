@@ -654,7 +654,7 @@ ad_proc -public api_proc_documentation {
         if {![regexp { (inst)?proc } $proc_name]} {
             #ns_log notice "Compute call graph from <$proc_name>"
             set callgraph [util::inline_svg_from_dot -css $css \
-                               [api_call_graph_snippet -proc_name $proc_name] -maxnodes 5]
+                               [api_call_graph_snippet -proc_name $proc_name -maxnodes 5]]
             if {$callgraph ne ""} {
                 append blocks_out "<p><dt>Partial Call Graph (max 5 caller/called nodes):</dt><dd>$callgraph</dd>\n"
             }
