@@ -272,17 +272,35 @@ namespace eval ::template {
             }
         }
 
+        :public object method registerCSSclasses {toolkit dict} {
+            #
+            # Register CSS class mapping for the provided framework
+            #
+            nsv_set acs_templating_cssClasses $toolkit $dict
+        }
+
         :public object method class {-toolkit name} {
             #
             # In case, a mapping for CSS classes is defined, return the
             # mapping for the provided class name. Otherwise return the
-            # provided class name.
+            # input class name unmodified.
             #
             if {![info exists toolkit]} {
                 set toolkit ${:preferredCSSToolkit}
+                if {$toolkit eq "default"} {
+                    set toolkit [template::toolkit]
+                    set :preferredCSSToolkit $toolkit
+                    ns_log notice "derived CSS toolkit '$toolkit'"
+                }
             }
-            #ns_log notice "CSS CLASS <$name> get from toolkit $toolkit exists [dict exists ${:cssClasses} $toolkit $name]"
 
+            if {[nsv_get acs_templating_cssClasses $toolkit dict]} {
+                if {[dict exists $dict $name]} {
+                    return [dict get $dict $name]
+                }
+            } else {
+                ns_log warning "template::CSS: no class mapping for toolkit $toolkit provided (should be in theme definition)"
+            }
             if {[dict exists ${:cssClasses} $toolkit $name]} {
                 return [dict get ${:cssClasses} $toolkit $name]
             } else {
