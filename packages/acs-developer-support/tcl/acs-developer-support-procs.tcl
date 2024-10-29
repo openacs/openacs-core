@@ -322,7 +322,7 @@ ad_proc -private ds_get_db_command_info {} {
     return $result
 }
 
-ad_proc -private ds_collect_connection_info {} {
+ad_proc -public ds_collect_connection_info {} {
 
     Collect information about the current connection.  Should be
     called only at the very beginning of the request processor
