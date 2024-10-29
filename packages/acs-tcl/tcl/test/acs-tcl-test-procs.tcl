@@ -743,6 +743,8 @@ aa_register_case \
     set foo 1
     set bar {}
 
+    aa_section "Exporting plain variables"
+
     aa_equals "{ foo bar }" \
         [export_vars { foo bar }] \
         "foo=1&bar="
@@ -785,6 +787,97 @@ aa_register_case \
             -base /absolute/url?param1=one&param2=two \
             {{exported_param exported}}] \
         "/absolute/url?param1=one&param2=two&exported_param=exported"
+
+
+    aa_section "Exporting plain variables + array"
+
+    array set an_array {one 1 two 2 three 3}
+
+    aa_equals "{ foo bar }" \
+        [export_vars { foo bar an_array }] \
+        "foo=1&an_array.three=3&an_array.two=2&an_array.one=1&bar="
+
+    aa_equals "-no_empty { foo bar }" \
+        [export_vars -no_empty { foo bar an_array }] \
+        "foo=1&an_array.three=3&an_array.two=2&an_array.one=1"
+
+    aa_equals "-no_empty { foo bar { baz greble } }" \
+        [export_vars -no_empty { foo bar { baz greble } an_array }] \
+        "foo=1&an_array.three=3&an_array.two=2&an_array.one=1&baz=greble"
+
+    aa_equals "-no_empty -override { { bar {} } { an_array {} } } { foo bar an_array }" \
+        [export_vars -no_empty -override { { bar {} } { an_array {} } } { foo bar an_array }] \
+        "foo=1&an_array=&bar=" \
+
+    aa_equals "-no_empty -override { { baz greble } } { foo bar an_array }" \
+        [export_vars -no_empty -override { baz } { foo bar an_array }] \
+        "foo=1&an_array.three=3&an_array.two=2&an_array.one=1"
+
+    aa_equals "-no_empty { foo { bar {} } { an_array {} } }" \
+        [export_vars -no_empty { foo { bar {} } { an_array {} } }] \
+        "foo=1&an_array=&bar="
+
+    aa_equals "base ending with '?', with vars" \
+        [export_vars -base "dummy?" { foo { bar {} } { an_array {} } }] \
+        "dummy?foo=1&an_array=&bar="
+
+    aa_equals "base containing more than two slashes " \
+        [export_vars -base "http://dummywebsite.com/one/two" {{foo a} {bar b} an_array}] \
+        "http://dummywebsite.com/one/two?foo=a&an_array.three=3&an_array.two=2&an_array.one=1&bar=b"
+
+    aa_equals "absolute base URL with query vars + exported vars" \
+        [export_vars \
+            -no_base_encode \
+            -base /absolute/url?param1=one&param2=two \
+            {{exported_param exported} an_array}] \
+         "/absolute/url?param1=one&param2=two&an_array.three=3&an_array.two=2&an_array.one=1&exported_param=exported"
+
+
+    aa_section "Exporting plain variables + multiple"
+
+    set a_multiple [list first second third]
+
+    aa_equals "{ foo bar }" \
+        [export_vars { foo bar a_multiple:multiple }] \
+        "a_multiple=first&a_multiple=second&a_multiple=third&foo=1&bar="
+
+    aa_equals "-no_empty { foo bar }" \
+        [export_vars -no_empty { foo bar a_multiple:multiple }] \
+        "a_multiple=first&a_multiple=second&a_multiple=third&foo=1"
+
+    aa_equals "-no_empty { foo bar { baz greble } }" \
+        [export_vars -no_empty { foo bar { baz greble } a_multiple:multiple }] \
+        "a_multiple=first&a_multiple=second&a_multiple=third&foo=1&baz=greble"
+
+    aa_equals "-no_empty -override { { bar {} } { a_multiple {} } } { foo bar a_multiple:multiple }" \
+        [export_vars -no_empty -override { { bar {} } { a_multiple {} } } { foo bar a_multiple:multiple }] \
+        "foo=1&a_multiple=&bar="
+
+    aa_equals "-no_empty -override { { baz greble } } { foo bar a_multiple:multiple }" \
+        [export_vars -no_empty -override { baz } { foo bar a_multiple:multiple }] \
+        "a_multiple=first&a_multiple=second&a_multiple=third&foo=1"
+
+    aa_equals "-no_empty { foo { bar {} } { a_multiple {} } }" \
+        [export_vars -no_empty { foo { bar {} } { a_multiple {} } }] \
+        "a_multiple=&foo=1&bar="
+
+    aa_equals "base ending with '?', with vars" \
+        [export_vars -base "dummy?" { foo { bar {} } { a_multiple {} } }] \
+        "dummy?a_multiple=&foo=1&bar="
+
+    aa_equals "base containing more than two slashes " \
+    [export_vars -base "http://dummywebsite.com/one/two" { {foo a} {bar b} a_multiple:multiple }] \
+        "http://dummywebsite.com/one/two?a_multiple=first&a_multiple=second&a_multiple=third&foo=a&bar=b"
+
+    aa_equals "absolute base URL with query vars + exported vars" \
+        [export_vars \
+            -no_base_encode \
+            -base /absolute/url?param1=one&param2=two \
+            { {exported_param exported} a_multiple:multiple }] \
+         "/absolute/url?param1=one&param2=two&a_multiple=first&a_multiple=second&a_multiple=third&exported_param=exported"
+
+
+    aa_section "Misc/Cornercases"
 
     # Test base with query vars
     set var1 a
