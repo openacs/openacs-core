@@ -1,13 +1,14 @@
 ad_library {
     Template style handling
+
     @author Gustaf Neumann
 }
 
 ad_proc -private template::toolkit {-subsite_id} {
 
-    return the CSS toolkit empty for the current or given site.
-    Potentila result values are "" (undtermined) "bootstrap"
-    (for Bootstrap 3) and "bootstrap5" (for Bootstrap 5).
+    Return the CSS toolkit or empty the current or given subsite.
+    Potential result values are "" (undetermined) "bootstrap" (for
+    Bootstrap 3), "bootstrap5" (for Bootstrap 5), or "w3css".
 
 } {
     if { ![info exists subsite_id] } {
@@ -211,7 +212,6 @@ namespace eval ::template {
             } {
                 return
             }
-
             #ns_log notice "template::CSS: initialize to <$paramValue>"
             #
             # The code below is executed only on first initialization of the
@@ -280,6 +280,12 @@ namespace eval ::template {
             nsv_set acs_templating_cssClasses $toolkit $dict
         }
 
+        #
+        # Initialize acs_templating_cssClasses in case, nothing is
+        # registered.
+        #
+        nsv_set acs_templating_cssClasses . .
+
         :public object method class {-toolkit name} {
             #
             # In case, a mapping for CSS classes is defined, return the
@@ -295,18 +301,14 @@ namespace eval ::template {
                 }
             }
 
-            try {
-                set dict [nsv_get acs_templating_cssClasses $toolkit]
-            } on error {errmsg} {
-                set dict ""
-            }
-
-            if {[dict exists $dict $name]} {
-                return [dict get $dict $name]
+            if {[nsv_get acs_templating_cssClasses $toolkit dict]} {
+                if {[dict exists $dict $name]} {
+                    return [dict get $dict $name]
+                }
             } else {
-                ns_log warning "template::CSS: no class mapping for toolkit $toolkit provided (should be in theme definition)"
+                ns_log warning "template::CSS: no class mapping for" \
+                    "toolkit $toolkit provided (should be in theme definition)"
             }
-
             if {[dict exists ${:cssClasses} $toolkit $name]} {
                 return [dict get ${:cssClasses} $toolkit $name]
             } else {
