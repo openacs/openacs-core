@@ -7,7 +7,7 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
     
-    <version name="6.0.0d1" url="http://openacs.org/repository/download/apm/acs-api-browser-6.0.0d1.apm">
+    <version name="6.0.0d2" url="http://openacs.org/repository/download/apm/acs-api-browser-6.0.0d2.apm">
         <owner url="http://openacs.org">OpenACS</owner>
         <summary>Interactive documentation for the Tcl and SQL APIs.</summary>
         <release-date>2024-09-02</release-date>
@@ -15,9 +15,9 @@
         <vendor url="http://openacs.org">OpenACS</vendor>
 	<license url="http://www.gnu.org/copyleft/gpl.html">GPL</license>
 	<maturity>3</maturity>
-        <description format="text/html">On line interactive documentation for the locally installed Tcl and SQL APIs.  Links to the Tcl core and NaviServer/AOLServer online documentation as well.</description>
+        <description format="text/html">On line interactive documentation for the locally installed Tcl and SQL APIs.  Links to the Tcl core and NaviServer online documentation as well.</description>
 
-        <provides url="acs-api-browser" version="6.0.0d1"/>
+        <provides url="acs-api-browser" version="6.0.0d2"/>
 	<requires url="acs-tcl" version="5.10.1"/>
         <requires url="acs-kernel" version="5.10.1"/>
 

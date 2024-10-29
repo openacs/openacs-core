@@ -18,27 +18,17 @@ namespace eval ::apidoc {
     variable style
     variable KEYWORDS
 
-    if {[ns_info name] eq "NaviServer"} {
-        #
-        # NaviServer at sourceforge
-        #
-        set ns_api_host  "https://naviserver.sourceforge.io/"
-        set ns_api_index [list "n/naviserver/files/" "n/"]
-        set ns_api_root  [list \
-                              ${ns_api_host}[lindex $ns_api_index 0] \
-                              ${ns_api_host}[lindex $ns_api_index 1] ]
-        set ns_api_html_index [list \
-                                   [lindex $ns_api_root 0]commandlist.html \
-                                   [lindex $ns_api_root 1]toc.html ]
-    } else {
-        #
-        # AOLserver wiki on panpotic
-        #
-        set ns_api_host  "http://panoptic.com/"
-        set ns_api_index "wiki/aolserver/Tcl_API"
-        set ns_api_root ${ns_api_host}${ns_api_index}
-        set ns_api_html_index $ns_api_root
-    }
+    #
+    # NaviServer at sourceforge
+    #
+    set ns_api_host  "https://naviserver.sourceforge.io/"
+    set ns_api_index [list "n/naviserver/files/" "n/"]
+    set ns_api_root  [list \
+                          ${ns_api_host}[lindex $ns_api_index 0] \
+                          ${ns_api_host}[lindex $ns_api_index 1] ]
+    set ns_api_html_index [list \
+                               [lindex $ns_api_root 0]commandlist.html \
+                               [lindex $ns_api_root 1]toc.html ]
 
     set tcl_api_html_index "https://www.tcl-lang.org/man/tcl$::tcl_version/TclCmd/contents.htm"
 
@@ -76,8 +66,173 @@ namespace eval ::apidoc {
 
     }
 
-}
+    ad_proc ::apidoc::get_object_property {o what args} {
 
+        Return poperties of objects agnostic to the object system
+        (i.e., XOTcl or NX).
+        
+    } {
+        switch -- $what {
+            "mixin" {
+                return [$o ::nsf::methods::object::info::mixins]
+            }
+            "instmixin" {
+                return [$o ::nsf::methods::class::info::mixins]
+            }
+            "mixinof" {
+                return [$o ::nsf::methods::class::info::mixinof -scope object]
+            }
+            "instmixinof" {
+                return [$o ::nsf::methods::class::info::mixinof -scope class]
+            }
+            "instproc" {
+                if {[nsf::is class,type=::xotcl::Class $o]} {return [$o info instprocs {*}$args]}
+                if {[nsf::is class,type=::nx::Class $o]} {return [$o info methods -path -type scripted -callprotection all {*}$args]}
+            }
+            "instcommand" {
+                if {[nsf::is class,type=::xotcl::Class $o]} {return [$o info instcommands {*}$args]}
+                if {[nsf::is class,type=::nx::Class $o]} {return [$o info methods -path {*}$args]}
+            }
+            "instforward" {
+                if {[nsf::is class,type=::xotcl::Class $o]} {return [$o info instforward {*}$args]}
+                if {[nsf::is class,type=::nx::Class $o]} {return [$o info methods -type forwarder {*}$args]}
+            }
+            "instmethodtype" {
+                return [$o ::nsf::methods::class::info::method type {*}$args]
+            }
+            "methodtype" {
+                return [$o ::nsf::methods::object::info::method type {*}$args]
+            }
+            "proc" {
+                if {[nsf::is object,type=::xotcl::Object $o]} {return [$o info procs {*}$args]}
+                if {[nsf::is object,type=::nx::Object $o]} {return [$o info object methods -path -type scripted {*}$args]}
+            }
+            "command" {
+                return [$o ::nsf::methods::object::info::methods {*}$args]
+            }
+            "forward" {
+                if {[nsf::is object,type=::xotcl::Object $o]} {return [$o info forward {*}$args]}
+                if {[nsf::is object,type=::nx::Object $o]} {return [$o info object methods -type forwarder {*}$args]}
+            }
+            "slots" {
+                if {[nsf::is object,type=::xotcl::Object $o]} {return [$o info slots]}
+                return [$o info object methods -type forwarder]
+            }
+            "class" {
+                return [$o ::nsf::methods::object::info::class]
+            }
+            "superclass" {
+                if {[nsf::is class,type=::xotcl::Class $o]} {return [$o info superclass]}
+                if {[nsf::is class,type=::nx::Class $o]} {return [$o info superclasses]}
+            }
+            "heritage" {
+                return [$o ::nsf::methods::class::info::heritage]
+            }
+            "subclass" {
+                if {[nsf::is class,type=::xotcl::Class $o]} {return [$o info subclass]}
+                if {[nsf::is class,type=::nx::Class $o]} {return [$o info subclasses]}
+            }
+            "parameter" {
+                if {[nsf::is object,type=::xotcl::Object $o]} {return [$o info parameter]}
+                return [lmap p [$o info variables -closure] {$o info variable parameter $p}]
+            }
+            "isclass" {
+                return [nsf::is class $o]
+            }
+            "isobject" {
+                return [nsf::is object $o]
+            }
+            "isbaseclass" {
+                if {![nsf::is class $o]} {return 0}
+                if {[catch {set p [$o ::nsf::methods::object::info::precedence]}]} {return 0}
+                return [expr {[lindex $p end] eq $o}]
+            }
+            "instmethodparameter" {
+                return [$o ::nsf::methods::class::info::method parameter {*}$args]
+            }
+            "methodparameter" {
+                return [$o ::nsf::methods::object::info::method parameter {*}$args]
+            }
+            "instargs" {
+                if {[nsf::is object,type=::xotcl::Object $o]} {return [$o info instargs {*}$args]}
+                set posargs {}
+                foreach \
+                    m [$o ::nsf::methods::class::info::method args {*}$args] \
+                    p [$o ::nsf::methods::class::info::method parameter {*}$args] {
+                        if {[string index [lindex $p 0] 0] eq "-"} continue
+                        lappend posargs $m
+                    }
+                return $posargs
+            }
+            "args" {
+                if {[nsf::is object,type=::xotcl::Object $o]} {return [$o info args {*}$args]}
+                set posargs {}
+                foreach \
+                    m [$o ::nsf::methods::object::info::method args {*}$args] \
+                    p [$o ::nsf::methods::object::info::method parameter {*}$args] {
+                        if {[lindex [string index $p 0] 0] eq "-"} continue
+                        lappend posargs $m
+                    }
+                return $posargs
+            }
+            "instargdefault" {
+                if {[nsf::is class,type=::xotcl::Class $o]} {
+                    return [uplevel [list $o info instdefault {*}$args]]
+                }
+                lassign $args method arg varName
+                foreach p [$o info method parameters $method] {
+                    lassign $p name default
+                    if {$name eq $arg} {
+                        uplevel [list set $varName $default]
+                        return [expr {[llength $p] == 2}]
+                    }
+                }
+                return 0
+            }
+            "argdefault" {
+                if {[nsf::is object,type=::xotcl::Object $o]} {
+                    return [uplevel [list $o info default {*}$args]]
+                }
+                lassign $args method arg varName
+                foreach p [$o info object method parameters $method] {
+                    lassign $p name default
+                    if {$name eq $arg} {
+                        uplevel [list set $varName $default]
+                        return [expr {[llength $p] == 2}]
+                    }
+                }
+                return 0
+            }
+
+            "array-exists" {
+                if {[nsf::is object,type=::xotcl::Object $o]} {return [$o array exists {*}$args]}
+                return [$o eval [list array exists :{*}$args]]
+            }
+            "array-get" {
+                if {[nsf::is object,type=::xotcl::Object $o]} {return [$o array get {*}$args]}
+                return [$o eval [list array get :{*}$args]]
+            }
+            "array-set" {
+                if {[nsf::is object,type=::xotcl::Object $o]} {return [$o array set {*}$args]}
+                return [$o eval [list array set :{*}$args]]
+            }
+            "set" {
+                if {[nsf::is object,type=::xotcl::Object $o]} {return [$o set {*}$args]}
+                return [$o eval [list set :[lindex $args 0]]]
+            }
+            "vars" {
+                return [$o ::nsf::methods::object::info::vars]
+            }
+
+            "isnxobject" {
+                return [nsf::is object,type=::nx::Object $o]
+            }
+            default {
+                error "no idea how to return $what"
+            }
+        }    
+    }
+}
 
 ad_proc -public api_read_script_documentation {
     path
@@ -424,7 +579,7 @@ ad_proc -public api_proc_documentation {
     Generates formatted documentation for a procedure.
 
     @param format    the type of documentation to generate. This
-                     parameter is deprecated and has no effect.
+    parameter is deprecated and has no effect.
     @param script    include information about what script this proc lives in?
     @param xql       include the source code for the related xql files?
     @param source    include the source code for the script?
@@ -836,7 +991,7 @@ ad_proc api_proc_pretty_name {
 
 ad_proc -public api_apropos_functions { string } {
     @return the functions in the system that contain string in their name
-            and have been defined using ad_proc.
+    and have been defined using ad_proc.
 } {
     set matches [list]
     foreach function [nsv_array names api_proc_doc] {
@@ -857,8 +1012,8 @@ ad_proc -public api_add_to_proc_doc {
 
     @author Gustaf Neumann
     @param proc_name name is fully qualified name without leading colons proc procs,
-           XOTcl methods are a triple with the fully qualified class name,
-           then proc|instproc and then the method name.
+    XOTcl methods are a triple with the fully qualified class name,
+    then proc|instproc and then the method name.
     @param property name of property such as "main" "testcase" "calledby" "deprecated_p" "script" "protection"
     @param value    value of the property
 
@@ -951,7 +1106,7 @@ ad_proc -private api_called_proc_names {
 ad_proc -private api_add_calling_info_to_procdoc {{proc_name "*"}} {
 
     Add the calling information (what are the functions called by this
-    proc_name) to the collected proc_doc information.
+                                 proc_name) to the collected proc_doc information.
 
     @author Gustaf Neumann
 } {
@@ -1356,10 +1511,10 @@ namespace eval ::apidoc {
         HTML string.
 
         @param author_string author information to format. 3 kind of
-               formats are expected: email (a mailto link to the email
-               is generated), whitespace-separated couple "<name> (<email>)" (a
-               mailto link for email and the name are generated) and
-               free-form (the same input string is returned).
+        formats are expected: email (a mailto link to the email
+                                     is generated), whitespace-separated couple "<name> (<email>)" (a
+                                                                                                    mailto link for email and the name are generated) and
+        free-form (the same input string is returned).
 
         @return the formatted result
     } {
@@ -1616,7 +1771,7 @@ namespace eval ::apidoc {
 
     ad_proc -private length_braces {data} {
         @return length of subexpression, from open to close brace inclusive.
-                Doesn't deal with unescaped braces in substrings.
+        Doesn't deal with unescaped braces in substrings.
     } {
         set i 1
         for {set count 1} {1} {incr i} {

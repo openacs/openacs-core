@@ -49,8 +49,8 @@
 
   <tr style="background:#DDDDDD">
    <td colspan="2">
-    <form id="ns-aol-api-search" action="@aolserver_search_url@" method="get">
-    <h4>NaviServer/AOLserver Tcl API Search</h4>
+    <form id="ns-api-search" action="@naviserver_search_url@" method="get">
+    <h4>NaviServer Tcl API Search</h4>
     <div>
     <input type="text" name="tcl_proc">
     <input type="submit" value="Go"><br>
