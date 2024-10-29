@@ -211,6 +211,7 @@ namespace eval ::template {
             } {
                 return
             }
+
             #ns_log notice "template::CSS: initialize to <$paramValue>"
             #
             # The code below is executed only on first initialization of the
@@ -294,13 +295,18 @@ namespace eval ::template {
                 }
             }
 
-            if {[nsv_get acs_templating_cssClasses $toolkit dict]} {
-                if {[dict exists $dict $name]} {
-                    return [dict get $dict $name]
-                }
+            try {
+                nsv_get acs_templating_cssClasses $toolkit dict
+            } on error {errmsg} {
+                set dict ""
+            }
+
+            if {[dict exists $dict $name]} {
+                return [dict get $dict $name]
             } else {
                 ns_log warning "template::CSS: no class mapping for toolkit $toolkit provided (should be in theme definition)"
             }
+
             if {[dict exists ${:cssClasses} $toolkit $name]} {
                 return [dict get ${:cssClasses} $toolkit $name]
             } else {
