@@ -174,7 +174,7 @@ pages, included in the links below.
   <td  class="text-center"><if @library_check.vulnerability@ not nil>
     <a href="@library_check.vulnerabilityCheckURL@">
     <if @library_check.vulnerability@ true><span class="text-danger"><adp:icon name="warn"></span></if>
-    <else><span class="text-success"><adp:icon name="radio-checked"></span></else>
+    <else><span class="text-success"><adp:icon name="checkbox-checked"></span></else>
     </a>
   </if</td>
   <td class="text-center">@library_check.available@</td>
