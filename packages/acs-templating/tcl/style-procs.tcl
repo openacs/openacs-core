@@ -296,7 +296,7 @@ namespace eval ::template {
             }
 
             try {
-                nsv_get acs_templating_cssClasses $toolkit dict
+                set dict [nsv_get acs_templating_cssClasses $toolkit]
             } on error {errmsg} {
                 set dict ""
             }
