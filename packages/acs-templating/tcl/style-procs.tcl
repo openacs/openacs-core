@@ -24,7 +24,7 @@ ad_proc -private template::toolkit {-subsite_id} {
             set toolkit bootstrap5
         } elseif {[string match *bootstrap3* $theme]} {
             set toolkit bootstrap
-        } elseif {[string match *w3css-theme* $theme]} {
+        } elseif {[string match *w3css* $theme]} {
             set toolkit w3css
         }
     }
@@ -69,6 +69,11 @@ namespace eval ::template {
             form-action "btn btn-default"
             margin-form ""
             text-warning text-warn
+        }
+        dict set :cssClasses yui {
+            card portlet-wrapper
+            card-body portlet
+            card-header portlet-header
         }
         dict set :cssClasses default {
             btn-default ""
@@ -309,6 +314,7 @@ namespace eval ::template {
                 ns_log warning "template::CSS: no class mapping for" \
                     "toolkit $toolkit provided (should be in theme definition)"
             }
+
             if {[dict exists ${:cssClasses} $toolkit $name]} {
                 return [dict get ${:cssClasses} $toolkit $name]
             } else {
