@@ -95,6 +95,13 @@ namespace eval ::template {
             return ${:preferredCSSToolkit}
         }
 
+        :public object method toolkits {} {
+            #
+            # Return the list of known toolkits
+            #
+            return [dict keys ${:cssClasses}]
+        }
+
         :public object method icon_name {filename} {
             #
             # Return an icon name for the proved filename
