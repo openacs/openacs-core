@@ -663,7 +663,7 @@ ad_proc -public api_proc_documentation {
         #
         # Make sure we have the newest update in the nsv
         #
-        ::xo::api update_object_doc $scope $cl ""
+        ::xo::api update_object_doc $scope [expr {[string match ::* $cl] ? $cl :"::$cl"}] ""
     } else {
         set xotclArgs 0
         if {[namespace which ::xo::api] ne "" && [::xo::api isobject "" [lindex $proc_name 1]]} {
@@ -827,6 +827,8 @@ ad_proc -public api_proc_documentation {
                     # The method is defined on a class
                     #
                     set methodSyntax [xo::api method_link -label $methodSyntax $containerObject instproc $m]
+                } else {
+                    set methodSyntax [xo::api method_link -label $methodSyntax $containerObject proc $m]
                 }
                 append blocks_out "<li><i>$methodSyntax</i></li>\n"
             }
