@@ -1,7 +1,5 @@
-if {[info commands ::xo::api] ne ""} {
-    ns_log notice "updating online documentation using xo::api"
-    ::xo::api update_nx_docs
-    ns_log notice "updating online documentation using xo::api DONE"
+if {[info commands ::xo::api] ne ""} {    
+    ad_schedule_proc -thread t -once t 1 ::xo::api update_nx_docs
 } else {
     ns_log warning "INIT: no xo::api available"
 }
