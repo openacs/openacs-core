@@ -928,10 +928,11 @@ ad_proc -public template::list::write_csv {
         template::list::element::get_reference -list_name $name -element_name $__element_name
         if {!$element_properties(hide_p)} {
             lappend __csv_cols $__element_name
-            lappend __csv_labels [csv_quote $element_properties(label)]
+            lappend __csv_labels $element_properties(label)
         }
     }
-    append __output "\"[join $__csv_labels "\"$delimiter\""]\"\n"
+
+    lappend __output $__csv_labels
 
     set __rowcount [template::multirow size $list_properties(multirow)]
     set __rownum 0
@@ -961,17 +962,21 @@ ad_proc -public template::list::write_csv {
                         -element_name $__element_name \
                         -local_name __element_properties
                     if { [info exists $__element_properties(csv_col)] } {
-                        lappend __cols [csv_quote [set $__element_properties(csv_col)]]
+                        lappend __cols [set $__element_properties(csv_col)]
                     } else {
-                        lappend __cols [csv_quote [set $__element_name]]
+                        lappend __cols [set $__element_name]
                     }
                 } {
-                    lappend __cols [csv_quote [set $__element_name]]
+                    lappend __cols [set $__element_name]
                 }
             }
-            append __output "\"[join $__cols "\"$delimiter\""]\"\n"
+            lappend __output $__cols
         }
     }
+
+    package require csv
+    set __output [::csv::joinlist $__output $delimiter]
+
     set oh [ns_conn outputheaders]
     ns_set put $oh Content-Disposition "attachment; filename=${__list_name}.csv"
     ns_return 200 text/csv $__output
