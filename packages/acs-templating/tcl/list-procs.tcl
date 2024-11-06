@@ -906,9 +906,18 @@ ad_proc -public template::list::csv_quote {
 
 ad_proc -public template::list::write_csv {
     -name:required
+    {-label_headers:boolean true}
     {-delimiter ","}
 } {
     Writes a CSV to the connection
+
+    @param name template::list name
+    @param lable_headers When set, element labels, typically human
+                         readable, will be used as column
+                         headers. When not set, the column names will
+                         be used, which is useful when e.g. importing
+                         the CSV somewhere.
+    @param delimiter CSV delimiter
 } {
     # Creates the '_eval' columns and aggregates
     template::list::prepare_for_rendering -name $name
@@ -932,7 +941,7 @@ ad_proc -public template::list::write_csv {
         }
     }
 
-    lappend __output $__csv_labels
+    lappend __output [expr {$label_headers_p ? $__csv_labels : $__csv_cols}]
 
     set __rowcount [template::multirow size $list_properties(multirow)]
     set __rownum 0
