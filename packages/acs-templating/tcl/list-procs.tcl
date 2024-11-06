@@ -895,10 +895,14 @@ ad_proc -public template::list::write_output {
     }
 }
 
-ad_proc -public template::list::csv_quote {
+ad_proc -deprecated template::list::csv_quote {
     string
 } {
     Quote a string for inclusion as a csv element
+
+    Obsolete when one uses tcllib csv package.
+
+    @see https://core.tcl-lang.org/tcllib/doc/trunk/embedded/md/tcllib/files/modules/csv/csv.md
 } {
     regsub -all -- {\"} $string {""} result
     return $result
