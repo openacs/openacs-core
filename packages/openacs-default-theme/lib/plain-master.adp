@@ -74,7 +74,7 @@
     <if @user_messages:rowcount@ gt 0>
       <div id="alert-message">
         <multiple name="user_messages">
-          <div class="alert">
+          <div class="alert alert-@user_messages.severity@">
             <strong>@user_messages.message;noquote@</strong>
           </div>
          </multiple>

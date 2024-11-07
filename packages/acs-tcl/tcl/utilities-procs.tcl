@@ -1809,6 +1809,7 @@ ad_proc -public util_user_message {
     {-replace:boolean}
     {-html:boolean}
     {-message {}}
+    {-severity "success"}
 } {
     Sets a message to be displayed on the next page request.
 
@@ -1819,8 +1820,16 @@ ad_proc -public util_user_message {
     @param html Set this flag if your message contains HTML. If specified, you're responsible for proper quoting
     of everything in your message. Otherwise, we quote it for you.
 
+    @param severity an indication of the message severity, that the
+    page template may use to e.g. color-code the message for the
+    user. Must be one of "success", "info", "warning" or "danger".
+
     @see util_get_user_messages
 } {
+    if {$severity ni {"success" "info" "warning" "danger"}} {
+        error {Invalid severity. Must be one of "success", "info", "warning" or "danger"}
+    }
+
     if {$replace_p} {
         set messages [list]
     } else {
@@ -1830,7 +1839,7 @@ ad_proc -public util_user_message {
         if { !$html_p } {
             set message [ns_quotehtml $message]
         }
-        dict incr messages $message
+        dict incr messages [list $message $severity]
     }
     ad_set_client_property -persistent f "acs-kernel" "general_messages" $messages
 }
@@ -1861,12 +1870,13 @@ ad_proc -public util_get_user_messages {
     if { !$keep_p && $messages ne "" } {
         ad_set_client_property -persistent f "acs-kernel" "general_messages" {}
     }
-    template::multirow create $multirow message
+    template::multirow create $multirow message severity
     foreach {message count} $messages {
+        lassign $message message severity
         if {$count > 1} {
             append message " ($count)"
         }
-        template::multirow append $multirow $message
+        template::multirow append $multirow $message $severity
     }
 }
 

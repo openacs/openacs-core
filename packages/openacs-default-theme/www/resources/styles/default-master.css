@@ -312,20 +312,37 @@ div.submit-button {
 
 /* User Messages */
 
-#alert-message {
-  background-color: #ccff99; 
-  padding: 4px;
-  padding-top: 6px;
-  padding-bottom: 6px;
-  font-size: 85%;
-}
-
 #alert-message .alert {
-  margin-left: 0;
-  padding-left: 2px;
-  border: none;
+    padding: 4px;
+    margin-bottom: 6px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    font-size: 85%;
 }
 
+#alert-message .alert-success {
+    color: #3c763d;
+    background-color: #dff0d8;
+    border-color: #d6e9c6;
+}
+
+#alert-message .alert-info {
+    color: #31708f;
+    background-color: #d9edf7;
+    border-color: #bce8f1;
+}
+
+#alert-message .alert-warning {
+    color: #8a6d3b;
+    background-color: #fcf8e3;
+    border-color: #faebcc;
+}
+
+#alert-message .alert-danger {
+    color: #a94442;
+    background-color: #f2dede;
+    border-color: #ebccd1;
+}
 
 /* Boxed User Message */
 
