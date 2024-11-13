@@ -545,6 +545,36 @@ ad_proc -deprecated template::util::tcl_to_sql_list { lst } {
     }
 }
 
+ad_proc -deprecated template::form::export {} {
+    Generates hidden input tags for all values in a form submission.
+    Typically used to create a confirmation page following an initial
+    submission.
+
+    DEPRECATED: this proc has been superseded by export_vars, which
+                also offers additional features.
+
+    @see export_vars
+
+    @return A string containing hidden input tags for inclusion in a
+            form.
+} {
+    set form [ns_getform]
+    if { $form eq "" } { return "" }
+
+    set export_data ""
+
+    for { set i 0 } { $i < [ns_set size $form] } { incr i } {
+
+        set key [ns_set key $form $i]
+        set value [ns_set value $form $i]
+
+        append export_data "
+        <div><input type=\"hidden\" name=\"$key\" value=\"[ns_quotehtml $value]\"></div>"
+    }
+
+    return $export_data
+}
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
