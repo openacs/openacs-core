@@ -566,8 +566,8 @@ the values are the column values. For example:
 db_foreach users_select &quot;select first_names, last_name from users&quot; -column_set columns {
     # Now $columns is an ns_set.
     doc_body_append &quot;&lt;li&gt;&quot;
-    for { set i 0 } { $i &lt; [ns_set size $columns] } { incr i } {
-        doc_body_append &quot;[ns_set key $columns $i] is [ns_set value $columns $i]. \n&quot;
+    foreach {key value} [ns_set array $columns] {
+        doc_body_append &quot;$key is $value. \n&quot;
     }
 }
 
