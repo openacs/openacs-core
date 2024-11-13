@@ -952,35 +952,23 @@ ad_proc -public ad_page_contract {
         set form [ns_getform]
     }
 
-    if { $form eq "" } {
-        set form_size 0
-    } else {
-        set form_size [ns_set size $form]
-    }
-
     # This is the array in which we store the signature variables as we come across them
     # Whenever we see a variable named foo:sig, we record it here as apc_signatures(foo).
     array set apc_signatures [list]
 
-    for { set form_counter_i 0 } { $form_counter_i < $form_size } { incr form_counter_i } {
-
+    foreach {actual_name actual_value} [ns_set array $form] {
         #
         # Map actual argument to formal argument ... only complication is from arrays
         #
 
-
         # Check the name of the argument to passed in the form, ignore if not valid
-        if { [regexp -nocase -- {^[a-z0-9_\-\.\:]*$}  [ns_set key $form $form_counter_i] ] } {
-            set actual_name [ns_set key $form $form_counter_i]
+        if { [regexp -nocase -- {^[a-z0-9_\-\.\:]*$} $actual_name] } {
 
             # The name of the formal argument in the page
             set formal_name $actual_name
 
             # This will be var(key) for an array
             set variable_to_set var
-
-            # This is the value
-            set actual_value [ns_set value $form $form_counter_i]
 
             # It may be a signature for another variable
             if { [regexp {^(.*):sig$} $actual_name match formal_name] } {
@@ -1023,7 +1011,6 @@ ad_proc -public ad_page_contract {
                 # which is not what we want
                 continue
             }
-
 
             # Remember that we've found the spec so we don't complain that this argument is missing
             ad_page_contract_set_validation_passed $formal_name
@@ -1084,7 +1071,7 @@ ad_proc -public ad_page_contract {
                 }
             }
         } else {
-            ad_log warning "ad_page_contract: attempt to use a nonstandard variable name in form.  [ns_set key $form $form_counter_i]  "
+            ad_log warning "ad_page_contract: attempt to use a nonstandard variable name in form: '$actual_name'"
         }
     }
 
