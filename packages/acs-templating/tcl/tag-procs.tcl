@@ -67,29 +67,22 @@ ad_proc -private template::template_tag_if_condition { chunk params condition_ty
 }
 
 ad_proc -private template::template_tag_if_concat_params { params } {
-    append all the tags together and then eval as a list to restore
-    quotes
-} {
+    
+    Append all the tags together.
 
-    set size [ns_set size $params]
+    Note that the tokens inside an IF-tag are parsed just as attribute
+    names, since these are not followed by an equals sign such as
+    HTML-like attributes. These tokens can contain variable names,
+    which are case-sensitive.
 
-    for { set i 0 } { $i < $size } { incr i } {
-        set key [ns_set key $params $i]
-        set value [ns_set value $params $i]
-        if {$key eq $value} {
-            lappend tokens $key
-        } else {
-            lappend tokens "$key=$value"
-        }
-    }
-
-    # LARS: The 'eval' statement here breaks if any key or value above contains a semicolon,
-    # since this causes eval to treat whatever comes after the semicolon as a new command.
-    # I'm not sure why we need to eval here at all, there ought to be another solution,
-    # but it's not clear what the intention of below statement is.
-
-    #set tokens [eval [concat list [join $tokens " "]]]
-    set tokens [join $tokens " "]
+    This disallows NaviServer to treat attribute names lower case (in
+    HTML, attribute names are case-insensitive).
+    
+} {    
+    set tokens [join [lmap {key value} [ns_set array $params] {
+        string cat [expr {$key eq $value ? $key : "$key=$value"}]
+    }] " "]
+    #ns_log notice template::template_tag_if_concat_params $tokens
 
     return $tokens
 }
