@@ -819,8 +819,37 @@ ad_proc -public api_proc_documentation {
         if {[nsf::is object,type=::nx::Object $objName] && ![nsf::is object,type=::nx::Class $objName]} {
             append blocks_out <blockquote><ul>
             foreach m [$objName info lookup methods -callprotection public -source application] {
-                set methodSyntax "$objName $m [$objName info lookup syntax $m]"
                 set definition [nx::Object info method definition [$objName info lookup method $m]]
+                #
+                # Currently, "info lookup syntax" does not work for aliases
+                #
+                if {[lindex $definition end-2] eq "alias"} {
+                    set targetMethod [lindex $definition end]
+                    unset -nocomplain methodSyntax
+                    if {[nsf::cmd::info type $targetMethod] eq "cmd"} {
+                        #
+                        # We have an alias to a plain command. Try
+                        # executing the plain command and let's hope,
+                        # it gives us a syntax.
+                        #
+                        try {
+                            $targetMethod
+                        } on error {errorMsg} {
+                            if {[regexp {"([^\"]+)"} [lindex [split $errorMsg \n] 0] . syntax]} {
+                                set methodSyntax "$objName $m [lrange $syntax 1 end]"
+                            }
+                        }
+                    } else {
+                        ns_log notice "unknown type '[nsf::cmd::info type $targetMethod]'" \
+                            "for alias for '$targetMethod'" \
+                            "used in [list $objName info lookup syntax $m]"                             
+                    }
+                    if {![info exists methodSyntax]} {
+                        set methodSyntax "$objName $m ..."                        
+                    }
+                } else {
+                    set methodSyntax "$objName $m [$objName info lookup syntax $m]"
+                }
                 set containerObject [lindex $definition 0]
                 if {$containerObject ne $objName} {
                     #
