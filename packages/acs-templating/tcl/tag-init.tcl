@@ -223,7 +223,7 @@ template::tag include { params } {
     # Check, if the src can be resolved against resources/templates in
     # the theme package
     #
-    ns_set update $params src [template::themed_template [ns_set iget $params src]]
+    ns_set iupdate $params src [template::themed_template [ns_set iget $params src]]
     template::template_tag_include_helper $params
 }
 
@@ -238,7 +238,7 @@ template::tag widget { params } {
     set src [ns_set iget $params src]
     set adp_stub [template::resource_path -type widgets -style $src -relative]
     if {[file exists $::acs::rootdir/$adp_stub.adp]} {
-        ns_set update $params src $adp_stub
+        ns_set iupdate $params src $adp_stub
     }
     template::template_tag_include_helper $params
 }
@@ -534,7 +534,7 @@ template::tag formerror { chunk params } {
     #
 
     set id [template::get_attribute formerror $params id]
-    set type [ns_set get $params type]
+    set type [ns_set iget $params type]
 
     if {$type eq {}} {
         set key $id
@@ -577,13 +577,13 @@ template::tag formgroup { chunk params } {
         "template::element options \${form:id} [list $id] { $tag_attributes }"
 
     # make sure name is a parameter to pass to the rendering tag handler
-    ns_set update $params name formgroup
-    ns_set update $params id formgroup
+    ns_set iupdate $params name formgroup
+    ns_set iupdate $params id formgroup
 
     # Use the multiple or grid tag to render the form group depending on
     # whether the cols attribute was specified
 
-    if { [ns_set find $params cols] == -1 } {
+    if { [ns_set ifind $params cols] == -1 } {
         template_tag_multiple $chunk $params
     } else {
         template_tag_grid $chunk $params
@@ -609,8 +609,8 @@ template::tag formgroup-widget { chunk params } {
         "template::element options \${form:id} [list $id] { $tag_attributes }"
 
     # make sure name is a parameter to pass to the rendering tag handler
-    ns_set update $params name formgroup
-    ns_set update $params id formgroup
+    ns_set iupdate $params name formgroup
+    ns_set iupdate $params id formgroup
     template::adp_append_code "append __adp_output \"\$\{formgroup:${row}(widget)\} \$\{formgroup:${row}(label)\}\""
 
 }
@@ -951,9 +951,7 @@ template::tag case { chunk params } {
                     if { $i == $size_1 } {
 
                         template::adp_append_code "$switches $value {" -nobreak
-
                         template::adp_compile_chunk $chunk
-
                         template::adp_append_code "}"
 
                     } else {

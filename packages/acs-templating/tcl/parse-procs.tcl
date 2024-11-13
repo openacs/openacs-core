@@ -862,7 +862,7 @@ ad_proc -private template::tag_attribute {
     @param tag the tag identifier
     @param attribute the attribute name
 } {
-    return [ns_set get $tag $attribute]
+    return [ns_set iget $tag $attribute]
 }
 
 ad_proc -private template::current_tag {} {

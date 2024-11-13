@@ -215,7 +215,7 @@ template::tag tabstrip { chunk params } {
 
   # Change the default style if no style is specified
   if {[ns_set iget $params style] eq ""} {
-    ns_set update $params style tabbed-dialog
+    ns_set iupdate $params style tabbed-dialog
   }
 
   # Render the template
