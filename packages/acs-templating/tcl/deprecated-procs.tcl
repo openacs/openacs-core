@@ -545,6 +545,9 @@ ad_proc -deprecated template::util::tcl_to_sql_list { lst } {
     }
 }
 
+namespace eval template {}
+namespace eval template::form {}
+
 ad_proc -deprecated template::form::export {} {
     Generates hidden input tags for all values in a form submission.
     Typically used to create a confirmation page following an initial
