@@ -225,6 +225,7 @@ aa_register_case \
     -procs {
         search::searchable_type_p
         search::object_index
+        search::object_unindex
     } \
     object_utilities {
         Test object-related utilities.
@@ -258,6 +259,10 @@ aa_register_case \
                 aa_true \
                     "Object '$object_id' of type '$object_type' will return a non null datasource" \
                     [llength $datasource]
+
+                aa_false "Unindexing does not bomb." [catch {
+                    search::object_unindex -object_id $object_id
+                }]
             }
         }
     }

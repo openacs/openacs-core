@@ -74,18 +74,53 @@ ad_proc -public search::object_index {
             -relevant_date $d(relevant_date) \
             -datasource d
     } else {
-        set r [acs_sc::invoke \
-                   -contract FtsEngineDriver \
-                   -operation [expr {$event eq "UPDATE" ? "update_index" : "index"}] \
-                   -call_args [list \
-                                   $d(object_id) \
-                                   $txt \
-                                   $d(title) \
-                                   $d(keywords)] \
-                   -impl $driver]
+        acs_sc::invoke \
+            -contract FtsEngineDriver \
+            -operation [expr {$event eq "UPDATE" ? "update_index" : "index"}] \
+            -call_args [list \
+                            $d(object_id) \
+                            $txt \
+                            $d(title) \
+                            $d(keywords)] \
+            -impl $driver
     }
 
+    #
+    # Call the action so other people who do indexey things have a
+    # hook.
+    #
+    callback -catch search::action \
+        -action $event \
+        -object_id $object_id \
+        -datasource d \
+        -object_type $object_type
+
     return [array get d]
+}
+
+ad_proc -public search::object_unindex {
+    -object_id:required
+} {
+    Unindexes an object by invoking the proper callbacks.
+} {
+    set driver [search::driver_name]
+    if {$driver eq ""} {
+        return
+    }
+
+    acs_sc::invoke \
+        -contract FtsEngineDriver \
+        -operation unindex \
+        -call_args [list $object_id] \
+        -impl $driver
+
+    # call the search action callbacks.
+    callback -catch search::action \
+        -action DELETE \
+        -object_id $object_id \
+        -datasource NONE \
+        -object_type {}
+
 }
 
 ad_proc -public search::queue {
@@ -211,68 +246,37 @@ ad_proc -private search::indexer {} {
             UPDATE -
             INSERT {
                 # Don't bother reindexing if we've already inserted/updated this object in this run
-                set object_type [acs_object_type $object_id]
-
                 if {![info exists seen($object_id)]} {
                     try {
-                        unset -nocomplain datasource
-                        array set datasource [search::object_index \
-                                                  -object_id $object_id]
+                        search::object_index \
+                            -event $event \
+                            -object_id $object_id
                     } on error {errMsg} {
                         ns_log Error "search::indexer: error getting datasource for " \
-                            "$object_id $object_type: $errMsg\n[ad_print_stack_trace]"
-                    }
-
-                    if {[array size datasource] > 0} {
-                        # call the action so other people who do indexey things have a hook
-                        callback -catch search::action \
-                            -action $event \
-                            -object_id $object_id \
-                            -datasource datasource \
-                            -object_type $object_type
-
-                        # Remember seeing this object so we can avoid reindexing it later
+                            "[acs_object_type $object_id]: $errMsg\n[ad_print_stack_trace]"
+                    } on ok {d} {
+                        #
+                        # Remember seeing this object so we can avoid
+                        # reindexing it later.
+                        #
                         set seen($object_id) 1
-
-                        search::dequeue \
-                            -object_id $object_id \
-                            -event_date $event_date \
-                            -event $event
                     }
                 }
             }
             DELETE {
-                if {[catch {
-                    set r [acs_sc::invoke \
-                               -contract FtsEngineDriver \
-                               -operation unindex \
-                               -call_args [list $object_id] \
-                               -impl $driver]
-                } errMsg]} {
+                try {
+                    search::object_unindex -object_id $object_id
+                } on error {errMsg} {
                     ns_log Error "search::indexer: error unindexing $object_id " \
                         "[acs_object_type $object_id]: $errMsg\n[ad_print_stack_trace]"
-                } else {
-                    # call the search action callbacks.
-                    callback -catch search::action \
-                        -action $event \
-                        -object_id $object_id \
-                        -datasource NONE \
-                        -object_type {}
-
-                    search::dequeue \
-                        -object_id $object_id \
-                        -event_date $event_date \
-                        -event $event
-
                 }
+
                 #
                 # Unset "seen" element since one could conceivably
                 # delete one but then subsequently reinsert it (e.g.
                 # when rolling back/forward the live revision).
                 #
-                if {[info exists seen($object_id)]} {
-                    unset seen($object_id)
-                }
+                unset -nocomplain seen($object_id)
             }
         }
 
