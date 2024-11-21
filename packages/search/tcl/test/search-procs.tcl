@@ -223,8 +223,8 @@ aa_register_case \
 aa_register_case \
     -cats {api smoke} \
     -procs {
-        search::driver_name
-        search::dotlrn::get_community_id
+        search::searchable_type_p
+        search::object_index
     } \
     object_utilities {
         Test object-related utilities.
