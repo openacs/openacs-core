@@ -224,6 +224,8 @@ aa_register_case \
     -cats {api smoke} \
     -procs {
         search::searchable_type_p
+        search::object_datasource
+        search::object_url
         search::object_index
         search::object_unindex
     } \
@@ -254,11 +256,26 @@ aa_register_case \
                 order by object_type asc
             }]] {
                 lassign $sample object_id object_type
-                set datasource [search::object_index -object_id $object_id]
+
+                set datasource [search::object_datasource -object_id $object_id]
 
                 aa_true \
                     "Object '$object_id' of type '$object_type' will return a non null datasource" \
                     [llength $datasource]
+
+                set datasource [search::object_index -object_id $object_id]
+
+                aa_true \
+                    "Object '$object_id' of type '$object_type' will return a non null datasource after index" \
+                    [llength $datasource]
+
+                set url [search::object_url -object_id $object_id]
+
+                aa_false \
+                    "Object '$object_id' produces a valid URL -> $url" \
+                    [catch {
+                        ns_parseurl $url
+                    }]
 
                 aa_false "Unindexing does not bomb." [catch {
                     search::object_unindex -object_id $object_id

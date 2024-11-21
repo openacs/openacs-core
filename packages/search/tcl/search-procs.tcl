@@ -18,11 +18,11 @@ ad_proc -public search::searchable_type_p  {
                   || [acs_sc_binding_exists_p FtsContentProvider $object_type]}]
 }
 
-ad_proc -public search::object_index {
+ad_proc -public search::object_datasource {
     -object_id:required
-    {-event "UPDATE"}
 } {
-    Indexes an object by invoking the proper datasource and callbacks.
+    Obtains the datasource for an object by invoking the proper
+    datasource and callbacks.
 
     @return datasource as dict
 } {
@@ -57,11 +57,29 @@ ad_proc -public search::object_index {
                          -impl $object_type]
     }
 
+    return [array get d]
+}
+
+ad_proc -public search::object_index {
+    -object_id:required
+    {-event "UPDATE"}
+} {
+    Indexes an object by invoking the proper datasource and callbacks.
+
+    @return datasource as dict
+} {
+    array set d [search::object_datasource -object_id $object_id]
+    if {[array size d] == 0} {
+        return
+    }
+
     search::content_get txt \
         $d(content) \
         $d(mime) \
         $d(storage_type) \
         $object_id
+
+    set driver [search::driver_name]
 
     if {[callback::impl_exists -callback search::index -impl $driver]} {
         callback -impl $driver search::index \
@@ -84,6 +102,8 @@ ad_proc -public search::object_index {
                             $d(keywords)] \
             -impl $driver
     }
+
+    set object_type [acs_object_type $object_id]
 
     #
     # Call the action so other people who do indexey things have a
@@ -121,6 +141,26 @@ ad_proc -public search::object_unindex {
         -datasource NONE \
         -object_type {}
 
+}
+
+ad_proc -public search::object_url {
+    -object_id:required
+} {
+    Retrieves the object URL by invoking the proper callbacks.
+
+    @return URL
+} {
+    set object_type [acs_object_type $object_id]
+
+    if {[callback::impl_exists -impl $object_type -callback search::url]} {
+	return [callback -impl $object_type search::url -object_id $object_id]
+    } else {
+	return [acs_sc::invoke \
+                    -contract FtsContentProvider \
+                    -operation url \
+                    -call_args [list $object_id] \
+                    -impl $object_type]
+    }
 }
 
 ad_proc -public search::queue {

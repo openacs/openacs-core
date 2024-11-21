@@ -134,13 +134,7 @@ set tend [clock clicks -milliseconds]
 
 if { $t eq [_ search.Feeling_Lucky] && $result(count) > 0} {
     set object_id [lindex $result(ids) 0]
-    set object_type [acs_object_type $object_id]
-    if {[callback::impl_exists -impl $object_type -callback search::url]} {
-	set url [callback -impl $object_type search::url -object_id $object_id]
-    } else {
-	set url [acs_sc::invoke -contract FtsContentProvider -operation url \
-		     -call_args [list $object_id] -impl $object_type]
-    }
+    set url [search::object_url -object_id $object_id]
     ad_returnredirect $url
     ad_script_abort
 }
@@ -177,18 +171,16 @@ template::multirow create searchresult title_summary txt_summary url_one object_
 
 foreach object_id $result(ids) {
     if {[catch {
-        set object_type [acs_object_type $object_id]
-        if {[callback::impl_exists -impl $object_type -callback search::datasource]} {
-            array set datasource [lindex [callback -impl $object_type search::datasource -object_id $object_id] 0]
-            set url_one [lindex [callback -impl $object_type search::url -object_id $object_id] 0]
-        } else {
-            #ns_log warning "SEARCH search/www/search.tcl callback::datasource::$object_type not found"
-            array set datasource [acs_sc::invoke -contract FtsContentProvider -operation datasource \
-				      -call_args [list $object_id] -impl $object_type]
-            set url_one [acs_sc::invoke -contract FtsContentProvider -operation url \
-			     -call_args [list $object_id] -impl $object_type]
-        }
-        search::content_get txt $datasource(content) $datasource(mime) $datasource(storage_type) $object_id
+        array set datasource [search::object_datasource -object_id $object_id]
+
+        set url_one [search::object_url -object_id $object_id]
+
+        search::content_get txt \
+            $datasource(content) \
+            $datasource(mime) \
+            $datasource(storage_type) \
+            $object_id
+
         if {[callback::impl_exists -impl $driver -callback search::summary]} {
             set title_summary [lindex [callback -impl $driver search::summary -query $q -text $datasource(title)] 0]
             set txt_summary [lindex [callback -impl $driver search::summary -query $q -text $txt] 0]
@@ -199,7 +191,7 @@ foreach object_id $result(ids) {
 				 -call_args [list $q $txt] -impl $driver]
         }
     } errmsg]} {
-        ns_log error "search.tcl object_id $object_id object_type $object_type error $errmsg"
+        ns_log error "search.tcl object_id $object_id object_type [acs_object_type $object_id] error $errmsg"
     } else {
         template::multirow append searchresult $title_summary $txt_summary $url_one
     }
