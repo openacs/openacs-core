@@ -7,6 +7,87 @@ ad_library {
 
 namespace eval search {}
 
+ad_proc -public search::searchable_type_p  {
+    -object_type:required
+} {
+    Is this object type searchable?
+
+    @return boolean
+} {
+    return [expr {[callback::impl_exists -callback search::datasource -impl $object_type]
+                  || [acs_sc_binding_exists_p FtsContentProvider $object_type]}]
+}
+
+ad_proc -public search::object_index {
+    -object_id:required
+    {-event "UPDATE"}
+} {
+    Indexes an object by invoking the proper datasource and callbacks.
+
+    @return datasource as dict
+} {
+    set driver [search::driver_name]
+    if {$driver eq ""} {
+        return
+    }
+
+    set object_type [acs_object_type $object_id]
+    if {![search::searchable_type_p -object_type $object_type]} {
+        return
+    }
+
+    array set d {
+        mime {}
+        storage_type {}
+        keywords {}
+        package_id {}
+        relevant_date {}
+    }
+
+    if {[callback::impl_exists -callback search::datasource -impl $object_type]} {
+        array set d [lindex [callback \
+                                 -impl $object_type \
+                                 search::datasource \
+                                 -object_id $object_id] 0]
+    } else {
+        array set d [acs_sc::invoke \
+                         -contract FtsContentProvider \
+                         -operation datasource \
+                         -call_args [list $object_id] \
+                         -impl $object_type]
+    }
+
+    search::content_get txt \
+        $d(content) \
+        $d(mime) \
+        $d(storage_type) \
+        $object_id
+
+    if {[callback::impl_exists -callback search::index -impl $driver]} {
+        callback -impl $driver search::index \
+            -object_id $object_id \
+            -content $txt \
+            -title $d(title) \
+            -keywords $d(keywords) \
+            -package_id $d(package_id) \
+            -community_id $d(community_id) \
+            -relevant_date $d(relevant_date) \
+            -datasource d
+    } else {
+        set r [acs_sc::invoke \
+                   -contract FtsEngineDriver \
+                   -operation [expr {$event eq "UPDATE" ? "update_index" : "index"}] \
+                   -call_args [list \
+                                   $d(object_id) \
+                                   $txt \
+                                   $d(title) \
+                                   $d(keywords)] \
+                   -impl $driver]
+    }
+
+    return [array get d]
+}
+
 ad_proc -public search::queue {
     -object_id
     -event
@@ -103,19 +184,14 @@ ad_proc -private search::indexer {} {
     @author Jeff Davis (davis@xarg.net)
 } {
 
-    set driver [parameter::get \
-                    -package_id [apm_package_id_from_key search] \
-                    -parameter FtsEngineDriver]
-
-    if { $driver eq ""
-         || (![callback::impl_exists -callback search::index -impl $driver] \
-                 && ! [acs_sc_binding_exists_p FtsEngineDriver $driver])
-     } {
+    set driver [search::driver_name]
+    if { $driver eq "" } {
+        #
         # Nothing to do if no driver
-        ns_log Debug "search::indexer: driver=$driver binding exists? " \
-            "[acs_sc_binding_exists_p FtsEngineDriver $driver]"
+        #
         return
     }
+
     # JCD: pull out the rows all at once so we release the handle
     foreach row [db_list_of_lists search_observer_queue_entry {}] {
 
@@ -131,86 +207,37 @@ ad_proc -private search::indexer {} {
         }
 
         lassign $row object_id event_date event
-        unset -nocomplain datasource
         switch -- $event {
             UPDATE -
             INSERT {
                 # Don't bother reindexing if we've already inserted/updated this object in this run
+                set object_type [acs_object_type $object_id]
+
                 if {![info exists seen($object_id)]} {
-                    set object_type [acs_object_type $object_id]
-                    ns_log debug "\n-----DB-----\n SEARCH INDEX object type = '${object_type}' \n------------\n "
-                    if {[callback::impl_exists -callback search::datasource -impl $object_type]
-                        || [acs_sc_binding_exists_p FtsContentProvider $object_type]} {
+                    try {
+                        unset -nocomplain datasource
+                        array set datasource [search::object_index \
+                                                  -object_id $object_id]
+                    } on error {errMsg} {
+                        ns_log Error "search::indexer: error getting datasource for " \
+                            "$object_id $object_type: $errMsg\n[ad_print_stack_trace]"
+                    }
 
-                        array set datasource {mime {} storage_type {} keywords {}}
-                        if {[catch {
-                            # check if a callback exists, if not fall
-                            # back to service contract
-                            if {[callback::impl_exists -callback search::datasource -impl $object_type]} {
-                                #ns_log notice "\n-----DB-----\n SEARCH INDEX callback datasource exists for object_type '${object_type}'\n------------\n "
-                                array set datasource [lindex [callback \
-                                                                  -impl $object_type \
-                                                                  search::datasource \
-                                                                  -object_id $object_id] 0]
-                            } else {
-                                #ns_log notice "invoke contract [list acs_sc::invoke -contract FtsContentProvider -operation datasource -call_args [list $object_id] -impl $object_type]"
-                                array set datasource  [acs_sc::invoke \
-                                                           -contract FtsContentProvider \
-                                                           -operation datasource \
-                                                           -call_args [list $object_id] \
-                                                           -impl $object_type]
-                            }
+                    if {[array size datasource] > 0} {
+                        # call the action so other people who do indexey things have a hook
+                        callback -catch search::action \
+                            -action $event \
+                            -object_id $object_id \
+                            -datasource datasource \
+                            -object_type $object_type
 
-                            search::content_get txt $datasource(content) $datasource(mime) \
-                                $datasource(storage_type) $object_id
+                        # Remember seeing this object so we can avoid reindexing it later
+                        set seen($object_id) 1
 
-                            if {[callback::impl_exists -callback search::index -impl $driver]} {
-                                if {![info exists datasource(package_id)]} {
-                                    set datasource(package_id) ""
-                                }
-
-                                if {![info exists datasource(relevant_date)]} {
-                                    set datasource(relevant_date) ""
-                                }
-                                #ns_log notice "callback invoke search::index"
-                                callback -impl $driver search::index \
-                                    -object_id $object_id \
-                                    -content $txt \
-                                    -title $datasource(title) \
-                                    -keywords $datasource(keywords) \
-                                    -package_id $datasource(package_id) \
-                                    -community_id $datasource(community_id) \
-                                    -relevant_date $datasource(relevant_date) \
-                                    -datasource datasource
-                            } else {
-                                #ns_log notice "acs_sc::invoke FtsEngineDriver"
-                                set r [acs_sc::invoke \
-                                           -contract FtsEngineDriver \
-                                           -operation [expr {$event eq "UPDATE" ? "update_index" : "index"}] \
-                                           -call_args [list $datasource(object_id) \
-                                                           $txt $datasource(title) \
-                                                           $datasource(keywords)] \
-                                           -impl $driver]
-                            }
-                        } errMsg]} {
-                            ns_log Error "search::indexer: error getting datasource for " \
-                                "$object_id $object_type: $errMsg\n[ad_print_stack_trace]"
-                        } else {
-                            # call the action so other people who do indexey things have a hook
-                            callback -catch search::action \
-                                -action $event \
-                                -object_id $object_id \
-                                -datasource datasource \
-                                -object_type $object_type
-
-                            # Remember seeing this object so we can avoid reindexing it later
-                            set seen($object_id) 1
-
-                            search::dequeue \
-                                -object_id $object_id \
-                                -event_date $event_date \
-                                -event $event
-                        }
+                        search::dequeue \
+                            -object_id $object_id \
+                            -event_date $event_date \
+                            -event $event
                     }
                 }
             }
@@ -425,7 +452,19 @@ ad_proc -public search::driver_name {
 } {
     Return the name of the current search driver.
 } {
-    return [parameter::get -package_id [apm_package_id_from_key search] -parameter FtsEngineDriver]
+    set driver [parameter::get \
+                    -package_id [apm_package_id_from_key search] \
+                    -parameter FtsEngineDriver]
+
+    if { $driver eq ""
+         || (![callback::impl_exists -callback search::index -impl $driver] \
+                 && ! [acs_sc_binding_exists_p FtsEngineDriver $driver])
+     } {
+        ns_log Debug "search::indexer: driver=$driver not properly configured."
+        return
+    }
+
+    return $driver
 }
 
 # dotlrn specific procs

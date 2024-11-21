@@ -219,3 +219,45 @@ aa_register_case \
                  -package_id [apm_package_id_from_key search] \
                  -parameter FtsEngineDriver]
     }
+
+aa_register_case \
+    -cats {api smoke} \
+    -procs {
+        search::driver_name
+        search::dotlrn::get_community_id
+    } \
+    object_utilities {
+        Test object-related utilities.
+    } {
+        set searchable_types [list]
+
+        db_foreach get_object_types {
+            select object_type from acs_object_types
+        } {
+            set expected [expr {[callback::impl_exists -callback search::datasource -impl $object_type]
+                                || [acs_sc_binding_exists_p FtsContentProvider $object_type]}]
+            set computed [search::searchable_type_p -object_type $object_type]
+            aa_equals "Is '$object_type' searchable?" $computed $expected
+
+            if {$computed} {
+                lappend searchable_types $object_type
+            }
+        }
+
+        if {[llength $searchable_types] > 0} {
+            foreach sample [db_list_of_lists get_searchable_objects [subst {
+                select min(object_id), object_type
+                from acs_objects
+                where object_type in ([ns_dbquotelist $searchable_types])
+                group by object_type
+                order by object_type asc
+            }]] {
+                lassign $sample object_id object_type
+                set datasource [search::object_index -object_id $object_id]
+
+                aa_true \
+                    "Object '$object_id' of type '$object_type' will return a non null datasource" \
+                    [llength $datasource]
+            }
+        }
+    }
