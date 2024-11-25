@@ -24,6 +24,7 @@ ad_proc -public search::convert::binary_to_text {
     if {![file exists $filename]} {
         ns_log warning "search::convert::binary_to_text:" \
             "tried to extract text from non-existing file" $filename
+        return ""
     }
 
     if {[file size $filename] == 0} {
