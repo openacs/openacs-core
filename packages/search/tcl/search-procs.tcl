@@ -36,7 +36,10 @@ ad_proc -public search::object_datasource {
         return
     }
 
+    set d(object_id) $object_id
+
     array set d {
+        title {}
         mime {}
         storage_type {}
         keywords {}
