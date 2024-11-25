@@ -81,7 +81,7 @@ ad_proc ad_build_mime_message {
     # the first three lines of the message are special; we need to grab
     # the info, add it to the message headers, and discard the lines
     set lines [split $mime_body \n]
-    set message_data [ns_set new]
+    set message_data [ns_set create]
 
     # get mime version
     regexp {MIME-Version: (.*)} [lindex $lines 0] junk mime_version

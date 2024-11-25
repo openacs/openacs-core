@@ -259,7 +259,7 @@ ad_proc -public util_remove_nulls_from_ns_set {
 
     @return new ns_set
 } {
-    set new_set_id [ns_set new "no_nulls$old_set_id"]
+    set new_set_id [ns_set create "no_nulls$old_set_id"]
 
     foreach {key value} [ns_set array $old_set_id] {
         if { $value ne "" } {
@@ -1351,23 +1351,8 @@ ad_proc -public util_return_headers {
         append content_type "; charset=[ns_config ns/parameters OutputCharset utf-8]"
     }
 
-    if {[ns_info name] eq "NaviServer"} {
-        set binary [expr {$text_p ? "" : "-binary"}]
-        ns_headers {*}$binary 200 $content_type {*}$content_length
-    } else {
-        if {$content_length ne ""} {
-            ns_set put [ns_conn outputheaders] "Content-Length" $content_length
-        }
-        set all_the_headers "HTTP/1.0 200 OK
-MIME-Version: 1.0
-Content-Type: $content_type\r\n"
-        util_WriteWithExtraOutputHeaders $all_the_headers
-        if {[string match "text/*" $content_type]} {
-            ns_startcontent -type $content_type
-        } else {
-            ns_startcontent
-        }
-    }
+    set binary [expr {$text_p ? "" : "-binary"}]
+    ns_headers {*}$binary 200 $content_type {*}$content_length
 }
 
 ad_proc -public ad_return_top_of_page {
