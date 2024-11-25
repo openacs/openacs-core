@@ -21,6 +21,10 @@ ad_proc -public search::convert::binary_to_text {
     @author Dirk Gomez <openacs@dirkgomez.de>
     @creation-date 2005-06-25
 } {
+    if {![file exists $filename]} {
+        ns_log warning "search::convert::binary_to_text:" \
+            "tried to extract text from non-existing file" $filename
+    }
 
     if {[file size $filename] == 0} {
         #
