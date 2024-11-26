@@ -3067,27 +3067,6 @@ ad_proc security::secure_hostname_p {host} {
         # returned.
         #
         set validationOk [expr {![ns_ip public [ns_addrbyhost $host]]}]
-
-    } elseif {[acs::icanuse "ns_subnetmatch"]} {
-        #
-        # Test for older versions of NaviServer testing if value is an
-        # IP address belonging to a "private network".
-        #
-        try {
-            ns_subnetmatch 0.0.0.0/0 $host
-        } on error {errorMsg} {
-            set ip_address_p 0
-        } on ok {ip_address_p} {
-        }
-        if {$ip_address_p} {
-            if {[ns_subnetmatch 10.0.0.0/8 $host]
-                || [ns_subnetmatch 172.16.0.0/12 $host]
-                || [ns_subnetmatch 192.168.0.0/16 $host]
-                || [ns_subnetmatch fd00::/8 $host]
-            } {
-                return 1
-            }
-        }
     }
 
     return 0

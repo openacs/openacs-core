@@ -2618,7 +2618,7 @@ ad_proc -deprecated -public util_httppost {url formvars {timeout 30} {depth 0} {
         flush $wfd
         close $wfd
 
-        set rpset [ns_set new [_ns_http_gets $timeout $rfd]]
+        set rpset [ns_set create [_ns_http_gets $timeout $rfd]]
         while 1 {
             set line [_ns_http_gets $timeout $rfd]
             if { $line eq "" } break
@@ -2928,7 +2928,7 @@ ad_proc -deprecated -public util_http_file_upload { -file -data -binary:boolean 
         flush $wfd
         close $wfd
 
-        set rpset [ns_set new [_ns_http_gets $timeout $rfd]]
+        set rpset [ns_set create [_ns_http_gets $timeout $rfd]]
         while 1 {
             set line [_ns_http_gets $timeout $rfd]
             if { $line eq "" } break

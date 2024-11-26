@@ -274,7 +274,7 @@ namespace eval ::acs {
                                 # in CIDR notation or it contains a
                                 # wild card.
                                 #
-                                if {([string first / $ip] != -1 && [ns_subnetmatch $ip $peer])
+                                if {([string first / $ip] != -1 && [ns_ip match $ip $peer])
                                     || ([string first * $ip] != -1 && [string match $ip $peer])
                                 } {
                                     set ok 1
