@@ -32,8 +32,8 @@ namespace eval acs {
     #
     # Enable / disable features depending on availability
     #
-    set ::acs::pageroot [expr {$::acs::useNaviServer ? [ns_server pagedir] : [ns_info pageroot]}]
-    set ::acs::tcllib   [expr {$::acs::useNaviServer ? [ns_server tcllib] : [ns_info tcllib]}]
+    set ::acs::pageroot [ns_server pagedir]
+    set ::acs::tcllib   [ns_server tcllib]
     set ::acs::rootdir  [file dirname [string trimright $::acs::tcllib "/"]]
     set ::acs::useNsfProc [expr {[namespace which ::nsf::proc] ne ""}]
 }

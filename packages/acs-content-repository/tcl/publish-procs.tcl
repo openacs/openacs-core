@@ -932,7 +932,7 @@ ad_proc -private publish::write_multiple_blobs {
       select content from cr_revisions where revision_id = $revision_id
     " -file $filename
 
-    ns_chmod $filename 0764
+    file attributes $filename -permissions 0764
     ns_log debug "publish::write_multiple_blobs: Wrote revision $revision_id to $filename"
   } $root_path
 }
@@ -957,7 +957,7 @@ ad_proc -private publish::write_multiple_files { url text {root_path ""}} {
   foreach_publish_path $url {
     mkdirs $filename
     template::util::write_file $filename $text
-    ns_chmod $filename 0764
+    file attributes $filename -permissions 0764
     ns_log debug "publish::write_multiple_files: Wrote text to $filename"
   } $root_path
 }
