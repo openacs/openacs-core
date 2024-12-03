@@ -603,7 +603,7 @@ as
   begin
     update membership_rels
     set member_state = 'expired'
-    where rel_id = unapprove.rel_id;
+    where rel_id = expire.rel_id;
   end;
 
   procedure deleted (
