@@ -10,6 +10,58 @@ aa_register_case -cats {
     api
     smoke
 } -procs {
+    template::multirow
+    template::util::list_to_multirow
+    template::util::multirow_to_list
+} lists_and_multirows {
+
+    Check conversion back and forth lists and multirows.
+
+} {
+    set the_list {
+        {one 1 two 2 three 3 four 4 five 5}
+        {one 11 two 22 three 33 four 44 five 55}
+        {one 111 two 222 three 333 four 444 five 555}
+        {one 1111 two 2222 three 3333 four 4444 five 5555}
+        {one 11111 two 22222 three 33333 four 44444 five 55555}
+    }
+
+    set expected_columns [lsort [list rownum {*}[dict keys [lindex $the_list 0]]]]
+
+    set level \#[::template::adp_level]
+
+    aa_section {List to Multirow}
+
+    ::template::util::list_to_multirow the_multirow $the_list $level
+
+    aa_true "Multirow exists" [template::multirow exists the_multirow]
+
+    aa_equals "[llength $the_list] elements" \
+        [template::multirow size the_multirow] [llength $the_list]
+
+    aa_equals "Columns are correct" \
+        [lsort [template::multirow columns the_multirow]] $expected_columns
+
+
+    aa_section {Multirow to List}
+
+    set the_second_list [::template::util::multirow_to_list -level $level the_multirow]
+
+    set i 1
+    foreach converted $the_second_list {
+        aa_equals "Element $i has the expected dict format" \
+            [lsort [dict keys $converted]] $expected_columns
+        incr i
+    }
+
+    aa_equals "Converted list has the same size" \
+        [llength $the_second_list] [llength $the_list]
+}
+
+aa_register_case -cats {
+    api
+    smoke
+} -procs {
     template::util::write_file
     template::util::read_file
     template::util::set_file_encoding
