@@ -329,7 +329,7 @@ ad_proc -public template::util::list_to_multirow { name rows { level 1 } } {
     @see template::util::multirow_to_list
 } {
 
-    upvar $level $name:rowcount rowcount
+    upvar $level $name:rowcount rowcount $name:columns columns
     set rowcount [llength $rows]
     set rownum 1
 
@@ -338,6 +338,10 @@ ad_proc -public template::util::list_to_multirow { name rows { level 1 } } {
         upvar $level $name:$rownum row
         array set row $rowlist
         incr rownum
+    }
+
+    if {[info exists row]} {
+        set columns [array names row]
     }
 }
 
