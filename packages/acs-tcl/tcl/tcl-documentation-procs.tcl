@@ -950,6 +950,10 @@ ad_proc -public ad_page_contract {
 
     if { $form eq "" } {
         set form [ns_getform]
+        if {$form eq "" && ![ns_conn isconnected]} {
+            ad_log warning "ad_page_contract called with no form data and no connection; aborting request"
+            ad_script_abort
+        }
     }
 
     # This is the array in which we store the signature variables as we come across them
@@ -1064,7 +1068,7 @@ ad_proc -public ad_page_contract {
                 if { [info exists $variable_to_set] } {
                     set complaint [_ acs-tcl.lt_Youve_supplied_two_va]
                     ad_complain -key $formal_name:-doublevalue $complaint
-                    ad_log Warning "User experienced '$complaint' when submitting a form related to path_info: [ad_conn path_info]"
+                    ad_log warning "User experienced '$complaint' when submitting a form related to path_info: [ad_conn path_info]"
                     continue
                 } else {
                     set $variable_to_set $actual_value
@@ -1325,7 +1329,7 @@ ad_proc -public ad_page_contract {
                     # involve any other template in order to break the
                     # cycle.
                     #
-                    ad_log Warning "Depth of recursive complaints exceeded. We will return a basic rendering."
+                    ad_log warning "Depth of recursive complaints exceeded. We will return a basic rendering."
                     set html [subst {
                         <html>
                            <head>
