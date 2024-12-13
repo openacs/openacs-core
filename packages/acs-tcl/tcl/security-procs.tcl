@@ -3066,7 +3066,13 @@ ad_proc security::secure_hostname_p {host} {
         # $hostName and checks the properties of the first IP address
         # returned.
         #
-        set validationOk [expr {![ns_ip public [ns_addrbyhost $host]]}]
+        try {
+            ns_addrbyhost $host
+        } on ok {result} {
+            set validationOk [expr {![ns_ip public $result]}]
+        } on error {errorMsg} {
+            ad_log warning "provided value in host header field '$host' could not be resolved"
+        }
     }
 
     return 0
