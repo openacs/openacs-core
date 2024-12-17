@@ -26,11 +26,6 @@ ad_proc -public search::object_datasource {
 
     @return datasource as dict
 } {
-    set driver [search::driver_name]
-    if {$driver eq ""} {
-        return
-    }
-
     set object_type [acs_object_type $object_id]
     if {![search::searchable_type_p -object_type $object_type]} {
         return
@@ -71,6 +66,11 @@ ad_proc -public search::object_index {
 
     @return datasource as dict
 } {
+    set driver [search::driver_name]
+    if {$driver eq ""} {
+        return
+    }
+
     array set d [search::object_datasource -object_id $object_id]
     if {[array size d] == 0} {
         return
@@ -81,8 +81,6 @@ ad_proc -public search::object_index {
         $d(mime) \
         $d(storage_type) \
         $object_id
-
-    set driver [search::driver_name]
 
     if {[callback::impl_exists -callback search::index -impl $driver]} {
         callback -impl $driver search::index \
