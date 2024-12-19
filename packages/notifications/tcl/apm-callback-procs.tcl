@@ -23,6 +23,12 @@ ad_proc -private notification::apm::after_install {} {
         # Register the service contract implementation with the notifications service
         register_email_delivery_method -impl_id $impl_id
 
+        # Register sse delivery method service contract implementation
+        set impl_id [create_sse_delivery_method_impl]
+
+        # Register the service contract implementation with the notifications service
+        register_sse_delivery_method -impl_id $impl_id
+
         # Create the notification type service contract
         create_notification_type_contract
     }
@@ -41,6 +47,12 @@ ad_proc -private notification::apm::before_uninstall {} {
 
         # Unregister email delivery method service contract implementation
         delete_email_delivery_method_impl
+
+        # Delete the service contract implementation from the notifications service
+        unregister_sse_delivery_method
+
+        # Unregister sse delivery method service contract implementation
+        delete_sse_delivery_method_impl
 
         # Delete the delivery method service contract
         delete_delivery_method_contract
@@ -103,6 +115,17 @@ ad_proc -private notification::apm::after_upgrade {
 
                     # Delete the old implementation
                     delete_email_delivery_method_impl -impl_name "notification_email_old"
+
+                }
+            }
+            5.10.1 6.0.0d1 {
+                db_transaction {
+
+                    # Register sse delivery method service contract implementation
+                    set impl_id [create_sse_delivery_method_impl]
+
+                    # Register the service contract implementation with the notifications service
+                    register_sse_delivery_method -impl_id $impl_id
 
                 }
             }
@@ -181,6 +204,45 @@ ad_proc -private notification::apm::register_email_delivery_method {
         -sc_impl_id $impl_id \
         -short_name "email" \
         -pretty_name "Email"
+}
+
+ad_proc -private notification::apm::create_sse_delivery_method_impl {} {
+    Register the service contract implementation and return the impl_id
+
+    @return impl_id of the created implementation
+} {
+    return [acs_sc::impl::new_from_spec -spec {
+        contract_name "NotificationDeliveryMethod"
+        name "notification_sse"
+        owner "notifications"
+        aliases {
+            Send notification::sse::send
+            ScanReplies notification::sse::scan_replies
+        }
+    }]
+}
+
+ad_proc -private notification::apm::delete_sse_delivery_method_impl {
+    {-impl_name "notification_sse"}
+} {
+    Unregister the NotificationDeliveryMethod service contract implementation for sse.
+} {
+    acs_sc::impl::delete \
+        -contract_name "NotificationDeliveryMethod" \
+        -impl_name $impl_name
+}
+
+ad_proc -private notification::apm::register_sse_delivery_method {
+    -impl_id:required
+} {
+    Register the sse delivery method with the notifications service.
+
+    @param impl_id The ID of the NotificationDeliveryMethod service contract implementation.
+} {
+    notification::delivery::new \
+        -sc_impl_id $impl_id \
+        -short_name "sse" \
+        -pretty_name "Server-sent Events"
 }
 
 ad_proc -private notification::apm::update_email_delivery_method_impl {
