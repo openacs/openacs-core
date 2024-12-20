@@ -10,6 +10,21 @@ ad_library {
 
 namespace eval notification::sweep {
 
+    ad_proc -private cleanup_sse_subscriptions {} {
+        Cleanup unused SSE channels.
+    } {
+        foreach {subscription channels} [nsv_array get ::notification::sse channels-*] {
+            set to_user_id [string range $subscription [string length channels-] end]
+            foreach channel $channels {
+                try {
+                    ns_connchan write $channel [string cat {: ping} \n\n]
+                } on error {errmsg} {
+                    ::notification::sse::unsubscribe $channel $to_user_id
+                }
+            }
+        }
+    }
+
     ad_proc -private cleanup_notifications {} {
         Clean up the notifications that have been sent out (DRB: inefficiently...).
     } {

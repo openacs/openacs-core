@@ -14,6 +14,11 @@ set cleanupInterval [parameter::get_from_package_key \
                          -default 900]
 ad_schedule_proc -thread t $cleanupInterval notification::sweep::cleanup_notifications
 
+#
+# Cleanup leftover SSE handles.
+#
+ad_schedule_proc -thread t 60 notification::sweep::cleanup_sse_subscriptions
+
 foreach interval [notification::get_all_intervals] {
     set n_seconds [lindex $interval 2]
     if {$n_seconds > 0} {

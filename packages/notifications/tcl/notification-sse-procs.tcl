@@ -38,7 +38,7 @@ namespace eval notification::sse {
         ad_script_abort
     }
 
-    ad_proc -public unsubscribe {
+    ad_proc -private unsubscribe {
         channel
         subscription_id
     } {
