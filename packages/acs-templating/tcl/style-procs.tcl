@@ -626,7 +626,7 @@ namespace eval ::template::icon {
             radio-checked        /shared/images/radiochecked.gif
             radio-unchecked      /shared/images/radio.gif
             text                 /shared/images/text16.png
-            reload               /shared/images/recylce16.png
+            reload               /shared/images/recycle16.png
             search               /resources/acs-subsite/Zoom16.gif
             sitemap              /resources/acs-subsite/sitemap.svg
             trash                /shared/images/Delete16.gif
