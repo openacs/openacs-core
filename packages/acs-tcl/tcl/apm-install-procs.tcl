@@ -2358,9 +2358,10 @@ ad_proc -public apm_invoke_install_proc {
 
     #ns_log notice "apm_invoke_install_proc: call [list ::install::xml::${type}::${name} $node]"
     if {$install_from_repository_p && $name eq "install"} {
-        ns_log notice "apm_invoke_install_proc: skip [list ::install::xml::${type}::${name} $node] (install from repo)"
+        ns_log notice "apm_invoke_install_proc: skip ::install::xml::${type}::${name} (while performing install from repo)"
         set result 1
     } else {
+        ns_log notice "apm_invoke_install_proc: call ::install::xml::${type}::${name}"
         set result [::install::xml::${type}::${name} $node]
     }
     return "install::xml::${type}::${name} $result\n"
