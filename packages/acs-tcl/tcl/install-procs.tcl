@@ -116,10 +116,10 @@ ad_proc -public install::xml::action::mount { node } {
     regsub -all -- {//} $mount_point "/" mount_point
     set mount_point [string trim $mount_point " /"]
 
-    if {[string is space $mount_point] || $mount_point eq "/"} {
+    if {$mount_point eq ""} {
         array set site_node [site_node::get -url "/"]
 
-        if {$site_node(object_id) ne ""} {
+        if {$site_node(url) eq "/"} {
             ns_log Error "A package is already mounted at '$mount_point', ignoring mount command"
             lappend out "A package is already mounted at '$mount_point', ignoring mount command"
             set node_id ""
@@ -143,15 +143,14 @@ ad_proc -public install::xml::action::mount { node } {
         # it won't help us very much!
         # Instead we just press on and if there's an error handle it at the top level.
 
-        # create the node and reget iff it doesn't exist
+        # create the node and refetch iff it doesn't exist
         if { [catch { array set site_node [site_node::get_from_url -exact -url "/$mount_point"] } error] } {
             set node_id [site_node::new -name $leaf_url -parent_id $parent_id]
             array set site_node [site_node::get_from_url -exact -url "/$mount_point"]
         }
 
-        # There now definitely a node with that path
-        if {$site_node(object_id) eq ""} {
-            # no package mounted - good!
+        if {[string trimright $site_node(url) /] ne "/$mount_point"} {
+            # no such package mounted - good!
             set node_id $site_node(node_id)
         } else {
             ns_log Error "A package is already mounted at '$mount_point', ignoring mount command"
@@ -200,10 +199,10 @@ ad_proc -public install::xml::action::mount-existing { node } {
     regsub -all -- {//} $mount_point "/" mount_point
     set mount_point [string trim $mount_point " /"]
 
-    if {[string is space $mount_point] || $mount_point eq "/"} {
+    if {$mount_point eq ""} {
         array set site_node [site_node::get -url "/"]
 
-        if {$site_node(object_id) ne ""} {
+        if {$site_node(url) eq "/"} {
             ns_log Error "A package is already mounted at '$mount_point', ignoring mount command"
             lappend out "A package is already mounted at '$mount_point', ignoring mount command"
             set node_id ""
@@ -221,15 +220,14 @@ ad_proc -public install::xml::action::mount-existing { node } {
         # it won't help us very much!
         # Instead we just press on and if there's an error handle it at the top level.
 
-        # create the node and reget iff it doesn't exist
+        # create the node and refetch iff it doesn't exist
         if { [catch { array set site_node [site_node::get_from_url -exact -url "/$mount_point"] } error] } {
             set node_id [site_node::new -name $leaf_url -parent_id $parent_id]
             array set site_node [site_node::get_from_url -exact -url "/$mount_point"]
         }
 
-        # There now definitely a node with that path
         if {$site_node(object_id) eq ""} {
-            # no package mounted - good!
+            # no such package mounted - good!
             set node_id $site_node(node_id)
         } else {
             ns_log Error "A package is already mounted at '$mount_point', ignoring mount command"
@@ -238,7 +236,7 @@ ad_proc -public install::xml::action::mount-existing { node } {
         }
     }
 
-    if {$node_id ne ""} {
+    if {[string trimright $site_node(url) /] eq "/$mount_point"} {
         lappend out "Mounting existing package $package_id at /$mount_point"
 
         if {$package_id ne ""} {
