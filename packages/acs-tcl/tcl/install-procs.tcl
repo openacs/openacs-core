@@ -157,7 +157,11 @@ ad_proc -public install::xml::action::mount { node } {
             lappend out "A package is already mounted at '$mount_point', ignoring mount command"
             set node_id ""
         }
-
+        
+        if {$context_id eq ""} {
+            set context_id default_context
+        }
+        
         if {$context_id eq ""} {
             set context_id [install::xml::util::get_id $context_id]
         }
@@ -1184,7 +1188,7 @@ ad_proc -public install::xml::util::get_id { id } {
     variable ::install::xml::ids
 
     if {[catch {
-        if {[string is integer $id]} {
+        if {[string is integer -strict $id]} {
             set result $id
         } elseif {[info exists ids($id)]} {
             set result $ids($id)
