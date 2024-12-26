@@ -165,6 +165,13 @@ ad_proc -public install::xml::action::mount { node } {
 
     if {$node_id ne ""} {
         lappend out "Mounting new instance of package $package_key at /$mount_point"
+        ns_log notice "Mounting new instance of package $package_key at /$mount_point" with cmd \
+            site_node::instantiate_and_mount \
+            -node_id $node_id \
+            -context_id $context_id \
+            -node_name $mount_point \
+            -package_name $instance_name \
+            -package_key $package_key
         set package_id [site_node::instantiate_and_mount \
             -node_id $node_id \
             -context_id $context_id \
