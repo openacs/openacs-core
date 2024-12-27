@@ -198,7 +198,7 @@ ad_proc -public site_node::instantiate_and_mount {
     if { $context_id eq "" } {
         set context_id [site_node::closest_ancestor_package -node_id $node_id]
     }
-    ns_log notice "site_node::instantiate_and_mount -node_id '$node_id' context_id '$context_id'"
+    #ns_log notice "site_node::instantiate_and_mount -node_id '$node_id' context_id '$context_id'"
 
     # Instantiate the package
     set package_id [apm_package_instance_new \
@@ -206,7 +206,7 @@ ad_proc -public site_node::instantiate_and_mount {
                         -package_key $package_key \
                         -instance_name $package_name \
                         -context_id $context_id]
-    ns_log notice "site_node::instantiate_and_mount -node_id '$node_id' context_id '$context_id' -> new package_id '$package_id'"
+    #ns_log notice "site_node::instantiate_and_mount -node_id '$node_id' context_id '$context_id' package_id '$package_id'"
 
     # Mount the package
     site_node::mount -node_id $node_id -object_id $package_id
@@ -1212,28 +1212,24 @@ ad_proc -public site_node::mount {
     #
     set parent_node_id [site_node::get_parent_id -node_id $node_id]
     set url [site_node::get_url -node_id $parent_node_id]
-    ad_log notice site_node::mount: [list site_node::get_parent_id -node_id $node_id] -> '$parent_node_id' parent_url '$url'
 
     site_node::update_cache -sync_children -node_id $node_id -url $url -object_id $object_id
     #
     # The parent_node_id should in a mount operation never be
-    # empty, unless "node_id" is already the toplevel package.
+    # empty.
     #
-    if {$parent_node_id ne ""} {
-        ::acs::site_nodes_cache flush_pattern \
-            -partition_key $parent_node_id \
-            get_children-$parent_node_id-*
-        ::acs::site_nodes_children_cache flush \
-            -partition_key $parent_node_id has_children-$parent_node_id
-    } else {
-        ns_log notice site_node::mount: mounting object_id $object_id under root '$url'
-    }
+    ::acs::site_nodes_cache flush_pattern \
+        -partition_key $parent_node_id \
+        get_children-$parent_node_id-*
+    ::acs::site_nodes_children_cache flush \
+        -partition_key $parent_node_id has_children-$parent_node_id
     #
     # This may be the first instance of this particular package.
     #
     ::acs::site_nodes_cache flush \
         -partition_key 0 \
         package_url-[apm_package_key_from_id $object_id]
+
 
     #
     # DAVEB: update context_id if it is passed in some code relies
