@@ -1225,6 +1225,8 @@ ad_proc -public site_node::mount {
             get_children-$parent_node_id-*
         ::acs::site_nodes_children_cache flush \
             -partition_key $parent_node_id has_children-$parent_node_id
+    } else {
+        ns_log notice site_node::mount: mounting object_id $object_id under root '$url'
     }
     #
     # This may be the first instance of this particular package.
