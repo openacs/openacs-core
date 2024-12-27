@@ -1184,7 +1184,7 @@ ad_proc -public install::xml::util::get_id { id } {
     variable ::install::xml::ids
 
     if {[catch {
-        if {[string is integer -strict $id]} {
+        if {[string is integer $id]} {
             set result $id
         } elseif {[info exists ids($id)]} {
             set result $ids($id)
@@ -1194,7 +1194,7 @@ ad_proc -public install::xml::util::get_id { id } {
     } err]} {
         error "$id is not an integer, is not defined in this install.xml, and is not an acs_magic_object"
     }
-
+    ns_log notice install::xml::util::get_id maps <$id> to <$result>
     return $result
 }
 
