@@ -159,10 +159,6 @@ ad_proc -public install::xml::action::mount { node } {
         }
         
         if {$context_id eq ""} {
-            set context_id default_context
-        }
-        
-        if {$context_id eq ""} {
             set context_id [install::xml::util::get_id $context_id]
         }
     }
