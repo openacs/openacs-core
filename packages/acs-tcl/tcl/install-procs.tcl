@@ -136,7 +136,8 @@ ad_proc -public install::xml::action::mount { node } {
         regexp {(.*)/([^/]*)$} $mount_point match parent_url leaf_url
 
         set parent_id [site_node::get_node_id -url "/$parent_url"]
-
+        ns_log notice install::xml::action::mount: parent_url '/$parent_url' has parent_id $parent_id
+        
         # technically this isn't safe - between us checking that the node exists
         # and using it, the node may have been deleted.
         # We could "select for update" but since it's in a memory cache anyway,
@@ -147,7 +148,10 @@ ad_proc -public install::xml::action::mount { node } {
         if { [catch { array set site_node [site_node::get_from_url -exact -url "/$mount_point"] } error] } {
             set node_id [site_node::new -name $leaf_url -parent_id $parent_id]
             array set site_node [site_node::get_from_url -exact -url "/$mount_point"]
+            ns_log notice install::xml::action::mount: [list site_node::get_from_url -exact -url "/$mount_point"] lead to error, refetch leads to site_node [array get $site_node]
         }
+
+        ns_log notice install::xml::action::mount: comparing [string trimright $site_node(url) /] ne "/$mount_point"
 
         if {[string trimright $site_node(url) /] ne "/$mount_point"} {
             # no such package mounted - good!
@@ -162,6 +166,7 @@ ad_proc -public install::xml::action::mount { node } {
             set context_id [install::xml::util::get_id $context_id]
         }
     }
+    
 
     if {$node_id ne ""} {
         lappend out "Mounting new instance of package $package_key at /$mount_point"

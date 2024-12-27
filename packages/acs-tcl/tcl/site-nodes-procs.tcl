@@ -198,7 +198,7 @@ ad_proc -public site_node::instantiate_and_mount {
     if { $context_id eq "" } {
         set context_id [site_node::closest_ancestor_package -node_id $node_id]
     }
-    #ns_log notice "site_node::instantiate_and_mount -node_id '$node_id' context_id '$context_id'"
+    ns_log notice "site_node::instantiate_and_mount -node_id '$node_id' context_id '$context_id'"
 
     # Instantiate the package
     set package_id [apm_package_instance_new \
@@ -206,7 +206,7 @@ ad_proc -public site_node::instantiate_and_mount {
                         -package_key $package_key \
                         -instance_name $package_name \
                         -context_id $context_id]
-    #ns_log notice "site_node::instantiate_and_mount -node_id '$node_id' context_id '$context_id' package_id '$package_id'"
+    ns_log notice "site_node::instantiate_and_mount -node_id '$node_id' context_id '$context_id' -> new package_id '$package_id'"
 
     # Mount the package
     site_node::mount -node_id $node_id -object_id $package_id
