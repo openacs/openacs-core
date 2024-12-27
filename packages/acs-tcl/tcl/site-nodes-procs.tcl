@@ -1211,6 +1211,7 @@ ad_proc -public site_node::mount {
     # turning into an inner node)
     #
     set parent_node_id [site_node::get_parent_id -node_id $node_id]
+    ad_log notice site_node::mount: [list site_node::get_parent_id -node_id $node_id] -> '$parent_node_id'
     set url [site_node::get_url -node_id $parent_node_id]
 
     site_node::update_cache -sync_children -node_id $node_id -url $url -object_id $object_id
