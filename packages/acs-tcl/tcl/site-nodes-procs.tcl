@@ -1211,26 +1211,27 @@ ad_proc -public site_node::mount {
     # turning into an inner node)
     #
     set parent_node_id [site_node::get_parent_id -node_id $node_id]
-    ad_log notice site_node::mount: [list site_node::get_parent_id -node_id $node_id] -> '$parent_node_id'
     set url [site_node::get_url -node_id $parent_node_id]
+    ad_log notice site_node::mount: [list site_node::get_parent_id -node_id $node_id] -> '$parent_node_id' parent_url '$url'
 
     site_node::update_cache -sync_children -node_id $node_id -url $url -object_id $object_id
     #
     # The parent_node_id should in a mount operation never be
-    # empty.
+    # empty, unless "node_id" is already the toplevel package.
     #
-    ::acs::site_nodes_cache flush_pattern \
-        -partition_key $parent_node_id \
-        get_children-$parent_node_id-*
-    ::acs::site_nodes_children_cache flush \
-        -partition_key $parent_node_id has_children-$parent_node_id
+    if {$parent_node_id ne ""} {
+        ::acs::site_nodes_cache flush_pattern \
+            -partition_key $parent_node_id \
+            get_children-$parent_node_id-*
+        ::acs::site_nodes_children_cache flush \
+            -partition_key $parent_node_id has_children-$parent_node_id
+    }
     #
     # This may be the first instance of this particular package.
     #
     ::acs::site_nodes_cache flush \
         -partition_key 0 \
         package_url-[apm_package_key_from_id $object_id]
-
 
     #
     # DAVEB: update context_id if it is passed in some code relies
