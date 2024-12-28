@@ -116,10 +116,10 @@ ad_proc -public install::xml::action::mount { node } {
     regsub -all -- {//} $mount_point "/" mount_point
     set mount_point [string trim $mount_point " /"]
 
-    if {[string is space $mount_point] || $mount_point eq "/"} {
+    if {$mount_point eq ""} {
         array set site_node [site_node::get -url "/"]
 
-        if {$site_node(object_id) ne ""} {
+        if {$site_node(url) eq "/"} {
             ns_log Error "A package is already mounted at '$mount_point', ignoring mount command"
             lappend out "A package is already mounted at '$mount_point', ignoring mount command"
             set node_id ""
@@ -150,7 +150,7 @@ ad_proc -public install::xml::action::mount { node } {
         }
 
         # There now definitely a node with that path
-        if {$site_node(object_id) eq ""} {
+        if {[string trimright $site_node(url) /] ne "/$mount_point"} {
             # no package mounted - good!
             set node_id $site_node(node_id)
         } else {
@@ -167,7 +167,7 @@ ad_proc -public install::xml::action::mount { node } {
     if {$node_id ne ""} {
         lappend out "Mounting new instance of package $package_key at /$mount_point"
         set package_id [site_node::instantiate_and_mount \
-            -node_id $node_id \
+            -parent_node_id $node_id \
             -context_id $context_id \
             -node_name $mount_point \
             -package_name $instance_name \
@@ -200,10 +200,10 @@ ad_proc -public install::xml::action::mount-existing { node } {
     regsub -all -- {//} $mount_point "/" mount_point
     set mount_point [string trim $mount_point " /"]
 
-    if {[string is space $mount_point] || $mount_point eq "/"} {
+    if {$mount_point eq ""} {
         array set site_node [site_node::get -url "/"]
 
-        if {$site_node(object_id) ne ""} {
+        if {$site_node(url) eq "/"} {
             ns_log Error "A package is already mounted at '$mount_point', ignoring mount command"
             lappend out "A package is already mounted at '$mount_point', ignoring mount command"
             set node_id ""
@@ -228,7 +228,7 @@ ad_proc -public install::xml::action::mount-existing { node } {
         }
 
         # There now definitely a node with that path
-        if {$site_node(object_id) eq ""} {
+        if {[string trimright $site_node(url) /] ne "/$mount_point"} {
             # no package mounted - good!
             set node_id $site_node(node_id)
         } else {
@@ -247,6 +247,12 @@ ad_proc -public install::xml::action::mount-existing { node } {
             set package_id [apm_package_id_from_key $package_key]
         }
 
+        #
+        # Probably, "node_id" is actually the parent_node_id, similar
+        # to the fix in install::xml::action::mount from Dec 27, 2024.
+        # However, we have not test or application scenario for that,
+        # so we leave the mount call untouched.
+        #
         set package_id [site_node::mount \
             -node_id $node_id \
             -object_id $package_id]

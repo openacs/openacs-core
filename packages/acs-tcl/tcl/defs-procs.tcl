@@ -840,10 +840,16 @@ ad_proc -public ad_progress_bar_end {
 } {
     Ends the progress bar by causing the browser to redirect to a new URL.
 
+    @param url must be a properly encoded URL, such as returned by "export_vars"
+
     @see ad_progress_bar_begin
 } {
     util_user_message -message $message_after_redirect
-    ns_write "<script type='text/javascript' nonce='[security::csp::nonce]'>window.location='[ns_quotehtml $url]';</script>"
+    #
+    # Using "ns_quotehtml" on the URL leads to overquoting, e.g., when running the
+    # the end of install-from-repository.
+    #
+    ns_write "<script type='text/javascript' nonce='[security::csp::nonce]'>window.location='$url';</script>"
     ns_conn close
 }
 
