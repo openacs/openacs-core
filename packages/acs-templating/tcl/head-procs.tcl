@@ -1013,7 +1013,7 @@ ad_proc -private template::register_double_click_handler {} {
                     }
                 }, true);
                 // In case the page has changed before the button was re-enabled
-                // and the user uses the brower's back button, we have to establish
+                // and the user uses the browser's back button, we have to establish
                 // a clickable state.
                 e.addEventListener('focus', function(event) {
                     oacs_reenable_double_click_handler(event.target || event.srcElement);
