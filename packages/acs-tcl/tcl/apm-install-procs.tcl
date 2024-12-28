@@ -2221,9 +2221,20 @@ ad_proc -public apm_get_repository_channels { {repository_url https://openacs.or
     $doc documentElement root
     foreach node [$root selectNodes {//ul/li/a}] {
         set href [$node getAttribute href]
-        if {[regexp {^(\d+[-]\d+)} $href . version]} {
+        if {[regexp {^(\d+[-]\d+[-]?\d*)} $href . version]} {
             set name $version
-            set tag oacs-$version
+            #
+            # Try to get the tag from the span node right after the "a" element.
+            #
+            set spanNode [lindex [[$node parentNode] selectNodes {span}] 0]
+            if {$spanNode ne ""} {
+                set tag [$spanNode text]
+            } else {
+                #
+                # Fall back to old version
+                #
+                set tag oacs-$version
+            }
             lappend repositories [list $name $tag]
         } else {
             #set txt [string trim [$node asText]]

@@ -10,13 +10,19 @@ ad_page_contract {
     {head_channel:token ""}
 }
 
-
+set channels [apm_get_repository_channels]
 if {$current_channel eq ""} {
     set current_channel [apm_get_repository_channel]
-    set channel $current_channel
+    if {[lsearch -index 0 $channels $current_channel] == -1} {
+        #
+        # The reported channel is not included in the list of
+        # channels, so it must be HEAD.
+        #
+        set current_channel HEAD
+    }
 }
 if {$head_channel eq ""} {
-    set head_channel [lindex [apm_get_repository_channels] 0 0]
+    set head_channel [lindex $channels 0 0]
 }
 
 #
@@ -73,6 +79,8 @@ if {[regexp {^(.*/)(\d+-\d+)/$} $repository_url . base_url passed_in_channel]} {
     set base_url  $repository_url
     set fetch_url $base_url/$channel/
 }
+
+ns_log notice "Fetch from repository URL: $fetch_url"
 
 apm_get_package_repository -repository_url $fetch_url -array repository
 
