@@ -3777,10 +3777,12 @@ ad_proc -public ad_job {
 }
 
 ad_proc ad_tmpnam {{template ""}} {
+
     A stub function to replace the deprecated "ns_tmpnam", which uses
     the deprecated C-library function "tmpnam()".  However, also
     ns_mktemp is not recommended any more due to a potential race
-    between the name creation and the file open command.
+    condidtion between the name creation and the file open command.
+
 } {
     if {$template eq ""} {
         set template [ns_config ns/parameters tmpdir]/oacs-XXXXXX
@@ -3797,9 +3799,9 @@ ad_proc ad_tmpdir {} {
 ad_proc ad_opentmpfile {varFilename {template "oacs"}} {
 
     Wrapper for Tcl's "file tempfile ...", but respects the server's
-    tmpdir settings, e.g. when admin want to specify the temporary
-    directory.  The function is similar to "ns_opentmpfile", but
-    provides a default template and uses always the configured tmp
+    tmpdir settings, e.g. when admin want to specify a non-default
+    temporary directory.  The function is similar to "ns_opentmpfile",
+    but provides a default template and uses always the configured tmp
     directory.
 
 } {
