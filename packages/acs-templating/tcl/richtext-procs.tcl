@@ -236,7 +236,7 @@ ad_proc -public template::util::richtext::initialize_widget {
     #
     # When no preset was specified, we will try to look for the
     # "standard" preset. This provides a hook for site-wide
-    # customization via a tcl proc, which enables to inject
+    # customization via a Tcl proc, which enables to inject
     # e.g. information coming from the connection context or other tcl
     # commands, not possible via parameter alone.
     #
