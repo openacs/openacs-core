@@ -721,7 +721,8 @@ ad_proc doc_return {args} {
 ad_proc -public ad_return_url {
     -urlencode:boolean
     {-path_encode:boolean true}
-    -qualified:boolean
+    {-qualified:boolean}
+    {-exclude ""}
     {-default_url .}
     {extra_args ""}
 } {
@@ -754,6 +755,7 @@ ad_proc -public ad_return_url {
     @author Don Baccus (dhogaza@pacifier.com)
 
     @param path_encode If false do no URL-encode the result
+    @param exclude list of form variables to be excluded in the result
     @param default_url When there is no connection, fall back to this URL
     @param qualified If provided the return URL will be fully qualified including http or https.
     @param extra_args A list of {name value} lists to append to the query string
@@ -765,7 +767,7 @@ ad_proc -public ad_return_url {
     }
 
     if {[ns_conn isconnected]} {
-        set query_list [export_vars -entire_form]
+        set query_list [export_vars -exclude $exclude -entire_form]
         set base_url [ns_conn url]
     } else {
         set query_list ""
