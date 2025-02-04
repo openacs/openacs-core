@@ -723,6 +723,7 @@ ad_proc -public ad_return_url {
     {-path_encode:boolean true}
     {-qualified:boolean}
     {-exclude ""}
+    {-formvars}
     {-default_url .}
     {extra_args ""}
 } {
@@ -755,9 +756,12 @@ ad_proc -public ad_return_url {
     @author Don Baccus (dhogaza@pacifier.com)
 
     @param path_encode If false do no URL-encode the result
-    @param exclude list of form variables to be excluded in the result
     @param default_url When there is no connection, fall back to this URL
     @param qualified If provided the return URL will be fully qualified including http or https.
+    @param exclude list of form variables to be excluded in the result (negative selection)
+    @param formvars A list of query/form variables potentially included in the returnurl.
+           Per default, all form vars are exported. By providing this positive
+           selection, only these will be used. If you specify this empty, no variables are included.
     @param extra_args A list of {name value} lists to append to the query string
 
 } {
@@ -767,7 +771,11 @@ ad_proc -public ad_return_url {
     }
 
     if {[ns_conn isconnected]} {
-        set query_list [export_vars -exclude $exclude -entire_form]
+        if {[info exists formvars]} {
+            set query_list [export_vars -formvars $formvars]
+        } else {
+            set query_list [export_vars -exclude $exclude -entire_form]
+        }
         set base_url [ns_conn url]
     } else {
         set query_list ""
