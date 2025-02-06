@@ -35,6 +35,7 @@ ad_proc -public template::widget::merge_tag_attributes {
         foreach {key value} $element(html) {
             dict lappend tag_attributes $key {*}$value
         }
+        unset element(html)
     }
 
     return $tag_attributes
