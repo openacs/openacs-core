@@ -6,33 +6,36 @@
     <pretty-plural>Notifications</pretty-plural>
     <initial-install-p>f</initial-install-p>
     <singleton-p>t</singleton-p>
+    <implements-subsite-p>f</implements-subsite-p>
+    <inherit-templates-p>t</inherit-templates-p>
     <auto-mount>notifications</auto-mount>
 
-    <version name="6.0.0d1" url="http://openacs.org/repository/download/apm/notifications-6.0.0d1.apm">
+    <version name="6.0.0d2" url="http://openacs.org/repository/download/apm/notifications-6.0.0d2.apm">
         <owner url="http://openacs.org">OpenACS</owner>
         <summary>Email notifications management</summary>
-        <release-date>2024-09-02</release-date>
+        <release-date>2025-02-07</release-date>
         <vendor url="http://openacs.org">OpenACS</vendor>
         <description format="text/html">Provides an API for packages to provide subscription based email notifications and handle replies.  Used by forums, bug-tracker, etc.  The currently preferred package for email notifications.</description>
         <maturity>3</maturity>
         <package_instance_name>#notifications.Notifications#</package_instance_name>
 
-        <provides url="notifications" version="6.0.0d1"/>
+        <provides url="notifications" version="6.0.0d2"/>
         <requires url="acs-kernel" version="5.10.1"/>
-        <requires url="acs-tcl" version="5.10.1"/>
         <requires url="acs-mail-lite" version="5.10.1"/>
+        <requires url="acs-tcl" version="5.10.1"/>
 
         <callbacks>
+            <callback type="before-uninstall"  proc="notification::apm::before_uninstall"/>
             <callback type="after-install"  proc="notification::apm::after_install"/>
             <callback type="after-upgrade"  proc="notification::apm::after_upgrade"/>
-            <callback type="before-uninstall"  proc="notification::apm::before_uninstall"/>
         </callbacks>
         <parameters>
-            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="CleanupSweepInterval"  default="900" description="Run sweeper in the specified interval (seconds)"/>
-            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="EmailDomain"  description="The domain for the notification email address" section_name="email"/>
-            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="EmailQmailQueue"  description="The location of the qmail queue for incoming email, mail will be looked for in EmailQmailQueue/new/*" section_name="email"/>
-            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="EmailQmailQueueScanP"  default="0" description="Should the package scan the qmail queue for incoming mail? (1 is true, 0 is false)" section_name="email"/>
-            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="EmailReplyAddressPrefix"  default="notification" description="The prefix for email replies" section_name="email"/>
+            <parameter scope="instance" datatype="number"  min_n_values="1"  max_n_values="1"  name="CleanupSweepInterval"  default="900" description="Run sweeper in the specified interval (seconds)"/>
+            <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="EmailDomain"  description="The domain for the notification email address" section_name="email"/>
+            <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="EmailQmailQueue"  description="The location of the qmail queue for incoming email, mail will be looked for in EmailQmailQueue/new/*" section_name="email"/>
+            <parameter scope="instance" datatype="number"  min_n_values="1"  max_n_values="1"  name="EmailQmailQueueScanP"  default="0" description="Should the package scan the qmail queue for incoming mail? (1 is true, 0 is false)" section_name="email"/>
+            <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="EmailReplyAddressPrefix"  default="notification" description="The prefix for email replies" section_name="email"/>
+            <parameter scope="global" datatype="string"  min_n_values="1"  max_n_values="1"  name="SSENotifications"  default="false" description="Should we use SSE notifications? When active, SSE can be chosen as a delivery method for notifications alongside emails and we will subscribe to the notifications EventSource on every page."/>
         </parameters>
 
     </version>

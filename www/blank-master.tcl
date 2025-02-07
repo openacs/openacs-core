@@ -294,6 +294,12 @@ if {[parameter::get -parameter CSPEnabledP -package_id [ad_acs_kernel_id] -defau
     }
 }
 
+set sse_notifications_p [::parameter::get_global_value \
+                             -boolean \
+                             -package_key notifications \
+                             -parameter SSENotifications \
+                             -default false]
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4

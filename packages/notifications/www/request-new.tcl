@@ -31,6 +31,17 @@ if {$pretty_name eq ""} {
 set intervals_pretty [notification::get_intervals -localized -type_id $type_id]
 set delivery_methods [notification::get_delivery_methods -type_id $type_id]
 
+set sse_notifications_p [::parameter::get_global_value \
+                             -boolean \
+                             -package_key notifications \
+                             -parameter SSENotifications \
+                             -default false]
+if {!$sse_notifications_p} {
+    set sse_delivery_method_id [::notification::get_delivery_method_id -name sse]
+    set delivery_methods [lsearch -all -not -inline -index 1 \
+                              $delivery_methods $sse_delivery_method_id]
+}
+
 ad_form -name subscribe -export {
     type_id object_id return_url
 } -form {
