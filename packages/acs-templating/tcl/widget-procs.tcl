@@ -23,9 +23,14 @@ ad_proc -public template::widget::merge_tag_attributes {
     element_reference
     tag_attributes
 } {
-    Consolidates the logics to compute the final tag attributes by
-    merging those explicitly supplied and those in the element
-    definition.
+    Merges the attributes coming from widget's html property with
+    those in the tag_attributes argument and returns the merged
+    dict. Here we decide which of the two sources takes precedence and
+    how.
+
+    Note that widget's html property is consumed in the process, so
+    that possible further executions of this proc won't apply the
+    attributes twice.
 
     @return dict
 } {
