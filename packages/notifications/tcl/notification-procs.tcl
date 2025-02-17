@@ -47,7 +47,7 @@ namespace eval notification {
         DEPRECATED: an API doing the exact same thing was moved into
         an own namespace
 
-        @see notification::get_delivery_method_id
+        @see notification::delivery::get_id
     } {
         return [db_string select_delivery_method_id {} -default ""]
     }
