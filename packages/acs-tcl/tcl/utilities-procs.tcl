@@ -3902,27 +3902,20 @@ ad_proc -public util::request_info {
 
         if {[ns_conn method] eq "POST"} {
             #
-            # POST data info
+            # Include form data when it is available via [ns_form],
+            # but remove sensible information from logging.
             #
-            if {[ns_conn flags] & 1} {
-                append info "\n    connection already closed, cooked form-content:"
-                foreach {k v} [ns_set array [ns_getform]] {
-                    if {[string length $v] > 100} {
-                        set v "[string range $v 0 100]..."
-                    }
-                    append info "\n        $k: $v"
+            set form [ns_getform]
+            if {[ns_set get $f password] ne ""} {
+                ns_set iupdate $f password XXXXX
+            }
+            foreach {k v} [ns_set array $form] {
+                if {[string length $v] > 100} {
+                    set v "[string range $v 0 100]..."
                 }
-            } else {
-                set ct [ns_set iget [ns_conn headers] content-type]
-                if {[string match text/* $ct] || $ct eq "application/x-www-form-urlencoded"} {
-                    set data [ns_conn content]
-                    if {[string length $data] < 2000} {
-                        append info "\n        post-data: $data"
-                    }
-                }
+                append info "\n        $k: $v"
             }
         }
-
         #
         # Optional header info
         #
