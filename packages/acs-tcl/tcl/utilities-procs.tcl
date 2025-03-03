@@ -3906,8 +3906,8 @@ ad_proc -public util::request_info {
             # but remove sensible information from logging.
             #
             set form [ns_getform]
-            if {[ns_set get $f password] ne ""} {
-                ns_set iupdate $f password XXXXX
+            if {[ns_set get $form password] ne ""} {
+                ns_set iupdate $form password XXXXX
             }
             foreach {k v} [ns_set array $form] {
                 if {[string length $v] > 100} {
