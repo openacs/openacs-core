@@ -24,13 +24,14 @@
     </querytext>
   </fullquery>
 
-  <fullquery name="select_params">      
+  <fullquery name="select_params">
     <querytext>
       select p.parameter_name,
         coalesce(p.description, 'No Description') as description,
         v.attr_value,
         coalesce(p.section_name, 'main') as section_name,
-        p.datatype
+        p.datatype,
+        p.default_value
       from apm_parameters p left outer join
         (select v.parameter_id, v.attr_value
          from apm_parameter_values v
@@ -38,7 +39,7 @@
         on p.parameter_id = v.parameter_id
       where p.package_key = :package_key
         and p.scope = :scope
-	$section_where_clause
+        $section_where_clause
       order by
         case when lower(section_name) = 'deprecated'
           then null
@@ -48,7 +49,7 @@
     </querytext>
   </fullquery>
 
-  <fullquery name="select_params_set">      
+  <fullquery name="select_params_set">
     <querytext>
       select p.parameter_name as c__parameter_name
       from apm_parameters p left outer join
@@ -63,4 +64,3 @@
   </fullquery>
 
 </queryset>
- 

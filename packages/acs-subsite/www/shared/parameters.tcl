@@ -14,7 +14,7 @@ ad_page_contract {
 }
 
 if {$scroll_to ne ""} {
-    add_body_handler -event load -script [subst -nocommands {        
+    add_body_handler -event load -script [subst -nocommands {
         const scrollTarget = document.querySelectorAll('#$scroll_to')[0];
         window.scrollTo(0, scrollTarget.offsetTop - 90);
     }]
@@ -113,8 +113,11 @@ db_foreach select_params {} {
             set html [list size 50]
         }
     }
+    set help_text_suffix [expr {$attr_value eq $default_value \
+                                    ? "<span style='color: green; font-size: small;'>(value is default)</span>"
+                                    : "<span style='color: orange; font-size: small;'>(default: $default_value)</span>"}]
     set elm [list ${parameter_name}:text($widget),optional,nospell \
-                 {label {$parameter_name}} \
+                 {label {$parameter_name $help_text_suffix}} \
                  {help_text {$description}} \
                  [list html $html]]
 
