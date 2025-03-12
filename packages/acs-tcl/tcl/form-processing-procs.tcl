@@ -796,6 +796,7 @@ ad_proc -public ad_form {
             # application-specific (validation is not always wanted,
             # especially, when high backward compitibility is required).
             #
+            #ns_log notice "ad_form: adding csrf token $::__csrf_token"
             template::element create $form_name __csrf_token -datatype text -widget hidden -value $::__csrf_token
         }
     }
