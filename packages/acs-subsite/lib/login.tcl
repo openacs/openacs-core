@@ -195,11 +195,12 @@ ad_form -extend -name login -on_request {
 
     set persistent_p [expr {$default_persistent_login_p == 1 ? "t" : ""}]
 
-    # One common problem with login is that people can hit the back button
-    # after a user logs out and relogin by using the cached password in
-    # the browser. We generate a unique hashed timestamp so that users
-    # cannot use the back button.
-
+    #
+    # A common issue occurs when users press the back button after
+    # logging out, potentially reusing cached credentials.  To prevent
+    # this, we generate a unique hashed timestamp, ensuring that
+    # cached pages cannot be used to bypass the login process.
+    #
     set time [ns_time]
     set token_id [sec_get_random_cached_token_id]
     set token [sec_get_token $token_id]
@@ -216,17 +217,17 @@ ad_form -extend -name login -on_request {
                              -package_id $::acs::kernel_id \
                              -default 0] ;# was 600
     #
-    # Just check the expiration time, when the configured value is >
-    # 0.  The old trick with the expiration time of the login page is
-    # not an issue of modern browsers, since the login page takes
-    # already care of avoiding caching.
+    # Only enforce the expiration time check when the configured value
+    # is greater than 0.  Modern browsers already handle cache control
+    # for the login page, so the old workaround using a short
+    # expiration time to prevent caching is no longer necessary.
     #
     if { $expiration_time > 0 } {
         if { $expiration_time < 30 } {
             #
-            # Sanity check: If expiration_time is less than 30 seconds,
-            # it's practically impossible to login and you will have
-            # completely hosed login on your entire site
+            # Sanity check: If the expiration_time is less than 30 seconds,
+            # logging-in becomes virtually impossible, potentially breaking
+            # authentication across the entire site.
             #
             ns_log warning "login: fix invalid setting of kernel parameter LoginPageExpirationTime \
                 (value $expiration_time); must be at least 30 (secs)"
