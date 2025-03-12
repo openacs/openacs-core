@@ -88,10 +88,10 @@ if {$section ne ""} {
 
 
 array set sections {}
-
 db_foreach select_params {} {
     set section_name [string map {- {_} " " {_}} $section_name]
     set section_pretty [string totitle [string map {_ { }} $section_name]]
+    set extra_html ""
 
     if { ![info exists sections($section_name)] } {
         set sec [list "-section" $section_name {legendtext "$section_pretty"}]
@@ -101,6 +101,7 @@ db_foreach select_params {} {
 
     if { $counter == 0 } {
         set focus_elm $parameter_name
+        set extra_html "autofocus"
     }
 
     switch -- $datatype {
@@ -119,7 +120,7 @@ db_foreach select_params {} {
     set elm [list ${parameter_name}:text($widget),optional,nospell \
                  {label {$parameter_name $help_text_suffix}} \
                  {help_text {$description}} \
-                 [list html $html]]
+                 [list html "$html $extra_html"]]
 
     set file_val [ad_parameter_from_configuration_file $parameter_name $package_key]
     if { $file_val ne "" } {
