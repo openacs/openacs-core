@@ -236,6 +236,7 @@ ad_form -extend -name login -on_request {
         if { $hash ne $computed_hash
              || $time < [ns_time] - $expiration_time
          } {
+            ns_log notice "LoginPage expired, redirect"
             ad_returnredirect \
                 -message [_ acs-subsite.Login_has_expired] -- \
                 [export_vars -base [ad_conn url] { return_url }]
