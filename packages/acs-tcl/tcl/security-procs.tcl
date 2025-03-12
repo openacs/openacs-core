@@ -14,15 +14,16 @@ namespace eval security {
     #set log(login_url) notice
     #set log(login_cookie) notice
     #set log(timeout) notice
+    #set log(session_id) notice
 
-    ad_proc -private log {kind msg} {
+    ad_proc -private log {kind args} {
         Helper proc for debugging security aspects.
         Uncomment some of the log(*) flags above to activate
         debugging and reload this file.
     } {
         set var ::security::log($kind)
         if {[info exists $var]} {
-            ns_log [set $var] "$kind $msg"
+            ns_log [set $var] "$kind [join $args { }]"
         }
     }
 }
@@ -109,7 +110,7 @@ ad_proc -private sec_handler {} {
     Reads the security cookies, setting fields in ad_conn accordingly.
 
 } {
-    ns_log debug "OACS= sec_handler: enter"
+    ::security::log session_id "OACS= sec_handler: enter"
 
     if {[info exists ::security::log(login_cookie)]} {
         foreach c [list session_id secure_token user_login user_login_secure] {
@@ -242,6 +243,8 @@ ad_proc -private sec_handler {} {
         set user_id 0
         set account_status closed
 
+        ::security::log session_id "sec_handler: session_id $session_id invalidated_p [sec_session_id_invalidated_p $session_id]"
+
         if {$login_level > 0 && [sec_session_id_invalidated_p $session_id]} {
             #
             # Check, if the session_id was invalidated (e.g. via
@@ -311,6 +314,8 @@ ad_proc -private sec_handler {} {
             ::security::log login_cookie "Secure session checked: session_id = $session_id, session_user_id = $session_user_id, auth_level = $auth_level, user_id = $user_id"
         }
 
+        ::security::log session_id "sec_handler: setup ad_conn with session_id $session_id untrusted_user_id $session_user_id user_id $user_id auth_level $auth_level"
+
         # Setup ad_conn
         ad_conn -set session_id $session_id
         ad_conn -set untrusted_user_id $session_user_id
@@ -328,6 +333,7 @@ ad_proc -private sec_handler {} {
         ::security::log timeout "SessionRefresh in [expr {($session_expr - [sec_session_renew]) - [ns_time]}] secs"
 
         if {  $session_expr - [sec_session_renew] < [ns_time] } {
+            ::security::log login_cookie "sec_handler: generate new session_id_cookie"
             sec_generate_session_id_cookie
         }
     }
@@ -638,6 +644,7 @@ ad_proc -public ad_user_logout {
 } {
     Logs the user out.
 } {
+    ad_log notice "ad_user_logout user_id [ad_conn user_id]"
 
     set external_registry [sec_login_get_external_registry]
     if {$external_registry ne ""} {
@@ -898,20 +905,20 @@ ad_proc -private sec_setup_session {
     and generates the cookies necessary for the session.
 
 } {
-    ns_log debug "OACS= sec_setup_session: enter"
+    ::security::log session_id "OACS= sec_setup_session: enter"
 
     set session_id [ad_conn session_id]
 
     # figure out the session id, if we don't already have it
     if { $session_id eq ""} {
 
-        ns_log debug "OACS= empty session_id"
+        ::security::log session_id "OACS= empty session_id"
 
         set session_id [sec_allocate_session]
         # if we have a user on a newly allocated session, update
         # users table
 
-        ns_log debug "OACS= newly allocated session $session_id"
+        ::security::log session_id "OACS= newly allocated session $session_id"
 
         if { $new_user_id != 0 } {
             ns_log debug "OACS= about to update user session info, user_id NONZERO"
@@ -947,7 +954,7 @@ ad_proc -private sec_setup_session {
             # A change of user_id on an active session demands an
             # update of the users table.
             #
-            ns_log debug "sec_update_user_session_info"
+            ::security::log login_cookie "sec_update_user_session_info"
             sec_update_user_session_info $new_user_id
         }
     }
@@ -968,11 +975,11 @@ ad_proc -private sec_setup_session {
     ad_conn -set account_status $account_status
     ad_conn -set user_id $user_id
 
-    ns_log debug "OACS= about to generate session id cookie"
+    ::security::log session_id "OACS= about to generate session id cookie"
 
     sec_generate_session_id_cookie -cookie_domain $cookie_domain
 
-    ns_log debug "OACS= done generating session id cookie"
+    ::security::log session_id "OACS= done generating session id cookie"
 
     if { $auth_level eq "secure"
          && ([security::secure_conn_p] || [ad_conn behind_secure_proxy_p])
@@ -1084,6 +1091,8 @@ ad_proc -private sec_allocate_session {} {
 
     if { ![info exists ::acs::sec_id_max_value] || ![info exists ::acs::sec_id_current_sequence_id]
          || $::acs::sec_id_current_sequence_id > $::acs::sec_id_max_value } {
+        ::security::log session_id "sec_allocate_session: info exists ::acs::sec_id_max_value [info exists ::acs::sec_id_max_value]" \
+            "info exists ::acs::sec_id_current_sequence_id [info exists ::acs::sec_id_current_sequence_id]"
         # Thread just spawned or we exceeded preallocated count.
         set ::acs::sec_id_current_sequence_id [db_nextval sec_id_seq]
         db_release_unused_handles
@@ -1719,8 +1728,8 @@ ad_proc -private __ad_verify_signature {
         set secret_token $secret
     }
 
-    ns_log Debug "__ad_verify_signature: Getting token_id $token_id, value $secret_token ; "
-    ns_log Debug "__ad_verify_signature: Expire_Time is $expire_time (compare to [ns_time]), hash is $hash"
+    ns_log Debug "__ad_verify_signature: Getting token_id $token_id, value $secret_token"
+    ns_log Debug "__ad_verify_signature: Expire_Time is $expire_time (compare to [ns_time], diff [expr {[ns_time]-$expire_time}]), hash is $hash"
 
     if {$binding == -1} {
         set binding_value [ad_conn user_id]
@@ -1731,8 +1740,9 @@ ad_proc -private __ad_verify_signature {
     }
 
     #
-    # Compute hash based on tokes, expire_time and user_id/csrf token
+    # Compute hash based on token, expire_time and user_id/csrf token
     #
+    ns_log Debug "__ad_verify_signature: compute hash based on $value/$token_id/$expire_time/$secret_token/$binding_value (binding $binding)"
     set computed_hash [ns_sha1 "$value$token_id$expire_time$secret_token$binding_value"]
 
     # Need to verify both hash and expiration
@@ -1747,6 +1757,7 @@ ad_proc -private __ad_verify_signature {
         # Check to see if IE is lame (and buggy!) and is expanding \n to \r\n
         # See: http://rhea.redhat.com/bboard-archive/webdb/000bfF.html
         #
+        ns_log Debug "__ad_verify_signature: hashes differ '$computed_hash' vs '$hash'"
         set value [string map [list \r ""] $value]
         set org_computed_hash $computed_hash
         set computed_hash [ns_sha1 "$value$token_id$expire_time$secret_token$binding_value"]
@@ -1772,10 +1783,10 @@ ad_proc -private __ad_verify_signature {
     } else {
         ns_log Debug "__ad_verify_signature: Expiration time ($expire_time) less than or equal to current time ([ns_time]) - Expiration check FAILED"
     }
+    ns_log Debug "__ad_verify_signature: hash_ok '$hash_ok_p' expiration_ok_p '$expiration_ok_p'"
 
     # Return validation result
     return [expr {$hash_ok_p && $expiration_ok_p}]
-
 }
 
 ad_proc -public ad_get_signed_cookie {
@@ -3616,7 +3627,9 @@ namespace eval ::security::csrf {
         }
 
         set token [token -tokenname $tokenname]
+
         if {$oldToken ne $token} {
+            ::security::log session_id "CSRF old token <$oldToken> new token <$token> peeraddr [ad_conn peeraddr]"
             fail
         }
     }
@@ -3640,11 +3653,13 @@ namespace eval ::security::csrf {
             # Anonymous request, use a peer address as session_id
             #
             set session_id [ad_conn peeraddr]
+            ::security::log session_id "GET CSRF token: Anonymous request -> $session_id"
         } else {
             #
             # User is logged-in, use a session token.
             #
             set session_id [ad_conn session_id]
+            ::security::log session_id "GET CSRF token: authenticated request -> $session_id"
         }
         return $session_id
     }
@@ -3671,6 +3686,8 @@ namespace eval ::security::csrf {
             set token [set $globalTokenName]
         } else {
             set secret [ns_config "ns/server/[ns_info server]/acs" parameterSecret ""]
+            ::security::log session_id "CSRF token: create token based on [session_id]"
+
             if {[namespace which ::crypto::hmac] ne ""} {
                 set token [::crypto::hmac string $secret [session_id]]
             } else {
@@ -3702,6 +3719,7 @@ namespace eval ::security::csrf {
 }
 
 nsv_set validated_location http://localhost 1
+
 #
 # Local variables:
 #    mode: tcl
