@@ -437,7 +437,7 @@ ad_proc -public db_nextval {
             # Oracle compatibility.
 
             if {![info exists ::db::sequences]} {
-                ns_log notice "-- creating per thread sequence table"
+                ns_log notice "-- creating per thread sequence table (triggered by db_nextval $sequence, epoch [ns_ictl epoch])"
                 namespace eval ::db {}
                 foreach s [db_list -dbn $dbn relnames "select relname, relkind  from pg_class where relkind = 'S'"] {
                     set ::db::sequences($s) 1
