@@ -3902,14 +3902,17 @@ ad_proc -public util::request_info {
 
         if {[ns_conn method] eq "POST"} {
             #
-            # Include form data when it is available via [ns_form],
-            # but remove sensible information from logging.
+            # Include form data when it is available via [ns_form]
             #
             set form [ns_getform]
-            if {[ns_set get $form password] ne ""} {
-                ns_set iupdate $form password XXXXX
-            }
+            
             foreach {k v} [ns_set array $form] {
+
+                # Remove sensible information from logging
+                if {[regexp {password} $k]} {
+                    set v XXXXXX
+                }
+                
                 if {[string length $v] > 100} {
                     set v "[string range $v 0 100]..."
                 }
