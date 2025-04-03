@@ -4529,7 +4529,7 @@ namespace eval util::resources {
                     unset vulnerabilityCheckVersionURL
                     ns_log notice "check_vulnerability: request failed $vulnerabilityCheckVersionURL"
                 } else {
-                    set hasVulnerability [string match "*PackageVulnerabilitiesTable*" $page]
+                    set hasVulnerability [string match "*Known vulnerabilities in the*package*" $page]
                     #ns_log notice RESULT=$page
                 }
             }
