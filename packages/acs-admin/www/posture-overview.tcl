@@ -17,6 +17,7 @@ set installed_locales [lang::system::get_locales]
 set packages [apm_enabled_packages]
 set number_of_packages [llength $packages]
 set version_numbers_on_result_pages [ns_config ns/server/[ns_info server] noticedetail]
+set version_numbers_on_result_pages [expr {$version_numbers_on_result_pages ? "yes" : "no"}]
 
 if {$current_location eq ""} {
     set current_location [ns_conn location]
@@ -210,13 +211,13 @@ foreach url {
     /robots.txt
     /security.txt
 } {
+    set detailURL ""
+    set detailLabel ""
+
     try {
         ns_http run -timeout 300ms $current_location$url
     } on ok {result} {
         set status [dict get $result status]
-        set diagnosis ""
-        set detailURL ""
-        set detailLabel ""
         switch $status {
             200 {set diagnosis "publicly accessible"}
             404 {
@@ -232,10 +233,15 @@ foreach url {
                     }
                 }
             }
+            default {
+                set diagnosis "unexpected status code: '$status'"
+                ns_log warning "posture-overview: unexpected status code '$status' for $current_location$url"
+            }
         }
         #append diagnosis " $node_id $package_id ($parties) // [llength $parties] // $direct_permissions"
         #append report "status $status $diagnose\n<br>"
     } on error {errorMsg} {
+        ns_log warning "posture-overview: ns_http to $current_location$url ends with $errorMsg"
         set diagnosis $errorMsg
         set status 0
     }
@@ -264,6 +270,60 @@ foreach url $current_location {
         template::multirow append hdr_check $field [ns_set iget $hdrs $field]
     }
 }
+
+
+
+template::multirow create database_client \
+    version versionURL fixedin cve_text cve_link cve_desc
+template::multirow create database_server \
+    version versionURL fixedin cve_text cve_link cve_desc
+
+try {
+    db_with_handle -dbn "" handle { set db_info [ns_db info $handle] }
+} on error {errorMsg} {
+    ns_log notice "cannot obtain version info from database driver"
+} on ok {rc} {
+    #ns_log notice "====== GOT db_info: $db_info"
+    dict with db_info {
+        if {$type eq "PostgreSQL"} {
+            #
+            # Overload dict values with sample version numbers for
+            # demo purposes.
+            #
+            set clientversion 130004
+            set serverversion 140010
+            
+            set database_client_version [expr {$clientversion / 10000}].[expr {$clientversion % 10000}]
+            set dbclient [::util::resources::check_vulnerability \
+                              -service postgresql.org \
+                              -library client \
+                              -version $clientversion]
+            dict with dbclient {
+                foreach c $CVE {
+                    #ns_log notice "CLIENT CVE $c"
+                    dict with c {
+                        template::multirow append database_client $database_client_version $versionURL $fixedin $name $url $description
+                    }
+                }
+            }
+            
+            set database_server_version [expr {$serverversion / 10000}].[expr {$serverversion % 10000}]
+            set dbserver [::util::resources::check_vulnerability \
+                              -service postgresql.org \
+                              -library server \
+                              -version $serverversion]
+            dict with dbserver {
+                foreach c $CVE {
+                    #ns_log notice "SERVER CVE $c"
+                    dict with c {
+                        template::multirow append database_server $database_server_version $versionURL $fixedin $name $url $description
+                    }
+                }
+            }
+        }
+    }
+}
+
 
 template::multirow create library_check \
     library swa_link version_color \

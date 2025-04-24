@@ -143,6 +143,58 @@ permitted under <i>PostgreSQL</i>.</if>
 via the <a title="External Link to SSLlabs" href="@ssllabs_url@">SSL Labs service</a> from Qualys.
 </if>
 
+<if @database_client_version@ not nil and @database_server_version@ not nil>
+  <h2>Database Vulnerability Check</h2>
+  <h4>Database Client Library</h4>
+  <table class="table table-sm">
+    <if @database_client:rowcount@ gt 0>
+      <tr>
+        <th>Installed</th>
+        <th>Vulnerability</th>
+        <th>Description</th>
+        <th>Fixed in</th>
+      </tr>
+      <multiple name="database_client">
+        <tr>
+          <td><a href="@database_client.versionURL@">@database_client.version@</a></td>
+          <td><a href="@database_client.cve_link@">@database_client.cve_text@</a></td>
+          <td>@database_client.cve_desc@</td>
+          <td>@database_client.fixedin@</td>
+        </tr>
+      </multiple>
+    </if><else>
+      <tr>
+        <th>Installed</th><th></th>
+      </tr>
+      <tr><td>@database_client_version@</td><td>No vulnerability known<td></tr>
+    </else>
+  </table>  
+
+  <h4>Database Server</h4>
+  <table class="table table-sm">
+    <if @database_server:rowcount@ gt 0>
+      <tr>
+        <th>Installed</th>
+        <th>Vulnerability</th>
+        <th>Description</th>
+        <th>Fixed in</th>
+      </tr>
+      <multiple name="database_server">
+        <tr>
+          <td><a href="@database_server.versionURL@">@database_server.version@</a></td>
+          <td><a href="@database_server.cve_link@">@database_server.cve_text@</a></td>
+          <td>@database_server.cve_desc@</td>
+          <td>@database_server.fixedin@</td>
+        </tr>
+      </multiple>
+    </if><else>
+      <tr>
+        <th>Installed</th><th></th>
+      </tr>
+      <tr><td>@database_server_version@</td><td>No vulnerability known<td></tr>
+    </else>
+  </table> 
+</if>
 
 <h2>External Library Check</h2>
 

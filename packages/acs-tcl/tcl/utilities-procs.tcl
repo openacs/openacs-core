@@ -3905,14 +3905,14 @@ ad_proc -public util::request_info {
             # Include form data when it is available via [ns_form]
             #
             set form [ns_getform]
-            
+
             foreach {k v} [ns_set array $form] {
 
-                # Remove sensible information from logging
-                if {[regexp {password} $k]} {
+                # Remove sensible information from form fields for logging
+                if {[regexp -nocase "password" $k]} {
                     set v XXXXXX
                 }
-                
+
                 if {[string length $v] > 100} {
                     set v "[string range $v 0 100]..."
                 }
@@ -4574,8 +4574,8 @@ namespace eval util::resources {
         {-version:required}
     } {
 
-        Return a dict containing vulnerability info with the keys
-        "hasVulnerability", "libraryURL" and "versionURL"
+        Returns a dict containing vulnerability info with the keys
+        "hasVulnerability", "libraryURL", "versionURL" and "cveURLs"
 
         @param service name of the vulnerability checking service (currently only synk)
         @param library name of the library as named by the vulnerability service
@@ -4583,6 +4583,7 @@ namespace eval util::resources {
 
     } {
         set hasVulnerability ?
+        set CVE {}
         switch $service {
             snyk {
                 set vulnerabilityCheckURL https://security.snyk.io/package/npm/$library
@@ -4599,6 +4600,73 @@ namespace eval util::resources {
                     #ns_log notice RESULT=$page
                 }
             }
+            postgresql.org {
+                set vulnerabilityCheckURL https://www.postgresql.org/support/security
+                set hasVulnerability 0
+                # clientversion 170004 serverversion 170004
+                set major [expr {$version/10000}]
+                set minor [expr {$version % 10000}]
+                set versionNr $major.$minor
+                ns_log notice "PG VERSION $versionNr"
+                set page [::util::resources::http_get_with_default \
+                              -url $vulnerabilityCheckURL/$major \
+                              -key postgresql-$library/$major]
+                #ns_log notice "PAGE=$page"
+                dom parse -html -- $page doc
+                $doc documentElement root
+                foreach tr [$root selectNodes //tbody/tr] {
+                    #ns_log notice "TR= [$tr asHTML]"
+                    set freshVulnerability 0
+                    set columns [$tr selectNodes td]
+                    if {[llength $columns] != 5} {
+                        continue
+                    }
+                    lassign $columns reference affected fixed component description
+                    if {![string match *$library* [$component asText]]} {
+                        continue
+                    }
+                    set fixedin .
+                    foreach v [regsub -all , [$fixed asText] ""] {
+                        regexp {^(\d+)[.](\d+)} $v . majorFix minorFix
+                        set numFixed [expr {$majorFix*10000+$minorFix}]
+                        if {$majorFix == $major && $version >= $numFixed} {
+                            set freshVulnerability 0
+                            #set hasVulnerability 0
+                            continue
+                        }
+                        if {$version < $numFixed} {
+                            if {$majorFix < $major} {
+                                break
+                            }
+                            set hasVulnerability 1
+                            set freshVulnerability 1
+                            set fixedin $v
+                            #break
+                        }
+                    }
+                    if {$freshVulnerability} {
+                        #ns_log notice "CVE [$reference asHTML]"
+                        #ns_log notice "... fixed <[$fixed asText]> -> has vulnerability $hasVulnerability"
+                        #ns_log notice "... component <[$component asText]>"
+                        #ns_log notice "... CHECK [$reference asHTML]"
+                        foreach url [$reference selectNodes .//a/@href] {
+                            #ns_log notice "... check URL $url"
+                            if {[regexp {(CVE[-]\d+[-]\d+)/} $url . cve]} {
+                                ns_log notice "... URL $url"
+                                set desc [$description asText]
+                                regsub -all {more details$} $desc "" desc
+                                lappend CVE [list \
+                                                 url https://www.postgresql.org/[lindex $url end] \
+                                                 fixedin $fixedin \
+                                                 name $cve \
+                                                 description $desc]
+                            }
+                        }
+                    }
+                }
+                set vulnerabilityCheckVersionURL $vulnerabilityCheckURL/$major
+                set vulnerabilityAdvisorURL ""
+            }
             default {
                 error "check_vulnerability: unknown service '$service'"
             }
@@ -4607,7 +4675,8 @@ namespace eval util::resources {
         return [list hasVulnerability $hasVulnerability \
                     libraryURL $vulnerabilityCheckURL \
                     versionURL $vulnerabilityCheckVersionURL \
-                    advisorURL $vulnerabilityAdvisorURL]
+                    advisorURL $vulnerabilityAdvisorURL \
+                    CVE $CVE]
     }
 }
 
