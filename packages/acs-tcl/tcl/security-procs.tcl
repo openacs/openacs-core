@@ -3130,7 +3130,12 @@ ad_proc -public security::validated_host_header {} {
         return $hostHeaderValue
     }
 
-    set hostHeaderDict [ns_parsehostport $hostHeaderValue]
+    try {
+        set hostHeaderDict [ns_parsehostport $hostHeaderValue]
+    } on error {errorMsg} {
+        ns_log [expr {[acs::icanuse "ns_log security"] ? "security" : "warning"}] "security::validated_host_header: $errorMsg"
+        return ""
+    }
     #
     # Remove trailing dot, as this is allowed in fully qualified DNS
     # names (see e.g. §3.2.2 of RFC 3976).
@@ -3150,6 +3155,8 @@ ad_proc -public security::validated_host_header {} {
     if {[acs::icanuse "ns_server hosts"]} {
         if {$normalizedHostHeaderValue in [ns_server hosts]} {
             #
+            # New Style host validation, available in new NaviServer 5
+            # versions after June 10, 2024
             #
             set validationOk 1
         }
