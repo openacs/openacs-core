@@ -11,10 +11,10 @@ ad_library {
 }
 
 #
-# Check, if parameterSecret is set (needed for signed parameters)
+# Check, if parameterSecret is set (needed for secure signed parameters)
 #
 if {[ns_config "ns/server/[ns_info server]/acs" parameterSecret ""] eq ""} {
-    ns_log warning "missing values for 'parameterSecret' in section " \
+    ns_log [expr {[acs::icanuse "ns_log security"] ? "security" : "warning"}] "missing value for 'parameterSecret' in section " \
         "'ns/server/[ns_info server]/acs' in configuration file"
 }
 
