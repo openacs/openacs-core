@@ -178,7 +178,7 @@ namespace eval rel_types {
 
                 for {set i [expr {[llength $plsql_drop] - 1}]} {$i >= 0} {incr i -1} {
                     set drop_cmd [lindex $plsql_drop $i]
-                    if {[catch $dropcmd err_msg_2]} {
+                    if {[catch $drop_cmd err_msg_2]} {
                         append errmsg "\nAdditional error while trying to roll back: $err_msg_2"
                         return -code error $errmsg
                     }
