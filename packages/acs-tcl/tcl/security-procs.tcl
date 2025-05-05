@@ -2639,11 +2639,32 @@ ad_proc -public security::driver {} {
         return $::acs::sdriver
     }
     set ::acs::sdriver ""
-    set server_modules [ad_server_modules]
-    foreach driver {nsssl nsssl_v4 nsssl_v6 nsopenssl nsssle} {
-        if {$driver ni $server_modules} continue
-        set ::acs::sdriver $driver
-        break
+
+    # Get the drivers registered for nsd (this requires at least NaviServer 4.99.15, Jan 2017)
+    try {
+        foreach driver_info [ns_driver info] {
+            if {[dict get $driver_info type] eq "nsssl"} {
+                # check, if the current server is using this driver
+                set serversSection [ns_configsection ns/module/[dict get $driver_info module]/servers]
+                if {$serversSection ne "" && [ns_info server] in [ns_set keys $serversSection]} {
+                    set ::acs::sdriver [dict get $driver_info module]
+                    return $::acs::sdriver
+                }
+            }
+        }
+    } on error {errorMsg} {
+        ns_log warning "Probably use of version of NaviServer before 4.99.15: $errorMsg"
+    }
+    if {$::acs::sdriver eq ""} {
+        #
+        # fallback to legacy code
+        #
+        set server_modules [ad_server_modules]
+        foreach driver {nsssl nsssl_v4 nsssl_v6 nsopenssl nsssle http https} {
+            if {$driver ni $server_modules} continue
+            set ::acs::sdriver $driver
+            break
+        }
     }
     return $::acs::sdriver
 }
