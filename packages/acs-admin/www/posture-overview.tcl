@@ -290,8 +290,8 @@ try {
             # Overload dict values with sample version numbers for
             # demo purposes.
             #
-            set clientversion 130004
-            set serverversion 140010
+            #set clientversion 130004
+            #set serverversion 140010
             
             set database_client_version [expr {$clientversion / 10000}].[expr {$clientversion % 10000}]
             set dbclient [::util::resources::check_vulnerability \
