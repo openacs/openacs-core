@@ -1,7 +1,7 @@
 <p>
 The configured version of @resource_name@ is
 <i>@version@</i><small> <adp:icon title="Configured via @configured_via@" name="form-info-sign"></small>
-(newest version on cdnjs: <i>@newest_version@</i>).
+ (newest version on @cdn@: <i>@newest_version@</i>).
 <ul class="action-links ms-3">
 <if @modifyPackageParameterURL@ not nil>
 <li>You might <a title="Change the value of the package parameter @parameter_name@" href="@modifyPackageParameterURL@">modify the parameter value</a> or

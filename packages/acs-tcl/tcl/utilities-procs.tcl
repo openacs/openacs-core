@@ -4287,8 +4287,10 @@ namespace eval util::resources {
                 #set result [util::http::get -url $location -spool]
                 set host [dict get [ns_parseurl $url] host]
                 set result [ns_http run -hostname $host -spoolsize 1 $location]
+                ns_log notice ... redirected download results in with status code [dict get $result status]
                 if {[dict get $result status] == 200} {
                     set fn [dict get $result file]
+                    ns_log notice ... redirected download is: $fn size [file size $fn]
                 }
             }
             default {
@@ -4299,6 +4301,7 @@ namespace eval util::resources {
         if {$fn eq ""} {
             error "download from $url failed: $result"
         }
+        #ns_log notice download_helper returns $result
         return $result
     }
 
@@ -4345,9 +4348,12 @@ namespace eval util::resources {
         set download_prefix https:[dict get $resource_info cdn]
         set local_path $resource_dir
 
+        #ns_log notice UTILITY uses resource_dir '$local_path'
+        
         if {$version_segment ne ""} {
             append local_path /$version_segment
             append download_prefix /$version_segment
+            #ns_log notice UTILITY adds to local_path '/$version_segment'
         }
         if {![ad_file writable $local_path]} {
             file mkdir $local_path
@@ -4371,18 +4377,21 @@ namespace eval util::resources {
             set result [download_helper -url $download_prefix/$file]
             #ns_log notice "... returned status code [dict get $result status]"
             set fn [dict get $result file]
+            #ns_log notice "... returned file $fn"
 
             set local_root [ad_file dirname $local_path/$file]
             if {![ad_file isdirectory $local_root]} {
                 file mkdir $local_root
             }
             file rename -force -- $fn $local_path/$file
+            ns_log notice "... renamed $fn to $local_path/$file"
 
             #
             # Remove potentially stale gzip file.
             #
             if {[ad_file exists $local_path/$file.gz]} {
                 file delete -- $local_path/$file.gz
+                ns_log notice "... removed stale file $local_path/$file.gz"
             }
 
             #
@@ -4410,10 +4419,11 @@ namespace eval util::resources {
             # downloaders, which might call this function.
             #
             foreach url [dict get $resource_info downloadURLs] {
-                ns_log notice "... downloading from URL: $url"
+                ns_log notice "... download via downloadURL: $url"
                 set result [download_helper -url $url]
                 set fn [dict get $result file]
                 set file [ad_file tail $url]
+                ns_log notice "... downloadURL rename file $fn to $local_path/$file"
                 file rename -force -- $fn $local_path/$file
             }
         }
@@ -4533,22 +4543,38 @@ namespace eval util::resources {
         dict with resource_info {
             set library [dict get $versionCheckAPI library]
             #ns_log notice ... versionCheckAPI $versionCheckAPI configuredVersion $configuredVersion
-            if {[dict get $versionCheckAPI cdn] eq "cdnjs"} {
-                set url [::util::resources::cdnjs_version_API \
-                             -library $library \
-                             -count [dict get $versionCheckAPI count]]
-                set json [http_get_with_default \
-                              -url $url \
-                              -key versionCheck-$library \
-                              -default {{"results": ""}}]
-                set jsonDict [util::json2dict $json]
-                #ns_log notice "=== jsonDict $library: $jsonDict"
-                foreach entry [dict get $jsonDict results] {
-                    #ns_log notice "... $library compare with '[dict get $entry name]' -> [expr {[dict get $entry name] eq $library}]"
-                    if {[dict get $entry name] eq $library} {
-                        set version [dict get $entry version]
-                        break
+            set jsonURL [::util::resources::cdnjs_version_API \
+                         -source [dict get $versionCheckAPI cdn] \
+                         -library $library \
+                         -count [dict get $versionCheckAPI count]]
+            
+            switch [dict get $versionCheckAPI cdn] {
+                cdnjs {
+                    set json [http_get_with_default \
+                                  -url $jsonURL \
+                                  -key versionCheck-$library \
+                                  -default {{"results": ""}}]
+                    set jsonDict [util::json2dict $json]
+                    #ns_log notice "=== jsonDict $library: $jsonDict"
+                    foreach entry [dict get $jsonDict results] {
+                        #ns_log notice "... $library compare with '[dict get $entry name]' -> [expr {[dict get $entry name] eq $library}]"
+                        if {[dict get $entry name] eq $library} {
+                            set version [dict get $entry version]
+                            break
+                        }
                     }
+                }
+                jsdelivr {
+                    set json [http_get_with_default \
+                                  -url $jsonURL \
+                                  -key versionCheck-$library \
+                                  -default {{"tags": {"latest": "unknown"}}}]
+                    set jsonDict [util::json2dict $json]
+                    #ns_log notice "=== jsonDict $library: $jsonDict"
+                    set version [lindex [dict get $jsonDict tags] 1]
+                }
+                default {
+                    error "unknown versionCheckAPI: '[dict get $versionCheckAPI cdn]'"
                 }
             }
         }
@@ -4556,6 +4582,7 @@ namespace eval util::resources {
     }
 
     ad_proc -public ::util::resources::cdnjs_version_API {
+        {-source:required}
         {-library:required}
         {-count:int 1}
     } {
@@ -4564,7 +4591,14 @@ namespace eval util::resources {
         the name under which the package is available from cdnjs.
 
     } {
-        return https://api.cdnjs.com/libraries?search=$library&search_fields=name&fields=filename,description,version&limit=$count
+        switch $source {
+            cdnjs {
+                return https://api.cdnjs.com/libraries?search=$library&search_fields=name&fields=filename,description,version&limit=$count
+            }
+            jsdelivr {
+                return https://data.jsdelivr.com/v1/packages/npm/$library
+            }
+        }
     }
 
 

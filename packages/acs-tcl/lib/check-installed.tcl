@@ -93,7 +93,6 @@ dict with parameterInfo {
 
 set version_segment [::util::resources::version_segment -resource_info $resource_info]
 set newest_version [::util::resources::cdnjs_get_newest_version -resource_info $resource_info]
-
 #
 # In case, we have an explicit versionCheckURL, use this.
 # Otherwise, try to derive it from the versionCheckAPI
@@ -103,8 +102,9 @@ if {[dict exists $resource_info versionCheckURL]} {
 } elseif {[dict exists $resource_info versionCheckAPI]} {
     set versionCheckAPI [dict get $resource_info versionCheckAPI]
     dict with versionCheckAPI {
-        if {$cdn eq "cdnjs"} {
-            set versionCheckURL https://cdnjs.com/libraries/$library
+        switch $cdn {
+            cdnjs    {set versionCheckURL https://cdnjs.com/libraries/$library}
+            jsdelivr {set versionCheckURL https://cdn.jsdelivr.net/npm/$library}
         }
     }
 }
