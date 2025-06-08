@@ -4571,7 +4571,8 @@ namespace eval util::resources {
                                   -default {{"tags": {"latest": "unknown"}}}]
                     set jsonDict [util::json2dict $json]
                     #ns_log notice "=== jsonDict $library: $jsonDict"
-                    set version [lindex [dict get $jsonDict tags] 1]
+                    #ns_log notice "=== TAGS [dict get $jsonDict tags]"
+                    set version [dict get [dict get $jsonDict tags] latest]
                 }
                 default {
                     error "unknown versionCheckAPI: '[dict get $versionCheckAPI cdn]'"
