@@ -1576,7 +1576,9 @@ ad_proc -private apm_git_build_repository {
 
     # Add a redirector for outdated releases
     set fw [open "${work_dir}repository/index.vuh" w]
-    puts $fw "ns_returnredirect /repository/"
+    puts $fw "#ns_returnredirect /repository/"
+    puts $fw {ns_log warning "reject Invalid repository file or release: '[ns_quotehtml [ns_conn url]]'"}
+    puts $fw {ad_return_complaint 1 "Invalid repository file or release: '[ns_quotehtml [ns_conn url]]'"}
     close $fw
 
     # Without the trailing slash
