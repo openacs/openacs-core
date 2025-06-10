@@ -23,17 +23,11 @@ function notifyMe(message) {
     }
 
     if (Notification.permission === 'granted') {
-        // Check whether notification permissions have already been granted;
-        // if so, create a notification
+        // Check whether notification permissions have already been
+        // granted; if so, create a notification. Note that we cannot
+        // request consent here if it was not granted earlier, because
+        // the request should follow a user interaction.
         const notification = messageToNotification(message);
-    } else if (Notification.permission !== 'denied') {
-        // We need to ask the user for permission
-        Notification.requestPermission().then((permission) => {
-            // If the user accepts, let's create a notification
-            if (permission === 'granted') {
-                const notification = messageToNotification(message);
-            }
-        });
     } else {
         console.warn('Your browser does not have permission to display this notification.');
         return

@@ -36,8 +36,10 @@ set sse_notifications_p [::parameter::get_global_value \
                              -package_key notifications \
                              -parameter SSENotifications \
                              -default false]
+
+set sse_delivery_method_id [::notification::delivery::get_id -short_name sse]
+
 if {!$sse_notifications_p} {
-    set sse_delivery_method_id [::notification::delivery::get_id -short_name sse]
     set delivery_methods [lsearch -all -not -inline -index 1 \
                               $delivery_methods $sse_delivery_method_id]
 }

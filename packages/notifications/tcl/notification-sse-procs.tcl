@@ -91,16 +91,17 @@ namespace eval notification::sse {
             return
         }
 
-        if { $content_html eq "" } {
-            set content $content_text
-        } else {
-            set content $content_html
-        }
-
         #
         # convert relative URLs to fully qualified URLs
         #
-        set content [::ad_html_qualify_links $content]
+        set content [::ad_html_qualify_links $content_html]
+
+        #
+        # We currently use the Notification web api to display SSE
+        # notifications, which does not support HTML markup.
+        #
+        set content [::ad_html_to_text $content]
+
 
         set user_locale [::lang::user::site_wide_locale -user_id $to_user_id]
         if { $user_locale eq "" } {
