@@ -2652,15 +2652,20 @@ ad_proc -public security::driver {} {
                 }
             }
         }
+        # if we can use the "ns_driver info" interface, and no sdriver
+        # is found - there is no secure driver. No need to fall back
+        # to the legacy code interface.
+        return $::acs::sdriver
+
     } on error {errorMsg} {
         ns_log warning "Probably use of version of NaviServer before 4.99.15: $errorMsg"
     }
     if {$::acs::sdriver eq ""} {
         #
-        # fallback to legacy code
+        # fallback for old NaviServer instances
         #
         set server_modules [ad_server_modules]
-        foreach driver {nsssl nsssl_v4 nsssl_v6 nsopenssl nsssle http https} {
+        foreach driver {nsssl nsssl_v4 nsssl_v6 nsopenssl nsssle https} {
             if {$driver ni $server_modules} continue
             set ::acs::sdriver $driver
             break
