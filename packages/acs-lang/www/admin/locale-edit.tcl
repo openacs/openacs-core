@@ -33,32 +33,33 @@ form create locale_editing
 # Hm.. this is Oracle-specific. Need to figure out what to do with this for PostgreSQL.
 #
 
-# The v$nls_valid_values view contains all the valid NLS values
-# for the oracle instance. It is up to the user to select the correct
-# values (combinations of language, territories and character sets. More
-# information on this view can be found in the docs at http://tahiti.oracle.com/
-# look for the PDF file of Oracle 8i "national language support guide"
+if {[db_driverkey ""] eq "oracle"} {
+    # The v$nls_valid_values view contains all the valid NLS values
+    # for the oracle instance. It is up to the user to select the correct
+    # values (combinations of language, territories and character sets. More
+    # information on this view can be found in the docs at http://tahiti.oracle.com/
+    # look for the PDF file of Oracle 8i "national language support guide"
 
-catch {
-    set nls_values_list [db_list_of_lists select_nls_values {select parameter, value
-    from v$nls_valid_values order by parameter, value}]
+    catch {
+        set nls_values_list [db_list_of_lists select_nls_values {select parameter, value
+            from v$nls_valid_values order by parameter, value}]
 
-    foreach nls_value $nls_values_list {
-        set value [lindex $nls_value 1]
-        switch [lindex $nls_value 0] {
-            LANGUAGE {
-                lappend list_nls_language "\"$value\" \"$value\""
-            }
-            TERRITORY {
-                lappend list_nls_territory "\"$value\" \"$value\""
-            }
-            CHARACTERSET {
-                lappend list_nls_charset "\"$value\" \"$value\""
+        foreach nls_value $nls_values_list {
+            set value [lindex $nls_value 1]
+            switch [lindex $nls_value 0] {
+                LANGUAGE {
+                    lappend list_nls_language "\"$value\" \"$value\""
+                }
+                TERRITORY {
+                    lappend list_nls_territory "\"$value\" \"$value\""
+                }
+                CHARACTERSET {
+                    lappend list_nls_charset "\"$value\" \"$value\""
+                }
             }
         }
     }
 }
-
 
 # Greenpeace had a table of countries and languages and their two-digit ISO-code
 # but not so in ACS-LANG - here you must provide the two-digit ISO-code
