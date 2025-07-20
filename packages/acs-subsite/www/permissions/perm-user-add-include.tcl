@@ -66,8 +66,8 @@ list::create \
             hide_p 1
             where_clause {
                 (:search is null
-                 or u.first_names || ' ' || u.last_name ilike '%' || :search || '%'
-                 or u.email ilike '%' || :search || '%'
+                 or upper(u.first_names || ' ' || u.last_name) like '%' || upper(:search) || '%'
+                 or upper(u.email) like '%' || upper(:search) || '%'
                  )
             }
         }
