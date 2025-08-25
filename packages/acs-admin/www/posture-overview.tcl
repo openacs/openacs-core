@@ -142,7 +142,7 @@ foreach {parameter_name package_id} $parameter_info  {
         $value \
         [string cat \
              /shared/parameters?package_id=$package_id \
-             &return_url=/acs-admin/system-overview\
+             &return_url=/acs-admin/posture-overview\
              &scroll_to=$parameter_name] \
         $diagnosis
 }
