@@ -2657,6 +2657,7 @@ ad_proc -public security::driver {} {
         # If we can use the "ns_driver info" interface, return the
         # potentially found secure driver.
         #
+        #ns_log notice "security::driver returns <$::acs::sdriver>"
         return $::acs::sdriver
 
     } on error {errorMsg} {
@@ -2849,6 +2850,8 @@ ad_proc -private security::configured_locations {
     # Get configuration information from the configured servers.
     #
     set driver_info [security::configured_driver_info]
+    #ns_log notice "configured_driver_info: $driver_info"
+
     foreach d $driver_info {
         #
         # port == 0 means that the driver is just used for sending,
@@ -2873,11 +2876,13 @@ ad_proc -private security::configured_locations {
                     lappend hosts {*}[ns_set values $virtualservers]
                 }
             }
+            #ns_log notice "adding configured locations hosts: $hosts"
             foreach entry $hosts {
                 #
                 # The value of the "DRIVER/servers" section might
                 # contain also a port.
                 #
+                #ns_log notice "get proto from <[ns_parsehostport $entry]> or <$d>"
                 set d1 [dict merge $d [ns_parsehostport $entry]]
                 set proto [dict get $d proto]
                 set host [dict get $d1 host]
@@ -2894,6 +2899,7 @@ ad_proc -private security::configured_locations {
                 if {($proto eq "https" && $port eq "443")
                     || ($proto eq "http" && $port eq "80")
                 } {
+                    #ns_log notice "join location 1 -proto $proto -hostname $host"
                     set location [util::join_location -proto $proto -hostname $host]
                     if {$location ni $locations} {
                         lappend locations $location
@@ -2903,6 +2909,7 @@ ad_proc -private security::configured_locations {
                 # Add a variant with the omitted port to
                 # portless_locations.
                 #
+                #ns_log notice "join location 2 -proto $proto -hostname $host"
                 set location [util::join_location -proto $proto -hostname $host]
                 if {$location ni $portless_locations
                     && $location ni $locations
@@ -2912,6 +2919,7 @@ ad_proc -private security::configured_locations {
                 #
                 # Add always a variant with the port to locations.
                 #
+                #ns_log notice "join location 3 -proto $proto -hostname $host"
                 set location [util::join_location -proto $proto -hostname $host -port $port]
                 if {$location ni $locations} {
                     lappend locations $location
