@@ -1693,6 +1693,7 @@ ad_proc -public ad_returnredirect {
     @see util_user_message
     @see ad_script_abort
 } {
+    #ad_log warning "ad_returnredirect allow_complete_url $allow_complete_url_p target_url <$target_url>"
     if {$message ne ""} {
         #
         # Leave a hint, that we do not want to be consumed on the
@@ -1703,6 +1704,7 @@ ad_proc -public ad_returnredirect {
     }
 
     if { [util_complete_url_p $target_url] } {
+        #ns_log notice "ad_returnredirect is complete <$target_url>"
         # http://myserver.com/foo/bar.tcl style - just pass to ns_returnredirect
         # check if the hostname matches the current host
         if {[util::external_url_p $target_url] && !$allow_complete_url_p} {
@@ -1715,6 +1717,7 @@ ad_proc -public ad_returnredirect {
         #
         set url [expr {[::acs::icanuse "relative redirects"] ? "" : [util_current_location]}]
         append url $target_url
+        #ns_log notice "ad_returnredirect path is absolute, updated URL <$url>"
     } else {
         #
         # URL is relative to current directory.
@@ -1724,11 +1727,13 @@ ad_proc -public ad_returnredirect {
         if {$target_url ne "."} {
             append url $target_url
         }
+        #ns_log notice "ad_returnredirect path is relative, updated URL <$url>"
     }
 
     # Sanitize URL to avoid potential injection attack
     regsub -all -- {[\r\n]} $url "" url
 
+    #ns_log notice "ad_returnredirect final redirect to <$url>"
     ns_returnredirect $url
 }
 
@@ -1833,6 +1838,7 @@ ad_proc -public util_driver_info {
 
     @see security::configured_driver_info
 } {
+    #ns_log notice "util_driver_info -driver <$driver>"
 
     if {$driver eq ""} {
         set driver [ad_conn driver]
@@ -1855,11 +1861,39 @@ ad_proc -public util_driver_info {
             set d [list proto https port [ns_config -int $section ServerPort] address [ns_config $section address]]
         }
         default {
-            #ns_log notice "Unknown driver: [ad_conn driver]. Only know nssock, nsunix, nsssl, nsssle, nsopenssl"
+            set d ""
+            try {
+                foreach drv [ns_driver info -server [ns_info server]] {
+                    #ns_log notice "util_driver_info driver <$driver> check $drv"
+                    if {[dict get $drv module] eq $driver} {
+                        lappend d \
+                            proto [dict get $drv protocol] \
+                            address [dict get $drv address] \
+                            port [dict get $drv port]
+                        #ns_log notice "util_driver_info for driver '$driver>' -> <$d>"
+                        break
+                    }
+                }
+            } on error {errorMsg} {
+                # Maybe an older version of NaviServer
+            }
+            if {[llength $d] == 0} {
+                ns_log warning "Unknown driver: '$driver'"
             set d [list proto http port [ns_config -int $section Port] address [ns_config $section address]]
         }
     }
-    lappend d hostname [ns_config $section hostname]
+    }
+    set hostname [ns_config $section hostname]
+    if {$hostname eq ""} {
+        # Try to get hostname from linked driver configuration (h3)
+        set hostname [ns_config [ns_config $section https] hostname]
+    }
+    if {$hostname eq ""} {
+        ns_log error "util_driver_info: no 'hostname' specified in section '$section'"
+    }
+    lappend d hostname $hostname
+
+    #ns_log notice "util_driver_info returns <$d>"
 
     if {[info exists array]} {
         upvar $array result
@@ -1894,6 +1928,7 @@ ad_proc util::split_location {location protoVar hostnameVar portVar} {
 
     try {
         set urlInfo [ns_parseurl $location]
+
     } on error {errorMsg} {
         #
         # Here we cannot use "ad_log warning", since it calls
