@@ -2882,8 +2882,11 @@ ad_proc -private security::configured_locations {
                 # The value of the "DRIVER/servers" section might
                 # contain also a port.
                 #
-                #ns_log notice "get proto from <[ns_parsehostport $entry]> or <$d>"
-                set d1 [dict merge $d [ns_parsehostport $entry]]
+                #ns_log notice "get proto from <ns_parsehostport $entry> or <$d>"
+                set d1 [dict merge $d [ns_parsehostport \
+                                           [expr {[string match *:* $entry]
+                                                  ? "\[$entry\]"
+                                                  : $entry}]]]
                 set proto [dict get $d proto]
                 set host [dict get $d1 host]
                 set port [dict get $d1 port]
