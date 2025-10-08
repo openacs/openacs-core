@@ -41,7 +41,7 @@ set email  [dict get $user_info email]
 set rel_id [dict get $user_info rel_id]
 
 if {$email_verified_p ne ""} {
-    set email_verified_p [expr {[string is true -strict] ? "t" : "f"}]
+    set email_verified_p [expr {[string is true -strict $email_verified_p] ? "t" : "f"}]
 }
 #
 # This page is used for state changes in the member_state, and as well
