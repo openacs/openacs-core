@@ -149,7 +149,7 @@ if { $counter > 0 } {
     }
     foreach section_name [lsort [array names sections]] {
         if {$section_name ne "main"} {
-            lappend section_list "<a href='#$section_name'>[ns_quotehtml $sections($section_name)]</a>"
+            lappend section_list "<a href='#parameters:$section_name'>[ns_quotehtml $sections($section_name)]</a>"
         }
     }
     set sections_header "<p>Sections: <small>[join $section_list { - } ]</small></p>"
