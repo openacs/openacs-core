@@ -144,10 +144,10 @@ set elements {
         label "$default_locale_label Message"
         display_template {
             <if @messages.deleted_p;literal@ true>
-              <span style="color: red; font-style: italic;">DELETED</span> (@messages.default_message;literal@)
+              <span style="color: red; font-style: italic;">DELETED</span> (@messages.default_message;noi18n@)
             </if>
             <else>
-              @messages.default_message;literal@
+              @messages.default_message;noi18n@
             </else>
         }
     }
@@ -159,10 +159,10 @@ if { !$default_locale_p } {
             label "$current_locale_label Message"
             display_template {
                 <if @messages.translation_deleted_p;literal@ true>
-                  <span style="color: red; font-style: italic;">DELETED</span> (@messages.translated_message;literal@)
+                  <span style="color: red; font-style: italic;">DELETED</span> (@messages.translated_message;noi18n@)
                 </if>
                 <else>
-                  <if @messages.translated_message@ not nil>@messages.translated_message;literal@</if>
+                  <if @messages.translated_message@ not nil>@messages.translated_message;noi18n@</if>
                   <else><span style="color: gray; font-style: italic;">Not translated</span></else>
                 </else>
             }
