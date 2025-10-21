@@ -776,7 +776,22 @@ namespace eval ::security::hash {
 
             @return hex encoded password hash (128 bytes)
         } {
+            lassign [split [ns_info patchlevel] .] major minor patchlevel
+            if {$major < 5 && $patchlevel < 31} {
+                ns_log notice "warning: this version of NaviServer returns results for flipped arguments." \
+                    "When upgrading to newer versions, scrypt-16384-1-8 will return compatible results"
+            }
             return [::ns_crypto::scrypt -secret $password -salt $salt -n 16384 -r 8 -p 1]
+        }
+        ad_proc -private scrypt-16384-1-8 {password salt} {
+
+            Compute a "password hash" using the scrypt password based
+            key derivation function (RFC 7914)- Flipped argument
+            version for bug compatibility.
+
+            @return hex encoded password hash (128 bytes)
+        } {
+            return [::ns_crypto::scrypt -secret $password -salt $salt -n 16384 -r 1 -p 8]
         }
     }
 
