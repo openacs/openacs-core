@@ -20,7 +20,7 @@ ad_form -name lookup -form {
 } -on_submit {
     if {[catch {
         # No substitution
-        set message [lang::message::lookup $locale $key]
+        set message [lang::message::lookup $locale $key "" "" 0]
     } errmsg]} {
         ad_return_complaint 1 $errmsg
         ad_log error $errmsg
