@@ -186,7 +186,7 @@ ad_form -extend -name message_form -form {
         # Call semantic and sanity checks on the key before registering.
         lang::message::check $locale $package_key $message_key $message
     } on error {errorMsg} {
-        template::form::set_error message message $errorMsg
+        template::form::set_error message_form message $errorMsg
         break
     }
 
