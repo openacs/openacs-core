@@ -276,12 +276,10 @@ db_foreach nodes_select {} {
 
     if {$object_id eq ""} {
         if {$new_application == $node_id} {
-
-            set action_type "new_app"
-            set action_form_part "[export_vars -form {expand:multiple root_id node_id new_package_id}] [apm_application_new_checkbox]"
-
             #Generate a package_id for double click protection
             set new_package_id [db_nextval acs_object_id_seq]
+            set action_type "new_app"
+            set action_form_part "[export_vars -form {expand:multiple root_id node_id new_package_id}] [apm_application_new_checkbox]"
         } else {
             set action_form_part "(none)"
         }
