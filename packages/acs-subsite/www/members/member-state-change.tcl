@@ -5,7 +5,7 @@ ad_page_contract {
     changes and notification emails.
     
 } {
-    {rel_id:naturalnum,multiple ""}
+    {rel_id:naturalnum ""}
     {member_state:notnull}
     {send_notification_mail:boolean,notnull 0}
 }
