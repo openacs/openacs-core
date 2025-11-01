@@ -14,9 +14,9 @@ ad_page_contract {
 }
 
 foreach id $package_id {
-    set id [site_node::get_node_id_from_object_id -object_id $id]
-    if {$id ne ""} {
-        lappend node_id $id
+    set nid [site_node::get_node_id_from_object_id -object_id $id]
+    if {$nid ne ""} {
+        lappend node_id $nid
         set p [lsearch $package_id $id]
         set package_id [lreplace $package_id $p $p]
     }
