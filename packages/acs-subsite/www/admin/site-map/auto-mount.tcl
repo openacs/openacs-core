@@ -17,7 +17,7 @@ ad_page_contract {
 subsite::auto_mount_application -node_id $node_id $package_key
 
 if {$return_url eq ""} {
-    set return_url [site_node::get_url -node_id]
+    set return_url [site_node::get_url -node_id $node_id]
 }
 
 ad_returnredirect $return_url
