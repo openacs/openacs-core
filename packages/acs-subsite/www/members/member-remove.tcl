@@ -16,7 +16,7 @@ permission::require_permission -object_id $group_id -privilege "admin"
 foreach id $user_id {
     group::remove_member \
         -group_id $group_id \
-        -user_id $user_id
+        -user_id $id
 }
 
 ad_returnredirect $return_url
