@@ -9,8 +9,8 @@
          from rel_segment_party_map
          where rel_type = 'admin_rel'
            and group_id = :group_id
-           and party_id = :user_id
-	
+           and party_id = :one_user_id
+
       </querytext>
 </fullquery>
 </queryset>
