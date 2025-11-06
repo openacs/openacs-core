@@ -1360,7 +1360,7 @@ ad_proc security::safe_tmpfile_p {
         return [expr {!$must_exist_p}]
     }
 
-    if {![ad_file owned $tmpfile]} {
+    if {$::tcl_platform(platform) ne "windows" && ![ad_file owned $tmpfile]} {
         #
         # File does not belong to us: not safe
         #
