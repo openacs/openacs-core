@@ -8,8 +8,8 @@ div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
 </style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="packages" leftLabel="Prev"
-			title="Chapter 11. Development
-Reference"
+			title="
+Chapter 11. Development Reference"
 			rightLink="request-processor" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
@@ -369,8 +369,8 @@ PL/SQL procedures defined above.</p></li><li class="listitem" style="list-style-
 <code class="computeroutput">acs_objects</code>. This means you
 should never use the fields in <code class="computeroutput">acs_objects</code> for application-specific
 purposes. This is especially true for the <code class="computeroutput">context_id</code> field.</p></li>
-</ul></div><div class="cvstag">($&zwnj;Id: objects.xml,v 1.10.2.1 2024/02/05
-15:35:06 gustafn Exp $)</div>
+</ul></div><div class="cvstag">($&zwnj;Id: objects.xml,v 1.12 2024/09/11 06:15:47
+gustafn Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

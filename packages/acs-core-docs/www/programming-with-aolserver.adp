@@ -8,8 +8,8 @@ div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
 </style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="object-identity" leftLabel="Prev"
-			title="Chapter 11. Development
-Reference"
+			title="
+Chapter 11. Development Reference"
 			rightLink="form-builder" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
@@ -204,9 +204,8 @@ clumsy to use, since Tcl doesn&#39;t have built-in syntactic
 support for them.</p><p>Consider for example a loop over the entries in a <code class="computeroutput">ns_set</code> as compared to an array:</p><pre class="programlisting">
 
 # ns_set variant
-set size [ns_set size $myset]
-for { set i 0 } { $i &lt; $size } { incr i } {
-    puts "[ns_set key $myset $i] = [ns_set value $myset $i]"
+foreach {name value} [ns_set array $myset] {
+    puts "$key = $value"
 }
 
 # array variant
@@ -234,8 +233,8 @@ lightweight, so memory consumption should not be a problem.
 However, when using <code class="computeroutput">ns_set get</code>
 to perform lookup by name, they perform a linear lookup, whereas
 arrays use a hash table, so <code class="computeroutput">ns_set</code>s are slower than arrays when the
-number of entries is large.</p><div class="cvstag">($&zwnj;Id: programming-with-aolserver.xml,v 1.10.2.1
-2019/08/09 20:04:23 gustafn Exp $)</div>
+number of entries is large.</p><div class="cvstag">($&zwnj;Id: programming-with-aolserver.xml,v 1.13
+2024/11/13 08:34:01 gustafn Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

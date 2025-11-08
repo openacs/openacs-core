@@ -8,8 +8,8 @@ div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
 </style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="rp-design" leftLabel="Prev"
-			title="Chapter 15. Kernel
-Documentation"
+			title="
+Chapter 15. Kernel Documentation"
 			rightLink="bootstrap-acs" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
@@ -30,7 +30,7 @@ at the top of the file:</p><pre class="programlisting">
 #
 # <span class="emphasis"><em>author&#39;s email address</em></span>, <span class="emphasis"><em>file creation date</em></span>
 #
-# <a class="ulink" href="http://www.loria.fr/~molli/cvs/doc/cvs_12.html#SEC93" target="_top">$&zwnj;Id: tcl-doc.xml,v 1.7.16.1 2023/07/10 08:36:09 gustafn Exp $</a>
+# <a class="ulink" href="http://www.loria.fr/~molli/cvs/doc/cvs_12.html#SEC93" target="_top">$&zwnj;Id: tcl-doc.xml,v 1.9 2024/09/11 06:15:47 gustafn Exp $</a>
 #
 </pre><p>In addition, the inputs expected by a Tcl page (i.e., form
 variables) would be enumerated in a call to <code class="computeroutput">ad_page_variables</code>, in effect, documenting
@@ -199,7 +199,7 @@ at the beginning of every Tcl page. Instead of:</p><pre class="programlisting">
 #
 # jsalz\@mit.edu, 7 Jun 2000
 #
-# $&zwnj;Id: tcl-doc.xml,v 1.7.16.1 2023/07/10 08:36:09 gustafn Exp $
+# $&zwnj;Id: tcl-doc.xml,v 1.9 2024/09/11 06:15:47 gustafn Exp $
 
 </pre><p>you&#39;ll now write:</p><pre class="programlisting">
 
@@ -226,8 +226,8 @@ indicating when the script was first created.</p></li><li class="listitem"><p>A 
 page&#39;s CVS identification string. Just use <code class="computeroutput">$&zwnj;Id: tcl-documentation.html,v 1.2 2000/09/19
 07:22:35 ron Exp $</code> when creating the file, and CVS will
 substitute an appropriate string when you check the file in.</p></li>
-</ul></div><div class="cvstag">($&zwnj;Id: tcl-doc.xml,v 1.7.16.1 2023/07/10
-08:36:09 gustafn Exp $)</div>
+</ul></div><div class="cvstag">($&zwnj;Id: tcl-doc.xml,v 1.9 2024/09/11 06:15:47
+gustafn Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

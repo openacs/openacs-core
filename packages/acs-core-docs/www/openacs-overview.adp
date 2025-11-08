@@ -8,8 +8,9 @@ div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
 </style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="general-documents" leftLabel="Prev"
-			title="Chapter 1. High level
-information: What is OpenACS?"
+			title="
+Chapter 1. High level information: What is
+OpenACS?"
 			rightLink="release-notes" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
@@ -48,8 +49,9 @@ help you in your endeavors with the system. Visit our <a class="ulink" href="htt
 feel free to <a class="ulink" href="http://openacs.org/forums/" target="_top">ask questions or provide feedback</a>.</p>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-			leftLink="general-documents" leftLabel="Prev" leftTitle="Chapter 1. High level
-information: What is OpenACS?"
+			leftLink="general-documents" leftLabel="Prev" leftTitle="
+Chapter 1. High level information: What is
+OpenACS?"
 			rightLink="release-notes" rightLabel="Next" rightTitle="OpenACS Release Notes"
 			homeLink="index" homeLabel="Home" 
 			upLink="general-documents" upLabel="Up"> 

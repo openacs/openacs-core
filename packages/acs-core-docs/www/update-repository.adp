@@ -8,8 +8,8 @@ div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
 </style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="releasing-openacs-core" leftLabel="Prev"
-			title="Chapter 16. Releasing
-OpenACS"
+			title="
+Chapter 16. Releasing OpenACS"
 			rightLink="releasing-package" rightLabel="Next">
 		    <div class="section">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
@@ -35,7 +35,8 @@ there.</p><p>This is automated on OpenACS.org by having a dedicated site just
 for building the repository, invoked with this shell script. Since
 the page circumvents security checks for ease of use, the entire
 site is limited to local requests. The script is called daily with
-a cron job.</p><pre class="programlisting">#!/bin/sh
+a cron job.</p><pre class="programlisting">
+#!/bin/sh
 #set -x
 
 STATUS=`wget --output-document - http://127.0.0.1:8002/build-repository.tcl | grep DONE | wc -l`
@@ -45,7 +46,8 @@ then
     rm -rf /web/openacs.org/www/repository.old
     mv /web/openacs.org/www/repository /web/openacs.org/www/repository.old
     cp -r /web/repository/www/repository /web/openacs.org/www/repository
-fi</pre>
+fi
+</pre>
 </li>
 </ol></div>
 </div>

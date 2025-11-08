@@ -8,8 +8,8 @@ div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
 </style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="update-repository" leftLabel="Prev"
-			title="Chapter 16. Releasing
-OpenACS"
+			title="
+Chapter 16. Releasing OpenACS"
 			rightLink="update-translations" rightLabel="Next">
 		    <div class="section">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">

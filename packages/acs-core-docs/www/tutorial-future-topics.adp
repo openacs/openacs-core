@@ -8,8 +8,8 @@ div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
 </style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="tutorial-second-database" leftLabel="Prev"
-			title="Chapter 10. Advanced
-Topics"
+			title="
+Chapter 10. Advanced Topics"
 			rightLink="dev-guide" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
@@ -26,8 +26,8 @@ Programming FAQ</a>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
 			leftLink="tutorial-second-database" leftLabel="Prev" leftTitle="Connect to a second database"
-			rightLink="dev-guide" rightLabel="Next" rightTitle="Chapter 11. Development
-Reference"
+			rightLink="dev-guide" rightLabel="Next" rightTitle="
+Chapter 11. Development Reference"
 			homeLink="index" homeLabel="Home" 
 			upLink="tutorial-advanced" upLabel="Up"> 
 		    

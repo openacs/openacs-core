@@ -8,7 +8,8 @@ div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
 </style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="install-origins" leftLabel="Prev"
-			title="Appendix C. Credits"
+			title="
+Appendix C. Credits"
 			rightLink="os-security" rightLabel="Next">
 		    <div class="section">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">

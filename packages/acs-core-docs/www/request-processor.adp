@@ -8,8 +8,8 @@ div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
 </style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="objects" leftLabel="Prev"
-			title="Chapter 11. Development
-Reference"
+			title="
+Chapter 11. Development Reference"
 			rightLink="db-api" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
@@ -110,8 +110,8 @@ package_key]</code></span></dt><dd><p>If the URL refers to a package instance, t
 name of the package.</p></dd><dt><span class="term"><code class="computeroutput">[ad_conn
 path_info]</code></span></dt><dd><p>In a .vuh file, path_info is the trailing part of the URL not
 matched by the .vuh file.</p></dd>
-</dl></div><div class="cvstag">($&zwnj;Id: rp.xml,v 1.13.2.3 2024/02/05 15:35:07
-gustafn Exp $)</div>
+</dl></div><div class="cvstag">($&zwnj;Id: rp.xml,v 1.15 2024/09/11 06:15:47 gustafn
+Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

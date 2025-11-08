@@ -8,8 +8,8 @@ div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
 </style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="analog-setup" leftLabel="Prev"
-			title="Chapter 6. Production
-Environments"
+			title="
+Chapter 6. Production Environments"
 			rightLink="maint-performance" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">

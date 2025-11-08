@@ -1,6 +1,8 @@
 
-<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Part IV. For OpenACS Platform Developers}</property>
-<property name="doc(title)">Part IV. For OpenACS Platform Developers</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Part IV. For OpenACS Platform
+Developers}</property>
+<property name="doc(title)">Part IV. For OpenACS Platform
+Developers</property>
 <master>
 <style>
 div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
@@ -12,8 +14,8 @@ div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
 			rightLink="kernel-doc" rightLabel="Next">
 		    <div class="part">
 <div class="titlepage"><div><div><h1 class="title">
-<a name="acs-plat-dev" id="acs-plat-dev"></a>Part IV. For OpenACS Platform
-Developers</h1></div></div></div><div class="toc">
+<a name="acs-plat-dev" id="acs-plat-dev"></a>Part IV. For OpenACS
+Platform Developers</h1></div></div></div><div class="toc">
 <p><strong>Table of Contents</strong></p><dl class="toc">
 <dt><span class="chapter"><a href="kernel-doc">15. Kernel
 Documentation</a></span></dt><dd><dl>
@@ -46,10 +48,11 @@ Update the translations</a></span></dt>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-			leftLink="cvs-tips" leftLabel="Prev" leftTitle="Appendix D. Using CVS with
-an OpenACS Site"
-			rightLink="kernel-doc" rightLabel="Next" rightTitle="Chapter 15. Kernel
-Documentation"
+			leftLink="cvs-tips" leftLabel="Prev" leftTitle="
+Appendix D. Using CVS with an OpenACS
+Site"
+			rightLink="kernel-doc" rightLabel="Next" rightTitle="
+Chapter 15. Kernel Documentation"
 			homeLink="index" homeLabel="Home" 
 			upLink="index" upLabel="Up"> 
 		    

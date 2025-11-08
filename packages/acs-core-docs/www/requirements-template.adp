@@ -8,8 +8,8 @@ div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
 </style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="filename" leftLabel="Prev"
-			title="Chapter 13. Documentation
-Standards"
+			title="
+Chapter 13. Documentation Standards"
 			rightLink="i18n" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
@@ -131,8 +131,8 @@ programmers.</em></span></p>
 <td>0.1</td><td>Created</td><td>8/21/2000</td><td>Josh Finkler, Audrey McLoghlin</td>
 </tr>
 </tbody>
-</table></div><div class="cvstag">($&zwnj;Id: requirements-template.xml,v 1.7.2.2
-2020/07/02 08:39:25 gustafn Exp $)</div>
+</table></div><div class="cvstag">($&zwnj;Id: requirements-template.xml,v 1.9
+2024/09/11 06:15:47 gustafn Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

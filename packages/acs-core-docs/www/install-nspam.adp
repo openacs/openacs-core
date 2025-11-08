@@ -8,8 +8,9 @@ div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
 </style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="analog-install" leftLabel="Prev"
-			title="Appendix B. Install
-additional supporting software"
+			title="
+Appendix B. Install additional supporting
+software"
 			rightLink="install-full-text-search-tsearch2" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">

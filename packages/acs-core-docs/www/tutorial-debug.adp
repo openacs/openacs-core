@@ -8,8 +8,8 @@ div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
 </style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="tutorial-pages" leftLabel="Prev"
-			title="Chapter 9. Development
-Tutorial"
+			title="
+Chapter 9. Development Tutorial"
 			rightLink="tutorial-advanced" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
@@ -20,26 +20,30 @@ OpenACS docs are written by the named authors, and may be edited by
 OpenACS documentation staff.</div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="id1370" id="id1370"></a>Debugging</h3></div></div></div><p>
-<strong>Developer Support. </strong>The Developer Support
-package adds several goodies: debug information for every page; the
-ability to log comments to the page instead of the error log, and
-fast user switching so that you can test pages as anonymous and as
-dummy users without logging in and out.</p><p>
-<strong>PostgreSQL. </strong>You can work directly with the
-database to do debugging steps like looking directly at tables and
-testing stored procedures. Start emacs. Type <strong class="userinput"><code>M-x sql-postgres</code></strong>. Press enter for
-server name and use <strong class="userinput"><code><span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span></code></strong>
+<strong>Developer Support. </strong>The Developer
+Support package adds several goodies: debug information for every
+page; the ability to log comments to the page instead of the error
+log, and fast user switching so that you can test pages as
+anonymous and as dummy users without logging in and out.</p><p>
+<strong>PostgreSQL. </strong>You can work directly
+with the database to do debugging steps like looking directly at
+tables and testing stored procedures. Start emacs. Type
+<strong class="userinput"><code>M-x sql-postgres</code></strong>.
+Press enter for server name and use <strong class="userinput"><code><span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span></code></strong>
 for database name. You can use C-(up arrow) and C-(down arrow) for
 command history.</p><p>Hint: "Parse error near *" usually means that an xql
 file wasn&#39;t recognized, because the Tcl file is choking on the
 *SQL* placeholder that it falls back on.</p><p><strong>Watching the server log. </strong></p><p>To set up real-time monitoring of the AOLserver error log,
 <span class="bold"><strong>type</strong></span>
-</p><pre class="screen">less /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/log/openacs-dev-error.log</pre><div class="literallayout"><p>
+</p><pre class="screen">
+less /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/log/openacs-dev-error.log
+</pre><div class="literallayout"><p>
 F to show new log entries in real time (like tail -f)<br>
 
 C-c to stop and F to start it up again. <br>
 
 G goes to the end.<br>
+
 ? searches backward <br>
 / searches forward. <br>
           </p></div>
@@ -85,11 +89,13 @@ to write automated tests. I&#39;ve done several tests by now and
 have found the process to be extremely easy and useful. It&#39;s a
 joy to work with automated testing once you get the hang of it.</p><p>Create the directory that will contain the test script and edit
 the script file. The directory location and filename are standards
-which are recognized by the automated testing package:</p><pre class="screen">[$OPENACS_SERVICE_NAME www]$<strong class="userinput"><code> mkdir /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/packages/myfirstpackage/tcl/test</code></strong>
+which are recognized by the automated testing package:</p><pre class="screen">
+[$OPENACS_SERVICE_NAME www]$<strong class="userinput"><code> mkdir /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/packages/myfirstpackage/tcl/test</code></strong>
 [$OPENACS_SERVICE_NAME www]$<strong class="userinput"><code> cd /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/packages/myfirstpackage/tcl/test</code></strong>
 [$OPENACS_SERVICE_NAME test]$ <strong class="userinput"><code>emacs myfirstpackages-procs.tcl</code></strong>
 </pre><p>Write the tests. This is obviously the big step :) The script
-should first call ad_library like any normal -procs.tcl file:</p><pre class="screen">ad_library {
+should first call ad_library like any normal -procs.tcl file:</p><pre class="screen">
+ad_library {
     ...
 }
 </pre><p>To create a test case you call <code class="computeroutput">
@@ -108,8 +114,10 @@ means that all the inserts, deletes, and updates will be rolled
 back once the test has been executed. A very useful feature.
 Instead of inserting bogus data like: <code class="computeroutput">set name "Simon"</code>, I tend to
 generate a random script in order avoid inserting a value
-that&#39;s already in the database:</p><pre class="screen">set name [ad_generate_random_string]
-</pre><p>Here&#39;s how the test case looks so far:</p><pre class="screen">aa_register_case mfp_basic_test {
+that&#39;s already in the database:</p><pre class="screen">
+set name [ad_generate_random_string]
+</pre><p>Here&#39;s how the test case looks so far:</p><pre class="screen">
+aa_register_case mfp_basic_test {
     My test
 } {
     aa_run_with_teardown \
@@ -125,7 +133,8 @@ from API-001, invoke mfp::note::get. Proc should return the
 specific word in the title."</p><pre class="programlisting">
       set name [ad_generate_random_string]
       set new_id [mfp::note::add -title $name]
-      aa_true "Note add succeeded" {$new_id ne ""}</pre><p>To test our simple case, we must load the test file into the
+      aa_true "Note add succeeded" {$new_id ne ""}
+</pre><p>To test our simple case, we must load the test file into the
 system (just as with the /tcl file in the basic tutorial, since the
 file didn&#39;t exist when the system started, the system
 doesn&#39;t know about it.) To make this file take effect, go to
@@ -157,7 +166,8 @@ integrating them.</p>
 </div><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
 <a name="id1373" id="id1373"></a>Example</h4></div></div></div><p>Now we can add the rest of the API tests, including a test with
-deliberately bad data. The complete test looks like:</p><pre class="programlisting">ad_library {
+deliberately bad data. The complete test looks like:</p><pre class="programlisting">
+ad_library {
     Test cases for my first package.
 }
 
@@ -309,14 +319,15 @@ aa_register_case \
 #    tcl-indent-level: 4
 #    indent-tabs-mode: nil
 # End:
-</pre><p>See also <a class="xref" href="automated-testing-best-practices" title="Automated Testing">the section called “Automated Testing”</a>.</p>
+</pre><p>See also <a class="xref" href="automated-testing-best-practices" title="Automated Testing">the section called
+&ldquo;Automated Testing&rdquo;</a>.</p>
 </div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
 			leftLink="tutorial-pages" leftLabel="Prev" leftTitle="Creating Web Pages"
-			rightLink="tutorial-advanced" rightLabel="Next" rightTitle="Chapter 10. Advanced
-Topics"
+			rightLink="tutorial-advanced" rightLabel="Next" rightTitle="
+Chapter 10. Advanced Topics"
 			homeLink="index" homeLabel="Home" 
 			upLink="tutorial" upLabel="Up"> 
 		    

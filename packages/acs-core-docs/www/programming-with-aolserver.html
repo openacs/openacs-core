@@ -178,9 +178,8 @@ use, since Tcl doesn't have built-in syntactic support for them.
 compared to an array:</p><pre class="programlisting">
 
 # ns_set variant
-set size [ns_set size $myset]
-for { set i 0 } { $i &lt; $size } { incr i } {
-    puts "[ns_set key $myset $i] = [ns_set value $myset $i]"
+foreach {name value} [ns_set array $myset] {
+    puts "$key = $value"
 }
 
 # array variant

@@ -8,8 +8,9 @@ div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
 </style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="openacs-overview" leftLabel="Prev"
-			title="Chapter 1. High level
-information: What is OpenACS?"
+			title="
+Chapter 1. High level information: What is
+OpenACS?"
 			rightLink="acs-admin" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
@@ -21,10 +22,12 @@ the major application packages (e.g., most of the ones used on
 OpenACS.org), and DotLRN 2.10.1. The release is probably the most
 secure and with the most tested code since ever.</p><p>Altogether, OpenACS 5.10.1 differs from OpenACS 5.10.0 by the
 following statistics</p><pre class="programlisting">
-        3038 files changed, 1291141 insertions(+), 354533 deletions(-)</pre><p>These changes were contributed by 8 committers (Antonio Pisano,
-Gustaf Neumann, Günter Ernst, Héctor Romojaro, Michael Aram, Raúl
-Rodríguez, Sebastian Scheder, and Thomas Renner) and additional 8
-patch/bugfix providers (Felix Mödritscher, Frank Bergmann, Franz
+        3038 files changed, 1291141 insertions(+), 354533 deletions(-)
+</pre><p>These changes were contributed by 8 committers (Antonio Pisano,
+Gustaf Neumann, GÃ¼nter Ernst, HÃ©ctor
+Romojaro, Michael Aram, RaÃºl RodrÃ­guez,
+Sebastian Scheder, and Thomas Renner) and additional 8 patch/bugfix
+providers (Felix MÃ¶dritscher, Frank Bergmann, Franz
 Penz, Josue Cardona, Keith Paskett, Markus Moser, Marty Israelsen,
 and Monika Andergassen) - all sorted by the first names.</p><p>In terms of changes, the release contains the largest amount of
 changes of the releases in the last 10 years. The packages with the
@@ -42,10 +45,11 @@ Features</h4></div></div></div><div class="itemizedlist"><ul class="itemizedlist
 <p>
 <span class="strong"><strong>Security and Privacy Posture
 Overview</strong></span>: As expressed as a wish from OpenACS users
-at the last OpenACS conference, a <span class="quote">“<span class="quote">Security and Privacy Posture Overview</span>”</span> was
-added that offers a quick overview of the state of the system and
-eases access to the parameters scattered over different packages in
-the system. The page offers:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle;">
+at the last OpenACS conference, a <span class="quote">&ldquo;<span class="quote">Security and
+Privacy Posture Overview</span>&rdquo;</span> was added that
+offers a quick overview of the state of the system and eases access
+to the parameters scattered over different packages in the system.
+The page offers:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle;">
 <li class="listitem">Quick overview</li><li class="listitem">Check of security and privacy relevant package
 parameters</li><li class="listitem">Permission and accessibility check of mounted
 packages</li><li class="listitem">Response header check</li><li class="listitem">External library check (CDN vs local usage,
@@ -56,18 +60,19 @@ site-wide-admin page (<code class="literal">/acs-admin</code>).</li>
 <span class="strong"><strong>Stronger Password Hashes for
 OpenACS</strong></span> (commit fe2bdb547, 8eee6a932, 52d2c997e,
 62d969c85): Introduction of new password hash functions alongside
-the pre-existing <span class="quote">“<span class="quote">salted-sha1</span>”</span>. The new algorithms are named
-<span class="quote">“<span class="quote">scram-sha-256</span>”</span>, <span class="quote">“<span class="quote">scrypt-16384-8-1</span>”</span>,
-<span class="quote">“<span class="quote">argon2-argon2-12288-3-1</span>”</span>, <span class="quote">“<span class="quote">argon2-rfc9106-high-mem</span>”</span>, and <span class="quote">“<span class="quote">argon2-rfc9106-low-mem</span>”</span>.
-These algorithms can be specified via the kernel package parameter
-<span class="quote">“<span class="quote">PasswordHashAlgorithm</span>”</span>. The algorithms
-require a recent version of NaviServer and a recent version of
-OpenSSL, which serves as a crypto library. This feature enhances
-security against brute-force attacks on password hashes (when db is
-compromised). Preferences of the password hash algorithms can be
-set via kernel package parameter <span class="quote">“<span class="quote">PasswordHashAlgorithm</span>”</span>, the first available
-algorithm is taken from the preference list, hash re-coding happens
-automatically at the next login.</p></li><li class="listitem"><p>
+the pre-existing <span class="quote">&ldquo;<span class="quote">salted-sha1</span>&rdquo;</span>. The new algorithms
+are named <span class="quote">&ldquo;<span class="quote">scram-sha-256</span>&rdquo;</span>, <span class="quote">&ldquo;<span class="quote">scrypt-16384-8-1</span>&rdquo;</span>, <span class="quote">&ldquo;<span class="quote">argon2-argon2-12288-3-1</span>&rdquo;</span>,
+<span class="quote">&ldquo;<span class="quote">argon2-rfc9106-high-mem</span>&rdquo;</span>, and
+<span class="quote">&ldquo;<span class="quote">argon2-rfc9106-low-mem</span>&rdquo;</span>. These
+algorithms can be specified via the kernel package parameter
+<span class="quote">&ldquo;<span class="quote">PasswordHashAlgorithm</span>&rdquo;</span>. The
+algorithms require a recent version of NaviServer and a recent
+version of OpenSSL, which serves as a crypto library. This feature
+enhances security against brute-force attacks on password hashes
+(when db is compromised). Preferences of the password hash
+algorithms can be set via kernel package parameter <span class="quote">&ldquo;<span class="quote">PasswordHashAlgorithm</span>&rdquo;</span>, the first
+available algorithm is taken from the preference list, hash
+re-coding happens automatically at the next login.</p></li><li class="listitem"><p>
 <span class="strong"><strong>Setting of CSP rules based on MIME
 types</strong></span> (commit 6bc253f1e, commit 94b8513ae). This is
 necessary to mitigate certain attacks on static SVG files uploaded
@@ -120,18 +125,18 @@ coherency (e.g. via <code class="literal">acs::clusterwide</code>)</p></li><li 
 <span class="strong"><strong>Support for Cloud Identity
 Providers</strong></span> (commit e506dee05, fd7af8d17, 06954d83b).
 Additional Identity providers can be added as secondary registries
-(e.g., MS Azure via oauth2), to support e.g. logins via the
-classical <code class="literal">register</code> page and via a
+(e.g., MS Azure via oauth2), to support e.g. logins via
+the classical <code class="literal">register</code> page and via a
 cloud registry (requires package xooauth for full
 functionality)</p></li><li class="listitem"><p>
 <span class="strong"><strong>Client-side double click
 prevention</strong></span>: This change makes it possible to
 provide a double click prevention for HTML elements via the CSS
-class <span class="quote">“<span class="quote">prevent-double-click</span>”</span>. The double click
-prevention deactivates a button or an anchor element after clicking
-for a short time (per default for 1s) and ignores in this time
-window further clicks. The time window can be specified via the
-data element oacs-timeout. (commit 5f2edeec2a9a831,
+class <span class="quote">&ldquo;<span class="quote">prevent-double-click</span>&rdquo;</span>. The double
+click prevention deactivates a button or an anchor element after
+clicking for a short time (per default for 1s) and ignores in this
+time window further clicks. The time window can be specified via
+the data element oacs-timeout. (commit 5f2edeec2a9a831,
 916d365aa11f2d)</p></li><li class="listitem"><p>
 <span class="strong"><strong>Cookie Namespaces</strong></span>
 (commit ce1573ed8): Important, when multiple OpenACS instances are
@@ -251,9 +256,9 @@ Postgres SQL. Target version of Oracle could be 12.*, as Extended
 support ends in 2022 (see <a class="ulink" href="https://www.oracle.com/us/support/library/lifetime-support-technology-069183.pdf" target="_top">https://www.oracle.com/us/support/library/lifetime-support-technology-069183.pdf</a>).
 This change implies:
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: square;">
-<li class="listitem">change <span class="quote">“<span class="quote">limit ... rownum ...</span>”</span> to standard
-<span class="quote">“<span class="quote">fetch first
-...</span>”</span>
+<li class="listitem">change <span class="quote">&ldquo;<span class="quote">limit ... rownum
+...</span>&rdquo;</span> to standard <span class="quote">&ldquo;<span class="quote">fetch first
+...</span>&rdquo;</span>
 </li><li class="listitem">use Postgres schemas where available for
 stored procedures so that they can be invoked with the same Oracle
 idiom</li>
@@ -296,12 +301,13 @@ in the test that are supposed to fail)</li>
 </ul></div>
 </div><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="version-requirements" id="version-requirements"></a>Version requirements</h4></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
-<li class="listitem">Require NaviServer (i.e. drop AOLserver
-support). Rationale: AOLserver cannot be compiled with the required
-modules with recent Tcl versions. Trying to backport NaviServer
-compatibility functions seems to be an overkill for the OpenACS
-project.</li><li class="listitem">Bootstrap 3 reached EOL in 2019, Bootstrap 4
+<a name="version-requirements" id="version-requirements"></a>Minimal Version Requirements</h4></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
+<li class="listitem">Require NaviServer (i.e. drop
+AOLserver support). Rationale: AOLserver cannot be compiled with
+the required modules with recent Tcl versions. Trying to backport
+NaviServer compatibility functions for all new features is an
+overkill for the OpenACS project and just a source for
+problems.</li><li class="listitem">Bootstrap 3 reached EOL in 2019, Bootstrap 4
 had EOL 2022, so we should migrate to Bootstrap 5 (details:
 <a class="ulink" href="https://github.com/twbs/release" target="_top">https://github.com/twbs/release</a>)</li><li class="listitem">Require Tcl 8.6.2, XOTcl 2.1, PostgreSQL 12
 (PostgreSQL 11 EOL: November 23), tdom 0.9</li><li class="listitem">Support for fresh installations on Oracle 19c
@@ -370,8 +376,8 @@ connection context is not available (772449b4, a049d806)</li>
 <span class="strong"><strong>Security
 Improvements</strong></span><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle;">
 <li class="listitem">Improve/harden input validation (many
-commits)</li><li class="listitem">Don’t expose immutable values as hidden
-formfields (03e3f2e7, 31955520)</li>
+commits)</li><li class="listitem">Don&rdquo;™t expose immutable
+values as hidden formfields (03e3f2e7, 31955520)</li>
 </ul></div>
 </li><li class="listitem">
 <span class="strong"><strong>Code
@@ -682,8 +688,7 @@ Fixes</h5></div></div></div><div class="itemizedlist"><ul class="itemizedlist" s
 <li class="listitem">Make <code class="literal">fs::get_file_package_id</code> more robust to cases where
 the package_id is not set on the object itself (bbbbf93b)</li><li class="listitem">Fixes for Oracle compatibility (9a5b9cf4,
 0d4331cb, de75d648)</li><li class="listitem">Fix regression when the files list is rendered
-in <span class="quote">“<span class="quote">list</span>”</span>
-format (d0eecbe4)</li>
+in <span class="quote">&ldquo;<span class="quote">list</span>&rdquo;</span> format (d0eecbe4)</li>
 </ul></div>
 </div><div class="sect4">
 <div class="titlepage"><div><div><h5 class="title">
@@ -783,7 +788,8 @@ Improvements</strong></span><div class="itemizedlist"><ul class="itemizedlist" s
 <span class="strong"><strong>Code
 Refactoring</strong></span><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle;">
 <li class="listitem">Pass properties in adp consistently with
-\@….;literal\@ best practice (dc2b6f8f, 44d3483e)</li><li class="listitem">Replace deprecated <code class="literal">template::util::is_true</code> with inline string idiom
+\@&rdquo;¦.;literal\@ best practice (dc2b6f8f,
+44d3483e)</li><li class="listitem">Replace deprecated <code class="literal">template::util::is_true</code> with inline string idiom
 (88c779b5)</li><li class="listitem">Replace handcrafted HTML icons with new
 adp:icon adp tag (1b6adbcb, 0cf9dfe4)</li>
 </ul></div>
@@ -895,9 +901,10 @@ Refactoring</strong></span><div class="itemizedlist"><ul class="itemizedlist" st
 <li class="listitem">Replace deprecated api (various commits)</li><li class="listitem">Modernize javascript idioms (various
 commits)</li><li class="listitem">Maintain an adequate look and feel using both
 Bootstrap5 and Bootstrap3 (70a0f52c, f07dfc06, e913ee2b, 54d4f3cc
-and others)</li><li class="listitem">Drop custom implementation of <span class="quote">“<span class="quote">lazy loading</span>”</span> for the
-proctoring display UI and rely on modern native browser features
-instead (commit 90d2404c)</li>
+and others)</li><li class="listitem">Drop custom implementation of <span class="quote">&ldquo;<span class="quote">lazy
+loading</span>&rdquo;</span> for the proctoring display UI
+and rely on modern native browser features instead (commit
+90d2404c)</li>
 </ul></div>
 </li><li class="listitem">
 <span class="strong"><strong>Usability</strong></span><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle;"><li class="listitem">Improve usability of the proctoring display UI
@@ -928,10 +935,10 @@ Tcl sorts (commit 6effe16)</li>
 Fixes</h5></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem">Avoiding double quoting (commit 08386db).</li><li class="listitem">Fixed potential memory leaks
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle;">
-<li class="listitem">Free explicitly answer <code class="literal">ns_set</code> in database <span class="quote">“<span class="quote">sets</span>”</span> method (commit
+<li class="listitem">Free explicitly answer <code class="literal">ns_set</code> in database <span class="quote">&ldquo;<span class="quote">sets</span>&rdquo;</span> method (commit
 158a831)</li><li class="listitem">Free <code class="literal">ns_set</code>
-storage more eager (when e.g. large queries are used in longer
-loops) (commit 3d6b05a)</li>
+storage more eager (when e.g. large queries are used in
+longer loops) (commit 3d6b05a)</li>
 </ul></div>
 </li><li class="listitem">Compatibility Fixes for Oracle 19c (commit
 de4a9a5, 88f8521, 1408e2b)</li>
@@ -1068,7 +1075,7 @@ obsolete and commented code (multiple commits).</li><li class="listitem">Extende
 methods (commit b0a9b875, commit fc1e48d1, commit 2c490318).</li><li class="listitem">Logging of deprecated usages unified under
 <code class="literal">ad_log_deprecated</code> (commit
 56d4b9d5).</li><li class="listitem">Removal of features and scripts no longer in
-use (commit 726cc0dd, commit c8100365).</li><li class="listitem">Added <span class="quote">“<span class="quote">\@see</span>”</span> to deprecated proc (commit
+use (commit 726cc0dd, commit c8100365).</li><li class="listitem">Added <span class="quote">&ldquo;<span class="quote">\@see</span>&rdquo;</span> to deprecated proc (commit
 bb2fa23a).</li><li class="listitem">Got rid of legacy message key <code class="literal">menu-Clipboard-Copy</code> (commit ba901036).</li>
 </ul></div>
 </div>
@@ -1131,7 +1138,8 @@ or by end time in long-calls listing (Commit 7c9ffe9).</li>
 </div><div class="sect4">
 <div class="titlepage"><div><div><h5 class="title">
 <a name="configuration-changes-3" id="configuration-changes-3"></a>Configuration Changes</h5></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;"><li class="listitem">Added configurability to watchdog with
-parameters like <span class="quote">“<span class="quote">-maxWaiting</span>”</span> and <span class="quote">“<span class="quote">-maxRunning</span>”</span> (Commit
+parameters like <span class="quote">&ldquo;<span class="quote">-maxWaiting</span>&rdquo;</span>
+and <span class="quote">&ldquo;<span class="quote">-maxRunning</span>&rdquo;</span> (Commit
 60ba4e3).</li></ul></div>
 </div><div class="sect4">
 <div class="titlepage"><div><div><h5 class="title">
@@ -1193,12 +1201,14 @@ namespaces for OpenACS such as <code class="computeroutput">urn:ad:css:*</code> 
 </li><li class="listitem">
 <p>The registered URN can be used like classical URL after
 registration.</p><p>Example consumer:</p><pre class="programlisting">
-   template::head::add_javascript -src urn:ad:js:jquery</pre>
+   template::head::add_javascript -src urn:ad:js:jquery
+</pre>
 </li><li class="listitem">
 <p>Declare composite files: Provide an interface to define that a
 .js file or a .css file contains multiple other .js/.css files in
 order to reduce the number of requests.</p><pre class="programlisting">
-   template::head::includes -container urn:js::style.js -parts {urn:ad:js:jquery ...}</pre>
+   template::head::includes -container urn:js::style.js -parts {urn:ad:js:jquery ...}
+</pre>
 </li>
 </ul></div>
 </li><li class="listitem"><p>Improved API browser: Visualization for code dependencies (which
@@ -1492,8 +1502,8 @@ officially supported by Oracle (See <a class="ulink" href="http://www.oracle.com
 </li><li class="listitem">
 <p>New Packages:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: square;">
 <li class="listitem"><p>cookie-consent: alerting users about the use of cookies on a
-website</p></li><li class="listitem"><p>boomerang: performance of your website from your end user’s
-point of view</p></li><li class="listitem"><p>xooauth: OAuth implementation, including LTI (Learning Tools
+website</p></li><li class="listitem"><p>boomerang: performance of your website from your end
+user&rdquo;™s point of view</p></li><li class="listitem"><p>xooauth: OAuth implementation, including LTI (Learning Tools
 Interoperability)</p></li><li class="listitem"><p>dotlrn-bootstrap3-theme: Bootstrap 3 theme for DotLRN</p></li><li class="listitem"><p>xowf-monaco-plugin: Integration of Monaco editor with for code
 exercise types in xowf</p></li><li class="listitem"><p>proctoring-support: utilities and user interfaces to implement
 proctoring of the user session, mainly intended in the context of
@@ -1512,13 +1522,14 @@ implementation for xowf</p></li>
 following statistics</p><pre class="programlisting">
  3445 files changed, 215464 insertions(+), 193642 deletions(-) 
 </pre><p>contributed by 7 committers (Antonio Pisano, Gustaf Neumann,
-Günter Ernst, Hector Romojaro, Michael Aram, Stefan Sobernig,
-Thomas Renner) and additional 13 patch/bugfix providers (Felix
-Mödritscher, Florian Mosböck, Frank Bergmann, Franz Penz, Hanifa
-Hasan, Keith Paskett, Markus Moser, Maurizio Martignano, Monika
-Andergassen, Nathan Coulter, Rainer Bachleitner, Stephan
-Adelsberger, Tony Kirkham). All packages of the release were tested
-with PostgreSQL 13.* and Tcl 8.6.*.</p><p>For more details, consult the <a class="ulink" href="http://openacs.org/changelogs/ChangeLog-5.10.0" target="_top">raw
+GÃ¼nter Ernst, Hector Romojaro, Michael Aram, Stefan
+Sobernig, Thomas Renner) and additional 13 patch/bugfix providers
+(Felix MÃ¶dritscher, Florian MosbÃ¶ck,
+Frank Bergmann, Franz Penz, Hanifa Hasan, Keith Paskett, Markus
+Moser, Maurizio Martignano, Monika Andergassen, Nathan Coulter,
+Rainer Bachleitner, Stephan Adelsberger, Tony Kirkham). All
+packages of the release were tested with PostgreSQL 13.* and Tcl
+8.6.*.</p><p>For more details, consult the <a class="ulink" href="http://openacs.org/changelogs/ChangeLog-5.10.0" target="_top">raw
 ChangeLog</a>.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
@@ -1929,12 +1940,13 @@ message are not issued every time a user enters/exits a chat-room
 </ul></div><p>Altogether, OpenACS 5.9.1 differs from OpenACS 5.9.1 by the
 following statistics</p><pre class="programlisting">
        3548 files changed, 113292 insertions(+), 90507 deletions(-)
-    </pre><p>contributed by 5 committers (Michael Aram, Gustaf Neumann,
+    
+</pre><p>contributed by 5 committers (Michael Aram, Gustaf Neumann,
 Antonio Pisano, Hector Romojaro, Thomas Renner) and 8 patch/bugfix
-providers (Frank Bergmann, Günter Ernst, Brian Fenton, Felix
-Mödritscher, Marcus Moser, Franz Penz, Stefan Sobernig, Michael
-Steigman). All packages of the release were tested with PostgreSQL
-9.6.* and Tcl 8.5.*.</p><p>For more details, consult the <a class="ulink" href="" target="_top">raw ChangeLog</a>.</p>
+providers (Frank Bergmann, GÃ¼nter Ernst, Brian
+Fenton, Felix MÃ¶dritscher, Marcus Moser, Franz Penz,
+Stefan Sobernig, Michael Steigman). All packages of the release
+were tested with PostgreSQL 9.6.* and Tcl 8.5.*.</p><p>For more details, consult the <a class="ulink" href="" target="_top">raw ChangeLog</a>.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="release-notes-5-9-0" id="release-notes-5-9-0"></a>Release 5.9.0</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
@@ -2032,12 +2044,13 @@ forums, news, notifications, xowiki.</p></li></ul></div>
 </ul></div><p>Altogether, OpenACS 5.9.0 differs from OpenACS 5.8.1 by the
 following statistics</p><pre class="programlisting">
       3658 files changed, 120800 insertions(+), 97617 deletions(-)
-    </pre><p>contributed by 4 committers (Michael Aram, Victor Guerra, Gustaf
+    
+</pre><p>contributed by 4 committers (Michael Aram, Victor Guerra, Gustaf
 Neumann, Antonio Pisano) and patch/bugfix providers (Frank
-Bergmann, Andrew Helsley, Felix Mödritscher, Markus Moser, Franz
-Penz, Thomas Renner). These are significantly more changes as the
-differences in the last releases. All packages of the release were
-tested with PostgreSQL 9.4.* and Tcl 8.5.*.</p><p>For more details, consult the <a class="ulink" href="" target="_top">raw ChangeLog</a>.</p>
+Bergmann, Andrew Helsley, Felix MÃ¶dritscher, Markus
+Moser, Franz Penz, Thomas Renner). These are significantly more
+changes as the differences in the last releases. All packages of
+the release were tested with PostgreSQL 9.4.* and Tcl 8.5.*.</p><p>For more details, consult the <a class="ulink" href="" target="_top">raw ChangeLog</a>.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="release-notes-5-8-1" id="release-notes-5-8-1"></a>Release 5.8.1</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
@@ -2274,10 +2287,11 @@ automated testing, which is not comprehensive. This release
 contains work done on the translation server
 http://translate.openacs.org through 7 Nov 2003.</p><p>Please report bugs using our <a class="ulink" href="http://openacs.org/bugtracker/openacs/" target="_top">Bug
 Tracker</a> at the <a class="ulink" href="http://openacs.org/" target="_top">OpenACS website</a>.</p><p>You may want to begin by reading our installation documentation
-for <a class="xref" href="unix-installation" title="a Unix-like system">the section called “a Unix-like
-system”</a>. Note that the Windows documentation is not current for
-OpenACS 5.9.0, but an alternative is to use John Sequeira&#39;s
-<a class="ulink" href="http://www.jsequeira.com/oasis/about.html" target="_top">Oasis VM project</a>.</p><p>After installation, the full documentation set can be found by
+for <a class="xref" href="unix-installation" title="a Unix-like system">the section called &ldquo;a
+Unix-like system&rdquo;</a>. Note that the Windows
+documentation is not current for OpenACS 5.9.0, but an alternative
+is to use John Sequeira&#39;s <a class="ulink" href="http://www.jsequeira.com/oasis/about.html" target="_top">Oasis VM
+project</a>.</p><p>After installation, the full documentation set can be found by
 visiting <code class="filename">http://yourserver/doc</code>.</p><p>New features in this release:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>Internationalization support. A message catalog to store
 translated text, localization of dates, number formatting, timezone
@@ -2326,8 +2340,8 @@ styles still using these mechanisms will break.</p></li><li class="listitem"><p>
 turned off by default via the acs-kernel parameter ExcludedFiles in
 section request-processor (The variable provides a string match
 glob list of files and is defaulted to "*/CVS/* *~")</p></li>
-</ul></div><div class="cvstag">($&zwnj;Id: release-notes.xml,v 1.39.2.9 2024/09/02
-09:31:40 gustafn Exp $)</div>
+</ul></div><div class="cvstag">($&zwnj;Id: release-notes.xml,v 1.41 2024/09/11
+06:15:47 gustafn Exp $)</div>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="id1338" id="id1338"></a>Release

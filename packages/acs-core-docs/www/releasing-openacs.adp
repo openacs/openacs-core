@@ -1,6 +1,8 @@
 
-<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Chapter 16. Releasing OpenACS}</property>
-<property name="doc(title)">Chapter 16. Releasing OpenACS</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Chapter 16. Releasing
+OpenACS}</property>
+<property name="doc(title)">Chapter 16. Releasing
+OpenACS</property>
 <master>
 <style>
 div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
@@ -8,8 +10,8 @@ div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
 </style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="ext-auth-requirements" leftLabel="Prev"
-			title="Part IV. For OpenACS
-Platform Developers"
+			title="Part IV. For
+OpenACS Platform Developers"
 			rightLink="releasing-openacs-core" rightLabel="Next">
 		    <div class="chapter">
 <div class="titlepage"><div><div><h2 class="title">

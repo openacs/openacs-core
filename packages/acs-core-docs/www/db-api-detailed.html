@@ -350,8 +350,8 @@ the values are the column values. For example:
 db_foreach users_select "select first_names, last_name from users" -column_set columns {
     # Now $columns is an ns_set.
     doc_body_append "&lt;li&gt;"
-    for { set i 0 } { $i &lt; [ns_set size $columns] } { incr i } {
-        doc_body_append "[ns_set key $columns $i] is [ns_set value $columns $i]. \n"
+    foreach {key value} [ns_set array $columns] {
+        doc_body_append "$key is $value. \n"
     }
 }
 

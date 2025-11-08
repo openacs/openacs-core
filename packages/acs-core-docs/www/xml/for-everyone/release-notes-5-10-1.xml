@@ -582,14 +582,14 @@
     </itemizedlist>
   </sect3>
   <sect3 xml:id="version-requirements">
-    <title>Version requirements</title>
+    <title>Minimal Version Requirements</title>
     <itemizedlist>
       <listitem>
           Require NaviServer (i.e.&nbsp;drop AOLserver support). Rationale:
           AOLserver cannot be compiled with the required modules with
           recent Tcl versions. Trying to backport NaviServer
-          compatibility functions seems to be an overkill for the
-          OpenACS project.
+          compatibility functions for all new features is an overkill for the
+          OpenACS project and just a source for problems.
       </listitem>
       <listitem>
           Bootstrap 3 reached EOL in 2019, Bootstrap 4 had EOL 2022, so

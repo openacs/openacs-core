@@ -1,6 +1,8 @@
 
-<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Appendix A. Install Red Hat 8/9}</property>
-<property name="doc(title)">Appendix A. Install Red Hat 8/9</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Appendix A. Install Red Hat
+8/9}</property>
+<property name="doc(title)">Appendix A. Install Red Hat
+8/9</property>
 <master>
 <style>
 div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
@@ -13,7 +15,8 @@ Part II. Administrator&#39;s Guide"
 			rightLink="install-more-software" rightLabel="Next">
 		    <div class="appendix">
 <div class="titlepage"><div><div><h2 class="title">
-<a name="install-redhat" id="install-redhat"></a>Appendix A. Install Red Hat 8/9</h2></div></div></div><div class="authorblurb">
+<a name="install-redhat" id="install-redhat"></a>Appendix A. Install
+Red Hat 8/9</h2></div></div></div><div class="authorblurb">
 <p>by <a class="ulink" href="mailto:joel\@aufrecht.org" target="_top">Joel Aufrecht</a>
 </p>
 OpenACS docs are written by the named authors, and may be edited by
@@ -181,9 +184,11 @@ create a boot disk</span></span></code> and click <code class="computeroutput"><
 <u><span class="accel">E</span></u>xit</span></span></code>, remove the CD, and
 watch the computer reboot.</p></li><li class="listitem">
 <p>After it finishes rebooting and shows the login prompt, log
-in:</p><pre class="screen">yourserver login: <strong class="userinput"><code>root</code></strong>
+in:</p><pre class="screen">
+yourserver login: <strong class="userinput"><code>root</code></strong>
 Password:
-[root root]#</pre>
+[root root]#
+</pre>
 </li><li class="listitem"><p>Install any security patches. For example, insert your CD with
 patches, mount it with <code class="computeroutput">mount
 /dev/cdrom</code>, then <code class="computeroutput">cd
@@ -237,7 +242,8 @@ service level. We&#39;ll use this system for PostgreSQL, but
 we&#39;ll use daemontools to perform a similar function for
 AOLserver. (The reason for these discrepancies is that, while
 daemontools is better, it&#39;s a pain in the ass to deal with and
-nobody&#39;s had any trouble leaving PostgreSQL the way it is.)</p><pre class="screen">[root root]# <strong class="userinput"><code>service pcmcia stop</code></strong>
+nobody&#39;s had any trouble leaving PostgreSQL the way it is.)</p><pre class="screen">
+[root root]# <strong class="userinput"><code>service pcmcia stop</code></strong>
 [root root]# <strong class="userinput"><code>service netfs stop</code></strong>
 [root root]# <strong class="userinput"><code>chkconfig --del pcmcia</code></strong>
 [root root]# <strong class="userinput"><code>chkconfig --del netfs</code></strong>
@@ -250,7 +256,8 @@ chkconfig --del netfs</span></span>
 </li><li class="listitem"><p>Plug in the network cable.</p></li><li class="listitem">
 <p>Verify that you have connectivity by going to another computer
 and ssh&#39;ing to <span class="replaceable"><span class="replaceable">yourserver</span></span>, logging in as remadmin, and
-promoting yourself to root:</p><pre class="screen">[joeuser\@someotherserver]$ <strong class="userinput"><code> ssh <span class="replaceable"><span class="replaceable">remadmin\@yourserver.test</span></span>
+promoting yourself to root:</p><pre class="screen">
+[joeuser\@someotherserver]$ <strong class="userinput"><code> ssh <span class="replaceable"><span class="replaceable">remadmin\@yourserver.test</span></span>
 </code></strong>
 The authenticity of host 'yourserver.test (1.2.3.4)' can&#39;t be established.
 DSA key fingerprint is 10:b9:b6:10:79:46:14:c8:2d:65:ae:c1:61:4b:a5:a5.
@@ -260,7 +267,8 @@ Password:
 Last login: Mon Mar  3 21:15:27 2003 from host-12-01.dsl-sea.seanet.com
 [remadmin remadmin]$ <strong class="userinput"><code>su -</code></strong>
 Password: 
-[root root]#</pre>
+[root root]#
+</pre>
 </li><li class="listitem">
 <p>If you didn&#39;t burn a CD of patches and use it, can still
 download and install the necessary patches. Here&#39;s how to do it
@@ -269,7 +277,8 @@ packages.</p><p>Upgrade the kernel to fix a security hole. The default Red Hat
 8.0 system kernel (2.4.18-14, which you can check with
 <strong class="userinput"><code>uname -a</code></strong>) has
 several <a class="ulink" href="https://rhn.redhat.com/errata/RHSA-2003-098.html" target="_top">security problems</a>. Download the new kernel, install it,
-and reboot.</p><pre class="screen">[root root]# <strong class="userinput"><code>cd /var/tmp</code></strong>
+and reboot.</p><pre class="screen">
+[root root]# <strong class="userinput"><code>cd /var/tmp</code></strong>
 [root tmp]# <strong class="userinput"><code>wget http://updates.redhat.com/7.1/en/os/i686/kernel-2.4.18-27.7.x.i686.rpm</code></strong>
 --20:39:00--  http://updates.redhat.com/7.1/en/os/i686/kernel-2.4.18-27.7.x.i686.rpm
            =&gt; `kernel-2.4.18-27.7.x.i686.rpm'
@@ -302,8 +311,9 @@ reboot</span></span>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
 			leftLink="backups-with-cvs" leftLabel="Prev" leftTitle="Using CVS for backup-recovery"
-			rightLink="install-more-software" rightLabel="Next" rightTitle="Appendix B. Install
-additional supporting software"
+			rightLink="install-more-software" rightLabel="Next" rightTitle="
+Appendix B. Install additional supporting
+software"
 			homeLink="index" homeLabel="Home" 
 			upLink="acs-admin" upLabel="Up"> 
 		    

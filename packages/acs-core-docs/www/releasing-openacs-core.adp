@@ -8,16 +8,17 @@ div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
 </style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="releasing-openacs" leftLabel="Prev"
-			title="Chapter 16. Releasing
-OpenACS"
+			title="
+Chapter 16. Releasing OpenACS"
 			rightLink="update-repository" rightLabel="Next">
 		    <div class="section">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="releasing-openacs-core" id="releasing-openacs-core"></a>OpenACS
 Core and .LRN</h2></div></div></div><div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem"><p>
-<strong>Update Translations. </strong><a class="xref" href="update-translations" title="How to Update the translations">the section called “How to Update
-the translations”</a>
+<strong>Update Translations. </strong><a class="xref" href="update-translations" title="How to Update the translations">the section called
+&ldquo;How to Update the
+translations&rdquo;</a>
 </p></li><li class="listitem">
 <p>
 <strong>Rebuild the Changelog. </strong>Rebuild the
@@ -46,15 +47,18 @@ translations.</span></em></p><div class="orderedlist"><ol class="orderedlist" ty
 /var/lib/aolserver/$OPENACS_SERVICE_NAME/packages/acs-core-docs/www/xml/variables.ent
 with the new version number.</p></li><li class="listitem"><p>Add new section in
 /var/lib/aolserver/$OPENACS_SERVICE_NAME/packages/acs-core-docs/www/xml/for-everyone/release-notes.xml</p></li><li class="listitem">
-<p>Regenerate all HTML docs</p><pre class="screen">cd /var/lib/aolserver/$OPENACS_SERVICE_NAME/packages/acs-core-docs/www/xml
-make</pre>
+<p>Regenerate all HTML docs</p><pre class="screen">
+cd /var/lib/aolserver/$OPENACS_SERVICE_NAME/packages/acs-core-docs/www/xml
+make
+</pre>
 </li><li class="listitem"><p>Update /var/lib/aolserver/$OPENACS_SERVICE_NAME/readme.txt with
 the new version number</p></li><li class="listitem">
 <p>Update version number and release date in all of the core
 packages. Use
 /var/lib/aolserver/$OPENACS_SERVICE_NAME/packages/acs-core-docs/www/files/update-info.sh
 with the new version number and the release date as arguments. Run
-it from /var/lib/aolserver/$OPENACS_SERVICE_NAME/packages:</p><pre class="screen">cd /var/lib/aolserver/$OPENACS_SERVICE_NAME/packages
+it from /var/lib/aolserver/$OPENACS_SERVICE_NAME/packages:</p><pre class="screen">
+cd /var/lib/aolserver/$OPENACS_SERVICE_NAME/packages
        ./acs-core-docs/www/files/update-info <span class="replaceable"><span class="replaceable">5.2.1</span></span><span class="replaceable"><span class="replaceable">2006-01-16</span></span>
 </pre>
 </li><li class="listitem"><p>Install a new site using the modified code and verify that the
@@ -62,8 +66,8 @@ automated tests pass.</p></li><li class="listitem"><p>Commit changes to CVS</p><
 </ol></div>
 </li><li class="listitem">
 <p>
-<strong>Tag the files in CVS. </strong>The steps to this
-point should have ensured that the head of the current branch
+<strong>Tag the files in CVS. </strong>The steps to
+this point should have ensured that the head of the current branch
 contains the full set of code to release. Now we need to tag it as
 the code to be released.</p><div class="orderedlist"><ol class="orderedlist" type="a">
 <li class="listitem">
@@ -95,7 +99,8 @@ branch until and unless new feature work is actively blocked by the
 feature freeze. Branching is almost the same as tagging, except for
 the flag and slightly different tag nomenclature. To see the list
 of old branches, <code class="computeroutput">cvs status -v
-somefile</code>.</p><pre class="screen">cvs tag -b <span class="replaceable"><span class="replaceable">oacs-5-0</span></span>
+somefile</code>.</p><pre class="screen">
+cvs tag -b <span class="replaceable"><span class="replaceable">oacs-5-0</span></span>
 </pre>
 </div><p>If doing .LRN: Since the .LRN packages aren&#39;t all in one
 module, we iterate through all of the modules. Log in first (cvs
@@ -162,30 +167,33 @@ tar cz -f <span class="replaceable"><span class="replaceable">dotlrn-2.0.0a1.tar
 </li>
 </ul></div>
 </li><li class="listitem"><p>
-<strong>Test the new tarball(s). </strong>Download the
-tarballs just created and install them and make sure everything
+<strong>Test the new tarball(s). </strong>Download
+the tarballs just created and install them and make sure everything
 looks okay and that automated tests pass.</p></li><li class="listitem">
 <p>
-<strong>Update Web site. </strong>Update the different
-places on OpenACS.org where we track status.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
+<strong>Update Web site. </strong>Update the
+different places on OpenACS.org where we track status.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>Release Status for the current version - something like
 http://openacs.org/projects/openacs/5.0/milestones</p></li><li class="listitem"><p>Home page of openacs.org</p></li><li class="listitem"><p>Post a new news item</p></li>
 </ul></div>
 </li><li class="listitem">
 <p>
-<strong>Clean Up. </strong>Clean up after yourself.</p><pre class="screen"><span class="action"><span class="action">cd /var/tmp
+<strong>Clean Up. </strong>Clean up after
+yourself.</p><pre class="screen"><span class="action"><span class="action">cd /var/tmp
 rm -rf tarball dotlrn-tarball dotlrn-packages openacs-<span class="replaceable"><span class="replaceable">5.0.0a1</span></span>
 rm -rf /var/tmp/openacs-4</span></span></pre>
 </li>
 </ol></div><p>Here is a shell script that automates packaging the tarball
 (it&#39;s a bit out of date with the new steps - I&#39;ve been
 doing everything manually or with little throwaway scripts as
-detailed above until the process is stabilized).</p><pre class="programlisting">release script missing</pre><div class="cvstag">($&zwnj;Id: releasing-openacs.xml,v 1.24.2.1
-2020/07/02 08:39:25 gustafn Exp $)</div>
+detailed above until the process is stabilized).</p><pre class="programlisting">
+release script missing
+</pre><div class="cvstag">($&zwnj;Id: releasing-openacs.xml,v 1.26 2024/09/11
+06:15:47 gustafn Exp $)</div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-			leftLink="releasing-openacs" leftLabel="Prev" leftTitle="Chapter 16. Releasing
-OpenACS"
+			leftLink="releasing-openacs" leftLabel="Prev" leftTitle="
+Chapter 16. Releasing OpenACS"
 			rightLink="update-repository" rightLabel="Next" rightTitle="How to Update the OpenACS.org
 repository"
 			homeLink="index" homeLabel="Home" 

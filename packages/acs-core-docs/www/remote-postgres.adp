@@ -8,8 +8,8 @@ div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
 </style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="database-management" leftLabel="Prev"
-			title="Chapter 7. Database
-Management"
+			title="
+Chapter 7. Database Management"
 			rightLink="install-openacs-delete-tablespace" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
@@ -21,7 +21,11 @@ file.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-ty
 <li class="listitem">
 <p>Edit the database configuration file, which in a Reference
 install is located at <code class="computeroutput">/usr/local/pgsql/data/postgresql.conf</code> and
-change</p><pre class="programlisting">#tcpip_socket = false</pre><p>to</p><pre class="programlisting">tcpip_socket = true</pre>
+change</p><pre class="programlisting">
+#tcpip_socket = false
+</pre><p>to</p><pre class="programlisting">
+tcpip_socket = true
+</pre>
 </li><li class="listitem"><p>Change the access control file for the database to permit
 specific remote clients to access. Access can be controlled ...
 (add notes from forum post)</p></li><li class="listitem">
@@ -32,8 +36,8 @@ and change</p><pre class="programlisting"></pre><p>to</p><pre class="programlist
 </ul></div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-			leftLink="database-management" leftLabel="Prev" leftTitle="Chapter 7. Database
-Management"
+			leftLink="database-management" leftLabel="Prev" leftTitle="
+Chapter 7. Database Management"
 			rightLink="install-openacs-delete-tablespace" rightLabel="Next" rightTitle="Deleting a tablespace"
 			homeLink="index" homeLabel="Home" 
 			upLink="database-management" upLabel="Up"> 

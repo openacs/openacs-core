@@ -1,6 +1,8 @@
 
-<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Appendix D. Using CVS with an OpenACS Site}</property>
-<property name="doc(title)">Appendix D. Using CVS with an OpenACS Site</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Appendix D. Using CVS with an
+OpenACS Site}</property>
+<property name="doc(title)">Appendix D. Using CVS with an
+OpenACS Site</property>
 <master>
 <style>
 div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
@@ -8,13 +10,14 @@ div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
 </style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="i18n-translators" leftLabel="Prev"
-			title="Part III. For OpenACS
-Package Developers"
+			title="
+Part III. For OpenACS Package
+Developers"
 			rightLink="acs-plat-dev" rightLabel="Next">
 		    <div class="appendix">
 <div class="titlepage"><div><div><h2 class="title">
-<a name="cvs-tips" id="cvs-tips"></a>Appendix D. Using CVS with an OpenACS
-Site</h2></div></div></div><div class="authorblurb">
+<a name="cvs-tips" id="cvs-tips"></a>Appendix D. Using CVS with
+an OpenACS Site</h2></div></div></div><div class="authorblurb">
 <p>By <a class="ulink" href="mailto:joel\@aufrecht.org" target="_top">Joel Aufrecht</a>
 </p>
 OpenACS docs are written by the named authors, and may be edited by
@@ -24,7 +27,8 @@ OPTIONAL. </strong><a class="indexterm" name="id14134" id="id14134"></a>These s
 add it to a <a class="link" href="install-cvs" title="Initialize CVS (OPTIONAL)">CVS repository</a>.</p><div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">
 <p>Create and set permissions on a subdirectory in the local cvs
-repository.</p><pre class="screen">[root root]# <strong class="userinput"><code>mkdir /cvsroot/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
+repository.</p><pre class="screen">
+[root root]# <strong class="userinput"><code>mkdir /cvsroot/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
 </code></strong>
 [root root]#<strong class="userinput"><code> chown <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME.$OPENACS_SERVICE_NAME</span></span> /cvsroot/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
 </code></strong>
@@ -36,13 +40,18 @@ chown <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME.
 </li><li class="listitem">
 <p>Add the repository location to the user environment. On some
 systems, you may get better results with .bash_profile instead of
-.bashrc.</p><pre class="screen">[root root]# <strong class="userinput"><code>su - <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
+.bashrc.</p><pre class="screen">
+[root root]# <strong class="userinput"><code>su - <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
 </code></strong>
 [$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$<strong class="userinput"><code> emacs .bashrc</code></strong>
-</pre><p>Put this string into <code class="computeroutput">/home/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/.bashrc</code>:</p><pre class="programlisting">export CVSROOT=/cvsroot</pre><pre class="screen">[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <strong class="userinput"><code>exit</code></strong>
+</pre><p>Put this string into <code class="computeroutput">/home/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/.bashrc</code>:</p><pre class="programlisting">
+export CVSROOT=/cvsroot
+</pre><pre class="screen">
+[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <strong class="userinput"><code>exit</code></strong>
 logout
 
-[root root]#</pre>
+[root root]#
+</pre>
 </li><li class="listitem">
 <p>Import all files into cvs. In order to work on files with source
 control, the files must be checked out from cvs. So we will import,
@@ -53,7 +62,8 @@ i.e. <code class="computeroutput">/cvsroot/<span class="replaceable"><span class
 </code>.
 "OpenACS" is the vendor tag, and
 "oacs-5-9-0-final" is the release tag. These tags will be
-useful in upgrading and branching. -m sets the version comment.</p><pre class="screen">[root root]# <strong class="userinput"><code>su - <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
+useful in upgrading and branching. -m sets the version comment.</p><pre class="screen">
+[root root]# <strong class="userinput"><code>su - <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
 </code></strong>
 [$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <strong class="userinput"><code>cd /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
 </code></strong>
@@ -72,7 +82,8 @@ cd /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENA
 cvs import -m "initial install" <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span> OpenACS oacs-5-9-0-final
 exit</span></span>
 </pre><p>Move the original directory to a temporary location, and check
-out the cvs repository in its place.</p><pre class="screen">[root root]# <strong class="userinput"><code>mv /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span> /var/tmp</code></strong>
+out the cvs repository in its place.</p><pre class="screen">
+[root root]# <strong class="userinput"><code>mv /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span> /var/tmp</code></strong>
 [root root]# <strong class="userinput"><code>mkdir /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
 </code></strong>
 [root root]# <strong class="userinput"><code>chown <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>.<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span> /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
@@ -106,8 +117,8 @@ temporary copy of the uploaded files.</p></li>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
 			leftLink="i18n-translators" leftLabel="Prev" leftTitle="Translator&#39;s Guide"
-			rightLink="acs-plat-dev" rightLabel="Next" rightTitle="Part IV. For OpenACS
-Platform Developers"
+			rightLink="acs-plat-dev" rightLabel="Next" rightTitle="Part IV. For
+OpenACS Platform Developers"
 			homeLink="index" homeLabel="Home" 
 			upLink="acs-package-dev" upLabel="Up"> 
 		    

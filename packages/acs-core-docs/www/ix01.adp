@@ -12,7 +12,7 @@ div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
 			rightLink="" rightLabel="">
 		    <div class="index">
 <div class="titlepage"><div><div><h1 class="title">
-<a name="id20331"></a>Index</h1></div></div></div><div xmlns:xlink="http://www.w3.org/1999/xlink" class="index">
+<a name="id20331" id="id20331"></a>Index</h1></div></div></div><div xmlns:xlink="http://www.w3.org/1999/xlink" class="index">
 <div class="indexdiv">
 <h3>Symbols</h3><dl><dt id="ientry-id3906">$OPENACS_SERVICE_NAME, <a class="indexterm" href="install-steps">Paths and Users</a>
 </dt></dl>
@@ -137,4 +137,4 @@ Sections</a>
 			rightLink="" rightLabel="" rightTitle=""
 			homeLink="index" homeLabel="Home" 
 			upLink="index" upLabel="Up"> 
-		    <a name="comments"></a>
+		    

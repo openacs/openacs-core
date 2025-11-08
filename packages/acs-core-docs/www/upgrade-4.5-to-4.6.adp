@@ -8,7 +8,8 @@ div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
 </style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="upgrade-overview" leftLabel="Prev"
-			title="Chapter 5. Upgrading"
+			title="
+Chapter 5. Upgrading"
 			rightLink="upgrade-4.6.3-to-5" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
@@ -24,21 +25,27 @@ acs-kernel/sql/postgres/upgrade-4.4-4.5.sql. See <a class="ulink" href="http://o
 </p></li>
 </ul></div><div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem"><p>
-<strong>Make a Backup. </strong>Back up the database and
-filesystem (see <a class="xref" href="snapshot-backup" title="Manual backup and recovery">the section called “Manual backup and
-recovery”</a>).</p></li><li class="listitem"><p>
-<strong>OPTIONAL: Upgrade OpenFTS. </strong><a class="xref" href="upgrade-supporting" title="Upgrading OpenFTS from 0.2 to 0.3.2">the section called “Upgrading
-OpenFTS from 0.2 to 0.3.2”</a>
+<strong>Make a Backup. </strong>Back up the database
+and filesystem (see <a class="xref" href="snapshot-backup" title="Manual backup and recovery">the section called
+&ldquo;Manual backup and
+recovery&rdquo;</a>).</p></li><li class="listitem"><p>
+<strong>OPTIONAL: Upgrade
+OpenFTS. </strong><a class="xref" href="upgrade-supporting" title="Upgrading OpenFTS from 0.2 to 0.3.2">the section called
+&ldquo;Upgrading OpenFTS from 0.2 to
+0.3.2&rdquo;</a>
 </p></li><li class="listitem">
-<p>Stop the server</p><pre class="screen">[root root]# <strong class="userinput"><code>svc -d /service/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
+<p>Stop the server</p><pre class="screen">
+[root root]# <strong class="userinput"><code>svc -d /service/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
 </code></strong>
 </pre>
 </li><li class="listitem"><p>
-<strong>Upgrade the filesystem. </strong><a class="xref" href="upgrade-openacs-files" title="Upgrading the OpenACS files">the section called “Upgrading the
-OpenACS files”</a>
+<strong>Upgrade the filesystem. </strong><a class="xref" href="upgrade-openacs-files" title="Upgrading the OpenACS files">the section called
+&ldquo;Upgrading the OpenACS
+files&rdquo;</a>
 </p></li><li class="listitem">
 <p><span class="strong"><strong>Start the
-server</strong></span></p><pre class="screen">[root root]# <strong class="userinput"><code>svc -u /service/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
+server</strong></span></p><pre class="screen">
+[root root]# <strong class="userinput"><code>svc -u /service/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
 </code></strong>
 </pre>
 </li><li class="listitem">
@@ -54,7 +61,8 @@ plus any new packages you want. It&#39;s safest to upgrade the
 kernel by itself, and then come back and upgrade the rest of the
 desired packages in a second pass.</p></li><li class="listitem"><p>On the next screen, click <code class="computeroutput"><span class="guibutton"><span class="guibutton">Install Packages</span></span></code>
 </p></li><li class="listitem">
-<p>When prompted, restart the server:</p><pre class="screen">[root root]# <strong class="userinput"><code>restart-aolserver <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
+<p>When prompted, restart the server:</p><pre class="screen">
+[root root]# <strong class="userinput"><code>restart-aolserver <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
 </code></strong>
 </pre>
 </li><li class="listitem"><p>Wait a minute, then browse to the package manager, <code class="computeroutput">http://<span class="replaceable"><span class="replaceable">yourserver</span></span>/acs-admin/apm</code>.</p></li><li class="listitem"><p>Check that the kernel upgrade worked by clicking <code class="computeroutput"><span class="guilabel"><span class="guilabel">All</span></span></code> and making sure that

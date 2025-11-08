@@ -8,7 +8,8 @@ div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
 </style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="upgrade" leftLabel="Prev"
-			title="Chapter 5. Upgrading"
+			title="
+Chapter 5. Upgrading"
 			rightLink="upgrade-4.5-to-4.6" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
@@ -52,7 +53,8 @@ section</strong></p><div class="table-contents"><table class="table" summary="As
 </div><br class="table-break">
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-			leftLink="upgrade" leftLabel="Prev" leftTitle="Chapter 5. Upgrading"
+			leftLink="upgrade" leftLabel="Prev" leftTitle="
+Chapter 5. Upgrading"
 			rightLink="upgrade-4.5-to-4.6" rightLabel="Next" rightTitle="Upgrading 4.5 or higher to 4.6.3"
 			homeLink="index" homeLabel="Home" 
 			upLink="upgrade" upLabel="Up"> 

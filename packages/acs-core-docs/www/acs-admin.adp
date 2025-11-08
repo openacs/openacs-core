@@ -1,6 +1,8 @@
 
-<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Part II. Administrator&#39;s Guide}</property>
-<property name="doc(title)">Part II. Administrator&#39;s Guide</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Part II. Administrator&#39;s
+Guide}</property>
+<property name="doc(title)">Part II. Administrator&#39;s
+Guide</property>
 <master>
 <style>
 div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
@@ -12,7 +14,8 @@ div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
 			rightLink="install-overview" rightLabel="Next">
 		    <div class="part">
 <div class="titlepage"><div><div><h1 class="title">
-<a name="acs-admin" id="acs-admin"></a>Part II. Administrator&#39;s Guide</h1></div></div></div><div class="toc">
+<a name="acs-admin" id="acs-admin"></a>Part II. Administrator&#39;s
+Guide</h1></div></div></div><div class="toc">
 <p><strong>Table of Contents</strong></p><dl class="toc">
 <dt><span class="chapter"><a href="install-overview">2.
 Installation Overview</a></span></dt><dd><dl>
@@ -101,8 +104,8 @@ Information</a></span></dt><dt><span class="section"><a href="install-resources"
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
 			leftLink="release-notes" leftLabel="Prev" leftTitle="OpenACS Release Notes"
-			rightLink="install-overview" rightLabel="Next" rightTitle="Chapter 2. Installation
-Overview"
+			rightLink="install-overview" rightLabel="Next" rightTitle="
+Chapter 2. Installation Overview"
 			homeLink="index" homeLabel="Home" 
 			upLink="index" upLabel="Up"> 
 		    

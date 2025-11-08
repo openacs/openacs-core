@@ -1,6 +1,8 @@
 
-<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Chapter 8. Backup and Recovery}</property>
-<property name="doc(title)">Chapter 8. Backup and Recovery</property>
+<property name="context">{/doc/acs-core-docs/ {ACS Core Documentation}} {Chapter 8. Backup and
+Recovery}</property>
+<property name="doc(title)">Chapter 8. Backup and
+Recovery</property>
 <master>
 <style>
 div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
@@ -13,7 +15,8 @@ Part II. Administrator&#39;s Guide"
 			rightLink="install-next-backups" rightLabel="Next">
 		    <div class="chapter">
 <div class="titlepage"><div><div><h2 class="title">
-<a name="backup-recovery" id="backup-recovery"></a>Chapter 8. Backup and Recovery</h2></div></div></div><div class="toc">
+<a name="backup-recovery" id="backup-recovery"></a>Chapter 8. Backup and
+Recovery</h2></div></div></div><div class="toc">
 <p><strong>Table of Contents</strong></p><dl class="toc">
 <dt><span class="sect1"><a href="install-next-backups">Backup
 Strategy</a></span></dt><dt><span class="sect1"><a href="snapshot-backup">Manual
@@ -22,8 +25,8 @@ Backup</a></span></dt><dt><span class="sect1"><a href="backups-with-cvs">Using C
 for backup-recovery</a></span></dt>
 </dl>
 </div><div class="authorblurb">
-<div class="cvstag">($&zwnj;Id: recovery.xml,v 1.18.2.1 2020/07/02
-08:39:25 gustafn Exp $)</div><p>By <a class="ulink" href="mailto:dhogaza\@pacifier.com" target="_top">Don Baccus</a> with additions by <a class="ulink" href="mailto:joel\@aufrecht.org" target="_top">Joel Aufrecht</a>
+<div class="cvstag">($&zwnj;Id: recovery.xml,v 1.20 2024/09/11 06:15:47
+gustafn Exp $)</div><p>By <a class="ulink" href="mailto:dhogaza\@pacifier.com" target="_top">Don Baccus</a> with additions by <a class="ulink" href="mailto:joel\@aufrecht.org" target="_top">Joel Aufrecht</a>
 </p><p>We will cover some basic backup and recovery strategies. These
 are intended to be robust but simple enough to set up. For a large
 scale production site you would probably need to create your own
@@ -31,8 +34,8 @@ backup strategies (in particular full dumps from oracle, while easy
 to set up, are far from the best solution).</p><p>There are three basic things which need to be backed up, the
 database data, the server source tree, and the
 acs-content-repository (which is in the server source tree).</p><div class="figure">
-<a name="id1406" id="id1406"></a><p class="title"><strong>Figure 8.1. Backup and Recovery
-Strategy</strong></p><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/backup.png" align="middle" alt="Backup and Recovery Strategy"></div></div>
+<a name="id1406" id="id1406"></a><p class="title"><strong>Figure 8.1. Backup
+and Recovery Strategy</strong></p><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/backup.png" align="middle" alt="Backup and Recovery Strategy"></div></div>
 </div><p><br class="figure-break"></p>
 OpenACS docs are written by the named authors, and may be edited by
 OpenACS documentation staff.</div>

@@ -8,8 +8,8 @@ div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
 </style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="templates" leftLabel="Prev"
-			title="Chapter 11. Development
-Reference"
+			title="
+Chapter 11. Development Reference"
 			rightLink="subsites" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
@@ -200,8 +200,8 @@ organizations of users and groups of users.</p></li><li class="listitem"><p>The 
 user rights.</p></li><li class="listitem"><p>The Context hierarchy allows you to define organize default
 permissions in a hierarchical fashion.</p></li>
 </ol></div><p>A PL/SQL or Tcl API is then used to check permissions in
-application pages.</p><div class="cvstag">($&zwnj;Id: permissions.xml,v 1.18.2.4 2024/02/05
-15:35:07 gustafn Exp $)</div>
+application pages.</p><div class="cvstag">($&zwnj;Id: permissions.xml,v 1.20 2024/09/11
+06:15:47 gustafn Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

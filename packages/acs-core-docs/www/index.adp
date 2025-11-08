@@ -283,8 +283,8 @@ database ANSI-style</a>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
 			leftLink="" leftLabel="" leftTitle=""
-			rightLink="for-everyone" rightLabel="Next" rightTitle="Part I. OpenACS For
-Everyone"
+			rightLink="for-everyone" rightLabel="Next" rightTitle="
+Part I. OpenACS For Everyone"
 			homeLink="" homeLabel="" 
 			upLink="" upLabel=""> 
 		    

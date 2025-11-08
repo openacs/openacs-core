@@ -8,8 +8,8 @@ div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
 </style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="permissions" leftLabel="Prev"
-			title="Chapter 11. Development
-Reference"
+			title="
+Chapter 11. Development Reference"
 			rightLink="parties" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
@@ -246,8 +246,8 @@ how it makes it possible to easily turn Notes into an application
 that appears to provide each user in a system with their own
 private notes database.</p><p>We also saw how to use the templating system&#39;s forms API in
 a simple way, to create forms based pages with minimal duplication
-of code.</p><div class="cvstag">($&zwnj;Id: subsites.xml,v 1.10.2.2 2020/07/02
-08:39:25 gustafn Exp $)</div>
+of code.</p><div class="cvstag">($&zwnj;Id: subsites.xml,v 1.12 2024/09/11 06:15:47
+gustafn Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

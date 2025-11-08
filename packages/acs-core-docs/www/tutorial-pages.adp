@@ -8,8 +8,8 @@ div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
 </style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="tutorial-database" leftLabel="Prev"
-			title="Chapter 9. Development
-Tutorial"
+			title="
+Chapter 9. Development Tutorial"
 			rightLink="tutorial-debug" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
@@ -46,9 +46,11 @@ the <code class="computeroutput">adp</code> page holds html. The
 <code class="computeroutput">-postgres.xql</code> and <code class="computeroutput">-oracle.xql</code> files contains
 database-specific SQL. The default page in any directory is
 <code class="computeroutput">index</code>, so we&#39;ll build that
-first, starting with the Tcl file:</p><pre class="screen">[$OPENACS_SERVICE_NAME postgresql]$<strong class="userinput"><code> cd /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/packages/myfirstpackages/www</code></strong>
+first, starting with the Tcl file:</p><pre class="screen">
+[$OPENACS_SERVICE_NAME postgresql]$<strong class="userinput"><code> cd /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/packages/myfirstpackages/www</code></strong>
 [$OPENACS_SERVICE_NAME www]$ <strong class="userinput"><code>emacs index.tcl</code></strong>
-</pre><p>Paste this into the file.</p><pre class="programlisting">ad_page_contract {
+</pre><p>Paste this into the file.</p><pre class="programlisting">
+ad_page_contract {
     This is the main page for the package.  It displays all of the Notes and provides links to edit them and to create new Notes.
 
     \@author Your Name (you\@example.com)
@@ -62,15 +64,19 @@ set context [list]
 #    tcl-indent-level: 4
 #    indent-tabs-mode: nil
 # End:
-</pre><p>Now <code class="computeroutput">index.adp</code>:</p><pre class="programlisting">&lt;master&gt;
+</pre><p>Now <code class="computeroutput">index.adp</code>:</p><pre class="programlisting">
+&lt;master&gt;
   &lt;property name="doc(title)"&gt;\@page_title;literal\@&lt;/property&gt;
   &lt;property name="context"&gt;\@context;literal\@&lt;/property&gt;
-&lt;include src="/packages/myfirstpackage/lib/note-list"&gt;</pre><p>The index page includes the list page, which we put in /lib
+&lt;include src="/packages/myfirstpackage/lib/note-list"&gt;
+</pre><p>The index page includes the list page, which we put in /lib
 instead of /www to designate that it&#39;s available for reuse by
-other packages.</p><pre class="screen">[$OPENACS_SERVICE_NAME www]$<strong class="userinput"><code> mkdir /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/packages/myfirstpackage/lib</code></strong>
+other packages.</p><pre class="screen">
+[$OPENACS_SERVICE_NAME www]$<strong class="userinput"><code> mkdir /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/packages/myfirstpackage/lib</code></strong>
 [$OPENACS_SERVICE_NAME www]$<strong class="userinput"><code> cd /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/packages/myfirstpackage/lib</code></strong>
 [$OPENACS_SERVICE_NAME lib]$ <strong class="userinput"><code>emacs note-list.tcl</code></strong>
-</pre><pre class="programlisting">template::list::create \
+</pre><pre class="programlisting">
+template::list::create \
     -name notes \
     -multirow notes \
     -actions { "Add a Note" note-edit} \
@@ -111,13 +117,18 @@ db_multirow \
 #    tcl-indent-level: 4
 #    indent-tabs-mode: nil
 # End:
-</pre><pre class="screen">[$OPENACS_SERVICE_NAME lib]$ <strong class="userinput"><code>emacs note-list.adp</code></strong>
-</pre><pre class="programlisting">&lt;listtemplate name="notes"&gt;&lt;/listtemplate&gt;</pre><p>You can test your work by viewing the page /myfirstpackage on
+</pre><pre class="screen">
+[$OPENACS_SERVICE_NAME lib]$ <strong class="userinput"><code>emacs note-list.adp</code></strong>
+</pre><pre class="programlisting">
+&lt;listtemplate name="notes"&gt;&lt;/listtemplate&gt;
+</pre><p>You can test your work by viewing the page /myfirstpackage on
 your installation.</p><p>Create the add/edit page. If note_id is passed in, it display
 that note, and can change to edit mode if appropriate. Otherwise,
-it presents a form for adding notes.</p><pre class="screen">[$OPENACS_SERVICE_NAME lib]$<strong class="userinput"><code> cd /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/packages/myfirstpackage/www</code></strong>
+it presents a form for adding notes.</p><pre class="screen">
+[$OPENACS_SERVICE_NAME lib]$<strong class="userinput"><code> cd /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/packages/myfirstpackage/www</code></strong>
 [$OPENACS_SERVICE_NAME www]$ <strong class="userinput"><code>emacs note-edit.tcl</code></strong>
-</pre><pre class="programlisting">ad_page_contract {
+</pre><pre class="programlisting">
+ad_page_contract {
     This is the view-edit page for notes.
 
     \@author Your Name (you\@example.com)
@@ -163,15 +174,20 @@ ad_form -name note -form {
 #    tcl-indent-level: 4
 #    indent-tabs-mode: nil
 # End:
-</pre><pre class="screen">[$OPENACS_SERVICE_NAME www]$ <strong class="userinput"><code>emacs note-edit.adp</code></strong>
-</pre><pre class="programlisting">&lt;master&gt;
+</pre><pre class="screen">
+[$OPENACS_SERVICE_NAME www]$ <strong class="userinput"><code>emacs note-edit.adp</code></strong>
+</pre><pre class="programlisting">
+&lt;master&gt;
   &lt;property name="doc(title)"&gt;\@page_title;literal\@&lt;/property&gt;
   &lt;property name="context"&gt;\@context;literal\@&lt;/property&gt;
   &lt;property name="focus"&gt;note.title&lt;/property&gt;
   
-&lt;formtemplate id="note"&gt;&lt;/formtemplate&gt;</pre><p>And the delete page. Since it has no UI, there is only a Tcl
-page, and no adp page.</p><pre class="screen">[$OPENACS_SERVICE_NAME www]$ <strong class="userinput"><code>emacs note-delete.tcl</code></strong>
-</pre><pre class="programlisting">ad_page_contract {
+&lt;formtemplate id="note"&gt;&lt;/formtemplate&gt;
+</pre><p>And the delete page. Since it has no UI, there is only a Tcl
+page, and no adp page.</p><pre class="screen">
+[$OPENACS_SERVICE_NAME www]$ <strong class="userinput"><code>emacs note-delete.tcl</code></strong>
+</pre><pre class="programlisting">
+ad_page_contract {
     This deletes a note
 
     \@author Your Name (you\@example.com)

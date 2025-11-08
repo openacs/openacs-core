@@ -92,4 +92,5 @@ against.</p>
 <hr>
 <em>Last updated - 2000-12-19</em>
 <br>
-<a href="mailto:pmcneill\@arsdigita.com"><address>pmcneill\@arsdigita.com</address></a>
+<a href="mailto:pmcneill\@arsdigita.com"></a>
+<address>pmcneill\@arsdigita.com</address>

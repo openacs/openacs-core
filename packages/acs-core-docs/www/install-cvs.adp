@@ -8,13 +8,15 @@ div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
 </style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="openacs-unpack" leftLabel="Prev"
-			title="Appendix B. Install
-additional supporting software"
+			title="
+Appendix B. Install additional supporting
+software"
 			rightLink="psgml-for-emacs" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="install-cvs" id="install-cvs"></a>Initialize CVS (OPTIONAL)</h2></div></div></div><a class="indexterm" name="id7747" id="id7747"></a><p>CVS is a source control system. Create and initialize a
-directory for a local cvs repository.</p><pre class="screen">[root tmp]# <strong class="userinput"><code>mkdir /cvsroot</code></strong>
+directory for a local cvs repository.</p><pre class="screen">
+[root tmp]# <strong class="userinput"><code>mkdir /cvsroot</code></strong>
 [root tmp]#<strong class="userinput"><code> cvs -d /cvsroot init</code></strong>
 [root tmp]#
 <span class="action"><span class="action">mkdir /cvsroot

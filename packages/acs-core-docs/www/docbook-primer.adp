@@ -8,8 +8,8 @@ div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
 </style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="doc-standards" leftLabel="Prev"
-			title="Chapter 13. Documentation
-Standards"
+			title="
+Chapter 13. Documentation Standards"
 			rightLink="psgml-mode" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
@@ -17,12 +17,12 @@ Standards"
 Kurup, and the OpenACS community</p><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="dbprimer-overview" id="dbprimer-overview"></a>Overview of OpenACS Documentation</h3></div></div></div><p>
-<span class="productname">OpenACS</span>™ is a powerful system
-with incredible possibilities and applications, but this power
-comes with some complexity and a steep learning curve that is only
-attenuated by good documentation. Our goal is to write superb
-documentation, so that users, developers and administrators of
-OpenACS installations can enjoy the system.</p><p>The history of OpenACS documentation: ..began by building on a
+<span class="productname">OpenACS</span>â„¢ is
+a powerful system with incredible possibilities and applications,
+but this power comes with some complexity and a steep learning
+curve that is only attenuated by good documentation. Our goal is to
+write superb documentation, so that users, developers and
+administrators of OpenACS installations can enjoy the system.</p><p>The history of OpenACS documentation: ..began by building on a
 good documentation base from ArsDigita&#39;s ACS in the late
 1990's. Some sections of the documentation, however, lacked
 details and examples; others simply did not exist. The OpenACS
@@ -163,7 +163,8 @@ including publishing strategy, style etc.</p></li><li class="listitem">
 <p>Use generic DocBook syntax to maximize reader familiarity with
 the documents.</p><pre class="programlisting">
                 &lt;book&gt;&lt;title&gt;&lt;part label="Part 1"&gt;&lt;etc...&gt;
-              </pre>
+              
+</pre>
 </li>
 </ul></div>
 </li>
@@ -394,12 +395,12 @@ criteria</p></li>
 <div class="titlepage"><div><div><h3 class="title">
 <a name="doc-strategy" id="doc-strategy"></a>OpenACS Documentation Strategy</h3></div></div></div><p>OpenACS documentation development is subject to the constraints
 of the software project development and release methods and cycles
-(<a class="xref" href="cvs-guidelines" title="Using CVS with OpenACS">the section called “Using CVS with
-OpenACS”</a>). Essentially, all phases of work may be active to
-accommodate the asynchronous nature of multiple subprojects
-evolving by the efforts of a global base of participants with
-culturally diverse time references and scheduling
-idiosyncrasies.</p><p>The documentation strategy is to use project methods to involve
+(<a class="xref" href="cvs-guidelines" title="Using CVS with OpenACS">the section called
+&ldquo;Using CVS with OpenACS&rdquo;</a>).
+Essentially, all phases of work may be active to accommodate the
+asynchronous nature of multiple subprojects evolving by the efforts
+of a global base of participants with culturally diverse time
+references and scheduling idiosyncrasies.</p><p>The documentation strategy is to use project methods to involve
 others by collaborating or obtaining guidance or feedback (peer
 review) to distribute the workload and increase the overall value
 of output for the OpenACS project.</p>
@@ -529,8 +530,9 @@ to feed every <code class="computeroutput">&lt;sect1&gt;</code> two
 attributes. The first attribute, <code class="computeroutput">id</code>, is standard and can be used with all
 elements. It comes in very handy when interlinking between
 documents (more about this when talking about links in <a class="xref" href="docbook-primer" title="Links">the
-section called “Links”</a>). The value of <code class="computeroutput">id</code> has to be unique throughout the book
-you&#39;re making since the <code class="computeroutput">id</code>'s in your <code class="computeroutput">sect1</code>'s will turn into filenames when
+section called &ldquo;Links&rdquo;</a>). The
+value of <code class="computeroutput">id</code> has to be unique
+throughout the book you&#39;re making since the <code class="computeroutput">id</code>'s in your <code class="computeroutput">sect1</code>'s will turn into filenames when
 the book is parsed into HTML.</p><p>
 <a class="indexterm" name="id12981" id="id12981"></a> The other
 attribute is <code class="computeroutput">xreflabel</code>. The
@@ -596,7 +598,7 @@ look like this:</p><p>Put this in your XML:</p><pre class="programlisting">
 &lt;xref linkend="packages-looks"&gt;&lt;/xref&gt;.
 </pre><p>And the output is:</p><pre class="programlisting">
 - Find information about what a package looks like in 
-<a class="xref" href="packages" title="What a Package Looks Like">the section called “What a Package Looks Like”</a>.
+<a class="xref" href="packages" title="What a Package Looks Like">the section called &ldquo;What a Package Looks Like&rdquo;</a>.
 </pre><p>Note that since I haven&#39;t provided an <code class="computeroutput">xreflabel</code> for the subsection, <code class="computeroutput">packages-looks</code>, the parser will try its
 best to explain where the link takes you.</p>
 </dd><dt><span class="term"><span class="strong"><strong>2. Linking
@@ -605,7 +607,9 @@ outside the documentation</strong></span></span></dt><dd>
 <a class="indexterm" name="id13067" id="id13067"></a> If
 you&#39;re hyper-linking out of the documentation, it works almost
 the same way as HTML - the tag is just a little different
-(<a class="ulink" href="http://docbook.org/tdg/en/html/ulink.html" target="_top"><code class="computeroutput">&lt;ulink&gt;</code></a>):</p><pre class="programlisting">&lt;ulink url="http://www.oracle.com/"&gt;Oracle Corporation&lt;/ulink&gt;</pre><p>....will create a hyper-link to Oracle in the HTML-version of
+(<a class="ulink" href="http://docbook.org/tdg/en/html/ulink.html" target="_top"><code class="computeroutput">&lt;ulink&gt;</code></a>):</p><pre class="programlisting">
+&lt;ulink url="http://www.oracle.com/"&gt;Oracle Corporation&lt;/ulink&gt;
+</pre><p>....will create a hyper-link to Oracle in the HTML-version of
 the documentation.</p><p>
 <span class="strong"><strong>NOTE:</strong></span> Do NOT use
 ampersands in your hyperlinks. These are reserved for referencing
@@ -806,8 +810,8 @@ that gets you most of the way.</p></li>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-			leftLink="doc-standards" leftLabel="Prev" leftTitle="Chapter 13. Documentation
-Standards"
+			leftLink="doc-standards" leftLabel="Prev" leftTitle="
+Chapter 13. Documentation Standards"
 			rightLink="psgml-mode" rightLabel="Next" rightTitle="Using PSGML mode in Emacs"
 			homeLink="index" homeLabel="Home" 
 			upLink="doc-standards" upLabel="Up"> 

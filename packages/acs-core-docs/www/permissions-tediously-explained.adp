@@ -8,8 +8,8 @@ div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
 </style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="parties" leftLabel="Prev"
-			title="Chapter 11. Development
-Reference"
+			title="
+Chapter 11. Development Reference"
 			rightLink="object-identity" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
@@ -54,7 +54,8 @@ create table <span class="bold"><strong>acs_objects</strong></span> (
       constraint acs_objects_context_object_un
           unique (context_id, object_id) disable
 );
-    </pre><p>This means that items that want to use the features of the
+    
+</pre><p>This means that items that want to use the features of the
 OpenACS object system needs to have an entry in the <code class="computeroutput">acs_objects</code>. This allows developers to
 define relationships between any two entities <span class="emphasis"><em>A</em></span> and <span class="emphasis"><em>B</em></span> by defining a relationship between
 their corresponding entries in the <code class="computeroutput">acs_objects</code> table. One of the applications
@@ -66,7 +67,8 @@ of this powerful capability is the general permission system.</p><p>At the heart
       pretty_name         varchar2(100),
       pretty_plural       varchar2(100)
   );
-    </pre><a name="acs_permissions" id="acs_permissions"></a><pre class="programlisting">
+    
+</pre><a name="acs_permissions" id="acs_permissions"></a><pre class="programlisting">
   create table <span class="bold"><strong>acs_permissions</strong></span> (
       object_id
           not null
@@ -80,7 +82,8 @@ of this powerful capability is the general permission system.</p><p>At the heart
       constraint acs_permissions_pk
           primary key (object_id, grantee_id, privilege)
   );
-    </pre><p>The <code class="computeroutput">acs_privileges</code> table
+    
+</pre><p>The <code class="computeroutput">acs_privileges</code> table
 stores named privileges like <span class="emphasis"><em>read</em></span>, <span class="emphasis"><em>write</em></span>, <span class="emphasis"><em>delete</em></span>, <span class="emphasis"><em>create</em></span>, and <span class="emphasis"><em>admin</em></span>. The <code class="computeroutput">acs_permissions</code> table stores assertions of
 the form:</p><p>Who (<code class="computeroutput">grantee_id</code>) can do what
 (<code class="computeroutput">privilege</code>) on which object
@@ -258,7 +261,8 @@ table.</p><a name="acs_object_context_index" id="acs_object_context_index"></a><
       constraint acs_object_context_index_pk
           primary key (object_id, ancestor_id)
   ) organization index;
-    </pre><p>A few things to note about this table are these. Number one, it
+    
+</pre><p>A few things to note about this table are these. Number one, it
 is an <a class="ulink" href="http://www.oradoc.com/ora817/server.817/a85397/statem3e.htm#2061922" target="_top">index-organized table</a>, which means it is
 substantially optimized for access by primary key. Number two, as
 the above computations suggest, the size of the table grows
@@ -304,12 +308,15 @@ the following example, Joe does not have the read permissions on
 </colgroup><tbody>
 <tr><td colspan="3" align="center"><div class="literallayout"><p>
 <br><span class="bold"><strong>A</strong></span><br><code class="computeroutput">object_id=10</code><br><span class="emphasis"><em>readable by Joe</em></span><br>
+
       </p></div></td></tr><tr>
 <td colspan="2" align="center"><div class="literallayout"><p>
 <br><span class="bold"><strong>B</strong></span><br><code class="computeroutput">object_id=20</code><br><span class="emphasis"><em>readable by Joe</em></span><br>
+
               </p></div></td><td align="center"><div class="literallayout"><p>
 <br><span class="bold"><strong>C</strong></span><br><code class="computeroutput">object_id=30</code><br>
 security_inherit_p = 'f'<br><span class="emphasis"><em>not readable by Joe</em></span><br>
+
       </p></div></td>
 </tr><tr>
 <td align="center"><div class="literallayout"><p>
@@ -319,6 +326,7 @@ security_inherit_p = 'f'<br><span class="emphasis"><em>not readable by Joe<
       </p></div></td><td align="center"><div class="literallayout"><p>
 <br><span class="bold"><strong>F</strong></span><br><code class="computeroutput">object_id=60</code><br>
 security_inherit_p = 'f'<br><span class="emphasis"><em>not readable by Joe</em></span><br>
+
       </p></div></td>
 </tr>
 </tbody>
@@ -357,7 +365,8 @@ table:</p><a name="acs_privilege_hierarchy" id="acs_privilege_hierarchy"></a><pr
       constraint acs_privilege_hierarchy_pk
           primary key (privilege, child_privilege)
   );
-    </pre><p>As in the case of the context hierarchy, it is convenient to
+    
+</pre><p>As in the case of the context hierarchy, it is convenient to
 have a flattened representation of this hierarchal structure. This
 is accomplished by defining the following view.</p><a name="acs_privilege_descendant_map" id="acs_privilege_descendant_map"></a><pre class="programlisting">
   create or replace view <span class="bold"><strong>acs_privilege_descendant_map</strong></span>
@@ -380,7 +389,8 @@ is accomplished by defining the following view.</p><a name="acs_privilege_descen
          prior child_privilege = privilege
       )
     or p2.privilege = p1.privilege;
-    </pre><p>As the number of different privileges in the system is expected
+    
+</pre><p>As the number of different privileges in the system is expected
 to be reasonably small, there is no pressing need to cache the
 flattened ansector-descendant view of the privilege hierarchy in a
 specially maintained table like it is done in the case of the
@@ -406,7 +416,8 @@ permission system. The party data model is set up as follows.</p><div class="inf
           constraint parties_email_un unique,
       url                 varchar2(200)
   );
-    </pre><a name="persons" id="persons"></a><pre class="programlisting">
+    
+</pre><a name="persons" id="persons"></a><pre class="programlisting">
   create table <span class="bold"><strong>persons</strong></span> (
       person_id
           not null
@@ -417,7 +428,8 @@ permission system. The party data model is set up as follows.</p><div class="inf
       last_name            varchar2(100)
           not null
   );
-    </pre><a name="users" id="users"></a><pre class="programlisting">
+    
+</pre><a name="users" id="users"></a><pre class="programlisting">
   create table <span class="bold"><strong>users</strong></span> (
       user_id
           not null
@@ -426,7 +438,9 @@ permission system. The party data model is set up as follows.</p><div class="inf
       password        char(40),
       -- other attributes
   );
-    </pre><a name="groups" id="groups"></a><pre class="programlisting"> 
+    
+</pre><a name="groups" id="groups"></a><pre class="programlisting">
+ 
   create table <span class="bold"><strong>groups</strong></span> (
       group_id
           not null
@@ -434,7 +448,8 @@ permission system. The party data model is set up as follows.</p><div class="inf
           constraint groups_pk primary key,
       group_name           varchar2(100) not null
   );
-    </pre><p>Recall that the <code class="computeroutput">grantee_id</code>
+    
+</pre><p>Recall that the <code class="computeroutput">grantee_id</code>
 column of the <a class="xref" href="permissions-tediously-explained">acs_permissions</a>
 table references <code class="computeroutput">parties.party_id</code>. This means that you can
 grant a privilege on an object to a party, person, user, or group.
@@ -465,7 +480,8 @@ and <code class="computeroutput">acs_rels</code> tables:</p><a name="acs_rels" i
       constraint acs_object_rels_un
           unique (rel_type, object_id_one, object_id_two)
   );
-    </pre><a name="membership_rels" id="membership_rels"></a><pre class="programlisting">
+    
+</pre><a name="membership_rels" id="membership_rels"></a><pre class="programlisting">
   create table <span class="bold"><strong>membership_rels</strong></span> (
       rel_id
           constraint membership_rel_rel_id_fk references <a class="xref" href="permissions-tediously-explained">acs_rels</a> (rel_id)
@@ -475,7 +491,8 @@ and <code class="computeroutput">acs_rels</code> tables:</p><a name="acs_rels" i
           constraint membership_rel_mem_ck
            check (member_state in ('approved', 'banned', 'rejected', 'deleted'))
   );
-    </pre><p>The <a class="xref" href="permissions-tediously-explained">acs_rels</a> table
+    
+</pre><p>The <a class="xref" href="permissions-tediously-explained">acs_rels</a> table
 entries would look like so:</p><div class="informaltable"><table class="informaltable" cellspacing="0" border="1">
 <colgroup>
 <col align="center" class="c1"><col align="center" class="c2"><col align="center" class="c3">
@@ -502,7 +519,8 @@ create table <span class="bold"><strong>composition_rels</strong></span> (
         constraint composition_rels_rel_id_fk references <a class="xref" href="permissions-tediously-explained">acs_rels</a> (rel_id)
         constraint composition_rels_rel_id_pk primary key
 );
-    </pre><p>The relevant entries in the <a class="xref" href="permissions-tediously-explained">acs_rels</a> look
+    
+</pre><p>The relevant entries in the <a class="xref" href="permissions-tediously-explained">acs_rels</a> look
 like so.</p><div class="informaltable"><table class="informaltable" cellspacing="0" border="1">
 <colgroup>
 <col align="center" class="c1"><col align="center" class="c2"><col align="center" class="c3">
@@ -548,7 +566,8 @@ such tables:</p><a name="group_component_index" id="group_component_index"></a><
           constraint group_component_index_pk
           primary key (group_id, component_id, rel_id)
   ) organization index;
-    </pre><a name="group_member_index" id="group_member_index"></a><pre class="programlisting">
+    
+</pre><a name="group_member_index" id="group_member_index"></a><pre class="programlisting">
   create table <span class="bold"><strong>group_member_index</strong></span> (
       group_id
           not null
@@ -565,7 +584,8 @@ such tables:</p><a name="group_component_index" id="group_component_index"></a><
       constraint group_member_index_pk
           primary key (member_id, group_id, rel_id)
   ) organization index;
-    </pre><p>The <code class="computeroutput">group_component_index</code>
+    
+</pre><p>The <code class="computeroutput">group_component_index</code>
 table stores a flattened representation of the group composition
 hierarchy that is maintained in sync with the <a class="xref" href="permissions-tediously-explained">acs_rels</a> and
 <code class="computeroutput">composition_rels</code> tables through
@@ -600,7 +620,8 @@ from
 where
   mr.rel_id = r.rel_id
   and r.object_id_one = gci.component_id;
-    </pre><p>A heuristic way to verify that <code class="computeroutput">group_member_view</code> is essentially identical
+    
+</pre><p>A heuristic way to verify that <code class="computeroutput">group_member_view</code> is essentially identical
 to <a class="xref" href="permissions-tediously-explained">group_member_index</a>
 is to compute the symmetric difference between the two:</p><pre class="programlisting">
 select
@@ -620,7 +641,8 @@ from
    minus
    select group_id, member_id from group_member_view
   )
-    </pre><p>The query returns no rows. The important point is, if we have a
+    
+</pre><p>The query returns no rows. The important point is, if we have a
 flattened view of the composition hierarchy -- like one provided by
 the <a class="xref" href="permissions-tediously-explained">group_component_index</a>
 table -- membership relationship resolution can be computed
@@ -631,7 +653,8 @@ in substantial performance gains.</p>
 <div class="titlepage"><div><div><h3 class="title">
 <a name="permissions-tedious-putting-all-together" id="permissions-tedious-putting-all-together"></a>Putting It All
 Together</h3></div></div></div><p>Security information is queried by calling the <code class="computeroutput">acs_permission.permission_p</code> function in
-OpenACS. This is accessible from Tcl via the <code class="computeroutput">permission::permission_p</code> procedure.</p><pre class="programlisting">  
+OpenACS. This is accessible from Tcl via the <code class="computeroutput">permission::permission_p</code> procedure.</p><pre class="programlisting">
+  
   create or replace package body acs_permission
   as
     -- some stuff removed for the sake of brevity
@@ -654,7 +677,8 @@ OpenACS. This is accessible from Tcl via the <code class="computeroutput">permis
     end;
 
   end acs_permission;
-    </pre><p><span class="strong"><strong>problem
+    
+</pre><p><span class="strong"><strong>problem
 avoidance</strong></span></p><p>The function queries <a class="xref" href="permissions-tediously-explained">
 acs_object_party_privilege_map</a>, which is a humongous view that
 joins three flattened hierarchies: the context tree, the privilege
@@ -666,7 +690,8 @@ function. Anything other than that would take forever to finish or
 would ultimately result in a query error.</p><p>For example, do not try to do things like</p><pre class="programlisting">
 select count(*)
   from <a class="xref" href="permissions-tediously-explained">acs_object_party_privilege_map</a>;
-    </pre><p>To give another example of things to avoid, I have seen code
+    
+</pre><p>To give another example of things to avoid, I have seen code
 like this:</p><pre class="programlisting">
   declare
       cursor cur is
@@ -692,15 +717,18 @@ like this:</p><pre class="programlisting">
 
   end;
   /
-    </pre><p>The <code class="computeroutput">acs_permission.revoke_permission</code> function
-merely runs a delete statement like so:</p><pre class="programlisting">  
+    
+</pre><p>The <code class="computeroutput">acs_permission.revoke_permission</code> function
+merely runs a delete statement like so:</p><pre class="programlisting">
+  
   delete from
      acs_permissions
   where
      object_id = revoke_permission.object_id
      and grantee_id = revoke_permission.grantee_id
      and privilege = revoke_permission.privilege;
-    </pre><p>Note that in the above example, <code class="computeroutput">acs_permissions</code> had only one entry that
+    
+</pre><p>Note that in the above example, <code class="computeroutput">acs_permissions</code> had only one entry that
 needed to be deleted:</p><div class="informaltable"><table class="informaltable" cellspacing="0" border="1">
 <colgroup>
 <col align="center" class="c1"><col align="center" class="c2"><col align="center" class="c3">
@@ -735,7 +763,8 @@ select
   privilege
 from
   <a class="xref" href="permissions-tediously-explained">acs_object_grantee_priv_map</a>;
-    </pre><a name="acs_object_grantee_priv_map" id="acs_object_grantee_priv_map"></a><pre class="programlisting">
+    
+</pre><a name="acs_object_grantee_priv_map" id="acs_object_grantee_priv_map"></a><pre class="programlisting">
 create or replace view <span class="bold"><strong>acs_object_grantee_priv_map</strong></span>
 as
 select
@@ -747,7 +776,9 @@ from
   <a class="xref" href="permissions-tediously-explained">acs_privilege_descendant_map</a> m
 where
   a.privilege = m.privilege;
-    </pre><a name="acs_permissions_all" id="acs_permissions_all"></a><pre class="programlisting"> 
+    
+</pre><a name="acs_permissions_all" id="acs_permissions_all"></a><pre class="programlisting">
+ 
 create or replace view <span class="bold"><strong>acs_permissions_all</strong></span>
 as
 select
@@ -759,7 +790,8 @@ from
   <a class="xref" href="permissions-tediously-explained">acs_permissions</a> p
 where
   op.ancestor_id = p.object_id;
-    </pre><a name="acs_object_paths" id="acs_object_paths"></a><pre class="programlisting">
+    
+</pre><a name="acs_object_paths" id="acs_object_paths"></a><pre class="programlisting">
 create or replace view <span class="bold"><strong>acs_object_paths</strong></span>
 as
 select
@@ -768,7 +800,9 @@ select
   n_generations
 from
   <a class="xref" href="permissions-tediously-explained">acs_object_context_index</a>;
-    </pre><a name="group_member_map" id="group_member_map"></a><pre class="programlisting"> 
+    
+</pre><a name="group_member_map" id="group_member_map"></a><pre class="programlisting">
+ 
 
 create or replace view <span class="bold"><strong>group_member_map</strong></span>
 as
@@ -779,7 +813,8 @@ select
   container_id
 from
   <a class="xref" href="permissions-tediously-explained">group_member_index</a>;
-    </pre>
+    
+</pre>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

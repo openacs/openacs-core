@@ -8,8 +8,9 @@ div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
 </style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="install-tclwebtest" leftLabel="Prev"
-			title="Appendix B. Install
-additional supporting software"
+			title="
+Appendix B. Install additional supporting
+software"
 			rightLink="install-squirrelmail" rightLabel="Next">
 		    <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
@@ -20,7 +21,8 @@ OpenACS docs are written by the named authors, and may be edited by
 OpenACS documentation staff.</div><p>To be able to use PHP software with AOLserver (and OpenACS), you
 have to install PHP with AOLserver support. Get the latest version
 from <a class="ulink" href="http://www.php.net" target="_top">www.php.net</a>. For convenience we get version 4.3.4 from a
-mirror</p><pre class="screen">[root root]# <strong class="userinput"><code>cd /usr/local/src</code></strong>
+mirror</p><pre class="screen">
+[root root]# <strong class="userinput"><code>cd /usr/local/src</code></strong>
 [root src]# <strong class="userinput"><code>wget http://de3.php.net/distributions/php-4.3.4.tar.gz</code></strong>
 [root src]# <strong class="userinput"><code>tar xfz php-4.3.4.tar.gz</code></strong>
 [root src]# <strong class="userinput"><code>cd php-4.3.4</code></strong>
