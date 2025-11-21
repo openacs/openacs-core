@@ -32,6 +32,8 @@ ad_proc -public auth::driver::get_parameters {
     set parameters {}
 
     ad_try {
+        #ns_log notice AcsSc.\n[join [lsort [info commands AcsSc.*]] \n]
+        #ns_log notice AcsSc.auth_pass\n[join [info commands AcsSc.auth_password*] \n]        
         set parameters [acs_sc::invoke \
                             -error \
                             -impl_id $impl_id \

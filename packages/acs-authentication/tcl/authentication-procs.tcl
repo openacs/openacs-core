@@ -428,7 +428,7 @@ ad_proc -public auth::authenticate {
         } else {
             set cookie_domain ""
         }
-        ns_log notice "auth::authenticate receives host_node_id $host_node_id domain <$cookie_domain>"
+        ns_log notice "auth::authenticate receives host_node_id '$host_node_id' cookie domain <$cookie_domain>"
         ad_user_login \
             -account_status $result(account_status) \
             -cookie_domain $cookie_domain \
