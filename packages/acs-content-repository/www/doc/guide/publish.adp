@@ -126,5 +126,5 @@ the initial query for any needed attributes.</p>
 <a href="mailto:karlg\@arsdigita.com">karlg\@arsdigita.com</a>
 <br>
 
-Last Modified: $&zwnj;Id: publish.html,v 1.5.2.3 2024/09/01 12:39:59
-gustafn Exp $
+Last Modified: $&zwnj;Id: publish.html,v 1.7 2024/09/11 06:15:47 gustafn
+Exp $

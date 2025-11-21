@@ -291,7 +291,8 @@ There are two parameters.
       DefaultMaster=/www/default-master
       ; anything other than "never" or "always" means normal operation
       RefreshCache=as necessary
-    </pre>
+    
+</pre>
 <h3>X. Future Improvements/Areas of Likely Change</h3>
 <p>Passing datasources by reference is new. The acs-templating
 syntax <code>&amp;formal="actual"</code> is different
@@ -307,11 +308,11 @@ complement sequential nested
 <li>System creator: <a href="mailto:karl\@arsdigita.com">Karl
 Goldstein</a>
 </li><li>System owners: <a href="mailto:karl\@arsdigita.com">Karl
-Goldstein</a> and <a href="mailto:christian\@arsdigita.com">Christian Brechbühler</a>
+Goldstein</a> and <a href="mailto:christian\@arsdigita.com">Christian
+Brechbühler</a>
 </li><li>Documentation authors: <a href="mailto:karl\@arsdigita.com">Karl
 Goldstein</a>, <a href="mailto:christian\@arsdigita.com">Christian
-Brechbühler</a>, and <a href="mailto:bquinn\@arsdigita.com">Bryan
-Quinn</a>
+Brechbühler</a>, and <a href="mailto:bquinn\@arsdigita.com">Bryan Quinn</a>
 </li>
 </ul>
 <h3>XII. Revision History</h3>
@@ -329,5 +330,5 @@ Quinn</a>
 <address><a href="mailto:christian\@arsdigita.com">Christian
 Brechbuehler</a></address>
 <!-- Created: Mon Aug 14 11:53:07 EDT 2000 -->
-Last modified: $&zwnj;Id: design.html,v 1.10.2.2 2019/08/15 10:18:49
-gustafn Exp $
+Last modified: $&zwnj;Id: design.html,v 1.12 2024/09/11 06:15:48 gustafn
+Exp $

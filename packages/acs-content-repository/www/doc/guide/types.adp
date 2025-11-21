@@ -47,14 +47,16 @@ in a custom table whose primary key references the associated ACS
 object ID (specific storage). To ensure efficient access to
 attributes, the content repository API requires you to use specific
 storage. Your table should have the form:</p>
-<pre>create table cr_<em>content_type</em> (
+<pre>
+create table cr_<em>content_type</em> (
     <em>content_type</em>_id       integer
                           constraint cr_<em>content_type</em>_id_fk
                           references cr_revisions
                           constraint cr_<em>content_type</em>_pk
                           primary key,
     <em>attributes</em>...
-);</pre>
+);
+</pre>
 <p>Note that your extended attribute table must reference the
 <kbd>cr_revisions</kbd> table, <em>not</em><kbd>cr_items</kbd>. As
 mentioned above, this allows you to maintain multiple revisions of
@@ -63,7 +65,8 @@ itself.</p>
 <h3>Use the Content Type API to create the content type</h3>
 <p>To define a content type, you should write an SQL script to
 create the content type and then add attributes to it:</p>
-<pre>declare
+<pre>
+declare
  attr_id        acs_attributes.attribute_id%TYPE;
 begin
 
@@ -114,5 +117,5 @@ part of a content type definition. See <a href="object-relationships">Object Rel
 details.</p>
 <hr>
 <a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a>
-<p>Last Modified: $&zwnj;Id: types.html,v 1.2.2.1 2019/08/10 18:09:52
-gustafn Exp $</p>
+<p>Last Modified: $&zwnj;Id: types.html,v 1.4 2024/09/11 06:15:47 gustafn
+Exp $</p>

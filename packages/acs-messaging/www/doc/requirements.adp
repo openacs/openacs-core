@@ -160,5 +160,5 @@ bboard thread could be sent to a user as a digest.</p>
 <hr>
 <address><a href="mailto:kapoor\@maya.com"></a></address>
 
-Last modified: $&zwnj;Id: requirements.html,v 1.3.2.2 2024/08/01 07:38:16
+Last modified: $&zwnj;Id: requirements.html,v 1.5 2024/09/11 06:15:48
 gustafn Exp $

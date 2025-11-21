@@ -92,7 +92,7 @@ efficiently.</font></p></dd><dt><font><strong>35.10 Remove attributes</strong></
 a group type. Removing the attribute removes all values specified
 for that attribute.</font></p></dd><dt><font><strong>40.10 Relationship
 Constraints</strong></font></dt><dd><p><font>The API must support the following types of constraints on
-relationships:</font></p></dd><dd></dd><dt><font><strong>40.10.10 Permissible
+relationships:</font></p></dd><dt><font><strong>40.10.10 Permissible
 relationships</strong></font></dt><dd><p><font>Each group type should maintain a list of all relationship
 types that can be used to add elements to groups of this group
 type.</font></p></dd><dt><font><strong>40.10.20 Constraints on
@@ -133,9 +133,9 @@ supertypes.</font></p></dd><dt><font>
 removes all groups of this type.</font></p></dd>
 </dl></blockquote></dd>
 </dl>
-<dt><font>
+<dl><dt><font>
 <strong>150.10</strong> Group instance summary
-page</font></dt>
+page</font></dt></dl>
 <blockquote><dl>
 <dt><font>
 <strong>150.10.10</strong> Display relations</font></dt><dd><p><font>Each group should display all the parties related to it

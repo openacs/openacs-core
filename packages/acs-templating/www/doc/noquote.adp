@@ -137,8 +137,8 @@ uglier in its own subtle way. The trick is to remember that our
 templating still supports all the ADP features, including embedding
 Tcl code in the template. Thus instead of referring to the multirow
 variable with the \@forums.name\@ variable substitutions, we use
-&lt;%= [ns_quotehtml \@forums.name\@] %&gt;. This
-works correctly, but obviously breaks the abstraction barrier
+&lt;%= [ns_quotehtml \@forums.name\@] %&gt;.
+This works correctly, but obviously breaks the abstraction barrier
 between ADP and Tcl syntaxes. The practical result of breaking the
 abstraction is that every occurrence of Tcl code in an ADP template
 will have to be painstakingly reviewed and converted once ADPs
@@ -152,7 +152,7 @@ Strangely, this otherwise sad fact allows us to deploy a very
 radical but much more robust solution to the problem.</p>
 </div><div class="sect2" lang="en">
 <div class="titlepage"><div><h3 class="title">
-<a name="Quote_Always,_Except_When_Told_Not_to" id="Quote_Always,_Except_When_Told_Not_to"></a>Quote Always, Except
+<a name="Quote_Always,_Except_When_Told_Not_to"></a>Quote Always, Except
 When Told Not to.</h3></div></div><p>At the time when we came to realize how serious the quoting
 deficiencies of ACS 4.0 were, we were about two weeks away from the
 release of a project for the German Bank. There was simply no time

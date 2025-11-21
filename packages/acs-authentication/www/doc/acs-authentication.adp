@@ -91,21 +91,17 @@ interact with the different authentication implementations (LDAP or
 PAM):</strong></p>
 <ol>
 <li>auth_authentication "Authenticate users and retrieve their
-account status.", with the operations:
-<ul>
+account status.", with the operations:</li><li style="list-style: none"><ul>
 <li>Authenticate</li><li>GetParameters</li>
-</ul>
-</li><li>auth_password "Update, reset, and retrieve passwords for
+</ul></li><li>auth_password "Update, reset, and retrieve passwords for
 authentication.", with the operations:
 <ul>
 <li>CanChangePassword</li><li>ChangePassword</li><li>CanRetrievePassword</li><li>RetrievePassword</li><li>CanResetPassword</li><li>ResetPassword</li><li>GetParameters</li>
 </ul>
 </li><li>auth_registration "Registering accounts for
-authentication", with the operations:
-<ul>
+authentication", with the operations:</li><li style="list-style: none"><ul>
 <li>GetElements</li><li>Register</li><li>GetParameters</li>
-</ul>
-</li><li>auth_sync_retrieve</li><li>auth_sync_process</li><li>auth_user_info
+</ul></li><li>auth_sync_retrieve</li><li>auth_sync_process</li><li>auth_user_info
 <ul>
 <li>GetUserInfo</li><li>GetParameters</li>
 </ul>

@@ -15,7 +15,7 @@ content_item</p>
 <li><a href="#overview">Overview</a></li><li><a href="#related">Related Objects</a></li><li><a href="#api">API</a></li>
 </ul>
 <p> </p>
-<a name="overview" id="overview"><h3>Overview</h3></a>
+<h3><a name="overview">Overview</a></h3>
 <p>Content items store the overview of the content published on a
 website. The actual content is stored in content revisions. It is
 implemented this way so that there can be multiple versions of the
@@ -26,10 +26,11 @@ all the right parameters (supertype, parent, etc), there will also
 exist at least one content revision pointing to this item with the
 actual review content.</p>
 <p> </p>
-<a name="related" id="related"><h3>Related Objects</h3></a>
- See also: content_revision, content_folder
+<h3><a name="related">Related Objects</a></h3>
+
+See also: content_revision, content_folder
 <p> </p>
-<a name="api" id="api"><h3>API</h3></a>
+<h3><a name="api">API</a></h3>
 <ul>
 <li>
 <font size="+1">Function:</font> content_item.get_content_type
@@ -745,5 +746,5 @@ procedure write_to_file (
 </ul>
 <p> </p>
 
-Last Modified: $&zwnj;Id: item.html,v 1.6.2.1 2019/08/10 18:09:52 gustafn
-Exp $
+Last Modified: $&zwnj;Id: item.html,v 1.8 2024/09/11 06:15:47 gustafn Exp
+$

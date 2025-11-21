@@ -25,8 +25,7 @@ that, and deliver it to the client. The adp page can use the
 datasources defined in the Tcl page.
 <h3>Guide</h3>
 <ol>
-<li>User Guide
-<ul>
+<li>User Guide</li><li style="list-style: none"><ul>
 <li><a href="guide/index">Overview</a></li><li>Establishing data sources
 <ul>
 <li><a href="guide/data">Implementing data sources</a></li><li><a href="guide/document">Documenting data sources</a></li>
@@ -53,8 +52,7 @@ types</a></li>
 <ul><li>See the "contract", "error", and
 "state" <a href="demo/">demos</a>.</li></ul>
 </li>
-</ul>
-</li><li>Object and API Reference
+</ul></li><li>Object and API Reference
 <ul>
 <li><a href="api/database">Database Query</a></li><li><a href="api/multirow">Mutirow Data Source</a></li><li><a href="api/request">Request</a></li><li><a href="api/form">Form</a></li><li><a href="api/element">Form Element</a></li><li><a href="widgets">Form Widgets</a></li>
 </ul>
@@ -103,5 +101,5 @@ variable; typically it will stay undefined.
 <address><a href="mailto:christian\@arsdigita.com">Christian
 Brechbühler</a></address>
 <!-- Created: Mon Aug 14 11:53:07 EDT 2000 -->
-Last modified: $&zwnj;Id: developer-guide.html,v 1.5.2.1 2023/06/06
-09:30:30 gustafn Exp $
+Last modified: $&zwnj;Id: developer-guide.html,v 1.7 2024/09/11 06:15:48
+gustafn Exp $

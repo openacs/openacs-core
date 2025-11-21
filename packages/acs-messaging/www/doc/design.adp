@@ -57,8 +57,7 @@ repository.
 ACS Messaging provides the <code>acs_messages_all</code>
  view as
 the primary mechanism for message queries.
-<blockquote><pre><code>
-create or replace view acs_messages_all as
+<blockquote><pre><code>create or replace view acs_messages_all as
     select m.message_id, m.reply_to, o.context_id, r.title, r.publish_date,
            r.mime_type, r.content, o.creation_user
     ...
