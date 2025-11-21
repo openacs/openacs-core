@@ -2058,11 +2058,7 @@ ad_proc util::join_location {{-noabbrev:boolean} {-proto ""} {-hostname} {-port 
             set port ""
         }
     }
-    if {[string match *:* $hostname]} {
-        append result "\[$hostname\]"
-    } else {
-        append result $hostname
-    }
+    append result [expr {[string match *:* $hostname] ? "\[$hostname\]" : $hostname}]
     if {$port ne ""} {
         append result :$port
     }
@@ -3930,10 +3926,13 @@ ad_proc -public util::request_info {
         #
         # Base information
         #
+        #ns_log notice DEBUG util::request_info -> util_current_location -> [util_current_location]
         append info "    " \
             [ns_conn method] \
             " [util_current_location][ns_conn url]?[ns_conn query]" \
             " referred by '[get_referrer]' peer [ad_conn peeraddr] user_id [ad_conn user_id]"
+
+        #ns_log notice DEBUG util::request_info info $info
 
         if {[ns_conn method] eq "POST"} {
             #
@@ -3957,10 +3956,12 @@ ad_proc -public util::request_info {
         #
         # Optional header info
         #
+        #ns_log notice DEBUG util::request_info with_headers_p $with_headers_p
         if {$with_headers_p} {
             append info \n [util::ns_set_pretty_print [ns_conn headers]]
         }
     }
+    #ns_log notice DEBUG util::request_info --> $info
     return $info
 }
 
