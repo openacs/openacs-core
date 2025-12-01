@@ -174,6 +174,403 @@ ad_proc util::unzip {
     exec $unzipCmd {*}$extra_options [expr {$overwrite_p ? "-o" : "-n"}] $source -d $destination
 }
 
+ad_proc -private util::archive_list_entries {
+    -archive:required
+} {
+    Return a list of entry names in the given archive.
+
+    Supports:
+    - ZIP-like archives (.zip, .jar, .war, .ear, .whl)
+    - tar archives (.tar, .tar.gz, .tgz, .tar.bz2, .tar.xz)
+
+    For other extensions, bsdtar is attempted if available.
+} {
+    set archive $archive
+
+    set bsdtarCmd  [util::which bsdtar]
+    set unzipCmd   [util::which unzip]
+    set zipinfoCmd [util::which zipinfo]
+    set tarCmd     [util::which tar]
+
+    set tail [string tolower [file tail $archive]]
+    set ext  [string tolower [file extension $tail]]
+
+    #
+    # Prefer bsdtar when available: it handles both tar and zip.
+    #
+    if {$bsdtarCmd ne ""} {
+        if {[catch {exec -- $bsdtarCmd -tf $archive} out]} {
+            error "Failed to list contents of archive '$archive' via bsdtar: $out"
+        }
+        set names {}
+        foreach name [split $out "\n"] {
+            set name [string trim $name]
+            if {$name ne ""} {
+                lappend names $name
+            }
+        }
+        return $names
+    }
+
+    #
+    # No bsdtar: use format-specific tools.
+    #
+    set zipExts {.zip .jar .war .ear .whl}
+    set isZip  [expr {$ext in $zipExts}]
+    set isTar  0
+
+    if {!$isZip} {
+        # Recognize common tar-style names.
+        if {$ext eq ".tar"} {
+            set isTar 1
+        } elseif {[string match "*.tar.gz" $tail]
+                  || [string match "*.tgz" $tail]
+                  || [string match "*.tar.bz2" $tail]
+                  || [string match "*.tar.xz" $tail]} {
+            set isTar 1
+        }
+    }
+
+    if {$isZip} {
+        #
+        # ZIP-like: unzip -Z -1 or zipinfo -1
+        #
+        if {$unzipCmd ne ""} {
+            if {[catch {exec -- $unzipCmd -Z -1 $archive} out]} {
+                error "Failed to list contents of zip archive '$archive' via unzip: $out"
+            }
+            set names {}
+            foreach name [split $out "\n"] {
+                set name [string trim $name]
+                if {$name ne ""} {
+                    lappend names $name
+                }
+            }
+            return $names
+        } elseif {$zipinfoCmd ne ""} {
+            if {[catch {exec -- $zipinfoCmd -1 $archive} out]} {
+                error "Failed to list contents of zip archive '$archive' via zipinfo: $out"
+            }
+            set names {}
+            foreach name [split $out "\n"] {
+                set name [string trim $name]
+                if {$name ne ""} {
+                    lappend names $name
+                }
+            }
+            return $names
+        } else {
+            error "No suitable command (unzip/zipinfo/bsdtar) available to inspect zip archive '$archive'."
+        }
+    }
+
+    if {$isTar} {
+        #
+        # tar archive: tar tf
+        #
+        if {$tarCmd eq ""} {
+            error "No suitable command (tar/bsdtar) available to inspect tar archive '$archive'."
+        }
+        if {[catch {exec -- $tarCmd tf $archive} out]} {
+            error "Failed to list contents of tar archive '$archive' via tar: $out"
+        }
+        set names {}
+        foreach name [split $out "\n"] {
+            set name [string trim $name]
+            if {$name ne ""} {
+                lappend names $name
+            }
+        }
+        return $names
+    }
+
+    #
+    # Unknown extension and no bsdtar: refuse, rather than guessing.
+    #
+    error "Unsupported archive type for '$archive' (no bsdtar and unrecognized extension)."
+}
+
+ad_proc -private util::archive_check_paths {
+    -archive:required
+} {
+    Validate entry names of an archive: reject path traversal and absolute paths.
+
+    Rejects:
+    - Unix absolute paths: names starting with '/'
+    - Windows UNC paths: '\\server\share\...'
+    - Windows drive-letter paths: 'C:\foo', 'D:/bar'
+    - Any path with '..' as a path component (both '/' and '\' separators)
+} {
+    set names [util::archive_list_entries -archive $archive]
+
+    foreach name $names {
+        set name [string trim $name]
+        if {$name eq ""} {
+            continue
+        }
+
+        # Reject Unix absolute paths: "/foo/bar"
+        if {[string index $name 0] eq "/"} {
+            error "Archive '$archive' contains an absolute path '$name', which is not allowed."
+        }
+
+        # Reject Windows UNC paths: "\\server\share"
+        if {[string match {\\\\*} $name]} {
+            error "Archive '$archive' contains a UNC-style path '$name', which is not allowed."
+        }
+
+        # Reject Windows drive-letter paths: "C:\foo" or "D:/bar"
+        if {[regexp {^[A-Za-z]:[\\/]} $name]} {
+            error "Archive '$archive' contains a Windows absolute path '$name', which is not allowed."
+        }
+
+        # Reject ".." path components.
+        if {[regexp {(?:^|[\\/])\.\.(?:$|[\\/])} $name]} {
+            error "Archive '$archive' contains a path with '..' components ('$name'), which is not allowed."
+        }
+    }
+}
+
+ad_proc -private util::archive_has_symlinks {
+    -archive:required
+} {
+    Return 1 if the archive contains symbolic link entries, 0 otherwise.
+
+    Uses bsdtar when available (works for zip and tar), otherwise falls back to:
+    - zipinfo for zip-like archives
+    - tar for tar archives
+
+    Errors if no suitable inspection tool is available.
+} {
+    set archive $archive
+
+    set bsdtarCmd  [util::which bsdtar]
+    set unzipCmd   [util::which unzip]
+    set zipinfoCmd [util::which zipinfo]
+    set tarCmd     [util::which tar]
+
+    set tail [string tolower [file tail $archive]]
+    set ext  [string tolower [file extension $tail]]
+
+    #
+    # Prefer bsdtar: it can do verbose listing with type info for both
+    # tar and zip archives.
+    #
+    if {$bsdtarCmd ne ""} {
+        if {[catch {exec -- $bsdtarCmd -tvf $archive} out]} {
+            error "Failed to inspect archive '$archive' for symlinks via bsdtar: $out"
+        }
+        foreach line [split $out "\n"] {
+            if {[string length $line] < 10} {
+                continue
+            }
+            # bsdtar -tvf output starts with mode bits:
+            # -rw-r--r--, drwxr-xr-x, lrwxrwxrwx, ...
+            set mode [string range $line 0 9]
+            if {[string index $mode 0] eq "l"} {
+                return 1
+            }
+        }
+        return 0
+    }
+
+    #
+    # Without bsdtar, fall back to format-specific tools.
+    #
+    set zipExts {.zip .jar .war .ear .whl}
+    set isZip  [expr {$ext in $zipExts}]
+    set isTar  0
+
+    if {!$isZip} {
+        if {$ext eq ".tar"} {
+            set isTar 1
+        } elseif {[string match "*.tar.gz" $tail]
+                  || [string match "*.tgz" $tail]
+                  || [string match "*.tar.bz2" $tail]
+                  || [string match "*.tar.xz" $tail]} {
+            set isTar 1
+        }
+    }
+
+    if {$isZip} {
+        #
+        # ZIP-like: use zipinfo -v and look for "symlink".
+        #
+        if {$zipinfoCmd ne ""} {
+            if {[catch {exec -- $zipinfoCmd -v $archive} out]} {
+                error "Failed to inspect zip archive '$archive' for symlinks via zipinfo: $out"
+            }
+            if {[string match *symlink* $out]} {
+                return 1
+            }
+            return 0
+        } elseif {$unzipCmd ne ""} {
+            #
+            # unzip itself doesn't have a nice verbose format with type info
+            # comparable to zipinfo -v, so without zipinfo we can't reliably
+            # detect symlinks in a zip archive. Be conservative and error.
+            #
+            error "Cannot reliably inspect zip archive '$archive' for symlinks: zipinfo not available."
+        } else {
+            error "No suitable command (zipinfo/unzip/bsdtar) available to inspect zip archive '$archive' for symlinks."
+        }
+    }
+
+    if {$isTar} {
+        #
+        # tar archive: tar tvf, same 'l' mode trick as with bsdtar.
+        #
+        if {$tarCmd eq ""} {
+            error "No suitable command (tar/bsdtar) available to inspect tar archive '$archive' for symlinks."
+        }
+        if {[catch {exec -- $tarCmd tvf $archive} out]} {
+            error "Failed to inspect tar archive '$archive' for symlinks via tar: $out"
+        }
+        foreach line [split $out "\n"] {
+            if {[string length $line] < 10} {
+                continue
+            }
+            set mode [string range $line 0 9]
+            if {[string index $mode 0] eq "l"} {
+                return 1
+            }
+        }
+        return 0
+    }
+
+    #
+    # Unknown type and no bsdtar.
+    #
+    error "Unsupported archive type for '$archive'; cannot inspect for symlinks."
+}
+
+
+ad_proc util::unzip {
+   -source:required
+   -destination:required
+   -overwrite:boolean
+} {
+    Unzip helper, performing generic path checks
+    (../, absolute paths, Windows absolute paths).
+    The function prefer bsdtar (Debian libarchive) when present
+    and no CP850 recoding is needed. For legacy CP850 filenames,
+    use unzip -O CP850, but only if the archive does not contain symlink entries.
+
+   @param source must be the name of a valid zip file to be decompressed
+   @param destination must be the name of a valid directory to contain decompressed files
+   @param overwrite Boolean flag
+} {
+    #
+    # Follow the following preferences_
+    #  - Prefer bsdtar (libarchive) when present and no CP850 recoding is needed.
+    #  - For legacy CP850 filenames, use unzip -O CP850, but only if the archive
+    #    does not contain symlink entries.
+    #  - Reject path traversal (../) and absolute paths (Unix + Windows style)
+    #    in archive entry names before extraction.
+    #
+
+    # Make sure the destination directory exists.
+    if {![file isdirectory $destination]} {
+        file mkdir $destination
+    }
+
+    # Generic path checks. Errors out on failures.
+    util::archive_check_paths -archive $source
+
+    # Tools for extraction
+    set bsdtarCmd [util::which bsdtar]
+    set unzipCmd [util::which unzip]
+    set zipinfoCmd [util::which zipinfo]
+
+    #
+    # Check whether we have to use CP850 handling (unzip -O CP850).
+    # This is Linux-only and depends on util::zip_file_contains_valid_filenames.
+    #
+    set need_cp850 0
+    if {[info commands ::util::zip_file_contains_valid_filenames] ne ""
+        && $::tcl_platform(os) eq "Linux"
+        && ![::util::zip_file_contains_valid_filenames $source]} {
+
+        #
+        # The option "-O" works apparently only under Linux and might
+        # depend on the version of "unzip". We assume here that the
+        # broken characters are from Windows (code page 850).
+        #
+        set need_cp850 1
+    }
+
+    #
+    # If CP850 recoding is needed, be conservative: reject archives
+    # that contain symlinks, since recoding can do harm with symlink
+    # paths and targets.
+    #
+    if {$need_cp850} {
+        if {[catch {util::archive_has_symlinks -archive $source} result]} {
+            #
+            # We cannot reliably check for symlinks in this archive, but we
+            # know we would have to recode filenames. Be conservative.
+            #
+            error "Zip archive '$source' appears to need CP850 recoding,\
+                  but symlink inspection failed: $result.\
+                  Refusing to extract for safety."
+        }
+        if {$result} {
+            error "Zip archive '$source' requires CP850 recoding and contains symbolic links.\
+                  This combination is rejected for security reasons."
+        }
+    }
+
+    #
+    # Prefer bsdtar when:
+    #   - it is available
+    #   - we do NOT need special CP850 handling
+    #
+    if {$bsdtarCmd ne "" && !$need_cp850} {
+        #
+        # bsdtar can read ZIP files as well.
+        #
+        #   -x        extract
+        #   -f file   archive file
+        #   -C dir    chdir before extracting (like unzip -d)
+        #   -k        do not overwrite existing files (like unzip -n)
+        #   --no-same-owner       do not restore uid/gid from archive
+        #   --no-same-permissions do not restore exact permissions
+        #
+        set cmd [list exec -- $bsdtarCmd -x]
+        if {!$overwrite_p} {
+            lappend cmd -k
+        }
+        lappend cmd --no-same-owner --no-same-permissions
+        lappend cmd -f $source -C $destination
+
+        {*}$cmd
+        return
+    }
+
+    #
+    # Fallback: classic unzip, with optional CP850 handling.
+    #
+    if {$unzipCmd eq ""} {
+        if {$need_cp850} {
+            error "Zip file contains non-UTF-8 filenames and 'unzip'\
+                  (needed for -O CP850) is not available on the system."
+        } else {
+            error "Neither bsdtar nor unzip command found on the system."
+        }
+    }
+
+    set extra_options {}
+    if {$need_cp850} {
+        lappend extra_options -O CP850
+    }
+
+    # -n means we don't overwrite existing files, -o forces overwrite
+    set overwrite_opt [expr {$overwrite_p ? "-o" : "-n"}]
+
+    exec $unzipCmd {*}$extra_options $overwrite_opt $source -d $destination
+}
+
+
 ad_proc -deprecated util_report_library_entry {
     {extra_message ""}
 } {
