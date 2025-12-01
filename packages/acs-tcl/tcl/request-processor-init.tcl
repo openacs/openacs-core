@@ -100,7 +100,7 @@ $unreg_cmd HEAD /*.tcl
 $unreg_cmd POST /*.tcl
 
 set listings [ns_config "ns/server/[ns_info server]" "directorylisting" "none"]
-if { $listings eq "fancy" || $listings eq "simple" } {
+if { $listings in {fancy simple}} {
     nsv_set rp_directory_listing_p . 1
 } else {
     nsv_set rp_directory_listing_p . 0
