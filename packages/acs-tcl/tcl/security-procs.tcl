@@ -835,9 +835,17 @@ ad_proc -public ad_check_password {
     @return Returns 1 if the password is correct for the given user ID.
 } {
 
-    set found_p [db_0or1row password_select {
-        select password, salt, password_hash_algorithm from users where user_id = :user_id
-    }]
+    try {
+        set found_p [db_0or1row password_select {
+            select password, salt, password_hash_algorithm from users where user_id = :user_id
+        }]
+    } on error {errorMsg} {
+        ns_log warning "Password query failed. Probably upgrade script not run. Retry with legacy version"
+        set found_p [db_0or1row password_select {
+            select password, salt, 'salted-sha1'::text as password_hash_algorithm
+            from users where user_id = :user_id
+        }]
+    }
     if { !$found_p } {
         return 0
     }
