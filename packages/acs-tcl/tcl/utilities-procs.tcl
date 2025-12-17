@@ -5061,8 +5061,8 @@ namespace eval util::resources {
                               -url $vulnerabilityCheckVersionURL \
                               -key snyk-$library/$version]
                 if {$page eq ""} {
-                    unset vulnerabilityCheckVersionURL
                     ns_log notice "check_vulnerability: request failed $vulnerabilityCheckVersionURL"
+                    unset vulnerabilityCheckVersionURL
                 } else {
                     set hasVulnerability [string match "*Known vulnerabilities in the*package*" $page]
                     #ns_log notice RESULT=$page
