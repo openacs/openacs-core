@@ -3303,7 +3303,7 @@ ad_proc -public security::validated_host_header {} {
             ns_log error "security::validated_host_header: configuration error:" \
                 "name resolution for configured hostname '$driverHostName'" \
                 "of driver '[ad_conn driver]' failed" \
-                "(name '$hostName', errorMsg: $errorMsg)"
+                "(name '$hostName')"
         } on ok {result} {
             set validationOk [expr {$hostName in $result}]
         }
