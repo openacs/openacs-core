@@ -3261,7 +3261,7 @@ ad_proc -public security::validated_host_header {} {
         #
         set driverInfo [util_driver_info]
         set driverHostName [dict get $driverInfo hostname]
-        if {$hostName eq $driverHostName} {
+        if {$hostName in $driverHostName} {
             set validationOk 1
         }
     }
@@ -3279,7 +3279,8 @@ ad_proc -public security::validated_host_header {} {
             #
             ns_log error "security::validated_host_header: configuration error:" \
                 "name resolution for configured hostname '$driverHostName'" \
-                "of driver '[ad_conn driver]' failed"
+                "of driver '[ad_conn driver]' failed" \
+                "(name '$hostName', errorMsg: $errorMsg)"
         } on ok {result} {
             set validationOk [expr {$hostName in $result}]
         }
