@@ -176,6 +176,7 @@ namespace eval acs_admin {
                             set c [::letsencrypt::Client new \
                                        -API $api \
                                        {*}$key_type_parameter \
+                                       -sslpath [file dirname $certfile] \
                                        -background \
                                        -domains {} \
                                       ]
