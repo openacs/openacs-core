@@ -15,7 +15,6 @@ ad_page_contract {
     }
 }
 
-catch {::util::block_request -condition {[ns_conn pool] eq "bots"} -target bots}
 #
 # Avoid page caching, across all browsers, no matter how the other
 # site wide caching parameters are set. For discussion and details,
