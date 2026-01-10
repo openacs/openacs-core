@@ -10,11 +10,10 @@
   this program to catch.
 </p>
 
-<p>
-  Here's what uptime has to say about the box:
-</p>
-
-<code>@uptime_output@</code>
+<if @uptime@ not nil>
+   <p> Here's what uptime has to say about the box:</p>
+  <code>@uptime_output@</code>
+</if>
 
 <h2>Connections</h2>
 
