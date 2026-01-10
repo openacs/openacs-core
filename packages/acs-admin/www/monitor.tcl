@@ -15,7 +15,7 @@ set threads [ns_info threads]
 set connections [list]
 foreach thread $threads {
     if { [lindex $thread 5] eq "ns:connthread" && [llength [lindex $thread 6]] > 0 } {
-	lappend connections [lindex $thread 6]
+        lappend connections [lindex $thread 6]
     }
 }
 
@@ -67,14 +67,14 @@ set distinct [array size ip_p]
 
 # run standard GNU uptime command to get load average (crude measure
 # of system health).
-if {[set uptime [util::which uptime]] eq ""} {
-    error "'uptime' command not found on the system"
+set uptime_output "The utility program 'uptime' is not available on this system"
+if {[set uptime [util::which uptime]] ne ""} {
+    if {[catch { set uptime_output [exec $uptime] } errmsg]} {
+        # whoops something wrong with uptime (check path)
+        set uptime_output "ERROR running uptime, check path in script"
+    }
 }
 
-if {[catch { set uptime_output [exec $uptime] } errmsg]} {
-   # whoops something wrong with uptime (check path)
-   set uptime_output "ERROR running uptime, check path in script"
-}
 
 # Local variables:
 #    mode: tcl
