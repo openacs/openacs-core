@@ -5,6 +5,16 @@ ad_page_contract {
 set page_title "Cache Control"
 set context [list [list "../developer" "Developer's Administration"] $page_title]
 
+#
+# If we have xotcl-core installed, use its cache management
+#
+if {[dict get [::acs::site_node get -url /xotcl/cache] url] ne "/"} {
+    set html [ad_parse_template \
+                  [template::themed_template "/packages/xotcl-core/www/cache"]]
+    ns_return 200 text/html [ns_adp_parse $html]
+    ad_script_abort
+}
+
 template::multirow create caches name entries size max flushed hit_rate
 
 foreach cache [lsort -dictionary [ns_cache_names]] {
