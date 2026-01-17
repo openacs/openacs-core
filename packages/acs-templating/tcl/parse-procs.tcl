@@ -399,7 +399,7 @@ ad_proc -public template::adp_init { type file_stub } {
     #
     set proc_name [namespace which ::template::mtimes::${cache}::$file_stub]
     #ns_log notice "$type $file_stub -> '$proc_name'"
-    
+
     set pkg_id [apm_package_id_from_key acs-templating]
     set refresh_cache [parameter::get \
                            -package_id $pkg_id \
@@ -426,6 +426,7 @@ ad_proc -public template::adp_init { type file_stub } {
                 }
             }
             #ns_log notice "$type $file_stub -> compiled '$code'"
+            #ns_log notice "DEBUG ... stored in: ::template::code::${cache}::$file_stub"
 
             #
             # Wrap the code for both types of files within an uplevel
@@ -691,13 +692,15 @@ ad_proc -public template::adp_compile_chunk { chunk } {
     @param chunk   A string containing markup, potentially with embedded
     ADP tags.
 } {
+    #ns_log notice DEBUG template::adp_compile_chunk $chunk
     # parse the template chunk inside the tag
     set remaining [adp_parse_string $chunk]
+    #ns_log notice DEBUG template::adp_compile_chunk chunk -> remaining '$remaining'
 
     # add everything from either the beginning of the chunk or the
     # last balanced tag in the chunk to the list
 
-    if { ! [string is space $remaining] } {
+    if { ! [string is space -strict $remaining] } {
         adp_quote_chunk remaining remaining_quoted
         adp_append_string $remaining_quoted
     }
@@ -784,7 +787,28 @@ ad_proc -private template::adp_append_string { s } {
     ATS tags.  Variable references and procedure calls are
     interpreted as for any double-quoted string in Tcl.
 } {
+    #ns_log notice DEBUG template::adp_append_string '$s'
+    if {[info exists ::__adp_whitepace]} {
+        #ns_log notice DEBUG consume whitespace
+        set s $::__adp_whitepace$s
+        unset -nocomplain ::__adp_whitepace
+    }
+
     adp_append_code "append __adp_output \"$s\""
+}
+
+ad_proc -private template::adp_append_whitespace {
+    -clear:boolean
+    string
+} {
+    Mark that last adp tag was followed by whitespace
+} {
+    if {$clear_p} {
+        unset -nocomplain ::__adp_whitepace
+    } else {
+        #ns_log notice DEBUG set whitespace 1
+        set ::__adp_whitepace $string
+    }
 }
 
 ad_proc -public template::adp_append_code { code { nobreak "" } } {
@@ -841,6 +865,8 @@ ad_proc -private template::adp_tag_init { {tag_name ""} } {
     if { ! [string is space $chunk] } {
         adp_quote_chunk chunk chunk_quoted
         adp_append_string $chunk_quoted
+    } elseif {$chunk ne ""} {
+        adp_append_whitespace $chunk
     }
 
     # flush the output buffer so that the next dump will only catch

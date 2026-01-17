@@ -142,6 +142,25 @@ aa_register_case \
         aa_log [ns_quotehtml $result]
         aa_true "test substitution contains still template variables" \
             [regexp {@} $result]
+
+        set x 1
+        set text [ns_trim -delimiter | {
+            |  a
+            |  <adp:button>@x@</adp:button>
+            |  <adp:button >@x@@x@</adp:button>
+            |  b
+        }]
+        set result [eval [template::adp_compile -string $text]]
+        set expected [ns_trim -delimiter | {
+            |  a
+            |  <button >1</button>
+            |  <button >11</button>
+            |  b
+        }]
+        aa_true "replacement of tags preserves whitespace" \
+            {$result eq $expected}
+        #aa_log [ns_quotehtml $result]
+        #aa_log [ns_quotehtml $expected]
     }
 
 aa_register_case \
