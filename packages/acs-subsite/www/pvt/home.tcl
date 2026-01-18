@@ -16,6 +16,8 @@ set user_home_template [parameter::get -parameter "UserHomeTemplate" -package_id
 if {$user_home_template eq ""} {
     set user_home_template "/packages/acs-subsite/lib/home"
 }
+set user_home_template [template::themed_template $user_home_template]
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
