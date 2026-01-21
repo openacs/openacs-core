@@ -70,7 +70,7 @@ namespace eval ::apidoc {
 
         Return poperties of objects agnostic to the object system
         (i.e., XOTcl or NX).
-        
+
     } {
         switch -- $what {
             "mixin" {
@@ -230,7 +230,7 @@ namespace eval ::apidoc {
             default {
                 error "no idea how to return $what"
             }
-        }    
+        }
     }
 }
 
@@ -817,6 +817,7 @@ ad_proc -public api_proc_documentation {
     } else {
         set objName [::xo::api object_from_proc_index $proc_name]
         if {[nsf::is object,type=::nx::Object $objName] && ![nsf::is object,type=::nx::Class $objName]} {
+            
             append blocks_out <blockquote><ul>
             foreach m [$objName info lookup methods -callprotection public -source application] {
                 set definition [nx::Object info method definition [$objName info lookup method $m]]
@@ -842,21 +843,24 @@ ad_proc -public api_proc_documentation {
                     } else {
                         ns_log notice "unknown type '[nsf::cmd::info type $targetMethod]'" \
                             "for alias for '$targetMethod'" \
-                            "used in [list $objName info lookup syntax $m]"                             
+                            "used in [list $objName info lookup syntax $m]"
                     }
                     if {![info exists methodSyntax]} {
-                        set methodSyntax "$objName $m ..."                        
+                        set methodSyntax "$objName $m ..."
                     }
                 } else {
                     set methodSyntax "$objName $m [$objName info lookup syntax $m]"
                 }
                 set containerObject [lindex $definition 0]
-                if {$containerObject ne $objName} {
-                    #
-                    # The method is defined on a class
-                    #
+
+                if {[nsf::is object ${objName}::$m]} {
+                    # Object was returned as method
+                    set methodSyntax [::xo::api object_link "" ${objName}::$m]
+                } elseif {$containerObject ne $objName} {
+                    # Method '$m' defined on a class
                     set methodSyntax [xo::api method_link -label $methodSyntax $containerObject instproc $m]
                 } else {
+                    # Method '$m' defined on an object
                     set methodSyntax [xo::api method_link -label $methodSyntax $containerObject proc $m]
                 }
                 append blocks_out "<li><i>$methodSyntax</i></li>\n"
