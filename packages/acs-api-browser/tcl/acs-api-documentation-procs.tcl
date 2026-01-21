@@ -660,10 +660,14 @@ ad_proc -public api_proc_documentation {
         } else {
             set pretty_proc_name [subst {<i>&lt;instance of [::xo::api object_link $scope $cl]&gt;</i> $method}]
         }
-        #
-        # Make sure we have the newest update in the nsv
-        #
-        ::xo::api update_object_doc $scope [expr {[string match ::* $cl] ? $cl :"::$cl"}] ""
+        set cl [expr {[string match ::* $cl] ? $cl :"::$cl"}]
+
+        if {[::xo::api scope_eval $scope ::nsf::is object $cl]} {
+            #
+            # Make sure we have the newest update in the nsv
+            #
+            ::xo::api update_object_doc $scope $cl ""
+        }
     } else {
         set xotclArgs 0
         if {[namespace which ::xo::api] ne "" && [::xo::api isobject "" [lindex $proc_name 1]]} {
