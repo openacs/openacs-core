@@ -1,5 +1,3 @@
-# /pvt/home.tcl
-
 ad_page_contract {
     user's workspace page
     @cvs-id $Id$
@@ -79,6 +77,10 @@ set user_info_template [parameter::get -parameter "UserInfoTemplate" -package_id
 if {$user_info_template eq ""} {
     set user_info_template "/packages/acs-subsite/lib/user-info"
 }
+
+set with_webauthn [expr { [apm_package_enabled_p "webauthn"]
+                          && [info commands ::webauthn::passkey ] ne ""}]
+set return_url [ad_return_url]
 
 # Local variables:
 #    mode: tcl

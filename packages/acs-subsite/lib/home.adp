@@ -1,5 +1,5 @@
 <table>
-  <tr valign="top"> 
+  <tr valign="top">
     <td style="width:35%">
       <div class="portlet-wrapper">
         <div class="portlet-header">
@@ -50,6 +50,10 @@
         </div>
       </div>
 
+      <if @with_webauthn;literal@ true>
+        <widget src="/packages/webauthn/lib/passkey-mgmt" &=user_id &=return_url>
+      </if>
+
     </td>
     <td>
 
@@ -83,7 +87,7 @@
       </if>
 
       <if @portrait_state@ eq show>
-        <div class="portlet-wrapper">  
+        <div class="portlet-wrapper">
           <div class="portlet-header">
             <div class="portlet-title">
               <h1>#acs-subsite.Your_Portrait#</h1>

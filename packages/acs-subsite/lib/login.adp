@@ -3,6 +3,10 @@
 <div id="register-login">
 <formtemplate id="login"></formtemplate>
 
+<if @with_webauthn;literal@ true>
+  <widget src="/packages/webauthn/lib/passkey-login" &=return_url>
+</if>
+
 <if @forgotten_pwd_url@ not nil>
   <if @email_forgotten_password_p;literal@ true>
   <a href="@forgotten_pwd_url;literal@" true>#acs-subsite.Forgot_your_password#</a>

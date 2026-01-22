@@ -70,6 +70,7 @@ if { $allow_persistent_login_p } {
 } else {
     set default_persistent_login_p 0
 }
+#ns_log notice login.tcl: allow_persistent_login_p $allow_persistent_login_p default_persistent_login_p $default_persistent_login_p
 
 #
 # Set the value of the autocomplete attribute on the 'password' element in the
@@ -87,6 +88,9 @@ if { $return_url eq "" } {
     set return_url [ad_pvt_home]
 }
 
+set with_webauthn [expr {[apm_package_enabled_p "webauthn"]
+                         && [info commands ::webauthn::passkey] ne ""}]
+
 if { $authority_id eq "" } {
     set authority_id [auth::authority::get]
 }
@@ -97,9 +101,12 @@ set forgotten_pwd_url [auth::password::get_forgotten_url \
                            -email $email]
 
 set register_url [export_vars -no_empty -base "[subsite::get_url]register/user-new" { return_url }]
+#ns_log notice "login.tcl: register_url $register_url"
+
 if { $authority_id eq [auth::get_register_authority] || [auth::UseEmailForLoginP] } {
-    set register_url [export_vars -no_empty -base $register_url { username email}]
+    set register_url [export_vars -no_empty -base $register_url {username email}]
 }
+#ns_log notice "login.tcl: final register_url $register_url"
 
 set login_button [list [list [_ acs-subsite.Log_In] ok]]
 ad_form \
@@ -132,6 +139,7 @@ if { [parameter::get -parameter UsePasswordWidgetForUsername -package_id $::acs:
     set username_widget password
     set email_widget    password
 }
+#ns_log notice login.tcl: email_widget $email_widget username_widget $username_widget
 
 set focus {}
 if { [auth::UseEmailForLoginP] } {
@@ -167,6 +175,8 @@ if { [auth::UseEmailForLoginP] } {
         set focus "username"
     }
 }
+#ns_log notice login.tcl: focus $focus
+
 set focus "login.$focus"
 
 ad_form -extend -name login -form {
@@ -192,6 +202,7 @@ if { $allow_persistent_login_p } {
 
 ad_form -extend -name login -on_request {
     # Populate fields from local vars
+    #ns_log notice "login.tcl: on_request"
 
     set persistent_p [expr {$default_persistent_login_p == 1 ? "t" : ""}]
 
@@ -207,6 +218,7 @@ ad_form -extend -name login -on_request {
     set hash [ns_sha1 "$time$token_id$token"]
 
 } -on_submit {
+    #ns_log notice "login.tcl: on_submit"
 
     # Check timestamp
     set token [sec_get_token $token_id]
@@ -347,6 +359,7 @@ ad_form -extend -name login -on_request {
         }
     }
 } -after_submit {
+    #ns_log notice "login.tcl: after_submit"
 
     # We're logged in
 
