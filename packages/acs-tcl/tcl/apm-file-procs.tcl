@@ -448,6 +448,61 @@ ad_proc -private apm_transfer_file {
     file rename [dict get $result file] $output_file_name
 }
 
+ad_proc -private apm_github_resolve_url {
+    {-url:required}
+} {
+    Resolve various github.com URLs to an archive tarball URL plus an optional
+    subpath (for /tree/REF/<path>).
+    Returns a dict with keys:
+      kind      github
+      tarball   <url-to-.tar.gz>
+      subpath   <path-within-repo-or-empty>
+} {
+    # Examples:
+    #  https://github.com/O/R
+    #  https://github.com/O/R/tree/REF
+    #  https://github.com/O/R/tree/REF/path/to/pkg
+    #
+    # Use HEAD tarball when no REF is specified.
+    set re {^https?://github\.com/([^/]+)/([^/]+)(?:/tree/([^/]+)(?:/(.*))?)?/?$}
+    if {![regexp -- $re $url -> owner repo ref subpath]} {
+        return -code error "not a supported github url: $url"
+    }
+    # Trim possible ".git"
+    regsub {\.git$} $repo "" repo
+
+    if {$ref eq ""} {
+        # GitHub supports .../archive/HEAD.tar.gz
+        set tarball "https://github.com/$owner/$repo/archive/HEAD.tar.gz"
+    } else {
+        # We don’t know if REF is a branch or tag; GitHub accepts archive/<ref>.tar.gz too,
+        # but HEAD.tar.gz is easiest. Still, tree/REF implies a specific ref.
+        set tarball "https://github.com/$owner/$repo/archive/$ref.tar.gz"
+    }
+    if {$subpath eq ""} {
+        set subpath ""
+    }
+
+    return [list kind github tarball $tarball subpath $subpath]
+}
+
+ad_proc -private apm_find_package_info_in_dir {
+    {-dir:required}
+} {
+    Locate exactly one *.info file in the given directory.
+    Returns absolute path to the info file.
+} {
+    set infos [glob -nocomplain -directory $dir *.info]
+    if {[llength $infos] == 0} {
+        return -code error "no .info file found in $dir"
+    }
+    if {[llength $infos] > 1} {
+        return -code error "multiple .info files found in $dir: $infos"
+    }
+    return [lindex $infos 0]
+}
+
+
 ad_proc -public apm_load_apm_file {
     {-callback apm_dummy_callback}
     {-url {}}
@@ -464,12 +519,42 @@ ad_proc -public apm_load_apm_file {
 } {
     # First download the apm file if a URL is provided
     if { $url ne "" } {
-        set file_path [ad_tmpnam].apm
-        apm_callback_and_log $callback "<li>Downloading $url..."
-        if { [catch {apm_transfer_file -url $url -output_file_name $file_path} errmsg] } {
-            apm_callback_and_log $callback "Unable to download. Please check your URL.</ul>.
-            The following error was returned: <blockquote><pre>[ns_quotehtml $errmsg]
-            </pre></blockquote>"
+
+        set source_kind "apm"
+        set github_subpath ""
+        set download_url $url
+        set tmp_suffix ".apm"
+
+        # GitHub shortcut: accept github.com URLs and fetch a tarball
+        if {[regexp {^https?://github\.com/} $url]} {
+            if {[catch {set gh [apm_github_resolve_url -url $url]} ghmsg]} {
+                apm_callback_and_log $callback "Unsupported GitHub URL:\n\
+                                     <blockquote><pre>[ns_quotehtml $ghmsg]</pre></blockquote>"
+                ns_log Error "Error loading package from github url $url: $ghmsg"
+                return
+            }
+            set source_kind "github"
+            set download_url [dict get $gh tarball]
+            set github_subpath [dict get $gh subpath]
+            set tmp_suffix ".tar.gz"
+        }
+
+        set file_path [ad_tmpnam]${tmp_suffix}
+        apm_callback_and_log $callback "<li>Downloading $download_url..."
+
+        #if { [catch {apm_transfer_file -url $url -output_file_name $file_path} errmsg] } {
+        #    apm_callback_and_log $callback "Unable to download. Please check your URL.</ul>.\n\
+        #    The following error was returned: <blockquote><pre>[ns_quotehtml $errmsg]\n\
+        #    </pre></blockquote>"
+        #    return
+        #}
+
+        # NOTE: use resolved URL for actual download
+        if { [catch {apm_transfer_file -url $download_url -output_file_name $file_path} errmsg] } {
+            apm_callback_and_log $callback "Unable to download. Please check your URL.</ul>.\n\
+                                     The following error was returned: \n\
+                                     <blockquote><pre>[ns_quotehtml $errmsg]\n\
+                                     </pre></blockquote>"
             return
         }
 
@@ -482,84 +567,127 @@ ad_proc -public apm_load_apm_file {
         }
     }
 
-    #ns_log notice "*** try to exec [apm_gzip_cmd] -d -q -c -S .apm $file_path | [apm_tar_cmd] tf - 2> [apm_dev_null]"
-    if { [catch {
-        set files [split [string trim \
-                              [exec [apm_gzip_cmd] -d -q -c -S .apm $file_path | [apm_tar_cmd] tf - 2> [apm_dev_null]]] "\n"]
-        apm_callback_and_log $callback  "<li>Done. Archive is [format %.1f [expr { [ad_file size $file_path] / 1024.0 }]]KB, with [llength $files] files.<li>"
-    } errmsg] } {
-        apm_callback_and_log $callback "The follow error occurred during the uncompression process:
-    <blockquote><pre>[ns_quotehtml $errmsg]</pre></blockquote><br>
-    "
-                ns_log Error "Error loading APM file form url $url: $errmsg\n$::errorInfo"
-        return
+    if {![info exists source_kind]} {
+        set source_kind "apm"
     }
 
-    if { [llength $files] == 0 } {
-        apm_callback_and_log $callback  "The archive does not contain any files.\n"
-        ns_log Error "Error loading APM file form url $url: The archive does not contain any files."
-        return
-    }
-
-    set package_key [lindex [split [lindex $files 0] "/"] 0]
-
-    # Find that .info file.
-    foreach file $files {
-        set components [split $file "/"]
-
-        if {[lindex $components 0] ne $package_key  } {
-            apm_callback_and_log $callback  "All files in the archive must be contained in the same directory
-        (corresponding to the package's key). This is not the case, so the archive is not
-        a valid APM file.\n"
-            ns_log Error "Error loading APM file form url $url: Invalid APM file. All files in the archive must be contained in the same directory corresponding to the package's key."
+    if {$source_kind eq "apm"} {
+        #ns_log notice "*** try to exec [apm_gzip_cmd] -d -q -c -S .apm $file_path | [apm_tar_cmd] tf - 2> [apm_dev_null]"
+        if { [catch {
+            set files [split [string trim \
+                                  [exec [apm_gzip_cmd] -d -q -c -S .apm $file_path | [apm_tar_cmd] tf - 2> [apm_dev_null]]] "\n"]
+            apm_callback_and_log $callback  \
+                "<li>Done. Archive is [format %.1f [expr { [ad_file size $file_path] / 1024.0 }]]KB, with [llength $files] files.<li>"
+        } errmsg] } {
+            apm_callback_and_log $callback "The follow error occurred during the uncompression process:\n\
+                                 <blockquote><pre>[ns_quotehtml $errmsg]</pre></blockquote><br>\n\
+                                 "
+                    ns_log Error "Error loading APM file form url $url: $errmsg\n$::errorInfo"
             return
         }
 
-        if { [llength $components] == 2 && [ad_file extension $file] eq ".info" } {
-            if { [info exists info_file] } {
-                apm_callback_and_log $callback  "The archive contains more than one <tt>package/*/*.info</tt> file, so it is not a valid APM file.</ul>\n"
-                ns_log Error "Error loading APM file form url $url: Invalid APM file. More than one package .info file."
+        if { [llength $files] == 0 } {
+            apm_callback_and_log $callback  "The archive does not contain any files.\n"
+            ns_log Error "Error loading APM file form url $url: The archive does not contain any files."
+            return
+        }
+        set package_key [lindex [split [lindex $files 0] "/"] 0]
+
+
+        # Find that .info file.
+        foreach file $files {
+            set components [split $file "/"]
+
+            if {[lindex $components 0] ne $package_key  } {
+                apm_callback_and_log $callback  \
+                    "All files in the archive must be contained in the same directory \
+                    (corresponding to the package's key). This is not the case, so the archive is not a valid APM file.\n"
+                ns_log Error "Error loading APM file form url $url: Invalid APM file." \
+                    "All files in the archive must be contained in the same directory corresponding to the package's key."
                 return
-            } else {
-                set info_file $file
+            }
+
+            if { [llength $components] == 2 && [ad_file extension $file] eq ".info" } {
+                if { [info exists info_file] } {
+                    apm_callback_and_log $callback \
+                        "The archive contains more than one <tt>package/*/*.info</tt> file, so it is not a valid APM file.</ul>\n"
+                    ns_log Error "Error loading APM file form url $url: Invalid APM file. More than one package .info file."
+                    return
+                } else {
+                    set info_file $file
+                }
             }
         }
-    }
-    if { ![info exists info_file] || [regexp {[^a-zA-Z0-9\-\./_]} $info_file] } {
-        apm_callback_and_log $callback  "The archive does not contain a <tt>*/*.info</tt> file, so it is not
-        a valid APM file.</ul>\n"
-        ns_log Error "Error loading APM file form url $url: Invalid APM file. No package .info file."
-        return
+
+        if { ![info exists info_file] || [regexp {[^a-zA-Z0-9\-\./_]} $info_file] } {
+            apm_callback_and_log $callback  \
+                "The archive does not contain a <tt>*/*.info</tt> file, so it is not a valid APM file.</ul>\n"
+            ns_log Error "Error loading APM file form url $url: Invalid APM file. No package .info file."
+            return
+        }
+
+        apm_callback_and_log $callback  "Extracting the .info file (<tt>$info_file</tt>)..."
+        set tmpdir [ad_mktmpdir]
+        exec [apm_gzip_cmd] -d -q -c -S .apm $file_path | [apm_tar_cmd] -xf - -C $tmpdir $info_file 2> [apm_dev_null]
+        set info_on_disk [ad_file join $tmpdir $info_file]
+
+    } else {
+        apm_callback_and_log $callback  "<li>Done. Archive is [format %.1f [expr { [ad_file size $file_path] / 1024.0 }]]KB.<li>"
+        apm_callback_and_log $callback  "Extracting GitHub archive to locate .info file..."
+        set tmpdir [ad_mktmpdir]
+        if {[catch {
+            exec [apm_gzip_cmd] -d -q -c $file_path | [apm_tar_cmd] -xf - -C $tmpdir 2> [apm_dev_null]
+            set roots [glob -nocomplain -directory $tmpdir -types d *]
+            if {[llength $roots] != 1} {
+                error "unexpected github archive layout (roots=$roots)"
+            }
+            set topdir [lindex $roots 0]
+            set pkgroot $topdir
+            if {[info exists github_subpath] && $github_subpath ne ""} {
+                set pkgroot [ad_file join $topdir $github_subpath]
+                if {![ad_file isdirectory $pkgroot]} {
+                    error "subpath '$github_subpath' not found in archive"
+                }
+            }
+            set info_on_disk [apm_find_package_info_in_dir -dir $pkgroot]
+        } errmsg]} {
+            file delete -force -- $tmpdir
+            apm_callback_and_log $callback \
+                "The follow error occurred during the uncompression process:\n\
+                        <blockquote><pre>[ns_quotehtml $errmsg]</pre></blockquote><br>\n\
+                        "
+            ns_log Error "Error loading package from github url $url: $errmsg\n$::errorInfo"
+            return
+        }
     }
 
-    apm_callback_and_log $callback  "Extracting the .info file (<tt>$info_file</tt>)..."
-    set tmpdir [ad_mktmpdir]
-    exec [apm_gzip_cmd] -d -q -c -S .apm $file_path | [apm_tar_cmd] -xf - -C $tmpdir $info_file 2> [apm_dev_null]
-
-    #exec sh -c "cd $tmpdir ; [apm_gzip_cmd] -d -q -c -S .apm $file_path | [apm_tar_cmd] xf - $info_file" 2> [apm_dev_null]
 
     if { [catch {
-        array set package [apm_read_package_info_file [ad_file join $tmpdir $info_file]]
+        array set package [apm_read_package_info_file $info_on_disk]
     } errmsg]} {
         file delete -force -- $tmpdir
-        apm_callback_and_log $callback  "The archive contains an unparsable package specification file:
-    <code>$info_file</code>.  The following error was produced while trying to
-    parse it: <blockquote><pre>[ns_quotehtml $errmsg]</pre></blockquote>.
-    <p>
-    The package cannot be installed.
-    </ul>\n"
-                ns_log Error "Error loading APM file form url $url: Bad package .info file. $errmsg\n$::errorInfo"
+        apm_callback_and_log $callback \
+            "The archive contains an unparsable package specification file:\n\
+                <code>[ns_quotehtml [ad_file tail $info_on_disk]]</code>.\n\
+                The following error was produced while trying to parse it:\n\
+                <blockquote><pre>[ns_quotehtml $errmsg]</pre></blockquote>.\n\
+                <p> The package cannot be installed. \n\
+                </ul>\n"
+        ns_log Error "Error loading APM file form url $url: Bad package .info file. $errmsg\n$::errorInfo"
         return
     }
-    file delete -force -- $tmpdir
+
     set package_key $package(package.key)
     set pretty_name $package(package-name)
     set version_name $package(name)
     ns_log Debug "APM: Preparing to load $pretty_name $version_name"
+    
     # Determine if this package version is already installed.
     if {[apm_package_version_installed_p $package_key $version_name]} {
         apm_callback_and_log $callback  "<li>$pretty_name $version_name is already installed in your system."
         ns_log Error "Error loading APM file form url $url: Package $pretty_name $version_name is already installed"
+        file delete -force -- $tmpdir
+
     } else {
 
         set install_path [apm_workspace_install_dir]
@@ -570,9 +698,32 @@ ad_proc -public apm_load_apm_file {
         apm_callback_and_log $callback  "<li>Extracting files into the filesystem."
         apm_callback_and_log $callback  "<li>$pretty_name $version_name ready for installation."
 
-        #ns_log notice "exec sh -c 'cd $install_path ; [apm_gzip_cmd] -d -q -c $file_path | [apm_tar_cmd] xf -' 2>/dev/null"
-        exec [apm_gzip_cmd] -d -q -c -S .apm $file_path | [apm_tar_cmd] -xf - -C $install_path 2> [apm_dev_null]
-
+        if {$source_kind eq "apm"} {
+            exec [apm_gzip_cmd] -d -q -c -S .apm $file_path | [apm_tar_cmd] -xf - -C $install_path 2> [apm_dev_null]
+        } else {
+            # GitHub: copy the located package root into workspace under the real package_key
+            if {[catch {
+                set roots [glob -nocomplain -directory $tmpdir -types d *]
+                set topdir [lindex $roots 0]
+                set pkgroot $topdir
+                if {[info exists github_subpath] && $github_subpath ne ""} {
+                    set pkgroot [ad_file join $topdir $github_subpath]
+                }
+                set dest [ad_file join $install_path $package_key]
+                if {[ad_file exists $dest]} {
+                    file delete -force -- $dest
+                }
+                file copy -force -- $pkgroot $dest
+            } errmsg]} {
+                file delete -force -- $tmpdir
+                apm_callback_and_log $callback \
+                    "Failed to stage files from GitHub archive:\n\
+                    <blockquote><pre>[ns_quotehtml $errmsg]</pre></blockquote>"
+                ns_log Error "Error loading package from github url $url: $errmsg\n$::errorInfo"
+                return
+            }
+        }
+        file delete -force -- $tmpdir        
         return "${install_path}/${package_key}/${package_key}.info"
     }
 }

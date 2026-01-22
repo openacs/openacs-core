@@ -10,8 +10,8 @@
       <h3>Install from Repository</h3>
       <p>
         Download and install/upgrade packages from the <a href="http://openacs.org/repository/">OpenACS.org repository</a>.
-        <br>When using this option, the existing code of the currently installed packages is moved
-        away <br>and replaced by the chosen packages from the OpenACS repository.
+        <br>When using this option,the existing code of the currently installed packages is archived
+        and replaced by the selected packages from the OpenACS repository.
       </p>
       <p>
         <a href="/acs-admin/@remote_install_url@" class="button">Install</a> or
@@ -22,9 +22,9 @@
     <li>
       <h3>Install from Local File System</h3>
       <p>
-        Install/upgrade packages from the local filesystem (@local_path@).
+        Install or upgrade packages from the local filesystem (@local_path@).
         <br>Use this if your site has
-        custom code or your packages are kept in a local code repository.
+        custom code or your packages are kept in a local source code management.
         <a href="/doc/upgrade-openacs-files">Help</a>.
       </p>
       <p>
@@ -34,15 +34,18 @@
     </li>
 
     <li>
-      <h3>Install from URL or Local Path</h3>
+      <h3>Install from URL or Non-Standard Location</h3>
       <p>
-        Load a single package an archive stored a non-standard place on
-        your local filesystem or from a URL.
+        Load a single package from a non-standard source.
+        <br>
+        Use this option for ad-hoc installs from HTTP/HTTPS (including GitHub),
+        or from an absolute path outside the standard local packages directory.
       </p>
       <p>
-        <a href="/acs-admin/apm/package-load" class="button">Load</a> from URL or Local Path
+        <a href="/acs-admin/apm/package-load" class="button">Load</a> from URL or non-standard location.
       </p>
     </li>
+    
 
   </ul>
 

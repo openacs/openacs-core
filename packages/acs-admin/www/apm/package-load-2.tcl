@@ -1,26 +1,31 @@
 ad_page_contract {
-    Loads a package from a URL into the package manager.
+    Loads a package from a URL or local filesystem into the package manager.
 
-    @param url The url of the package to load.
+    @param source URL (http/https, including GitHub) or absolute local path.
     @author Bryan Quinn (bquinn@arsdigita.com)
+    @author Gustaf Neumann (neumann@wu-wien.ac.at)
     @creation-date 10 October 2000
-    @cvs-id $Id$
-
 } {
-    {url ""}
-    {file_path ""}
+    {source ""}
     {delete:boolean,notnull 0}
 } -validate {
-    
-    url_xor_file_path {
-	if {($url eq "" && $file_path eq "") ||
-	($url ne "" && $file_path ne "") } {
-	    ad_complain
-	}
+
+    source_present {
+        if {$source eq ""} {
+            ad_complain
+        }
+    }
+
+    source_absolute_path_or_url {
+        # Accept http(s) URLs, otherwise require absolute path
+        if {![regexp {^https?://} $source] && ![string match "/*" $source]} {
+            ad_complain
+        }
     }
 
 } -errors {
-    url_xor_file_path {You must specify either a URL to download or a file path, but not both.}
+    source_present {You must specify a package source (URL or absolute local path).}
+    source_absolute_path_or_url {Local paths must be absolute (start with “/”), or provide an http(s) URL.}
 }
 
 if {$delete} {
@@ -34,63 +39,56 @@ ad_return_top_of_page [ad_parse_template \
                            -params [list context title] \
                            [template::streaming_template]]
 
-if {$file_path eq ""} {
-    #
-    # delete potential leading "http://"
-    #
-    if {[string range $url 0 6] eq "http://"} {
-	set url [string range $url 7 end]
-    }
-    ns_write "<ul>"
-    set url_param "-url http://$url"
-   
-} else {
-    ns_write "
-    Accessing $file_path...
-    <p>
-    <ul>
-    "
-    set url_param ""
-}
-ns_log Debug "APM: Loading $file_path"
+ns_write "<ul>\n"
 
-# If file_path ends in .apm, then load the single package.
-if { [file extension $file_path] eq ".apm" || $url_param ne ""} {
-    apm_load_apm_file {*}$url_param -callback apm_ns_write_callback $file_path
+set is_url_p [regexp {^https?://} $source]
+
+if {$is_url_p} {
+    ns_write "<li>Downloading $source...\n"
+    ns_log Debug "APM: Loading from url $source"
+
+    # URL install: pass -url and keep file_path empty
+    apm_load_apm_file -url $source -callback apm_ns_write_callback ""
+
 } else {
-    # See if this is a directory.
-    if { [file isdirectory $file_path] } {
-	#Find all the .APM and load them.
-	set apm_file_list [glob -nocomplain "$file_path/*.apm"] 
-	if {$apm_file_list eq ""} {
-	    ns_write [subst {
-		The directory specified, <code>$file_path</code>, does not contain any APM files.  
-		Please <a href="package-load">try again</a>
-	    }]
-	    return
-	} else {
-	    foreach apm_file $apm_file_list {
-		ns_write "Loading $apm_file... <ul>"
-		apm_load_apm_file -callback apm_ns_write_callback $apm_file
-		ns_write "<li>Done.</ul><p>"
-	    }
-	}
+    set file_path $source
+    ns_write "<li>Accessing $file_path...\n"
+    ns_log Debug "APM: Loading $file_path"
+
+    # Local install: single .apm file?
+    if {[file extension $file_path] eq ".apm"} {
+        apm_load_apm_file -callback apm_ns_write_callback $file_path
+
+    } elseif {[file isdirectory $file_path]} {
+        # Directory: load all .apm files
+        set apm_file_list [glob -nocomplain "$file_path/*.apm"]
+        if {$apm_file_list eq ""} {
+            ns_write [subst {
+                <li>The directory specified, <code>$file_path</code>, does not contain any APM files.
+                Please <a href="package-load">try again</a>.
+            }]
+            ns_write "</ul>\n"
+            return
+        }
+
+        foreach apm_file $apm_file_list {
+            ns_write "<li>Loading $apm_file... <ul>\n"
+            apm_load_apm_file -callback apm_ns_write_callback $apm_file
+            ns_write "<li>Done.</ul>\n"
+        }
+
     } else {
-	# Not sure what to do... stop.
-	ns_write "The specified file path is not an APM file or a directory.  Please try
-	entering a new file path."
-	return
+        ns_write [subst {
+            <li>The specified path <code>$file_path</code> is not an APM file and not a directory.
+            Please <a href="package-load">try again</a>.
+        }]
+        ns_write "</ul>\n"
+        return
     }
 }
 
 ns_write [subst {
 </ul>
-The package(s) are now extracted into your filesystem.  You can <a href="package-load">load 
-another new package</a> from a URL or proceed to <a href="packages-install">install</a> the package(s).
+The package(s) are now extracted into your filesystem. You can <a href="package-load">load another new package</a>
+or proceed to <a href="packages-install">install</a> the package(s).
 }]
-
-# Local variables:
-#    mode: tcl
-#    tcl-indent-level: 4
-#    indent-tabs-mode: nil
-# End:
