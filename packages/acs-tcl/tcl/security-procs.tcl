@@ -3309,6 +3309,25 @@ ad_proc -public security::validated_host_header {} {
         }
     }
 
+    if {$validationOk == 0 && [::acs::icanuse "ns_ip"] && [ns_ip valid $hostName]} {
+        #
+        # Validation is OK, when we have an IP address, and the IP
+        # address is returned via DNS from one of the configured host
+        # names.
+        #
+        foreach name $driverHostName {
+            try {
+                if {$hostName in [ns_addrbyhost -all $name]} {
+                    #ns_log notice  "**** resolved '$name' to provided numeric host header field: $hostName"
+                    set validationOk 1
+                    break
+                }
+            } on error {errorMsg} {
+                ns_log debug "cannot resolve '$name' via DNS"
+            }
+        }
+    }
+
     #
     # Check, if the provided host is the same in [ns_conn location]
     # (will be used as default, but we do not want a warning in such
