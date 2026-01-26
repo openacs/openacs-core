@@ -452,11 +452,11 @@ ad_proc -private apm_github_resolve_url {
     {-url:required}
 } {
     Resolve various github.com URLs to an archive tarball URL plus an optional
-    subpath (for /tree/REF/<path>).
+    subpath (for /tree/REF/&lt;path&gt;).
     Returns a dict with keys:
       kind      github
-      tarball   <url-to-.tar.gz>
-      subpath   <path-within-repo-or-empty>
+      tarball   &lt;url-to-.tar.gz&gt;
+      subpath   &lt;path-within-repo-or-empty&gt;
 } {
     # Examples:
     #  https://github.com/O/R
