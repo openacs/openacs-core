@@ -2621,6 +2621,38 @@ namespace eval ::template::csrf {
     }
 }
 
+ad_proc ::template::require_post {} {
+    
+    Enforce HTTP POST for state-changing requests.
+
+    Verify that the current request was issued using the HTTP POST
+    method. If the request uses any other method (e.g. GET), return
+    a "405 Method Not Allowed" response and abort request processing.
+
+    Background:
+    State-changing operations should not be reachable via HTTP GET.
+    In particular, browsers will send session cookies on cross-site
+    GET navigations when SameSite is set to "lax", which enables CSRF
+    attacks via forged links. Requiring POST reduces the attack
+    surface and allows SameSite=Lax cookies to provide an additional
+    layer of protection.
+
+    This procedure is intended to be used in combination with
+    explicit CSRF token validation for full protection.
+
+    This validator is intended to be used in a "-validate" block of a
+    page contract or ad_form.
+
+    @return 1 on success; otherwise the request is aborted
+    
+} {
+    if {[ns_conn isconnected] && [ns_conn method] ne "POST"} {
+        ns_return 405 text/plain "Method Not Allowed"
+        ad_script_abort
+    }
+    return 1
+}
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
