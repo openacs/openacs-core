@@ -4,7 +4,7 @@ ad_page_contract {
 } -query {
     user_id:naturalnum,notnull
     password:optional
-    {referer "/acs-admin/users"}
+    {referer "/acs-admin/users"}    
 } -properties {
     context:onevalue
     export_vars:onevalue

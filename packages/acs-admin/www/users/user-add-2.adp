@@ -32,6 +32,8 @@ Thank you,
 <center>
 <input type="submit" value="Send Email">
 </center>
-
+<if @::__csrf_token@ defined>
+  <input type="hidden" name="__csrf_token" value="@::__csrf_token;literal@">
+</if>
 </form>
 </p>

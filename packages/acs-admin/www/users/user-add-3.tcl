@@ -9,6 +9,9 @@ ad_page_contract {
     last_name
     user_id:naturalnum,notnull
     {referer "/acs-admin/users"}
+} -validate {
+  method { require_post }
+  csrf   { csrf::validate }
 } -properties {
     context:onevalue
     first_names:onevalue

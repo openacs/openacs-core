@@ -61,15 +61,24 @@ if { $callback_url ne "" } {
 # Pre-generate user_id for double-click protection
 set user_id [db_nextval acs_object_id_seq]
 
-ad_form -name register -export {next_url user_id return_url} -form [auth::get_registration_form_elements]
+ad_form -name register \
+    -export {next_url user_id return_url} \
+    -form [auth::get_registration_form_elements] \
+    -csrf_protection_p true
 
 #
 # Standard validator
 #
+# If the data is not submitted via a POST request, bail out hard. The
+# request might come from an hacking attempt.
 set validate {
     {email
         {[party::get_by_email -email $email] eq ""}
         "[_ acs-subsite.Email_already_exists]"
+    }
+    {email
+        {[require_post]}
+        "Only POST requests are allowed"
     }
 }
 
@@ -107,7 +116,7 @@ ad_form -extend -name register -on_request {
     # Populate elements from local variables
 
 } -on_submit {
-
+    
     db_transaction {
         array set creation_info [auth::create_user \
                                      -user_id $user_id \
