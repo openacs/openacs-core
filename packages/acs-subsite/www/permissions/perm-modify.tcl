@@ -8,6 +8,8 @@ ad_page_contract {
     {privs:token,notnull}
     return_url:localurl
 } -validate {
+    method { require_post }
+    csrf   { csrf::validate }
     privs_exists_p -requires {privs} {
         foreach priv $privs {
             if {![db_0or1row get_priv {select 1 from acs_privileges where privilege = :priv}]} {
@@ -29,7 +31,9 @@ ad_page_contract {
 }
 
 
-permission::require_permission -object_id $object_id -privilege admin
+permission::require_permission \
+    -object_id $object_id \
+    -privilege admin
 
 set mainsite_p [expr {$object_id eq [subsite::main_site_id]}]
 

@@ -73,9 +73,14 @@ if { $scope ne "global" } {
 ad_form -name parameters -export {section} -cancel_url $return_url -form {
     {return_url:text(hidden)}
     {scope:text(hidden)}
-    {package_id:integer(hidden),optional}
+    {package_id:integer(hidden)}
     {package_key:text(hidden),optional}
-}
+} -validate {
+    {package_id 
+        { [require_post] } 
+        "Only POST requests are allowed" 
+    }     
+} -csrf_protection_p true
 
 set display_warning_p 0
 set counter 0

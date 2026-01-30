@@ -4,10 +4,9 @@
 
   <p>[ <a href="@toggle_view_href@">@toggle_view_label@</a> ]</p>
   <h3>#acs-subsite.Direct_Permissions#</h3>
-
   <if @detail_p;literal@ true>
     <if @acl:rowcount;literal@ gt 0>
-      <form method="get" action="revoke">
+      <form method="POST" action="revoke">
         @export_form_vars;noquote@
         <multiple name="acl">
           <if @mainsite_p@ true and @acl.grantee_id@ eq "-1">
@@ -25,9 +24,12 @@
     </else>
     <if @acl:rowcount;literal@ gt 0>
       <div><input type="submit" value="#acs-subsite.Revoke_Checked#"></div>
+      <if @::__csrf_token@ defined>
+         <input type="hidden" name="__csrf_token" value="@::__csrf_token;literal@">
+      </if>
       </form>
     </if>
-  @controls;noquote@
+    @controls;noquote@
   </if><else>
     <include src="/packages/acs-subsite/www/permissions/perm-include" &="object_id" &="return_url" &="privs">
   </else>

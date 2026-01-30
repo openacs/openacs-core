@@ -37,7 +37,7 @@ foreach item $revoke_list {
 
 append body [subst {
     </ul>
-    <form method="get" action="revoke-2">
+    <form method="POST" action="revoke-2">
     [export_vars -form {object_id application_url}]
 }]
 
@@ -49,6 +49,9 @@ foreach item $revoke_list {
 
 append body {
     <input name="operation" type="submit" value="Yes"> <input name="operation" type="submit" value="No">
+    <if @::__csrf_token@ defined>
+       <input type="hidden" name="__csrf_token" value="<%= $::__csrf_token %>">
+    </if>
     </form>
 }
 

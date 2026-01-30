@@ -40,7 +40,7 @@ ad_form -name update -edit_buttons [list [list [_ acs-kernel.common_update] "ok"
     {user_id:integer(hidden)}
     {return_url:text(hidden),optional}
     {message:text(hidden),optional}
-}
+} -csrf_protection_p true
 
 
 set focus "update.password_old"
@@ -62,6 +62,10 @@ ad_form -extend -name update -form {
         { [string equal $password_1 $password_2] }
         { Passwords don't match }
     }
+    {password_1 
+        { [require_post] } 
+        "Only POST requests are allowed" 
+    }     
 } -on_submit {
     array set result [auth::password::change \
                           -user_id $user_id \

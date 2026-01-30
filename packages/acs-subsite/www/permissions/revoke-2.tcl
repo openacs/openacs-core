@@ -6,8 +6,11 @@ ad_page_contract {
 } {
   object_id:naturalnum,notnull
   revoke_list:multiple
-  { operation "" }
+  {operation ""}
   {application_url ""}
+} -validate { 
+    method { require_post } 
+    csrf   { csrf::validate } 
 }
 
 permission::require_permission -object_id $object_id -privilege admin
