@@ -1282,10 +1282,29 @@ ad_proc -public ad_page_contract {
 
     # Initialize the list of page variables for other scripts to use
     set ::ad_page_contract_variables $apc_formals
-
+    
     if { [ad_complaints_count] > 0 } {
 
         set complaints [ad_complaints_get_list]
+
+        #
+        # If the request body was JSON, return contract errors as
+        # JSON.  Requires NaviServer's JSON/form parsing support
+        # (ns_conn form for JSON) and (optionally) ns_conn
+        # contenttype.  For now, just return the first complaint.
+        #
+        if {[info commands ::ns_json] ne ""
+            && "JSONPARSED" in [split [dict get [ns_conn details] flags] |]
+        } {
+            #ns_log notice DEBUG "we have JSON with validation complaints: $complaints"
+            ns_return 400 application/json \
+                [ns_json value -type object [list \
+                                                 error string invalid-input \
+                                                 details string [lindex $complaints 0] \
+                                                 complaints_count number [ad_complaints_count]]]
+            ad_script_abort
+        }
+        
         if {$warn_p} {
             ad_log warning "contract in '$::ad_page_contract_context'"\
                 "was violated:\n" [join $complaints "\n "]
