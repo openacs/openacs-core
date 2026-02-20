@@ -348,6 +348,75 @@ aa_register_case \
                 [acs::test::visualize_control_chars $i] $o
         }
     }
+
+
+aa_register_case -cats {
+    api
+    smoke
+} -procs {
+    ad_page_contract
+} ad_page_contract_json {
+    Test ad_page_contract in JSON requests
+} {
+    set www_dir [acs_root_dir]/packages/acs-automated-testing/www/
+
+    set user_info [acs::test::user::create -admin]
+    set testfilename JSON-TEST.tcl
+
+    if {[info commands ::ns_json] eq ""} {
+        return
+    }
+    try {
+        set tcl {
+            ad_page_contract {
+                test_page
+            } {
+                {user_id:naturalnum 0}
+            }
+            ns_log notice "json test file sees user_id: $user_id"
+            set flags [split [dict get [ns_conn details] flags] |]
+            nsv_set __test_json flags $flags
+            nsv_set __test_json ct [ns_set get [ns_conn headers] content-type]
+            ns_return 200 application/json [subst {{"result":"OK", "detail":$user_id}}]
+        }
+        set wfd [open $www_dir/$testfilename w]
+        puts -nonewline $wfd $tcl
+        close $wfd
+
+        set request /test/$testfilename
+
+        aa_section "Contract OK"
+        set d [acs::test::http -user_info $user_info -headers {content-type application/json} -method POST -body {{"user_id":123}} $request]
+        acs::test::reply_has_status_code $d 200
+        aa_log "reply [dict get $d body]"
+        aa_log "flags info [nsv_get __test_json flags]"
+        aa_true "request was JSON" {"JSONPARSED" in [nsv_get __test_json flags]}
+        acs::test::reply_contains $d "123"
+
+        aa_section "Contract violation"
+        set d [acs::test::http -last_request $d -headers {content-type application/json} -method POST -body {{"user_id":-100}} $request]
+        acs::test::reply_has_status_code $d 400
+        aa_log "reply [dict get $d body]"
+        aa_true "request was JSON" {"JSONPARSED" in [nsv_get __test_json flags]}
+        set replyHeaders [dict get $d headers]
+        if {[string match "application/json*" [ns_set get $replyHeaders content-type]]} {
+            aa_true "reply was jSON" 1
+            set jsonDict [ns_json parse [dict get $d body]]
+            aa_true "have error code" {"error" in  [dict keys $jsonDict]}
+            aa_true "have error details" {"details" in  [dict keys $jsonDict]}
+        } else {
+            aa_log [ns_quotehtml [ns_set format $replyHeaders]]
+            aa_log CT=[ns_set get $replyHeaders content-type]
+            aa_true "reply was JSON" 0
+        }
+
+    } finally {
+        nsv_unset __test_json
+        acs::test::user::delete -user_id [dict get $user_info user_id]
+        file delete \
+            [acs_root_dir]/packages/acs-automated-testing/www/$testfilename
+    }
+}
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
