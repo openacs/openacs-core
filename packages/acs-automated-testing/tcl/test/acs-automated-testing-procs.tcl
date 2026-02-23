@@ -352,61 +352,174 @@ aa_register_case \
 
 aa_register_case -cats {
     api
+    web
     smoke
 } -procs {
     ad_page_contract
+    ns_json
+    ns_trim
+    acs::test::http
 } ad_page_contract_json {
-    Test ad_page_contract in JSON requests
+    Test ad_page_contract in JSON requests, expecting
+    RFC 9457 compliant messages on JSON page-contract violations
 } {
     set www_dir [acs_root_dir]/packages/acs-automated-testing/www/
 
     set user_info [acs::test::user::create -admin]
-    set testfilename JSON-TEST.tcl
 
     if {[info commands ::ns_json] eq ""} {
         return
     }
     try {
-        set tcl {
-            ad_page_contract {
-                test_page
-            } {
-                {user_id:naturalnum 0}
-            }
-            ns_log notice "json test file sees user_id: $user_id"
-            set flags [split [dict get [ns_conn details] flags] |]
-            nsv_set __test_json flags $flags
-            nsv_set __test_json ct [ns_set get [ns_conn headers] content-type]
-            ns_return 200 application/json [subst {{"result":"OK", "detail":$user_id}}]
-        }
-        set wfd [open $www_dir/$testfilename w]
-        puts -nonewline $wfd $tcl
+        set testfilename1 JSON-TEST1.tcl
+        set request /test/$testfilename1
+
+        set wfd [open $www_dir/$testfilename1 w]
+        puts -nonewline $wfd [ns_trim -delimiter | {
+            | ad_page_contract {
+            |    test_page
+            | } {
+            |     {user_id:naturalnum 0}
+            | }
+            | ns_log notice "json test file sees user_id: $user_id"
+            | set flags [split [dict get [ns_conn details] flags] |]
+            | nsv_set __test_json flags $flags
+            | nsv_set __test_json ct [ns_set get [ns_conn headers] content-type]
+            | ns_return 200 application/json [subst {{"result":"OK", "detail":$user_id}}]
+        }]
         close $wfd
 
-        set request /test/$testfilename
-
         aa_section "Contract OK"
-        set d [acs::test::http -user_info $user_info -headers {content-type application/json} -method POST -body {{"user_id":123}} $request]
+        set JSON {{"user_id":123}}
+
+        set d [acs::test::http -user_info $user_info -method POST \
+                   -headers {content-type application/json} \
+                   -body $JSON \
+                   $request]
         acs::test::reply_has_status_code $d 200
         aa_log "reply [dict get $d body]"
         aa_log "flags info [nsv_get __test_json flags]"
         aa_true "request was JSON" {"JSONPARSED" in [nsv_get __test_json flags]}
         acs::test::reply_contains $d "123"
 
-        aa_section "Contract violation"
-        set d [acs::test::http -last_request $d -headers {content-type application/json} -method POST -body {{"user_id":-100}} $request]
-        acs::test::reply_has_status_code $d 400
+        aa_section "Contract violation with toplevel JSON element"
+        set JSON {{"user_id":-100}}
+
+        set d [acs::test::http -last_request $d -method POST \
+                   -headers {content-type application/json} \
+                   -body $JSON \
+                   $request]
+        acs::test::reply_has_status_code $d 422
         aa_log "reply [dict get $d body]"
         aa_true "request was JSON" {"JSONPARSED" in [nsv_get __test_json flags]}
         set replyHeaders [dict get $d headers]
-        if {[string match "application/json*" [ns_set get $replyHeaders content-type]]} {
-            aa_true "reply was jSON" 1
+        set ct [ns_set get $replyHeaders content-type]
+        if {[string match "application/*json*" $ct]} {
+            aa_true "reply was JSON" 1
+            set triples [ns_json parse -output triples [dict get $d body]]
             set jsonDict [ns_json parse [dict get $d body]]
-            aa_true "have error code" {"error" in  [dict keys $jsonDict]}
-            aa_true "have error details" {"details" in  [dict keys $jsonDict]}
+            aa_log <pre>[ns_quotehtml [ns_json value -pretty -type object $triples]]</pre>
+            aa_log "jsonDict '$jsonDict'"
+            aa_true "have status" {"status" in  [dict keys $jsonDict]}
+            aa_true "have error detail" {"detail" in [lindex [dict get $jsonDict errors] 0]}
         } else {
-            aa_log [ns_quotehtml [ns_set format $replyHeaders]]
-            aa_log CT=[ns_set get $replyHeaders content-type]
+            aa_log <pre>[ns_quotehtml [ns_set format $replyHeaders]]</pre>
+            aa_log CT=$ct
+            aa_true "reply was JSON" 0
+        }
+
+        #
+        # nested case
+        #
+        set testfilename2 JSON-TEST2.tcl
+        set request /test/$testfilename2
+
+        set wfd [open $www_dir/$testfilename2 w]
+        puts -nonewline $wfd [ns_trim -delimiter | {
+            | ad_page_contract {
+            |     test_page
+            | } {
+            |     {user/id:naturalnum 0}
+            |     {user/flags/admin:boolean}
+            | }
+            | set flags [split [dict get [ns_conn details] flags] |]
+            | nsv_set __test_json flags $flags
+            | nsv_set __test_json ct [ns_set get [ns_conn headers] content-type]
+            | ns_return 200 application/json [subst {{"result":"OK", "user_id":${user/id}}}]
+        }]
+        close $wfd
+
+        aa_section "Nested: Contract OK"
+
+        set JSON {
+            {"user": {
+                "id":10,
+                "name":"Alice",
+                "flags":{
+                    "admin": true,
+                    "active":true
+                }}
+            }
+        }
+        set d [acs::test::http -last_request $d -method POST \
+                   -headers {content-type application/json} \
+                   -body $JSON \
+                   $request]
+        acs::test::reply_has_status_code $d 200
+        aa_log "reply [dict get $d body]"
+        aa_true "request was JSON" {"JSONPARSED" in [nsv_get __test_json flags]}
+        set replyHeaders [dict get $d headers]
+        set ct [ns_set get $replyHeaders content-type]
+        if {[string match "application/*json*" $ct]} {
+            aa_true "reply was JSON" 1
+            set triples [ns_json parse -output triples [dict get $d body]]
+            set jsonDict [ns_json parse [dict get $d body]]
+            aa_log <pre>[ns_quotehtml [ns_json value -pretty -type object $triples]]</pre>
+            aa_log "jsonDict '$jsonDict'"
+            aa_false "have status" {[dict exists $jsonDict status]}
+            aa_false "have errors" {[dict exists $jsonDict errors]}
+            aa_true "have ID" {[dict exists $jsonDict user_id]}
+        } else {
+            aa_log <pre>[ns_quotehtml [ns_set format $replyHeaders]]</pre>
+            aa_log CT=$ct
+            aa_true "reply was JSON" 0
+        }
+
+
+        aa_section "Nested: Contract violation with multiple violations"
+
+        set JSON {
+            {"user": {
+                "id":-7,
+                "name":"Alice",
+                "flags":{
+                    "admin":"xxx",
+                    "active":true
+                }}
+            }
+        }
+        set d [acs::test::http -last_request $d -method POST \
+                   -headers {content-type application/json} \
+                   -body $JSON \
+                   $request]
+        acs::test::reply_has_status_code $d 422
+        aa_log "reply [dict get $d body]"
+        aa_true "request was JSON" {"JSONPARSED" in [nsv_get __test_json flags]}
+        set replyHeaders [dict get $d headers]
+        set ct [ns_set get $replyHeaders content-type]
+        if {[string match "application/*json*" $ct]} {
+            aa_true "reply was JSON" 1
+            set triples [ns_json parse -output triples [dict get $d body]]
+            set jsonDict [ns_json parse [dict get $d body]]
+            aa_log <pre>[ns_quotehtml [ns_json value -pretty -type object $triples]]</pre>
+            aa_log "jsonDict '$jsonDict'"
+            aa_true "have status" {[dict exists $jsonDict status]}
+            aa_true "have errors" {[dict exists $jsonDict errors]}
+            aa_true "have error detail" {"detail" in [lindex [dict get $jsonDict errors] 0]}
+            aa_false "have ID" {[dict exists $jsonDict user_id]}
+        } else {
+            aa_log <pre>[ns_quotehtml [ns_set format $replyHeaders]]</pre>
+            aa_log CT=$ct
             aa_true "reply was JSON" 0
         }
 
@@ -414,7 +527,8 @@ aa_register_case -cats {
         nsv_unset __test_json
         acs::test::user::delete -user_id [dict get $user_info user_id]
         file delete \
-            [acs_root_dir]/packages/acs-automated-testing/www/$testfilename
+            [acs_root_dir]/packages/acs-automated-testing/www/$testfilename1 \
+            [acs_root_dir]/packages/acs-automated-testing/www/$testfilename2
     }
 }
 # Local variables:
