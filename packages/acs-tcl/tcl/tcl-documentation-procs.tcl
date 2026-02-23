@@ -64,6 +64,7 @@ ad_proc -private ad_complaints_init {context} {
     @creation-date 24 July 2000
 } {
     set ::ad_page_contract_complaints [list]
+    set ::ad_page_contract_complaints_info [list]
     set ::ad_page_contract_errorkeys [list]
     set ::ad_page_contract_context $context
 }
@@ -89,6 +90,9 @@ ad_proc -public ad_complain {
     if { $key eq "" && [info exists ::ad_page_contract_errorkeys] } {
         set key [lindex $::ad_page_contract_errorkeys 0]
     }
+    lassign [split $key : ] name filter
+    lappend ::ad_page_contract_complaints_info [list name $name filter $filter]
+
     if { [info exists ::ad_page_contract_error_string($key)] } {
         lappend ::ad_page_contract_complaints $::ad_page_contract_error_string($key)
     } elseif { $message eq "" } {
@@ -966,7 +970,7 @@ ad_proc -public ad_page_contract {
         #
 
         # Check the name of the argument to passed in the form, ignore if not valid
-        if { [regexp -nocase -- {^[a-z0-9_\-\.\:]*$} $actual_name] } {
+        if { [regexp -nocase -- {^[a-z0-9_\-\.:/]*$} $actual_name] } {
 
             # The name of the formal argument in the page
             set formal_name $actual_name
@@ -1282,7 +1286,7 @@ ad_proc -public ad_page_contract {
 
     # Initialize the list of page variables for other scripts to use
     set ::ad_page_contract_variables $apc_formals
-    
+
     if { [ad_complaints_count] > 0 } {
 
         set complaints [ad_complaints_get_list]
@@ -1291,20 +1295,37 @@ ad_proc -public ad_page_contract {
         # If the request body was JSON, return contract errors as
         # JSON.  Requires NaviServer's JSON/form parsing support
         # (ns_conn form for JSON) and (optionally) ns_conn
-        # contenttype.  For now, just return the first complaint.
+        # contenttype.
         #
         if {[info commands ::ns_json] ne ""
             && "JSONPARSED" in [split [dict get [ns_conn details] flags] |]
         } {
-            #ns_log notice DEBUG "we have JSON with validation complaints: $complaints"
-            ns_return 400 application/json \
+            set errors {}
+            set i 0
+            #
+            # If - for whatever reason - we de no have the full
+            # complaints_info, just reply the detail messages.
+            #
+            if {[llength $complaints] == [llength $::ad_page_contract_complaints_info]} {
+                foreach c $complaints ci $::ad_page_contract_complaints_info {
+                    lappend errors $i object [list detail string $c pointer string "#/[dict get $ci name]"]
+
+                }
+            } else {
+                foreach c $complaints {
+                    lappend errors $i object [list detail string $c]
+                }
+            }
+            ns_return 422 application/problem+json \
                 [ns_json value -type object [list \
-                                                 error string invalid-input \
-                                                 details string [lindex $complaints 0] \
-                                                 complaints_count number [ad_complaints_count]]]
+                                                 type string "https://openacs.org/validation-error" \
+                                                 title string "[_ acs-tcl.We_had] [_ acs-tcl.a_problem] [_ acs-tcl.with_your_input]" \
+                                                 status number 422 \
+                                                 errors array $errors \
+                                                ]]
             ad_script_abort
         }
-        
+
         if {$warn_p} {
             ad_log warning "contract in '$::ad_page_contract_context'"\
                 "was violated:\n" [join $complaints "\n "]
@@ -2641,7 +2662,7 @@ namespace eval ::template::csrf {
 }
 
 ad_proc ::template::require_post {} {
-    
+
     Enforce HTTP POST for state-changing requests.
 
     Verify that the current request was issued using the HTTP POST
@@ -2663,7 +2684,7 @@ ad_proc ::template::require_post {} {
     page contract or ad_form.
 
     @return 1 on success; otherwise the request is aborted
-    
+
 } {
     if {[ns_conn isconnected] && [ns_conn method] ne "POST"} {
         ns_return 405 text/plain "Method Not Allowed"
