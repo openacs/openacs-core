@@ -1,5 +1,5 @@
 ad_page_contract {} {
-    object_id:naturalnum,notnull
+    object_id:integer,notnull
     user_id:multiple,naturalnum
     return_url:localurl
 }

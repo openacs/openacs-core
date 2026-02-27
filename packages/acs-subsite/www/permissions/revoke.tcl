@@ -4,7 +4,7 @@ ad_page_contract {
   @creation-date 2000-08-20
   @cvs-id $Id$
 } {
-  object_id:naturalnum,notnull
+  object_id:integer,notnull
   {revoke_list:multiple,optional {}}
   {application_url ""}
 }

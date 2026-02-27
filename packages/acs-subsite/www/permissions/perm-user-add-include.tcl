@@ -1,6 +1,6 @@
 ad_page_contract {
 } {
-    object_id:naturalnum,notnull
+    object_id:integer,notnull
     return_url:localurl
     page:naturalnum,optional
     {search ""}
