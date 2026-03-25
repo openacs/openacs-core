@@ -180,26 +180,37 @@ namespace eval acs_admin {
                                        -background \
                                        -domains {} \
                                       ]
-                            ns_log notice "ssl: call getCertificate"
-                            $c getCertificate
-                            ns_log notice "ssl: call getCertificate DONE"
+                            #ns_log notice "ssl: call getCertificate"
+                            set result [$c getCertificate]
+                            #ns_log notice "ssl: call getCertificate DONE (result $result)"
                             append report \n[ad_html_to_text [$c cget -log]]\n
-                            $c destroy
+                            if {$result ne ""} {
+                                # newer versions of letsencrypt return success indicator
+                                $c cget -returnStatus
+                            } else {
+                                list status 200 msg OK
+                            }
 
                         } on ok {result} {
-                            ns_log notice "letsencrypt: automated renew request succeeded: $result"
-                            set success "success"
+                            ns_log notice "letsencrypt: automated renew request returns: $result"
+                            set statusDict $result
                         } on error {errorMsg} {
                             append report "Error: $errorMsg\nConsider upgrading to letsencrypt 0.6\n"
                             ns_log notice "letsencrypt: automated renew request failed: $errorMsg"
-                            set success "error"
+                            set statusDict [list status 500 msg $errorMsg]
+                        } finally {
+                            catch {$c destroy}
                         }
 
                         parameter::set_value \
                             -package_id $::acs::kernel_id \
                             -parameter UseCanonicalLocation \
                             -value $oldValue
-                        set mailSubject "Certificate of [ad_system_name] renewal ($success)"
+
+                        dict with statusDict {
+                            set firstLine [lindex [split $msg \n] 0]
+                            set mailSubject "Certificate of [ad_system_name] renewal (status $status: $firstLine)"
+                        }
                     }
                     append report \n[string repeat = 72]\n
 
