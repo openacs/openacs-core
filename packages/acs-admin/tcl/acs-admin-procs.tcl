@@ -195,7 +195,7 @@ namespace eval acs_admin {
                             ns_log notice "letsencrypt: automated renew request returns: $result"
                             set statusDict $result
                         } on error {errorMsg} {
-                            append report "Error: $errorMsg\nConsider upgrading to letsencrypt 0.6\n"
+                            append report "Error: $errorMsg\nConsider upgrading to letsencrypt 0.7\n"
                             ns_log notice "letsencrypt: automated renew request failed: $errorMsg"
                             set statusDict [list status 500 msg $errorMsg]
                         } finally {
