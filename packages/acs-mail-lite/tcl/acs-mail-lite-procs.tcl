@@ -449,6 +449,20 @@ namespace eval acs_mail_lite {
         return $email
     }
 
+    ad_proc -private acs_mail_lite::address_allowed_p {
+        recipient
+        allowed_patterns
+    } {
+        Return true when the recipient matches one of the allowed address patterns.
+    } {
+        foreach pattern $allowed_patterns {
+            if {[string match -nocase $pattern $recipient]} {
+                return 1
+            }
+        }
+        return 0
+    }
+
     #---------------------------------------
     ad_proc -private send_immediately {
         {-valid_email_p "0"}
@@ -762,7 +776,9 @@ namespace eval acs_mail_lite {
                  || [dict get $deliveryDict SMTPPassword] ne ""
                  || [dict get $deliveryDict SMTPUser] ne ""
              } {
-                ns_log warning "configured 'nssmtp' as EmailDeliveryMode but it can't be used."
+                ns_log warning "configured 'nssmtpd' as EmailDeliveryMode but it is not configured, falling back to mode 'log'."
+                set notice "logging email instead of sending"
+                set default_send_mode log
              } else {
                  set default_send_mode nssmtpd
              }
@@ -780,18 +796,18 @@ namespace eval acs_mail_lite {
                                       -parameter EmailAllow]
 
                 foreach recipient [concat $to_addr $cc_addr $bcc_addr] {
-
-                    # if any of the recipient is not in the allowed list
-                    # email message has to be sent to the log instead
-
-                    if {$recipient ni $allowed_addr} {
+                    #
+                    # Send only when all recipients match EmailAllow.
+                    # Otherwise log the message instead.
+                    #
+                    if {![acs_mail_lite::address_allowed_p $recipient $allowed_addr]} {
                         set send_mode "log"
-                        set notice "logging email because one of the recipient ($recipient) is not in the EmailAllow list"
+                        set notice "logging email because recipient ($recipient) does not match any pattern in EmailAllow"
                         break
                     }
                 }
-
             }
+
             redirect {
                 set send_mode $default_send_mode
 
