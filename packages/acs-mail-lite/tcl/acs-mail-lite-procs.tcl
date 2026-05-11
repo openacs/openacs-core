@@ -449,7 +449,7 @@ namespace eval acs_mail_lite {
         return $email
     }
 
-    ad_proc -private acs_mail_lite::address_allowed_p {
+    ad_proc -private address_allowed_p {
         recipient
         allowed_patterns
     } {
