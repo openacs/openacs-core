@@ -3138,7 +3138,7 @@ ad_proc security::secure_hostname_p {host} {
         }
     }
 
-    return 0
+    return $validationOk
 }
 
 ad_proc -public security::validated_host_header {} {
