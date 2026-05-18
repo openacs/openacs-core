@@ -99,7 +99,18 @@ $unreg_cmd GET /*.tcl
 $unreg_cmd HEAD /*.tcl
 $unreg_cmd POST /*.tcl
 
-set listings [ns_config "ns/server/[ns_info server]" "directorylisting" "none"]
+set directorylistingDefault none
+set serverSection ns/server/[ns_info server]
+set fastpathSection ns/server/[ns_info server]/fastpath
+set s [ns_configsection $serverSection]
+if {[ns_set find $s directorylisting] >= 0} {
+    ns_log warning \
+        "deprecated configuration: parameter 'directorylisting' in section '$serverSection' is deprecated;" \
+        "use section '$fastpathSection' instead"
+    set directorylistingDefault [ns_config $serverSection directorylisting $directorylistingDefault]
+}
+set listings [ns_config $fastpathSection directorylisting $directorylistingDefault]
+
 if { $listings in {fancy simple}} {
     nsv_set rp_directory_listing_p . 1
 } else {
