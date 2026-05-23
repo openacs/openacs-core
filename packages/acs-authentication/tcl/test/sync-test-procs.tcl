@@ -1201,7 +1201,7 @@ aa_register_case \
                 set timestamp 12345
 
                 set doc ""
-                append doc {<?xml version="1.0" encoding="} [ns_config "ns/parameters" OutputCharset] {"?>} \n
+                append doc {<?xml version="1.0" encoding="} [ns_config ns/parameters OutputCharset utf-8] {"?>} \n
                 append doc {<enterprise>} \n
                 append doc {  <properties>} \n
                 append doc {    <type>acknowledgement</type>} \n
@@ -1291,7 +1291,7 @@ aa_register_case \
                 set rascal_username [dict get $rascal_user username]
 
                 set doc ""
-                append doc {<?xml version="1.0" encoding="} [ns_config "ns/parameters" OutputCharset] {"?>} \n
+                append doc {<?xml version="1.0" encoding="} [ns_config "ns/parameters" OutputCharset utf-8] {"?>} \n
                 append doc {<enterprise>} \n
                 append doc {  <properties>} \n
                 append doc {    <type>acknowledgement</type>} \n

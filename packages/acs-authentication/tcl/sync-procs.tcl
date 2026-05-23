@@ -943,7 +943,7 @@ ad_proc -private auth::sync::process_doc::ims::GetAcknowledgementDocument {
     set timestamp [xml_get_child_node_content_by_path $root_node { { properties datetime } }]
     $tree delete
 
-    append doc {<?xml version="1.0" encoding="} [ns_config "ns/parameters" OutputCharset] {"?>} \n
+    append doc {<?xml version="1.0" encoding="} [ns_config "ns/parameters" OutputCharset utf-8] {"?>} \n
     append doc {<enterprise>} \n
     append doc {  <properties>} \n
     append doc {    <type>acknowledgement</type>} \n

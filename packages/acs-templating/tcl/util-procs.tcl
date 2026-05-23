@@ -414,7 +414,7 @@ ad_proc -public template::util::set_file_encoding { file_channel_id } {
 
     @author Peter Marklund
 } {
-    set output_charset [ns_config "ns/parameters" OutputCharset]
+    set output_charset [ns_config "ns/parameters" OutputCharset utf-8]
     set tcl_charset [ns_encodingforcharset $output_charset]
 
     if { $tcl_charset ne "" } {
