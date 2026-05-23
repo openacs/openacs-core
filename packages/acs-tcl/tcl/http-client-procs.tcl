@@ -1451,7 +1451,7 @@ ad_proc -private util::http::native::request {
     if {$depth == 0} {
         set content_type [ns_set iget $headers "content-type"]
         if {$content_type eq ""} {
-            set content_type "text/plain; charset=[ns_config ns/parameters OutputCharset iso-8859-1]"
+            set content_type "text/plain; charset=[ns_config ns/parameters OutputCharset utf-8]"
         }
 
         set enc [util::http::get_channel_settings $content_type]
@@ -1755,7 +1755,7 @@ ad_proc -private util::http::curl::request {
     if {$depth == 0} {
         set content_type [ns_set iget $headers "content-type"]
         if {$content_type eq ""} {
-            set content_type "text/plain; charset=[ns_config ns/parameters OutputCharset iso-8859-1]"
+            set content_type "text/plain; charset=[ns_config ns/parameters OutputCharset utf-8]"
         }
 
         set enc [util::http::get_channel_settings $content_type]

@@ -178,7 +178,7 @@ if {![info exists doc(title)]} {
 }
 
 if {![info exists doc(charset)]} {
-    set doc(charset) [ns_config ns/parameters OutputCharset [ad_conn charset]]
+    set doc(charset) [ns_config ns/parameters OutputCharset utf-8]
 }
 
 #
