@@ -623,7 +623,7 @@ ad_proc -private rp_filter { why } {
             if { $query ne "" } {
                 set query ?[export_vars -entire_form]
             }
-            ad_returnredirect -allow_complete_url "[ns_conn location][ns_conn url]$query"
+            ad_returnredirect -allow_complete_url "[util_current_location][ns_conn url]$query"
             return filter_return
         }
     }

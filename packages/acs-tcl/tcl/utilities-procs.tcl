@@ -2624,6 +2624,23 @@ ad_proc -public util_current_location {} {
     #
 
     #
+    # If we are running in a container, map the internal port
+    # (provided typically via "ns_conn location") to th external port.
+    #
+    if {[info commands ::acs::container] ne ""} {
+        set mapping [::acs::container mapping]
+        if {[dict exists $mapping $port/tcp port]} {
+            #
+            # We have a mapping. Note, that the container mapping
+            # might have multiple entries for $port/tcp
+            # (e.g. different IP addresses), which we ignore for now.
+            #
+            set port [dict get $mapping $port/tcp port]
+        }
+    }
+
+
+    #
     # In case the "Host:" header field was provided, use the "hostame"
     # and maybe the "port" from there (this has the highest priority)
     #
