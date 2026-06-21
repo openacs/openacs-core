@@ -1323,17 +1323,31 @@ ad_proc -private ::util::skip_suspicious_query_vars {query} {
 
 ad_proc ::util::block_request {-condition:required {-target you}} {
 
-    Block a request for certain kind of requests. This proc can be
-    used to disallow, e.g., requests from bots in login pages or similar.
+    Block a request from application-level Tcl code when a given condition
+    evaluates to true.
+
+    This proc is intended for use from pages, callbacks, or other code that
+    runs after the OpenACS request processor has already accepted and
+    initialized the request.  It can be used to disallow selected requests,
+    for example requests from bot pools on login pages or other application
+    entry points.
+
+    This proc is not suitable for rejecting requests that must be blocked
+    before OpenACS request processing, canonical-host redirects, or page
+    dispatch.  For such cases, e.g. scanner probes for foreign application
+    paths, use an early NaviServer filter such as ::util::reject_request_filter
+    registered with ns_register_filter.
+
+    If the condition is true and the connection is still active, the proc logs
+    the request, returns a complaint page to the client, and aborts the script.
+    Otherwise, it returns normally without producing output.
 
     Example: <pre>
     ::util::block_request -condition {[ns_conn pool] eq "bots"} -target bots</pre>
 
-    The proc either terminates the requests by responding a blocking message to the
-    client, or it continues and returns nothing.
-
-    @param condition Tcl expression, blocking condition
-    @param target part of the message string presented to the blocked user
+    @param condition Tcl expression evaluated in the caller's scope.  When the
+                     expression evaluates to true, the request is blocked.
+    @param target    Short description used in the message shown to the client.
 
 } {
     if {[ns_conn isconnected] && [uplevel 1 [list expr $condition]]} {
@@ -1342,6 +1356,41 @@ ad_proc ::util::block_request {-condition:required {-target you}} {
         ad_return_complaint 1 "page is not allowed for $target"
         ad_script_abort
     }
+}
+
+ad_proc ::util::reject_request_filter {why what} {
+
+    Reject a request from a NaviServer filter.
+
+    This proc is intended for use with ns_register_filter, in particular
+    for early preauth filters that reject unwanted probe, scanner, or
+    otherwise unsupported request paths before the OpenACS request
+    processor performs canonical-host redirects or page dispatch.
+
+    When used as a preauth filter, the proc performs the minimal ad_conn
+    setup needed by the OpenACS request processor cleanup path.
+    Example: <pre>
+    ns_register_filter -first preauth POST /PSEMHUB/* ::util::reject_request_filter "PeopleSoft probe"</pre>
+
+    @param why filter stage, e.g. preauth
+    @param what short description of the rejected request
+
+    @return filter_return
+
+} {
+    ns_log notice "rejected request: $what method=[ns_conn method] url=[ns_conn url] peer=[ns_conn peeraddr]"
+
+    if {$why eq "preauth"} {
+        #
+        # Minimal setup for the OpenACS request processor to avoid errors
+        # when the proc is registered as a preauth filter.
+        #
+        ad_conn -set extra_url /
+        ad_conn -set path_info /
+    }
+
+    ns_returnnotfound
+    return filter_return
 }
 
 ad_proc -private export_vars_sign {
