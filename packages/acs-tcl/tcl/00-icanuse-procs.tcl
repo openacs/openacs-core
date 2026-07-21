@@ -140,6 +140,11 @@ namespace eval ::acs {
 ::acs::register_icanuse "ns_set values"             [acs::cmd_has_subcommand ns_set values]
 ::acs::register_icanuse "ns_setcookie -samesite"    [acs::cmd_error_contains ns_setcookie -samesite]
 ::acs::register_icanuse "ns_strcoll"                {[info commands ::ns_strcoll] ne ""}
+# TODO: "ns_urlencode -part oauth1" is deprecated since naviserver 5.1.
+# However, as its replacement ns_percentencode is only available since
+# naviserver 5, and tcl alternatives may be slower or just inadequate
+# (eg. tcl/oauth-procs.tcl in xooauth), removing it now may unnecessarily
+# degrade instances running naviserver 4.99.x.
 ::acs::register_icanuse "ns_urlencode -part oauth1" [acs::cmd_error_contains {ns_urlencode -part xxx} oauth1]
 ::acs::register_icanuse "ns_writer"                 {[info commands ::ns_writer] ne ""}
 ::acs::register_icanuse "nsf::config profile"       [expr {[info exists ::nsf::config(profile)] ? $::nsf::config(profile) : 0}]
