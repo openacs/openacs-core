@@ -144,6 +144,7 @@ namespace eval ::acs {
 ::acs::register_icanuse "ns_writer"                 {[info commands ::ns_writer] ne ""}
 ::acs::register_icanuse "nsf::config profile"       [expr {[info exists ::nsf::config(profile)] ? $::nsf::config(profile) : 0}]
 ::acs::register_icanuse "nsf::parseargs -asdict"    [acs::cmd_error_contains {nsf::parseargs} -asdict]
+::acs::register_icanuse "ns_percentencode"          {[info commands ::ns_percentencode] ne ""}
 
 #
 # At the time "ns_trim -prefix was introduced in NaviServer, a memory
