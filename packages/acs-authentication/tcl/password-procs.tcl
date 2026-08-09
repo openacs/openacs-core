@@ -250,8 +250,11 @@ ad_proc -public auth::password::get_forgotten_url {
         set user_id [party::get_by_email -email $email]
         if { $user_id ne "" } {
             set user [acs_user::get_user_info -user_id $user_id]
-            set authority_id [dict get $user authority_id]
-            set username     [dict get $user username]
+            # A party is not necessarily a user.
+            if { [dict exists $user user_id] } {
+                set authority_id [dict get $user authority_id]
+                set username     [dict get $user username]
+            }
         }
     }
 
