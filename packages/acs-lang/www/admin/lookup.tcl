@@ -2,7 +2,7 @@ ad_page_contract {
     Test message lookup
 }
 
-set page_title "Test Message Lookup"
+set page_title [_ "acs-lang.Look_up_message"]
 set context [list $page_title]
 
 set message_p 0
