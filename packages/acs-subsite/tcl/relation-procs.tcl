@@ -372,6 +372,39 @@ ad_proc -public relation::get_objects {
     }
 }
 
+ad_proc -public relation::get {
+    {-rel_id:required}
+    {-element ""}
+} {
+    Return information about a relation for the given rel_id.
+
+    @param rel_id The relation ID.
+    @param element If specified, return only this element.
+
+    @return A dict containing rel_id, rel_type, object_id_one and
+            object_id_two, or a single value when -element is specified.
+} {
+    db_1row relation_info {
+        select rel_type,
+               object_id_one,
+               object_id_two
+          from acs_rels
+         where rel_id = :rel_id
+    }
+
+    set data [dict create \
+                  rel_id $rel_id \
+                  rel_type $rel_type \
+                  object_id_one $object_id_one \
+                  object_id_two $object_id_two]
+
+    if {$element ne ""} {
+        return [dict get $data $element]
+    }
+
+    return $data
+}
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
