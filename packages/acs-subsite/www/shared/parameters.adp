@@ -3,6 +3,7 @@
   <property name="context">@context;literal@</property>
   <if @focus@ not nil><property name="focus">@focus;literal;no18b@</property></if>
 
+<h1>@page_title@</h1>
 <if @global_param_url@ defined>
 <h2>Global parameters</h2> 
 <blockquote>
