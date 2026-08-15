@@ -496,9 +496,11 @@ ad_proc cr_check_mime_type {
     # Check if the provided mime_type is already in our cr_mime_types
     # table. If so, accept it.
     #
-    if {$mime_type ne "*/*" && [db_0or1row check_given_mime_type {
-        select 1 from cr_mime_types where mime_type = :mime_type
-    }]} {
+    if {[info exists mime_type]
+            && $mime_type ne "*/*"
+            && [db_0or1row check_given_mime_type {
+                select 1 from cr_mime_types where mime_type = :mime_type
+            }]} {
         return $mime_type
     }
 
