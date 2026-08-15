@@ -2,6 +2,7 @@
   <property name="doc(title)">#acs-subsite.Permissions_for_name#</property>
   <property name="context">@context;literal@</property>
 
+  <h1>#acs-subsite.Permissions_for_name#</h1>
   <p>[ <a href="@toggle_view_href@">@toggle_view_label@</a> ]</p>
   <h3>#acs-subsite.Direct_Permissions#</h3>
   <if @detail_p;literal@ true>
