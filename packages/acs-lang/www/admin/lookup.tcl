@@ -18,6 +18,8 @@ ad_form -name lookup -form {
         {help_text "[_ acs-lang.Can_be_two_character]"}
     }
 } -on_submit {
+    set key [string trim $key]
+    set locale [string trim $locale]
     if {[catch {
         # No substitution
         set message [lang::message::lookup $locale $key "" "" 0]
