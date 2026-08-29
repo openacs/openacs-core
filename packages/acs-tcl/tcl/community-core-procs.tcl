@@ -287,6 +287,10 @@ ad_proc -public acs_user::change_state {
     {-state:required}
 } {
     Change the membership state of a user.
+
+    Existing login cookies become invalidated when the user is banned
+    or deleted so that the new state also becomes effective for already
+    authenticated sessions.
 } {
     set rel_id [acs_user::get_user_info \
                     -user_id $user_id -element rel_id]
@@ -299,6 +303,10 @@ ad_proc -public acs_user::change_state {
     membership_rel::change_state -rel_id $rel_id -state $state
     # flush user-specific info
     acs_user::flush_user_info -user_id $user_id
+
+    if {$state in {banned deleted}} {
+        sec_change_user_auth_token $user_id
+    }
 }
 
 ad_proc -public acs_user::approve {
