@@ -1,7 +1,11 @@
 ad_include_contract {
     UI includelet to show and create subsites.
 } {
+    {show_instance_name:boolean true}
+    {show_members_count:boolean true}
+    {show_member_state:boolean true}
 }
+
 
 set pretty_name [_ acs-subsite.subsite]
 set pretty_plural [_ acs-subsite.subsites]
@@ -24,20 +28,23 @@ if { $admin_p } {
     lappend actions [_ acs-subsite.Create_new_subsite] "${subsite_url}admin/subsite-add" {}
 }
 
-list::create \
-    -name subsites \
-    -multirow subsites \
-    -actions $actions \
-    -no_data "[_ acs-subsite.No_pretty_plural [list pretty_plural $pretty_plural]]" \
-    -elements {
+set elements {}
+if {$show_instance_name} {
+    lappend elements \
         instance_name {
             label "[_ acs-subsite.Name]"
             link_url_col url
         }
+}
+if {$show_members_count} {
+    lappend elements \
         num_members {
             label "\# [_ acs-subsite.Members]"
             html { align right }
         }
+}
+if {$show_member_state} {
+    lappend elements \
         member_state {
             label "[_ acs-subsite.Member_State]"
             display_template {
@@ -53,7 +60,14 @@ list::create \
                 </switch>
             }
         }
-    }
+}
+
+list::create \
+    -name subsites \
+    -multirow subsites \
+    -actions $actions \
+    -no_data "[_ acs-subsite.No_pretty_plural [list pretty_plural $pretty_plural]]" \
+    -elements $elements
 
 set return_url [ad_return_url]
 db_multirow -extend { url join_url request_url } subsites select_subsites [subst {
