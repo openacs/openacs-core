@@ -577,6 +577,11 @@ ad_proc -public template::list::prepare {
 
         # Use some short variable names to make the expr readable
         set page $list_properties(filter,page)
+        if { $page < 1 } {
+            # Clamp to 1 to avoid negative offsets when page=0
+            set page 1
+            set list_properties(filter,page) 1
+        }
         set groupsize   $list_properties(page_groupsize)
         set page_size   $list_properties(page_size)
         set page_group  [expr {($page - 1 - (($page - 1) % $groupsize)) / $groupsize + 1}]
