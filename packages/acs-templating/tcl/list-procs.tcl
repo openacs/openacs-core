@@ -1714,11 +1714,14 @@ ad_proc -private template::list::prepare_filters {
                 multival {
                     if { ![info exists current_filter_value] || $current_filter_value eq "" } {
                         set selected_p 0
+                    } elseif {$current_filter_value eq $value} {
+                        # A multival option can itself be a list, e.g. a date range
+                        set selected_p 1
                     } else {
+                        set selected_p 0
                         # Since here we have multiple values
                         # we set as selected_p the value that match any
                         # of the values present in the list
-                        set selected_p 0
                         foreach val $current_filter_value {
                             if { [util_sets_equal_p $val $value] } {
                                 set selected_p 1
