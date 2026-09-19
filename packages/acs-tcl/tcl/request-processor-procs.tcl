@@ -1081,13 +1081,24 @@ ad_proc -private rp_handler {} {
         # url AOLserver substitutes if ::ad_conn does not exist
         # (rp_filter begins with ad_conn -reset) ...
         #
+        # This is not an "obscure" case. but a requests, where the
+        # server receives a forward proxy request. It is questionable,
+        # if in these cases, "rp_handler" should be called at all. I
+        # would argue against it.
+        #
         ad_log warning "rp_handler: Obscure case, where ::ad_conn is not set, redirect to [ns_conn url]"
 
         #
         # Before we give up, make one attempt to setup everything.
         #
-        rp_filter preauth
+        set filter_result [rp_filter preauth]
 
+        ad_log warning \
+            "rp_handler: fallback rp_filter returned '$filter_result';" \
+            "status [ns_conn status], connected [ns_conn isconnected]," \
+            "method [ns_conn method], proxy-host '[ns_conn host]'," \
+            "url '[ns_conn url]'"
+        
         if { ![info exists ::ad_conn] } {
             ad_returnredirect [ns_conn url]
             return
