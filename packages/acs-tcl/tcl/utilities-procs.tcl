@@ -4597,7 +4597,7 @@ namespace eval util {
                     file delete -- $stem.dot
                 }
             } else {
-                ns_log notice "inline_svg_from_dot: reuse $stem.svg"
+                #ns_log notice "inline_svg_from_dot: reuse $stem.svg"
             }
             if {[ad_file exists $stem.svg]} {
                 set f [open $stem.svg]; set svg [read $f]; close $f
