@@ -20,6 +20,15 @@ ns_cache create party_info_cache \
                   -parameter PartyInfoCacheTimeout \
                   -default 1h]
 
+# Actually, we should create the cache via the acs::Cache
+# infrastructure, where we can scale better and we need no extra cache
+# configure statemement. The same applies as well for the caches
+# below.
+#
+# Without these timeout setting, cache entry creations are
+# unbounded and might bring the full server to a halt.
+ns_cache_configure party_info_cache -timeout 5m
+
 #
 # Create a cache for keeping person_info
 #
@@ -42,6 +51,7 @@ ns_cache create person_info_cache \
                   -parameter PersonInfoCacheTimeout \
                   -default 1h]
 
+ns_cache_configure person_info_cache -timeout 5m
 
 #
 # Create a cache for keeping user_info
@@ -65,6 +75,7 @@ ns_cache create user_info_cache \
                   -parameter UserInfoCacheTimeout \
                   -default 1h]
 
+ns_cache_configure user_info_cache -timeout 5m
 
 
 # Local variables:
