@@ -7,6 +7,8 @@
 ns_cache create util_memoize -size \
     [parameter::get -package_id $::acs::kernel_id -parameter MaxSize -default 200000]
 
+ns_cache_configure util_memoize -timeout 5m
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
