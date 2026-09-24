@@ -3134,7 +3134,8 @@ ad_proc security::secure_hostname_p {host} {
         } on ok {result} {
             set validationOk [expr {![ns_ip public $result]}]
         } on error {errorMsg} {
-            ad_log warning "provided value in host header field '$host' could not be resolved"
+            ns_log warning \
+                "security::secure_hostname_p: DNS lookup for host header value '$host' failed: $errorMsg"
         }
     }
 
