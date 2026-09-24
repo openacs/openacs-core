@@ -4451,7 +4451,7 @@ ad_proc -public ad_log {
     level
     args
 } {
-    Output ns_log message with detailed context. This function is
+    Output an ns_log message with detailed context. This function is
     intended to be used typically with "error" to ease debugging.
 
     @param level Severity level such as "error" or "warning".
@@ -4459,11 +4459,46 @@ ad_proc -public ad_log {
 
     @author Gustaf Neumann
 } {
-    set with_headers [expr {$level in {error Error}}]
-    append request "    " \
-        [util::request_info -with_headers=$with_headers]
+    #
+    # ad_log gathers request information, which may itself encounter an
+    # error and call ad_log. In that case, log without gathering context.
+    #
+    if {[info exists ::acs::ad_log_in_progress]} {
+        ns_log $level {*}$args \
+            "\n    recursive ad_log invocation; request context omitted"
+        return
+    }
 
-    ns_log $level {*}$args "\n[uplevel ad_get_tcl_call_stack]${request}\n"
+    set ::__ad_log_in_progress 1
+    try {
+        set with_headers [expr {$level in {error Error}}]
+        append request "    " \
+            [util::request_info -with_headers=$with_headers]
+
+        ns_log $level {*}$args "\n[uplevel ad_get_tcl_call_stack]${request}\n"
+
+        #
+        # Optional deduplication.. not sure this should be done
+        # always. Better to get rid of the error/warning
+        #
+        # set key $level-$args
+        # if {[nsv_get ad_log $key previous_thread_name]} {
+        #     set cnt [nsv_incr ad_log $key-count]
+        #     ns_log notice \
+        #         "... repeated $level #$cnt (see $previous_thread_name)"
+        # } else {
+        #     nsv_set ad_log $key [ns_thread name]
+        #     set with_headers [expr {$level in {error Error}}]
+        #     set request ""
+        #     append request "    " \
+        #         [util::request_info -with_headers=$with_headers]
+        #
+        #     ns_log $level {*}$args \
+        #         "\n[uplevel ad_get_tcl_call_stack]${request}\n"
+        # }
+    } finally {
+        unset -nocomplain ::__ad_log_in_progress
+    }
 }
 
 ad_proc -public util::var_subst_quotehtml {
