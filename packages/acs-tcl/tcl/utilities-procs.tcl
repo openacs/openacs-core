@@ -4520,7 +4520,7 @@ ad_proc -public ad_log {
     {-key ""}
     {-interval:integer 60}    
     {-plain:boolean}    
-    level
+    severity
     args
 } {
     Output an ns_log message with detailed context. This function is
@@ -4541,7 +4541,7 @@ ad_proc -public ad_log {
                     when -key is supplied; must be positive and
                     requires -key
     @param plain suppress context
-    @param level Severity level such as "error" or "warning".
+    @param severity Severity level such as "error" or "warning".
     @param plain log the supplied message without adding request or call
                  context. The normal NaviServer log prefix and any
                  rate-suppression summary are retained.
@@ -4569,7 +4569,7 @@ ad_proc -public ad_log {
     # error and call ad_log. In that case, log without gathering context.
     #
     if {[info exists ::acs::ad_log_in_progress]} {
-        ns_log $level {*}$args \
+        ns_log $severity {*}$args \
             "\n    recursive ad_log invocation; request context omitted"
         return
     }
@@ -4577,31 +4577,31 @@ ad_proc -public ad_log {
     set ::__ad_log_in_progress 1
     try {
         if {$plain_p} {
-            ns_log $level {*}$args
+            ns_log $severity {*}$args
         } else {
-            set with_headers [expr {$level in {error Error}}]
+            set with_headers [expr {$severity in {error Error}}]
             append request "    " \
                 [util::request_info -with_headers=$with_headers]
 
-            ns_log $level {*}$args "\n[uplevel ad_get_tcl_call_stack]${request}\n"
+            ns_log $severity {*}$args "\n[uplevel ad_get_tcl_call_stack]${request}\n"
 
             #
             # Optional deduplication.. not sure this should be done
             # always. Better to get rid of the error/warning
             #
-            # set key $level-$args
+            # set key $severity-$args
             # if {[nsv_get ad_log $key previous_thread_name]} {
             #     set cnt [nsv_incr ad_log $key-count]
             #     ns_log notice \
-            #         "... repeated $level #$cnt (see $previous_thread_name)"
+            #         "... repeated $severity #$cnt (see $previous_thread_name)"
             # } else {
             #     nsv_set ad_log $key [ns_thread name]
-            #     set with_headers [expr {$level in {error Error}}]
+            #     set with_headers [expr {$severity in {error Error}}]
             #     set request ""
             #     append request "    " \
             #         [util::request_info -with_headers=$with_headers]
             #
-            #     ns_log $level {*}$args \
+            #     ns_log $severity {*}$args \
             #         "\n[uplevel ad_get_tcl_call_stack]${request}\n"
             # }
         }
