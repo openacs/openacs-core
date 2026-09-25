@@ -62,10 +62,14 @@ ad_proc ::util::reject_anonymous_on_high_load_filter {
     limit while a matching request is executed. Authenticated requests
     are exempt from this filter.
 
-    Without -match, compare URLs exactly with the current request URL.
-    With -match, count URLs matching the supplied Tcl glob pattern.
-    The URL pattern used to register the filter determines which
-    requests invoke it; it does not define the active-request grouping.
+    Without -match, count requests whose URL path equals the current
+    request's path, as returned by ns_conn url. Requests with different
+    query parameters but the same path therefore belong to the same
+    group.
+
+    With -match, apply the supplied Tcl glob pattern to the URL path.
+    The pattern used to register the filter determines which requests
+    invoke it; it does not define the active-request grouping.
 
     The active count includes the current request and matching requests
     from both anonymous and authenticated users. Both limits use
@@ -90,7 +94,7 @@ ad_proc ::util::reject_anonymous_on_high_load_filter {
     @param what short description of the request
     @param pools connection pools in which the filter is active
     @param match optional Tcl match pattern for grouping active URLs;
-                 when omitted, only the current URL is counted
+                 when omitted, only the current URL path is counted
     @param max_running maximum number of matching active requests
     @param max_queued maximum number of queued requests
     @param retry_after Retry-After value in seconds
@@ -133,6 +137,7 @@ ad_proc ::util::reject_anonymous_on_high_load_filter {
 
     if {$queued > $max_queued} {
         set running "-"
+        set reason_code queued
         set rejection_reason \
             "queued requests $queued exceed limit $max_queued"
     } else {
@@ -142,7 +147,7 @@ ad_proc ::util::reject_anonymous_on_high_load_filter {
 
         #
         # Count active requests with the same method and either the
-        # exact current URL or a URL matching the supplied pattern.
+        # exact current URL path or a URL matching the supplied pattern.
         #
         foreach active_request [ns_server active] {
             lassign $active_request \
@@ -168,6 +173,7 @@ ad_proc ::util::reject_anonymous_on_high_load_filter {
             return filter_ok
         }
 
+        set reason_code matching-active
         set rejection_reason \
             "matching active requests $running exceed limit $max_running"
     }
@@ -176,7 +182,9 @@ ad_proc ::util::reject_anonymous_on_high_load_filter {
     set request    [ns_conn request]
     set user_agent [ns_set iget [ns_conn headers] user-agent]
 
-    ns_log notice \
+    ad_log -plain \
+        -key [list reject-anonymous $pool $what $match $reason_code] \
+        -interval 60 \
         "reject anonymous request under high load: $what" \
         $rejection_reason \
         "pool=<$pool>" \
