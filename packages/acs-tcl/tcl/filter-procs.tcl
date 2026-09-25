@@ -57,9 +57,20 @@ ad_proc ::util::reject_anonymous_on_high_load_filter {
     args
 } {
 
-    Reject an anonymous request when too many requests for the same
-    URL are already running or when the server request queue exceeds
-    a configured limit.
+    Reject an anonymous request when either the number of matching
+    active requests OR the request queue length exceeds its configured
+    limit while a matching request is executed. Authenticated requests
+    are exempt from this filter.
+
+    Without -match, compare URLs exactly with the current request URL.
+    With -match, count URLs matching the supplied Tcl glob pattern.
+    The URL pattern used to register the filter determines which
+    requests invoke it; it does not define the active-request grouping.
+
+    The active count includes the current request and matching requests
+    from both anonymous and authenticated users. Both limits use
+    snapshots; this filter does not reserve execution capacity or
+    enforce a strict concurrency bound.
 
     The filter is active only in the connection pools specified by
     -pools. The empty pool name denotes the default connection pool.
@@ -99,9 +110,9 @@ ad_proc ::util::reject_anonymous_on_high_load_filter {
     } on error {errorMsg} {
         ns_log Warning DEBUG failed to parse args <$args>
         return filter_ok
-        
+
     }
-    
+
     #
     # Apply the filter only in the selected connection pools.
     # An empty pool name denotes the default pool.
@@ -118,37 +129,47 @@ ad_proc ::util::reject_anonymous_on_high_load_filter {
         return filter_ok
     }
 
-    set method [ns_conn method]
-    set url    [ns_conn url]
     set queued [ns_server waiting]
-    set running 0
 
-    #
-    # With no explicit match pattern, count requests for exactly the
-    # current URL. Otherwise, count URLs matching the supplied pattern.
-    #
-    foreach active_request [ns_server active] {
-        lassign $active_request \
-            connection_id peer state active_method active_url \
-            running_time bytes_sent
+    if {$queued > $max_queued} {
+        set running "-"
+        set rejection_reason \
+            "queued requests $queued exceed limit $max_queued"
+    } else {
+        set method  [ns_conn method]
+        set url     [ns_conn url]
+        set running 0
 
-        if {$active_method ne $method} {
-            continue
+        #
+        # Count active requests with the same method and either the
+        # exact current URL or a URL matching the supplied pattern.
+        #
+        foreach active_request [ns_server active] {
+            lassign $active_request \
+                connection_id peer state active_method active_url \
+                running_time bytes_sent
+
+            if {$active_method ne $method} {
+                continue
+            }
+
+            if {$match eq ""} {
+                if {$active_url ne $url} {
+                    continue
+                }
+            } elseif {![string match $match $active_url]} {
+                continue
+            }
+
+            incr running
         }
 
-        if {$match eq ""} {
-            if {$active_url eq $url} {
-                incr running
-            }
-        } else {
-            if {[string match $match $active_url]} {
-                incr running
-            }
+        if {$running <= $max_running} {
+            return filter_ok
         }
-    }
 
-    if {$running <= $max_running && $queued <= $max_queued} {
-        return filter_ok
+        set rejection_reason \
+            "matching active requests $running exceed limit $max_running"
     }
 
     set peer       [ns_conn peeraddr]
@@ -156,12 +177,13 @@ ad_proc ::util::reject_anonymous_on_high_load_filter {
     set user_agent [ns_set iget [ns_conn headers] user-agent]
 
     ns_log notice \
-        "reject anonymous request under high load: $what\
-         pool=<$pool>\
-         running=$running max_running=$max_running\
-         queued=$queued max_queued=$max_queued\
-         peer=$peer request=<$request>\
-         user-agent=<$user_agent>"
+        "reject anonymous request under high load: $what" \
+        $rejection_reason \
+        "pool=<$pool>" \
+        "running=$running max_running=$max_running" \
+        "queued=$queued max_queued=$max_queued" \
+        "peer=$peer request=<$request>" \
+        "user-agent=<$user_agent>"
 
     ns_set update [ns_conn outputheaders] Retry-After $retry_after
 
