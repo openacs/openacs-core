@@ -1,10 +1,5 @@
 ad_library {
-
     Initializes datastructures for utility procs.
-
-    @creation-date 02 October 2000
-    @author Bryan Quinn
-    @cvs-id $Id$
 }
 
 # initialize the random number generator
@@ -20,6 +15,9 @@ if { $logmaxbackup } {
     ad_schedule_proc -all_servers t -schedule_proc ns_schedule_daily \
         [list 00 00] util::roll_server_log
 }
+
+nsv_set ad_log_rate_limited mutex \
+    [ns_mutex create ad_log_rate_limited]
 
 # Local variables:
 #    mode: tcl

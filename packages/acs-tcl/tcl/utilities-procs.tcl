@@ -4447,18 +4447,123 @@ ad_proc util::trim_leading_zeros {
     return $string
 }
 
+ad_proc -private util::log_rate_limit_check {
+    severity
+    key
+    interval
+} {
+    Return {suppressed reference}, where suppressed is -1 when this
+    call should not log, or the number of additional suppressed calls.
+
+    Reference is the thread name captured when the first full message
+    was permitted. The caller must supply a positive interval in seconds.
+} {
+    set severity [string tolower $severity]
+    set count_key [list total $severity $key]
+    set state_key [list window $severity $key]
+
+    set sequence [nsv_incr ad_log_rate_limited $count_key]
+    set now [clock seconds]
+
+    if {[nsv_get ad_log_rate_limited $state_key state]} {
+        lassign $state last_log accounted reference
+
+        if {$sequence <= $accounted
+            || ($now >= $last_log && $now - $last_log < $interval)} {
+            return [list -1 ""]
+        }
+    }
+
+    set result [list -1 ""]
+    set mutex [nsv_get ad_log_rate_limited mutex]
+
+    ns_mutex eval $mutex {
+        set now [clock seconds]
+        set emit 1
+
+        if {[nsv_get ad_log_rate_limited $state_key state]} {
+            lassign $state last_log accounted reference
+
+            if {$sequence <= $accounted
+                || ($now >= $last_log && $now - $last_log < $interval)} {
+                set emit 0
+            }
+        } else {
+            set accounted 0
+            set reference [ns_thread name]
+        }
+
+        if {$emit} {
+            #
+            # Existing two-element records have no reference.
+            # Establish one with this newly permitted full message.
+            #
+            if {$reference eq ""} {
+                set reference [ns_thread name]
+            }
+
+            set total [nsv_get ad_log_rate_limited $count_key]
+            set suppressed [expr {$total - $accounted - 1}]
+
+            nsv_set ad_log_rate_limited $state_key \
+                [list $now $total $reference]
+
+            set result [list $suppressed $reference]
+        }
+    }
+
+    return $result
+}
+
+
 ad_proc -public ad_log {
+    {-key ""}
+    {-interval:integer 60}    
+    {-plain:boolean}    
     level
     args
 } {
     Output an ns_log message with detailed context. This function is
     intended to be used typically with "error" to ease debugging.
 
+    When -key is supplied, rate-limit messages by severity and key
+    across connection threads of this server. Log the first occurrence
+    immediately, then suppress further messages within the interval.
+    Include the suppressed count with the next emitted message.
+
+    Without -key, logging behavior is unchanged. Suppressed message
+    texts are not retained, and no summary is emitted until another
+    call occurs after the interval.
+
+    @param key optional stable identifier for a group of related
+               messages; avoid unbounded keys such as full request URLs
+    @param interval minimum logging interval in seconds, default 60
+                    when -key is supplied; must be positive and
+                    requires -key
+    @param plain suppress context
     @param level Severity level such as "error" or "warning".
-    @param args Log message
+    @param plain log the supplied message without adding request or call
+                 context. The normal NaviServer log prefix and any
+                 rate-suppression summary are retained.
 
     @author Gustaf Neumann
 } {
+
+    if {$key ne ""} {
+
+        lassign [::util::log_rate_limit_check $severity $key $interval] \
+            suppressed reference
+
+        if {$suppressed < 0} {
+            return
+        }
+
+        if {$suppressed > 0} {
+            lappend args \
+                " ($suppressed additional messages suppressed; see $reference)"
+        }
+    }
+    
     #
     # ad_log gathers request information, which may itself encounter an
     # error and call ad_log. In that case, log without gathering context.
@@ -4471,35 +4576,110 @@ ad_proc -public ad_log {
 
     set ::__ad_log_in_progress 1
     try {
-        set with_headers [expr {$level in {error Error}}]
-        append request "    " \
-            [util::request_info -with_headers=$with_headers]
+        if {$plain_p} {
+            ns_log $level {*}$args
+        } else {
+            set with_headers [expr {$level in {error Error}}]
+            append request "    " \
+                [util::request_info -with_headers=$with_headers]
 
-        ns_log $level {*}$args "\n[uplevel ad_get_tcl_call_stack]${request}\n"
+            ns_log $level {*}$args "\n[uplevel ad_get_tcl_call_stack]${request}\n"
 
-        #
-        # Optional deduplication.. not sure this should be done
-        # always. Better to get rid of the error/warning
-        #
-        # set key $level-$args
-        # if {[nsv_get ad_log $key previous_thread_name]} {
-        #     set cnt [nsv_incr ad_log $key-count]
-        #     ns_log notice \
-        #         "... repeated $level #$cnt (see $previous_thread_name)"
-        # } else {
-        #     nsv_set ad_log $key [ns_thread name]
-        #     set with_headers [expr {$level in {error Error}}]
-        #     set request ""
-        #     append request "    " \
-        #         [util::request_info -with_headers=$with_headers]
-        #
-        #     ns_log $level {*}$args \
-        #         "\n[uplevel ad_get_tcl_call_stack]${request}\n"
-        # }
+            #
+            # Optional deduplication.. not sure this should be done
+            # always. Better to get rid of the error/warning
+            #
+            # set key $level-$args
+            # if {[nsv_get ad_log $key previous_thread_name]} {
+            #     set cnt [nsv_incr ad_log $key-count]
+            #     ns_log notice \
+            #         "... repeated $level #$cnt (see $previous_thread_name)"
+            # } else {
+            #     nsv_set ad_log $key [ns_thread name]
+            #     set with_headers [expr {$level in {error Error}}]
+            #     set request ""
+            #     append request "    " \
+            #         [util::request_info -with_headers=$with_headers]
+            #
+            #     ns_log $level {*}$args \
+            #         "\n[uplevel ad_get_tcl_call_stack]${request}\n"
+            # }
+        }
     } finally {
         unset -nocomplain ::__ad_log_in_progress
     }
 }
+
+
+ad_proc -public ad_log_rate_limited {
+    -key
+    {-interval:integer 60}
+    severity
+    message
+} {
+    Log a message at most once per interval for the supplied key and
+    severity, shared across connection threads of this server.
+
+    Log the first occurrence immediately. Suppress subsequent calls
+    within the interval and report their count with the next emitted
+    message. The emitted message is the current call's message;
+    suppressed message texts are not retained.
+
+    @param key stable identifier for the group of related messages
+    @param interval minimum interval between notices, in seconds;
+                    must be positive
+    @param severity severity passed to ad_log
+    @param message message passed to ad_log
+
+    @return 1 if ad_log was called, or 0 if the message was suppressed
+    
+    @author Gustaf Neumann
+} {
+    if {$interval <= 0} {
+        error "-interval must be greater than zero"
+    }
+
+    set mutex [nsv_get ad_log_rate_limited mutex]
+    set state_key [list state $severity $key]
+    set report_suppressed -1
+
+    ns_mutex eval $mutex {
+        set now [clock seconds]
+
+        if {![nsv_exists ad_log_rate_limited $state_key]} {
+            nsv_set ad_log_rate_limited $state_key [list $now 0]
+            set report_suppressed 0
+        } else {
+            lassign [nsv_get ad_log_rate_limited $state_key] \
+                last_log suppressed
+
+            if {$now - $last_log >= $interval || $now < $last_log} {
+                nsv_set ad_log_rate_limited $state_key [list $now 0]
+                set report_suppressed $suppressed
+            } else {
+                incr suppressed
+                nsv_set ad_log_rate_limited $state_key \
+                    [list $last_log $suppressed]
+            }
+        }
+    }
+
+    if {$report_suppressed < 0} {
+        return 0
+    }
+
+    if {$report_suppressed > 0} {
+        append message \
+            " ($report_suppressed additional messages suppressed since previous log)"
+    }
+
+    #
+    # Log after releasing the limiter mutex.
+    #
+    ad_log $severity $message
+    return 1
+}
+
 
 ad_proc -public util::var_subst_quotehtml {
    {-ulevel 1}
