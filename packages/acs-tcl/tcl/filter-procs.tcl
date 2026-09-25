@@ -185,6 +185,7 @@ ad_proc ::util::reject_anonymous_on_high_load_filter {
     ad_log -plain \
         -key [list reject-anonymous $pool $what $match $reason_code] \
         -interval 60 \
+        notice \
         "reject anonymous request under high load: $what" \
         $rejection_reason \
         "pool=<$pool>" \
