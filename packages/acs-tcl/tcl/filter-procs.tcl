@@ -120,7 +120,7 @@ ad_proc ::util::reject_anonymous_on_high_load_filter {
 
     set method [ns_conn method]
     set url    [ns_conn url]
-    set queued [llength [ns_server queued]]
+    set queued [ns_server waiting]
     set running 0
 
     #
