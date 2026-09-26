@@ -1079,7 +1079,30 @@ ad_proc -public ad_page_contract {
                 }
             }
         } else {
-            ad_log warning "ad_page_contract: attempt to use a nonstandard variable name in form: '$actual_name'"
+            set message  "ad_page_contract: attempt to use a nonstandard variable name in form: '$actual_name'"
+            if {[ad_conn user_id] != 0} {
+                #
+                # Log every occurrence for authenticated users so that application-side
+                # encoding errors remain visible. Anonymous requests can produce large
+                # volumes of these warnings, e.g. when crawlers mishandle HTML entities
+                # in links, so rate-limit their messages while retaining suppression counts.
+                #
+                ad_log warning $message
+            } else {
+                #
+                # Keep HTML-entity-related names in a separate suppression group to prevent
+                # this common pattern from hiding other invalid names. Use fixed categories
+                # rather than submitted names to bound the number of rate-limit entries.
+                #
+                set category [expr {[string match {amp;*} $name]
+                                    ? "html-entity-name"
+                                    : "nonstandard-name"
+                                }]
+
+                ad_log -key [list page-contract-invalid-name $category] \
+                    -interval 300 \
+                    warning $message
+            }
         }
     }
 
