@@ -644,7 +644,10 @@ ad_proc -public ad_user_logout {
 } {
     Logs the user out.
 } {
-    ad_log notice "ad_user_logout user_id [ad_conn user_id]"
+    set user_id [ad_conn user_id]
+    if {$user_id != 0} {
+        ad_log notice "ad_user_logout user_id $user_id"
+    }
 
     set external_registry [sec_login_get_external_registry]
     if {$external_registry ne ""} {
