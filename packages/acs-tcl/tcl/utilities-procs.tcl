@@ -3,9 +3,6 @@ ad_library {
     Provides a variety of non-ACS-specific utilities, including
     the procs to support the who's online feature.
 
-    @author Various (acs@arsdigita.com)
-    @creation-date 13 April 2000
-    @cvs-id $Id$
 }
 
 #
@@ -2652,7 +2649,8 @@ ad_proc -public util_current_location {} {
             set port $Host_port
         }
     } else {
-        ns_log notice "ignore non-existing or untrusted host header, fall back to <$hostname>"
+        ad_log -plain -key ignore-non-existing -- notice \
+            "ignore non-existing or untrusted host header, fall back to <$hostname>"
     }
 
     #
