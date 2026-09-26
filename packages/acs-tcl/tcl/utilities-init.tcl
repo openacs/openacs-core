@@ -16,9 +16,6 @@ if { $logmaxbackup } {
         [list 00 00] util::roll_server_log
 }
 
-nsv_set ad_log_rate_limited mutex \
-    [ns_mutex create ad_log_rate_limited]
-
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4

@@ -4452,69 +4452,56 @@ ad_proc -private util::log_rate_limit_check {
     key
     interval
 } {
-    Return {suppressed reference}, where suppressed is -1 when this
-    call should not log, or the number of additional suppressed calls.
+    Return {suppressed reference}.
 
-    Reference is the thread name captured when the first full message
-    was permitted. The caller must supply a positive interval in seconds.
+    A suppressed count of -1 means that this call should not log.
+    Otherwise, it is the number of suppressed calls collected for
+    this notice. Reference identifies the original logging thread.
+
+    The caller must supply a positive interval in seconds.
 } {
     set severity [string tolower $severity]
-    set count_key [list total $severity $key]
-    set state_key [list window $severity $key]
+    set group [list $severity $key]
 
-    set sequence [nsv_incr ad_log_rate_limited $count_key]
-    set now [clock seconds]
+    set count_key [list pending $group]
+    set reference_key [list reference $group]
 
-    if {[nsv_get ad_log_rate_limited $state_key state]} {
-        lassign $state last_log accounted reference
+    #
+    # This local variable changes only when this caller evaluates
+    # the cache-miss script. Cache hits retain the suppression decision.
+    #
+    set decision [list -1 ""]
 
-        if {$sequence <= $accounted
-            || ($now >= $last_log && $now - $last_log < $interval)} {
-            return [list -1 ""]
-        }
+    ::acs::misc_cache eval -expires $interval -- log-rate-$group {
+        #
+        # Initialize the counter and original reference atomically.
+        # These values survive expiration of the cache marker.
+        #
+        nsv_set -default ad_log_rate_limited $count_key 0
+        set reference [nsv_set -default \
+                           ad_log_rate_limited $reference_key \
+                           [ns_thread name]]
+
+        #
+        # Collect previous suppressions and start a new count.
+        #
+        set suppressed [nsv_set -reset \
+                            ad_log_rate_limited $count_key 0]
+
+        set decision [list $suppressed $reference]
+
+        #
+        # Cache only a marker, not this caller's logging decision.
+        #
+        set marker 1
     }
 
-    set result [list -1 ""]
-    set mutex [nsv_get ad_log_rate_limited mutex]
-
-    ns_mutex eval $mutex {
-        set now [clock seconds]
-        set emit 1
-
-        if {[nsv_get ad_log_rate_limited $state_key state]} {
-            lassign $state last_log accounted reference
-
-            if {$sequence <= $accounted
-                || ($now >= $last_log && $now - $last_log < $interval)} {
-                set emit 0
-            }
-        } else {
-            set accounted 0
-            set reference [ns_thread name]
-        }
-
-        if {$emit} {
-            #
-            # Existing two-element records have no reference.
-            # Establish one with this newly permitted full message.
-            #
-            if {$reference eq ""} {
-                set reference [ns_thread name]
-            }
-
-            set total [nsv_get ad_log_rate_limited $count_key]
-            set suppressed [expr {$total - $accounted - 1}]
-
-            nsv_set ad_log_rate_limited $state_key \
-                [list $now $total $reference]
-
-            set result [list $suppressed $reference]
-        }
+    if {[lindex $decision 0] < 0} {
+        nsv_incr ad_log_rate_limited $count_key
     }
 
-    return $result
+    return $decision
 }
-
 
 ad_proc -public ad_log {
     {-key ""}
