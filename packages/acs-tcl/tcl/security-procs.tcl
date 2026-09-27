@@ -3367,7 +3367,7 @@ ad_proc -public security::validated_host_header {} {
     #
     # Now we give up
     #
-    ad_log -plain -key ignore-host-header $hostHeaderValue" -- warning \
+    ad_log -plain -key "ignore-host-header $hostHeaderValue" -- warning \
         "ignore untrusted host header field: '$hostHeaderValue'." \
         "Consider adding this value to 'whitelistedHosts' in the" \
         "section 'ns/server/\$server/acs' of your configuration file"
