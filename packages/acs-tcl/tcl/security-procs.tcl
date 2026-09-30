@@ -1476,6 +1476,12 @@ ad_proc -public ad_get_login_url {
     }
     ::security::log login_url "ad_get_login_url: final login_url <$url>"
 
+# Temporary diagnostic for the demo subsite.
+if {[ns_conn isconnected]
+    && [string match "/demo/*" [ad_conn url]]} {
+    ns_log warning "DEBUG LOGIN_URL"  source [ad_conn url]  target $url
+}
+
     return $url
 }
 
@@ -1681,11 +1687,15 @@ ad_proc -public ad_verify_signature {
     one provided by the ACS signature mechanism.
 } {
     if {![string is list $signature]} {
-        ns_log warning "signature is not a list '$signature'"
+        ns_log warning "ad_verify_signature: signature is not a Tcl list"
         return 0
+    } elseif {[llength $signature] != 3} {
+        ns_log warning "ad_verify_signature: malformed signature: expected 3 elements, got [llength $signature]"
+        return 0
+    } else {
+        lassign $signature token_id expire_time hash
+        return [__ad_verify_signature $value $token_id $secret $expire_time $hash]
     }
-    lassign $signature token_id expire_time hash
-    return [__ad_verify_signature $value $token_id $secret $expire_time $hash]
 }
 
 ad_proc -public ad_verify_signature_with_expr {
@@ -1700,16 +1710,19 @@ ad_proc -public ad_verify_signature_with_expr {
     one provided by the ACS signature mechanism.
 } {
     if {![string is list $signature]} {
-        ns_log warning "signature is not a list '$signature'"
+        ns_log warning "ad_verify_signature_with_expr signature is not a Tcl list"
         return 0
-    }
-    lassign $signature token_id expire_time hash
-    if { [__ad_verify_signature $value $token_id $secret $expire_time $hash] } {
-        return $expire_time
+    } elseif {[llength $signature] != 3} {
+        ns_log warning "ad_verify_signature_with_expr malformed signature: expected 3 elements, got [llength $signature]"
+        return 0
     } else {
-        return 0
+        lassign $signature token_id expire_time hash
+        if { [__ad_verify_signature $value $token_id $secret $expire_time $hash] } {
+            return $expire_time
+        } else {
+            return 0
+        }
     }
-
 }
 
 ad_proc -private __ad_verify_signature {
