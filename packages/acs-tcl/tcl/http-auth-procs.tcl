@@ -71,11 +71,11 @@ ad_proc http_auth::set_user_id {} {
             return 0
         }
         ns_log debug "\nTDAV: auth_check OpenACS 5.0 user_id= $auth(user_id)"
-        ad_conn -set user_id $auth(user_id)
+        security::set_user_id $auth(user_id)
 
     } else {
         # no authenticate header, anonymous visitor
-        ad_conn -set user_id 0
+        security::set_user_id 0
         ad_conn -set untrusted_user_id 0
     }
 }

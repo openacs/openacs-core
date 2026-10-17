@@ -11,6 +11,20 @@ ad_library {
 }
 
 namespace eval security {
+    ad_proc -public set_user_id {user_id} {
+        Set the OpenACS connection user ID and the identity recorded by
+        NaviServer's access logger. Zero denotes an anonymous OpenACS user.
+        This also updates ns_conn authuser, replacing any HTTP authentication
+        username. Without an HTTP connection, only ad_conn is updated.
+
+        @param user_id OpenACS user ID, or zero for an anonymous user
+    } {
+        ad_conn -set user_id $user_id
+        if {[ns_conn isconnected]} {
+            ns_set update [ns_conn auth] username $user_id
+        }
+    }
+
     #set log(login_url) notice
     #set log(login_cookie) notice
     #set log(timeout) notice
@@ -140,7 +154,7 @@ ad_proc -private sec_handler {} {
             #ns_log notice logindata=$logindata
             if {[dict exists $logindata user_id]} {
                 set user_id [dict get $logindata user_id]
-                ad_conn -set user_id $user_id
+                security::set_user_id $user_id
                 ad_conn -set untrusted_user_id $user_id
                 ad_conn -set account_status ok
                 ad_conn -set auth_level ok
@@ -319,7 +333,7 @@ ad_proc -private sec_handler {} {
         # Setup ad_conn
         ad_conn -set session_id $session_id
         ad_conn -set untrusted_user_id $session_user_id
-        ad_conn -set user_id $user_id
+        security::set_user_id $user_id
         ad_conn -set auth_level $auth_level
         ad_conn -set account_status $account_status
 
@@ -991,7 +1005,7 @@ ad_proc -private sec_setup_session {
     ad_conn -set session_id $session_id
     ad_conn -set auth_level $auth_level
     ad_conn -set account_status $account_status
-    ad_conn -set user_id $user_id
+    security::set_user_id $user_id
 
     ::security::log session_id "OACS= about to generate session id cookie"
 

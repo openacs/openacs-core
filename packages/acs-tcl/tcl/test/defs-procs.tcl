@@ -107,7 +107,7 @@ aa_register_case \
         aa_section "Site home link"
         set old_user_id [ad_conn user_id]
         try {
-            ad_conn -set user_id 0
+            security::set_user_id 0
             set site_home_link [ad_site_home_link]
 
             aa_true "Subsite name is in the link (user 0)" {
@@ -119,7 +119,7 @@ aa_register_case \
             }
             aa_true "Link is HTML (user 0)" [ad_looks_like_html_p $site_home_link]
 
-            ad_conn -set user_id 1
+            security::set_user_id 1
             set site_home_link [ad_site_home_link]
 
             aa_true "Subsite name is in the link (user 1)" {
@@ -131,7 +131,7 @@ aa_register_case \
             }
             aa_true "Link is HTML (user 1)" [ad_looks_like_html_p $site_home_link]
         } finally {
-            ad_conn -set user_id $old_user_id
+            security::set_user_id $old_user_id
         }
 
         aa_section "System name"

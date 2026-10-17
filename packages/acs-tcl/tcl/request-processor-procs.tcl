@@ -480,7 +480,7 @@ ad_proc -private rp_filter { why } {
     sec_handler_reset
     ad_conn -reset
     ad_conn -set request [ns_conn id]
-    ad_conn -set user_id 0
+    security::set_user_id 0
     ad_conn -set start_clicks [clock clicks -microseconds]
 
     ds_collect_connection_info
