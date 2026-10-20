@@ -4371,12 +4371,28 @@ ad_proc -private util::ns_set_pretty_print {
 }
 
 
+ad_proc -private util::log_user_agent {value} {
+    Format a User-Agent for single-line request diagnostics. Bound the input to
+    1024 characters and URL-encode it using the configured default encoding.
+
+    @param value Client-supplied User-Agent header.
+    @return URL-encoded value followed by an explicit truncation flag.
+} {
+    set truncated [expr {[string length $value] > 1024}]
+    set value [string range $value 0 1023]
+    return "[ns_urlencode -- $value] user_agent_truncated $truncated"
+}
+
+
 ad_proc -public util::request_info {
     {-with_headers:boolean false}
 } {
 
     Produce a string containing the detailed request information.
     This is in particular useful for debugging, when errors are raised.
+
+    The base information includes a User-Agent bounded to 1024 characters,
+    escaped for a single log line, and an explicit truncation flag.
 
     @param with_headers Include request headers
     @author Gustaf Neumann
@@ -4391,7 +4407,8 @@ ad_proc -public util::request_info {
         append info "    " \
             [ns_conn method] \
             " [util_current_location][ns_conn url]?[ns_conn query]" \
-            " referred by '[get_referrer]' peer [ad_conn peeraddr] user_id [ad_conn user_id]"
+            " referred by '[get_referrer]' peer [ad_conn peeraddr] user_id [ad_conn user_id]" \
+            " user_agent [util::log_user_agent [ns_set iget [ns_conn headers] User-Agent]]"
 
         #ns_log notice DEBUG util::request_info info $info
 

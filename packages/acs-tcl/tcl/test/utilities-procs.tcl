@@ -645,3 +645,26 @@ aa_register_case -cats {
 #    tcl-indent-level: 4
 #    indent-tabs-mode: nil
 # End:
+
+
+aa_register_case -cats {api smoke} -procs {util::log_user_agent} log_user_agent {
+    User-Agent diagnostics use bounded default-charset URL encoding and remain single-line.
+} {
+    foreach raw [list {} {Browser plain} {plus+ percent% literal%20} {\x0a\n\u0000} \
+                     {Browser Österreich 日本} {[error unevaluated] $unevaluated} \
+                     "Agent \"quoted\" \\literal\n\r\t\x7f"] {
+        set formatted [util::log_user_agent $raw]
+        aa_true "Encoded value has an explicit nontruncated flag" \
+            [regexp {^([^ \t\r\n]*) user_agent_truncated 0$} $formatted -> encoded]
+        aa_equals "Default-charset URL encoding round trip" [ns_urldecode -- $encoded] $raw
+        aa_equals "Uses the default URL encoding" $encoded [ns_urlencode -- $raw]
+    }
+    aa_equals "Empty header" [util::log_user_agent {}] { user_agent_truncated 0}
+    set full [util::log_user_agent [string repeat x 1024]]
+    aa_true "Exact bound is not truncated" [string match {*user_agent_truncated 0} $full]
+    set clipped [util::log_user_agent [string repeat 日 1025]]
+    regexp {^([^ ]*)} $clipped -> encoded
+    aa_equals "Bound is applied before URL encoding" \
+        [ns_urldecode -- $encoded] [string repeat 日 1024]
+    aa_true "Truncation is explicit" [string match {*user_agent_truncated 1} $clipped]
+}
