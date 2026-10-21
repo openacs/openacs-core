@@ -75,8 +75,11 @@ ad_proc -public person::get {
     }
 
     if {$element ne ""} {
-        set data [expr {[dict exists $data $element] ?
-                        [dict get $data $element] : ""}]
+        if {[dict exists $data $element]} {
+            set data [dict get $data $element]
+        } else {
+            set data ""
+        }
     }
 
     return $data
@@ -113,8 +116,11 @@ ad_proc -public person::get_person_info {
     }
 
     if {$element ne ""} {
-        return [expr {[dict exists $person_info $element] ?
-                      [dict get $person_info $element] : ""}]
+        if {[dict exists $person_info $element]} {
+            return [dict get $person_info $element]
+        } else {
+            return ""
+        }
     } else {
         return $person_info
     }
@@ -489,8 +495,11 @@ ad_proc -public acs_user::get {
     }
 
     if {$element ne ""} {
-        set data [expr {[dict exists $data $element] ?
-                        [dict get $data $element] : ""}]
+        if {[dict exists $data $element]} {
+            set data [dict get $data $element]
+        } else {
+            set data ""
+        }
     }
 
     if {$include_bio_p} {
@@ -541,8 +550,11 @@ ad_proc acs_user::get_user_info {
     }
 
     if {$element ne ""} {
-        return [expr {[dict exists $user_info $element] ?
-                      [dict get $user_info $element] : ""}]
+        if {[dict exists $user_info $element]} {
+            return [dict get $user_info $element]
+        } else {
+            return ""
+        }
     } else {
         return $user_info
     }
