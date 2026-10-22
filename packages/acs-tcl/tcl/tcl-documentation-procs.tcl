@@ -323,6 +323,34 @@ ad_proc -private ad_page_contract_split_argspec_flag_parameters {flag_parameters
 # ad_page_contract_variables: list of all the variables, required or
 #   optional, specified in the ad_page_contract call error
 
+ad_proc -private ad_page_contract_log_duplicate {
+    formal_name
+    complaint
+} {
+    Log rejection of a repeated single-valued page-contract parameter.
+    Authenticated requests retain every full warning. Anonymous requests
+    share five-minute rate limits, separately for bot and other pools and
+    for return_url, view and other parameters. The existing ad_log limiter
+    reports suppressed occurrences on the next emitted warning.
+
+    @param formal_name declared parameter name
+    @param complaint localized validation complaint
+} {
+    set message "User experienced '$complaint' when submitting a form related to path_info: [ad_conn path_info]"
+    if {[ad_conn user_id] != 0} {
+        ad_log warning $message
+    } else {
+        # Fixed categories bound limiter state and keep bot traffic from
+        # suppressing examples from other pools. Pool membership is routing
+        # context, not proof that a request is automated or malicious.
+        set pool other
+        if {[ns_conn isconnected] && [ns_conn pool] eq "bots"} {set pool bots}
+        set parameter [expr {$formal_name in {return_url view} ? $formal_name : "other"}]
+        ad_log -key [list page-contract-duplicate-parameter $pool $parameter] \
+            -interval 300 warning $message
+    }
+}
+
 ad_proc -public ad_page_contract {
     {-form {}}
     {-level 1}
@@ -1072,7 +1100,7 @@ ad_proc -public ad_page_contract {
                 if { [info exists $variable_to_set] } {
                     set complaint [_ acs-tcl.lt_Youve_supplied_two_va]
                     ad_complain -key $formal_name:-doublevalue $complaint
-                    ad_log warning "User experienced '$complaint' when submitting a form related to path_info: [ad_conn path_info]"
+                    ad_page_contract_log_duplicate $formal_name $complaint
                     continue
                 } else {
                     set $variable_to_set $actual_value
