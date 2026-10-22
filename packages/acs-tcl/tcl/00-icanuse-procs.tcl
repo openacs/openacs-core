@@ -126,6 +126,7 @@ namespace eval ::acs {
 ::acs::register_icanuse "ns_ictl trace idle"        [acs::cmd_error_contains {ns_ictl trace foo} idle]
 ::acs::register_icanuse "ns_info meminfo"           [acs::cmd_has_subcommand ns_info meminfo]
 ::acs::register_icanuse "ns_ip"                     {[info commands ::ns_ip] ne ""}
+::acs::register_icanuse "ns_json"                   {[info commands ::ns_json] ne ""}
 ::acs::register_icanuse "ns_log security"           {"Security" in [ns_logctl severities]}
 ::acs::register_icanuse "ns_mkdtemp"                {[info commands ::ns_mkdtemp] ne ""}
 ::acs::register_icanuse "ns_parsehtml"              {[info commands ::ns_parsehtml] ne ""}
