@@ -1335,9 +1335,12 @@ ad_proc ::util::block_request {-condition:required {-target you}} {
     paths, use an early NaviServer filter such as ::util::reject_request_filter
     registered with ns_register_filter.
 
-    If the condition is true and the connection is still active, the proc logs
-    the request, returns a complaint page to the client, and aborts the script.
-    Otherwise, it returns normally without producing output.
+    If the condition is true and the connection is still active, the proc
+    returns a complaint page to the client and aborts the script. Notices are
+    rate-limited to one per five minutes, separately for the bots pool and
+    all other pools. The next emitted notice reports suppressed occurrences;
+    request context is collected only when logging. Otherwise, the proc
+    returns normally without producing output.
 
     Example: <pre>
     ::util::block_request -condition {[ns_conn pool] eq "bots"} -target bots</pre>
@@ -1348,8 +1351,20 @@ ad_proc ::util::block_request {-condition:required {-target you}} {
 
 } {
     if {[ns_conn isconnected] && [uplevel 1 [list expr $condition]]} {
-        ns_log notice "blocking request for condition $condition\n" \
-            [util::request_info]
+        # Use two fixed groups: varying conditions, targets and URLs must
+        # not grow limiter state. This affects diagnostics only; every matching
+        # request still receives the complaint and script abort below.
+        set pool [expr {[ns_conn pool] eq "bots" ? "bots" : "other"}]
+        lassign [util::log_rate_limit_check notice [list block-request $pool] 300] \
+            suppressed reference
+        if {$suppressed >= 0} {
+            set message "blocking request for condition $condition"
+            if {$suppressed > 0} {
+                append message " ($suppressed additional messages suppressed; see $reference)"
+            }
+            # Gather request context only for an emitted notice.
+            ns_log notice "$message\n" [util::request_info]
+        }
         ad_return_complaint 1 "page is not allowed for $target"
         ad_script_abort
     }
