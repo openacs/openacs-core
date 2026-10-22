@@ -605,7 +605,7 @@ ad_proc -public util::get_referrer {
     # specified. An attacker might to sneak in e.g. a JavaScript URL.
     #
     if { $trusted_p && [util::external_url_p $url]} {
-        ns_log warning "someone tried to sneak in an untrusted referrer '$url'"
+        #ns_log warning "someone tried to sneak in an untrusted referrer '$url'"
         set url ""
     }
     if {$relative_p} {
