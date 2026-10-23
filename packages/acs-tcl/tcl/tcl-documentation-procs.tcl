@@ -1122,7 +1122,7 @@ ad_proc -public ad_page_contract {
                 # this common pattern from hiding other invalid names. Use fixed categories
                 # rather than submitted names to bound the number of rate-limit entries.
                 #
-                set category [expr {[string match {amp;*} $name]
+                set category [expr {[string match {amp;*} $actual_name]
                                     ? "html-entity-name"
                                     : "nonstandard-name"
                                 }]

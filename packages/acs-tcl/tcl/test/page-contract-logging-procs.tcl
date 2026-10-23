@@ -203,6 +203,30 @@ aa_register_case -cats {api smoke production_safe} -procs {
         aa_equals "Varying requests are all still rejected" [interp eval $child {expr {$aborts-$beforeAborts}}] 100
         aa_equals "Suppressed varying requests do not collect context" [interp eval $child {set contextCalls}] 3
 
+        # Exercise the actual nonstandard-name logging branch. No variable
+        # named "name" exists: submitted names are held in actual_name.
+        set channel [open [file join [acs_package_root_dir acs-tcl] tcl tcl-documentation-procs.tcl]]
+        try {set text [read $channel]} finally {close $channel}
+        set start [string first {set message  "ad_page_contract: attempt to use a nonstandard variable name} $text]
+        set start [string first {if {[ad_conn user_id] != 0}} $text $start]
+        set branch {}
+        foreach line [split [string range $text $start end] \n] {
+            append branch $line \n
+            if {[info complete $branch]} break
+        }
+        interp eval $child {
+            unset -nocomplain name
+            set user_id 0; set message invalid; set state {}; set cache {}; set logs {}
+            set actual_name {amp;project_id}
+        }
+        interp eval $child $branch
+        aa_equals "Entity-prefixed invalid name logs without an undefined variable" \
+            [interp eval $child {set category}] html-entity-name
+        interp eval $child {set actual_name {)}}
+        interp eval $child $branch
+        aa_equals "Other invalid name uses the general bounded category" \
+            [interp eval $child {set category}] nonstandard-name
+
     } finally {
         interp delete $child
     }

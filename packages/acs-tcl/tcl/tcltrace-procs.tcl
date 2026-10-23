@@ -55,6 +55,14 @@ namespace eval ::tcltrace {
         @param cmd the full command as executed by Tcl
         @param op the trace operation
     } {
+        # Blueprint replacement can finalize NX caches before XOTcl
+        # destructors log their notices. Interpreter deletion also need not
+        # preserve request services. Never initialize tracing parameters or
+        # developer-support state after these dependencies have disappeared.
+        if {[info commands ::acs::per_request_cache] eq ""
+            || [info commands ::parameter::get_from_package_key] eq ""} {
+            return
+        }
         set msg [join [lassign $cmd cmdname severity]]
         set severity [string totitle $severity]
         if {![info exists ::__log_severities]} {
