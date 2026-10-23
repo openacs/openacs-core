@@ -803,6 +803,17 @@ ad_proc -private rp_report_error {
         #
         set message $::errorInfo
     }
+    #
+    # Report the original exception once, with request context, before
+    # rendering the error response. Rendering can fail or abort; neither
+    # should lose the original diagnostic. Callers must not log it again.
+    #
+    if {![ns_conn isconnected]} {
+        ad_log error "rp_report_error: request handler received error after connection was closed: $message"
+        return
+    }
+    ad_log error $message
+
     set error_url [ad_url][ad_conn url]?[export_vars -entire_form]
     set error_file [ad_conn file]
     set prev_url [util::get_referrer -trusted]
@@ -814,10 +825,6 @@ ad_proc -private rp_report_error {
         error_url error_info user_id prev_url error_file feedback_id bug_package_id
     }]
 
-    if {![ns_conn isconnected]} {
-        ad_log warning "rp_report_error: request handler received error after connection was closed: $message\n$error_url"
-        return
-    }
 
     ds_add conn error $message
 
@@ -862,8 +869,6 @@ ad_proc -private rp_report_error {
             <blockquote><pre>[ns_quotehtml $error_message]</pre></blockquote>
         }]
     }
-    ad_log error $error_message
-
     ns_return 500 text/html $rendered_page
 }
 
@@ -1166,7 +1171,7 @@ ad_proc -private rp_handler {} {
         set error_msg "errorMsg $errorMsg while serving [ns_conn request]"
         append error_msg "\nad_url <[ad_conn url]> maps to file <[ad_conn file]>"
         rp_debug "error in rp_handler: $error_msg"
-        ns_log error "rp_handler no-script-abort: $error_msg\n$::errorCode\n$::errorInfo"
+        # rp_report_error logs this exception once with full request context.
         rp_report_error
     }
 }
