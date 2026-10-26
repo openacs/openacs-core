@@ -821,7 +821,7 @@ ad_proc -public api_proc_documentation {
     } else {
         set objName [::xo::api object_from_proc_index $proc_name]
         if {[nsf::is object,type=::nx::Object $objName] && ![nsf::is object,type=::nx::Class $objName]} {
-            
+
             append blocks_out <blockquote><ul>
             foreach m [$objName info lookup methods -callprotection public -source application] {
                 set definition [nx::Object info method definition [$objName info lookup method $m]]
@@ -1899,9 +1899,16 @@ namespace eval ::apidoc {
 
     ad_proc -private get_doc_url {-cmd -index -root -host} {
 
-        foreach i $index r $root {
-            set result [util_memoize [list ::util::http::get -url $i]]
-            set page   [dict get $result page]
+        foreach url $index r $root {
+            try {
+                set page [util_memoize [list apply {{url} {dict get [ns_http run -timeout 30 $url] body}} $url]]
+            } trap {NS_TIMEOUT} {errorMsg} {
+                ns_log notice "Documentation index <$url> timed out: $errorMsg"
+                continue
+            } on error {errorMsg} {
+                ns_log error "Could not fetch documentation index <$url>: $errorMsg"
+                continue
+            }
 
             #
             # Since man pages contain often a summary of multiple commands, try
