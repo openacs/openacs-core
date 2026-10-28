@@ -1102,12 +1102,16 @@ aa_register_case \
         "/test"
         ":/test"
         "//bxss.me"
+        "https://"
     } {
         aa_false $url [util_complete_url_p $url]
     }
     foreach url {
         "http://test"
         "ftp://test"
+        "https://example.invalid/a b.pdf"
+        "https://example.invalid/search?q={two words}"
+        "https://137.208.116.31/file/1008452/modelling competences in dotlrn (slides).pdf?"
     } {
         aa_true $url [util_complete_url_p $url]
     }
@@ -1118,7 +1122,7 @@ aa_register_case \
     -procs util_external_url_p \
     util__external_url_p {
 
-        Test util_complete_url_p
+        Test util::external_url_p
 
         @creation-date 2018-09-17
         @author Héctor Romojaro <hector.romojaro@gmail.com>
@@ -1129,6 +1133,8 @@ aa_register_case \
         "//bss.me" 1
         "http://test" 1
         "ftp://test" 1
+        "https://redirect-test.invalid/a b.pdf" 1
+        "https://redirect-test.invalid/search?q={two words}" 1
     } {
       aa_equals $url [util::external_url_p $url] $expected
     }

@@ -1281,6 +1281,11 @@ ad_proc -public export_vars {
         append export_string "\#$anchor"
     }
 
+    if {[info exists exp_flag(return_url:sign)]} {
+        security::debug_return_url_signature \
+            [expr {$url_p ? "export-url" : "export-form"}] \
+            $export_string [ns_set get $export_set return_url:sig]
+    }
     return $export_string
 }
 
@@ -2219,7 +2224,16 @@ ad_proc -public ad_returnredirect {
         util_user_message -message $message -html=$html_p
     }
 
-    if { [util_complete_url_p $target_url] } {
+    set complete_url_p [util_complete_url_p $target_url]
+    if {!$complete_url_p && [regexp {^[A-Za-z][A-Za-z0-9+.-]*:} $target_url]} {
+        #
+        # A scheme-prefixed URL that cannot be classified as complete
+        # must not be resolved relative to the current directory.
+        #
+        error "Invalid absolute redirect URL."
+    }
+
+    if { $complete_url_p } {
         #ns_log notice "ad_returnredirect is complete <$target_url>"
         # http://myserver.com/foo/bar.tcl style - just pass to ns_returnredirect
         # check if the hostname matches the current host
@@ -2250,6 +2264,7 @@ ad_proc -public ad_returnredirect {
     regsub -all -- {[\r\n]} $url "" url
 
     #ns_log notice "ad_returnredirect final redirect to <$url>"
+    security::debug_return_url_signature redirect $url
     ns_returnredirect $url
 }
 
@@ -2330,13 +2345,17 @@ ad_proc -public util_get_user_messages {
 
 ad_proc -public util_complete_url_p {url} {
     Determine whether the provided argument is a complete URL,
-    i.e., it contains a scheme, and a host
+    i.e., it contains a scheme and a host. This is a structural check,
+    not encoding validation; unencoded path or query characters do not
+    make an absolute URL relative.
 
     @return boolean value
 } {
     try {
-        set parsed [ns_parseurl -strict $url]
-        return [expr {[dict exists $parsed proto] && [dict exists $parsed host]}]
+        set parsed [ns_parseurl $url]
+        return [expr {[dict exists $parsed proto]
+                      && [dict exists $parsed host]
+                      && [dict get $parsed host] ne ""}]
     } on error {errorMsg} {
         return 0
     }
@@ -4540,9 +4559,11 @@ ad_proc -public ad_log {
     severity
     args
 } {
-    Output an ns_log message with detailed context. This function is
+    Output ns_log message with detailed context. This function is
     intended to be used typically with "error" to ease debugging.
-
+    Repeated messages are reported only once, with a reference to the
+    first occurrence.
+    
     When -key is supplied, rate-limit messages by severity and key
     across connection threads of this server. Log the first occurrence
     immediately, then suppress further messages within the interval.

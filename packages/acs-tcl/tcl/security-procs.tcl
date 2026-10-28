@@ -11,6 +11,7 @@ ad_library {
 }
 
 namespace eval security {
+
     ad_proc -public set_user_id {user_id} {
         Set the OpenACS connection user ID and the identity recorded by
         NaviServer's access logger. Zero denotes an anonymous OpenACS user.
@@ -1404,6 +1405,79 @@ ad_proc security::safe_tmpfile_p {
     return true
 }
 
+ad_proc -private security::debug_return_url_signature {
+    stage
+    {url ""}
+    {signature ""}
+} {
+    Temporary, opt-in diagnostics for file-storage return_url signatures.
+
+    Enable from nscp for fifteen minutes (optionally limit normal-path
+    observations to one peer):
+    <pre>
+    nsv_set security_return_url_signature_debug settings [list \
+        until [expr {[clock seconds] + 900}] peer 91.114.61.250]
+    </pre>
+    Disable with nsv_unset security_return_url_signature_debug settings.
+    Malformed-signature observations ignore the peer filter. The target
+    defaults to /storage/download-zip; settings may specify another path.
+
+    Fields ending in _urlencoded must be decoded exactly once to recover
+    the observed text, including the distinction between + and %2B.
+    Fields are length-bounded with explicit truncation flags. Signing
+    secrets, cookies and authorization headers are never collected.
+    Diagnostics must not change request or signature-validation behavior.
+} {
+    # Best effort: an incomplete request context or diagnostic configuration
+    # must never interfere with generation, verification, or redirects.
+    catch {
+        if {![nsv_get security_return_url_signature_debug settings settings]
+            || ![dict exists $settings until]
+            || ![string is integer -strict [dict get $settings until]]
+            || [dict get $settings until] <= [clock seconds]
+            || ![ns_conn isconnected]} {
+            return
+        }
+        set path /storage/download-zip
+        if {[dict exists $settings path]} {
+            set path [dict get $settings path]
+        }
+        if {$path eq ""} {
+            return
+        }
+        set source [ns_conn url]
+        set malformed_p [expr {$stage eq "malformed"}]
+        if {$source ne $path && [string first $path $url] < 0
+            && !(($stage eq "export-url" || $stage eq "export-form")
+                 && [string first "[file dirname $path]/" $source] == 0)} {
+            return
+        }
+        set peer [ns_conn peeraddr]
+        if {!$malformed_p && [dict exists $settings peer]
+            && [dict get $settings peer] ne ""
+            && [dict get $settings peer] ne $peer} {
+            return
+        }
+        set headers [ns_conn headers]
+        set record [list SIGNATURE-PROBE stage $stage driver [ns_conn driver] peer $peer]
+        foreach {field text limit} [list \
+            request [ns_conn request] 4096 \
+            url $url 4096 \
+            signature $signature 256 \
+            referrer [ns_set iget $headers referer] 1024 \
+            user_agent [ns_set iget $headers user-agent] 512] {
+            set truncated [expr {[string length $text] > $limit}]
+            if {$truncated} {
+                set text [string range $text 0 $limit-1]
+            }
+            lappend record ${field}_urlencoded [ns_urlencode -- $text] \
+                ${field}_truncated $truncated
+        }
+        ns_log notice $record
+    }
+    return
+}
+
 ad_proc -public ad_get_login_url {
     {-authority_id ""}
     {-username ""}
@@ -1489,6 +1563,7 @@ ad_proc -public ad_get_login_url {
         }]
     }
     ::security::log login_url "ad_get_login_url: final login_url <$url>"
+    security::debug_return_url_signature login-url $url
 
 # Temporary diagnostic for the demo subsite.
 if {[ns_conn isconnected]
@@ -1702,9 +1777,11 @@ ad_proc -public ad_verify_signature {
 } {
     if {![string is list $signature]} {
         ns_log warning "ad_verify_signature: signature is not a Tcl list"
+        security::debug_return_url_signature malformed "" $signature
         return 0
     } elseif {[llength $signature] != 3} {
         ns_log warning "ad_verify_signature: malformed signature: expected 3 elements, got [llength $signature]"
+        security::debug_return_url_signature malformed "" $signature
         return 0
     } else {
         lassign $signature token_id expire_time hash
@@ -1725,9 +1802,11 @@ ad_proc -public ad_verify_signature_with_expr {
 } {
     if {![string is list $signature]} {
         ns_log warning "ad_verify_signature_with_expr signature is not a Tcl list"
+        security::debug_return_url_signature malformed "" $signature
         return 0
     } elseif {[llength $signature] != 3} {
         ns_log warning "ad_verify_signature_with_expr malformed signature: expected 3 elements, got [llength $signature]"
+        security::debug_return_url_signature malformed "" $signature
         return 0
     } else {
         lassign $signature token_id expire_time hash
