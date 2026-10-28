@@ -1281,8 +1281,9 @@ ad_proc -public export_vars {
         append export_string "\#$anchor"
     }
 
-    if {[info exists exp_flag(return_url:sign)]} {
-        security::debug_return_url_signature \
+    if {[info exists exp_flag(return_url:sign)]
+        && [info commands ::security::debug_return_url_signature] ne ""} {
+        ::security::debug_return_url_signature \
             [expr {$url_p ? "export-url" : "export-form"}] \
             $export_string [ns_set get $export_set return_url:sig]
     }
@@ -2264,7 +2265,9 @@ ad_proc -public ad_returnredirect {
     regsub -all -- {[\r\n]} $url "" url
 
     #ns_log notice "ad_returnredirect final redirect to <$url>"
-    security::debug_return_url_signature redirect $url
+    if {[info commands ::security::debug_return_url_signature] ne ""} {
+        ::security::debug_return_url_signature redirect $url
+    }
     ns_returnredirect $url
 }
 

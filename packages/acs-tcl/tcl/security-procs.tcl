@@ -1563,7 +1563,9 @@ ad_proc -public ad_get_login_url {
         }]
     }
     ::security::log login_url "ad_get_login_url: final login_url <$url>"
-    security::debug_return_url_signature login-url $url
+    if {[info commands ::security::debug_return_url_signature] ne ""} {
+        ::security::debug_return_url_signature login-url $url
+    }
 
 # Temporary diagnostic for the demo subsite.
 if {[ns_conn isconnected]
@@ -1777,11 +1779,15 @@ ad_proc -public ad_verify_signature {
 } {
     if {![string is list $signature]} {
         ns_log warning "ad_verify_signature: signature is not a Tcl list"
-        security::debug_return_url_signature malformed "" $signature
+        if {[info commands ::security::debug_return_url_signature] ne ""} {
+            ::security::debug_return_url_signature malformed "" $signature
+        }
         return 0
     } elseif {[llength $signature] != 3} {
         ns_log warning "ad_verify_signature: malformed signature: expected 3 elements, got [llength $signature]"
-        security::debug_return_url_signature malformed "" $signature
+        if {[info commands ::security::debug_return_url_signature] ne ""} {
+            ::security::debug_return_url_signature malformed "" $signature
+        }
         return 0
     } else {
         lassign $signature token_id expire_time hash
@@ -1802,11 +1808,15 @@ ad_proc -public ad_verify_signature_with_expr {
 } {
     if {![string is list $signature]} {
         ns_log warning "ad_verify_signature_with_expr signature is not a Tcl list"
-        security::debug_return_url_signature malformed "" $signature
+        if {[info commands ::security::debug_return_url_signature] ne ""} {
+            ::security::debug_return_url_signature malformed "" $signature
+        }
         return 0
     } elseif {[llength $signature] != 3} {
         ns_log warning "ad_verify_signature_with_expr malformed signature: expected 3 elements, got [llength $signature]"
-        security::debug_return_url_signature malformed "" $signature
+        if {[info commands ::security::debug_return_url_signature] ne ""} {
+            ::security::debug_return_url_signature malformed "" $signature
+        }
         return 0
     } else {
         lassign $signature token_id expire_time hash
