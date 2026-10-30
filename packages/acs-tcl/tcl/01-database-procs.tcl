@@ -1331,7 +1331,35 @@ ad_proc -public db_exec { {-subst all} type db statement_name pre_sql {ulevel 2}
     set complain_time [expr {[info exists ::acs::DbLogMinDuration] ? $::acs::DbLogMinDuration : 2000 }]
     if { [clock clicks -milliseconds] - $start_time > $complain_time} {
         set duration [format %.2f [expr {[clock clicks -milliseconds] - $start_time}]]
-        ns_log Warning "db_exec: longdb $duration ms $db $type $statement_name"
+        set log_message "db_exec: longdb $duration ms $db $type $statement_name"
+        if {[regexp {\.db_nextval\.(nextval|nextval_sequence)$} $statement_name -> operation]
+            && [uplevel $ulevel {info exists sequence}]} {
+            # The same caller frame used for SQL substitution has the requested
+            # sequence. Inspect the resolved SQL without executing it.
+            set sequence [uplevel $ulevel {set sequence}]
+            set target unknown
+            set branch unresolved
+            if {[regexp -nocase {^\s*select\s+nextval\s*\(\s*'([^']+)'\s*\)} $sql -> target]} {
+                if {$operation eq "nextval_sequence"} {
+                    set branch catalog-fallback
+                } elseif {$target eq "t_$sequence"} {
+                    set branch cached-prefixed-sequence
+                } else {
+                    set branch cached-sequence
+                }
+            } elseif {[regexp -nocase {^\s*select\s+nextval\s+from\s+(\S+)\s*$} $sql -> target]} {
+                set branch sequence-view
+            } elseif {[regexp -nocase {^\s*select\s+(\S+)\.nextval\s+from\s+dual\s*$} $sql -> target]} {
+                set branch driver-sequence
+            }
+            foreach key {sequence target branch} {
+                set value [string map [list \\ \\\\ \" \\\" \n {\n} \r {\r} \t {\t}] [set $key]]
+                regsub -all {[\x00-\x1f\x7f-\x9f\u2028\u2029]} $value {?} value
+                if {[string length $value]>512} {set value "[string range $value 0 511]..."}
+                append log_message " $key=\"$value\""
+            }
+        }
+        ns_log Warning $log_message
     } else {
         #set duration [format %.2f [expr {[clock clicks -milliseconds] - $start_time}]]
         #ns_log Debug "db_exec: timing $duration seconds $db $type $statement_name"
