@@ -464,6 +464,44 @@ ad_proc -private rp_resources_filter { why } {
     return filter_ok
 }
 
+ad_proc -private rp_force_host_redirect {host_header location path query {effective_location ""}} {
+    Build a ForceHostP redirect to the driver's configured location, or
+    return an empty string when the request already uses that hostname.
+    The path is decoded connection data; the query is the original encoded
+    query string, not form data (in particular, not a POST request body).
+    When supplied, effective_location preserves the current scheme and port
+    (including proxy, container and SuppressHttpPort handling), but its
+    request-derived hostname is replaced with the configured hostname.
+
+    @return encoded absolute redirect URL, or an empty string
+} {
+    if {$host_header eq ""} {
+        return ""
+    }
+    util::split_host $host_header host port
+    if {![util::split_location $location proto desired_host desired_port]} {
+        error "ForceHostP: invalid configured location"
+    }
+    if {[string equal -nocase $host $desired_host]} {
+        return ""
+    }
+
+    if {$effective_location ne ""} {
+        set effective [ns_parseurl $effective_location]
+        set authority [expr {[string first : $desired_host]>=0
+                             ? "\[$desired_host\]" : $desired_host}]
+        set location [dict get $effective proto]://$authority
+        if {[dict exists $effective port]} {
+            append location :[dict get $effective port]
+        }
+    }
+    set url [string trimright $location /][ad_urlencode_folder_path $path]
+    if {$query ne ""} {
+        append url ?$query
+    }
+    return $url
+}
+
 ad_proc -private rp_filter { why } {
 
     This is the first filter that runs for non-resource URLs. It sets up ad_conn and handles
@@ -615,15 +653,15 @@ ad_proc -private rp_filter { why } {
     if { $root eq ""
          && [parameter::get -package_id $::acs::kernel_id -parameter ForceHostP -default 0]
      } {
-        set host_header [ns_set iget [ns_conn headers] "Host"]
-        regexp {^([^:]*)} $host_header "" host_no_port
-        regexp {^https?://([^:]+)} [ns_conn location] "" desired_host_no_port
-        if { $host_header ne "" && $host_no_port ne $desired_host_no_port  } {
-            set query [ns_getform]
-            if { $query ne "" } {
-                set query ?[export_vars -entire_form]
-            }
-            ad_returnredirect -allow_complete_url "[util_current_location][ns_conn url]$query"
+        # Compare and redirect to the same configured authority. The
+        # request-based util_current_location can retain an alias/IP Host
+        # header and would redirect the client back to the same host.
+        set redirect_url [rp_force_host_redirect \
+                              [ns_set iget [ns_conn headers] Host] \
+                              [ns_conn location] [ns_conn url] [ns_conn query] \
+                              [util_current_location]]
+        if {$redirect_url ne ""} {
+            ad_returnredirect -allow_complete_url $redirect_url
             return filter_return
         }
     }
