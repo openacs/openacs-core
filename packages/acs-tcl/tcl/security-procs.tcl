@@ -2262,6 +2262,23 @@ ad_proc -private sec_lookup_property_not_cached {
     @return empty, when no property is recorded or a list containing property_value and secure_p
 
 } {
+    if {[db_driverkey] eq "postgresql"} {
+        # A cache miss needs only one round trip and one lookup on PostgreSQL.
+        set new_last_hit [clock seconds]
+        if {[db_0or1row property_lookup_touch_sec {
+            update sec_session_properties
+            set last_hit = :new_last_hit
+            where session_id = :id
+              and module = :module
+              and property_name = :name
+            returning property_value, secure_p
+        }]} {
+            return [list $property_value $secure_p]
+        }
+        return ""
+    }
+
+    # Keep the portable SELECT followed by UPDATE for Oracle and other drivers.
     if {
         ![db_0or1row property_lookup_sec {
             select property_value, secure_p
@@ -2279,8 +2296,9 @@ ad_proc -private sec_lookup_property_not_cached {
     db_dml update_last_hit_dml {
         update sec_session_properties
         set last_hit = :new_last_hit
-        where session_id = :id and
-        property_name = :name
+        where session_id = :id
+          and module = :module
+          and property_name = :name
     }
 
     return [list $property_value $secure_p]

@@ -254,3 +254,74 @@ aa_register_case \
            [security::safe_tmpfile_p $tmpfile]
 
     }
+
+
+aa_register_case \
+    -cats {api db} \
+    -procs {sec_lookup_property_not_cached} \
+    sec_lookup_property_not_cached_db {
+        Lookup touches only the complete session-property key and preserves
+        missing, empty and secure property results on PostgreSQL and Oracle.
+    } {
+        aa_run_with_teardown -rollback -test_code {
+            set id [db_nextval sec_id_seq]
+            set other_id [db_nextval sec_id_seq]
+            set module "lookup-test"
+            set name "property"
+            db_dml insert_lookup_property {
+                insert into sec_session_properties
+                    (session_id, module, property_name, property_value, secure_p, last_hit)
+                values (:id, :module, :name, 'value', 't', 1)
+            }
+            db_dml insert_other_module {
+                insert into sec_session_properties
+                    (session_id, module, property_name, property_value, secure_p, last_hit)
+                values (:id, 'lookup-other', :name, 'other', 'f', 1)
+            }
+            db_dml insert_other_name {
+                insert into sec_session_properties
+                    (session_id, module, property_name, property_value, secure_p, last_hit)
+                values (:id, :module, 'other', 'other', 'f', 1)
+            }
+            db_dml insert_other_session {
+                insert into sec_session_properties
+                    (session_id, module, property_name, property_value, secure_p, last_hit)
+                values (:other_id, :module, :name, 'other', 'f', 1)
+            }
+
+            set before [clock seconds]
+            aa_equals "Value and secure flag are returned" \
+                [sec_lookup_property_not_cached $id $module $name] {value t}
+            set hit [db_string lookup_hit {
+                select last_hit from sec_session_properties
+                where session_id = :id and module = :module and property_name = :name
+            }]
+            aa_true "Matching property timestamp is refreshed" {
+                $hit >= $before && $hit <= [clock seconds]
+            }
+            aa_equals "Other modules, names and sessions remain untouched" \
+                [db_string untouched_properties {
+                    select count(*) from sec_session_properties
+                    where session_id in (:id, :other_id) and last_hit = 1
+                }] 3
+            aa_equals "Repeated lookup still returns the property" \
+                [sec_lookup_property_not_cached $id $module $name] {value t}
+
+            # SQL NULL represents an empty Tcl property on both backends.
+            db_dml empty_lookup_property {
+                update sec_session_properties set property_value = null, secure_p = 'f'
+                where session_id = :id and module = :module and property_name = :name
+            }
+            aa_equals "Empty property remains a two-element result" \
+                [sec_lookup_property_not_cached $id $module $name] [list "" f]
+            aa_equals "Missing property returns empty" \
+                [sec_lookup_property_not_cached $id $module missing] ""
+            aa_equals "Missing module returns empty" \
+                [sec_lookup_property_not_cached $id missing $name] ""
+            aa_equals "Lookup never inserts properties" \
+                [db_string lookup_property_count {
+                    select count(*) from sec_session_properties
+                    where session_id in (:id, :other_id)
+                }] 4
+        }
+    }
