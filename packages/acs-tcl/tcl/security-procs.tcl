@@ -2262,7 +2262,7 @@ ad_proc -private sec_lookup_property_not_cached {
     @return empty, when no property is recorded or a list containing property_value and secure_p
 
 } {
-    if {[db_driverkey] eq "postgresql"} {
+    if {[db_driverkey ""] eq "postgresql"} {
         # A cache miss needs only one round trip and one lookup on PostgreSQL.
         set new_last_hit [clock seconds]
         if {[db_0or1row property_lookup_touch_sec {
