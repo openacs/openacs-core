@@ -13,6 +13,7 @@ aa_register_case -cats {api smoke production_safe} -procs {
     try {set source [read $channel]} finally {close $channel}
     set child [interp create]
     try {
+        interp alias $child ns_set {} ns_set
         interp eval $child [list set source $source]
         interp eval $child {
             proc declaration_body {source name} {
@@ -57,6 +58,10 @@ aa_register_case -cats {api smoke production_safe} -procs {
                 }
             }
             proc rp_debug {args} {}
+            proc ns_getform {} {
+                if {[info exists ::test_form]} {return $::test_form}
+                return ""
+            }
             proc ad_try {body args} {uplevel 1 $body}
             proc rp_handle_request {} {incr ::handled}
             namespace eval site_node {
@@ -131,6 +136,31 @@ aa_register_case -cats {api smoke production_safe} -procs {
         }
         aa_equals "Connection URLs containing glob characters are compared literally" \
             [interp eval $child {list $::resets $::ad_conn(extra_url)}] {1 /abc}
+
+        foreach status {404 403 302} {
+            set form [ns_set create]
+            try {
+                ns_set put $form @page log.smtpsent
+                ns_set put $form raw 1
+                interp eval $child [list set ::test_form $form]
+                interp eval $child {
+                    setup_request /wrong-nsstats wrong-nsstats
+                    dict set ::connection query {@page=log.smtpsent&raw=1}
+                    rp_handler
+                }
+                aa_equals "$status: original request retains its form parameters" \
+                    [ns_set size $form] 2
+                interp eval $child [list dict set ::connection status $status]
+                interp eval $child {dict set ::connection url /shared/404; rp_handler}
+                aa_equals "$status: only a 404 redirect clears the parsed form" \
+                    [ns_set size $form] [expr {$status == 404 ? 0 : 2}]
+                aa_equals "$status: raw query remains available for diagnostics" \
+                    [interp eval $child {ns_conn query}] {@page=log.smtpsent&raw=1}
+            } finally {
+                interp eval $child {unset -nocomplain ::test_form}
+                ns_set free $form
+            }
+        }
     } finally {
         interp delete $child
     }

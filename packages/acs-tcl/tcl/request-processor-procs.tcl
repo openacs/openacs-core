@@ -1182,6 +1182,14 @@ ad_proc -private rp_handler {} {
         #
         set status [ns_conn status]
         rp_debug "internal redirect status $status"
+        if {$status == 404} {
+            # The error page must not process the original request's parameters.
+            # Empty the cached form, retaining the raw query for diagnostics.
+            set form [ns_getform]
+            if {$form ne ""} {
+                ns_set truncate $form 0
+            }
+        }
         if {$status < 200 || $status >= 300} {
             ad_conn -set extra_url [ns_conn url]
             ad_conn -set package_key "acs-subsite"
