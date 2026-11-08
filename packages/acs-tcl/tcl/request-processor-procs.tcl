@@ -1182,7 +1182,7 @@ ad_proc -private rp_handler {} {
         #
         set status [ns_conn status]
         rp_debug "internal redirect status $status"
-        if {$status == 404} {
+        if {$status >= 400 && $status < 600} {
             # The error page must not process the original request's parameters.
             # Empty the cached form, retaining the raw query for diagnostics.
             set form [ns_getform]

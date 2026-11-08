@@ -137,7 +137,7 @@ aa_register_case -cats {api smoke production_safe} -procs {
         aa_equals "Connection URLs containing glob characters are compared literally" \
             [interp eval $child {list $::resets $::ad_conn(extra_url)}] {1 /abc}
 
-        foreach status {404 403 302} {
+        foreach status {302 399 400 401 403 404 499 500 503 599 600} {
             set form [ns_set create]
             try {
                 ns_set put $form @page log.smtpsent
@@ -152,8 +152,8 @@ aa_register_case -cats {api smoke production_safe} -procs {
                     [ns_set size $form] 2
                 interp eval $child [list dict set ::connection status $status]
                 interp eval $child {dict set ::connection url /shared/404; rp_handler}
-                aa_equals "$status: only a 404 redirect clears the parsed form" \
-                    [ns_set size $form] [expr {$status == 404 ? 0 : 2}]
+                aa_equals "$status: only a 4xx or 5xx redirect clears the parsed form" \
+                    [ns_set size $form] [expr {$status >= 400 && $status < 600 ? 0 : 2}]
                 aa_equals "$status: raw query remains available for diagnostics" \
                     [interp eval $child {ns_conn query}] {@page=log.smtpsent&raw=1}
             } finally {
