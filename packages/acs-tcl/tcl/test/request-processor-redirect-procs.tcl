@@ -1,5 +1,112 @@
 ad_library {
-    Regression tests for internal redirect detection in the request processor.
+    Regression tests for request processor redirects and error page parameters.
+}
+
+aa_register_case -cats {api smoke production_safe} -procs {
+    rp_report_error
+} rp_report_error_parameters {
+    Error templates receive no original form parameters, while diagnostics
+    retain the original request and exception. Use a child interpreter so
+    the live server's request commands and state are not changed.
+} {
+    set channel [open [file join [acs_package_root_dir acs-tcl] tcl request-processor-procs.tcl]]
+    try {set source [read $channel]} finally {close $channel}
+    set child [interp create]
+    set form [ns_set create]
+    try {
+        interp alias $child ns_set {} ns_set
+        interp eval $child [list set source $source]
+        interp eval $child [list set test_form $form]
+        interp eval $child {
+            set start [string first {ad_proc -private rp_report_error } $source]
+            if {$start < 0} {error "Missing rp_report_error declaration"}
+            set declaration {}
+            foreach line [split [string range $source $start end] \n] {
+                append declaration $line \n
+                if {[info complete $declaration]} break
+            }
+            if {![info complete $declaration]} {error "Incomplete rp_report_error declaration"}
+            # Only the ad_proc option parser is omitted; use the production body.
+            proc rp_report_error {} [lindex $declaration end]
+            namespace eval acs {variable kernel_id 1}
+            namespace eval parameter {proc get {args} {return 0}}
+            namespace eval util {proc get_referrer {args} {return https://local.example/}}
+            proc ns_conn {key} {
+                switch -- $key {
+                    isconnected {return $::connected}
+                    query {return {@page=log.smtpsent&raw=1}}
+                    default {error "Unexpected ns_conn $key"}
+                }
+            }
+            proc ns_getform {} {return $::test_form}
+            proc ad_conn {key} {
+                return [dict get {url /broken file /fixture/broken.tcl user_id 7 package_id 1} $key]
+            }
+            proc ad_url {} {return https://local.example}
+            proc ad_log {severity message} {lappend ::logs [list $severity $message]}
+            proc db_nextval {args} {return 42}
+            proc ds_add {args} {}
+            proc export_vars {args} {
+                if {$args eq "-entire_form"} {
+                    set form [ns_getform]
+                    set ::diagnostic_form_size [expr {$form eq "" ? 0 : [ns_set size $form]}]
+                    return [ns_conn query]
+                }
+                return feedback-form
+            }
+            proc ad_try {args} {uplevel 1 [list try {*}[lrange $args 1 end]]}
+            proc ad_parse_template {args} {
+                set ::render_form_size [expr {$::test_form eq "" ? 0 : [ns_set size $::test_form]}]
+                set ::render_params [dict create {*}[concat {*}[lindex $args 1]]]
+                return rendered-error
+            }
+            proc ns_return {args} {set ::response $args}
+        }
+
+        foreach connected {1 0} {
+            ns_set truncate $form 0
+            ns_set put $form @page log.smtpsent
+            ns_set put $form raw 1
+            interp eval $child [list set connected $connected]
+            interp eval $child {
+                set logs {}
+                unset -nocomplain render_form_size render_params response
+                set ::errorInfo {original test exception}
+                rp_report_error
+            }
+            if {$connected} {
+                aa_equals "Diagnostics capture parameters before clearing" \
+                    [interp eval $child {set diagnostic_form_size}] 2
+                aa_equals "Error template receives an empty parsed form" \
+                    [interp eval $child {set render_form_size}] 0
+                aa_equals "Cached form remains empty after rendering" [ns_set size $form] 0
+                aa_equals "Diagnostic URL retains the original query" \
+                    [interp eval $child {dict get $render_params error_url}] \
+                    {https://local.example/broken?@page=log.smtpsent&raw=1}
+                aa_equals "Error template retains the original exception" \
+                    [interp eval $child {dict get $render_params stacktrace}] {original test exception}
+                aa_equals "Original exception is logged once" \
+                    [interp eval $child {set logs}] {{error {original test exception}}}
+                aa_equals "Response is still HTTP 500" \
+                    [interp eval $child {set response}] {500 text/html rendered-error}
+            } else {
+                aa_equals "Disconnected request does not change its form" [ns_set size $form] 2
+                aa_equals "Disconnected request does not render an error template" \
+                    [interp eval $child {info exists render_form_size}] 0
+            }
+        }
+        interp eval $child {
+            set connected 1
+            set test_form ""
+            set ::errorInfo {original test exception}
+            rp_report_error
+        }
+        aa_equals "Missing parsed form still permits rendering" \
+            [interp eval $child {set response}] {500 text/html rendered-error}
+    } finally {
+        interp delete $child
+        ns_set free $form
+    }
 }
 
 aa_register_case -cats {api smoke production_safe} -procs {

@@ -889,6 +889,13 @@ ad_proc -private rp_report_error {
         lset params 0 [list stacktrace $message]
     }
 
+    # Capture the original request diagnostics above before removing its
+    # parameters from the form consumed by the error page and its masters.
+    set form [ns_getform]
+    if {$form ne ""} {
+        ns_set truncate $form 0
+    }
+
     ad_try -auto_abort=false {
         set rendered_page [ad_parse_template -params $params "/packages/acs-tcl/lib/page-error"]
 
