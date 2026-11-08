@@ -517,6 +517,7 @@ ad_proc -private rp_filter { why } {
 
     sec_handler_reset
     ad_conn -reset
+    ad_conn -set rp_conn_url [ns_conn url]
     ad_conn -set request [ns_conn id]
     security::set_user_id 0
     ad_conn -set start_clicks [clock clicks -microseconds]
@@ -1149,15 +1150,15 @@ ad_proc -private rp_handler {} {
     }
 
     #
-    # Determine internal redirects by comparing URL suffix. We check
-    # if the connection URL ends by the ad_conn extra_url. Don't use a
-    # match operation, since this might lead to surprising results,
-    # when the URL contains match characters ('*' or '?', ...).
+    # Compare complete connection URLs, since extra_url suffixes can
+    # coincide across redirects (e.g. /4 and /shared/404). Use ns_conn
+    # URLs on both sides: ad_conn url can include a host-mapped prefix.
     #
-    if {[info exists ::ad_conn(extra_url)]
-        && $::ad_conn(extra_url) ne ""
-        && [string range [ns_conn url] end-[expr {[string length $::ad_conn(extra_url)] - 1}] end] ne $::ad_conn(extra_url)
+    set current_url [ns_conn url]
+    if {[info exists ::ad_conn(rp_conn_url)]
+        && $current_url ne $::ad_conn(rp_conn_url)
     } {
+        ad_conn -set rp_conn_url $current_url
         #
         # On internal redirects, the current ::ad_conn(extra_url)
         # might be from a previous request, which might have led to a
