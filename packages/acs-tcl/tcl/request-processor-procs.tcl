@@ -1617,6 +1617,7 @@ ad_proc -public ad_conn {args} {
                             ns_log debug "ad_conn: request processor did not set <ad_conn $var>, fallback: $ad_conn($var)"
                             return $ad_conn($var)
                         }
+                        file -
                         extra_url -
                         locale -
                         language -

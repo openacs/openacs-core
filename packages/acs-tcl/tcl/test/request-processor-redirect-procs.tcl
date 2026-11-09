@@ -3,6 +3,71 @@ ad_library {
 }
 
 aa_register_case -cats {api smoke production_safe} -procs {
+    ad_conn rp_handler
+} rp_unresolved_file_error {
+    An exception before file resolution must reach the error reporter without
+    trying the nonexistent ns_conn file subcommand or hiding the original error.
+} {
+    set channel [open [file join [acs_package_root_dir acs-tcl] tcl request-processor-procs.tcl]]
+    try {set source [read $channel]} finally {close $channel}
+    set child [interp create]
+    try {
+        foreach {prefix name arguments} {
+            {ad_proc -public ad_conn} ad_conn args
+            {ad_proc -private rp_handler} rp_handler {}
+        } {
+            set start [string first "$prefix " $source]
+            if {$start < 0} {error "Missing production declaration: $prefix"}
+            set declaration {}
+            foreach line [split [string range $source $start end] \n] {
+                append declaration $line \n
+                if {[info complete $declaration]} break
+            }
+            if {![info complete $declaration]} {error "Incomplete declaration: $prefix"}
+            interp eval $child [list proc $name $arguments [lindex $declaration end]]
+        }
+        interp eval $child {
+            proc ns_conn {key} {
+                switch -- $key {
+                    url {return /shared/404}
+                    method {return GET}
+                    query {return {}}
+                    request {return {GET /shared/404 HTTP/1.1}}
+                    file {incr ::file_calls; error "ns_conn file must not be called"}
+                    default {error "Unexpected ns_conn $key"}
+                }
+            }
+            proc ns_log {args} {}
+            proc rp_debug {args} {}
+            proc ad_try {args} {uplevel 1 [list try {*}$args]}
+            proc rp_handle_request {} {error "Original resource-handler exception"}
+            proc rp_report_error {} {
+                set ::reported $::errorInfo
+                # The production reporter also reads this diagnostic field.
+                set ::reported_file [ad_conn file]
+                incr ::reports
+            }
+            set file_calls 0
+            set reports 0
+            array set ::ad_conn {recursion_count 0 url /shared/404}
+        }
+        aa_equals "Missing file has an empty fallback" [interp eval $child {ad_conn file}] ""
+        aa_equals "Explicit -get uses the same fallback" [interp eval $child {ad_conn -get file}] ""
+        aa_equals "Missing file is cached as empty" [interp eval $child {set ::ad_conn(file)}] ""
+        interp eval $child {ad_conn -set file /fixture/resolved.tcl}
+        aa_equals "Resolved file is preserved" [interp eval $child {ad_conn file}] /fixture/resolved.tcl
+        interp eval $child {ad_conn -unset file; rp_handler}
+        aa_equals "Exception reaches the error reporter once" [interp eval $child {set reports}] 1
+        aa_true "Original exception is preserved" \
+            [interp eval $child {string match {*Original resource-handler exception*} $reported}]
+        aa_equals "Error reporter can read the unresolved file" [interp eval $child {set reported_file}] ""
+        aa_equals "No ns_conn file fallback is attempted" [interp eval $child {set file_calls}] 0
+    } finally {
+        interp delete $child
+    }
+}
+
+aa_register_case -cats {api smoke production_safe} -procs {
     rp_report_error
 } rp_report_error_parameters {
     Error templates receive no original form parameters, while diagnostics
