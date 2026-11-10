@@ -35,7 +35,7 @@ aa_register_case \
             set doc [dom parse -html "<div>$html</div>"]
             try {
                 set a [lindex [[$doc documentElement] selectNodes //a] 0]
-                aa_equals "Ordinary API link for $name" [$a getAttribute href] [api_proc_url $name]
+                aa_equals "Ordinary API link for $name" [$a getAttribute href] [api_proc_url [string trimleft $name :]]
             } finally {
                 $doc delete
             }

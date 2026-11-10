@@ -2002,6 +2002,8 @@ namespace eval ::apidoc {
                 }
 
                 "\$" {
+                    # A variable in the command word makes its target dynamic.
+                    set proc_ok 0
                     if {$in_comment || [string index $data $i+1] eq " "} {
                         append html "\$"
                     } else {
@@ -2107,6 +2109,24 @@ namespace eval ::apidoc {
                         set procl [length_proc [string range $data $i end]]
                         set proc_name [string range $data $i $i+$procl]
 
+                        # Do not link a literal prefix of a substituted word.
+                        set nextchar [string index $data [expr {$i + $procl + 1}]]
+                        if {$nextchar in {\$ \[}} {
+                            append html [ns_quotehtml $proc_name]
+                            incr i $procl
+                            continue
+                        }
+                        set resolved_name ""
+                        if {[string match "::*" $proc_name]} {
+                            set resolved_name [namespace which -command $proc_name]
+                        } elseif {$proc_namespace ne ""
+                                  && [namespace exists ::[string trimleft $proc_namespace :]]} {
+                            set resolved_name [namespace eval ::[string trimleft $proc_namespace :] \
+                                                   [list namespace which -command $proc_name]]
+                        } else {
+                            set resolved_name [namespace which -command ::$proc_name]
+                        }
+
                         if {$proc_name eq "ad_proc"} {
                             #
                             # Pretty print comment after ad_proc rather than trying to index keywords
@@ -2195,33 +2215,15 @@ namespace eval ::apidoc {
                         } elseif {[string match "*__arg_parser" $proc_name]} {
                             append html [pretty_token helper $proc_name]
 
-                        } elseif {$proc_namespace ne ""
-                                  && [namespace which ::${proc_namespace}::${proc_name}] ne ""}  {
-
-                            if {[is_object $scope ${proc_namespace}::${proc_name}]} {
+                        } elseif {$resolved_name ne ""} {
+                            if {[is_object $scope $resolved_name]} {
                                 set url [::xo::api object_url \
                                              -show_source 1 -show_methods 2 \
-                                             $scope ::${proc_namespace}::${proc_name}]
+                                             $scope $resolved_name]
                                 append html "<a href='[ns_quotehtml $url]' title='XOTcl object'>" \
                                     [pretty_token object $proc_name] </a>
                             } else {
-                                set url [api_proc_url ${proc_namespace}::${proc_name}]
-                                append html "<a href='[ns_quotehtml $url]' title='API command'>" \
-                                    [pretty_token proc $proc_name] </a>
-                            }
-                        } elseif {[namespace which ::$proc_name] ne ""} {
-
-                            set absolute_name [expr {[string match "::*" $proc_name]
-                                                     ? $proc_name : "::${proc_name}" }]
-
-                            if {[is_object $scope $absolute_name]} {
-                                set url [::xo::api object_url \
-                                             -show_source 1 -show_methods 2 \
-                                             $scope $absolute_name]
-                                append html "<a href='[ns_quotehtml $url]' title='XOTcl object'>" \
-                                    [pretty_token object $proc_name] </a>
-                            } else {
-                                set url [api_proc_url $proc_name]
+                                set url [api_proc_url [string trimleft $resolved_name :]]
                                 append html "<a href='[ns_quotehtml $url]' title='API command'>" \
                                     [pretty_token proc $proc_name] </a>
                             }
