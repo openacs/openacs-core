@@ -1057,7 +1057,7 @@ ad_proc -public api_add_to_proc_doc {
     @param value    value of the property
 
 } {
-    # A Tcllib package may have been loaded after acs-tcl's documentation
+    # A Tcllib or tDOM package may have been loaded after acs-tcl's documentation
     # file. Register its existing command before adding testcase/caller data.
     if {[namespace which ::acs::tcllib::register_documentation] ne ""} {
         ::acs::tcllib::register_documentation $proc_name
@@ -1086,7 +1086,10 @@ ad_proc -public api_add_to_proc_doc {
         # testcase and caller metadata even without an OpenACS proc_doc,
         # but do not report these commands as undocumented. Accept either
         # unqualified names or exactly one leading namespace qualifier.
-        if {![regexp {^(::)?(ns_|nsv_|nscp$|nsf::)} $proc_name]} {
+        if {![regexp {^(::)?(ns_|nsv_|nscp$|nsf::)} $proc_name]
+            && !([regexp {^(::)?thread::(send|transfer|exists|release)$} $proc_name]
+                 && [package provide Thread] ne ""
+                 && [namespace which -command ::[string trimleft $proc_name :]] ne "")} {
             ns_log warning "api_add_to_proc_doc: no proc_doc available for $proc_name"
         }
     }
@@ -1160,7 +1163,7 @@ ad_proc -private api_add_calling_info_to_procdoc {{proc_name "*"}} {
 
     @author Gustaf Neumann
 } {
-    # Include already-loaded Tcllib APIs before taking the procedure snapshot.
+    # Include already-loaded external APIs before taking the procedure snapshot.
     if {[namespace which ::acs::tcllib::register_documentation] ne ""} {
         ::acs::tcllib::register_documentation
     }

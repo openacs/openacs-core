@@ -1,5 +1,5 @@
 ad_library {
-    API-browser documentation for Tcllib commands used by OpenACS.
+    API-browser documentation for Tcllib commands and tDOM helpers used by OpenACS.
 
     Only already-provided packages and existing commands are documented.
     Documentation-only ad_proc declarations do not replace implementations.
@@ -10,15 +10,15 @@ namespace eval ::acs::tcllib {}
 
 if {[namespace which ::acs::tcllib::register_documentation] eq ""} {
     ad_proc -private ::acs::tcllib::register_documentation {{proc_name ""}} {
-        Refresh documentation for already-loaded Tcllib packages, optionally
-        when metadata is requested for a command in uri, base64 or mime.
+        Refresh documentation for already-loaded Tcllib and tDOM packages, optionally
+        when metadata is requested for a command in uri, base64, mime, md5 or tdom.
         This procedure never requires a package or evaluates its loader.
         @param proc_name Procedure name, or empty to refresh all declarations.
     } {
         if {$proc_name ne ""} {
             set name [string trimleft $proc_name :]
             set package [string trimleft [namespace qualifiers ::$name] :]
-            if {$package ni {uri base64 mime}
+            if {$package ni {uri base64 mime md5 tdom}
                 || [package provide $package] eq ""
                 || [namespace which -command ::$name] eq ""
                 || ([nsv_exists api_proc_doc $name]
@@ -321,4 +321,56 @@ if {[namespace which ::acs::tcllib::document] eq ""} {
     the internal part state. Parsing errors are reported as Tcl errors.
     This version-dependent helper is not a public API.
     @param token MIME token containing the part to parse.
+} private
+
+if {[package provide md5] ne "" && [namespace which -command ::md5::md5] ne ""} {
+    ::acs::tcllib::document md5 ::md5::md5 [info args ::md5::md5] {
+        Compute an MD5 digest using the already-loaded Tcllib MD5 implementation.
+        The default result is binary in MD5 2.x; -hex requests hexadecimal output.
+        @param args Data and options supported by the loaded MD5 package,
+        including -hex, -filename and -channel in MD5 2.x.
+        @return MD5 digest in the requested representation.
+    }
+}
+
+::acs::tcllib::document mime ::mime::parsetype {token string} {
+    Parse a Content-Type value for an internal MIME token.
+    @param token MIME parser token.
+    @param string Content-Type value to parse.
+    @return Content type and parameters as a two-element list.
+} private
+
+::acs::tcllib::document mime ::mime::addr_domain {token} {
+    Parse a domain using internal MIME address-parser state.
+    @param token Internal address-parser token.
+} private
+
+::acs::tcllib::document mime ::mime::addr_end {token} {
+    Validate the end of an address using internal MIME parser state.
+    Invalid trailing syntax raises an error.
+    @param token Internal address-parser token.
+} private
+
+::acs::tcllib::document mime ::mime::addr_group {token} {
+    Parse an address group using internal MIME parser state.
+    @param token Internal address-parser token.
+} private
+
+::acs::tcllib::document mime ::mime::addr_phrase {token} {
+    Parse an address phrase using internal MIME parser state.
+    @param token Internal address-parser token.
+} private
+
+::acs::tcllib::document mime ::mime::addr_routeaddr {token {checkP 1}} {
+    Parse a route address using internal MIME parser state.
+    @param token Internal address-parser token.
+    @param checkP Whether to require a closing angle bracket.
+} private
+
+::acs::tcllib::document tdom ::tdom::xmlReadFile {filename {encodingString {}}} {
+    Read XML file content through tDOM's internal encoding-aware file helper.
+    This implementation helper is not a public API.
+    @param filename XML file to read.
+    @param encodingString Optional name of a caller variable receiving encoding information.
+    @return File content read by the helper.
 } private

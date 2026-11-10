@@ -1376,41 +1376,6 @@ ad_proc ::util::block_request {-condition:required {-target you}} {
     }
 }
 
-ad_proc ::util::reject_request_filter {why what} {
-
-    Reject a request from a NaviServer filter.
-
-    This proc is intended for use with ns_register_filter, in particular
-    for early preauth filters that reject unwanted probe, scanner, or
-    otherwise unsupported request paths before the OpenACS request
-    processor performs canonical-host redirects or page dispatch.
-
-    When used as a preauth filter, the proc performs the minimal ad_conn
-    setup needed by the OpenACS request processor cleanup path.
-    Example: <pre>
-    ns_register_filter -first preauth POST /PSEMHUB/* ::util::reject_request_filter "PeopleSoft probe"</pre>
-
-    @param why filter stage, e.g. preauth
-    @param what short description of the rejected request
-
-    @return filter_return
-
-} {
-    ns_log notice "rejected request: $what method=[ns_conn method] url=[ns_conn url] peer=[ns_conn peeraddr]"
-
-    if {$why eq "preauth"} {
-        #
-        # Minimal setup for the OpenACS request processor to avoid errors
-        # when the proc is registered as a preauth filter.
-        #
-        ad_conn -set extra_url /
-        ad_conn -set path_info /
-    }
-
-    ns_returnnotfound
-    return filter_return
-}
-
 ad_proc -private export_vars_sign {
     {-params ""}
     value
