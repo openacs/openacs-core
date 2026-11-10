@@ -1119,7 +1119,7 @@ aa_register_case \
 
 aa_register_case \
     -cats {api smoke production_safe} \
-    -procs util_external_url_p \
+    -procs util::external_url_p \
     util__external_url_p {
 
         Test util::external_url_p

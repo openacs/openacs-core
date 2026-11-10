@@ -45,6 +45,25 @@ proc sec_login_timeout {} "
     return \"[parameter::get -package_id [ad_acs_kernel_id] -parameter LoginTimeout -default 28800]\"
 "
 
+# Document the generated procedures without replacing their cached bodies.
+ad_proc -private sec_session_timeout {} {
+    Return the session inactivity timeout cached at server initialization
+    from the kernel SessionTimeout parameter (default 1200 seconds).
+    @return Session inactivity timeout in seconds.
+} -
+
+ad_proc -private sec_session_renew {} {
+    Return the cached session-renewal threshold: SessionTimeout minus
+    SessionRenew (default 300 seconds), evaluated at server initialization.
+    @return Session renewal threshold in seconds.
+} -
+
+ad_proc -private sec_login_timeout {} {
+    Return the login timeout cached at server initialization from the kernel
+    LoginTimeout parameter (default 28800 seconds). Zero disables this timeout.
+    @return Login timeout in seconds.
+} -
+
 #
 # Get content security policy rules for static resources from the
 # OpenACS configuration file. The definition can be there like e.g.

@@ -344,6 +344,12 @@ proc acs_sc_log {level msg} {
     }
 }
 
+ad_proc -private acs_sc_log {level msg} {
+    Log a service-contract message unless its level is SCDebug.
+    @param level NaviServer log severity, or SCDebug to suppress the message.
+    @param msg Message to log.
+} -
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4

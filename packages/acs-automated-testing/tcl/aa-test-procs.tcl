@@ -88,6 +88,15 @@ proc aa_proc_copy {proc_name_old proc_name_new {new_body ""}} {
     }
 }
 
+ad_proc -private aa_proc_copy {proc_name_old proc_name_new {new_body ""}} {
+    Copy a Tcl or NSF procedure for automated-test stub management, optionally
+    substituting a new body. Preserve the argument list and defaults, and
+    retain any required OpenACS argument parser in the copied body.
+    @param proc_name_old Procedure to copy.
+    @param proc_name_new Name of the copy to create.
+    @param new_body Replacement body, or empty to copy the existing body.
+} -
+
 ad_proc -public aa_stub {
     proc_name
     new_body
