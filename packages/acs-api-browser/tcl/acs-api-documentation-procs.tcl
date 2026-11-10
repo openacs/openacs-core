@@ -1082,7 +1082,13 @@ ad_proc -public api_add_to_proc_doc {
         }
     } else {
         nsv_set api_proc_doc $proc_name [list $property $value]
-        ns_log warning "api_add_to_proc_doc: no proc_doc available for $proc_name"
+        # NaviServer and NSF maintain their documentation externally. Keep
+        # testcase and caller metadata even without an OpenACS proc_doc,
+        # but do not report these commands as undocumented. Accept either
+        # unqualified names or exactly one leading namespace qualifier.
+        if {![regexp {^(::)?(ns_|nsv_|nscp$|nsf::)} $proc_name]} {
+            ns_log warning "api_add_to_proc_doc: no proc_doc available for $proc_name"
+        }
     }
 }
 
