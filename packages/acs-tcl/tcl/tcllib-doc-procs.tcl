@@ -290,3 +290,35 @@ if {[namespace which ::acs::tcllib::document] eq ""} {
     @return Attribute value with surrounding quotes trimmed, or an empty string
     if the key is absent.
 } private
+
+::acs::tcllib::document mime ::mime::md5 {separator string} {
+    Internal MIME adapter for computing a hexadecimal MD5 digest when Trf is
+    absent. The ignored first positional parameter has a version-dependent
+    name in Tcllib. This helper is not a public API.
+    @param separator Literal -- argument, ignored by the adapter.
+    @param string Data to hash.
+    @return Hexadecimal MD5 digest.
+} private
+
+::acs::tcllib::document mime ::mime::addr_specification {token} {
+    Parse the next address specification using the internal MIME parser state
+    and lookahead. Invalid address syntax can raise an error.
+    This version-dependent helper is not a public API.
+    @param token Internal address-parser token.
+    @return 1 if another address was parsed, or 0 at the end of the list.
+} private
+
+::acs::tcllib::document mime ::mime::parselexeme {token} {
+    Consume the next lexeme from an internal MIME address-parser token,
+    updating its input, buffer and last-lexeme state.
+    This version-dependent helper is not a public API.
+    @param token Internal address-parser token.
+    @return Lexeme type recognized by the parser.
+} private
+
+::acs::tcllib::document mime ::mime::parsepart {token} {
+    Parse a MIME part from its token's string or file input and populate
+    the internal part state. Parsing errors are reported as Tcl errors.
+    This version-dependent helper is not a public API.
+    @param token MIME token containing the part to parse.
+} private
