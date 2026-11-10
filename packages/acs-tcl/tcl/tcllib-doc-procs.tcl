@@ -202,3 +202,75 @@ if {[namespace which ::acs::tcllib::document] eq ""} {
     @return Encoded header text.
     @see https://core.tcl-lang.org/tcllib/doc/trunk/embedded/md/tcllib/files/modules/mime/mime.md
 } private
+
+# Version-dependent implementation helpers remain private in the API browser.
+::acs::tcllib::document base64 ::base64::ADD {x} {
+    Append a character to the pure-Tcl Base64 encoder's caller-owned output
+    state, inserting line breaks as needed. This version-dependent helper
+    requires its encoder's local variables and is not a standalone API.
+    @param x Character to append.
+    @see https://core.tcl-lang.org/tcllib/doc/trunk/embedded/md/tcllib/files/modules/base64/base64.md
+} private
+
+::acs::tcllib::document mime ::mime::base64 {modeOption action separator chunk} {
+    Internal MIME adapter for Base64 encoding and decoding when Trf is absent.
+    This helper is version-dependent and is not a standalone public API.
+    @param modeOption Literal -mode argument.
+    @param action encode or decode.
+    @param separator Literal -- argument.
+    @param chunk Data to process.
+    @return The encoded or decoded chunk.
+    @see https://core.tcl-lang.org/tcllib/doc/trunk/embedded/md/tcllib/files/modules/mime/mime.md
+} private
+
+::acs::tcllib::document mime ::mime::quoted-printable {modeOption action separator chunk} {
+    Internal MIME adapter for quoted-printable encoding and decoding when
+    Trf is absent. This helper is version-dependent, not a public API.
+    @param modeOption Literal -mode argument.
+    @param action encode or decode.
+    @param separator Literal -- argument.
+    @param chunk Data to process.
+    @return The encoded or decoded chunk.
+    @see https://core.tcl-lang.org/tcllib/doc/trunk/embedded/md/tcllib/files/modules/mime/mime.md
+} private
+
+::acs::tcllib::document mime ::mime::reversemapencoding {mimeType} {
+    Map a MIME charset name to the corresponding Tcl encoding name using
+    Tcllib's case-insensitive mapping table.
+    @param mimeType MIME charset name.
+    @return The Tcl encoding name, or the empty string if no mapping is known.
+    @see https://core.tcl-lang.org/tcllib/doc/trunk/embedded/md/tcllib/files/modules/mime/mime.md
+}
+
+::acs::tcllib::document mime ::mime::buildmessageaux {token} {
+    Internal recursive MIME message serializer used by mime::buildmessage.
+    This helper is version-dependent and operates on MIME token state.
+    @param token MIME token to serialize.
+    @return Serialized MIME message content.
+    @see https://core.tcl-lang.org/tcllib/doc/trunk/embedded/md/tcllib/files/modules/mime/mime.md
+} private
+
+::acs::tcllib::document mime ::mime::getsize {token} {
+    Determine the size reported for a MIME token by mime::getproperty.
+    This internal helper is version-dependent and is not a public API.
+    @param token MIME token to inspect.
+    @return The size reported for the MIME part.
+    @see https://core.tcl-lang.org/tcllib/doc/trunk/embedded/md/tcllib/files/modules/mime/mime.md
+} private
+
+::acs::tcllib::document mime ::mime::initializeaux {token args} {
+    Configure an allocated MIME token's internal state on behalf of
+    mime::initialize. This helper is version-dependent, not a public API.
+    @param token Allocated MIME token to configure.
+    @param args MIME initialization options passed by mime::initialize.
+    @see https://core.tcl-lang.org/tcllib/doc/trunk/embedded/md/tcllib/files/modules/mime/mime.md
+} private
+
+::acs::tcllib::document mime ::mime::parseaddressaux {token string} {
+    Parse an address list using an internal MIME address-parser token.
+    This helper is version-dependent and is not a public API.
+    @param token Internal address-parser token.
+    @param string Address list to parse.
+    @return Parsed address records as name/value lists.
+    @see https://core.tcl-lang.org/tcllib/doc/trunk/embedded/md/tcllib/files/modules/mime/mime.md
+} private

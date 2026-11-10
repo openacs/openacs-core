@@ -1057,6 +1057,11 @@ ad_proc -public api_add_to_proc_doc {
     @param value    value of the property
 
 } {
+    # A Tcllib package may have been loaded after acs-tcl's documentation
+    # file. Register its existing command before adding testcase/caller data.
+    if {[namespace which ::acs::tcllib::register_documentation] ne ""} {
+        ::acs::tcllib::register_documentation $proc_name
+    }
     if {[nsv_exists api_proc_doc $proc_name]} {
         set d [nsv_get api_proc_doc $proc_name]
         #
@@ -1149,6 +1154,10 @@ ad_proc -private api_add_calling_info_to_procdoc {{proc_name "*"}} {
 
     @author Gustaf Neumann
 } {
+    # Include already-loaded Tcllib APIs before taking the procedure snapshot.
+    if {[namespace which ::acs::tcllib::register_documentation] ne ""} {
+        ::acs::tcllib::register_documentation
+    }
     if {$proc_name eq "*"} {
         set proc_names [nsv_array names api_proc_doc]
     } else {
@@ -2170,8 +2179,10 @@ namespace eval ::apidoc {
                         } elseif {$proc_name in $XOTCL_KEYWORDS} {
                             append html [pretty_token keyword $proc_name]
 
-                        } elseif {[string match "ns*" $proc_name]} {
-                            set url "/api-doc/tcl-proc-view?tcl_proc=$proc_name"
+                        } elseif {[regexp {^(::)?(ns_|nsv_|nscp$)} $proc_name]} {
+                            # Treat qualified NaviServer names like bare ones.
+                            # Match nscp exactly; exclude unrelated nsf::* APIs.
+                            set url "/api-doc/tcl-proc-view?tcl_proc=[string trimleft $proc_name :]"
                             append html "<a href='[ns_quotehtml $url]' title='[ns_info name] command'>" \
                                 [pretty_token proc $proc_name] </a>
 
