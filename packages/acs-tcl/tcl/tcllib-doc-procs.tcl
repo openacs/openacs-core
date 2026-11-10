@@ -274,3 +274,19 @@ if {[namespace which ::acs::tcllib::document] eq ""} {
     @return Parsed address records as name/value lists.
     @see https://core.tcl-lang.org/tcllib/doc/trunk/embedded/md/tcllib/files/modules/mime/mime.md
 } private
+
+::acs::tcllib::document mime ::mime::addr_next {token} {
+    Advance an internal MIME address-parser token to the next address.
+    This version-dependent helper updates parser state and is not a public API.
+    @param token Internal address-parser token.
+    @return 1 if another address was parsed, or 0 at the end of the list.
+} private
+
+::acs::tcllib::document mime ::mime::addr_x400 {mbox key} {
+    Extract a keyed attribute from an X.400 mailbox representation for the
+    internal MIME address parser. This helper is not a public API.
+    @param mbox X.400 mailbox representation.
+    @param key Attribute key to find, matched without case distinctions.
+    @return Attribute value with surrounding quotes trimmed, or an empty string
+    if the key is absent.
+} private
