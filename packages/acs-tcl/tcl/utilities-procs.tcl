@@ -1860,6 +1860,23 @@ ad_proc -public ad_safe_eval args {
     return [uplevel {*}$args]
 }
 
+ad_proc -public util::coalesce {args} {
+    Return the first nonempty argument, or the empty string if no argument
+    is nonempty. Only the empty string is skipped; zero, false and whitespace
+    are returned unchanged. All arguments are evaluated before this procedure
+    is called.
+
+    @param args Values to examine in order.
+    @return The first nonempty value, or the empty string.
+} {
+    foreach value $args {
+        if {$value ne ""} {
+            return $value
+        }
+    }
+    return ""
+}
+
 ad_proc -public ad_decode { value args } {
 
     This procedure is analogous to sql decode procedure. The first parameter is
