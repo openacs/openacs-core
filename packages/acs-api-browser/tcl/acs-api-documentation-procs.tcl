@@ -2125,7 +2125,7 @@ namespace eval ::apidoc {
                         } elseif {$proc_namespace ne ""
                                   && [namespace exists ::[string trimleft $proc_namespace :]]} {
                             set resolved_name [namespace eval ::[string trimleft $proc_namespace :] \
-                                                   [list namespace which -command $proc_name]]
+                                                   [list ::namespace which -command $proc_name]]
                         } else {
                             set resolved_name [namespace which -command ::$proc_name]
                         }
