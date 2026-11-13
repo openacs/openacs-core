@@ -26,6 +26,9 @@ if {[namespace which ::xo::api] ne ""} {
     ::xo::api update_object_doc "" ::acs::db::[::acs::dc cget -driver]-[::acs::dc cget -backend] ""
 }
 
+# Check unresolved references after NX has registered its method documentation.
+ad_schedule_proc -thread t -once t -all_servers t 1 ::api_finish_proc_doc_startup
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4

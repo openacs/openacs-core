@@ -1081,7 +1081,7 @@ ad_proc -public api_add_to_proc_doc {
             #ns_log notice "adding property $property with value $value to proc_doc of $proc_name"
         }
     } else {
-        nsv_set api_proc_doc $proc_name [list $property $value]
+        nsv_set api_proc_doc $proc_name [list $property [list $value]]
         # NaviServer and NSF maintain their documentation externally. Keep
         # testcase and caller metadata even without an OpenACS proc_doc,
         # but do not report these commands as undocumented. Accept either
@@ -1090,7 +1090,39 @@ ad_proc -public api_add_to_proc_doc {
             && !([regexp {^(::)?thread::(send|transfer|exists|release)$} $proc_name]
                  && [package provide Thread] ne ""
                  && [namespace which -command ::[string trimleft $proc_name :]] ne "")} {
-            ns_log warning "api_add_to_proc_doc: no proc_doc available for $proc_name"
+            nsv_set api_pending_proc_doc_warnings $proc_name 1
+            if {[nsv_exists api_proc_doc_state startup_complete]} {
+                api_warn_pending_proc_doc $proc_name
+            }
+        }
+    }
+}
+
+ad_proc -private api_warn_pending_proc_doc {proc_name} {
+    Warn if the proc or method still has no documentation. A test may
+    have registered a placeholder before its definition was loaded.
+} {
+    nsv_unset -nocomplain api_pending_proc_doc_warnings $proc_name
+    if {[nsv_exists api_proc_doc $proc_name]
+        && ![dict exists [nsv_get api_proc_doc $proc_name] script]} {
+        ns_log warning "api_add_to_proc_doc: no proc_doc available for $proc_name"
+        nsv_unset api_proc_doc $proc_name
+    }
+}
+
+ad_proc -private api_finish_proc_doc_startup {} {
+    Check queued warnings after the startup documentation pass.
+} {
+    try {
+        if {[info commands ::xo::api] ne ""} {
+            ::xo::api update_nx_docs
+        } else {
+            ns_log warning "INIT: no xo::api available"
+        }
+    } finally {
+        nsv_set api_proc_doc_state startup_complete 1
+        foreach proc_name [nsv_array names api_pending_proc_doc_warnings] {
+            api_warn_pending_proc_doc $proc_name
         }
     }
 }

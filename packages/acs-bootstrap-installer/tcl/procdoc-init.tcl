@@ -1,8 +1,4 @@
-if {[info commands ::xo::api] ne ""} {    
-    ad_schedule_proc -thread t -once t 1 ::xo::api update_nx_docs
-} else {
-    ns_log warning "INIT: no xo::api available"
-}
+# The API Browser schedules the startup documentation pass.
 
 # Local variables:
 #    mode: tcl
