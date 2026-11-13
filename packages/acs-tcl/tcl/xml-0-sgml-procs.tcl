@@ -1,4 +1,6 @@
 ad_library {
+    Deprecated legacy sgml package. Use tDOM for XML processing.
+    Loaded only when WithDeprecatedCode is enabled.
 
     @original-header
 # sgml.tcl --
@@ -34,6 +36,10 @@ ad_library {
 # incur as a result of using, copying or modifying the Software.
 #
     @cvs-id $Id$
+}
+
+if {![ad_with_deprecated_code_p]} {
+    return
 }
 
 package provide sgml 1.7
@@ -839,7 +845,10 @@ proc sgml::Entity {opts entityrefcmd pcdatacmd entities ref} {
 #	for each element, second element are the attribute lists of the
 #	elements and the third element is the entity map.
 
-proc sgml::parseDTD {dtd args} {
+ad_proc -public -deprecated sgml::parseDTD {dtd args} {
+    Parse a DTD using the legacy SGML parser.
+    Use tDOM for XML processing.
+} {
     variable Wsp
     variable ParseDTDnum
 

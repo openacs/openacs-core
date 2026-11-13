@@ -1,4 +1,6 @@
 ad_library {
+    Deprecated legacy dom package. Use tDOM for XML processing.
+    Loaded only when WithDeprecatedCode is enabled.
 
 # dom.tcl --
 #
@@ -20,6 +22,10 @@ ad_library {
 # incur as a result of using, copying or modifying this software.
 #
     @cvs-id $Id$
+}
+
+if {![ad_with_deprecated_code_p]} {
+    return
 }
 
 package provide dom 1.6
@@ -128,7 +134,10 @@ namespace eval dom {
     variable DOMImplementationCounter 0
 }
 
-proc dom::DOMImplementation {method args} {
+ad_proc -public -deprecated dom::DOMImplementation {method args} {
+    Dispatch a legacy DOM operation such as parsing or creating a document.
+    Use tDOM for XML processing.
+} {
     variable DOMImplementationOptions
     variable DOMImplementationCounter
 

@@ -1,4 +1,6 @@
 ad_library {
+    Deprecated legacy xml package. Use tDOM for XML processing.
+    Loaded only when WithDeprecatedCode is enabled.
     @original-header
 # xml.tcl --
 #
@@ -32,6 +34,10 @@ ad_library {
 # incur as a result of using, copying or modifying the Software.
 #
     @cvs-id $Id$
+}
+
+if {![ad_with_deprecated_code_p]} {
+    return
 }
 
 package provide xml 1.9
@@ -104,7 +110,10 @@ namespace eval xml {
 # Results:
 #	The state variable is initialized.
 
-proc xml::parser {args} {
+ad_proc -public -deprecated xml::parser {args} {
+    Create a legacy Tcl XML parser.
+    Use tDOM for XML processing.
+} {
     variable ParserCounter
 
     if {[llength $args] > 0} {
