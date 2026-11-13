@@ -31,7 +31,11 @@ namespace eval ::acs {
     # ::acs::clusterwide.
     ##########################################################################
 
-    proc clusterwide args {
+    ad_proc -public ::acs::clusterwide {args} {
+        Execute a command locally, then broadcast it to the configured cluster.
+        @param args The command and its arguments.
+        @return The result of executing the command locally.
+    } {
         #
         # First, execute the command on the local server.
         #

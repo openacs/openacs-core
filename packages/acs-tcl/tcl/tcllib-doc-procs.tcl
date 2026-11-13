@@ -392,6 +392,13 @@ if {[package provide md5] ne "" && [namespace which -command ::md5::md5] ne ""} 
     @param args Arguments and options for the selected operation.
 }
 
+::acs::tcllib::document tdom ::tdom::IANAEncoding2TclEncoding {IANAName} {
+    Map a recognized IANA character encoding name to Tcl's encoding name.
+    Matching is case-insensitive. An unrecognized name raises an error.
+    @param IANAName Character encoding name or alias.
+    @return The corresponding Tcl encoding name.
+}
+
 ::acs::tcllib::document tdom ::tdom::xmlOpenFileWorker {
     filename {encodingString {}} {forSimple 0} {forRead 0}
 } {
