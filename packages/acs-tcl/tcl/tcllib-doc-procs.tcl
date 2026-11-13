@@ -26,10 +26,12 @@ if {[namespace which ::acs::tcllib::register_documentation] eq ""} {
                         set package smtp
                     }
                 }
-                tcl::mathfunc::max {set package Tcl}
+                tcl::mathfunc::max -
+                tcl::mathfunc::double {set package Tcl}
+                nstrace::statescript {set package ""}
             }
-            if {$package ni {uri base64 mime md5 tdom Trf Tcl smtp}
-                || [package provide $package] eq ""
+            if {$package ni {{} uri base64 mime md5 tdom Trf Tcl smtp}
+                || ($package ne "" && [package provide $package] eq "")
                 || [namespace which -command ::$name] eq ""
                 || ([nsv_exists api_proc_doc $name]
                     && [dict exists [nsv_get api_proc_doc $name] main])} {
@@ -48,13 +50,13 @@ if {[namespace which ::acs::tcllib::document] eq ""} {
     } {
         Register documentation for an existing command of an already-loaded
         Tcl package, without replacing its implementation or existing docs.
-        @param package Owning Tcl package.
+        @param package Owning Tcl package, or empty for a NaviServer core command.
         @param proc_name Fully qualified command name.
         @param arguments Documented Tcl argument list.
         @param documentation API-browser documentation text.
         @param protection API-browser visibility, public or private.
     } {
-        if {[package provide $package] eq ""
+        if {($package ne "" && [package provide $package] eq "")
             || [namespace which -command $proc_name] eq ""} {return}
         set name [string trimleft $proc_name :]
         set previous {}
@@ -454,6 +456,20 @@ if {[package provide md5] ne "" && [namespace which -command ::md5::md5] ne ""} 
     @param token Internal MIME parser token.
     @param string Original Content-Type value.
 } private
+
+::acs::tcllib::document {} ::nstrace::statescript {{file ""}} {
+    Generate the NaviServer interpreter blueprint used to initialize other
+    Tcl interpreters from the current interpreter state.
+    @param file Optional path to write the generated script to.
+    @return The generated Tcl script when no file is specified.
+} private
+
+::acs::tcllib::document Tcl ::tcl::mathfunc::double {arg} {
+    Convert a numeric value to a double-precision floating-point value.
+    This command implements double() for Tcl expressions.
+    @param arg Numeric value to convert.
+    @return The converted floating-point value.
+}
 
 ::acs::tcllib::document Tcl ::tcl::mathfunc::max {arg args} {
     Return the greatest of one or more numeric arguments.
