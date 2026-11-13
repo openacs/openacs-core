@@ -1082,11 +1082,11 @@ ad_proc -public api_add_to_proc_doc {
         }
     } else {
         nsv_set api_proc_doc $proc_name [list $property [list $value]]
-        # NaviServer and NSF maintain their documentation externally. Keep
+        # NaviServer, NSF and NX maintain their documentation externally. Keep
         # testcase and caller metadata even without an OpenACS proc_doc,
         # but do not report these commands as undocumented. Accept either
         # unqualified names or exactly one leading namespace qualifier.
-        if {![regexp {^(::)?(ns_|nsv_|nscp$|nsf::)} $proc_name]
+        if {![regexp {^(::)?(ns_|nsv_|nscp$|nsf::|nx::)} $proc_name]
             && !([regexp {^(::)?thread::(send|transfer|exists|release)$} $proc_name]
                  && [package provide Thread] ne ""
                  && [namespace which -command ::[string trimleft $proc_name :]] ne "")} {

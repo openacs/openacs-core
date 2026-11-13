@@ -1,5 +1,5 @@
 ad_library {
-    API-browser documentation for Tcllib commands and tDOM helpers used by OpenACS.
+    API-browser documentation for external Tcl commands used by OpenACS.
 
     Only already-provided packages and existing commands are documented.
     Documentation-only ad_proc declarations do not replace implementations.
@@ -10,15 +10,25 @@ namespace eval ::acs::tcllib {}
 
 if {[namespace which ::acs::tcllib::register_documentation] eq ""} {
     ad_proc -private ::acs::tcllib::register_documentation {{proc_name ""}} {
-        Refresh documentation for already-loaded Tcllib and tDOM packages, optionally
-        when metadata is requested for a command in uri, base64, mime, md5 or tdom.
+        Refresh documentation for existing Tcl core and extension commands,
+        optionally when metadata is requested for a single command.
         This procedure never requires a package or evaluates its loader.
         @param proc_name Procedure name, or empty to refresh all declarations.
     } {
         if {$proc_name ne ""} {
             set name [string trimleft $proc_name :]
             set package [string trimleft [namespace qualifiers ::$name] :]
-            if {$package ni {uri base64 mime md5 tdom}
+            switch -- $name {
+                dom {set package tdom}
+                transform {
+                    set package Trf
+                    if {[package provide Trf] eq ""} {
+                        set package smtp
+                    }
+                }
+                tcl::mathfunc::max {set package Tcl}
+            }
+            if {$package ni {uri base64 mime md5 tdom Trf Tcl smtp}
                 || [package provide $package] eq ""
                 || [namespace which -command ::$name] eq ""
                 || ([nsv_exists api_proc_doc $name]
@@ -37,8 +47,8 @@ if {[namespace which ::acs::tcllib::document] eq ""} {
         package proc_name arguments documentation {protection public}
     } {
         Register documentation for an existing command of an already-loaded
-        Tcllib package, without replacing its implementation or existing docs.
-        @param package Owning Tcllib package.
+        Tcl package, without replacing its implementation or existing docs.
+        @param package Owning Tcl package.
         @param proc_name Fully qualified command name.
         @param arguments Documented Tcl argument list.
         @param documentation API-browser documentation text.
@@ -374,3 +384,93 @@ if {[package provide md5] ne "" && [namespace which -command ::md5::md5] ne ""} 
     @param encodingString Optional name of a caller variable receiving encoding information.
     @return File content read by the helper.
 } private
+
+
+::acs::tcllib::document tdom ::dom {subcommand args} {
+    Parse XML or create and manage DOM documents using tDOM.
+    @param subcommand Operation such as parse or createDocument.
+    @param args Arguments and options for the selected operation.
+}
+
+::acs::tcllib::document tdom ::tdom::xmlOpenFileWorker {
+    filename {encodingString {}} {forSimple 0} {forRead 0}
+} {
+    Open an XML file and configure the channel for tDOM's parser or file reader.
+    @param filename XML file to open.
+    @param encodingString Optional caller variable for encoding information.
+    @param forSimple Select the simple parser's channel handling.
+    @param forRead Select channel handling for reading the file as text.
+    @return Open input channel.
+} private
+
+::acs::tcllib::document md5 ::md5::MD5Init {} {
+    Initialize a Tcllib incremental MD5 digest.
+    @return A token for MD5Update and MD5Final.
+}
+
+::acs::tcllib::document md5 ::md5::MD5Update {token data} {
+    Feed a chunk of binary data into an incremental MD5 digest.
+    @param token Token returned by MD5Init.
+    @param data Chunk to hash.
+}
+
+::acs::tcllib::document md5 ::md5::MD5Final {token} {
+    Finalize an incremental MD5 digest and release its state.
+    @param token Token returned by MD5Init.
+    @return The binary MD5 digest.
+}
+
+::acs::tcllib::document md5 ::md5::Hex {data} {
+    Convert binary data to hexadecimal for Tcllib's MD5 implementation.
+    @param data Bytes to encode.
+    @return Hexadecimal text.
+} private
+
+::acs::tcllib::document md5 ::md5::Pop {varname {nth 0}} {
+    Remove and return an element from a list in the caller's scope.
+    @param varname Name of the caller's list variable.
+    @param nth Index of the element to remove, defaulting to the first.
+} private
+
+::acs::tcllib::document mime ::mime::addr_local {token} {
+    Parse the local part of a mailbox and store it in the MIME parser state.
+    @param token Internal address-parser token.
+} private
+
+::acs::tcllib::document mime ::mime::addr_route {token} {
+    Parse a source route and store it in the MIME parser state.
+    @param token Internal address-parser token.
+} private
+
+::acs::tcllib::document mime ::mime::parsetypeaux {token string} {
+    Parse the media type, subtype and parameters for the MIME Content-Type parser.
+    @param token Internal MIME parser token.
+    @param string Original Content-Type value.
+} private
+
+::acs::tcllib::document Tcl ::tcl::mathfunc::max {arg args} {
+    Return the greatest of one or more numeric arguments.
+    This command implements max() for Tcl expressions.
+    @param arg First numeric argument.
+    @param args Additional numeric arguments.
+}
+
+::acs::tcllib::document Trf ::transform {args} {
+    Run a Tcl-defined data transformation or attach it to an I/O channel
+    using the Trf extension.
+    @param args Transformation options, including -command for the Tcl callback
+                and -attach for channel mode, or data for immediate mode.
+}
+
+
+# Some Tcllib SMTP versions define this global shim when Trf is unavailable.
+if {[package provide Trf] eq ""
+    && [info exists ::smtp::trf] && !$::smtp::trf
+    && [info procs ::transform] ne ""
+    && [string match {*set mystate(size) 1*} [info body ::transform]]} {
+    ::acs::tcllib::document smtp ::transform {args} {
+        Internal compatibility shim installed by Tcllib SMTP when Trf is
+        unavailable. Set the caller's SMTP size state to 1.
+        @param args Compatibility arguments accepted and ignored by the shim.
+    } private
+}
