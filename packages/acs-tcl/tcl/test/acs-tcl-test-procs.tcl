@@ -304,12 +304,12 @@ aa_register_case \
         site_node::get_children
         site_node::get_node_id
 
-        "::xo::SiteNode instproc get"
-        "::xo::SiteNodeUrlspaceCache instproc get_node_id"
-        "::xo::SiteNodesCache instproc get_node_id"
-        "::xo::SiteNodesCache instproc get_url"
-        "::xo::SiteNodesCache instproc get_children"
-        "::xo::SiteNode instproc get_children"
+        "::acs::SiteNode instproc get"
+        "::acs::SiteNodeUrlspaceCache instproc get_node_id"
+        "::acs::SiteNodesCache instproc get_node_id"
+        "::acs::SiteNodesCache instproc get_url"
+        "::acs::SiteNodesCache instproc get_children"
+        "::acs::SiteNode instproc get_children"
         db_1row
     } -on_error {
         site_node::get_children returns root node!
@@ -939,7 +939,7 @@ aa_register_case \
         site_node::get_node_id
         site_node::verify_folder_name
 
-        "::xo::SiteNodesCache instproc get_url"
+        "::acs::SiteNodesCache instproc get_url"
     } \
     site_node_verify_folder_name {
     Testing site_node::verify_folder_name

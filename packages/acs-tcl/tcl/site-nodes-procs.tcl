@@ -538,6 +538,7 @@ namespace eval ::acs {
             {-url ""}
             {-node_id ""}
         } {
+            # Return site node details for a URL or node ID.
             #
             # @return a site node from url or site-node with all its context info
             #
@@ -599,6 +600,7 @@ namespace eval ::acs {
             {-filters ""}
             {-element ""}
         } {
+            # Return child site nodes matching the requested filters.
             #
             # Filtering happens here exactly like in the nsv-based
             # version. If should be possible to realize (at least
@@ -905,6 +907,7 @@ namespace eval ::acs {
             {-filters ""}
             {-element ""}
         } {
+            # Cache filtered child lookups by argument list. Recursive lookups bypass the cache.
             #
             # Cache get_children operations, except, when "-all"
             # was specified.  The underlying operation can be quite
@@ -941,6 +944,7 @@ namespace eval ::acs {
         }
 
         :public method get_node_id {-url:required} {
+            # Cache the upstream URL-to-node-ID lookup.
             #
             # Cache the result of the upstream implementation of
             # get_node_id in the acs::site_nodes_id_cache cache.
@@ -955,6 +959,7 @@ namespace eval ::acs {
         }
 
         :public method get_url {-node_id:required,1..1} {
+            # Return the cached URL for a site node, or an empty string for an empty ID.
             #
             # It's a pain, but OpenACS and its regression test
             # call "get_url" a few times with an empty node_id.
@@ -1112,6 +1117,7 @@ namespace eval ::acs {
         #
 
         :public method get_node_id {-url:required} {
+            # Find the node ID for the best matching site node URL using the URL-space cache.
             #
             # Get node_id for the provided URL. We have to
             # determine the partial URL for determining the site
