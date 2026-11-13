@@ -47,7 +47,11 @@ namespace eval ::acs {
         return $result
     }
 
-    proc cache_flush_pattern {cache pattern} {
+    ad_proc -public cache_flush_pattern {cache pattern} {
+        Flush entries whose keys match a pattern in a cache on this server.
+        @param cache Cache name.
+        @param pattern Glob pattern for cache keys.
+    } {
         #
         # Provide means to perform a wildcard-based cache flushing on
         # (cluster) machines.
@@ -57,7 +61,9 @@ namespace eval ::acs {
         }
     }
 
-    proc cache_flush_all {} {
+    ad_proc -public cache_flush_all {} {
+        Flush all entries in every NaviServer cache on this server.
+    } {
         #
         # Reset all caches and flush all of its contents.
         #

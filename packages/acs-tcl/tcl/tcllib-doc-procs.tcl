@@ -26,9 +26,11 @@ if {[namespace which ::acs::tcllib::register_documentation] eq ""} {
                         set package smtp
                     }
                 }
+                auto_execok -
                 tcl::mathfunc::max -
                 tcl::mathfunc::double {set package Tcl}
-                nstrace::statescript {set package ""}
+                nstrace::statescript -
+                nstrace::namespaces {set package ""}
             }
             if {$package ni {{} uri base64 mime md5 tdom Trf Tcl smtp}
                 || ($package ne "" && [package provide $package] eq "")
@@ -455,6 +457,30 @@ if {[package provide md5] ne "" && [namespace which -command ::md5::md5] ne ""} 
     Parse the media type, subtype and parameters for the MIME Content-Type parser.
     @param token Internal MIME parser token.
     @param string Original Content-Type value.
+} private
+
+::acs::tcllib::document Tcl ::auto_execok {name} {
+    Find a command that Tcl can invoke with exec.
+    @param name Command name or path.
+    @return A command prefix suitable for exec, or an empty string if unavailable.
+}
+
+::acs::tcllib::document md5 ::md5::MD5Hash {token msg} {
+    Update the pure Tcl MD5 digest state with one 64-byte block.
+    @param token Internal MD5 digest state token.
+    @param msg Message block to process.
+} private
+
+::acs::tcllib::document md5 ::md5::bytes {v} {
+    Encode an MD5 state word as four bytes in little-endian order.
+    @param v Integer word to encode.
+    @return The four bytes of the word.
+} private
+
+::acs::tcllib::document {} ::nstrace::namespaces {{top "::"}} {
+    Enumerate namespaces for NaviServer interpreter blueprint serialization.
+    @param top Root namespace to scan, including the root itself.
+    @return Namespace names, omitting configured excluded descendants.
 } private
 
 ::acs::tcllib::document {} ::nstrace::statescript {{file ""}} {
