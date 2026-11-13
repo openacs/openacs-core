@@ -33,7 +33,20 @@ if { ![nsv_exists aa_test cases] } {
     }
 }
 
-proc aa_proc_copy {proc_name_old proc_name_new {new_body ""}} {
+ad_proc -private aa_proc_copy {
+    proc_name_old
+    proc_name_new
+    {new_body ""}
+} {
+    
+    Copy a Tcl or NSF procedure for automated-test stub management, optionally
+    substituting a new body. Preserve the argument list and defaults, and
+    retain any required OpenACS argument parser in the copied body.
+    
+    @param proc_name_old Procedure to copy.
+    @param proc_name_new Name of the copy to create.
+    @param new_body Replacement body, or empty to copy the existing body.
+} {
     #
     # This is a single proc handling all stub management requirements
     # from aa-testing. Since the arglist nsf::procs is not simply "args"
@@ -87,15 +100,6 @@ proc aa_proc_copy {proc_name_old proc_name_new {new_body ""}} {
         error "no such proc $proc_name_old"
     }
 }
-
-ad_proc -private aa_proc_copy {proc_name_old proc_name_new {new_body ""}} {
-    Copy a Tcl or NSF procedure for automated-test stub management, optionally
-    substituting a new body. Preserve the argument list and defaults, and
-    retain any required OpenACS argument parser in the copied body.
-    @param proc_name_old Procedure to copy.
-    @param proc_name_new Name of the copy to create.
-    @param new_body Replacement body, or empty to copy the existing body.
-} -
 
 ad_proc -public aa_stub {
     proc_name
