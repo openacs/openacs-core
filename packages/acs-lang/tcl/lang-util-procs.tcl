@@ -72,6 +72,34 @@ ad_proc -public lang::util::get_hash_indices { multilingual_string } {
     return [regexp -inline -indices -all {\#[a-zA-Z0-9_:-]+\.[a-zA-Z0-9_:-]+\#} $multilingual_string]
 }
 
+ad_proc -public lang::util::escape_message_keys {text} {
+    Protect literal message-key references from localization. Keep the
+    delimiters so unescape_message_keys can restore the original text
+    after the last localization pass.
+    @param text Text containing literal message-key references.
+    @return Text with message-key references protected.
+    @see lang::util::unescape_message_keys
+} {
+    # A closing hash can also start a second reference. Repeat until
+    # none of the remaining hashes form a message key.
+    while {[llength [set matches [get_hash_indices $text]]]} {
+        foreach match [lreverse $matches] {
+            set last [lindex $match 1]
+            set text [string replace $text $last $last "\x01#"]
+        }
+    }
+    return $text
+}
+
+ad_proc -public lang::util::unescape_message_keys {text} {
+    Restore literal message-key delimiters after localization.
+    @param text Text protected by escape_message_keys.
+    @return Text with the protection markers removed.
+    @see lang::util::escape_message_keys
+} {
+    return [string map [list "\x01#" "#"] $text]
+}
+
 ad_proc lang::util::message_tag_regexp {} {
     The regexp expression used by proc get_temporary_tags_indices and elsewhere
     to extract temporary message catalog tags (&lt;#...#&gt;) from ADP and Tcl files.

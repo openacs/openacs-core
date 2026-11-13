@@ -193,6 +193,12 @@ ad_proc -private adp_parse_ad_conn_file {} {
             }
         }
 
+        # Masters have finished localizing titles and context labels.
+        if {[string first "\x01#" $parsed_template] >= 0
+            && [namespace which ::lang::util::unescape_message_keys] ne ""} {
+            set parsed_template [::lang::util::unescape_message_keys $parsed_template]
+        }
+
         set mime_type [template::get_mime_type]
         set header_preamble [template::get_mime_header_preamble $mime_type]
         doc_return 200 $mime_type "$header_preamble$parsed_template"
