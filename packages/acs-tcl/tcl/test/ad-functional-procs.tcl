@@ -9,7 +9,6 @@ aa_register_case \
         f::cons
         f::lambda
         f::map
-        f::fib
         f::fold
         f::fold1
         f::scanl
