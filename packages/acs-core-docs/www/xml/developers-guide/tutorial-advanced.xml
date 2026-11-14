@@ -1586,59 +1586,65 @@ ad_page_contract {
         <para>Modify config.tcl to accommodate the legacy database, and to
         ensure that the legacy database is not used for standard
         OpenACS queries:</para>
-        <programlisting>ns_section ns/db/pools
-ns_param   pool1              "Pool 1"
-ns_param   pool2              "Pool 2"
-ns_param   pool3              "Pool 3"
-ns_param   legacy             "Legacy"
-
-ns_section ns/db/pool/pool1
-<emphasis>#Unchanged from default</emphasis>
-ns_param   maxidle            1000000000
-ns_param   maxopen            1000000000
-ns_param   connections        5
-ns_param   verbose            $debug
-ns_param   extendedtableinfo  true
-ns_param   logsqlerrors       $debug
-if { $database eq "oracle" } {
-    ns_param   driver             ora8
-    ns_param   datasource         {}
-    ns_param   user               $db_name
-    ns_param   password           $db_password
-} else {
-    ns_param   driver             postgres
-    ns_param   datasource         ${db_host}:${db_port}:${db_name}
-    ns_param   user               $db_user
-    ns_param   password           ""
+        <programlisting><emphasis># Pools known to NaviServer</emphasis>
+ns_section ns/db/pools {
+   ns_param   pool1              "Pool 1"
+   ns_param   pool2              "Pool 2"
+   ns_param   pool3              "Pool 3"
+   ns_param   legacy             "Legacy"
+}
+ns_section ns/db/pool/pool1 {
+   <emphasis>#Unchanged from default</emphasis>
+   ns_param   maxidle            1000000000
+   ns_param   maxopen            1000000000
+   ns_param   connections        5
+   ns_param   verbose            $debug
+   ns_param   extendedtableinfo  true
+   ns_param   logsqlerrors       $debug
+   if { $database eq "oracle" } {
+       ns_param   driver             ora8
+       ns_param   datasource         {}
+       ns_param   user               $db_name
+       ns_param   password           $db_password
+   } else {
+       ns_param   driver             postgres
+       ns_param   datasource         ${db_host}:${db_port}:${db_name}
+       ns_param   user               $db_user
+       ns_param   password           ""
+   }
 }
 
-ns_section ns/db/pool/pool2
-<emphasis>#Unchanged from default, removed for clarity</emphasis>
+ns_section ns/db/pool/pool2 {
+   <emphasis>#Unchanged from default, removed for clarity</emphasis>
+}
+ns_section ns/db/pool/pool3 {
+   <emphasis>#Unchanged from default, removed for clarity</emphasis>
+}
+ns_section ns/db/pool/legacy {
+   ns_param   maxidle            1000000000
+   ns_param   maxopen            1000000000
+   ns_param   connections        5
+   ns_param   verbose            $debug
+   ns_param   extendedtableinfo  true
+   ns_param   logsqlerrors       $debug
+   ns_param   driver             postgres
+   ns_param   datasource         ${db_host}:${db_port}:legacy_db
+   ns_param   user               legacy_user
+   ns_param   password           legacy_password
+}
 
-ns_section ns/db/pool/pool3
-<emphasis>#Unchanged from default, removed for clarity</emphasis>
+<emphasis># Pools available via ns_db interface for $server</emphasis>
+ns_section ns/server/${server}/db {
+   ns_param   pools              *
+   ns_param   defaultpool        pool1
+}
 
-ns_section ns/db/pool/legacy
-ns_param   maxidle            1000000000
-ns_param   maxopen            1000000000
-ns_param   connections        5
-ns_param   verbose            $debug
-ns_param   extendedtableinfo  true
-ns_param   logsqlerrors       $debug
-ns_param   driver             postgres
-ns_param   datasource         ${db_host}:${db_port}:legacy_db
-ns_param   user               legacy_user
-ns_param   password           legacy_password
-
-
-ns_section ns/server/${server}/db
-ns_param   pools              *
-ns_param   defaultpool        pool1
-
-ns_section ns/server/${server}/acs/database
-ns_param database_names [list main legacy]
-ns_param pools_main [list pool1 pool2 pool3]
-ns_param pools_legacy [list legacy]</programlisting>
+<emphasis># Pools used by OpenACS db_* API in $server</emphasis>
+ns_section ns/server/${server}/acs/database {
+   ns_param database_names {main legacy}
+   ns_param pools_main {pool1 pool2 pool3}
+   ns_param pools_legacy {legacy}
+}</programlisting>
       </listitem>
       <listitem>
         <para>To use the legacy database, use the
