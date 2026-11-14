@@ -29,10 +29,11 @@ if {[namespace which ::acs::tcllib::register_documentation] eq ""} {
                 auto_execok -
                 tcl::mathfunc::max -
                 tcl::mathfunc::double {set package Tcl}
+                xotcl::self {set package XOTcl}
                 nstrace::statescript -
                 nstrace::namespaces {set package ""}
             }
-            if {$package ni {{} uri base64 mime md5 tdom Trf Tcl smtp}
+            if {$package ni {{} uri base64 mime md5 tdom Trf Tcl smtp XOTcl}
                 || ($package ne "" && [package provide $package] eq "")
                 || [namespace which -command ::$name] eq ""
                 || ([nsv_exists api_proc_doc $name]
@@ -482,6 +483,11 @@ if {[package provide md5] ne "" && [namespace which -command ::md5::md5] ne ""} 
     @param top Root namespace to scan, including the root itself.
     @return Namespace names, omitting configured excluded descendants.
 } private
+
+::acs::tcllib::document XOTcl ::xotcl::self {{arg ""}} {
+    Return the current XOTcl object or information about the active method call.
+    @param arg Optional context selector, such as class, proc, or next.
+}
 
 ::acs::tcllib::document {} ::nstrace::statescript {{file ""}} {
     Generate the NaviServer interpreter blueprint used to initialize other
