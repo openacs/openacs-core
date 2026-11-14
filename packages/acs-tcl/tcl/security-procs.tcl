@@ -3273,6 +3273,10 @@ ad_proc security::secure_hostname_p {host} {
         } on error {errorMsg} {
             ns_log warning \
                 "security::secure_hostname_p: DNS lookup for host header value '$host' failed: $errorMsg"
+            if {[regexp -nocase {(^|\.)invalid\.?$} $host]} {
+                ns_return 400 text/plain "Unrecognized Host header"
+                ad_script_abort
+            }
         }
     }
 
