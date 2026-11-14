@@ -3259,6 +3259,17 @@ ad_proc security::secure_hostname_p {host} {
         return 1
     }
 
+    #
+    # RFC 6761 §6.4 defines .invalid as a special-use domain.
+    #
+    if {[regexp -nocase {(^|\.)invalid\.?$} $host]} {
+        if {[ns_conn isconnected]} {
+            ns_return 400 text/plain "Unrecognized Host header"
+            ad_script_abort
+        }
+        return 0
+    }
+
     set validationOk 0
     if {[acs::icanuse "ns_ip"]} {
         #
@@ -3270,13 +3281,15 @@ ad_proc security::secure_hostname_p {host} {
             ns_addrbyhost $host
         } on ok {result} {
             set validationOk [expr {![ns_ip public $result]}]
+        } trap {NS_DNS NOT_FOUND} {} {
+            # Continue with the configured host and host-node checks.
+        } trap {NS_DNS} {message options} {
+            set reason [lindex [dict get $options -errorcode] 1]
+            ns_log warning \
+                "security::secure_hostname_p: DNS $reason for Host [list $host]: $message"
         } on error {errorMsg} {
             ns_log warning \
                 "security::secure_hostname_p: DNS lookup for host header value '$host' failed: $errorMsg"
-            if {[regexp -nocase {(^|\.)invalid\.?$} $host]} {
-                ns_return 400 text/plain "Unrecognized Host header"
-                ad_script_abort
-            }
         }
     }
 
