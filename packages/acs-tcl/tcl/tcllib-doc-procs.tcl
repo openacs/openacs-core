@@ -29,6 +29,7 @@ if {[namespace which ::acs::tcllib::register_documentation] eq ""} {
                 auto_execok -
                 tcl::mathfunc::max -
                 tcl::mathfunc::double {set package Tcl}
+                xotcl::method_handle_to_xotcl -
                 xotcl::self {set package XOTcl}
                 nstrace::statescript -
                 nstrace::namespaces {set package ""}
@@ -482,6 +483,11 @@ if {[package provide md5] ne "" && [namespace which -command ::md5::md5] ne ""} 
     Enumerate namespaces for NaviServer interpreter blueprint serialization.
     @param top Root namespace to scan, including the root itself.
     @return Namespace names, omitting configured excluded descendants.
+} private
+
+::acs::tcllib::document XOTcl ::xotcl::method_handle_to_xotcl {methodHandle} {
+    Convert an NSF method handle to an XOTcl method reference.
+    @param methodHandle NSF method handle to translate.
 } private
 
 ::acs::tcllib::document XOTcl ::xotcl::self {{arg ""}} {
