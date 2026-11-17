@@ -17,7 +17,7 @@ ad_page_contract {
 }
 
 set url_vars [export_vars {path version_id}]
-set return_url [ns_urlencode [ad_conn url]?][ns_urlencode $url_vars]
+set return_url [export_vars -base [ad_conn url] {path version_id}]
 
 set default_source_p [ad_get_client_property -default 0 acs-api-browser api_doc_source_p]
 if { ![info exists source_p] } {
@@ -116,6 +116,8 @@ if { $source_p } {
    set file_contents [template::util::read_file $::acs::rootdir/$path]
    set file_contents [apidoc::tclcode_to_html $file_contents]
 }
+
+set set_default_url [export_vars -base set-default {source_p return_url}]
 
 # Local variables:
 #    mode: tcl

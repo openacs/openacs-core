@@ -119,6 +119,8 @@ if {![file readable $::acs::rootdir/$path] || [file isdirectory $::acs::rootdir/
 
 }
 
+set set_default_url [export_vars -base set-default {source_p return_url}]
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4

@@ -24,7 +24,7 @@
 
 
     <if @source_p@ ne @default_source_p@> 
-      | [ <a href="set-default?source_p=@source_p@&amp;return_url=@return_url@">make this
+      | [ <a href="@set_default_url@">make this
         the default</a> ]
     </if>
 
