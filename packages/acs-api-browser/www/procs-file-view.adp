@@ -30,10 +30,10 @@
   </multiple>
 
   <if @source_p;literal@ false>
-    [ <a href="procs-file-view?@url_vars@&amp;source_p=1">show source</a> ]
+    [ <a href="@source_toggle_url;noi18n@">show source</a> ]
   </if>
   <else>
-    [ <a href="procs-file-view?@url_vars@&amp;source_p=0">hide source</a> ]
+    [ <a href="@source_toggle_url;noi18n@">hide source</a> ]
   </else>
 
 

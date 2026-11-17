@@ -16,7 +16,6 @@ ad_page_contract {
     proc_doc_list:multirow
 }
 
-set url_vars [export_vars {path version_id}]
 set return_url [export_vars -base [ad_conn url] {path version_id}]
 
 set default_source_p [ad_get_client_property -default 0 acs-api-browser api_doc_source_p]
@@ -117,6 +116,9 @@ if { $source_p } {
    set file_contents [apidoc::tclcode_to_html $file_contents]
 }
 
+set mount [string trimright [ad_conn package_url] /]
+set toggle_source_p [expr {!$source_p}]
+set source_toggle_url [export_vars -base $mount/procs-file-view {path version_id {source_p $toggle_source_p}}]
 set set_default_url [export_vars -base set-default {source_p return_url}]
 
 # Local variables:

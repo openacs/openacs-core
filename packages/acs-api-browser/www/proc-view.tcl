@@ -160,7 +160,7 @@ proc $proc {[info args $proc]} {
     }
 }
 set toggle_source_p [expr {!$source_p}]
-set procViewToggleURL [export_vars -base proc-view -no_empty {proc {source_p $toggle_source_p} version_id}]
+set procViewToggleURL [export_vars -base [string trimright [ad_conn package_url] /]/proc-view -no_empty {proc {source_p $toggle_source_p} version_id}]
 set setDefaultURL     [export_vars -base set-default {source_p return_url}]
 
 #

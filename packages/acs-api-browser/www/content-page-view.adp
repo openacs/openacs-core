@@ -16,10 +16,10 @@
 <if @source_link@ ne 0>
   <p>
     <if @source_p;literal@ false>
-      [ <a href="content-page-view?@url_vars@&amp;source_p=1">show source</a> ]
+      [ <a href="@source_toggle_url;noi18n@">show source</a> ]
     </if>
     <else>
-      [ <a href="content-page-view?@url_vars@&amp;source_p=0">hide source</a> ]
+      [ <a href="@source_toggle_url;noi18n@">hide source</a> ]
     </else>
 
 
