@@ -231,11 +231,22 @@ aa_register_case -cats {api smoke production_safe} -procs {
             }
             proc rp_debug {args} {}
             proc ns_getform {} {
-                if {[info exists ::test_form]} {return $::test_form}
-                return ""
+                if {[info exists ::_ns_form]} {return $::_ns_form}
+                error "Unexpected attempt to parse the original body"
             }
-            proc ad_try {body args} {uplevel 1 $body}
-            proc rp_handle_request {} {incr ::handled}
+            proc ad_try {body args} {tailcall try $body {*}$args}
+            proc ns_return {args} {lappend ::responses $args}
+            proc rp_handle_request {} {
+                incr ::handled
+                if {[info exists ::invalid_json]} {
+                    throw NS_INVALID_JSON "Internal parser diagnostic"
+                }
+                if {[dict get $::connection status] >= 400
+                    && [dict get $::connection status] < 600
+                    && [ns_conn url] ne $::ad_conn(url)} {
+                    set ::error_form [ns_set array [ns_getform]]
+                }
+            }
             namespace eval site_node {
                 proc get {args} {error "Unexpected site-node lookup: $args"}
             }
@@ -314,7 +325,7 @@ aa_register_case -cats {api smoke production_safe} -procs {
             try {
                 ns_set put $form @page log.smtpsent
                 ns_set put $form raw 1
-                interp eval $child [list set ::test_form $form]
+                interp eval $child [list set ::_ns_form $form]
                 interp eval $child {
                     setup_request /wrong-nsstats wrong-nsstats
                     dict set ::connection query {@page=log.smtpsent&raw=1}
@@ -329,10 +340,26 @@ aa_register_case -cats {api smoke production_safe} -procs {
                 aa_equals "$status: raw query remains available for diagnostics" \
                     [interp eval $child {ns_conn query}] {@page=log.smtpsent&raw=1}
             } finally {
-                interp eval $child {unset -nocomplain ::test_form}
+                interp eval $child {unset -nocomplain ::_ns_form}
                 ns_set free $form
             }
         }
+        aa_equals "Malformed JSON returns one generic 400" [interp eval $child {
+            setup_request /telemetry telemetry
+            set ::responses {}
+            set ::invalid_json 1
+            rp_handler
+            unset ::invalid_json
+            list $::handled $::responses
+        }] {1 {{400 text/plain {Invalid JSON request body.}}}}
+
+        aa_equals "Error redirect can use an empty form without parsing the body" [interp eval $child {
+            setup_request /telemetry telemetry
+            dict set ::connection url /shared/500
+            dict set ::connection status 500
+            rp_handler
+            list $::handled $::error_form
+        }] {1 {}}
     } finally {
         interp delete $child
     }

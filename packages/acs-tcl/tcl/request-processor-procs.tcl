@@ -164,6 +164,9 @@ ad_proc -private rp_invoke_filter { why filter_info } {
         # no need to propagate the exception
         #
         set result filter_return
+    } trap {NS_INVALID_JSON} {} {
+        ns_return 400 text/plain "Invalid JSON request body."
+        set result filter_return
     } on error {errMsg} {
         set errno 1
     } on ok {r} {
@@ -222,6 +225,8 @@ ad_proc -private rp_invoke_proc { argv } {
         # do nothing on ad_script_aborts
         ns_log notice "rp_invoke_proc: aborted cmd: $cmd"
         ds_add rp [list registered_proc $cmd $startclicks [clock clicks -microseconds]]
+    } trap {NS_INVALID_JSON} {} {
+        ns_return 400 text/plain "Invalid JSON request body."
     } on error {errMsg} {
         ds_add rp [list registered_proc $cmd $startclicks [clock clicks -microseconds] error $::errorInfo]
         rp_debug "error in $proc for [ns_conn method] [ns_conn url]?[ns_conn query] errorInfo is $::errorInfo"
@@ -1191,10 +1196,12 @@ ad_proc -private rp_handler {} {
         rp_debug "internal redirect status $status"
         if {$status >= 400 && $status < 600} {
             # The error page must not process the original request's parameters.
-            # Empty the cached form, retaining the raw query for diagnostics.
-            set form [ns_getform]
-            if {$form ne ""} {
-                ns_set truncate $form 0
+            # Clear an existing form without parsing the original body again.
+            # An empty set also prevents later ns_getform calls from parsing it.
+            if {[info exists ::_ns_form] && $::_ns_form ne ""} {
+                ns_set truncate $::_ns_form 0
+            } else {
+                set ::_ns_form [ns_set create]
             }
         }
         if {$status < 200 || $status >= 300} {
@@ -1221,6 +1228,8 @@ ad_proc -private rp_handler {} {
 
     ad_try {
         rp_handle_request
+    } trap {NS_INVALID_JSON} {} {
+        ns_return 400 text/plain "Invalid JSON request body."
     } on error {errorMsg} {
         set error_msg "errorMsg $errorMsg while serving [ns_conn request]"
         append error_msg "\nad_url <[ad_conn url]> maps to file <[ad_conn file]>"
