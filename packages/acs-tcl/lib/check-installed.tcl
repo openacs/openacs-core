@@ -6,17 +6,26 @@ ad_include_contract {
     @param resource_info    dict containing at least resourceDir and cdn
     @param version          version of the package
     @param download_url     url for downloading the resource
+    @param resource_path    alternate display path for resourceDir
+    @param installed_p      optional result of a package-specific installation check
+    @param show_policy_p    whether to show the OpenACS resource policy link
 
     @author Gustaf Neumann
 } {
     {resource_info}
     {version ""}
     {download_url ""}
+    {resource_path ""}
+    {installed_p:boolean ""}
+    {show_policy_p:boolean 1}
 }
 
 set resource_dir  [dict get $resource_info resourceDir]
 set cdn           [dict get $resource_info cdn]
 set resource_name [dict get $resource_info resourceName]
+if {$resource_path eq ""} {
+    set resource_path $resource_dir
+}
 if {$version eq ""} {
     set version [dict get $resource_info configuredVersion]
 }
@@ -92,7 +101,8 @@ dict with parameterInfo {
 
 
 set version_segment [::util::resources::version_segment -resource_info $resource_info]
-set newest_version [::util::resources::cdnjs_get_newest_version -resource_info $resource_info]
+set newest_version unknown
+catch {set newest_version [::util::resources::cdnjs_get_newest_version -resource_info $resource_info]}
 #
 # In case, we have an explicit versionCheckURL, use this.
 # Otherwise, try to derive it from the versionCheckAPI
@@ -112,11 +122,9 @@ if {[dict exists $resource_info versionCheckURL]} {
 if {[dict exists $resource_info vulnerabilityCheck]} {
     set vulnerabilityCheck [dict get $resource_info vulnerabilityCheck]
     dict with vulnerabilityCheck {
-        set result [::util::resources::check_vulnerability \
-                        -service $service \
-                        -library $library \
-                        -version $version]
-        if {[dict get $result hasVulnerability] ne "?"} {
+        if {![catch {
+            ::util::resources::check_vulnerability -service $service -library $library -version $version
+        } result] && [dict get $result hasVulnerability] ne "?"} {
             set vulnerabilityCheckURL [dict get $result libraryURL]
             set vulnerabilityCheckVersionURL [dict get $result versionURL]
             set vulnerabilityAdvisorURL [dict get $result advisorURL]
@@ -135,14 +143,16 @@ foreach url {versionCheckURL vulnerabilityCheck} {
 #
 # Check, if the resources are already installed.
 #
-set is_installed [::util::resources::is_installed_locally \
-                      -resource_info $resource_info \
-                      -version_segment $version_segment ]
-if {$is_installed} {
+if {$installed_p eq ""} {
+    set installed_p [::util::resources::is_installed_locally \
+                         -resource_info $resource_info \
+                         -version_segment $version_segment]
+}
+if {$installed_p} {
     #
     # Tell the users, where the resources are installed.
     #
-    set resources $resource_dir/$version_segment
+    set resources $resource_path/$version_segment
 
 } else {
     #
@@ -157,7 +167,7 @@ if {$is_installed} {
         # If we cannot install locally, tell the user were we want to
         # install.
         #
-        set path $resource_dir/$version_segment
+        set path $resource_path/$version_segment
     }
 }
 

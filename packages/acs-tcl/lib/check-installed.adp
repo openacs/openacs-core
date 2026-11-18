@@ -54,6 +54,6 @@ under <i>@resources@</i>.</if>
   </else>
 </else>
 
-<p>For <a href="https://openacs.org/xowiki/external-javascript-packages">background
-and OpenACS policies</a> concerning the management of external
-packages on OpenACS.org.</p>
+<if @show_policy_p@ true>
+  <include src="/packages/acs-tcl/lib/external-javascript-policy">
+</if>
