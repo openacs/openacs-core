@@ -1167,8 +1167,12 @@ ad_proc -private rp_handler {} {
     # URLs on both sides: ad_conn url can include a host-mapped prefix.
     #
     set current_url [ns_conn url]
+    set status [ns_conn status]
+    # The resource filter can trigger an error redirect before rp_filter
+    # records the original URL or initializes the package routing fields.
     if {[info exists ::ad_conn(rp_conn_url)]
-        && $current_url ne $::ad_conn(rp_conn_url)
+        ? $current_url ne $::ad_conn(rp_conn_url)
+        : ($status >= 400 && $status < 600)
     } {
         ad_conn -set rp_conn_url $current_url
         #
@@ -1192,7 +1196,6 @@ ad_proc -private rp_handler {} {
         # host-node-mapped subsites, when e.g. the error pages are
         # mapped to /shared/404 etc.
         #
-        set status [ns_conn status]
         rp_debug "internal redirect status $status"
         if {$status >= 400 && $status < 600} {
             # The error page must not process the original request's parameters.
