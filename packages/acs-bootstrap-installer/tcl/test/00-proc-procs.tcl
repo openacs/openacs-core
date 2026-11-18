@@ -108,6 +108,47 @@ aa_register_case \
         aa_true "type: $type" {$type eq ""}
     }
 
+ad_proc -private db_qd_test_lambda_scope {query} {
+    Resolve a query from nested Tcl lambdas in a documented procedure.
+} {
+    apply {{query} {
+        ::apply {{query} {
+            db_qd_get_fullname $query 0
+        }} $query
+    }} $query
+}
+
+aa_register_case \
+    -cats {api smoke production_safe} \
+    -procs {db_qd_get_fullname} \
+    db_qd__apply_frames {
+        Queries in Tcl lambdas inherit a documented procedure's XQL
+        scope. Inline shell queries fall back without logging warnings.
+    } {
+        set warnings {}
+        set trace_cmd [list apply {{level command operation} {
+            if {[string equal -nocase [lindex $command 1] warning]
+                && [string match "db_qd_get_fullname:*" [lindex $command 2]]} {
+                upvar #$level warnings warnings
+                lappend warnings $command
+            }
+        }} [info level]]
+        trace add execution ns_log enter $trace_cmd
+        try {
+            set documented [db_qd_test_lambda_scope example]
+            set inline [uplevel #0 {
+                apply {{} {db_qd_get_fullname example 0}}
+            }]
+        } finally {
+            trace remove execution ns_log enter $trace_cmd
+        }
+
+        aa_equals "Nested apply resolves in the documented procedure" $documented \
+            dbqd.acs-bootstrap-installer.tcl.test.00-proc-procs.db_qd_test_lambda_scope.example
+        aa_equals "Shell-style inline query uses the null path" $inline dbqd..NULL
+        aa_equals "Query resolution emitted no warnings" $warnings {}
+    }
+
 aa_register_case \
     -cats {api smoke} \
     -procs {

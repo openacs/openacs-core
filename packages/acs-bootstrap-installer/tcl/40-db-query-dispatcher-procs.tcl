@@ -280,18 +280,42 @@ ad_proc -public db_qd_get_fullname {local_name {added_stack_num 1}} {
         return $local_name
     }
 
-    # Get the proc name being executed.
-    # We catch this in case we're being called from the top level
-    # (e.g. from bootstrap.tcl), in which case we return what we
-    # were given
-    if { [catch {string trimleft [info level [expr {-1 - $added_stack_num}]] ::} proc_name] } {
-        return [::nsf::strip_proc_name $local_name]
+    # Find the calling procedure. Lambda frames have no XQL scope of their own.
+    set caller_level [expr {1 + $added_stack_num}]
+    set skipped_lambda_p 0
+    while {![catch {info level [expr {-$caller_level}]} proc_name]} {
+        set command [string trimleft [lindex $proc_name 0] :]
+        if {$command eq "util_memoize"} {
+            incr caller_level
+            continue
+        }
+        if {$command eq "apply"} {
+            # A procedure named apply is possible in a namespace. Check
+            # the actual evaluation frame before treating it as a lambda.
+            set lambda_p 0
+            for {set frame 1} {$frame < [info frame]} {incr frame} {
+                set frame_info [info frame -$frame]
+                if {[dict exists $frame_info level]
+                    && [dict get $frame_info level] == $caller_level
+                    && [dict exists $frame_info lambda]} {
+                    set lambda_p 1
+                    break
+                }
+            }
+            if {$lambda_p} {
+                set skipped_lambda_p 1
+                incr caller_level
+                continue
+            }
+        }
+        set proc_name [string trimleft $proc_name :]
+        break
     }
-
-    # If util_memoize, we have to go back up one in the stack
-    if {[lindex $proc_name 0] eq "util_memoize"} {
-        # db_qd_log QDDebug "util_memoize! going up one level"
-        set proc_name [info level [expr {-2 - $added_stack_num}]]
+    if {$caller_level >= [info level]} {
+        if {$skipped_lambda_p} {
+            return [db_qd_null_path]
+        }
+        return [::nsf::strip_proc_name $local_name]
     }
 
     set proc_name [::nsf::strip_proc_name $proc_name]
@@ -306,6 +330,11 @@ ad_proc -public db_qd_get_fullname {local_name {added_stack_num 1}} {
     # We check if we're running the special ns_ proc that tells us
     # whether this is a URL or a Tcl proc.
     if { [lindex $proc_name 0] in $list_of_source_procs } {
+        if {$skipped_lambda_p} {
+            # Inline SQL in a page-level lambda (e.g. the developer shell)
+            # should not resolve against the enclosing page's XQL file.
+            return [db_qd_null_path]
+        }
 
         # Means we are running inside a URL
 
@@ -390,7 +419,7 @@ ad_proc -public db_qd_get_fullname {local_name {added_stack_num 1}} {
         # proc_name, so that the correct query can be looked up.
         # (OpenACS - DanW)
 
-        set calling_namespace [string range [uplevel [expr {1 + $added_stack_num}] {namespace current}] 2 end]
+        set calling_namespace [string range [uplevel $caller_level {namespace current}] 2 end]
         # db_qd_log QDDebug "calling namespace = $calling_namespace"
 
         if {$calling_namespace ne "" &&
@@ -406,6 +435,9 @@ ad_proc -public db_qd_get_fullname {local_name {added_stack_num 1}} {
         # probably dealing with one of the bootstrap procs, and so we just
         # return a bogus proc name
         if {![nsv_exists api_proc_doc $proc_name]} {
+            if {$skipped_lambda_p} {
+                return [db_qd_null_path]
+            }
             ns_log warning "db_qd_get_fullname: there is no documented proc " \
                 "with name $proc_name returning [db_qd_null_path] " \
                 "(declare proc $proc_name with ad_proc to make it " \
