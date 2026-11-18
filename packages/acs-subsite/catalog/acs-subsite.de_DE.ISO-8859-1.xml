@@ -556,4 +556,11 @@ copy it as above to the new location, then select &lt;em&gt;unmount&lt;/em&gt; a
   <msg key="Your_Portrait">Ihr Profilbild</msg>
   <msg key="Your_system_alerts">Ihre Benachrichtigungen für %gc_system_name%</msg>
   <msg key="Youre_marked_as_back">Sie sind unter %site_link% als wieder anwesend gekennzeichnet.</msg>
+  <msg key="Email_change_complete">Ihre E-Mail-Adresse wurde aktualisiert.</msg>
+  <msg key="Email_change_confirm">Änderung der E-Mail-Adresse bestätigen</msg>
+  <msg key="Email_change_confirm_help">Bestätigen Sie die Änderung der E-Mail-Adresse Ihres Kontos.</msg>
+  <msg key="Email_change_invalid">Diese Anfrage ist ungültig, abgelaufen oder nicht mehr verfügbar. Fordern Sie in Ihrem Profil einen neuen Link an.</msg>
+  <msg key="Email_change_mail_body">Öffnen Sie %confirmation_url%, um Ihre neue E-Mail-Adresse zu bestätigen. Der Link läuft nach 24 Stunden ab.</msg>
+  <msg key="Email_change_pending">Wir haben einen Bestätigungslink an Ihre neue E-Mail-Adresse gesendet. Ihre bisherige Adresse bleibt bis zur Bestätigung aktiv.</msg>
+  <msg key="Email_change_request_failed">Die Änderung der E-Mail-Adresse konnte nicht angefordert werden. Prüfen Sie die Adresse und versuchen Sie es erneut.</msg>
 </message_catalog>

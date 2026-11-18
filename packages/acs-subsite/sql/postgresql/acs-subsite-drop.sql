@@ -14,3 +14,5 @@
 \i site-node-selection-dro.sql
 
 drop view party_names;
+
+drop table subsite_email_changes;

@@ -538,4 +538,11 @@
   <msg key="Your_Portrait">Il Tuo Ritratto</msg>
   <msg key="Your_system_alerts">Le tue notifiche su %gc_system_name% </msg>
   <msg key="Youre_marked_as_back">Sei segnalato come di ritorno a %site_link%</msg>
+  <msg key="Email_change_complete">Il tuo indirizzo email è stato aggiornato.</msg>
+  <msg key="Email_change_confirm">Conferma la modifica dell'indirizzo email</msg>
+  <msg key="Email_change_confirm_help">Conferma la modifica dell'indirizzo email del tuo account.</msg>
+  <msg key="Email_change_invalid">Questa richiesta non è valida, è scaduta o non è più disponibile. Richiedi un nuovo link dal tuo profilo.</msg>
+  <msg key="Email_change_mail_body">Apri %confirmation_url% per confermare il tuo nuovo indirizzo email. Il link scade dopo 24 ore.</msg>
+  <msg key="Email_change_pending">Ti abbiamo inviato un link di conferma al nuovo indirizzo email. Il tuo indirizzo attuale rimane attivo fino alla conferma.</msg>
+  <msg key="Email_change_request_failed">Non è stato possibile richiedere la modifica dell'indirizzo email. Controlla l'indirizzo e riprova.</msg>
 </message_catalog>

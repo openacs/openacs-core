@@ -640,4 +640,11 @@ copy it as above to the new location, then select &lt;em&gt;unmount&lt;/em&gt; a
   <msg key="Your_Portrait">Your Portrait</msg>
   <msg key="Your_system_alerts">Your %gc_system_name% alerts</msg>
   <msg key="Youre_marked_as_back">You&#39;re marked as back from vacation at %site_link%.</msg>
+  <msg key="Email_change_complete">Your email address has been updated.</msg>
+  <msg key="Email_change_confirm">Confirm email address change</msg>
+  <msg key="Email_change_confirm_help">Confirm the change to your account email address.</msg>
+  <msg key="Email_change_invalid">This email change request is invalid, expired, or no longer available. Request a new link from your profile.</msg>
+  <msg key="Email_change_mail_body">To confirm your new email address, open %confirmation_url% and confirm the change. The link expires in 24 hours.</msg>
+  <msg key="Email_change_pending">Check your new email address for a confirmation link. Your current address stays active until you confirm.</msg>
+  <msg key="Email_change_request_failed">Could not request this email address change. Check the address and try again.</msg>
 </message_catalog>

@@ -12,3 +12,5 @@
 @@ email-image-drop
 @@ host-node-map-drop
 @@ site-node-selection-drop
+
+drop table subsite_email_changes;

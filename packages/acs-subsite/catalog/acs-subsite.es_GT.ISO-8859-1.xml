@@ -292,4 +292,11 @@ Para cambiar su contraseña, visite %reset_password_url%</msg>
   <msg key="Your_Portrait">Su foto</msg>
   <msg key="Your_system_alerts">Su %gc_system_name% alerta </msg>
   <msg key="Youre_marked_as_back">Usted ha sido marcado como de vuelta de vacaciones en</msg>
+  <msg key="Email_change_complete">Se ha actualizado su dirección de correo electrónico.</msg>
+  <msg key="Email_change_confirm">Confirmar el cambio de dirección de correo electrónico</msg>
+  <msg key="Email_change_confirm_help">Confirme el cambio de dirección de correo electrónico de su cuenta.</msg>
+  <msg key="Email_change_invalid">Esta solicitud no es válida, ha caducado o ya no está disponible. Solicite un nuevo enlace desde su perfil.</msg>
+  <msg key="Email_change_mail_body">Abra %confirmation_url% para confirmar su nueva dirección de correo electrónico. El enlace caduca al cabo de 24 horas.</msg>
+  <msg key="Email_change_pending">Le hemos enviado un enlace de confirmación a su nueva dirección de correo electrónico. Su dirección actual seguirá activa hasta que confirme el cambio.</msg>
+  <msg key="Email_change_request_failed">No se pudo solicitar el cambio de dirección de correo electrónico. Compruebe la dirección e inténtelo de nuevo.</msg>
 </message_catalog>

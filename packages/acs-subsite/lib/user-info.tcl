@@ -172,15 +172,20 @@ ad_form -extend -name user_info -form $elms_list -on_request {
 
 } -on_submit {
 
-    # Makes the email an image or text according to the level of privacy
-    catch {email_image::edit_email_image -user_id $user_id -new_email $email} errmsg
-
     set user_info(authority_id) $user(authority_id)
     set user_info(username) $user(username)
     foreach elm $form_elms {
         if { $elm_mode($elm) eq "" && [info exists $elm] } {
             set user_info($elm) [string trim [set $elm]]
         }
+    }
+
+    set pending_email ""
+    if {[info exists user_info(email)]} {
+        if {![string equal -nocase $user_info(email) $user(email)]} {
+            set pending_email $user_info(email)
+        }
+        unset user_info(email)
     }
 
     set account_info [auth::update_local_account \
@@ -191,6 +196,15 @@ ad_form -extend -name user_info -form $elms_list -on_request {
     # Handle authentication problems
     switch -- [dict get $account_info update_status] {
         ok {
+            if {$pending_email ne ""} {
+                if {[catch {
+                    subsite::request_email_change $user_id $user(email) $pending_email
+                }]} {
+                    form set_error user_info email [_ acs-subsite.Email_change_request_failed]
+                    break
+                }
+                util_user_message -message [_ acs-subsite.Email_change_pending]
+            }
             # Updating locale/tz data
             if { [info exists site_wide_locale] } {
                 lang::user::set_locale $site_wide_locale
