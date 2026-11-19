@@ -424,7 +424,7 @@ ad_proc -private rp_resources_filter { why } {
     If that fails, we map to root/packages/acs-subsite/www/resources/*
     If that fails, we map to root/www/resources/*
 
-    If the file doesn't exist we'll log an error and return filter_ok, which will allow
+    If the file doesn't exist we'll log at Debug(request) and return filter_ok, which will allow
     packages mounted at "/resources" in a legacy site to work correctly.  This is a
     horrible kludge which may disappear after discussion with the gang.
 
@@ -465,7 +465,7 @@ ad_proc -private rp_resources_filter { why } {
         return [rp_serve_resource_file $path]
     }
 
-    ns_log Warning "rp_sources_filter: file \"$path\" does not exists trying to serve as a normal request"
+    ns_log Debug(request) "rp_resources_filter: resource [list [ns_conn url]] not found; continuing normal request processing"
     return filter_ok
 }
 
