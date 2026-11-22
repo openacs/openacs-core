@@ -2580,22 +2580,30 @@ ad_proc -public security::redirect_to_insecure {
 # security namespace private procs
 #
 #####
-
 ad_proc -private security::get_https_port {} {
-    Return the HTTPS port specified in the server's config file.
+    Return the published HTTPS port when Docker mapping is available,
+    otherwise the HTTPS driver's listening port.
 
-    @return The HTTPS port number or the empty string if none is configured.
-
-    @author Gustaf Neumann
+    @return The HTTPS port or an empty string when HTTPS is unavailable.
 } {
-    # get secure driver server modules
     set sdriver [security::driver]
-
-    if {$sdriver ne ""} {
-        set d [util_driver_info -driver $sdriver]
-        return [dict get $d port]
+    if {$sdriver eq ""} {
+        return ""
     }
+
+    set d [util_driver_info -driver $sdriver]
+    set port [dict get $d port]
+
+    if {[namespace which -command ::docker::external_port] ne ""} {
+        set external_port [::docker::external_port $port tcp]
+        if {$external_port ne ""} {
+            set port $external_port
+        }
+    }
+
+    return $port
 }
+
 
 ad_proc -private security::get_http_port {} {
     Return the HTTP port specified in the server's config file.
