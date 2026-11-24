@@ -161,7 +161,7 @@ perform drop_package('${package_name}');
 
 perform define_function_args('${package_name}__new','[plpgsql_utility::define_function_args $attribute_list]');
 
-CREATE FUNCTION ${package_name}__new([plpgsql_utility::generate_function_signature $attribute_list])
+CREATE FUNCTION ${package_name}__new([plpgsql_utility::generate_function_signature -named $attribute_list])
 RETURNS [db_column_type -complain $table_name $id_column] AS $$
 DECLARE
     [plpgsql_utility::generate_attribute_parameters $attribute_list];

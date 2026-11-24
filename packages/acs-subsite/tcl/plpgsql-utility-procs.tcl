@@ -122,9 +122,14 @@ namespace eval plpgsql_utility {
 
 
     ad_proc -public generate_function_signature {
+        -named:boolean
         attr_list
     } {
-        Generates the signature for a pl/sql function or procedure
+        Generates the signature for a pl/sql function or procedure.
+        Named signatures use arg_ prefixes to leave the p_ aliases
+        used by generated function bodies available.
+
+        @param named Include names in the function signature.
 
         @author Steve Woodcock (swoodcock@scholastic.co.uk)
         @creation-date 07/2001
@@ -135,7 +140,11 @@ namespace eval plpgsql_utility {
             set table [string toupper [string trim [lindex $triple 0]]]
             set attr [string toupper [string trim [lindex $triple 1]]]
             set datatype [db_column_type -complain $table $attr]
-            lappend pieces $datatype
+            if {$named_p} {
+                lappend pieces "arg_[string tolower $attr] $datatype"
+            } else {
+                lappend pieces $datatype
+            }
         }
         return [join $pieces ","]
 

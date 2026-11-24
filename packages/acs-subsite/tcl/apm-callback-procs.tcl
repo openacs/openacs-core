@@ -219,6 +219,26 @@ ad_proc -private subsite::after_upgrade {
                     }
                 }
             }
+            6.0.0d4 6.0.0d5 {
+                if {[db_driverkey ""] eq "postgresql"} {
+                    set object_types [db_list missing_instructor_constructor {
+                        select object_type
+                          from acs_object_types
+                         where dynamic_p = 't'
+                           and lower(package_name) = 'instructor_rel'
+                           and not exists (
+                               select 1 from pg_proc
+                                where proname = 'instructor_rel__new'
+                                  and pg_function_is_visible(oid)
+                           )
+                    }]
+                    foreach object_type $object_types {
+                        db_transaction {
+                            package_create $object_type
+                        }
+                    }
+                }
+            }
         }
 }
 
