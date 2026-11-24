@@ -22,7 +22,7 @@ begin
                select 1 from acs_object_types t
                 where t.dynamic_p = 't' and p.proname = lower(t.package_name) || '__new'
            )
-         group by p.oid, n.nspname, p.proname
+         group by p.oid, n.nspname, p.proname, p.pronargs
         having count(*) = p.pronargs
            and count(*) = (select count(*) from acs_function_args
                             where function = upper(p.proname))
