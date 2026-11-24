@@ -176,7 +176,7 @@ DECLARE
     v_repository_id acs_reference_repositories.repository_id%TYPE;
 BEGIN
     return acs_reference__new(null, p_table_name, 'f', null, null, p_source, p_source_url,
-                              p_effective_date, null, null, null, null, null, null,
+                              p_effective_date, null, null, null, null, null, null::varchar,
                               'acs_reference_repository', null);
 END;
 
