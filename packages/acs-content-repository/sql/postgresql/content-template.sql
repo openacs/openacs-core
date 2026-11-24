@@ -273,7 +273,7 @@ CREATE OR REPLACE FUNCTION content_template__delete(
 ) RETURNS integer AS $$
 DECLARE
 BEGIN
-  PERFORM content_template__delete(delete__template_id);
+  PERFORM content_template__del(delete__template_id);
 
   return 0; 
 END;
