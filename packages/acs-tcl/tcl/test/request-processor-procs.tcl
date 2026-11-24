@@ -77,7 +77,6 @@ ad_proc -private request_processor::test::require_registered_procs {} {
             }
         }
         regsub -all {:} $proc_name {_} path
-        ns_log warning "Registered - $path $proc_name {*}$args"
         ad_register_proc * $path $proc_name $args
     }
 
