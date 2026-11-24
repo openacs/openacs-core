@@ -336,18 +336,9 @@ namespace eval ::acs::db {
             }]
             set function_arg_names [string tolower [dict get $db_definitions $key argument_names]]
             set nr_defined_args [llength $function_arg_names]
-            if {[llength $argument_types] < $nr_defined_args} {
-                #
-                # This might be a definition with fewer arguments; we
-                # aim always for the definition with the most
-                # arguments.
-                #
-                #ns_log notice "key $key has argument_types [llength $argument_types] but this is less than nr_defined_args $nr_defined_args"
-                continue
-            } elseif {[llength $argument_types] < $nr_defined_args} {
-                ns_log warning "generate_stubs: $key has less arguments in " \
-                    "function_definitions ($nr_defined_args) than in DB [llength $argument_types]"
-                ns_log notice ".... have already types [dict exists $db_definitions $key types]"
+            # The metadata describes one arity. Other overloads must not
+            # compete for the same stub, even when their prefix names match.
+            if {[llength $argument_types] != $nr_defined_args} {
                 continue
             }
 
