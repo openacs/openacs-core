@@ -281,6 +281,37 @@ ad_proc -private template::util::richtext::require_editor {
 }
 
 
+ad_proc -private template::util::richtext::editor_config {
+    {-options {}}
+    {-htmlarea_p false}
+    {-htmlarea_explicit_p false}
+} {
+    Resolve editor settings for a richtext field. Field options override the
+    current package's RichTextEditor parameter, which overrides the templating
+    default. An empty package parameter preserves legacy behavior.
+} {
+    set package_editor [parameter::get -package_id [ad_conn package_id] \
+                            -parameter RichTextEditor -default ""]
+    set editor [expr {[dict exists $options editor] ? [dict get $options editor] : $package_editor}]
+    if {$editor eq ""} {
+        set editor [parameter::get -package_id [apm_package_id_from_key acs-templating] \
+                        -parameter RichTextEditor -default ckeditor4]
+    }
+    set selector [expr {[dict exists $options format_selector] ?
+                       [string is true -strict [dict get $options format_selector]] :
+                       $package_editor ne ""}]
+    if {!$htmlarea_explicit_p && ($package_editor ne "" || $selector)} {
+        set htmlarea_p true
+    }
+    if {$package_editor ne "" && ![require_editor -editor $editor]} {
+        set htmlarea_p false
+    }
+    set selector [expr {$htmlarea_p && $selector
+                       && [namespace which ::richtext::${editor}::initialize_format_selector] ne ""}]
+    return [dict create editor $editor htmlarea_p $htmlarea_p format_selector $selector]
+}
+
+
 ad_proc -public template::util::richtext::get_tag {
     {-options {}}
 } {
@@ -455,6 +486,13 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
     to the user.
 
     <p>
+    A package can declare an instance parameter <code>RichTextEditor</code>
+    with an empty default to retain the templating defaults. A nonempty value
+    selects that editor for its richtext fields. Editors implementing
+    <code>initialize_format_selector</code> activate on the HTML MIME choice,
+    preserving the standard format selector. Explicit field editor options,
+    <code>format_selector</code>, and <code>htmlarea_p</code> take precedence.
+    <p>
     Note that the richtext editors interact with <code>blank-master.tcl</code> and
     <code>blank-master.adp</code>.
     <p>
@@ -512,6 +550,13 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
                                 -parameter "UseHtmlAreaForRichtextP" \
                                 -default 0]
         }
+        set editor_config [::template::util::richtext::editor_config \
+                               -options [array get options] -htmlarea_p $htmlarea_p \
+                               -htmlarea_explicit_p [expr {[info exists element(htmlarea_p)]
+                                                          && $element(htmlarea_p) ne ""}]]
+        set richtextEditor [dict get $editor_config editor]
+        set htmlarea_p [dict get $editor_config htmlarea_p]
+        set options(editor) $richtextEditor
         set edit_item_tag [::template::util::richtext::get_tag -options [array get options]]
         set format_menu [menu $element(id).format [template::util::richtext::format_options] $format {}]
         set output [textarea_internal $element(id) attributes $contents "edit" $edit_item_tag]
@@ -521,10 +566,21 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
                                   -element_ref element]
         #ns_log notice "widget::richtext: $htmlarea_p, spellcheck [array get spellcheck] OPTIONS [array get options]"
 
+        if {[dict get $editor_config format_selector]} {
+            # The plugin prepares lazy activation while the standard widget
+            # continues to render its textarea and MIME format selector.
+            if {![info exists options(format_conversion_url)]} {
+                set options(format_conversion_url) /shared/richtext-format
+            }
+            set result [::richtext::${richtextEditor}::initialize_format_selector \
+                            -form_id $element(form_id) -text_id $attributes(id) \
+                            -options [array get options]]
+            if {[dict get $result success]} {
+                set htmlarea_p false
+            }
+        }
+
         if { $htmlarea_p } {
-            # figure out, which rich text editor to use
-            set richtextEditor [expr {[info exists options(editor)] ?
-                                      $options(editor) : ""}]
             #
             # Tell the blank-master to include the special stuff
             # for the richtext widget in the page header
