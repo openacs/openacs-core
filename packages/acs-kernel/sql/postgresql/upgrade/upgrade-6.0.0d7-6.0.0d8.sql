@@ -164,6 +164,16 @@ begin
            )
     loop
         definition := pg_get_functiondef(target.oid);
+        -- Some legacy databases have a misspelled local declaration.
+        -- The install SQL already declares the variable used by the body.
+        if target.proname = 'acs_rel_type__drop_type' then
+            definition := regexp_replace(
+                definition,
+                '(^|\n)([ \t]*)v_cascade([ \t]+boolean[ \t]*;)',
+                '\1\2v_cascade_p\3',
+                'i'
+            );
+        end if;
         execute format('CREATE OR REPLACE FUNCTION %I.%I(%s)',
                        target.nspname, target.proname, target.signature)
                 || substr(definition, strpos(definition, chr(10)));
