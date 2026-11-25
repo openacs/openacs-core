@@ -483,7 +483,7 @@ ad_proc util::json::array::create {values} {
 
 ad_proc util::json::array::get_values {item} {
 
-    Verify that the given Tcl structure is an object, and return its
+    Verify that the given Tcl structure is an array, and return its
     values list.
 
 } {
