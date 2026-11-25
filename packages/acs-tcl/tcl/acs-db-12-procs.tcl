@@ -339,6 +339,7 @@ namespace eval ::acs::db {
             # The metadata describes one arity. Other overloads must not
             # compete for the same stub, even when their prefix names match.
             if {[llength $argument_types] != $nr_defined_args} {
+                ns_log notice "[string tolower $key]([join $argument_types {, }]) is not directly callable via the generated Tcl API. The registered signature expects $nr_defined_args arguments. This overload remains callable from SQL."
                 continue
             }
 
@@ -367,6 +368,7 @@ namespace eval ::acs::db {
                       -key $key \
                       -function_arg_names $function_arg_names \
                       -db_names $proargnames]} {
+                ns_log notice "[string tolower $key]([join $argument_types {, }]) is not directly callable via the generated Tcl API. Its argument names <$proargnames> differ from the registered names <$function_arg_names>. This overload remains callable from SQL."
                 continue
             }
 
