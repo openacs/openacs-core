@@ -604,7 +604,7 @@ ad_proc -public ad_form {
             if {$valid_arg ni {
                 name form method action html validate export mode cancel_url
                 has_edit has_submit actions edit_buttons display_buttons
-                fieldset on_validation_error
+                fieldset show_required_p on_validation_error csrf_protection_p
             }} {
                 set af_parts(${form_name}__extend) ""
             }
