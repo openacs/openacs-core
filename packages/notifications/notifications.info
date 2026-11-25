@@ -10,7 +10,7 @@
     <inherit-templates-p>t</inherit-templates-p>
     <auto-mount>notifications</auto-mount>
 
-    <version name="6.0.0d2" url="http://openacs.org/repository/download/apm/notifications-6.0.0d2.apm">
+    <version name="6.0.0d3" url="http://openacs.org/repository/download/apm/notifications-6.0.0d3.apm">
         <owner url="http://openacs.org">OpenACS</owner>
         <summary>Email notifications management</summary>
         <release-date>2025-02-07</release-date>
@@ -19,7 +19,7 @@
         <maturity>3</maturity>
         <package_instance_name>#notifications.Notifications#</package_instance_name>
 
-        <provides url="notifications" version="6.0.0d2"/>
+        <provides url="notifications" version="6.0.0d3"/>
         <requires url="acs-kernel" version="5.10.1"/>
         <requires url="acs-mail-lite" version="5.10.1"/>
         <requires url="acs-tcl" version="5.10.1"/>
