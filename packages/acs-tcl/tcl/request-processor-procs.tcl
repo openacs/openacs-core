@@ -389,7 +389,8 @@ ad_proc -private rp_serve_resource_file { path } {
 
 } {
     if { ![rp_file_can_be_public_p $path] } {
-        ad_raise notfound
+        ns_returnnotfound
+        return filter_return
     }
     set expireTime [parameter::get -package_id $::acs::kernel_id -parameter ResourcesExpireInterval -default 0]
     if {$expireTime != 0} {
@@ -1324,6 +1325,11 @@ ad_proc -private rp_serve_abstract_file {
 ad_proc -public rp_serve_concrete_file {file} {
     Serves a file.
 } {
+    if {![rp_file_can_be_public_p $file]} {
+        ns_returnnotfound
+        ad_script_abort
+    }
+
     set extension [ad_file extension $file]
     set startclicks [clock clicks -microseconds]
 
@@ -1356,43 +1362,36 @@ ad_proc -public rp_serve_concrete_file {file} {
             rp_finish_serving_page
         }
 
-    } elseif { [rp_file_can_be_public_p $file] } {
+    } else {
         set type [ns_guesstype $file]
         ds_add rp [list serve_file [list $file $type] \
                        $startclicks [clock clicks -microseconds]]
         ns_returnfile 200 $type $file
-    } else {
-        ad_raise notfound
     }
 }
 
 ad_proc -private rp_file_can_be_public_p { path } {
     Determines if -- absent application restrictions -- a file can be served to
-    a client without violating simple security checks.  The checks and response
+    a client without violating simple security checks.  The checks
     do not require the initialization of ad_conn or expensive permission::
     calls.
 
-    The proc will return page-not-found messages to the client in the case
-    where the file must not be served, log a warning, and close the connection
-    to the client.
+    Log a warning when the file must not be served. The caller handles
+    the response.
 
     @param  path    The file to perform the simple security checks on.
-    @return 0 (and close the connection!) if the file must not be served.  1 if the application should
+    @return 0 if the file must not be served. 1 if the application should
     perform its own checks, if any.
 } {
     #  first check that we are not serving a forbidden file like a .xql, a backup or CVS file
     if {[ad_file extension $path] eq ".xql"
         && ![parameter::get -parameter ServeXQLFiles -package_id $::acs::kernel_id -default 0] } {
-        # Can't use ad_return_exception_page because it depends upon an initialized ad_conn
         ns_log Warning "An attempt was made to access an .XQL resource: {$path}."
-        ns_return 404 "text/html" "Not Found"
         return 0
     }
     foreach match [parameter::get -parameter ExcludedFiles -package_id $::acs::kernel_id -default {}] {
         if {[string match $match $path]} {
-            # Can't use ad_return_exception_page because it depends upon an initialized ad_conn
             ns_log Warning "An attempt was made to access an ExcludedFiles resource: {$path}."
-            ns_return 404 "text/html" "Not Found"
             return 0
         }
     }
