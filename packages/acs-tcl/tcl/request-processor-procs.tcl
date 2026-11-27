@@ -1230,8 +1230,11 @@ ad_proc -private rp_handler {} {
     ad_conn -set recursion_count [incr recursion_count]
     rp_debug "rp_handler: handling request: [ns_conn method] [ns_conn url]?[ns_conn query]"
 
-    ad_try {
+    ad_try -auto_abort=false {
         rp_handle_request
+    } trap {AD EXCEPTION ad_script_abort} {} {
+        # The request has already been handled.
+        return
     } trap {NS_INVALID_JSON} {} {
         ns_return 400 text/plain "Invalid JSON request body."
     } on error {errorMsg} {
